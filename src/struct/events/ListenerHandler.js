@@ -1,0 +1,120 @@
+const path = require('path');
+const EventEmitter = require('events');
+const rread = require('readdir-recursive');
+const Listener = require('./Listener');
+
+class ListenerHandler {
+    /**
+     * Creates a new ListenerHandler.
+     * @param {Framework} framework The Akairo framework.
+     */
+    constructor(framework){
+        /**
+         * The Akairo framework.
+         * @type {Framework}
+         */
+        this.framework = framework;
+
+        /**
+         * Directory to listeners.
+         * @type {string}
+         */
+        this.directory = path.resolve(this.framework.options.listenerDirectory);
+
+        /**
+         * Listeners loaded, mapped by ID to Listener.
+         * @type {Map.<string, Listener>}
+         */
+        this.listeners = new Map();
+        let lisPaths = rread.fileSync(this.directory);
+
+        lisPaths.forEach(filepath => {
+            this.loadListener(filepath);
+        });
+    }
+
+    /**
+     * Loads a Listener.
+     * @param {string} filepath Path to file.
+     */
+    loadListener(filepath){
+        let listener = require(filepath);
+
+        if (!(listener instanceof Listener)) return;
+        if (this.listeners.has(listener.id)) throw new Error(`Listener ${listener.id} already loaded.`);
+
+        listener.filepath = filepath;
+        listener.framework = this.framework;
+        listener.listenerHandler = this;
+
+        this.listeners.set(listener.id, listener);
+        this.registerListener(listener.id);
+    }
+
+    /**
+     * Adds a Listener.
+     * @param {string} filename Filename to lookup in the directory.
+     */
+    addListener(filename){
+        let files = rread.fileSync(this.directory);
+        let filepath = files.find(file => file.endsWith(`${filename}`));
+
+        if (!filepath){
+            throw new Error(`File ${filename} not found.`);
+        }
+
+        this.loadListener(filepath);
+    }
+
+    /**
+     * Reloads a Listener.
+     * @param {string} id ID of the Listener.
+     */
+    reloadListener(id){
+        let oldListener = this.listeners.get(id);
+        if (!oldListener) throw new Error(`Listener ${id} does not exist.`);
+
+        let filepath = oldListener.filepath;
+
+        delete require.cache[require.resolve(oldListener.filepath)];
+        this.deregisterListener(oldListener.id);
+        this.listeners.delete(oldListener.id);
+        
+        this.loadListener(filepath);
+    }
+
+    
+    /**
+     * Registers a Listener with the EventEmitter.
+     * @param {string} id ID of the Listener.
+     */
+    registerListener(id){
+        let listener = this.listeners.get(id);
+        if (!listener) throw new Error(`Listener ${id} does not exist.`);
+
+        let emitter = listener.emitter instanceof EventEmitter ? listener.emitter : this.framework[listener.emitter];
+        if (!(emitter instanceof EventEmitter)) throw new Error('Listener\'s emitter is not an EventEmitter');
+
+        if (listener.type === 'once'){
+            return emitter.once(listener.eventName, listener.exec);
+        }
+
+        emitter.on(listener.eventName, listener.exec);
+    }
+
+    /**
+     * Removes a Listener from the EventEmitter.
+     * @param {string} id ID of the Listener.
+     */
+    deregisterListener(id){
+        let listener = this.listeners.get(id);
+        if (!listener) throw new Error(`Listener ${id} does not exist.`);
+
+        let emitter = listener.emitter instanceof EventEmitter ? listener.emitter : this.framework[listener.emitter];
+        if (!(emitter instanceof EventEmitter)) throw new Error('Listener\'s emitter is not an EventEmitter');
+
+        emitter.removeListener(listener.eventName, listener.exec);
+    }
+}
+
+module.exports = ListenerHandler;

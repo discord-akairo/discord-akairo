@@ -1,0 +1,22 @@
+{
+  "name": "discord-akairo",
+  "version": "1.0.0",
+  "description": "A bot framework for Discord.js.",
+  "main": "./src/index.js",
+  "author": "1Computer",
+  "license": "MIT",
+  "dependencies": {
+    "readdir-recursive": "0.0.4"
+  },
+  "peerDependencies": {
+    "sqlite": "^2.2.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/1Computer1/discord-akairo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/1Computer1/discord-akairo/issues"
+  },
+  "homepage": "https://github.com/1Computer1/discord-akairo"
+}
