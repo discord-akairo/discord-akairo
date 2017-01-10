@@ -58,14 +58,14 @@ class Listener {
     }
 
     /**
-     * Shortcut to listener handler's reload.
+     * Reloads the Listener.
      */
     reload(){
         this.listenerHandler.reloadListener(this.id);
     }
 
     /**
-     * Shortcut to listener handler's remove.
+     * Removes the Listener. It can be readded with the listener handler.
      */
     remove(){
         this.listenerHandler.removeListener(this.id);

@@ -101,14 +101,14 @@ class Command {
     }
 
     /**
-     * Shortcut to command handler's reload.
+     * Reloads the Command.
      */
     reload(){
         this.commandHandler.reloadCommand(this.id);
     }
 
     /**
-     * Shortcut to command handler's remove.
+     * Removes the Command. It can be readded with the command handler.
      */
     remove(){
         this.commandHandler.removeCommand(this.id);

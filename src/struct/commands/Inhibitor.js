@@ -3,7 +3,7 @@ class Inhibitor {
      * Creates a new Inhibitor.
      * @param {string} id Inhibitor ID.
      * @param {string} reason Reason emitted when a command is blocked.
-     * @param {function} exec Function called before a command is ran. (message, command)
+     * @param {function} exec Function called before a command is ran. Return true or a rejecting Promise to block. (message, command)
      */
     constructor(id, reason, exec){
         /**
@@ -44,14 +44,14 @@ class Inhibitor {
     }
 
     /**
-     * Shortcut to command handler's reload.
+     * Reloads the inhibitor.
      */
     reload(){
         this.commandHandler.reloadInhibitor(this.id);
     }
     
     /**
-     * Shortcut to command handler's remove.
+     * Removes the Inhibitor. It can be readded with the command handler.
      */
     remove(){
         this.commandHandler.removeInhibitor(this.id);
