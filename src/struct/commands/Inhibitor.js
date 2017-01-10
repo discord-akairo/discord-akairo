@@ -49,6 +49,13 @@ class Inhibitor {
     reload(){
         this.commandHandler.reloadInhibitor(this.id);
     }
+    
+    /**
+     * Shortcut to command handler's remove.
+     */
+    remove(){
+        this.commandHandler.removeInhibitor(this.id);
+    }
 }
 
 module.exports = Inhibitor;

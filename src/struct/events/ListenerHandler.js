@@ -67,22 +67,34 @@ class ListenerHandler {
     }
 
     /**
+     * Removes a Listener.
+     * @param {string} id ID of the Listener.
+     */
+    removeListener(id){
+        let listener = this.listeners.get(id);
+        if (!listener) throw new Error(`Listener ${id} does not exist.`);
+
+        delete require.cache[require.resolve(listener.filepath)];
+        this.deregisterListener(listener.id);
+        this.listeners.delete(listener.id);
+    }
+
+    /**
      * Reloads a Listener.
      * @param {string} id ID of the Listener.
      */
     reloadListener(id){
-        let oldListener = this.listeners.get(id);
-        if (!oldListener) throw new Error(`Listener ${id} does not exist.`);
+        let listener = this.listeners.get(id);
+        if (!listener) throw new Error(`Listener ${id} does not exist.`);
 
-        let filepath = oldListener.filepath;
+        let filepath = listener.filepath;
 
-        delete require.cache[require.resolve(oldListener.filepath)];
-        this.deregisterListener(oldListener.id);
-        this.listeners.delete(oldListener.id);
+        delete require.cache[require.resolve(listener.filepath)];
+        this.deregisterListener(listener.id);
+        this.listeners.delete(listener.id);
         
         this.loadListener(filepath);
     }
-
     
     /**
      * Registers a Listener with the EventEmitter.
@@ -92,7 +104,12 @@ class ListenerHandler {
         let listener = this.listeners.get(id);
         if (!listener) throw new Error(`Listener ${id} does not exist.`);
 
-        let emitter = listener.emitter instanceof EventEmitter ? listener.emitter : this.framework[listener.emitter];
+        let emitters = {
+            client: this.framework.client,
+            commandHandler: this.framework.commandHandler
+        };
+
+        let emitter = listener.emitter instanceof EventEmitter ? listener.emitter : emitters[listener.emitter];
         if (!(emitter instanceof EventEmitter)) throw new Error('Listener\'s emitter is not an EventEmitter');
 
         if (listener.type === 'once'){
@@ -110,7 +127,12 @@ class ListenerHandler {
         let listener = this.listeners.get(id);
         if (!listener) throw new Error(`Listener ${id} does not exist.`);
 
-        let emitter = listener.emitter instanceof EventEmitter ? listener.emitter : this.framework[listener.emitter];
+        let emitters = {
+            client: this.framework.client,
+            commandHandler: this.framework.commandHandler
+        };
+
+        let emitter = listener.emitter instanceof EventEmitter ? listener.emitter : emitters[listener.emitter];
         if (!(emitter instanceof EventEmitter)) throw new Error('Listener\'s emitter is not an EventEmitter');
 
         emitter.removeListener(listener.eventName, listener.exec);

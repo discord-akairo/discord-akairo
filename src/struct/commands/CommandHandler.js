@@ -86,17 +86,29 @@ class CommandHandler extends EventEmitter {
     }
 
     /**
+     * Removes a Command.
+     * @param {string} id ID of the Command.
+     */
+    removeCommand(id){
+        let command = this.commands.get(id);
+        if (!command) throw new Error(`Command ${id} does not exist.`);
+
+        delete require.cache[require.resolve(command.filepath)];
+        this.commands.delete(command.id);
+    }
+
+    /**
      * Reloads a Command.
      * @param {string} id ID of the Command.
      */
     reloadCommand(id){
-        let oldCommand = this.commands.get(id);
-        if (!oldCommand) throw new Error(`Command ${id} does not exist.`);
+        let command = this.commands.get(id);
+        if (!command) throw new Error(`Command ${id} does not exist.`);
 
-        let filepath = oldCommand.filepath;
+        let filepath = command.filepath;
 
-        delete require.cache[require.resolve(oldCommand.filepath)];
-        this.commands.delete(oldCommand.id);
+        delete require.cache[require.resolve(command.filepath)];
+        this.commands.delete(command.id);
         
         this.loadCommand(filepath);
     }
@@ -142,17 +154,29 @@ class CommandHandler extends EventEmitter {
     }
 
     /**
+     * Removes an Inhibitor.
+     * @param {string} id ID of the Inhibitor.
+     */
+    removeInhibitor(id){
+        let inhibitor = this.inhibitors.get(id);
+        if (!inhibitor) throw new Error(`Inhibitor ${id} does not exist.`);
+
+        delete require.cache[require.resolve(inhibitor.filepath)];
+        this.inhibitors.delete(inhibitor.id);
+    }
+
+    /**
      * Reloads an Inhibitor.
      * @param {string} id ID of the Inhibitor.
      */
     reloadInhibitor(id){
-        let oldInhibitor = this.inhibitors.get(id);
-        if (!oldInhibitor) throw new Error(`Inhibitor ${id} does not exist.`);
+        let inhibitor = this.inhibitors.get(id);
+        if (!inhibitor) throw new Error(`Inhibitor ${id} does not exist.`);
 
-        let filepath = oldInhibitor.filepath;
+        let filepath = inhibitor.filepath;
 
-        delete require.cache[require.resolve(oldInhibitor.filepath)];
-        this.inhibitors.delete(oldInhibitor.id);
+        delete require.cache[require.resolve(inhibitor.filepath)];
+        this.inhibitors.delete(inhibitor.id);
         
         this.loadInhibitor(filepath);
     }

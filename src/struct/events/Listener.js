@@ -63,6 +63,13 @@ class Listener {
     reload(){
         this.listenerHandler.reloadListener(this.id);
     }
+
+    /**
+     * Shortcut to listener handler's remove.
+     */
+    remove(){
+        this.listenerHandler.removeListener(this.id);
+    }
 }
 
 module.exports = Listener;

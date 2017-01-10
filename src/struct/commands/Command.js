@@ -106,6 +106,13 @@ class Command {
     reload(){
         this.commandHandler.reloadCommand(this.id);
     }
+
+    /**
+     * Shortcut to command handler's remove.
+     */
+    remove(){
+        this.commandHandler.removeCommand(this.id);
+    }
 }
 
 module.exports = Command;
