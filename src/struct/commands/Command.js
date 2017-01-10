@@ -22,7 +22,7 @@ class Command {
      * @param {string} id Command ID.
      * @param {Array.<string>} aliases Names to call the command with.
      * @param {Array.<Argument>} args Arguments for the command.
-     * @param {function} exec Function called when command is ran. (message, args, text)
+     * @param {function} exec Function called when command is ran. (message, args, content)
      * @param {CommandOptions} options Options for the command.
      */
     constructor(id, aliases = [], args = [], exec, options = {}){

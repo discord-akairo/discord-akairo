@@ -222,12 +222,12 @@ class CommandHandler extends EventEmitter {
         });
 
         Promise.all(results).then(() => {
-            let text = message.content.slice(message.content.indexOf(name) + name.length + 1);
+            let content = message.content.slice(message.content.indexOf(name) + name.length + 1);
             let words = [];
 
             const argSplit = {
-                plain: text.match(/([^\s]+)/g),
-                quoted: text.match(/"(.*?)"|("+?)|([^\s]+)/g)
+                plain: content.match(/([^\s]+)/g),
+                quoted: content.match(/"(.*?)"|("+?)|([^\s]+)/g)
             };
             
             words = argSplit[command.options.split] || argSplit.plain || [];
@@ -275,7 +275,7 @@ class CommandHandler extends EventEmitter {
             });
 
             this.emit('commandStarted', message, command);
-            let end = Promise.resolve(command.exec(message, args, text));
+            let end = Promise.resolve(command.exec(message, args, content));
 
             end.then(() => {
                 this.emit('commandFinished', message, command);
