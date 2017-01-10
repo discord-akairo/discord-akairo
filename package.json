@@ -9,6 +9,7 @@
     "readdir-recursive": "0.0.4"
   },
   "peerDependencies": {
+    "discord.js": "^11.0.0",
     "sqlite": "^2.2.4"
   },
   "repository": {
