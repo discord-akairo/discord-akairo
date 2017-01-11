@@ -12,7 +12,7 @@ A bot framework for Discord.js v11.
 - SQLite support.
 
 ### Help
-See the examples and docs folder for information.  
+See the examples folder for information.  
 If you need more help, message me on Discord: 1Computer#7952.  
 
 ### Issues
