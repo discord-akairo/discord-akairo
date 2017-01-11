@@ -91,7 +91,7 @@ class ClientUtil {
      * @param {Discord.Guild} guild Guild to find channel in.
      * @returns {Discord.Role}
      */
-    resolvRole(text, guild){
+    resolveRole(text, guild){
         if (!guild) throw new Error('Guild must be specified.');
 
         let roles = guild.roles;
