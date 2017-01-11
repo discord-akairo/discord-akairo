@@ -3,7 +3,7 @@
  * An argument in a command.
  * @prop {string} id - ID of the argument.
  * @prop {string} prefix - Ignores word order and uses a word that starts with this prefix.
- * @prop {string} parse - Method to parse argument: 'word', 'prefix', 'flag', or 'text'.
+ * @prop {string} parse - Method to parse argument: 'word', 'prefix', 'flag', 'text', or 'content'.
  * @prop {string} type - Attempts to cast input to this type: 'string', 'number', or 'dynamic'. 
  * @prop {(string|number)} defaultValue - Default value if a word is not inputted.
  */
@@ -27,7 +27,7 @@ class Command {
      * @param {string} id Command ID.
      * @param {Array.<string>} aliases Names to call the command with.
      * @param {Array.<Argument>} args Arguments for the command.
-     * @param {function} exec Function called when command is ran. (message, args, content)
+     * @param {function} exec Function called when command is ran. (message, args)
      * @param {CommandOptions} options Options for the command.
      */
     constructor(id, aliases = [], args = [], exec, options = {}){
@@ -127,8 +127,8 @@ class Command {
     parse(content){
         let words = [];
         const argSplit = {
-            plain: content.match(/([^\s]+)/g),
-            quoted: content.match(/"(.*?)"|("+?)|([^\s]+)/g)
+            plain: content.match(/[^\s]+/g),
+            quoted: content.match(/".*?"|[^\s"]+|"/g)
         };
         
         words = argSplit[this.options.split] || [];
@@ -139,6 +139,7 @@ class Command {
         let wordArgs = this.args.filter(arg => arg.parse === 'word');
         let prefixArgs = this.args.filter(arg => arg.parse === 'prefix' || arg.parse === 'flag');
         let textArgs = this.args.filter(arg => arg.parse === 'text');
+        let contentArgs = this.args.filter(arg => arg.parse === 'content');
 
         let prefixes = prefixArgs.map(arg => arg.prefix);
         let noPrefixWords = words.filter(w => !prefixes.some(p => w.startsWith(p)));
@@ -176,6 +177,10 @@ class Command {
 
         textArgs.forEach(arg => {
             args[arg.id] = noPrefixWords.join(' ') || arg.defaultValue;
+        });
+
+        contentArgs.forEach(arg => {
+            args[arg.id] = content || arg.defaultValue;
         });
 
         return args;
