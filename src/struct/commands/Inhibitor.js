@@ -56,6 +56,15 @@ class Inhibitor {
     remove(){
         this.commandHandler.removeInhibitor(this.id);
     }
+
+    /**
+     * Returns the ID.
+     * @override
+     * @returns {string}
+     */
+    toString(){
+        return this.id;
+    }
 }
 
 module.exports = Inhibitor;

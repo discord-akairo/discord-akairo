@@ -177,6 +177,15 @@ class Command {
 
         return args;
     }
+
+    /**
+     * Returns the ID.
+     * @override
+     * @returns {string}
+     */
+    toString(){
+        return this.id;
+    }
 }
 
 module.exports = Command;

@@ -70,6 +70,15 @@ class Listener {
     remove(){
         this.listenerHandler.removeListener(this.id);
     }
+
+    /**
+     * Returns the ID.
+     * @override
+     * @returns {string}
+     */
+    toString(){
+        return this.id;
+    }
 }
 
 module.exports = Listener;
