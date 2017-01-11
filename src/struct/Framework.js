@@ -1,5 +1,6 @@
 const CommandHandler = require('./commands/CommandHandler');
 const ListenerHandler = require('./events/ListenerHandler');
+const ClientUtil = require('./utils/ClientUtil');
 
 /**
  * @typedef {Object} FrameworkOptions
@@ -7,6 +8,7 @@ const ListenerHandler = require('./events/ListenerHandler');
  * @prop {string} token - Client token.
  * @prop {string} ownerID - Discord ID of the client owner.
  * @prop {boolean} selfbot - Marks this bot as a selfbot.
+ * @prop {boolean} addUtil - Adds to the client a bunch of utility functions. Accessible with client.util.
  * @prop {(string|function)} prefix - Default command prefix or function returning prefix.
  * @prop {(boolean|function)} allowMention - Allow mentions to the client user as a prefix or function that returns true or false.
  * @prop {string} commandDirectory - Directory to commands.
@@ -34,11 +36,16 @@ class Framework {
         this.options = options;
         if (this.options.token === undefined) throw new Error('Token must be defined.');
         if (this.options.selfbot === undefined) this.options.selfbot = false;
+        if (this.options.addUtil === undefined) this.options.addUtil = false;
         if (this.options.prefix === undefined) this.options.prefix = '!';
         if (this.options.allowMention === undefined) this.options.allowMention = false;
         if (this.options.commandDirectory === undefined) throw new Error('Command directory must be defined.');
         if (this.options.inhibitorDirectory === undefined) throw new Error('Inhibitor directory must be defined.');
         if (this.options.listenerDirectory === undefined) throw new Error('Listener directory must be defined.');
+
+        if (this.options.addUtil){
+            this.client.util = new ClientUtil(this);
+        }
 
         /**
          * The CommandHandler.
