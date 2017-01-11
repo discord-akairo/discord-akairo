@@ -235,56 +235,7 @@ class CommandHandler extends EventEmitter {
 
         Promise.all(results).then(() => {
             let content = message.content.slice(message.content.indexOf(name) + name.length + 1);
-            let words = [];
-
-            const argSplit = {
-                plain: content.match(/([^\s]+)/g),
-                quoted: content.match(/"(.*?)"|("+?)|([^\s]+)/g)
-            };
-            
-            words = argSplit[command.options.split] || argSplit.plain || [];
-
-            let args = {};
-
-            let wordArgs = command.args.filter(arg => !arg.parse || arg.parse === 'word');
-            let prefixArgs = command.args.filter(arg => arg.parse === 'prefix' || arg.parse === 'flag');
-            let textArgs = command.args.filter(arg => arg.parse === 'text');
-
-            let prefixes = prefixArgs.map(arg => arg.prefix);
-            let noPrefixWords = words.filter(w => !prefixes.some(p => w.startsWith(p)));
-
-            wordArgs.forEach((arg, i) => {
-                let word = noPrefixWords[i];
-                if (!word) return args[arg.id] = arg.defaultValue;
-
-                if (command.options.split === 'quoted' && /^".*"$/.test(word)) word = word.slice(1, -1);
-
-                if ((arg.type === 'dynamic' || arg.type === 'number') && !isNaN(word)) word = parseInt(word);
-                if (arg.type === 'number' && isNaN(word)) word = arg.defaultValue;
-
-                args[arg.id] = word;
-            });
-
-            prefixArgs.forEach(arg => {
-                if (arg.parse === 'flag'){
-                    let word = words.find(w => w === arg.prefix);
-                    return args[arg.id] = !!word;
-                }
-
-                let word = words.find(w => w.startsWith(arg.prefix));
-                if (!word) return args[arg.id] = arg.defaultValue;
-
-                word = word.replace(arg.prefix, '');
-
-                if ((arg.type === 'dynamic' || arg.type === 'number') && !isNaN(word)) word = parseInt(word);
-                if (arg.type === 'number' && isNaN(word)) word = arg.defaultValue;
-
-                args[arg.id] = word;
-            });
-
-            textArgs.forEach(arg => {
-                args[arg.id] = noPrefixWords.join(' ') || arg.defaultValue;
-            });
+            let args = command.parse(content);
 
             this.emit('commandStarted', message, command);
             let end = Promise.resolve(command.exec(message, args, content));

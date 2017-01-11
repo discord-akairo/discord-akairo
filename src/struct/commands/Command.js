@@ -9,6 +9,11 @@
  */
 
 /**
+ * @typedef {Object} EvaluatedArguments
+ * Arguments parsed from text. Properties are determined by the command's args.
+ */
+
+/**
  * @typedef {Object} CommandOptions
  * Options to use for command execution behavior.
  * @prop {boolean} ownerOnly - Allow client owner only.
@@ -112,6 +117,65 @@ class Command {
      */
     remove(){
         this.commandHandler.removeCommand(this.id);
+    }
+
+    /**
+     * Parses text based on this Command's args.
+     * @param {string} content String to parse.
+     * @returns {EvaluatedArguments}
+     */
+    parse(content){
+        let words = [];
+        const argSplit = {
+            plain: content.match(/([^\s]+)/g),
+            quoted: content.match(/"(.*?)"|("+?)|([^\s]+)/g)
+        };
+        
+        words = argSplit[this.options.split] || argSplit.plain || [];
+
+        let args = {};
+
+        let wordArgs = this.args.filter(arg => !arg.parse || arg.parse === 'word');
+        let prefixArgs = this.args.filter(arg => arg.parse === 'prefix' || arg.parse === 'flag');
+        let textArgs = this.args.filter(arg => arg.parse === 'text');
+
+        let prefixes = prefixArgs.map(arg => arg.prefix);
+        let noPrefixWords = words.filter(w => !prefixes.some(p => w.startsWith(p)));
+
+        wordArgs.forEach((arg, i) => {
+            let word = noPrefixWords[i];
+            if (!word) return args[arg.id] = arg.defaultValue;
+
+            if (this.options.split === 'quoted' && /^".*"$/.test(word)) word = word.slice(1, -1);
+
+            if ((arg.type === 'dynamic' || arg.type === 'number') && !isNaN(word)) word = parseInt(word);
+            if (arg.type === 'number' && isNaN(word)) word = arg.defaultValue;
+
+            args[arg.id] = word;
+        });
+
+        prefixArgs.forEach(arg => {
+            if (arg.parse === 'flag'){
+                let word = words.find(w => w === arg.prefix);
+                return args[arg.id] = !!word;
+            }
+
+            let word = words.find(w => w.startsWith(arg.prefix));
+            if (!word) return args[arg.id] = arg.defaultValue;
+
+            word = word.replace(arg.prefix, '');
+
+            if ((arg.type === 'dynamic' || arg.type === 'number') && !isNaN(word)) word = parseInt(word);
+            if (arg.type === 'number' && isNaN(word)) word = arg.defaultValue;
+
+            args[arg.id] = word;
+        });
+
+        textArgs.forEach(arg => {
+            args[arg.id] = noPrefixWords.join(' ') || arg.defaultValue;
+        });
+
+        return args;
     }
 }
 
