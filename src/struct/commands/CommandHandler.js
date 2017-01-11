@@ -189,7 +189,8 @@ class CommandHandler extends EventEmitter {
      */
     handle(message, prefix, allowMention){
         let start;
-        let mentioned = new RegExp(`^<@!?${this.framework.client.user.id}>`).match(message.content);
+        let mentionRegex = new RegExp(`^<@!?${this.framework.client.user.id}>`);
+        let mentioned = mentionRegex.match(message.content);
 
         if (message.content.startsWith(prefix)){
             start = prefix;
