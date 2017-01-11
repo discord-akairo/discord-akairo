@@ -1,7 +1,7 @@
-const path = require('path');
+const DatabaseHandler = require('./DatabaseHandler');
 const sql = require('sqlite');
 
-class SQLiteHandler {
+class SQLiteHandler extends DatabaseHandler {
     /**
      * Creates an SQLiteHandler. Table must have an 'id' column.
      * @param {string} filepath Path to .sqlite file.
@@ -9,39 +9,18 @@ class SQLiteHandler {
      * @param {Object} defaultConfig Default configuration.
      */
     constructor(filepath, tableName, defaultConfig = {}){
-        /**
-         * Path to .sqlite file.
-         * @type {string}
-         */
-        this.filepath = path.resolve(filepath);
+        super(filepath, defaultConfig);
 
         /**
          * Name of the table.
          * @type {string}
          */
         this.tableName = tableName;
-
-        /**
-         * Default configuration.
-         * @type {Object}
-         */
-        this.defaultConfig = defaultConfig;
-
-        /**
-         * The SQLite database.
-         * @type {Object}
-         */
-        this.db = null;
-
-        /** 
-         * Configurations stored in memory, mapped by ID to configuration.
-         * @type {Map<string, Object>}
-         */
-        this.memory = new Map();
     }
 
     /**
      * Opens the database so that it can be used.
+     * @override
      * @return {Promise.<Database>}
      */
     open(){
@@ -56,6 +35,7 @@ class SQLiteHandler {
     /**
      * Initializes handler and database with IDs.
      * @param ids {Array.<string>} Array of IDs.
+     * @override
      * @returns {Promise.<SQLiteHandler>}
      */
     init(ids){
@@ -81,6 +61,7 @@ class SQLiteHandler {
     /**
      * Adds into the database.
      * @param {string} id ID of entry.
+     * @override
      * @returns {Promise.<SQLiteHandler>}
      */
     add(id){
@@ -103,6 +84,7 @@ class SQLiteHandler {
     /**
      * Adds into the in-memory config.
      * @param {string} id ID of entry.
+     * @override
      * @returns {SQLiteHandler}
      */
     addMemory(id){
@@ -118,6 +100,7 @@ class SQLiteHandler {
     /**
      * Removes from the database.
      * @param {string} id ID of entry.
+     * @override
      * @returns {Promise.<SQLiteHandler>}
      */
     remove(id){
@@ -136,6 +119,7 @@ class SQLiteHandler {
     /**
      * Removes from the in-memory config.
      * @param {string} id ID of entry.
+     * @override
      * @returns {SQLiteHandler}
      */
     removeMemory(id){
@@ -147,6 +131,7 @@ class SQLiteHandler {
     /**
      * Checks if ID exists in config.
      * @param {string} id ID of entry.
+     * @override
      * @returns {boolean}
      */
     has(id){
@@ -156,6 +141,7 @@ class SQLiteHandler {
     /**
      * Gets configuration for an ID.
      * @param {string} id ID of entry.
+     * @override
      * @returns {Object}
      */
     get(id){
@@ -165,8 +151,8 @@ class SQLiteHandler {
         let copy = {};
 
         Object.keys(config).forEach(key => {
-            if (config[key] === null) return copy[key] = this.defaultConfig[key];
-            copy[key] = config[key];
+            if (config[key] === undefined) return copy[key] = typeof this.defaultConfig[key] === 'string' ? this.defaultConfig[key].replace(/'/g, '\'\'') : this.defaultConfig[key];
+            copy[key] = typeof config[key] === 'string' ? config[key].replace(/''/g, '') : config[key];
         });
 
         return copy;
@@ -177,6 +163,7 @@ class SQLiteHandler {
      * @param {string} id ID of entry.
      * @param {string} key Key to set.
      * @param {string|number} value Value to set.
+     * @override
      * @returns {Promise.<SQLiteHandler>}
      */
     set(id, key, value){
@@ -218,6 +205,7 @@ class SQLiteHandler {
      * @param {string} id ID of entry.
      * @param {string} key Key to set.
      * @param {string|number} value Value to set.
+     * @override
      * @returns {SQLiteHandler}
      */
     setMemory(id, key, value){
@@ -246,6 +234,7 @@ class SQLiteHandler {
     /**
      * Saves an in-memory config to the database.
      * @param {string} id ID to save.
+     * @override
      * @returns {Promise.<SQLiteHandler>}
      */
     save(id){
