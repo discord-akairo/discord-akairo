@@ -80,8 +80,8 @@ class ClientUtil {
         return channels.get(text) || channels.find(c => {
             return c.name === text
             || c.name.toLowerCase() === text.toLowerCase()
-            || c.name.replace(/^#/, '') === text
-            || c.name.replace(/^#/, '').toLowerCase() === text.toLowerCase();
+            || c.name === text.replace(/^#/, '')
+            || c.name.toLowerCase() === text.replace(/^#/, '').toLowerCase();
         });
     }
 
@@ -105,8 +105,8 @@ class ClientUtil {
         return roles.get(text) || roles.find(r => {
             return r.name === text
             || r.name.toLowerCase() === text.toLowerCase()
-            || r.name.replace(/^@/, '') === text
-            || r.name.replace(/^@/, '').toLowerCase() === text.toLowerCase();
+            || r.name === text.replace(/^@/, '')
+            || r.name.toLowerCase() === text.replace(/^@/, '').toLowerCase();
         });
     }
 
