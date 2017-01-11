@@ -189,12 +189,13 @@ class CommandHandler extends EventEmitter {
      */
     handle(message, prefix, allowMention){
         let start;
+        let mentioned = new RegExp(`^<@!?${this.framework.client.user.id}>`).match(message.content);
 
         if (message.content.startsWith(prefix)){
             start = prefix;
         } else
-        if (allowMention && new RegExp(`^<@!?${this.framework.client.user.id}>`).test(message.content)){
-            start = message.content.match(new RegExp(`^<@!?${this.framework.client.user.id}>`))[0];
+        if (allowMention && mentioned){
+            start = mentioned[0];
         } else {
             return this.emit('commandPrefixInvalid', message);
         }
@@ -205,29 +206,16 @@ class CommandHandler extends EventEmitter {
 
         if (!command) return this.emit('commandInvalid', message);
 
-        if (message.author.id !== this.framework.client.user.id && this.framework.options.selfbot){
-            return this.emit('commandBlocked', message, command, 'notSelf');
-        }
+        let block = reason => {
+            this.emit('commandBlocked', message, command, reason);
+        };
 
-        if (message.author.id === this.framework.client.user.id && !this.framework.options.selfbot){
-            return this.emit('commandBlocked', message, command, 'client');
-        }
-
-        if (message.author.bot){
-            return this.emit('commandBlocked', message, command, 'bot');
-        }
-
-        if (command.options.ownerOnly && message.author.id !== this.framework.options.ownerID){
-            return this.emit('commandBlocked', message, command, 'owner');
-        }
-
-        if (command.options.channelRestriction === 'guild' && !message.guild){
-            return this.emit('commandBlocked', message, command, 'guild');
-        }
-
-        if (command.options.channelRestriction === 'dm' && message.guild){
-            return this.emit('commandBlocked', message, command, 'dm');
-        }
+        if (message.author.id !== this.framework.client.user.id && this.framework.options.selfbot) return block('notSelf');
+        if (message.author.id === this.framework.client.user.id && !this.framework.options.selfbot) return block('client');
+        if (message.author.bot) return block('bot');
+        if (command.options.ownerOnly && message.author.id !== this.framework.options.ownerID) return block('owner');
+        if (command.options.channelRestriction === 'guild' && !message.guild) return block('guild');
+        if (command.options.channelRestriction === 'dm' && message.guild) return block('dm');
 
         let results = [];
 
@@ -309,7 +297,7 @@ class CommandHandler extends EventEmitter {
             });
         }).catch(reason => {
             if (reason instanceof Error) throw reason;
-            this.emit('commandBlocked', message, command, reason);
+            block(reason);
         });
     }
 }
