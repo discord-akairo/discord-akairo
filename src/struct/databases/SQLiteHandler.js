@@ -3,7 +3,7 @@ const sql = require('sqlite');
 
 class SQLiteHandler {
     /**
-     * Creates an SQLiteHandler.
+     * Creates an SQLiteHandler. Table must have an 'id' column.
      * @param {string} filepath Path to .sqlite file.
      * @param {string} tableName Name of the table.
      * @param {Object} defaultConfig Default configuration.
@@ -29,9 +29,9 @@ class SQLiteHandler {
 
         /**
          * The SQLite database.
-         * @type {?Object}
+         * @type {Object}
          */
-        this.db;
+        this.db = null;
 
         /** 
          * Configurations stored in memory, mapped by ID to configuration.
@@ -84,6 +84,8 @@ class SQLiteHandler {
      * @returns {Promise.<SQLiteHandler>}
      */
     add(id){
+        if (!this.db) return Promise.reject(new Error('Database not opened.'));
+
         return new Promise((resolve, reject) => {
             if (this.has(id)) return reject(`${id} already exists.`);
 
@@ -119,6 +121,8 @@ class SQLiteHandler {
      * @returns {Promise.<SQLiteHandler>}
      */
     remove(id){
+        if (!this.db) return Promise.reject(new Error('Database not opened.'));
+
         return new Promise((resolve, reject) => {
             if (!this.has(id)) return reject(`${id} does not exist.`);
             
@@ -176,6 +180,8 @@ class SQLiteHandler {
      * @returns {Promise.<SQLiteHandler>}
      */
     set(id, key, value){
+        if (!this.db) return Promise.reject(new Error('Database not opened.'));
+
         return new Promise((resolve, reject) => {
             key = key.replace(/'/g, '\'\'');
             value = (typeof value === 'string' ? value.replace(/'/g, '\'\'') : value);
@@ -243,6 +249,8 @@ class SQLiteHandler {
      * @returns {Promise.<SQLiteHandler>}
      */
     save(id){
+        if (!this.db) return Promise.reject(new Error('Database not opened.'));
+
         return new Promise((resolve, reject) => {
             if (!this.has(id)){
                 return reject(new Error(`${id} not found.`));
