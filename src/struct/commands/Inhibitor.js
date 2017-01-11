@@ -26,21 +26,21 @@ class Inhibitor {
 
         /**
          * Path to Inhibitor file.
-         * @type {?string}
+         * @type {string}
          */
-        this.filepath;
+        this.filepath = null;
 
         /**
          * The Akairo framework.
-         * @type {?Framework}
+         * @type {Framework}
          */
-        this.framework;
+        this.framework = null;
 
         /**
          * The command handler.
-         * @type {?CommandHandler}
+         * @type {CommandHandler}
          */
-        this.commandHandler;
+        this.commandHandler = null;
     }
 
     /**

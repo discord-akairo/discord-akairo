@@ -40,21 +40,21 @@ class Listener {
 
         /**
          * Path to Listener file.
-         * @type {?string}
+         * @type {string}
          */
-        this.filepath;
+        this.filepath = null;
 
         /**
          * The Akairo framework.
-         * @type {?Framework}
+         * @type {Framework}
          */
-        this.framework;
+        this.framework = null;
 
         /**
          * The listener handler.
-         * @type {?ListenerHandler}
+         * @type {ListenerHandler}
          */
-        this.listenerHandler;
+        this.listenerHandler = null;
     }
 
     /**
