@@ -57,7 +57,7 @@ class ListenerHandler {
      */
     addListener(filename){
         let files = rread.fileSync(this.directory);
-        let filepath = files.find(file => file.endsWith(`${filename}`));
+        let filepath = files.find(file => file.endsWith(`${filename}.js`));
 
         if (!filepath){
             throw new Error(`File ${filename} not found.`);

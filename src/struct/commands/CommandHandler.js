@@ -76,7 +76,7 @@ class CommandHandler extends EventEmitter {
      */
     addCommand(filename){
         let files = rread.fileSync(this.commandDirectory);
-        let filepath = files.find(file => file.endsWith(`${filename}`));
+        let filepath = files.find(file => file.endsWith(`${filename}.js`));
 
         if (!filepath){
             throw new Error(`File ${filename} not found.`);
@@ -144,7 +144,7 @@ class CommandHandler extends EventEmitter {
      */
     addInhibitor(filename){
         let files = rread.fileSync(this.inhibitorDirectory);
-        let filepath = files.find(file => file.endsWith(`${filename}`));
+        let filepath = files.find(file => file.endsWith(`${filename}.js`));
 
         if (!filepath){
             throw new Error(`File ${filename} not found.`);
