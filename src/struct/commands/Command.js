@@ -131,11 +131,12 @@ class Command {
             quoted: content.match(/"(.*?)"|("+?)|([^\s]+)/g)
         };
         
-        words = argSplit[this.options.split] || argSplit.plain || [];
+        words = argSplit[this.options.split] || [];
+        if (words.length === 0) return {};
 
         let args = {};
 
-        let wordArgs = this.args.filter(arg => !arg.parse || arg.parse === 'word');
+        let wordArgs = this.args.filter(arg => arg.parse === 'word');
         let prefixArgs = this.args.filter(arg => arg.parse === 'prefix' || arg.parse === 'flag');
         let textArgs = this.args.filter(arg => arg.parse === 'text');
 
@@ -153,6 +154,8 @@ class Command {
 
             args[arg.id] = word;
         });
+
+        words.reverse();
 
         prefixArgs.forEach(arg => {
             if (arg.parse === 'flag'){
