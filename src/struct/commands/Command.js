@@ -2,9 +2,10 @@
  * @typedef {Object} Argument
  * An argument in a command.
  * @prop {string} id - ID of the argument.
- * @prop {string} prefix - Ignores word order and uses a word that starts with this prefix.
- * @prop {string} parse - Method to parse argument: 'word', 'prefix', 'flag', 'text', or 'content'.
+ * @prop {string} parse - Method to parse argument: 'word', 'rest', 'prefix', 'flag', 'text', or 'content'.
  * @prop {string} type - Attempts to cast input to this type: 'string', 'number', or 'dynamic'. 
+* @prop {string} prefix - Ignores word order and uses a word that starts with this prefix. Applicable to 'prefix' and 'flag' only.
+ * @prop {number} index - Word to start from. Applicable to 'rest' only.
  * @prop {(string|number)} defaultValue - Default value if a word is not inputted.
  */
 
@@ -92,11 +93,11 @@ class Command {
      * @type {string}
      */
     get example(){
-        if (this.args.length === 1 && this.args[0].parse === 'text'){
+        if (this.args.length === 1 && (this.args[0].parse === 'text' || this.args[0].parse === 'content')){
             return `${this.aliases[0]} ${this.args[0].id}`;
         }
 
-        let args = this.args.filter(arg => arg.parse !== 'text').map(arg => {
+        let args = this.args.filter(arg => arg.parse !== 'text' && arg.parse !== 'content').map(arg => {
             if (arg.parse === 'flag') return arg.prefix;
             if (arg.parse === 'prefix') return `${arg.prefix}${arg.id}`;
             return arg.id;
@@ -137,7 +138,9 @@ class Command {
         let args = {};
 
         let wordArgs = this.args.filter(arg => arg.parse === 'word');
-        let prefixArgs = this.args.filter(arg => arg.parse === 'prefix' || arg.parse === 'flag');
+        let restArgs = this.args.filter(arg => arg.parse === 'rest');
+        let prefixArgs = this.args.filter(arg => arg.parse === 'prefix');
+        let flagArgs = this.args.filter(arg => arg.parse === 'flag');
         let textArgs = this.args.filter(arg => arg.parse === 'text');
         let contentArgs = this.args.filter(arg => arg.parse === 'content');
 
@@ -156,14 +159,14 @@ class Command {
             args[arg.id] = word;
         });
 
+        restArgs.forEach(arg => {
+            let words = noPrefixWords.slice(arg.index);
+            args[arg.id] = words.join(' ') || arg.defaultValue;
+        });
+
         words.reverse();
 
         prefixArgs.forEach(arg => {
-            if (arg.parse === 'flag'){
-                let word = words.find(w => w === arg.prefix);
-                return args[arg.id] = !!word;
-            }
-
             let word = words.find(w => w.startsWith(arg.prefix));
             if (!word) return args[arg.id] = arg.defaultValue;
 
@@ -173,6 +176,11 @@ class Command {
             if (arg.type === 'number' && isNaN(word)) word = arg.defaultValue;
 
             args[arg.id] = word;
+        });
+
+        flagArgs.forEach(arg => {    
+            let word = words.find(w => w === arg.prefix);
+            return args[arg.id] = !!word;
         });
 
         textArgs.forEach(arg => {
