@@ -74,6 +74,8 @@ class CommandHandler extends EventEmitter {
         command.commandHandler = this;
 
         this.commands.set(command.id, command);
+
+        if (!this.categories.has(command.options.category)) this.categories.set(command.options.category, []);
         this.categories.get(command.options.category).push(command);
     }
 
