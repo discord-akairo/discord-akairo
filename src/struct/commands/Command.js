@@ -2,10 +2,10 @@
  * @typedef {Object} Argument
  * An argument in a command.
  * @prop {string} id - ID of the argument.
- * @prop {string} parse - Method to parse argument: 'word', 'rest', 'prefix', 'flag', 'text', or 'content'.
+ * @prop {string} parse - Method to parse argument: 'word', 'prefix', 'flag', 'text', or 'content'.
  * @prop {string} type - Attempts to cast input to this type: 'string', 'number', or 'dynamic'. 
 * @prop {string} prefix - Ignores word order and uses a word that starts with this prefix. Applicable to 'prefix' and 'flag' only.
- * @prop {number} index - Word to start from. Applicable to 'rest' only.
+ * @prop {number} index - Word to start from. Applicable to 'word' or 'text' only.
  * @prop {(string|number)} defaultValue - Default value if a word is not inputted.
  */
 
@@ -133,12 +133,10 @@ class Command {
         };
         
         words = argSplit[this.options.split] || [];
-        if (words.length === 0) return {};
 
         let args = {};
 
         let wordArgs = this.args.filter(arg => arg.parse === 'word');
-        let restArgs = this.args.filter(arg => arg.parse === 'rest');
         let prefixArgs = this.args.filter(arg => arg.parse === 'prefix');
         let flagArgs = this.args.filter(arg => arg.parse === 'flag');
         let textArgs = this.args.filter(arg => arg.parse === 'text');
@@ -148,7 +146,7 @@ class Command {
         let noPrefixWords = words.filter(w => !prefixes.some(p => w.startsWith(p)));
 
         wordArgs.forEach((arg, i) => {
-            let word = noPrefixWords[i];
+            let word = noPrefixWords[arg.index || i];
             if (!word) return args[arg.id] = arg.defaultValue;
 
             if (this.options.split === 'quoted' && /^".*"$/.test(word)) word = word.slice(1, -1);
@@ -157,11 +155,6 @@ class Command {
             if (arg.type === 'number' && isNaN(word)) word = arg.defaultValue;
 
             args[arg.id] = word;
-        });
-
-        restArgs.forEach(arg => {
-            let words = noPrefixWords.slice(arg.index);
-            args[arg.id] = words.join(' ') || arg.defaultValue;
         });
 
         words.reverse();
@@ -184,7 +177,7 @@ class Command {
         });
 
         textArgs.forEach(arg => {
-            args[arg.id] = noPrefixWords.join(' ') || arg.defaultValue;
+            args[arg.id] = noPrefixWords.slice(arg.index).join(' ') || arg.defaultValue;
         });
 
         contentArgs.forEach(arg => {
