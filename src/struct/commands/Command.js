@@ -5,7 +5,7 @@
  * @prop {string} parse - Method to parse argument: 'word', 'prefix', 'flag', 'text', or 'content'.
  * @prop {string} type - Attempts to cast input to this type: 'string', 'number', or 'dynamic'. 
 * @prop {string} prefix - Ignores word order and uses a word that starts with this prefix. Applicable to 'prefix' and 'flag' only.
- * @prop {number} index - Word to start from. Applicable to 'word' or 'text' only.
+ * @prop {number} index - Word to start from. Applicable to 'word', 'text', or 'content' only.
  * @prop {(string|number)} defaultValue - Default value if a word is not inputted.
  */
 
@@ -181,7 +181,7 @@ class Command {
         });
 
         contentArgs.forEach(arg => {
-            args[arg.id] = content || arg.defaultValue;
+            args[arg.id] = content.split(' ').slice(arg.index).join(' ') || arg.defaultValue;
         });
 
         return args;
