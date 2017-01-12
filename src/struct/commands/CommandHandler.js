@@ -131,7 +131,18 @@ class CommandHandler extends EventEmitter {
      * @param {string} name Alias to find with.
      */
     findCommand(name){
-        return Array.from(this.commands.values()).find(command => command.aliases.includes(name.toLowerCase()));
+        return Array.from(this.commands.values()).find(command => {
+            return command.aliases.some(a => a.toLowerCase() === name.toLowerCase());
+        });
+    }
+
+    /**
+     * Finds a category by name.
+     * @param {string} name Name to find with.
+     */
+    findCategory(name){
+        let cat = Array.from(this.categories).find(cat => cat[0].toLowerCase() === name.toLowerCase());
+        return cat ? cat[1] : null;
     }
 
     /**
