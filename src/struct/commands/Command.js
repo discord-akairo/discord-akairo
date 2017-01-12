@@ -146,7 +146,7 @@ class Command {
         let noPrefixWords = words.filter(w => !prefixes.some(p => w.startsWith(p)));
 
         wordArgs.forEach((arg, i) => {
-            let word = noPrefixWords[arg.index || i];
+            let word = noPrefixWords[arg.index !== undefined ? arg.index : i];
             if (!word) return args[arg.id] = arg.defaultValue;
 
             if (this.options.split === 'quoted' && /^".*"$/.test(word)) word = word.slice(1, -1);
