@@ -12,7 +12,8 @@ A bot framework for Discord.js v11.
 - SQLite support.
 
 ### Help
-See the examples folder for information.  
+Documentation: [https://1computer1.github.io/discord-akairo/](https://1computer1.github.io/discord-akairo/)  
+See the examples folder for some more information.  
 If you need more help, message me on Discord: 1Computer#7952.  
 
 ### Issues
