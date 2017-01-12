@@ -6,7 +6,7 @@ class DatabaseHandler {
      */
     constructor(filepath, defaultConfig){
         /**
-         * Path to .sqlite file.
+         * Path to the database file.
          * @type {string}
          */
         this.filepath = path.resolve(filepath);

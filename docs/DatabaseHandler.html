@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>events/Listener.js - Documentation</title>
+    <title>DatabaseHandler - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -28,102 +28,486 @@
 
 <div id="main">
     
-    <h1 class="page-title">events/Listener.js</h1>
+    <h1 class="page-title">DatabaseHandler</h1>
     
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>class Listener {
-    /**
-     * Creates a new Listener.
-     * @param {string} id Listener ID.
-     * @param {(string|EventEmitter)} emitter The event emitter: 'client' or 'commandHandler' or an EventEmitter.
-     * @param {string} eventName Event to listen to.
-     * @param {string} type Type of listener: 'on' or 'once'.
-     * @param {function} exec The function called when event emitted. (...)
-     */
-    constructor(id, emitter, eventName, type, exec){
-        /**
-         * ID of the Listener.
-         * @type {string}
-         */
-        this.id = id;
+        <h2>
+        DatabaseHandler
+        </h2>
+        
+    
+</header>
 
-        /**
-         * The event emitter.
-         * @type {(string|EventEmitter)}
-         */
-        this.emitter = emitter;
+<article>
+    <div class="container-overview">
+    
+        
 
-        /**
-         * The event name listened to.
-         * @type {string}
-         */
-        this.eventName = eventName;
+    
 
-        /**
-         * Type of listener.
-         * @type {string}
-         */
-        this.type = type;
+    <h4 class="name" id="DatabaseHandler"><span class="type-signature"></span>new DatabaseHandler<span class="signature">()</span><span class="type-signature"></span></h4>
 
-        /**
-         * The function called when event emitted.
-         * @type {function}
-         */
-        this.exec = exec;
+    
 
-        /**
-         * Path to Listener file.
-         * @type {string}
-         */
-        this.filepath = null;
 
-        /**
-         * The Akairo framework.
-         * @type {Framework}
-         */
-        this.framework = null;
 
-        /**
-         * The listener handler.
-         * @type {ListenerHandler}
-         */
-        this.listenerHandler = null;
-    }
+<div class="description">
+    This class should be extended, not used.
+</div>
 
-    /**
-     * Reloads the Listener.
-     */
-    reload(){
-        this.listenerHandler.reloadListener(this.id);
-    }
 
-    /**
-     * Removes the Listener. It can be readded with the listener handler.
-     */
-    remove(){
-        this.listenerHandler.removeListener(this.id);
-    }
 
-    /**
-     * Returns the ID.
-     * @override
-     * @returns {string}
-     */
-    toString(){
-        return this.id;
-    }
-}
 
-module.exports = Listener;</code></pre>
-        </article>
-    </section>
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line7">line 7</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="db"><span class="type-signature"></span>db<span class="type-signature"> :Object</span></h4>
+
+
+
+
+<div class="description">
+    The database.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line30">line 30</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="defaultConfig"><span class="type-signature"></span>defaultConfig<span class="type-signature"> :Object</span></h4>
+
+
+
+
+<div class="description">
+    Default configuration.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line18">line 18</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="filepath"><span class="type-signature"></span>filepath<span class="type-signature"> :string</span></h4>
+
+
+
+
+<div class="description">
+    Path to the database file.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line12">line 12</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="ids"><span class="type-signature"></span>ids<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Gets all the IDs.
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line37">line 37</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="memory"><span class="type-signature"></span>memory<span class="type-signature"> :Map.&lt;string, Object></span></h4>
+
+
+
+
+<div class="description">
+    Configurations stored in memory, mapped by ID to configuration.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Map.&lt;string, Object></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line24">line 24</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
