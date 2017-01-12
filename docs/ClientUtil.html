@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>ListenerHandler - Documentation</title>
+    <title>ClientUtil - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -28,7 +28,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">ListenerHandler</h1>
+    <h1 class="page-title">ClientUtil</h1>
     
 
     
@@ -41,7 +41,7 @@
 <header>
     
         <h2>
-        ListenerHandler
+        ClientUtil
         </h2>
         
     
@@ -54,14 +54,14 @@
 
     
 
-    <h4 class="name" id="ListenerHandler"><span class="type-signature"></span>new ListenerHandler<span class="signature">(framework)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="ClientUtil"><span class="type-signature"></span>new ClientUtil<span class="signature">(client)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Creates a new ListenerHandler.
+    Creates client utilities.
 </div>
 
 
@@ -97,13 +97,13 @@
 
         <tr>
             
-                <td class="name"><code>framework</code></td>
+                <td class="name"><code>client</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="Framework.html">Framework</a></span>
+<span class="param-type">Discord.Client</span>
 
 
             
@@ -113,7 +113,7 @@
 
             
 
-            <td class="description last">The Akairo framework.</td>
+            <td class="description last">The Discord.js client.</td>
         </tr>
 
     
@@ -154,7 +154,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="events_ListenerHandler.js.html">events/ListenerHandler.js</a>, <a href="events_ListenerHandler.js.html#line11">line 11</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line6">line 6</a>
     </li></ul></dd>
     
 
@@ -198,13 +198,13 @@
 
         
             
-<h4 class="name" id="directory"><span class="type-signature"></span>directory<span class="type-signature"> :string</span></h4>
+<h4 class="name" id="client"><span class="type-signature"></span>client<span class="type-signature"> :Discord.Client</span></h4>
 
 
 
 
 <div class="description">
-    Directory to listeners.
+    The Discord.js client.
 </div>
 
 
@@ -213,7 +213,7 @@
     <ul>
         <li>
             
-<span class="param-type">string</span>
+<span class="param-type">Discord.Client</span>
 
 
         </li>
@@ -252,151 +252,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="events_ListenerHandler.js.html">events/ListenerHandler.js</a>, <a href="events_ListenerHandler.js.html#line22">line 22</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="framework"><span class="type-signature"></span>framework<span class="type-signature"> :<a href="Framework.html">Framework</a></span></h4>
-
-
-
-
-<div class="description">
-    The Akairo framework.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><a href="Framework.html">Framework</a></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="events_ListenerHandler.js.html">events/ListenerHandler.js</a>, <a href="events_ListenerHandler.js.html#line16">line 16</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="listeners"><span class="type-signature"></span>listeners<span class="type-signature"> :Map.&lt;string, <a href="Listener.html">Listener</a>></span></h4>
-
-
-
-
-<div class="description">
-    Listeners loaded, mapped by ID to Listener.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Map.&lt;string, <a href="Listener.html">Listener</a>></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="events_ListenerHandler.js.html">events/ListenerHandler.js</a>, <a href="events_ListenerHandler.js.html#line28">line 28</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line11">line 11</a>
     </li></ul></dd>
     
 
@@ -423,14 +279,14 @@
 
     
 
-    <h4 class="name" id="addListener"><span class="type-signature"></span>addListener<span class="signature">(filename)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="createInvite"><span class="type-signature"></span>createInvite<span class="signature">(permissions)</span><span class="type-signature"> &rarr; {Promise.&lt;string>}</span></h4>
 
     
 
 
 
 <div class="description">
-    Adds a Listener.
+    Creates an invite link for the client.
 </div>
 
 
@@ -456,6 +312,8 @@
         
 
         
+        <th>Default</th>
+        
 
         <th class="last">Description</th>
     </tr>
@@ -466,13 +324,13 @@
 
         <tr>
             
-                <td class="name"><code>filename</code></td>
+                <td class="name"><code>permissions</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">number</span>
 
 
             
@@ -481,8 +339,14 @@
             
 
             
+                <td class="default">
+                
+                    0
+                
+                </td>
+            
 
-            <td class="description last">Filename to lookup in the directory.</td>
+            <td class="description last">Permissions number.</td>
         </tr>
 
     
@@ -523,7 +387,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="events_ListenerHandler.js.html">events/ListenerHandler.js</a>, <a href="events_ListenerHandler.js.html#line58">line 58</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line156">line 156</a>
     </li></ul></dd>
     
 
@@ -546,6 +410,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;string></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -554,14 +436,14 @@
 
     
 
-    <h4 class="name" id="deregisterListener"><span class="type-signature"></span>deregisterListener<span class="signature">(id)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="displayColor"><span class="type-signature"></span>displayColor<span class="signature">(member)</span><span class="type-signature"> &rarr; {number}</span></h4>
 
     
 
 
 
 <div class="description">
-    Removes a Listener from the EventEmitter.
+    Gets the display color in decimal of the member.
 </div>
 
 
@@ -597,13 +479,13 @@
 
         <tr>
             
-                <td class="name"><code>id</code></td>
+                <td class="name"><code>member</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Discord.GuildMember</span>
 
 
             
@@ -613,7 +495,7 @@
 
             
 
-            <td class="description last">ID of the Listener.</td>
+            <td class="description last">The member to find color of.</td>
         </tr>
 
     
@@ -654,7 +536,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="events_ListenerHandler.js.html">events/ListenerHandler.js</a>, <a href="events_ListenerHandler.js.html#line126">line 126</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line143">line 143</a>
     </li></ul></dd>
     
 
@@ -677,6 +559,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -685,14 +585,14 @@
 
     
 
-    <h4 class="name" id="loadListener"><span class="type-signature"></span>loadListener<span class="signature">(filepath)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="resolveChannel"><span class="type-signature"></span>resolveChannel<span class="signature">(text, guild)</span><span class="type-signature"> &rarr; {Discord.GuildChannel}</span></h4>
 
     
 
 
 
 <div class="description">
-    Loads a Listener.
+    Resolves a GuildChannel from a string, such as an ID, a name, etc.
 </div>
 
 
@@ -728,7 +628,7 @@
 
         <tr>
             
-                <td class="name"><code>filepath</code></td>
+                <td class="name"><code>text</code></td>
             
 
             <td class="type">
@@ -744,7 +644,30 @@
 
             
 
-            <td class="description last">Path to file.</td>
+            <td class="description last">Text to resolve.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>guild</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Discord.Guild</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Guild to find channel in.</td>
         </tr>
 
     
@@ -785,7 +708,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="events_ListenerHandler.js.html">events/ListenerHandler.js</a>, <a href="events_ListenerHandler.js.html#line40">line 40</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line69">line 69</a>
     </li></ul></dd>
     
 
@@ -808,6 +731,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Discord.GuildChannel</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -816,14 +757,14 @@
 
     
 
-    <h4 class="name" id="registerListener"><span class="type-signature"></span>registerListener<span class="signature">(id)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="resolveEmoji"><span class="type-signature"></span>resolveEmoji<span class="signature">(text, guild)</span><span class="type-signature"> &rarr; {Discord.Emoji}</span></h4>
 
     
 
 
 
 <div class="description">
-    Registers a Listener with the EventEmitter.
+    Resolves an Emoji from a string, such as a name or a mention.
 </div>
 
 
@@ -859,7 +800,7 @@
 
         <tr>
             
-                <td class="name"><code>id</code></td>
+                <td class="name"><code>text</code></td>
             
 
             <td class="type">
@@ -875,7 +816,30 @@
 
             
 
-            <td class="description last">ID of the Listener.</td>
+            <td class="description last">Text to resolve.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>guild</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Discord.Guild</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Guild to find emoji in.</td>
         </tr>
 
     
@@ -916,7 +880,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="events_ListenerHandler.js.html">events/ListenerHandler.js</a>, <a href="events_ListenerHandler.js.html#line103">line 103</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line119">line 119</a>
     </li></ul></dd>
     
 
@@ -939,6 +903,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Discord.Emoji</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -947,14 +929,14 @@
 
     
 
-    <h4 class="name" id="reloadListener"><span class="type-signature"></span>reloadListener<span class="signature">(id)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="resolveMember"><span class="type-signature"></span>resolveMember<span class="signature">(text, guild)</span><span class="type-signature"> &rarr; {Discord.GuildMember|Discord.User}</span></h4>
 
     
 
 
 
 <div class="description">
-    Reloads a Listener.
+    Resolves a GuildMember from a string, such as an ID, a nickname, a username, etc.
 </div>
 
 
@@ -990,7 +972,7 @@
 
         <tr>
             
-                <td class="name"><code>id</code></td>
+                <td class="name"><code>text</code></td>
             
 
             <td class="type">
@@ -1006,7 +988,30 @@
 
             
 
-            <td class="description last">ID of the Listener.</td>
+            <td class="description last">Text to resolve.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>guild</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Discord.Guild</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Guild to find member in. If not specified, will resolve a User instead.</td>
         </tr>
 
     
@@ -1047,7 +1052,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="events_ListenerHandler.js.html">events/ListenerHandler.js</a>, <a href="events_ListenerHandler.js.html#line86">line 86</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line42">line 42</a>
     </li></ul></dd>
     
 
@@ -1070,6 +1075,27 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Discord.GuildMember</span>
+|
+
+<span class="param-type">Discord.User</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -1078,14 +1104,14 @@
 
     
 
-    <h4 class="name" id="removeListener"><span class="type-signature"></span>removeListener<span class="signature">(id)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="resolveRole"><span class="type-signature"></span>resolveRole<span class="signature">(text, guild)</span><span class="type-signature"> &rarr; {Discord.Role}</span></h4>
 
     
 
 
 
 <div class="description">
-    Removes a Listener.
+    Resolves a Role from a string, such as an ID, a name, etc.
 </div>
 
 
@@ -1121,7 +1147,7 @@
 
         <tr>
             
-                <td class="name"><code>id</code></td>
+                <td class="name"><code>text</code></td>
             
 
             <td class="type">
@@ -1137,7 +1163,30 @@
 
             
 
-            <td class="description last">ID of the Listener.</td>
+            <td class="description last">Text to resolve.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>guild</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Discord.Guild</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Guild to find channel in.</td>
         </tr>
 
     
@@ -1178,7 +1227,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="events_ListenerHandler.js.html">events/ListenerHandler.js</a>, <a href="events_ListenerHandler.js.html#line73">line 73</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line94">line 94</a>
     </li></ul></dd>
     
 
@@ -1201,6 +1250,173 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Discord.Role</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="resolveUser"><span class="type-signature"></span>resolveUser<span class="signature">(text)</span><span class="type-signature"> &rarr; {Discord.User}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Resolves a User from a string, such as an ID, a username, etc.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Text to resolve.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line19">line 19</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Discord.User</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 

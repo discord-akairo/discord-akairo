@@ -17,6 +17,7 @@
 /**
  * @typedef {Object} CommandOptions
  * Options to use for command execution behavior.
+ * @prop {string} category - Command category for organization purposes.
  * @prop {boolean} ownerOnly - Allow client owner only.
  * @prop {string} channelRestriction - Restricts channel: 'guild' or 'dm'.
  * @prop {string} split - Method to divide text into words: 'plain' or 'quoted'.
@@ -52,6 +53,7 @@ class Command {
         this.args.forEach(arg => {
             if (arg.parse === undefined) arg.parse = 'word';
             if (arg.type === undefined) arg.type = 'string';
+            if (arg.defaultValue === undefined) arg.defaultValue = '';
         });
 
         /**
@@ -65,6 +67,7 @@ class Command {
          * @type {CommandOptions}
          */
         this.options = options;
+        if (this.options.category === undefined) this.options.category = '';
         if (this.options.ownerOnly === undefined) this.options.ownerOnly = false;
         if (this.options.channelRestriction === undefined) this.options.channelRestriction = 'none';
         if (this.options.split === undefined) this.options.split = 'plain';

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>commands/Inhibitor.js - Documentation</title>
+    <title>databases/DatabaseHandler.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -28,7 +28,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">commands/Inhibitor.js</h1>
+    <h1 class="page-title">databases/DatabaseHandler.js</h1>
     
 
     
@@ -38,76 +38,57 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>class Inhibitor {
-    /**
-     * Creates a new Inhibitor.
-     * @param {string} id Inhibitor ID.
-     * @param {string} reason Reason emitted when a command is blocked.
-     * @param {function} exec Function called before a command is ran. Return true or a rejecting Promise to block. (message, command)
-     */
-    constructor(id, reason, exec){
+            <pre class="prettyprint source linenums"><code>const path = require('path');
+
+class DatabaseHandler {
+    constructor(filepath, defaultConfig){
         /**
-         * ID of the Inhibitor.
+         * Path to .sqlite file.
          * @type {string}
          */
-        this.id = id;
+        this.filepath = path.resolve(filepath);
+        
+        /**
+         * Default configuration.
+         * @type {Object}
+         */
+        this.defaultConfig = defaultConfig;
+
+        /** 
+         * Configurations stored in memory, mapped by ID to configuration.
+         * @type {Map&lt;string, Object>}
+         */
+        this.memory = new Map();
 
         /**
-         * Reason emitted when command is inhibited.
-         * @type {string}
+         * The database.
+         * @type {Object}
          */
-        this.reason = reason;
-
-        /**
-         * Function called to inhibit.
-         * @type {function}
-         */
-        this.exec = exec;
-
-        /**
-         * Path to Inhibitor file.
-         * @type {string}
-         */
-        this.filepath = null;
-
-        /**
-         * The Akairo framework.
-         * @type {Framework}
-         */
-        this.framework = null;
-
-        /**
-         * The command handler.
-         * @type {CommandHandler}
-         */
-        this.commandHandler = null;
+        this.db = null;
     }
 
     /**
-     * Reloads the inhibitor.
+     * Gets all the IDs.
+     * @return {Array.&lt;string>}
      */
-    reload(){
-        this.commandHandler.reloadInhibitor(this.id);
-    }
-    
-    /**
-     * Removes the Inhibitor. It can be readded with the command handler.
-     */
-    remove(){
-        this.commandHandler.removeInhibitor(this.id);
+    get ids(){
+        return Array.from(this.memory.keys());
     }
 
-    /**
-     * Returns the ID.
-     * @override
-     * @returns {string}
-     */
-    toString(){
-        return this.id;
-    }
+    open(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
+    init(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
+    add(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
+    addMemory(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
+    remove(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
+    removeMemory(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
+    has(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
+    get(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
+    set(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
+    setMemory(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
+    save(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
 }
 
-module.exports = Inhibitor;</code></pre>
+module.exports = DatabaseHandler;</code></pre>
         </article>
     </section>
 

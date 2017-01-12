@@ -37,6 +37,12 @@ class CommandHandler extends EventEmitter {
         this.commands = new Map();
 
         /**
+         * Commands categories mapped by name to Array of Commands.
+         * @type {Map.<string, Array.<Command>>}
+         */
+        this.categories = new Map();
+
+        /**
          * Inhibitors loaded, mapped by ID to Inhibitor.
          * @type {Map.<string, Inhibitor>}
          */
@@ -68,6 +74,7 @@ class CommandHandler extends EventEmitter {
         command.commandHandler = this;
 
         this.commands.set(command.id, command);
+        this.categories.get(command.options.category).push(command);
     }
 
     /**
@@ -95,6 +102,9 @@ class CommandHandler extends EventEmitter {
 
         delete require.cache[require.resolve(command.filepath)];
         this.commands.delete(command.id);
+        
+        let category = this.categories.get(command.options.category);
+        category.splice(category.indexOf(command), 1);
     }
 
     /**
@@ -109,6 +119,9 @@ class CommandHandler extends EventEmitter {
 
         delete require.cache[require.resolve(command.filepath)];
         this.commands.delete(command.id);
+
+        let category = this.categories.get(command.options.category);
+        category.splice(category.indexOf(command), 1);
         
         this.loadCommand(filepath);
     }

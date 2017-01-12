@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>commands/Inhibitor.js - Documentation</title>
+    <title>utils/ClientUtil.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -28,7 +28,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">commands/Inhibitor.js</h1>
+    <h1 class="page-title">utils/ClientUtil.js</h1>
     
 
     
@@ -38,76 +38,172 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>class Inhibitor {
+            <pre class="prettyprint source linenums"><code>class ClientUtil {
     /**
-     * Creates a new Inhibitor.
-     * @param {string} id Inhibitor ID.
-     * @param {string} reason Reason emitted when a command is blocked.
-     * @param {function} exec Function called before a command is ran. Return true or a rejecting Promise to block. (message, command)
+     * Creates client utilities.
+     * @param {Discord.Client} client The Discord.js client.
      */
-    constructor(id, reason, exec){
-        /**
-         * ID of the Inhibitor.
-         * @type {string}
+    constructor(client){
+        /** 
+         * The Discord.js client. 
+         * @type {Discord.Client}
          */
-        this.id = id;
-
-        /**
-         * Reason emitted when command is inhibited.
-         * @type {string}
-         */
-        this.reason = reason;
-
-        /**
-         * Function called to inhibit.
-         * @type {function}
-         */
-        this.exec = exec;
-
-        /**
-         * Path to Inhibitor file.
-         * @type {string}
-         */
-        this.filepath = null;
-
-        /**
-         * The Akairo framework.
-         * @type {Framework}
-         */
-        this.framework = null;
-
-        /**
-         * The command handler.
-         * @type {CommandHandler}
-         */
-        this.commandHandler = null;
+        this.client = client;
     }
 
     /**
-     * Reloads the inhibitor.
+     * Resolves a User from a string, such as an ID, a username, etc.
+     * @param {string} text Text to resolve.
+     * @returns {Discord.User}
      */
-    reload(){
-        this.commandHandler.reloadInhibitor(this.id);
-    }
-    
-    /**
-     * Removes the Inhibitor. It can be readded with the command handler.
-     */
-    remove(){
-        this.commandHandler.removeInhibitor(this.id);
+    resolveUser(text){
+        let users = this.client.users;
+
+        let reg = /&lt;@!?(\d+)>/;
+        if (reg.test(text)){
+            let id = text.match(reg)[1];
+            return users.get(id);
+        }
+
+        return users.get(text) || users.find(u => {
+            return u.username === text
+            || u.username.toLowerCase() === text.toLowerCase()
+            || u.username === text.split('#')[0] &amp;&amp; u.discriminator === text.split('#')[1]
+            || u.username.toLowerCase() === text.split('#')[0].toLowerCase() &amp;&amp; u.discriminator === text.split('#')[1];
+        });
     }
 
     /**
-     * Returns the ID.
-     * @override
-     * @returns {string}
+     * Resolves a GuildMember from a string, such as an ID, a nickname, a username, etc.
+     * @param {string} text Text to resolve.
+     * @param {Discord.Guild} guild Guild to find member in. If not specified, will resolve a User instead.
+     * @returns {(Discord.GuildMember|Discord.User)}
      */
-    toString(){
-        return this.id;
+    resolveMember(text, guild){
+        if (!guild) return this.resolveUser(text);
+
+        let members = guild.members;
+
+        let reg = /&lt;@!?(\d+)>/;
+        if (reg.test(text)){
+            let id = text.match(reg)[1];
+            return members.get(id);
+        }
+
+        return members.get(text) || members.find(m => {
+            return m.displayName === text
+            || m.displayName.toLowerCase() === text.toLowerCase()
+            || m.user.username === text
+            || m.user.username.toLowerCase() === text.toLowerCase()
+            || m.user.username === text.split('#')[0] &amp;&amp; m.user.discriminator === text.split('#')[1]
+            || m.user.username.toLowerCase() === text.split('#')[0].toLowerCase() &amp;&amp; m.user.discriminator === text.split('#')[1];
+        });
+    }
+
+    /**
+     * Resolves a GuildChannel from a string, such as an ID, a name, etc.
+     * @param {string} text Text to resolve.
+     * @param {Discord.Guild} guild Guild to find channel in.
+     * @returns {Discord.GuildChannel}
+     */
+    resolveChannel(text, guild){
+        if (!guild) throw new Error('Guild must be specified.');
+
+        let channels = guild.channels;
+
+        let reg = /&lt;#(\d+)>/;
+        if (reg.test(text)){
+            let id = text.match(reg)[1];
+            return channels.get(id);
+        }
+
+        return channels.get(text) || channels.find(c => {
+            return c.name === text
+            || c.name.toLowerCase() === text.toLowerCase()
+            || c.name === text.replace(/^#/, '')
+            || c.name.toLowerCase() === text.replace(/^#/, '').toLowerCase();
+        });
+    }
+
+    /**
+     * Resolves a Role from a string, such as an ID, a name, etc.
+     * @param {string} text Text to resolve.
+     * @param {Discord.Guild} guild Guild to find channel in.
+     * @returns {Discord.Role}
+     */
+    resolveRole(text, guild){
+        if (!guild) throw new Error('Guild must be specified.');
+
+        let roles = guild.roles;
+
+        let reg = /&lt;@&amp;(\d+)>/;
+        if (reg.test(text)){
+            let id = text.match(reg)[1];
+            return roles.get(id);
+        }
+
+        return roles.get(text) || roles.find(r => {
+            return r.name === text
+            || r.name.toLowerCase() === text.toLowerCase()
+            || r.name === text.replace(/^@/, '')
+            || r.name.toLowerCase() === text.replace(/^@/, '').toLowerCase();
+        });
+    }
+
+    /**
+     * Resolves an Emoji from a string, such as a name or a mention.
+     * @param {string} text Text to resolve.
+     * @param {Discord.Guild} guild Guild to find emoji in.
+     * @returns {Discord.Emoji}
+     */
+    resolveEmoji(text, guild){
+        if (!guild) throw new Error('Guild must be specified.');
+
+        let emojis = guild.emojis;
+
+        let reg = /&lt;:[a-zA-Z0-9_]+:(\d+)>/;
+        if (reg.test(text)){
+            let id = text.match(reg)[1];
+            return emojis.get(id);
+        }
+
+        return emojis.get(text) || emojis.find(e => {
+            return e.name === text
+            || e.name.toLowerCase() === text.toLowerCase()
+            || e.name === text.replace(/:/g, '')
+            || e.name === text.replace(/:/g, '').toLowerCase();
+        });
+    }
+
+    /**
+     * Gets the display color in decimal of the member.
+     * @param {Discord.GuildMember} member The member to find color of.
+     * @returns {number}
+     */
+    displayColor(member){
+        let roles = member.roles.filter(r => r.color !== 0);
+        if (roles.size === 0) return 0;
+        
+        let highest = Math.max(...roles.map(r => r.position));
+        return roles.find(r => r.position === highest).color;
+    }
+
+    /**
+     * Creates an invite link for the client.
+     * @param {number} permissions Permissions number.
+     * @return {Promise.&lt;string>}
+     */
+    createInvite(permissions = 0){
+        return new Promise((resolve, reject) => {
+            this.client.fetchApplication().then(app => {
+                let invite = `https://discordapp.com/oauth2/authorize?permissions=${permissions}&amp;scope=bot&amp;client_id=${app.id}`;
+                resolve(invite);
+            }).catch(reject);
+        });
     }
 }
 
-module.exports = Inhibitor;</code></pre>
+module.exports = ClientUtil;</code></pre>
         </article>
     </section>
 

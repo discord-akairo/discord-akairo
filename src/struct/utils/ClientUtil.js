@@ -111,15 +111,55 @@ class ClientUtil {
     }
 
     /**
+     * Resolves an Emoji from a string, such as a name or a mention.
+     * @param {string} text Text to resolve.
+     * @param {Discord.Guild} guild Guild to find emoji in.
+     * @returns {Discord.Emoji}
+     */
+    resolveEmoji(text, guild){
+        if (!guild) throw new Error('Guild must be specified.');
+
+        let emojis = guild.emojis;
+
+        let reg = /<:[a-zA-Z0-9_]+:(\d+)>/;
+        if (reg.test(text)){
+            let id = text.match(reg)[1];
+            return emojis.get(id);
+        }
+
+        return emojis.get(text) || emojis.find(e => {
+            return e.name === text
+            || e.name.toLowerCase() === text.toLowerCase()
+            || e.name === text.replace(/:/g, '')
+            || e.name === text.replace(/:/g, '').toLowerCase();
+        });
+    }
+
+    /**
      * Gets the display color in decimal of the member.
      * @param {Discord.GuildMember} member The member to find color of.
      * @returns {number}
      */
     displayColor(member){
-        let roles = member.roles.array().sort((a, b) => b.comparePositionTo(a));
-        let role = roles.find(r => r.color !== 0);
+        let roles = member.roles.filter(r => r.color !== 0);
+        if (roles.size === 0) return 0;
+        
+        let highest = Math.max(...roles.map(r => r.position));
+        return roles.find(r => r.position === highest).color;
+    }
 
-        return role ? role.color : 0;
+    /**
+     * Creates an invite link for the client.
+     * @param {number} permissions Permissions number.
+     * @return {Promise.<string>}
+     */
+    createInvite(permissions = 0){
+        return new Promise((resolve, reject) => {
+            this.client.fetchApplication().then(app => {
+                let invite = `https://discordapp.com/oauth2/authorize?permissions=${permissions}&scope=bot&client_id=${app.id}`;
+                resolve(invite);
+            }).catch(reject);
+        });
     }
 }
 

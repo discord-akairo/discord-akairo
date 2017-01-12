@@ -1,6 +1,9 @@
 const path = require('path');
 
 class DatabaseHandler {
+    /**
+     * This class should be extended, not used.
+     */
     constructor(filepath, defaultConfig){
         /**
          * Path to .sqlite file.
