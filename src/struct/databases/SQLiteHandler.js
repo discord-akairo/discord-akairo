@@ -1,6 +1,7 @@
 const DatabaseHandler = require('./DatabaseHandler');
 const sql = require('sqlite');
 
+/** @extends DatabaseHandler */
 class SQLiteHandler extends DatabaseHandler {
     /**
      * Creates an SQLiteHandler. Table must have an 'id' column.

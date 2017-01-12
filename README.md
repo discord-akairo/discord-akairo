@@ -12,7 +12,7 @@ A bot framework for Discord.js v11.
 - SQLite support.
 
 ### Help
-Documentation: [https://1computer1.github.io/discord-akairo/](https://1computer1.github.io/discord-akairo/)  
+Documentation: [https://1computer1.github.io/discord-akairo/index.html/](https://1computer1.github.io/discord-akairo/index.html)  
 See the examples folder for some more information.  
 If you need more help, message me on Discord: 1Computer#7952.  
 
