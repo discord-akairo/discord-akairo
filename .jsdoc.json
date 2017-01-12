@@ -17,7 +17,7 @@
         }
     },
     "opts": {
-        "destination": "./docs/",
+        "destination": "./out/",
         "encoding": "utf8",
         "private": true,
         "recurse": true,

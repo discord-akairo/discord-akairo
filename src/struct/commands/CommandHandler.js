@@ -281,35 +281,35 @@ class CommandHandler extends EventEmitter {
 module.exports = CommandHandler;
 
 /**
- * @event CommandHandler#commandPrefixInvalid
  * Emitted when a message does not start with the prefix.
+ * @event CommandHandler#commandPrefixInvalid
  * @param {Discord.Message} message Message sent.
  */
 
 /**
- * @event CommandHandler#commandInvalid
  * Emitted when a message does not match a command.
+ * @event CommandHandler#commandInvalid
  * @param {Discord.Message} message Message sent.
  */
 
 /**
- * @event CommandHandler#commandBlocked
  * Emitted when a command is blocked by an inhibitor.
+ * @event CommandHandler#commandBlocked
  * @param {Discord.Message} message Message sent.
  * @param {Command} command Command blocked.
  * @param {string} reason Reason for the block.
  */
 
 /**
- * @event CommandHandler#commandStarted
  * Emitted when a command starts execution.
+ * @event CommandHandler#commandStarted
  * @param {Discord.Message} message Message sent.
  * @param {Command} command Command executed.
  */
 
 /**
- * @event CommandHandler#commandFinished
  * Emitted when a command finishes execution.
+ * @event CommandHandler#commandFinished
  * @param {Discord.Message} message Message sent.
  * @param {Command} command Command executed.
  */
