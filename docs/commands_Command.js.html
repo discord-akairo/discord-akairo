@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>commands/Command.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Command.html">Command</a><ul class='methods'><li data-type='method'><a href="Command.html#reload">reload</a></li><li data-type='method'><a href="Command.html#remove">remove</a></li></ul></li><li><a href="CommandHandler.html">CommandHandler</a><ul class='methods'><li data-type='method'><a href="CommandHandler.html#addCommand">addCommand</a></li><li data-type='method'><a href="CommandHandler.html#addInhibitor">addInhibitor</a></li><li data-type='method'><a href="CommandHandler.html#findCommand">findCommand</a></li><li data-type='method'><a href="CommandHandler.html#handle">handle</a></li><li data-type='method'><a href="CommandHandler.html#loadCommand">loadCommand</a></li><li data-type='method'><a href="CommandHandler.html#loadInhibitor">loadInhibitor</a></li><li data-type='method'><a href="CommandHandler.html#reloadCommand">reloadCommand</a></li><li data-type='method'><a href="CommandHandler.html#reloadInhibitor">reloadInhibitor</a></li><li data-type='method'><a href="CommandHandler.html#removeCommand">removeCommand</a></li><li data-type='method'><a href="CommandHandler.html#removeInhibitor">removeInhibitor</a></li></ul></li><li><a href="Framework.html">Framework</a><ul class='methods'><li data-type='method'><a href="Framework.html#login">login</a></li></ul></li><li><a href="Inhibitor.html">Inhibitor</a><ul class='methods'><li data-type='method'><a href="Inhibitor.html#reload">reload</a></li><li data-type='method'><a href="Inhibitor.html#remove">remove</a></li></ul></li><li><a href="Listener.html">Listener</a><ul class='methods'><li data-type='method'><a href="Listener.html#reload">reload</a></li><li data-type='method'><a href="Listener.html#remove">remove</a></li></ul></li><li><a href="ListenerHandler.html">ListenerHandler</a><ul class='methods'><li data-type='method'><a href="ListenerHandler.html#addListener">addListener</a></li><li data-type='method'><a href="ListenerHandler.html#deregisterListener">deregisterListener</a></li><li data-type='method'><a href="ListenerHandler.html#loadListener">loadListener</a></li><li data-type='method'><a href="ListenerHandler.html#registerListener">registerListener</a></li><li data-type='method'><a href="ListenerHandler.html#reloadListener">reloadListener</a></li><li data-type='method'><a href="ListenerHandler.html#removeListener">removeListener</a></li></ul></li><li><a href="SQLiteHandler.html">SQLiteHandler</a><ul class='methods'><li data-type='method'><a href="SQLiteHandler.html#add">add</a></li><li data-type='method'><a href="SQLiteHandler.html#addMemory">addMemory</a></li><li data-type='method'><a href="SQLiteHandler.html#get">get</a></li><li data-type='method'><a href="SQLiteHandler.html#has">has</a></li><li data-type='method'><a href="SQLiteHandler.html#init">init</a></li><li data-type='method'><a href="SQLiteHandler.html#open">open</a></li><li data-type='method'><a href="SQLiteHandler.html#remove">remove</a></li><li data-type='method'><a href="SQLiteHandler.html#removeMemory">removeMemory</a></li><li data-type='method'><a href="SQLiteHandler.html#save">save</a></li><li data-type='method'><a href="SQLiteHandler.html#set">set</a></li><li data-type='method'><a href="SQLiteHandler.html#setMemory">setMemory</a></li></ul></li></ul><h3>Events</h3><ul><li><a href="global.html#event:CommandHandler#commandBlockedEmittedwhenacommandisblockedbyaninhibitor.">CommandHandler#commandBlockedEmitted when a command is blocked by an inhibitor.</a></li><li><a href="global.html#event:CommandHandler#commandFinishedEmittedwhenacommandfinishesexecution.">CommandHandler#commandFinishedEmitted when a command finishes execution.</a></li><li><a href="global.html#event:CommandHandler#commandInvalidEmittedwhenamessagedoesnotmatchacommand.">CommandHandler#commandInvalidEmitted when a message does not match a command.</a></li><li><a href="global.html#event:CommandHandler#commandPrefixInvalidEmittedwhenamessagedoesnotstartwiththeprefix.">CommandHandler#commandPrefixInvalidEmitted when a message does not start with the prefix.</a></li><li><a href="global.html#event:CommandHandler#commandStartedEmittedwhenacommandstartsexecution.">CommandHandler#commandStartedEmitted when a command starts execution.</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">commands/Command.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @typedef {Object} Argument
+ * An argument in a command.
+ * @prop {string} id - ID of the argument.
+ * @prop {string} prefix - Ignores word order and uses a word that starts with this prefix.
+ * @prop {string} parse - Method to parse argument: 'word', 'prefix', 'flag', or 'text'.
+ * @prop {string} type - Attempts to cast input to this type: 'string', 'number', or 'dynamic'. 
+ * @prop {(string|number)} defaultValue - Default value if a word is not inputted.
+ */
+
+/**
+ * @typedef {Object} CommandOptions
+ * Options to use for command execution behavior.
+ * @prop {boolean} ownerOnly - Allow client owner only.
+ * @prop {string} channelRestriction - Restricts channel: 'guild' or 'dm'.
+ * @prop {string} split - Method to divide text into words: 'plain' or 'quoted'.
+ */
+
+class Command {
+    /**
+     * Creates a new Command.
+     * @param {string} id Command ID.
+     * @param {Array.&lt;string>} aliases Names to call the command with.
+     * @param {Array.&lt;Argument>} args Arguments for the command.
+     * @param {function} exec Function called when command is ran. (message, args, content)
+     * @param {CommandOptions} options Options for the command.
+     */
+    constructor(id, aliases = [], args = [], exec, options = {}){
+        /**
+         * ID of the Command.
+         * @type {string}
+         */
+        this.id = id;
+
+        /**
+         * Command names.
+         * @type {Array.&lt;string>}
+         */
+        this.aliases = aliases;
+
+        /**
+         * Arguments for the command.
+         * @type {Array.&lt;Argument>}
+         */
+        this.args = args;
+        this.args.forEach(arg => {
+            if (arg.parse === undefined) arg.parse = 'word';
+            if (arg.type === undefined) arg.type = 'string';
+        });
+
+        /**
+         * Function called for command.
+         * @type {function}
+         */
+        this.exec = exec;
+
+        /**
+         * CommandOptions.
+         * @type {CommandOptions}
+         */
+        this.options = options;
+        if (this.options.ownerOnly === undefined) this.options.ownerOnly = false;
+        if (this.options.channelRestriction === undefined) this.options.channelRestriction = 'none';
+        if (this.options.split === undefined) this.options.split = 'plain';
+
+        /**
+         * Path to Command file.
+         * @type {?string}
+         */
+        this.filepath;
+
+        /**
+         * The Akairo framework.
+         * @type {?Framework}
+         */
+        this.framework;
+
+        /**
+         * The command handler.
+         * @type {?CommandHandler}
+         */
+        this.commandHandler;
+    }
+
+    /**
+     * Gets an example of the command using all arguments or one text argument.
+     * @type {string}
+     */
+    get example(){
+        if (this.args.length === 1 &amp;&amp; this.args[0].parse === 'text'){
+            return `${this.aliases[0]} ${this.args[0].id}`;
+        }
+
+        let args = this.args.filter(arg => arg.parse !== 'text').map(arg => {
+            if (arg.parse === 'flag') return arg.prefix;
+            if (arg.parse === 'prefix') return `${arg.prefix}${arg.id}`;
+            return arg.id;
+        });
+
+        return `${this.aliases[0]} ${args.join(' ')}`;
+    }
+
+    /**
+     * Reloads the Command.
+     */
+    reload(){
+        this.commandHandler.reloadCommand(this.id);
+    }
+
+    /**
+     * Removes the Command. It can be readded with the command handler.
+     */
+    remove(){
+        this.commandHandler.removeCommand(this.id);
+    }
+}
+
+module.exports = Command;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Jan 12 2017 13:15:54 GMT+0100 (CET) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

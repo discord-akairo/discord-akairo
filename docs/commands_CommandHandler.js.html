@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>commands/CommandHandler.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Command.html">Command</a><ul class='methods'><li data-type='method'><a href="Command.html#reload">reload</a></li><li data-type='method'><a href="Command.html#remove">remove</a></li></ul></li><li><a href="CommandHandler.html">CommandHandler</a><ul class='methods'><li data-type='method'><a href="CommandHandler.html#addCommand">addCommand</a></li><li data-type='method'><a href="CommandHandler.html#addInhibitor">addInhibitor</a></li><li data-type='method'><a href="CommandHandler.html#findCommand">findCommand</a></li><li data-type='method'><a href="CommandHandler.html#handle">handle</a></li><li data-type='method'><a href="CommandHandler.html#loadCommand">loadCommand</a></li><li data-type='method'><a href="CommandHandler.html#loadInhibitor">loadInhibitor</a></li><li data-type='method'><a href="CommandHandler.html#reloadCommand">reloadCommand</a></li><li data-type='method'><a href="CommandHandler.html#reloadInhibitor">reloadInhibitor</a></li><li data-type='method'><a href="CommandHandler.html#removeCommand">removeCommand</a></li><li data-type='method'><a href="CommandHandler.html#removeInhibitor">removeInhibitor</a></li></ul></li><li><a href="Framework.html">Framework</a><ul class='methods'><li data-type='method'><a href="Framework.html#login">login</a></li></ul></li><li><a href="Inhibitor.html">Inhibitor</a><ul class='methods'><li data-type='method'><a href="Inhibitor.html#reload">reload</a></li><li data-type='method'><a href="Inhibitor.html#remove">remove</a></li></ul></li><li><a href="Listener.html">Listener</a><ul class='methods'><li data-type='method'><a href="Listener.html#reload">reload</a></li><li data-type='method'><a href="Listener.html#remove">remove</a></li></ul></li><li><a href="ListenerHandler.html">ListenerHandler</a><ul class='methods'><li data-type='method'><a href="ListenerHandler.html#addListener">addListener</a></li><li data-type='method'><a href="ListenerHandler.html#deregisterListener">deregisterListener</a></li><li data-type='method'><a href="ListenerHandler.html#loadListener">loadListener</a></li><li data-type='method'><a href="ListenerHandler.html#registerListener">registerListener</a></li><li data-type='method'><a href="ListenerHandler.html#reloadListener">reloadListener</a></li><li data-type='method'><a href="ListenerHandler.html#removeListener">removeListener</a></li></ul></li><li><a href="SQLiteHandler.html">SQLiteHandler</a><ul class='methods'><li data-type='method'><a href="SQLiteHandler.html#add">add</a></li><li data-type='method'><a href="SQLiteHandler.html#addMemory">addMemory</a></li><li data-type='method'><a href="SQLiteHandler.html#get">get</a></li><li data-type='method'><a href="SQLiteHandler.html#has">has</a></li><li data-type='method'><a href="SQLiteHandler.html#init">init</a></li><li data-type='method'><a href="SQLiteHandler.html#open">open</a></li><li data-type='method'><a href="SQLiteHandler.html#remove">remove</a></li><li data-type='method'><a href="SQLiteHandler.html#removeMemory">removeMemory</a></li><li data-type='method'><a href="SQLiteHandler.html#save">save</a></li><li data-type='method'><a href="SQLiteHandler.html#set">set</a></li><li data-type='method'><a href="SQLiteHandler.html#setMemory">setMemory</a></li></ul></li></ul><h3>Events</h3><ul><li><a href="global.html#event:CommandHandler#commandBlockedEmittedwhenacommandisblockedbyaninhibitor.">CommandHandler#commandBlockedEmitted when a command is blocked by an inhibitor.</a></li><li><a href="global.html#event:CommandHandler#commandFinishedEmittedwhenacommandfinishesexecution.">CommandHandler#commandFinishedEmitted when a command finishes execution.</a></li><li><a href="global.html#event:CommandHandler#commandInvalidEmittedwhenamessagedoesnotmatchacommand.">CommandHandler#commandInvalidEmitted when a message does not match a command.</a></li><li><a href="global.html#event:CommandHandler#commandPrefixInvalidEmittedwhenamessagedoesnotstartwiththeprefix.">CommandHandler#commandPrefixInvalidEmitted when a message does not start with the prefix.</a></li><li><a href="global.html#event:CommandHandler#commandStartedEmittedwhenacommandstartsexecution.">CommandHandler#commandStartedEmitted when a command starts execution.</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">commands/CommandHandler.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const path = require('path');
+const EventEmitter = require('events');
+const rread = require('readdir-recursive');
+const Command = require('./Command');
+const Inhibitor = require('./Inhibitor');
+
+class CommandHandler extends EventEmitter {
+    /**
+     * Creates a new CommandHandler.
+     * @param {Framework} framework The Akairo framework.
+     */
+    constructor(framework){
+        super();
+
+        /**
+         * The Akairo framework.
+         * @type {Framework}
+         */
+        this.framework = framework;
+
+        /**
+         * Directory to commands.
+         * @type {string}
+         */
+        this.commandDirectory = path.resolve(this.framework.options.commandDirectory);
+
+        /**
+         * Directory to inhibitors.
+         * @type {string}
+         */
+        this.inhibitorDirectory = path.resolve(this.framework.options.inhibitorDirectory);
+
+        /**
+         * Commands loaded, mapped by ID to Command.
+         * @type {Map.&lt;string, Command>}
+         */
+        this.commands = new Map();
+
+        /**
+         * Inhibitors loaded, mapped by ID to Inhibitor.
+         * @type {Map.&lt;string, Inhibitor>}
+         */
+        this.inhibitors = new Map();
+
+        let cmdPaths = rread.fileSync(this.commandDirectory);
+        cmdPaths.forEach(filepath => {
+            this.loadCommand(filepath);
+        });
+
+        let inhibPaths = rread.fileSync(this.inhibitorDirectory);
+        inhibPaths.forEach(filepath => {
+            this.loadInhibitor(filepath);
+        });
+    }
+
+    /**
+     * Loads a Command.
+     * @param {string} filepath Path to file.
+     */
+    loadCommand(filepath){
+        let command = require(filepath);
+
+        if (!(command instanceof Command)) return;
+        if (this.commands.has(command.id)) throw new Error(`Command ${command.id} already loaded.`);
+
+        command.filepath = filepath;
+        command.framework = this.framework;
+        command.commandHandler = this;
+
+        this.commands.set(command.id, command);
+    }
+
+    /**
+     * Adds a Command.
+     * @param {string} filename Filename to lookup in the directory.
+     */
+    addCommand(filename){
+        let files = rread.fileSync(this.commandDirectory);
+        let filepath = files.find(file => file.endsWith(`${filename}`));
+
+        if (!filepath){
+            throw new Error(`File ${filename} not found.`);
+        }
+
+        this.loadCommand(filepath);
+    }
+
+    /**
+     * Removes a Command.
+     * @param {string} id ID of the Command.
+     */
+    removeCommand(id){
+        let command = this.commands.get(id);
+        if (!command) throw new Error(`Command ${id} does not exist.`);
+
+        delete require.cache[require.resolve(command.filepath)];
+        this.commands.delete(command.id);
+    }
+
+    /**
+     * Reloads a Command.
+     * @param {string} id ID of the Command.
+     */
+    reloadCommand(id){
+        let command = this.commands.get(id);
+        if (!command) throw new Error(`Command ${id} does not exist.`);
+
+        let filepath = command.filepath;
+
+        delete require.cache[require.resolve(command.filepath)];
+        this.commands.delete(command.id);
+        
+        this.loadCommand(filepath);
+    }
+
+    /**
+     * Finds a command by alias.
+     * @param {string} name Alias to find with.
+     */
+    findCommand(name){
+        return Array.from(this.commands.values()).find(command => command.aliases.includes(name.toLowerCase()));
+    }
+
+    /**
+     * Loads an Inhibitor.
+     * @param {string} filepath Path to file.
+     */
+    loadInhibitor(filepath){
+        let inhibitor = require(filepath);
+
+        if (!(inhibitor instanceof Inhibitor)) return;
+        if (this.inhibitors.has(inhibitor.id)) throw new Error(`Inhibitor ${inhibitor.id} already loaded.`);
+
+        inhibitor.filepath = filepath;
+        inhibitor.framework = this.framework;
+        inhibitor.commandHandler = this;
+
+        this.inhibitors.set(inhibitor.id, inhibitor);
+    }
+
+    /**
+     * Adds an Inhibitor.
+     * @param {string} filename Filename to lookup in the directory.
+     */
+    addInhibitor(filename){
+        let files = rread.fileSync(this.inhibitorDirectory);
+        let filepath = files.find(file => file.endsWith(`${filename}`));
+
+        if (!filepath){
+            throw new Error(`File ${filename} not found.`);
+        }
+
+        this.loadInhibitor(filepath);
+    }
+
+    /**
+     * Removes an Inhibitor.
+     * @param {string} id ID of the Inhibitor.
+     */
+    removeInhibitor(id){
+        let inhibitor = this.inhibitors.get(id);
+        if (!inhibitor) throw new Error(`Inhibitor ${id} does not exist.`);
+
+        delete require.cache[require.resolve(inhibitor.filepath)];
+        this.inhibitors.delete(inhibitor.id);
+    }
+
+    /**
+     * Reloads an Inhibitor.
+     * @param {string} id ID of the Inhibitor.
+     */
+    reloadInhibitor(id){
+        let inhibitor = this.inhibitors.get(id);
+        if (!inhibitor) throw new Error(`Inhibitor ${id} does not exist.`);
+
+        let filepath = inhibitor.filepath;
+
+        delete require.cache[require.resolve(inhibitor.filepath)];
+        this.inhibitors.delete(inhibitor.id);
+        
+        this.loadInhibitor(filepath);
+    }
+
+    /**
+     * Handles a Message.
+     * @param {Discord.Message} message Message to handle.
+     * @param {string} prefix Prefix for command.
+     * @param {boolean} allowMention Allow mentions to the client user as a prefix.
+     */
+    handle(message, prefix, allowMention){
+        let start;
+
+        if (message.content.startsWith(prefix)){
+            start = prefix;
+        } else
+        if (allowMention &amp;&amp; new RegExp(`^&lt;@!?${this.framework.client.user.id}>`).test(message.content)){
+            start = message.content.match(new RegExp(`^&lt;@!?${this.framework.client.user.id}>`))[0];
+        } else {
+            return this.emit('commandPrefixInvalid', message);
+        }
+
+        let firstWord = message.content.replace(start, '').search(/\S/) + start.length;
+        let name = message.content.slice(firstWord).split(' ')[0];
+        let command = this.findCommand(name);
+
+        if (!command) return this.emit('commandInvalid', message);
+
+        if (message.author.id !== this.framework.client.user.id &amp;&amp; this.framework.options.selfbot){
+            return this.emit('commandBlocked', message, command, 'notSelf');
+        }
+
+        if (message.author.id === this.framework.client.user.id &amp;&amp; !this.framework.options.selfbot){
+            return this.emit('commandBlocked', message, command, 'client');
+        }
+
+        if (message.author.bot){
+            return this.emit('commandBlocked', message, command, 'bot');
+        }
+
+        if (command.options.ownerOnly &amp;&amp; message.author.id !== this.framework.options.ownerID){
+            return this.emit('commandBlocked', message, command, 'owner');
+        }
+
+        if (command.options.channelRestriction === 'guild' &amp;&amp; !message.guild){
+            return this.emit('commandBlocked', message, command, 'guild');
+        }
+
+        if (command.options.channelRestriction === 'dm' &amp;&amp; message.guild){
+            return this.emit('commandBlocked', message, command, 'dm');
+        }
+
+        let results = [];
+
+        this.inhibitors.forEach(inhibitor => {
+            let inhibited = inhibitor.exec(message, command);
+
+            if (inhibited instanceof Promise){
+                return results.push(inhibited.catch(() => { throw inhibitor.reason; }));
+            }
+
+            if (!inhibited){
+                return results.push(Promise.resolve());
+            }
+
+            results.push(Promise.reject(inhibitor.reason));
+        });
+
+        Promise.all(results).then(() => {
+            let content = message.content.slice(message.content.indexOf(name) + name.length + 1);
+            let words = [];
+
+            const argSplit = {
+                plain: content.match(/([^\s]+)/g),
+                quoted: content.match(/"(.*?)"|("+?)|([^\s]+)/g)
+            };
+            
+            words = argSplit[command.options.split] || argSplit.plain || [];
+
+            let args = {};
+
+            let wordArgs = command.args.filter(arg => !arg.parse || arg.parse === 'word');
+            let prefixArgs = command.args.filter(arg => arg.parse === 'prefix' || arg.parse === 'flag');
+            let textArgs = command.args.filter(arg => arg.parse === 'text');
+
+            let prefixes = prefixArgs.map(arg => arg.prefix);
+            let noPrefixWords = words.filter(w => !prefixes.some(p => w.startsWith(p)));
+
+            wordArgs.forEach((arg, i) => {
+                let word = noPrefixWords[i];
+                if (!word) return args[arg.id] = arg.defaultValue;
+
+                if (command.options.split === 'quoted' &amp;&amp; /^".*"$/.test(word)) word = word.slice(1, -1);
+
+                if ((arg.type === 'dynamic' || arg.type === 'number') &amp;&amp; !isNaN(word)) word = parseInt(word);
+                if (arg.type === 'number' &amp;&amp; isNaN(word)) word = arg.defaultValue;
+
+                args[arg.id] = word;
+            });
+
+            prefixArgs.forEach(arg => {
+                if (arg.parse === 'flag'){
+                    let word = words.find(w => w === arg.prefix);
+                    return args[arg.id] = !!word;
+                }
+
+                let word = words.find(w => w.startsWith(arg.prefix));
+                if (!word) return args[arg.id] = arg.defaultValue;
+
+                word = word.replace(arg.prefix, '');
+
+                if ((arg.type === 'dynamic' || arg.type === 'number') &amp;&amp; !isNaN(word)) word = parseInt(word);
+                if (arg.type === 'number' &amp;&amp; isNaN(word)) word = arg.defaultValue;
+
+                args[arg.id] = word;
+            });
+
+            textArgs.forEach(arg => {
+                args[arg.id] = noPrefixWords.join(' ') || arg.defaultValue;
+            });
+
+            this.emit('commandStarted', message, command);
+            let end = Promise.resolve(command.exec(message, args, content));
+
+            end.then(() => {
+                this.emit('commandFinished', message, command);
+            }).catch(err => {
+                this.emit('commandFinished', message, command);
+                throw err;
+            });
+        }).catch(reason => {
+            if (reason instanceof Error) throw reason;
+            this.emit('commandBlocked', message, command, reason);
+        });
+    }
+}
+
+module.exports = CommandHandler;
+
+/**
+ * @event CommandHandler#commandPrefixInvalid
+ * Emitted when a message does not start with the prefix.
+ * @param {Discord.Message} message Message sent.
+ */
+
+/**
+ * @event CommandHandler#commandInvalid
+ * Emitted when a message does not match a command.
+ * @param {Discord.Message} message Message sent.
+ */
+
+/**
+ * @event CommandHandler#commandBlocked
+ * Emitted when a command is blocked by an inhibitor.
+ * @param {Discord.Message} message Message sent.
+ * @param {Command} command Command blocked.
+ * @param {string} reason Reason for the block.
+ */
+
+/**
+ * @event CommandHandler#commandStarted
+ * Emitted when a command starts execution.
+ * @param {Discord.Message} message Message sent.
+ * @param {Command} command Command executed.
+ */
+
+/**
+ * @event CommandHandler#commandFinished
+ * Emitted when a command finishes execution.
+ * @param {Discord.Message} message Message sent.
+ * @param {Command} command Command executed.
+ */</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Jan 12 2017 13:15:54 GMT+0100 (CET) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
