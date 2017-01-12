@@ -27,6 +27,14 @@ class DatabaseHandler {
         this.db = null;
     }
 
+    /**
+     * Gets all the IDs.
+     * @return {Array.<string>}
+     */
+    get ids(){
+        return Array.from(this.memory.keys());
+    }
+
     open(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
     init(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
     add(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
