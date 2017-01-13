@@ -141,7 +141,7 @@ class Command {
         let textArgs = this.args.filter(arg => arg.parse === 'text');
         let contentArgs = this.args.filter(arg => arg.parse === 'content');
 
-        let prefixes = prefixArgs.map(arg => arg.prefix);
+        let prefixes = prefixArgs.concat(flagArgs).map(arg => arg.prefix);
         let noPrefixWords = words.filter(w => !prefixes.some(p => w.startsWith(p)));
 
         wordArgs.forEach((arg, i) => {
