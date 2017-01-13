@@ -48,9 +48,7 @@ class SQLiteHandler extends DatabaseHandler {
                     });
 
                     ids.forEach(id => {
-                        if (!this.has(id)){
-                            this.add(id).catch(reject);
-                        }
+                        if (!this.has(id)) this.add(id).catch(reject);
                     });
                     
                     resolve(this);
@@ -180,12 +178,12 @@ class SQLiteHandler extends DatabaseHandler {
 
             let config = this.memory.get(id);
 
-            if (!(key in config)){
+            if (!config.hasOwnProperty(key)){
                 return reject(new Error(`Key ${key} was not found for ${id}.`));
             }
 
             if (key === 'id'){
-                return reject(new Error(`Key ${key} is read-only.`));
+                return reject(new Error('The id key is read-only.'));
             }
 
             config[key] = value;
@@ -219,12 +217,12 @@ class SQLiteHandler extends DatabaseHandler {
 
         let config = this.memory.get(id);
 
-        if (!(key in config)){
+        if (!config.hasOwnProperty(key)){
             throw new Error(`Key ${key} was not found for ${id}.`);
         }
 
         if (key === 'id'){
-            throw new Error(`Key ${key} is read-only.`);
+            throw new Error('The id key is read-only.');
         }
 
         config[key] = value;
@@ -249,9 +247,8 @@ class SQLiteHandler extends DatabaseHandler {
             let config = this.memory.get(id);
             let sets = [];
 
-            Object.keys(config).forEach(k => {
-                let key =  k.replace(/'/g, '\'\'');
-                let value = (typeof config[key] === 'string' ? config[key].replace(/'/g, '\'\'') : config[key]);
+            Object.keys(config).forEach(key => {
+                let value = config[key];
 
                 if (isNaN(value)){
                     value = `'${value}'`;
