@@ -1,9 +1,17 @@
-# Discord-Akairo
-*insert cool logo here*  
+<p align="center">
+    <a href=https://github.com/1Computer1/discord-akairo>
+        <img src=https://u.nya.is/fweoqf.png/>
+    </a>
+</p>  
 
+<p align="center">
+    <a href=https://nodei.co/npm/discord-akairo>
+        <img src=https://nodei.co/npm/discord-akairo.png/>
+    </a>
+</p>  
+
+### About
 A bot framework for Discord.js v11.  
-
-### Features
 - Command processing.
 - Argument parsing.
 - Command inhibitors.
@@ -11,11 +19,12 @@ A bot framework for Discord.js v11.
 - Reloadable everything.
 - SQLite support.
 
-### Help
-Documentation: [https://1computer1.github.io/discord-akairo/index.html/](https://1computer1.github.io/discord-akairo/index.html)  
-See the examples folder for some more information.  
-If you need more help, message me on Discord: 1Computer#7952.  
+### Installation
+discord-akairo: `npm install discord-akairo --save`  
+discord.js: `npm install discord.js --save`  
+sqlite: `npm install sqlite --save`  
 
-### Issues
-Open up an issue if you find a bug!  
-It would help a lot, as I am terrible at testing.  
+### Documentation
+Documentation is available on [https://1computer1.github.io/discord-akairo/index.html](https://1computer1.github.io/discord-akairo/index.html).  
+See the examples folder for some examples.  
+If you need more help, message me on Discord: 1Computer#7952.  
