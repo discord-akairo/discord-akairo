@@ -43,14 +43,14 @@ const ListenerHandler = require('./events/ListenerHandler');
 const ClientUtil = require('./utils/ClientUtil');
 
 /**
+ * Options used to determine how the framework behaves.
  * @typedef {Object} FrameworkOptions
- * A set of options used to determine what the framework does.
  * @prop {string} token - Client token.
  * @prop {string} ownerID - Discord ID of the client owner.
- * @prop {boolean} selfbot - Marks this bot as a selfbot.
- * @prop {boolean} addUtil - Adds to the client a bunch of utility functions. Accessible with client.util.
- * @prop {(string|function)} prefix - Default command prefix or function returning prefix.
- * @prop {(boolean|function)} allowMention - Allow mentions to the client user as a prefix or function that returns true or false.
+ * @prop {boolean} [selfbot=false] - Marks this bot as a selfbot.
+ * @prop {boolean} [addUtil=false] - Adds to the client a bunch of utility functions. Accessible with client.util.
+ * @prop {(string|function)} [prefix='!'] - Default command prefix or function returning prefix.
+ * @prop {(boolean|function)} [allowMention=false] - Allow mentions to the client user as a prefix or function that returns true or false.
  * @prop {string} commandDirectory - Directory to commands.
  * @prop {string} inhibitorDirectory - Directory to inhibitors.
  * @prop {string} listenerDirectory - Directory to listeners.
@@ -59,8 +59,8 @@ const ClientUtil = require('./utils/ClientUtil');
 class Framework {
     /**
      * Creates a new Framework.
-     * @param {Discord.Client} client The Discord.js client.
-     * @param {FrameworkOptions} options Options to use.
+     * @param {Discord.Client} client - The Discord.js client.
+     * @param {FrameworkOptions} options - Options to use.
      */
     constructor(client, options = {}){
         /** 

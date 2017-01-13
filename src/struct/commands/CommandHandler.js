@@ -4,10 +4,11 @@ const rread = require('readdir-recursive');
 const Command = require('./Command');
 const Inhibitor = require('./Inhibitor');
 
+/** @extends EventEmitter */
 class CommandHandler extends EventEmitter {
     /**
      * Creates a new CommandHandler.
-     * @param {Framework} framework The Akairo framework.
+     * @param {Framework} framework - The Akairo framework.
      */
     constructor(framework){
         super();
@@ -61,7 +62,7 @@ class CommandHandler extends EventEmitter {
 
     /**
      * Loads a Command.
-     * @param {string} filepath Path to file.
+     * @param {string} filepath - Path to file.
      */
     loadCommand(filepath){
         let command = require(filepath);
@@ -81,7 +82,7 @@ class CommandHandler extends EventEmitter {
 
     /**
      * Adds a Command.
-     * @param {string} filename Filename to lookup in the directory.
+     * @param {string} filename - Filename to lookup in the directory. A .js extension is assumed.
      */
     addCommand(filename){
         let files = rread.fileSync(this.commandDirectory);
@@ -96,7 +97,7 @@ class CommandHandler extends EventEmitter {
 
     /**
      * Removes a Command.
-     * @param {string} id ID of the Command.
+     * @param {string} id - ID of the Command.
      */
     removeCommand(id){
         let command = this.commands.get(id);
@@ -111,7 +112,7 @@ class CommandHandler extends EventEmitter {
 
     /**
      * Reloads a Command.
-     * @param {string} id ID of the Command.
+     * @param {string} id - ID of the Command.
      */
     reloadCommand(id){
         let command = this.commands.get(id);
@@ -130,7 +131,7 @@ class CommandHandler extends EventEmitter {
 
     /**
      * Finds a command by alias.
-     * @param {string} name Alias to find with.
+     * @param {string} name - Alias to find with.
      */
     findCommand(name){
         return Array.from(this.commands.values()).find(command => {
@@ -140,7 +141,7 @@ class CommandHandler extends EventEmitter {
 
     /**
      * Finds a category by name.
-     * @param {string} name Name to find with.
+     * @param {string} name - Name to find with.
      */
     findCategory(name){
         let cat = Array.from(this.categories).find(cat => cat[0].toLowerCase() === name.toLowerCase());
@@ -149,7 +150,7 @@ class CommandHandler extends EventEmitter {
 
     /**
      * Loads an Inhibitor.
-     * @param {string} filepath Path to file.
+     * @param {string} filepath - Path to file.
      */
     loadInhibitor(filepath){
         let inhibitor = require(filepath);
@@ -166,7 +167,7 @@ class CommandHandler extends EventEmitter {
 
     /**
      * Adds an Inhibitor.
-     * @param {string} filename Filename to lookup in the directory.
+     * @param {string} filename - Filename to lookup in the directory. A .js extension is assumed.
      */
     addInhibitor(filename){
         let files = rread.fileSync(this.inhibitorDirectory);
@@ -181,7 +182,7 @@ class CommandHandler extends EventEmitter {
 
     /**
      * Removes an Inhibitor.
-     * @param {string} id ID of the Inhibitor.
+     * @param {string} id - ID of the Inhibitor.
      */
     removeInhibitor(id){
         let inhibitor = this.inhibitors.get(id);
@@ -193,7 +194,7 @@ class CommandHandler extends EventEmitter {
 
     /**
      * Reloads an Inhibitor.
-     * @param {string} id ID of the Inhibitor.
+     * @param {string} id - ID of the Inhibitor.
      */
     reloadInhibitor(id){
         let inhibitor = this.inhibitors.get(id);
@@ -209,9 +210,9 @@ class CommandHandler extends EventEmitter {
 
     /**
      * Handles a Message.
-     * @param {Discord.Message} message Message to handle.
-     * @param {string} prefix Prefix for command.
-     * @param {boolean} allowMention Allow mentions to the client user as a prefix.
+     * @param {Discord.Message} message - Message to handle.
+     * @param {string} prefix - Prefix for command.
+     * @param {boolean} allowMention - Allow mentions to the client user as a prefix.
      */
     handle(message, prefix, allowMention){
         let start;

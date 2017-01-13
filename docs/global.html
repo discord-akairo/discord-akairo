@@ -153,7 +153,11 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -178,7 +182,17 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last">ID of the argument.</td>
@@ -201,10 +215,24 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
+                
+                </td>
             
 
-            <td class="description last">Method to parse argument: 'word', 'prefix', 'flag', 'text', or 'content'.</td>
+            
+                <td class="default">
+                
+                    'word'
+                
+                </td>
+            
+
+            <td class="description last">Method to parse argument: 'word', 'prefix', 'flag', 'text', or 'content'. Word parses by the order of the words inputted. Prefix and flag ignores order and uses the value after the prefix (if prefix) or true/false (if flag). Text and content retrieves everything after the command, with the difference being that text ignores prefixes. Note that if the command's split type is plain or quote, text will also not have extra whitespace.</td>
         </tr>
 
     
@@ -224,10 +252,24 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
+                
+                </td>
             
 
-            <td class="description last">Attempts to cast input to this type: 'string', 'number', or 'dynamic'.</td>
+            
+                <td class="default">
+                
+                    'string'
+                
+                </td>
+            
+
+            <td class="description last">Attempts to cast input to this type: 'string', 'number', or 'dynamic'. String does not care about type. Number attempts to parse the input to a number and if it is NaN, it will use the default value. Dynamic defaults to a string, but will parse to number if it is not NaN.</td>
         </tr>
 
     
@@ -247,10 +289,22 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
+                
+                </td>
             
 
-            <td class="description last">Ignores word order and uses a word that starts with this prefix. Applicable to 'prefix' and 'flag' only.</td>
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Ignores word order and uses a word that starts with/matches this prefix. Applicable to 'prefix' and 'flag' only.</td>
         </tr>
 
     
@@ -270,7 +324,19 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last">Word to start from. Applicable to 'word', 'text', or 'content' only.</td>
@@ -296,7 +362,21 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    ''
+                
+                </td>
             
 
             <td class="description last">Default value if a word is not inputted.</td>
@@ -395,7 +475,11 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -420,7 +504,19 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last">Command category for organization purposes.</td>
@@ -443,7 +539,21 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
             
 
             <td class="description last">Allow client owner only.</td>
@@ -466,7 +576,21 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    'none'
+                
+                </td>
             
 
             <td class="description last">Restricts channel: 'guild' or 'dm'.</td>
@@ -489,87 +613,29 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
+                
+                </td>
             
 
-            <td class="description last">Method to divide text into words: 'plain' or 'quoted'.</td>
+            
+                <td class="default">
+                
+                    'plain'
+                
+                </td>
+            
+
+            <td class="description last">Method to divide text into words: 'plain', 'plainW', 'quoted' or 'quotedW'. Plain splits by space and ignores extra whitespace between words. Quoted does the same, but counts text in double quotes as one word. The W (whitespace) variant of each does not ignore extra whitespace.</td>
         </tr>
 
     
     </tbody>
 </table>
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line17">line 17</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-            
-                
-<h4 class="name" id="EvaluatedArguments">EvaluatedArguments</h4>
-
-
-
-
-<div class="description">
-    Arguments parsed from text. Properties are determined by the command's args.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Object</span>
-
-
-        </li>
-    </ul>
-
 
 
 
@@ -627,7 +693,7 @@
 
 
 <div class="description">
-    A set of options used to determine what the framework does.
+    Options used to determine how the framework behaves.
 </div>
 
 
@@ -660,7 +726,11 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -685,7 +755,17 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last">Client token.</td>
@@ -708,7 +788,17 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last">Discord ID of the client owner.</td>
@@ -731,7 +821,21 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
             
 
             <td class="description last">Marks this bot as a selfbot.</td>
@@ -754,7 +858,21 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
             
 
             <td class="description last">Adds to the client a bunch of utility functions. Accessible with client.util.</td>
@@ -780,7 +898,21 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    '!'
+                
+                </td>
             
 
             <td class="description last">Default command prefix or function returning prefix.</td>
@@ -806,7 +938,21 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
             
 
             <td class="description last">Allow mentions to the client user as a prefix or function that returns true or false.</td>
@@ -829,7 +975,17 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last">Directory to commands.</td>
@@ -852,7 +1008,17 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last">Directory to inhibitors.</td>
@@ -875,7 +1041,17 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last">Directory to listeners.</td>

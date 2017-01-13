@@ -1,9 +1,9 @@
 class Inhibitor {
     /**
      * Creates a new Inhibitor.
-     * @param {string} id Inhibitor ID.
-     * @param {string} reason Reason emitted when a command is blocked.
-     * @param {function} exec Function called before a command is ran. Return true or a rejecting Promise to block. (message, command)
+     * @param {string} id - Inhibitor ID.
+     * @param {string} reason - Reason emitted when a command is blocked.
+     * @param {function} exec - Function called before a command is ran. Return true or a rejecting Promise to block. (message, command)
      */
     constructor(id, reason, exec){
         /**
@@ -59,7 +59,6 @@ class Inhibitor {
 
     /**
      * Returns the ID.
-     * @override
      * @returns {string}
      */
     toString(){

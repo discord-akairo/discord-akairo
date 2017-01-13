@@ -6,7 +6,7 @@ const Listener = require('./Listener');
 class ListenerHandler {
     /**
      * Creates a new ListenerHandler.
-     * @param {Framework} framework The Akairo framework.
+     * @param {Framework} framework - The Akairo framework.
      */
     constructor(framework){
         /**
@@ -35,7 +35,7 @@ class ListenerHandler {
 
     /**
      * Loads a Listener.
-     * @param {string} filepath Path to file.
+     * @param {string} filepath - Path to file.
      */
     loadListener(filepath){
         let listener = require(filepath);
@@ -53,7 +53,7 @@ class ListenerHandler {
 
     /**
      * Adds a Listener.
-     * @param {string} filename Filename to lookup in the directory.
+     * @param {string} filename - Filename to lookup in the directory.
      */
     addListener(filename){
         let files = rread.fileSync(this.directory);
@@ -68,7 +68,7 @@ class ListenerHandler {
 
     /**
      * Removes a Listener.
-     * @param {string} id ID of the Listener.
+     * @param {string} id - ID of the Listener.
      */
     removeListener(id){
         let listener = this.listeners.get(id);
@@ -81,7 +81,7 @@ class ListenerHandler {
 
     /**
      * Reloads a Listener.
-     * @param {string} id ID of the Listener.
+     * @param {string} id - ID of the Listener.
      */
     reloadListener(id){
         let listener = this.listeners.get(id);
@@ -98,7 +98,7 @@ class ListenerHandler {
     
     /**
      * Registers a Listener with the EventEmitter.
-     * @param {string} id ID of the Listener.
+     * @param {string} id - ID of the Listener.
      */
     registerListener(id){
         let listener = this.listeners.get(id);
@@ -121,7 +121,7 @@ class ListenerHandler {
 
     /**
      * Removes a Listener from the EventEmitter.
-     * @param {string} id ID of the Listener.
+     * @param {string} id - ID of the Listener.
      */
     deregisterListener(id){
         let listener = this.listeners.get(id);

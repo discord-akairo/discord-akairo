@@ -5,9 +5,9 @@ const sql = require('sqlite');
 class SQLiteHandler extends DatabaseHandler {
     /**
      * Creates an SQLiteHandler. Table must have an 'id' column.
-     * @param {string} filepath Path to .sqlite file.
-     * @param {string} tableName Name of the table.
-     * @param {Object} defaultConfig Default configuration.
+     * @param {string} filepath - Path to .sqlite file.
+     * @param {string} tableName - Name of the table.
+     * @param {Object} defaultConfig - Default configuration.
      */
     constructor(filepath, tableName, defaultConfig = {}){
         super(filepath, defaultConfig);
@@ -35,7 +35,7 @@ class SQLiteHandler extends DatabaseHandler {
 
     /**
      * Initializes handler and database with IDs.
-     * @param ids {Array.<string>} Array of IDs.
+     * @param {Array.<string>} ids - Array of IDs.
      * @override
      * @returns {Promise.<SQLiteHandler>}
      */
@@ -61,7 +61,7 @@ class SQLiteHandler extends DatabaseHandler {
 
     /**
      * Adds into the database.
-     * @param {string} id ID of entry.
+     * @param {string} id - ID of entry.
      * @override
      * @returns {Promise.<SQLiteHandler>}
      */
@@ -84,7 +84,7 @@ class SQLiteHandler extends DatabaseHandler {
 
     /**
      * Adds into the in-memory config.
-     * @param {string} id ID of entry.
+     * @param {string} id - ID of entry.
      * @override
      * @returns {SQLiteHandler}
      */
@@ -100,7 +100,7 @@ class SQLiteHandler extends DatabaseHandler {
 
     /**
      * Removes from the database.
-     * @param {string} id ID of entry.
+     * @param {string} id - ID of entry.
      * @override
      * @returns {Promise.<SQLiteHandler>}
      */
@@ -119,7 +119,7 @@ class SQLiteHandler extends DatabaseHandler {
 
     /**
      * Removes from the in-memory config.
-     * @param {string} id ID of entry.
+     * @param {string} id - ID of entry.
      * @override
      * @returns {SQLiteHandler}
      */
@@ -141,7 +141,7 @@ class SQLiteHandler extends DatabaseHandler {
 
     /**
      * Gets configuration for an ID.
-     * @param {string} id ID of entry.
+     * @param {string} id - ID of entry.
      * @override
      * @returns {Object}
      */
@@ -161,9 +161,9 @@ class SQLiteHandler extends DatabaseHandler {
 
     /**
      * Updates the database.
-     * @param {string} id ID of entry.
-     * @param {string} key Key to set.
-     * @param {string|number} value Value to set.
+     * @param {string} id - ID of entry.
+     * @param {string} key - Key to set.
+     * @param {string|number} value - Value to set.
      * @override
      * @returns {Promise.<SQLiteHandler>}
      */
@@ -203,9 +203,9 @@ class SQLiteHandler extends DatabaseHandler {
 
     /**
      * Updates the in-memory configuration.
-     * @param {string} id ID of entry.
-     * @param {string} key Key to set.
-     * @param {string|number} value Value to set.
+     * @param {string} id - ID of entry.
+     * @param {string} key - Key to set.
+     * @param {string|number} value - Value to set.
      * @override
      * @returns {SQLiteHandler}
      */
@@ -234,7 +234,7 @@ class SQLiteHandler extends DatabaseHandler {
 
     /**
      * Saves an in-memory config to the database.
-     * @param {string} id ID to save.
+     * @param {string} id - ID to save.
      * @override
      * @returns {Promise.<SQLiteHandler>}
      */

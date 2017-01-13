@@ -1,36 +1,31 @@
 /**
- * @typedef {Object} Argument
  * An argument in a command.
+ * @typedef {Object} Argument
  * @prop {string} id - ID of the argument.
- * @prop {string} parse - Method to parse argument: 'word', 'prefix', 'flag', 'text', or 'content'.
- * @prop {string} type - Attempts to cast input to this type: 'string', 'number', or 'dynamic'. 
-* @prop {string} prefix - Ignores word order and uses a word that starts with this prefix. Applicable to 'prefix' and 'flag' only.
- * @prop {number} index - Word to start from. Applicable to 'word', 'text', or 'content' only.
- * @prop {(string|number)} defaultValue - Default value if a word is not inputted.
+ * @prop {string} [parse='word'] - Method to parse argument: 'word', 'prefix', 'flag', 'text', or 'content'. Word parses by the order of the words inputted. Prefix and flag ignores order and uses the value after the prefix (if prefix) or true/false (if flag). Text and content retrieves everything after the command, with the difference being that text ignores prefixes. Note that if the command's split type is plain or quote, text will also not have extra whitespace.
+ * @prop {string} [type='string'] - Attempts to cast input to this type: 'string', 'number', or 'dynamic'. String does not care about type. Number attempts to parse the input to a number and if it is NaN, it will use the default value. Dynamic defaults to a string, but will parse to number if it is not NaN. 
+ * @prop {string} [prefix] - Ignores word order and uses a word that starts with/matches this prefix. Applicable to 'prefix' and 'flag' only.
+ * @prop {number} [index] - Word to start from. Applicable to 'word', 'text', or 'content' only.
+ * @prop {(string|number)} [defaultValue=''] - Default value if a word is not inputted.
  */
 
 /**
- * @typedef {Object} EvaluatedArguments
- * Arguments parsed from text. Properties are determined by the command's args.
- */
-
-/**
- * @typedef {Object} CommandOptions
  * Options to use for command execution behavior.
- * @prop {string} category - Command category for organization purposes.
- * @prop {boolean} ownerOnly - Allow client owner only.
- * @prop {string} channelRestriction - Restricts channel: 'guild' or 'dm'.
- * @prop {string} split - Method to divide text into words: 'plain' or 'quoted'.
+ * @typedef {Object} CommandOptions
+ * @prop {string} [category] - Command category for organization purposes.
+ * @prop {boolean} [ownerOnly=false] - Allow client owner only.
+ * @prop {string} [channelRestriction='none'] - Restricts channel: 'guild' or 'dm'.
+ * @prop {string} [split='plain'] - Method to divide text into words: 'plain', 'plainW', 'quoted' or 'quotedW'. Plain splits by space and ignores extra whitespace between words. Quoted does the same, but counts text in double quotes as one word. The W (whitespace) variant of each does not ignore extra whitespace.
  */
 
 class Command {
     /**
      * Creates a new Command.
-     * @param {string} id Command ID.
-     * @param {Array.<string>} aliases Names to call the command with.
-     * @param {Array.<Argument>} args Arguments for the command.
-     * @param {function} exec Function called when command is ran. (message, args)
-     * @param {CommandOptions} options Options for the command.
+     * @param {string} id - Command ID.
+     * @param {Array.<string>} aliases - Names to call the command with.
+     * @param {Array.<Argument>} args - Arguments for the command.
+     * @param {function} exec - Function called when command is ran. (message, args)
+     * @param {CommandOptions} options - Options for the command.
      */
     constructor(id, aliases = [], args = [], exec, options = {}){
         /**
@@ -125,14 +120,16 @@ class Command {
 
     /**
      * Parses text based on this Command's args.
-     * @param {string} content String to parse.
-     * @returns {EvaluatedArguments}
+     * @param {string} content - String to parse.
+     * @returns {Object}
      */
     parse(content){
         let words = [];
         const argSplit = {
             plain: content.match(/[^\s]+/g),
-            quoted: content.match(/".*?"|[^\s"]+|"/g)
+            plainW: content.match(/[^\s]+|\s/g),
+            quoted: content.match(/".*?"|[^\s"]+|"/g),
+            quotedW: content.match(/".*?"|[^\s"]+|"|\s/g)
         };
         
         words = argSplit[this.options.split] || [];
@@ -192,7 +189,6 @@ class Command {
 
     /**
      * Returns the ID.
-     * @override
      * @returns {string}
      */
     toString(){

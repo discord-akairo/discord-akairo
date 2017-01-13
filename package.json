@@ -16,6 +16,9 @@
     "jsdoc": "^3.4.3",
     "minami": "^1.1.1"
   },
+  "scripts": {
+    "generate-docs": "node_modules/.bin/jsdoc --configure .jsdoc.json --verbose"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/1Computer1/discord-akairo.git"

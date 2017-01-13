@@ -1,7 +1,7 @@
 class ClientUtil {
     /**
      * Creates client utilities.
-     * @param {Discord.Client} client The Discord.js client.
+     * @param {Discord.Client} client - The Discord.js client.
      */
     constructor(client){
         /** 
@@ -13,7 +13,7 @@ class ClientUtil {
 
     /**
      * Resolves a User from a string, such as an ID, a username, etc.
-     * @param {string} text Text to resolve.
+     * @param {string} text - Text to resolve.
      * @returns {Discord.User}
      */
     resolveUser(text){
@@ -35,8 +35,8 @@ class ClientUtil {
 
     /**
      * Resolves a GuildMember from a string, such as an ID, a nickname, a username, etc.
-     * @param {string} text Text to resolve.
-     * @param {Discord.Guild} guild Guild to find member in. If not specified, will resolve a User instead.
+     * @param {string} text - Text to resolve.
+     * @param {Discord.Guild} [guild] - Guild to find member in. If not specified, will resolve a User instead.
      * @returns {(Discord.GuildMember|Discord.User)}
      */
     resolveMember(text, guild){
@@ -62,8 +62,8 @@ class ClientUtil {
 
     /**
      * Resolves a GuildChannel from a string, such as an ID, a name, etc.
-     * @param {string} text Text to resolve.
-     * @param {Discord.Guild} guild Guild to find channel in.
+     * @param {string} text - Text to resolve.
+     * @param {Discord.Guild} guild - Guild to find channel in.
      * @returns {Discord.GuildChannel}
      */
     resolveChannel(text, guild){
@@ -87,8 +87,8 @@ class ClientUtil {
 
     /**
      * Resolves a Role from a string, such as an ID, a name, etc.
-     * @param {string} text Text to resolve.
-     * @param {Discord.Guild} guild Guild to find channel in.
+     * @param {string} text - Text to resolve.
+     * @param {Discord.Guild} guild - Guild to find channel in.
      * @returns {Discord.Role}
      */
     resolveRole(text, guild){
@@ -112,8 +112,8 @@ class ClientUtil {
 
     /**
      * Resolves an Emoji from a string, such as a name or a mention.
-     * @param {string} text Text to resolve.
-     * @param {Discord.Guild} guild Guild to find emoji in.
+     * @param {string} text - Text to resolve.
+     * @param {Discord.Guild} guild - Guild to find emoji in.
      * @returns {Discord.Emoji}
      */
     resolveEmoji(text, guild){
@@ -137,7 +137,7 @@ class ClientUtil {
 
     /**
      * Gets the display color in decimal of the member.
-     * @param {Discord.GuildMember} member The member to find color of.
+     * @param {Discord.GuildMember} member - The member to find color of.
      * @returns {number}
      */
     displayColor(member){
@@ -150,7 +150,7 @@ class ClientUtil {
 
     /**
      * Creates an invite link for the client.
-     * @param {number} permissions Permissions number.
+     * @param {number} [permissions=0] - Permissions number.
      * @return {Promise.<string>}
      */
     createInvite(permissions = 0){
