@@ -13,7 +13,7 @@
 # About
 A bot framework for Discord.js v11, where everything is reloadable, commands are easy as cake to make, and argument parsing is very flexible.  
 
-### Commands and arguments:
+### Commands and Arguments:
 ```js
 const Command = require('discord-akairo').Command;
 
@@ -31,7 +31,7 @@ module.exports = new Command('roll', ['roll', 'dice', 'rng'], [
     channelRestriction: 'guild'
 });
 ```
-### Command inhibitors:
+### Command Inhibitors:
 ```js
 const Inhibitor = require('discord-akairo').Inhibitor;
 const blockedUsers = ['1234', '5678', '1357', '2468'];
@@ -42,7 +42,7 @@ function exec(message){
 
 module.exports = new Inhibitor('blacklist', 'blacklist', exec);
 ```
-### Event listeners:
+### Event Listeners:
 ```js
 const Listener = require('discord-akairo').Listener;
 
@@ -59,7 +59,7 @@ function exec(message, command, reason){
 
 module.exports = new Listener('commandBlocked', 'commandHandler', 'commandBlocked', 'on', exec);
 ```
-### Reloadable everything:
+### Reloadable Everything:
 ```js
 // Somewhere...
 commandHandler.reloadCommand('roll');
@@ -68,7 +68,7 @@ listenerHandler.reloadListener('commandBlocked');
 
 // All reloaded!
 ```
-### SQLite support:
+### SQLite Support:
 ```js
 const guildSQL = new Akairo.SQLiteHandler('./databases/guilds.sqlite', 'guildConfigs', require('./databases/guildDefault.json'));
 
