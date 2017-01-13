@@ -10,21 +10,80 @@
     </a>
 </p>  
 
-### About
-A bot framework for Discord.js v11.  
-- Command processing.
-- Argument parsing.
-- Command inhibitors.
-- Event listeners.
-- Reloadable everything.
-- SQLite support.
+# About
+A bot framework for Discord.js v11, where everything is reloadable, commands are easy as cake to make, and argument parsing is very flexible.  
 
-### Installation
+### Commands and arguments:
+```js
+const Command = require('discord-akairo').Command;
+
+function exec(message, args){
+    let random = Math.random() * args.limit + 1;
+    if (!args.noFloor) random = Math.floor(random);
+
+    message.channel.send(random);
+}
+
+module.exports = new Command('roll', ['roll', 'dice', 'rng'], [
+    {id: 'limit', type: 'number', defaultValue: 100},
+    {id: 'noFloor', parse: 'flag', prefix: '--noFloor'}
+], exec, {
+    channelRestriction: 'guild'
+});
+```
+### Command inhibitors:
+```js
+const Inhibitor = require('discord-akairo').Inhibitor;
+const blockedUsers = ['1234', '5678', '1357', '2468'];
+
+function exec(message){
+    return blockedUsers.includes(message.author.id);
+}
+
+module.exports = new Inhibitor('blacklist', 'blacklist', exec);
+```
+### Event listeners:
+```js
+const Listener = require('discord-akairo').Listener;
+
+function exec(message, command, reason){
+    const replies = {
+        owner: 'You are not the bot owner!',
+        guild: 'You can only use this command in a guild!',
+        dm: 'You can only use this command in a DM!',
+        blacklist: 'I don\'t like you >:c'
+    };
+
+    if (replies[reason]) message.reply(replies[reason]);
+}
+
+module.exports = new Listener('commandBlocked', 'commandHandler', 'commandBlocked', 'on', exec);
+```
+### Reloadable everything:
+```js
+// Somewhere...
+commandHandler.reloadCommand('roll');
+commandHandler.reloadInhibitor('blacklist');
+listenerHandler.reloadListener('commandBlocked');
+
+// All reloaded!
+```
+### SQLite support:
+```js
+const guildSQL = new Akairo.SQLiteHandler('./databases/guilds.sqlite', 'guildConfigs', require('./databases/guildDefault.json'));
+
+akairo.login().then(() => {
+    guildSQL.init(client.guilds.map(g => g.id));
+    console.log(guildSQL.get('123456').prefix) // Hopefully not '!'
+});
+```
+
+# Installation
 discord-akairo: `npm install discord-akairo --save`  
 discord.js: `npm install discord.js --save`  
 sqlite: `npm install sqlite --save`  
 
-### Documentation
+# Documentation
 Documentation is available on [https://1computer1.github.io/discord-akairo/index.html](https://1computer1.github.io/discord-akairo/index.html).  
 See the examples folder for some examples.  
 If you need more help, message me on Discord: 1Computer#7952.  
