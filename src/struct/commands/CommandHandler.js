@@ -3,6 +3,7 @@ const EventEmitter = require('events');
 const rread = require('readdir-recursive');
 const Command = require('./Command');
 const Inhibitor = require('./Inhibitor');
+const Collection = require('discord.js').Collection;
 
 /** @extends EventEmitter */
 class CommandHandler extends EventEmitter {
@@ -33,21 +34,21 @@ class CommandHandler extends EventEmitter {
 
         /**
          * Commands loaded, mapped by ID to Command.
-         * @type {Map.<string, Command>}
+         * @type {Collection.<string, Command>}
          */
-        this.commands = new Map();
+        this.commands = new Collection();
 
         /**
          * Commands categories mapped by name to Array of Commands.
          * @type {Map.<string, Array.<Command>>}
          */
-        this.categories = new Map();
+        this.categories = new Collection();
 
         /**
          * Inhibitors loaded, mapped by ID to Inhibitor.
-         * @type {Map.<string, Inhibitor>}
+         * @type {Collection.<string, Inhibitor>}
          */
-        this.inhibitors = new Map();
+        this.inhibitors = new Collection();
 
         let cmdPaths = rread.fileSync(this.commandDirectory);
         cmdPaths.forEach(filepath => {
@@ -135,7 +136,7 @@ class CommandHandler extends EventEmitter {
      * @param {string} name - Alias to find with.
      */
     findCommand(name){
-        return Array.from(this.commands.values()).find(command => {
+        return this.commands.find(command => {
             return command.aliases.some(a => a.toLowerCase() === name.toLowerCase());
         });
     }
@@ -145,8 +146,8 @@ class CommandHandler extends EventEmitter {
      * @param {string} name - Name to find with.
      */
     findCategory(name){
-        let cat = Array.from(this.categories).find(cat => cat[0].toLowerCase() === name.toLowerCase());
-        return cat ? cat[1] : null;
+        let key = Array.from(this.categories.keys()).find(k => k.toLowerCase() === name.toLowerCase());
+        return this.categories.get(key);
     }
 
     /**
