@@ -20,6 +20,26 @@ class SQLiteHandler extends DatabaseHandler {
     }
 
     /**
+     * Sanitizes a string by replacing single quotes with two single quotes.
+     * @param {string} input - Input text.
+     * @return {string}
+     */
+    sanitize(input){
+        if (typeof input !== 'string') return input;
+        return input.replace(/'/g, '\'\'');
+    }
+
+    /**
+     * Desanitizes a string for use by replacing two single quotes with a single quote.
+     * @param {string} input - Input text.
+     * @return {string}
+     */
+    desanitize(input){
+        if (typeof input !== 'string') return input;
+        return input.replace(/''/g, '\'');
+    }
+
+    /**
      * Opens the database so that it can be used.
      * @override
      * @return {Promise.<Database>}
@@ -150,8 +170,8 @@ class SQLiteHandler extends DatabaseHandler {
         let copy = {};
 
         Object.keys(config).forEach(key => {
-            if (config[key] === undefined) return copy[key] = typeof this.defaultConfig[key] === 'string' ? this.defaultConfig[key].replace(/'/g, '\'\'') : this.defaultConfig[key];
-            copy[key] = typeof config[key] === 'string' ? config[key].replace(/''/g, '') : config[key];
+            if (config[key] === undefined) return copy[key] = this.sanitize(this.defaultConfig[key]);
+            copy[key] = this.desanitize(config[key]);
         });
 
         return copy;
@@ -169,8 +189,8 @@ class SQLiteHandler extends DatabaseHandler {
         if (!this.db) return Promise.reject(new Error('Database not opened.'));
 
         return new Promise((resolve, reject) => {
-            key = key.replace(/'/g, '\'\'');
-            value = (typeof value === 'string' ? value.replace(/'/g, '\'\'') : value);
+            key = this.sanitize(key);
+            value = this.sanitize(value);
 
             if (!this.has(id)){
                 return reject(new Error(`${id} not found.`));
@@ -208,8 +228,8 @@ class SQLiteHandler extends DatabaseHandler {
      * @returns {SQLiteHandler}
      */
     setMemory(id, key, value){
-        key =  key.replace(/'/g, '\'\'');
-        value = (typeof value === 'string' ? value.replace(/'/g, '\'\'') : value);
+        key = this.sanitize(key);
+        value = this.sanitize(value);
 
         if (!this.has(id)){
             throw new Error(`${id} not found.`);

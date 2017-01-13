@@ -1,4 +1,5 @@
 const path = require('path');
+const Collection = require('discord.js').Collection;
 
 class DatabaseHandler {
     /**
@@ -18,10 +19,10 @@ class DatabaseHandler {
         this.defaultConfig = defaultConfig;
 
         /** 
-         * Configurations stored in memory, mapped by ID to configuration.
-         * @type {Map<string, Object>}
+         * Configurations stored in memory, mapped by ID to configuration. Note that if you modify/get values directly from here, you should use the handler's sanitize() and desanitize() methods.
+         * @type {Collection.<string, Object>}
          */
-        this.memory = new Map();
+        this.memory = new Collection();
 
         /**
          * The database.
@@ -37,6 +38,12 @@ class DatabaseHandler {
     get ids(){
         return Array.from(this.memory.keys());
     }
+
+    /** Should sanitize input. */
+    sanitize(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
+
+    /** Should desanitize text for use. */
+    desanitize(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
 
     /** Should open database. */
     open(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
