@@ -103,7 +103,7 @@ listenerHandler.reloadListener('commandBlocked');
 // All reloaded!
 ```
 
-### SQLite Support:
+### SQLite Support
 ```js
 const guildSQL = new Akairo.SQLiteHandler('./databases/guilds.sqlite', 'guildConfigs', require('./databases/guildDefault.json'));
 
