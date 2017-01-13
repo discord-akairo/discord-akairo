@@ -191,7 +191,7 @@ class Command {
 
             if (this.options.split === 'quoted' &amp;&amp; /^".*"$/.test(word)) word = word.slice(1, -1);
 
-            if ((arg.type === 'dynamic' || arg.type === 'number') &amp;&amp; !isNaN(word)) word = parseInt(word);
+            if ((arg.type === 'dynamic' || arg.type === 'number') &amp;&amp; !isNaN(word)) word = new Number(word);
             if (arg.type === 'number' &amp;&amp; isNaN(word)) word = arg.defaultValue;
 
             args[arg.id] = word;
@@ -205,7 +205,7 @@ class Command {
 
             word = word.replace(arg.prefix, '');
 
-            if ((arg.type === 'dynamic' || arg.type === 'number') &amp;&amp; !isNaN(word)) word = parseInt(word);
+            if ((arg.type === 'dynamic' || arg.type === 'number') &amp;&amp; !isNaN(word)) word = new Number(word);
             if (arg.type === 'number' &amp;&amp; isNaN(word)) word = arg.defaultValue;
 
             args[arg.id] = word;
