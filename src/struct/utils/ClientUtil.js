@@ -14,9 +14,10 @@ class ClientUtil {
     /**
      * Resolves a User from a string, such as an ID, a username, etc.
      * @param {string} text - Text to resolve.
+     * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @returns {Discord.User}
      */
-    resolveUser(text){
+    resolveUser(text, caseSensitive = false){
         let users = this.client.users;
 
         let reg = /<@!?(\d+)>/;
@@ -25,21 +26,24 @@ class ClientUtil {
             return users.get(id);
         }
 
-        return users.get(text) || users.find(u => {
-            return u.username === text
-            || u.username.toLowerCase() === text.toLowerCase()
-            || u.username === text.split('#')[0] && u.discriminator === text.split('#')[1]
-            || u.username.toLowerCase() === text.split('#')[0].toLowerCase() && u.discriminator === text.split('#')[1];
-        });
+        let check = u => {
+            let username = caseSensitive ? u.username : u.username.toLowerCase();
+            let text = caseSensitive ? text : text.toLowerCase();
+
+            return username === text || username === text.split('#')[0] && u.discriminator === text.split('#')[1];
+        };
+
+        return users.get(text) || users.find(check);
     }
 
     /**
      * Resolves a GuildMember from a string, such as an ID, a nickname, a username, etc.
      * @param {string} text - Text to resolve.
      * @param {Discord.Guild} [guild] - Guild to find member in. If not specified, will resolve a User instead.
+     * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @returns {(Discord.GuildMember|Discord.User)}
      */
-    resolveMember(text, guild){
+    resolveMember(text, guild, caseSensitive = false){
         if (!guild) return this.resolveUser(text);
 
         let members = guild.members;
@@ -50,23 +54,25 @@ class ClientUtil {
             return members.get(id);
         }
 
-        return members.get(text) || members.find(m => {
-            return m.displayName === text
-            || m.displayName.toLowerCase() === text.toLowerCase()
-            || m.user.username === text
-            || m.user.username.toLowerCase() === text.toLowerCase()
-            || m.user.username === text.split('#')[0] && m.user.discriminator === text.split('#')[1]
-            || m.user.username.toLowerCase() === text.split('#')[0].toLowerCase() && m.user.discriminator === text.split('#')[1];
-        });
+        let check = m => {
+            let username = caseSensitive ? m.user.username : m.user.username.toLowerCase();
+            let displayName = caseSensitive ? m.displayName : m.displayName.toLowerCase();
+            let text = caseSensitive ? text : text.toLowerCase();
+
+            return displayName === text || username === text || username === text.split('#')[0] && m.user.discriminator === text.split('#')[1];
+        };
+
+        return members.get(text) || members.find(check);
     }
 
     /**
      * Resolves a GuildChannel from a string, such as an ID, a name, etc.
      * @param {string} text - Text to resolve.
      * @param {Discord.Guild} guild - Guild to find channel in.
+     * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @returns {Discord.GuildChannel}
      */
-    resolveChannel(text, guild){
+    resolveChannel(text, guild, caseSensitive = false){
         if (!guild) throw new Error('Guild must be specified.');
 
         let channels = guild.channels;
@@ -77,21 +83,24 @@ class ClientUtil {
             return channels.get(id);
         }
 
-        return channels.get(text) || channels.find(c => {
-            return c.name === text
-            || c.name.toLowerCase() === text.toLowerCase()
-            || c.name === text.replace(/^#/, '')
-            || c.name.toLowerCase() === text.replace(/^#/, '').toLowerCase();
-        });
+        let check = c => {
+            let name = caseSensitive ? c.name : c.name.toLowerCase();
+            let text = caseSensitive ? text : text.toLowerCase();
+
+            return name === text || name === text.replace(/^#/, '');
+        };
+
+        return channels.get(text) || channels.find(check);
     }
 
     /**
      * Resolves a Role from a string, such as an ID, a name, etc.
      * @param {string} text - Text to resolve.
      * @param {Discord.Guild} guild - Guild to find channel in.
+     * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @returns {Discord.Role}
      */
-    resolveRole(text, guild){
+    resolveRole(text, guild, caseSensitive = false){
         if (!guild) throw new Error('Guild must be specified.');
 
         let roles = guild.roles;
@@ -102,21 +111,24 @@ class ClientUtil {
             return roles.get(id);
         }
 
-        return roles.get(text) || roles.find(r => {
-            return r.name === text
-            || r.name.toLowerCase() === text.toLowerCase()
-            || r.name === text.replace(/^@/, '')
-            || r.name.toLowerCase() === text.replace(/^@/, '').toLowerCase();
-        });
+        let check = r => {
+            let name = caseSensitive ? r.name : r.name.toLowerCase();
+            let text = caseSensitive ? text : text.toLowerCase();
+
+            return name === text || name === text.replace(/^@/, '');
+        };
+
+        return roles.get(text) || roles.find(check);
     }
 
     /**
      * Resolves an Emoji from a string, such as a name or a mention.
      * @param {string} text - Text to resolve.
      * @param {Discord.Guild} guild - Guild to find emoji in.
+     * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @returns {Discord.Emoji}
      */
-    resolveEmoji(text, guild){
+    resolveEmoji(text, guild, caseSensitive = false){
         if (!guild) throw new Error('Guild must be specified.');
 
         let emojis = guild.emojis;
@@ -127,12 +139,14 @@ class ClientUtil {
             return emojis.get(id);
         }
 
-        return emojis.get(text) || emojis.find(e => {
-            return e.name === text
-            || e.name.toLowerCase() === text.toLowerCase()
-            || e.name === text.replace(/:/g, '')
-            || e.name === text.replace(/:/g, '').toLowerCase();
-        });
+        let check = e => {
+            let name = caseSensitive ? e.name : e.name.toLowerCase();
+            let text = caseSensitive ? text : text.toLowerCase();
+
+            return name === text || name === text.replace(/:/g, '');
+        };
+
+        return emojis.get(text) || emojis.find(check);
     }
 
     /**
