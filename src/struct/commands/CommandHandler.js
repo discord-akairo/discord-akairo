@@ -213,8 +213,9 @@ class CommandHandler extends EventEmitter {
      * @param {Discord.Message} message - Message to handle.
      * @param {string} prefix - Prefix for command.
      * @param {boolean} allowMention - Allow mentions to the client user as a prefix.
+     * @param {boolean} disableBuiltIn - Disables the built-in command inhibitors.
      */
-    handle(message, prefix, allowMention){
+    handle(message, prefix, allowMention, disableBuiltIn){
         let start;
         let mentionRegex = new RegExp(`^<@!?${this.framework.client.user.id}>`);
         let mentioned = message.content.match(mentionRegex);
@@ -238,12 +239,14 @@ class CommandHandler extends EventEmitter {
             this.emit('commandBlocked', message, command, reason);
         };
 
-        if (message.author.id !== this.framework.client.user.id && this.framework.options.selfbot) return block('notSelf');
-        if (message.author.id === this.framework.client.user.id && !this.framework.options.selfbot) return block('client');
-        if (message.author.bot) return block('bot');
-        if (command.options.ownerOnly && message.author.id !== this.framework.options.ownerID) return block('owner');
-        if (command.options.channelRestriction === 'guild' && !message.guild) return block('guild');
-        if (command.options.channelRestriction === 'dm' && message.guild) return block('dm');
+        if (!disableBuiltIn){
+            if (message.author.id !== this.framework.client.user.id && this.framework.options.selfbot) return block('notSelf');
+            if (message.author.id === this.framework.client.user.id && !this.framework.options.selfbot) return block('client');
+            if (message.author.bot) return block('bot');
+            if (command.options.ownerOnly && message.author.id !== this.framework.options.ownerID) return block('owner');
+            if (command.options.channelRestriction === 'guild' && !message.guild) return block('guild');
+            if (command.options.channelRestriction === 'dm' && message.guild) return block('dm');
+        }
 
         let results = [];
 

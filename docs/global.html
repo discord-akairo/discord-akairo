@@ -339,7 +339,7 @@
                 </td>
             
 
-            <td class="description last">Word to start from. Applicable to 'word', 'text', or 'content' only.</td>
+            <td class="description last">Word to start from. Applicable to 'word', 'text', or 'content' only. When using with word, this will offset all word arguments after it by 1, so you will have to include an index property for those.</td>
         </tr>
 
     
@@ -515,6 +515,8 @@
 
             
                 <td class="default">
+                
+                    ''
                 
                 </td>
             
@@ -790,6 +792,8 @@
             
                 <td class="attributes">
                 
+                    &lt;optional><br>
+                
 
                 
                 </td>
@@ -956,6 +960,43 @@
             
 
             <td class="description last">Allow mentions to the client user as a prefix or function that returns true or false.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>disableBuiltIn</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last">Disables the built-in command inhibitors (i.e. blocking bots and the client and checking if the command is owner only or restricted to a channel). Not recommended.</td>
         </tr>
 
     
