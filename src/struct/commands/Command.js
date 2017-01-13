@@ -15,7 +15,7 @@
  * @prop {string} [category=''] - Command category for organization purposes.
  * @prop {boolean} [ownerOnly=false] - Allow client owner only.
  * @prop {string} [channelRestriction='none'] - Restricts channel: 'guild' or 'dm'.
- * @prop {string} [split='plain'] - Method to divide text into words: 'plain', 'plainW', 'quoted' or 'quotedW'. Plain splits by space and ignores extra whitespace between words. Quoted does the same, but counts text in double quotes as one word. The W (whitespace) variant of each does not ignore extra whitespace.
+ * @prop {string} [split='plain'] - Method to divide text into words: 'plain', 'split', or 'quoted'. Plain splits by space and ignores extra whitespace between words, while split is just split(' '). Quoted does the same as plain, but counts text in double quotes as one word.
  */
 
 class Command {
@@ -127,9 +127,8 @@ class Command {
         let words = [];
         const argSplit = {
             plain: content.match(/[^\s]+/g),
-            plainW: content.match(/[^\s]+|\s/g),
-            quoted: content.match(/".*?"|[^\s"]+|"/g),
-            quotedW: content.match(/".*?"|[^\s"]+|"|\s/g)
+            split: content.split(' '),
+            quoted: content.match(/".*?"|[^\s"]+|"/g)
         };
         
         words = argSplit[this.options.split] || [];
@@ -151,7 +150,7 @@ class Command {
 
             if (this.options.split === 'quoted' && /^".*"$/.test(word)) word = word.slice(1, -1);
 
-            if ((arg.type === 'dynamic' || arg.type === 'number') && !isNaN(word)) word = new Number(word);
+            if ((arg.type === 'dynamic' || arg.type === 'number') && !isNaN(word)) word = parseFloat(word);
             if (arg.type === 'number' && isNaN(word)) word = arg.defaultValue;
 
             args[arg.id] = word;
@@ -165,7 +164,7 @@ class Command {
 
             word = word.replace(arg.prefix, '');
 
-            if ((arg.type === 'dynamic' || arg.type === 'number') && !isNaN(word)) word = new Number(word);
+            if ((arg.type === 'dynamic' || arg.type === 'number') && !isNaN(word)) word = parseFloat(word);
             if (arg.type === 'number' && isNaN(word)) word = arg.defaultValue;
 
             args[arg.id] = word;
@@ -177,15 +176,7 @@ class Command {
         });
 
         textArgs.forEach(arg => {
-            let text = noPrefixWords.slice(arg.index);
-
-            if (this.options.split.endsWith('W')){
-                text = text.join('');
-            } else {
-                text = text.join(' ');
-            }
-
-            args[arg.id] = text || arg.defaultValue;
+            args[arg.id] = noPrefixWords.slice(arg.index).join(' ') || arg.defaultValue;
         });
 
         contentArgs.forEach(arg => {
