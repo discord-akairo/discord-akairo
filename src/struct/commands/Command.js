@@ -79,6 +79,12 @@ class Command {
          */
         this.framework = null;
 
+        /** 
+         * The Discord.js client. 
+         * @type {Discord.Client}
+         */
+        this.client = null;
+
         /**
          * The command handler.
          * @type {CommandHandler}

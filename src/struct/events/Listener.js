@@ -50,6 +50,12 @@ class Listener {
          */
         this.framework = null;
 
+        /** 
+         * The Discord.js client. 
+         * @type {Discord.Client}
+         */
+        this.client = null;
+
         /**
          * The listener handler.
          * @type {ListenerHandler}

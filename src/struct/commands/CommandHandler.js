@@ -72,6 +72,7 @@ class CommandHandler extends EventEmitter {
 
         command.filepath = filepath;
         command.framework = this.framework;
+        command.client = this.framework.client;
         command.commandHandler = this;
 
         this.commands.set(command.id, command);
@@ -160,6 +161,7 @@ class CommandHandler extends EventEmitter {
 
         inhibitor.filepath = filepath;
         inhibitor.framework = this.framework;
+        inhibitor.client = this.framework.client;
         inhibitor.commandHandler = this;
 
         this.inhibitors.set(inhibitor.id, inhibitor);

@@ -45,6 +45,7 @@ class ListenerHandler {
 
         listener.filepath = filepath;
         listener.framework = this.framework;
+        listener.client = this.framework.client;
         listener.listenerHandler = this;
 
         this.listeners.set(listener.id, listener);
