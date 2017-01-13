@@ -177,7 +177,15 @@ class Command {
         });
 
         textArgs.forEach(arg => {
-            args[arg.id] = noPrefixWords.slice(arg.index).join(' ') || arg.defaultValue;
+            let text = noPrefixWords.slice(arg.index);
+
+            if (this.options.split.endsWith('W')){
+                text = text.join('');
+            } else {
+                text = text.join(' ');
+            }
+
+            args[arg.id] = text || arg.defaultValue;
         });
 
         contentArgs.forEach(arg => {
