@@ -34,8 +34,8 @@ class DatabaseHandler {
     }
 
     /**
-     * Gets all the IDs.
-     * @return {Array.<string>}
+     * Array of IDs.
+     * @return {string[]}
      */
     get ids(){
         return Array.from(this.memory.keys());

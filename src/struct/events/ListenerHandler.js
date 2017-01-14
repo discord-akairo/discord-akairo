@@ -1,8 +1,8 @@
 const path = require('path');
-const EventEmitter = require('events');
 const rread = require('readdir-recursive');
-const Listener = require('./Listener');
+const EventEmitter = require('events');
 const Collection = require('discord.js').Collection;
+const Listener = require('./Listener');
 
 class ListenerHandler {
     /**
@@ -27,8 +27,8 @@ class ListenerHandler {
          * @type {Collection.<string, Listener>}
          */
         this.listeners = new Collection();
-        let lisPaths = rread.fileSync(this.directory);
 
+        let lisPaths = rread.fileSync(this.directory);
         lisPaths.forEach(filepath => {
             this.loadListener(filepath);
         });

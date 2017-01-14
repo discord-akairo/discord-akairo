@@ -22,8 +22,8 @@ class Command {
     /**
      * Creates a new Command.
      * @param {string} id - Command ID.
-     * @param {Array.<string>} aliases - Names to call the command with.
-     * @param {Array.<Argument>} args - Arguments for the command.
+     * @param {string[]} aliases - Names to call the command with.
+     * @param {Argument[]} args - Arguments for the command.
      * @param {function} exec - Function called when command is ran. (message, args)
      * @param {CommandOptions} options - Options for the command.
      */
@@ -36,13 +36,13 @@ class Command {
 
         /**
          * Command names.
-         * @type {Array.<string>}
+         * @type {string[]}
          */
         this.aliases = aliases;
 
         /**
          * Arguments for the command.
-         * @type {Array.<Argument>}
+         * @type {Argument[]}
          */
         this.args = args;
         this.args.forEach(arg => {
@@ -94,7 +94,7 @@ class Command {
 
     /** 
      * Formats the arguments.
-     * @param {Array.<string>} [ignore=[]] - Ignores the specified argument IDs.
+     * @param {string[]} [ignore=[]] - Ignores the specified argument IDs.
      * @param {boolean} [whitelist=false] - Uses the ignore param as a whitelist instead of a blacklist.
      */
     format(ignore = [], whitelist = false){

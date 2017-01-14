@@ -197,7 +197,7 @@ class ClientUtil {
 
     /**
      * Creates an invite link for the client.
-     * @param {(number|Array.<PermissionResolvable>)} [permissions=0] - Permissions number or array of PermissionResolvables.
+     * @param {(number|PermissionResolvable[])} [permissions=0] - Permissions number or array of PermissionResolvables.
      * @return {Promise.<string>}
      */
     createInvite(permissions = 0){
@@ -214,7 +214,7 @@ class ClientUtil {
     /**
      * Resolves a permission number and returns an array of permission names.
      * @param {number} number - The permissions number.
-     * @returns {Array.<string>}
+     * @returns {string[]}
      */
     resolvePermissionNumber(number){
         let resolved = [];

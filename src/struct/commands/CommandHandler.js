@@ -1,9 +1,9 @@
 const path = require('path');
-const EventEmitter = require('events');
 const rread = require('readdir-recursive');
+const EventEmitter = require('events');
+const Collection = require('discord.js').Collection;
 const Command = require('./Command');
 const Inhibitor = require('./Inhibitor');
-const Collection = require('discord.js').Collection;
 
 /** @extends EventEmitter */
 class CommandHandler extends EventEmitter {
@@ -134,6 +134,7 @@ class CommandHandler extends EventEmitter {
     /**
      * Finds a command by alias.
      * @param {string} name - Alias to find with.
+     * @returns {Command}
      */
     findCommand(name){
         return this.commands.find(command => {
@@ -144,6 +145,7 @@ class CommandHandler extends EventEmitter {
     /**
      * Finds a category by name.
      * @param {string} name - Name to find with.
+     * @returns {Command[]}
      */
     findCategory(name){
         let key = Array.from(this.categories.keys()).find(k => k.toLowerCase() === name.toLowerCase());

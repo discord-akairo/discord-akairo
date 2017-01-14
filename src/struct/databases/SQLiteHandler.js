@@ -1,5 +1,5 @@
-const DatabaseHandler = require('./DatabaseHandler');
 const sql = require('sqlite');
+const DatabaseHandler = require('./DatabaseHandler');
 
 /** @extends DatabaseHandler */
 class SQLiteHandler extends DatabaseHandler {
@@ -54,7 +54,7 @@ class SQLiteHandler extends DatabaseHandler {
 
     /**
      * Initializes handler and database with IDs.
-     * @param {Array.<string>} ids - Array of IDs.
+     * @param {string[]} ids - Array of IDs.
      * @returns {Promise.<SQLiteHandler>}
      */
     init(ids){
