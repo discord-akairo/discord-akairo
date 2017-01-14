@@ -212,7 +212,7 @@ class ClientUtil {
     }
 
     /**
-     * Resolves a permission number and returns an Array of permission names.
+     * Resolves a permission number and returns an array of permission names.
      * @param {number} number - The permissions number.
      * @returns {Array.<string>}
      */

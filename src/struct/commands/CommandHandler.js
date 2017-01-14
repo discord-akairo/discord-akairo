@@ -39,7 +39,7 @@ class CommandHandler extends EventEmitter {
         this.commands = new Collection();
 
         /**
-         * Commands categories mapped by name to Array of Commands.
+         * Commands categories mapped by name to array of Commands.
          * @type {Map.<string, Array.<Command>>}
          */
         this.categories = new Collection();
