@@ -23,7 +23,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3>Events</h3><ul><li><a href="CommandHandler.html#event:commandBlocked">commandBlocked</a></li><li><a href="CommandHandler.html#event:commandFinished">commandFinished</a></li><li><a href="CommandHandler.html#event:commandInvalid">commandInvalid</a></li><li><a href="CommandHandler.html#event:commandPrefixInvalid">commandPrefixInvalid</a></li><li><a href="CommandHandler.html#event:commandStarted">commandStarted</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -38,15 +38,49 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>class ClientUtil {
+            <pre class="prettyprint source linenums"><code>const PERMISSIONS = {
+    CREATE_INSTANT_INVITE: 1 &lt;&lt; 0,
+    KICK_MEMBERS: 1 &lt;&lt; 1,
+    BAN_MEMBERS: 1 &lt;&lt; 2,
+    ADMINISTRATOR: 1 &lt;&lt; 3,
+    MANAGE_CHANNELS: 1 &lt;&lt; 4,
+    MANAGE_GUILD: 1 &lt;&lt; 5,
+    ADD_REACTIONS: 1 &lt;&lt; 6,
+
+    READ_MESSAGES: 1 &lt;&lt; 10,
+    SEND_MESSAGES: 1 &lt;&lt; 11,
+    SEND_TTS_MESSAGES: 1 &lt;&lt; 12,
+    MANAGE_MESSAGES: 1 &lt;&lt; 13,
+    EMBED_LINKS: 1 &lt;&lt; 14,
+    ATTACH_FILES: 1 &lt;&lt; 15,
+    READ_MESSAGE_HISTORY: 1 &lt;&lt; 16,
+    MENTION_EVERYONE: 1 &lt;&lt; 17,
+    EXTERNAL_EMOJIS: 1 &lt;&lt; 18,
+
+    CONNECT: 1 &lt;&lt; 20,
+    SPEAK: 1 &lt;&lt; 21,
+    MUTE_MEMBERS: 1 &lt;&lt; 22,
+    DEAFEN_MEMBERS: 1 &lt;&lt; 23,
+    MOVE_MEMBERS: 1 &lt;&lt; 24,
+    USE_VAD: 1 &lt;&lt; 25,
+
+    CHANGE_NICKNAME: 1 &lt;&lt; 26,
+    MANAGE_NICKNAMES: 1 &lt;&lt; 27,
+    MANAGE_ROLES_OR_PERMISSIONS: 1 &lt;&lt; 28,
+    MANAGE_WEBHOOKS: 1 &lt;&lt; 29,
+    MANAGE_EMOJIS: 1 &lt;&lt; 30,
+};
+
+class ClientUtil {
     /**
-     * Creates client utilities.
-     * @param {Discord.Client} client - The Discord.js client.
+     * Client utilities to help with common tasks.
+     * @param {Client} client - The Discord.js client.
      */
     constructor(client){
         /** 
          * The Discord.js client. 
-         * @type {Discord.Client}
+         * @readonly
+         * @type {Client}
          */
         this.client = client;
     }
@@ -54,9 +88,10 @@
     /**
      * Resolves a User from a string, such as an ID, a username, etc.
      * @param {string} text - Text to resolve.
-     * @returns {Discord.User}
+     * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
+     * @returns {User}
      */
-    resolveUser(text){
+    resolveUser(text, caseSensitive = false){
         let users = this.client.users;
 
         let reg = /&lt;@!?(\d+)>/;
@@ -65,21 +100,24 @@
             return users.get(id);
         }
 
-        return users.get(text) || users.find(u => {
-            return u.username === text
-            || u.username.toLowerCase() === text.toLowerCase()
-            || u.username === text.split('#')[0] &amp;&amp; u.discriminator === text.split('#')[1]
-            || u.username.toLowerCase() === text.split('#')[0].toLowerCase() &amp;&amp; u.discriminator === text.split('#')[1];
-        });
+        let check = u => {
+            let username = caseSensitive ? u.username : u.username.toLowerCase();
+            let t = caseSensitive ? text : text.toLowerCase();
+
+            return username === t || username === t.split('#')[0] &amp;&amp; u.discriminator === t.split('#')[1];
+        };
+
+        return users.get(text) || users.find(check);
     }
 
     /**
      * Resolves a GuildMember from a string, such as an ID, a nickname, a username, etc.
      * @param {string} text - Text to resolve.
-     * @param {Discord.Guild} [guild] - Guild to find member in. If not specified, will resolve a User instead.
-     * @returns {(Discord.GuildMember|Discord.User)}
+     * @param {Guild} [guild] - Guild to find member in. If not specified, will resolve a User instead.
+     * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
+     * @returns {(GuildMember|User)}
      */
-    resolveMember(text, guild){
+    resolveMember(text, guild, caseSensitive = false){
         if (!guild) return this.resolveUser(text);
 
         let members = guild.members;
@@ -90,23 +128,25 @@
             return members.get(id);
         }
 
-        return members.get(text) || members.find(m => {
-            return m.displayName === text
-            || m.displayName.toLowerCase() === text.toLowerCase()
-            || m.user.username === text
-            || m.user.username.toLowerCase() === text.toLowerCase()
-            || m.user.username === text.split('#')[0] &amp;&amp; m.user.discriminator === text.split('#')[1]
-            || m.user.username.toLowerCase() === text.split('#')[0].toLowerCase() &amp;&amp; m.user.discriminator === text.split('#')[1];
-        });
+        let check = m => {
+            let username = caseSensitive ? m.user.username : m.user.username.toLowerCase();
+            let displayName = caseSensitive ? m.displayName : m.displayName.toLowerCase();
+            let t = caseSensitive ? text : text.toLowerCase();
+
+            return displayName === t || username === t || username === t.split('#')[0] &amp;&amp; m.user.discriminator === t.split('#')[1];
+        };
+
+        return members.get(text) || members.find(check);
     }
 
     /**
      * Resolves a GuildChannel from a string, such as an ID, a name, etc.
      * @param {string} text - Text to resolve.
-     * @param {Discord.Guild} guild - Guild to find channel in.
-     * @returns {Discord.GuildChannel}
+     * @param {Guild} guild - Guild to find channel in.
+     * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
+     * @returns {GuildChannel}
      */
-    resolveChannel(text, guild){
+    resolveChannel(text, guild, caseSensitive = false){
         if (!guild) throw new Error('Guild must be specified.');
 
         let channels = guild.channels;
@@ -117,21 +157,24 @@
             return channels.get(id);
         }
 
-        return channels.get(text) || channels.find(c => {
-            return c.name === text
-            || c.name.toLowerCase() === text.toLowerCase()
-            || c.name === text.replace(/^#/, '')
-            || c.name.toLowerCase() === text.replace(/^#/, '').toLowerCase();
-        });
+        let check = c => {
+            let name = caseSensitive ? c.name : c.name.toLowerCase();
+            let t = caseSensitive ? text : text.toLowerCase();
+
+            return name === t || name === t.replace(/^#/, '');
+        };
+
+        return channels.get(text) || channels.find(check);
     }
 
     /**
      * Resolves a Role from a string, such as an ID, a name, etc.
      * @param {string} text - Text to resolve.
-     * @param {Discord.Guild} guild - Guild to find channel in.
-     * @returns {Discord.Role}
+     * @param {Guild} guild - Guild to find channel in.
+     * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
+     * @returns {Role}
      */
-    resolveRole(text, guild){
+    resolveRole(text, guild, caseSensitive = false){
         if (!guild) throw new Error('Guild must be specified.');
 
         let roles = guild.roles;
@@ -142,21 +185,24 @@
             return roles.get(id);
         }
 
-        return roles.get(text) || roles.find(r => {
-            return r.name === text
-            || r.name.toLowerCase() === text.toLowerCase()
-            || r.name === text.replace(/^@/, '')
-            || r.name.toLowerCase() === text.replace(/^@/, '').toLowerCase();
-        });
+        let check = r => {
+            let name = caseSensitive ? r.name : r.name.toLowerCase();
+            let t = caseSensitive ? t : text.toLowerCase();
+
+            return name === t || name === t.replace(/^@/, '');
+        };
+
+        return roles.get(text) || roles.find(check);
     }
 
     /**
      * Resolves an Emoji from a string, such as a name or a mention.
      * @param {string} text - Text to resolve.
-     * @param {Discord.Guild} guild - Guild to find emoji in.
-     * @returns {Discord.Emoji}
+     * @param {Guild} guild - Guild to find emoji in.
+     * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
+     * @returns {Emoji}
      */
-    resolveEmoji(text, guild){
+    resolveEmoji(text, guild, caseSensitive = false){
         if (!guild) throw new Error('Guild must be specified.');
 
         let emojis = guild.emojis;
@@ -167,17 +213,19 @@
             return emojis.get(id);
         }
 
-        return emojis.get(text) || emojis.find(e => {
-            return e.name === text
-            || e.name.toLowerCase() === text.toLowerCase()
-            || e.name === text.replace(/:/g, '')
-            || e.name === text.replace(/:/g, '').toLowerCase();
-        });
+        let check = e => {
+            let name = caseSensitive ? e.name : e.name.toLowerCase();
+            let t = caseSensitive ? text : text.toLowerCase();
+
+            return name === t || name === t.replace(/:/g, '');
+        };
+
+        return emojis.get(text) || emojis.find(check);
     }
 
     /**
      * Gets the display color in decimal of the member.
-     * @param {Discord.GuildMember} member - The member to find color of.
+     * @param {GuildMember} member - The member to find color of.
      * @returns {number}
      */
     displayColor(member){
@@ -190,16 +238,33 @@
 
     /**
      * Creates an invite link for the client.
-     * @param {number} [permissions=0] - Permissions number.
+     * @param {(number|PermissionResolvable[])} [permissions=0] - Permissions number or array of PermissionResolvables.
      * @return {Promise.&lt;string>}
      */
     createInvite(permissions = 0){
         return new Promise((resolve, reject) => {
+            let perms = typeof permissions === 'number' ? permissions : this.client.resolver.resolvePermissions(permissions);
+
             this.client.fetchApplication().then(app => {
-                let invite = `https://discordapp.com/oauth2/authorize?permissions=${permissions}&amp;scope=bot&amp;client_id=${app.id}`;
+                let invite = `https://discordapp.com/oauth2/authorize?permissions=${perms}&amp;scope=bot&amp;client_id=${app.id}`;
                 resolve(invite);
             }).catch(reject);
         });
+    }
+
+    /**
+     * Resolves a permission number and returns an array of permission names.
+     * @param {number} number - The permissions number.
+     * @returns {string[]}
+     */
+    resolvePermissionNumber(number){
+        let resolved = [];
+
+        Object.keys(PERMISSIONS).forEach(key => {
+            if (number &amp; PERMISSIONS[key]) resolved.push(key);
+        });
+
+        return resolved;
     }
 }
 

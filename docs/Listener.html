@@ -23,7 +23,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3>Events</h3><ul><li><a href="CommandHandler.html#event:commandBlocked">commandBlocked</a></li><li><a href="CommandHandler.html#event:commandFinished">commandFinished</a></li><li><a href="CommandHandler.html#event:commandInvalid">commandInvalid</a></li><li><a href="CommandHandler.html#event:commandPrefixInvalid">commandPrefixInvalid</a></li><li><a href="CommandHandler.html#event:commandStarted">commandStarted</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -72,7 +72,6 @@
 
 
 
-    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -247,7 +246,6 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="events_Listener.js.html">events/Listener.js</a>, <a href="events_Listener.js.html#line10">line 10</a>
     </li></ul></dd>
@@ -259,10 +257,6 @@
 
     
 </dl>
-
-
-
-
 
 
 
@@ -289,33 +283,18 @@
     
 
     
-        <h3 class="subsection-title">Members</h3>
+        <h3 class="subsection-title">Properties</h3>
 
         
             
-<h4 class="name" id="emitter"><span class="type-signature"></span>emitter<span class="type-signature"> :string|EventEmitter</span></h4>
+<h4 class="name" id="client"><span class="type-signature">(readonly) </span>client<span class="type-signature"> Client</span></h4>
 
 
 
 
 <div class="description">
-    The event emitter.
+    The Discord.js client.
 </div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">string</span>
-|
-
-<span class="param-type">EventEmitter</span>
-
-
-        </li>
-    </ul>
 
 
 
@@ -348,7 +327,65 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="events_Listener.js.html">events/Listener.js</a>, <a href="events_Listener.js.html#line60">line 60</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="emitter"><span class="type-signature"></span>emitter<span class="type-signature"> string|EventEmitter</span></h4>
+
+
+
+
+<div class="description">
+    The event emitter.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="events_Listener.js.html">events/Listener.js</a>, <a href="events_Listener.js.html#line21">line 21</a>
     </li></ul></dd>
@@ -368,7 +405,7 @@
 
         
             
-<h4 class="name" id="eventName"><span class="type-signature"></span>eventName<span class="type-signature"> :string</span></h4>
+<h4 class="name" id="eventName"><span class="type-signature"></span>eventName<span class="type-signature"> string</span></h4>
 
 
 
@@ -376,18 +413,6 @@
 <div class="description">
     The event name listened to.
 </div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">string</span>
-
-
-        </li>
-    </ul>
 
 
 
@@ -420,7 +445,6 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="events_Listener.js.html">events/Listener.js</a>, <a href="events_Listener.js.html#line27">line 27</a>
     </li></ul></dd>
@@ -440,7 +464,7 @@
 
         
             
-<h4 class="name" id="exec"><span class="type-signature"></span>exec<span class="type-signature"> :function</span></h4>
+<h4 class="name" id="exec"><span class="type-signature"></span>exec<span class="type-signature"> function</span></h4>
 
 
 
@@ -448,18 +472,6 @@
 <div class="description">
     The function called when event emitted.
 </div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">function</span>
-
-
-        </li>
-    </ul>
 
 
 
@@ -492,7 +504,6 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="events_Listener.js.html">events/Listener.js</a>, <a href="events_Listener.js.html#line39">line 39</a>
     </li></ul></dd>
@@ -512,7 +523,7 @@
 
         
             
-<h4 class="name" id="filepath"><span class="type-signature"></span>filepath<span class="type-signature"> :string</span></h4>
+<h4 class="name" id="filepath"><span class="type-signature">(readonly) </span>filepath<span class="type-signature"> string</span></h4>
 
 
 
@@ -523,18 +534,6 @@
 
 
 
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">string</span>
-
-
-        </li>
-    </ul>
-
-
-
 
 
 <dl class="details">
@@ -564,9 +563,8 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="events_Listener.js.html">events/Listener.js</a>, <a href="events_Listener.js.html#line45">line 45</a>
+        <a href="events_Listener.js.html">events/Listener.js</a>, <a href="events_Listener.js.html#line46">line 46</a>
     </li></ul></dd>
     
 
@@ -584,7 +582,7 @@
 
         
             
-<h4 class="name" id="framework"><span class="type-signature"></span>framework<span class="type-signature"> :<a href="Framework.html">Framework</a></span></h4>
+<h4 class="name" id="framework"><span class="type-signature">(readonly) </span>framework<span class="type-signature"> <a href="Framework.html">Framework</a></span></h4>
 
 
 
@@ -595,18 +593,6 @@
 
 
 
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><a href="Framework.html">Framework</a></span>
-
-
-        </li>
-    </ul>
-
-
-
 
 
 <dl class="details">
@@ -636,9 +622,8 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="events_Listener.js.html">events/Listener.js</a>, <a href="events_Listener.js.html#line51">line 51</a>
+        <a href="events_Listener.js.html">events/Listener.js</a>, <a href="events_Listener.js.html#line53">line 53</a>
     </li></ul></dd>
     
 
@@ -656,7 +641,7 @@
 
         
             
-<h4 class="name" id="id"><span class="type-signature"></span>id<span class="type-signature"> :string</span></h4>
+<h4 class="name" id="id"><span class="type-signature"></span>id<span class="type-signature"> string</span></h4>
 
 
 
@@ -664,18 +649,6 @@
 <div class="description">
     ID of the Listener.
 </div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">string</span>
-
-
-        </li>
-    </ul>
 
 
 
@@ -708,7 +681,6 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="events_Listener.js.html">events/Listener.js</a>, <a href="events_Listener.js.html#line15">line 15</a>
     </li></ul></dd>
@@ -728,7 +700,7 @@
 
         
             
-<h4 class="name" id="listenerHandler"><span class="type-signature"></span>listenerHandler<span class="type-signature"> :<a href="ListenerHandler.html">ListenerHandler</a></span></h4>
+<h4 class="name" id="listenerHandler"><span class="type-signature">(readonly) </span>listenerHandler<span class="type-signature"> <a href="ListenerHandler.html">ListenerHandler</a></span></h4>
 
 
 
@@ -736,18 +708,6 @@
 <div class="description">
     The listener handler.
 </div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><a href="ListenerHandler.html">ListenerHandler</a></span>
-
-
-        </li>
-    </ul>
 
 
 
@@ -780,9 +740,8 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="events_Listener.js.html">events/Listener.js</a>, <a href="events_Listener.js.html#line57">line 57</a>
+        <a href="events_Listener.js.html">events/Listener.js</a>, <a href="events_Listener.js.html#line67">line 67</a>
     </li></ul></dd>
     
 
@@ -800,7 +759,7 @@
 
         
             
-<h4 class="name" id="type"><span class="type-signature"></span>type<span class="type-signature"> :string</span></h4>
+<h4 class="name" id="type"><span class="type-signature"></span>type<span class="type-signature"> string</span></h4>
 
 
 
@@ -808,18 +767,6 @@
 <div class="description">
     Type of listener.
 </div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">string</span>
-
-
-        </li>
-    </ul>
 
 
 
@@ -852,7 +799,6 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="events_Listener.js.html">events/Listener.js</a>, <a href="events_Listener.js.html#line33">line 33</a>
     </li></ul></dd>
@@ -930,9 +876,8 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="events_Listener.js.html">events/Listener.js</a>, <a href="events_Listener.js.html#line63">line 63</a>
+        <a href="events_Listener.js.html">events/Listener.js</a>, <a href="events_Listener.js.html#line73">line 73</a>
     </li></ul></dd>
     
 
@@ -942,10 +887,6 @@
 
     
 </dl>
-
-
-
-
 
 
 
@@ -1012,9 +953,8 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="events_Listener.js.html">events/Listener.js</a>, <a href="events_Listener.js.html#line70">line 70</a>
+        <a href="events_Listener.js.html">events/Listener.js</a>, <a href="events_Listener.js.html#line80">line 80</a>
     </li></ul></dd>
     
 
@@ -1024,10 +964,6 @@
 
     
 </dl>
-
-
-
-
 
 
 
@@ -1094,9 +1030,8 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="events_Listener.js.html">events/Listener.js</a>, <a href="events_Listener.js.html#line78">line 78</a>
+        <a href="events_Listener.js.html">events/Listener.js</a>, <a href="events_Listener.js.html#line88">line 88</a>
     </li></ul></dd>
     
 
@@ -1115,28 +1050,6 @@
 
 
 
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">string</span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 

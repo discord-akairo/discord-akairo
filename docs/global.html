@@ -23,7 +23,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3>Events</h3><ul><li><a href="CommandHandler.html#event:commandBlocked">commandBlocked</a></li><li><a href="CommandHandler.html#event:commandFinished">commandFinished</a></li><li><a href="CommandHandler.html#event:commandInvalid">commandInvalid</a></li><li><a href="CommandHandler.html#event:commandPrefixInvalid">commandPrefixInvalid</a></li><li><a href="CommandHandler.html#event:commandStarted">commandStarted</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -125,18 +125,6 @@
 
 
 
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Object</span>
-
-
-        </li>
-    </ul>
-
-
-
 
 
     <h5 class="subsection-title">Properties:</h5>
@@ -217,7 +205,7 @@
             
                 <td class="attributes">
                 
-                    &lt;optional><br>
+                    optional<br>
                 
 
                 
@@ -254,7 +242,7 @@
             
                 <td class="attributes">
                 
-                    &lt;optional><br>
+                    optional<br>
                 
 
                 
@@ -269,7 +257,7 @@
                 </td>
             
 
-            <td class="description last">Attempts to cast input to this type: 'string', 'number', or 'dynamic'. String does not care about type. Number attempts to parse the input to a number and if it is NaN, it will use the default value. Dynamic defaults to a string, but will parse to number if it is not NaN.</td>
+            <td class="description last">Attempts to cast input to this type: 'string', 'number', 'integer', or 'dynamic'. String does not care about type. Number and integer attempts to parse the input to a number or an integer and if it is NaN, it will use the default value. Dynamic defaults to a string, but will parse to number if it is not NaN.</td>
         </tr>
 
     
@@ -291,7 +279,7 @@
             
                 <td class="attributes">
                 
-                    &lt;optional><br>
+                    optional<br>
                 
 
                 
@@ -326,7 +314,7 @@
             
                 <td class="attributes">
                 
-                    &lt;optional><br>
+                    optional<br>
                 
 
                 
@@ -339,7 +327,7 @@
                 </td>
             
 
-            <td class="description last">Word to start from. Applicable to 'word', 'text', or 'content' only. When using with word, this will offset all word arguments after it by 1, so you will have to include an index property for those.</td>
+            <td class="description last">Word to start from. Applicable to 'word', 'text', or 'content' only. When using with word, this will offset all word arguments after it by 1 unless the index property is also specified for them.</td>
         </tr>
 
     
@@ -364,7 +352,7 @@
             
                 <td class="attributes">
                 
-                    &lt;optional><br>
+                    optional<br>
                 
 
                 
@@ -416,7 +404,6 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line1">line 1</a>
     </li></ul></dd>
@@ -444,18 +431,6 @@
 <div class="description">
     Options to use for command execution behavior.
 </div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Object</span>
-
-
-        </li>
-    </ul>
 
 
 
@@ -506,7 +481,7 @@
             
                 <td class="attributes">
                 
-                    &lt;optional><br>
+                    optional<br>
                 
 
                 
@@ -543,7 +518,7 @@
             
                 <td class="attributes">
                 
-                    &lt;optional><br>
+                    optional<br>
                 
 
                 
@@ -580,7 +555,7 @@
             
                 <td class="attributes">
                 
-                    &lt;optional><br>
+                    optional<br>
                 
 
                 
@@ -617,7 +592,7 @@
             
                 <td class="attributes">
                 
-                    &lt;optional><br>
+                    optional<br>
                 
 
                 
@@ -669,7 +644,6 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line12">line 12</a>
     </li></ul></dd>
@@ -697,18 +671,6 @@
 <div class="description">
     Options used to determine how the framework behaves.
 </div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Object</span>
-
-
-        </li>
-    </ul>
 
 
 
@@ -792,7 +754,7 @@
             
                 <td class="attributes">
                 
-                    &lt;optional><br>
+                    optional<br>
                 
 
                 
@@ -801,6 +763,8 @@
 
             
                 <td class="default">
+                
+                    ''
                 
                 </td>
             
@@ -827,7 +791,7 @@
             
                 <td class="attributes">
                 
-                    &lt;optional><br>
+                    optional<br>
                 
 
                 
@@ -864,7 +828,7 @@
             
                 <td class="attributes">
                 
-                    &lt;optional><br>
+                    optional<br>
                 
 
                 
@@ -879,7 +843,7 @@
                 </td>
             
 
-            <td class="description last">Adds to the client a bunch of utility functions. Accessible with client.util.</td>
+            <td class="description last">Adds some utility functions to the client. Accessible with client.util.</td>
         </tr>
 
     
@@ -904,7 +868,7 @@
             
                 <td class="attributes">
                 
-                    &lt;optional><br>
+                    optional<br>
                 
 
                 
@@ -944,7 +908,7 @@
             
                 <td class="attributes">
                 
-                    &lt;optional><br>
+                    optional<br>
                 
 
                 
@@ -981,7 +945,7 @@
             
                 <td class="attributes">
                 
-                    &lt;optional><br>
+                    optional<br>
                 
 
                 
@@ -1132,7 +1096,6 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="Framework.js.html">Framework.js</a>, <a href="Framework.js.html#line5">line 5</a>
     </li></ul></dd>

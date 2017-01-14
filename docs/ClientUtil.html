@@ -23,7 +23,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3>Events</h3><ul><li><a href="CommandHandler.html#event:commandBlocked">commandBlocked</a></li><li><a href="CommandHandler.html#event:commandFinished">commandFinished</a></li><li><a href="CommandHandler.html#event:commandInvalid">commandInvalid</a></li><li><a href="CommandHandler.html#event:commandPrefixInvalid">commandPrefixInvalid</a></li><li><a href="CommandHandler.html#event:commandStarted">commandStarted</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -61,7 +61,7 @@
 
 
 <div class="description">
-    Creates client utilities.
+    Client utilities to help with common tasks.
 </div>
 
 
@@ -72,7 +72,6 @@
 
 
 
-    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -103,7 +102,7 @@
             <td class="type">
             
                 
-<span class="param-type">Discord.Client</span>
+<span class="param-type">Client</span>
 
 
             
@@ -152,9 +151,8 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line6">line 6</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line39">line 39</a>
     </li></ul></dd>
     
 
@@ -164,10 +162,6 @@
 
     
 </dl>
-
-
-
-
 
 
 
@@ -194,11 +188,11 @@
     
 
     
-        <h3 class="subsection-title">Members</h3>
+        <h3 class="subsection-title">Properties</h3>
 
         
             
-<h4 class="name" id="client"><span class="type-signature"></span>client<span class="type-signature"> :Discord.Client</span></h4>
+<h4 class="name" id="client"><span class="type-signature">(readonly) </span>client<span class="type-signature"> Client</span></h4>
 
 
 
@@ -206,18 +200,6 @@
 <div class="description">
     The Discord.js client.
 </div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Discord.Client</span>
-
-
-        </li>
-    </ul>
 
 
 
@@ -250,9 +232,8 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line11">line 11</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line45">line 45</a>
     </li></ul></dd>
     
 
@@ -297,7 +278,6 @@
 
 
 
-    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -333,6 +313,9 @@
             
                 
 <span class="param-type">number</span>
+|
+
+<span class="param-type">Array.&lt;PermissionResolvable></span>
 
 
             
@@ -341,7 +324,7 @@
             
                 <td class="attributes">
                 
-                    &lt;optional><br>
+                    optional<br>
                 
 
                 
@@ -358,7 +341,7 @@
                 </td>
             
 
-            <td class="description last">Permissions number.</td>
+            <td class="description last">Permissions number or array of PermissionResolvables.</td>
         </tr>
 
     
@@ -397,9 +380,8 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line156">line 156</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line204">line 204</a>
     </li></ul></dd>
     
 
@@ -418,28 +400,6 @@
 
 
 
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;string></span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
@@ -466,7 +426,6 @@
 
 
 
-    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -497,7 +456,7 @@
             <td class="type">
             
                 
-<span class="param-type">Discord.GuildMember</span>
+<span class="param-type">GuildMember</span>
 
 
             
@@ -546,9 +505,8 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line143">line 143</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line191">line 191</a>
     </li></ul></dd>
     
 
@@ -570,34 +528,12 @@
 
 
 
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">number</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
         
             
 
     
 
-    <h4 class="name" id="resolveChannel"><span class="type-signature"></span>resolveChannel<span class="signature">(text, guild)</span><span class="type-signature"> &rarr; {Discord.GuildChannel}</span></h4>
+    <h4 class="name" id="resolveChannel"><span class="type-signature"></span>resolveChannel<span class="signature">(text, guild, caseSensitive<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {GuildChannel}</span></h4>
 
     
 
@@ -615,7 +551,6 @@
 
 
 
-    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -628,7 +563,11 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -653,7 +592,19 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last">Text to resolve.</td>
@@ -669,17 +620,68 @@
             <td class="type">
             
                 
-<span class="param-type">Discord.Guild</span>
+<span class="param-type">Guild</span>
 
 
             
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last">Guild to find channel in.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>caseSensitive</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    optional<br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last">Makes finding by name case sensitive.</td>
         </tr>
 
     
@@ -718,9 +720,8 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line69">line 69</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line109">line 109</a>
     </li></ul></dd>
     
 
@@ -742,34 +743,12 @@
 
 
 
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Discord.GuildChannel</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
         
             
 
     
 
-    <h4 class="name" id="resolveEmoji"><span class="type-signature"></span>resolveEmoji<span class="signature">(text, guild)</span><span class="type-signature"> &rarr; {Discord.Emoji}</span></h4>
+    <h4 class="name" id="resolveEmoji"><span class="type-signature"></span>resolveEmoji<span class="signature">(text, guild, caseSensitive<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Emoji}</span></h4>
 
     
 
@@ -787,7 +766,6 @@
 
 
 
-    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -800,7 +778,11 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -825,7 +807,19 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last">Text to resolve.</td>
@@ -841,17 +835,68 @@
             <td class="type">
             
                 
-<span class="param-type">Discord.Guild</span>
+<span class="param-type">Guild</span>
 
 
             
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last">Guild to find emoji in.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>caseSensitive</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    optional<br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last">Makes finding by name case sensitive.</td>
         </tr>
 
     
@@ -890,9 +935,8 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line119">line 119</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line165">line 165</a>
     </li></ul></dd>
     
 
@@ -914,34 +958,12 @@
 
 
 
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Discord.Emoji</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
         
             
 
     
 
-    <h4 class="name" id="resolveMember"><span class="type-signature"></span>resolveMember<span class="signature">(text, guild<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Discord.GuildMember|Discord.User}</span></h4>
+    <h4 class="name" id="resolveMember"><span class="type-signature"></span>resolveMember<span class="signature">(text, guild<span class="signature-attributes">opt</span>, caseSensitive<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {GuildMember|User}</span></h4>
 
     
 
@@ -959,7 +981,6 @@
 
 
 
-    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -975,6 +996,8 @@
         <th>Attributes</th>
         
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -1009,6 +1032,10 @@
             
 
             
+                <td class="default">
+                
+                </td>
+            
 
             <td class="description last">Text to resolve.</td>
         </tr>
@@ -1023,7 +1050,7 @@
             <td class="type">
             
                 
-<span class="param-type">Discord.Guild</span>
+<span class="param-type">Guild</span>
 
 
             
@@ -1032,7 +1059,7 @@
             
                 <td class="attributes">
                 
-                    &lt;optional><br>
+                    optional<br>
                 
 
                 
@@ -1042,8 +1069,51 @@
             
 
             
+                <td class="default">
+                
+                </td>
+            
 
             <td class="description last">Guild to find member in. If not specified, will resolve a User instead.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>caseSensitive</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    optional<br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last">Makes finding by name case sensitive.</td>
         </tr>
 
     
@@ -1082,9 +1152,8 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line42">line 42</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line80">line 80</a>
     </li></ul></dd>
     
 
@@ -1106,28 +1175,128 @@
 
 
 
-
-<h5>Returns:</h5>
-
         
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Discord.GuildMember</span>
-|
-
-<span class="param-type">Discord.User</span>
-
-
-    </dd>
-</dl>
+            
 
     
+
+    <h4 class="name" id="resolvePermissionNumber"><span class="type-signature"></span>resolvePermissionNumber<span class="signature">(number)</span><span class="type-signature"> &rarr; {Array.&lt;string>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Resolves a permission number and returns an array of permission names.
+</div>
+
+
+
+
+
+
+
+
+
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>number</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The permissions number.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line220">line 220</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1136,7 +1305,7 @@
 
     
 
-    <h4 class="name" id="resolveRole"><span class="type-signature"></span>resolveRole<span class="signature">(text, guild)</span><span class="type-signature"> &rarr; {Discord.Role}</span></h4>
+    <h4 class="name" id="resolveRole"><span class="type-signature"></span>resolveRole<span class="signature">(text, guild, caseSensitive<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Role}</span></h4>
 
     
 
@@ -1154,7 +1323,6 @@
 
 
 
-    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -1167,7 +1335,11 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -1192,7 +1364,19 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last">Text to resolve.</td>
@@ -1208,17 +1392,68 @@
             <td class="type">
             
                 
-<span class="param-type">Discord.Guild</span>
+<span class="param-type">Guild</span>
 
 
             
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last">Guild to find channel in.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>caseSensitive</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    optional<br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last">Makes finding by name case sensitive.</td>
         </tr>
 
     
@@ -1257,9 +1492,8 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line94">line 94</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line137">line 137</a>
     </li></ul></dd>
     
 
@@ -1281,34 +1515,12 @@
 
 
 
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Discord.Role</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
         
             
 
     
 
-    <h4 class="name" id="resolveUser"><span class="type-signature"></span>resolveUser<span class="signature">(text)</span><span class="type-signature"> &rarr; {Discord.User}</span></h4>
+    <h4 class="name" id="resolveUser"><span class="type-signature"></span>resolveUser<span class="signature">(text, caseSensitive<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {User}</span></h4>
 
     
 
@@ -1326,7 +1538,6 @@
 
 
 
-    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -1339,7 +1550,11 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -1364,10 +1579,61 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last">Text to resolve.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>caseSensitive</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    optional<br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last">Makes finding by name case sensitive.</td>
         </tr>
 
     
@@ -1406,9 +1672,8 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line19">line 19</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line54">line 54</a>
     </li></ul></dd>
     
 
@@ -1427,28 +1692,6 @@
 
 
 
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Discord.User</span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 

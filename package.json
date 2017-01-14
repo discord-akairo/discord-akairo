@@ -6,8 +6,8 @@
   "author": "1Computer",
   "license": "MIT",
   "dependencies": {
-    "readdir-recursive": "0.0.4",
-    "discord.js": "^11.0.0"
+    "discord.js": "^11.0.0",
+    "readdir-recursive": "0.0.4"
   },
   "peerDependencies": {
     "sqlite": "^2.2.4"

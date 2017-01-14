@@ -23,7 +23,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3>Events</h3><ul><li><a href="CommandHandler.html#event:commandBlocked">commandBlocked</a></li><li><a href="CommandHandler.html#event:commandFinished">commandFinished</a></li><li><a href="CommandHandler.html#event:commandInvalid">commandInvalid</a></li><li><a href="CommandHandler.html#event:commandPrefixInvalid">commandPrefixInvalid</a></li><li><a href="CommandHandler.html#event:commandStarted">commandStarted</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -61,7 +61,7 @@
 
 
 <div class="description">
-    Creates a new ListenerHandler.
+    Loads Listeners and register them with EventEmitters.
 </div>
 
 
@@ -72,7 +72,6 @@
 
 
 
-    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -152,9 +151,8 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="events_ListenerHandler.js.html">events/ListenerHandler.js</a>, <a href="events_ListenerHandler.js.html#line11">line 11</a>
+        <a href="events_ListenerHandler.js.html">events/ListenerHandler.js</a>, <a href="events_ListenerHandler.js.html#line12">line 12</a>
     </li></ul></dd>
     
 
@@ -164,10 +162,6 @@
 
     
 </dl>
-
-
-
-
 
 
 
@@ -194,11 +188,11 @@
     
 
     
-        <h3 class="subsection-title">Members</h3>
+        <h3 class="subsection-title">Properties</h3>
 
         
             
-<h4 class="name" id="directory"><span class="type-signature"></span>directory<span class="type-signature"> :string</span></h4>
+<h4 class="name" id="directory"><span class="type-signature">(readonly) </span>directory<span class="type-signature"> string</span></h4>
 
 
 
@@ -209,18 +203,6 @@
 
 
 
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">string</span>
-
-
-        </li>
-    </ul>
-
-
-
 
 
 <dl class="details">
@@ -250,9 +232,8 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="events_ListenerHandler.js.html">events/ListenerHandler.js</a>, <a href="events_ListenerHandler.js.html#line22">line 22</a>
+        <a href="events_ListenerHandler.js.html">events/ListenerHandler.js</a>, <a href="events_ListenerHandler.js.html#line25">line 25</a>
     </li></ul></dd>
     
 
@@ -270,7 +251,7 @@
 
         
             
-<h4 class="name" id="framework"><span class="type-signature"></span>framework<span class="type-signature"> :<a href="Framework.html">Framework</a></span></h4>
+<h4 class="name" id="framework"><span class="type-signature">(readonly) </span>framework<span class="type-signature"> <a href="Framework.html">Framework</a></span></h4>
 
 
 
@@ -281,18 +262,6 @@
 
 
 
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><a href="Framework.html">Framework</a></span>
-
-
-        </li>
-    </ul>
-
-
-
 
 
 <dl class="details">
@@ -322,9 +291,8 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="events_ListenerHandler.js.html">events/ListenerHandler.js</a>, <a href="events_ListenerHandler.js.html#line16">line 16</a>
+        <a href="events_ListenerHandler.js.html">events/ListenerHandler.js</a>, <a href="events_ListenerHandler.js.html#line18">line 18</a>
     </li></ul></dd>
     
 
@@ -342,7 +310,7 @@
 
         
             
-<h4 class="name" id="listeners"><span class="type-signature"></span>listeners<span class="type-signature"> :Map.&lt;string, <a href="Listener.html">Listener</a>></span></h4>
+<h4 class="name" id="listeners"><span class="type-signature"></span>listeners<span class="type-signature"> Collection.&lt;string, <a href="Listener.html">Listener</a>></span></h4>
 
 
 
@@ -350,18 +318,6 @@
 <div class="description">
     Listeners loaded, mapped by ID to Listener.
 </div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Map.&lt;string, <a href="Listener.html">Listener</a>></span>
-
-
-        </li>
-    </ul>
 
 
 
@@ -394,9 +350,8 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="events_ListenerHandler.js.html">events/ListenerHandler.js</a>, <a href="events_ListenerHandler.js.html#line28">line 28</a>
+        <a href="events_ListenerHandler.js.html">events/ListenerHandler.js</a>, <a href="events_ListenerHandler.js.html#line31">line 31</a>
     </li></ul></dd>
     
 
@@ -441,7 +396,6 @@
 
 
 
-    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -521,9 +475,8 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="events_ListenerHandler.js.html">events/ListenerHandler.js</a>, <a href="events_ListenerHandler.js.html#line58">line 58</a>
+        <a href="events_ListenerHandler.js.html">events/ListenerHandler.js</a>, <a href="events_ListenerHandler.js.html#line62">line 62</a>
     </li></ul></dd>
     
 
@@ -533,10 +486,6 @@
 
     
 </dl>
-
-
-
-
 
 
 
@@ -572,7 +521,6 @@
 
 
 
-    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -652,9 +600,8 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="events_ListenerHandler.js.html">events/ListenerHandler.js</a>, <a href="events_ListenerHandler.js.html#line126">line 126</a>
+        <a href="events_ListenerHandler.js.html">events/ListenerHandler.js</a>, <a href="events_ListenerHandler.js.html#line130">line 130</a>
     </li></ul></dd>
     
 
@@ -664,10 +611,6 @@
 
     
 </dl>
-
-
-
-
 
 
 
@@ -703,7 +646,6 @@
 
 
 
-    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -783,9 +725,8 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="events_ListenerHandler.js.html">events/ListenerHandler.js</a>, <a href="events_ListenerHandler.js.html#line40">line 40</a>
+        <a href="events_ListenerHandler.js.html">events/ListenerHandler.js</a>, <a href="events_ListenerHandler.js.html#line43">line 43</a>
     </li></ul></dd>
     
 
@@ -795,10 +736,6 @@
 
     
 </dl>
-
-
-
-
 
 
 
@@ -834,7 +771,6 @@
 
 
 
-    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -914,9 +850,8 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="events_ListenerHandler.js.html">events/ListenerHandler.js</a>, <a href="events_ListenerHandler.js.html#line103">line 103</a>
+        <a href="events_ListenerHandler.js.html">events/ListenerHandler.js</a>, <a href="events_ListenerHandler.js.html#line107">line 107</a>
     </li></ul></dd>
     
 
@@ -926,10 +861,6 @@
 
     
 </dl>
-
-
-
-
 
 
 
@@ -965,7 +896,6 @@
 
 
 
-    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -1045,9 +975,8 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="events_ListenerHandler.js.html">events/ListenerHandler.js</a>, <a href="events_ListenerHandler.js.html#line86">line 86</a>
+        <a href="events_ListenerHandler.js.html">events/ListenerHandler.js</a>, <a href="events_ListenerHandler.js.html#line90">line 90</a>
     </li></ul></dd>
     
 
@@ -1057,10 +986,6 @@
 
     
 </dl>
-
-
-
-
 
 
 
@@ -1096,7 +1021,6 @@
 
 
 
-    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -1176,9 +1100,8 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="events_ListenerHandler.js.html">events/ListenerHandler.js</a>, <a href="events_ListenerHandler.js.html#line73">line 73</a>
+        <a href="events_ListenerHandler.js.html">events/ListenerHandler.js</a>, <a href="events_ListenerHandler.js.html#line77">line 77</a>
     </li></ul></dd>
     
 
@@ -1188,10 +1111,6 @@
 
     
 </dl>
-
-
-
-
 
 
 

@@ -23,7 +23,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3>Events</h3><ul><li><a href="CommandHandler.html#event:commandBlocked">commandBlocked</a></li><li><a href="CommandHandler.html#event:commandFinished">commandFinished</a></li><li><a href="CommandHandler.html#event:commandInvalid">commandInvalid</a></li><li><a href="CommandHandler.html#event:commandPrefixInvalid">commandPrefixInvalid</a></li><li><a href="CommandHandler.html#event:commandStarted">commandStarted</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -39,15 +39,16 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>const path = require('path');
-const EventEmitter = require('events');
 const rread = require('readdir-recursive');
+const EventEmitter = require('events');
+const Collection = require('discord.js').Collection;
 const Command = require('./Command');
 const Inhibitor = require('./Inhibitor');
 
 /** @extends EventEmitter */
 class CommandHandler extends EventEmitter {
     /**
-     * Creates a new CommandHandler.
+     * Loads Commands and Inhibitors and handles messages.
      * @param {Framework} framework - The Akairo framework.
      */
     constructor(framework){
@@ -55,39 +56,42 @@ class CommandHandler extends EventEmitter {
 
         /**
          * The Akairo framework.
+         * @readonly
          * @type {Framework}
          */
         this.framework = framework;
 
         /**
          * Directory to commands.
+         * @readonly
          * @type {string}
          */
         this.commandDirectory = path.resolve(this.framework.options.commandDirectory);
 
         /**
          * Directory to inhibitors.
+         * @readonly
          * @type {string}
          */
         this.inhibitorDirectory = path.resolve(this.framework.options.inhibitorDirectory);
 
         /**
          * Commands loaded, mapped by ID to Command.
-         * @type {Map.&lt;string, Command>}
+         * @type {Collection.&lt;string, Command>}
          */
-        this.commands = new Map();
+        this.commands = new Collection();
 
         /**
-         * Commands categories mapped by name to Array of Commands.
-         * @type {Map.&lt;string, Array.&lt;Command>>}
+         * Commands categories mapped by name to array of Commands.
+         * @type {Collection.&lt;string, Command[]>}
          */
-        this.categories = new Map();
+        this.categories = new Collection();
 
         /**
          * Inhibitors loaded, mapped by ID to Inhibitor.
-         * @type {Map.&lt;string, Inhibitor>}
+         * @type {Collection.&lt;string, Inhibitor>}
          */
-        this.inhibitors = new Map();
+        this.inhibitors = new Collection();
 
         let cmdPaths = rread.fileSync(this.commandDirectory);
         cmdPaths.forEach(filepath => {
@@ -112,6 +116,7 @@ class CommandHandler extends EventEmitter {
 
         command.filepath = filepath;
         command.framework = this.framework;
+        command.client = this.framework.client;
         command.commandHandler = this;
 
         this.commands.set(command.id, command);
@@ -172,9 +177,10 @@ class CommandHandler extends EventEmitter {
     /**
      * Finds a command by alias.
      * @param {string} name - Alias to find with.
+     * @returns {Command}
      */
     findCommand(name){
-        return Array.from(this.commands.values()).find(command => {
+        return this.commands.find(command => {
             return command.aliases.some(a => a.toLowerCase() === name.toLowerCase());
         });
     }
@@ -182,10 +188,11 @@ class CommandHandler extends EventEmitter {
     /**
      * Finds a category by name.
      * @param {string} name - Name to find with.
+     * @returns {Command[]}
      */
     findCategory(name){
-        let cat = Array.from(this.categories).find(cat => cat[0].toLowerCase() === name.toLowerCase());
-        return cat ? cat[1] : null;
+        let key = Array.from(this.categories.keys()).find(k => k.toLowerCase() === name.toLowerCase());
+        return this.categories.get(key);
     }
 
     /**
@@ -200,6 +207,7 @@ class CommandHandler extends EventEmitter {
 
         inhibitor.filepath = filepath;
         inhibitor.framework = this.framework;
+        inhibitor.client = this.framework.client;
         inhibitor.commandHandler = this;
 
         this.inhibitors.set(inhibitor.id, inhibitor);
@@ -250,7 +258,7 @@ class CommandHandler extends EventEmitter {
 
     /**
      * Handles a Message.
-     * @param {Discord.Message} message - Message to handle.
+     * @param {Message} message - Message to handle.
      * @param {string} prefix - Prefix for command.
      * @param {boolean} allowMention - Allow mentions to the client user as a prefix.
      * @param {boolean} disableBuiltIn - Disables the built-in command inhibitors.
@@ -288,23 +296,15 @@ class CommandHandler extends EventEmitter {
             if (command.options.channelRestriction === 'dm' &amp;&amp; message.guild) return block('dm');
         }
 
-        let results = [];
-
-        this.inhibitors.forEach(inhibitor => {
+        let p = this.inhibitors.map(inhibitor => {
             let inhibited = inhibitor.exec(message, command);
 
-            if (inhibited instanceof Promise){
-                return results.push(inhibited.catch(() => { throw inhibitor.reason; }));
-            }
-
-            if (!inhibited){
-                return results.push(Promise.resolve());
-            }
-
-            results.push(Promise.reject(inhibitor.reason));
+            if (inhibited instanceof Promise) return inhibited.catch(() => { throw inhibitor.reason; });
+            if (!inhibited) return Promise.resolve();
+            return Promise.reject(inhibitor.reason);
         });
 
-        Promise.all(results).then(() => {
+        Promise.all(p).then(() => {
             let content = message.content.slice(message.content.indexOf(name) + name.length + 1);
             let args = command.parse(content);
 
@@ -329,19 +329,19 @@ module.exports = CommandHandler;
 /**
  * Emitted when a message does not start with the prefix.
  * @event CommandHandler#commandPrefixInvalid
- * @param {Discord.Message} message Message sent.
+ * @param {Message} message Message sent.
  */
 
 /**
  * Emitted when a message does not match a command.
  * @event CommandHandler#commandInvalid
- * @param {Discord.Message} message Message sent.
+ * @param {Message} message Message sent.
  */
 
 /**
  * Emitted when a command is blocked by an inhibitor.
  * @event CommandHandler#commandBlocked
- * @param {Discord.Message} message Message sent.
+ * @param {Message} message Message sent.
  * @param {Command} command Command blocked.
  * @param {string} reason Reason for the block.
  */
@@ -349,14 +349,14 @@ module.exports = CommandHandler;
 /**
  * Emitted when a command starts execution.
  * @event CommandHandler#commandStarted
- * @param {Discord.Message} message Message sent.
+ * @param {Message} message Message sent.
  * @param {Command} command Command executed.
  */
 
 /**
  * Emitted when a command finishes execution.
  * @event CommandHandler#commandFinished
- * @param {Discord.Message} message Message sent.
+ * @param {Message} message Message sent.
  * @param {Command} command Command executed.
  */</code></pre>
         </article>

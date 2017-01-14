@@ -23,7 +23,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3>Events</h3><ul><li><a href="CommandHandler.html#event:commandBlocked">commandBlocked</a></li><li><a href="CommandHandler.html#event:commandFinished">commandFinished</a></li><li><a href="CommandHandler.html#event:commandInvalid">commandInvalid</a></li><li><a href="CommandHandler.html#event:commandPrefixInvalid">commandPrefixInvalid</a></li><li><a href="CommandHandler.html#event:commandStarted">commandStarted</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -39,14 +39,18 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>const path = require('path');
+const Collection = require('discord.js').Collection;
 
 class DatabaseHandler {
     /**
      * This class should be extended, not used.
+     * @param {string} filepath - Path to database file.
+     * @param {Object} [defaultConfig={}] - Default configuration.
      */
-    constructor(filepath, defaultConfig){
+    constructor(filepath, defaultConfig = {}){
         /**
          * Path to the database file.
+         * @readonly
          * @type {string}
          */
         this.filepath = path.resolve(filepath);
@@ -58,58 +62,110 @@ class DatabaseHandler {
         this.defaultConfig = defaultConfig;
 
         /** 
-         * Configurations stored in memory, mapped by ID to configuration.
-         * @type {Map&lt;string, Object>}
+         * Configurations stored in memory, mapped by ID to configuration. Note that if you modify/get values directly from here, you should use the handler's sanitize() and desanitize() methods.
+         * @type {Collection.&lt;string, Object>}
          */
-        this.memory = new Map();
+        this.memory = new Collection();
 
         /**
          * The database.
+         * @readonly
          * @type {Object}
          */
         this.db = null;
     }
 
     /**
-     * Gets all the IDs.
-     * @return {Array.&lt;string>}
+     * Array of IDs.
+     * @return {string[]}
      */
     get ids(){
         return Array.from(this.memory.keys());
     }
 
-    /** Should open database. */
+    /** 
+     * Should sanitize input.
+     * @abstract
+     */
+    sanitize(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
+
+    /** 
+     * Should desanitize text for use. 
+     * @abstract
+     */
+    desanitize(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
+
+    /** 
+     * Should open database. 
+     * @abstract
+     */
     open(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
     
-    /** Should initialize database. */
+    /** 
+     * Should initialize database. 
+     * @abstract
+     */
     init(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
 
-    /** Should add entry to database. */
+    /** 
+     * Should add entry to database. 
+     * @abstract
+     */
     add(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
 
-    /** Should add entry to memory. */
+    /** 
+     * Should add entry to memory. 
+     * @abstract
+     */
     addMemory(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
 
-    /** Should remove entry from database. */
+    /** 
+     * Should remove entry from database. 
+     * @abstract
+     */
     remove(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
 
-    /** Should remove entry from database. */
+    /** 
+     * Should remove entry from database. 
+     * @abstract
+     */
     removeMemory(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
 
-    /** Should check if entry is in memory. */
+    /** 
+     * Should check if entry is in memory. 
+     * @abstract
+     */
     has(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
 
-    /** Should get entry from memory. */
+    /** 
+     * Should get entry from memory.
+     * @abstract
+     */
     get(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
 
-    /** Should update a value in database. */
+    /** 
+     * Should update a value in database. 
+     * @abstract
+     */
     set(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
 
-    /** Should update a value in memory. */
+    /** 
+     * Should update a value in memory. 
+     * @abstract
+     */
     setMemory(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
 
-    /** Should update a config from memory to database. */
+    /** 
+     * Should update a config from memory to database. 
+     * @abstract
+     */
     save(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
+
+    /** 
+     * Should update all configs from memory to database.
+     * @abstract
+     */
+    saveAll(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
 }
 
 module.exports = DatabaseHandler;</code></pre>

@@ -23,7 +23,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3>Events</h3><ul><li><a href="CommandHandler.html#event:commandBlocked">commandBlocked</a></li><li><a href="CommandHandler.html#event:commandFinished">commandFinished</a></li><li><a href="CommandHandler.html#event:commandInvalid">commandInvalid</a></li><li><a href="CommandHandler.html#event:commandPrefixInvalid">commandPrefixInvalid</a></li><li><a href="CommandHandler.html#event:commandStarted">commandStarted</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -61,7 +61,7 @@
 
 
 <div class="description">
-    Creates a new Framework.
+    The Akairo Framework. Creates the handlers and sets them up.
 </div>
 
 
@@ -72,7 +72,6 @@
 
 
 
-    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -103,7 +102,7 @@
             <td class="type">
             
                 
-<span class="param-type">Discord.Client</span>
+<span class="param-type">Client</span>
 
 
             
@@ -175,7 +174,6 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="Framework.js.html">Framework.js</a>, <a href="Framework.js.html#line26">line 26</a>
     </li></ul></dd>
@@ -187,10 +185,6 @@
 
     
 </dl>
-
-
-
-
 
 
 
@@ -217,11 +211,11 @@
     
 
     
-        <h3 class="subsection-title">Members</h3>
+        <h3 class="subsection-title">Properties</h3>
 
         
             
-<h4 class="name" id="client"><span class="type-signature"></span>client<span class="type-signature"> :Discord.Client</span></h4>
+<h4 class="name" id="client"><span class="type-signature">(readonly) </span>client<span class="type-signature"> Client</span></h4>
 
 
 
@@ -232,18 +226,6 @@
 
 
 
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Discord.Client</span>
-
-
-        </li>
-    </ul>
-
-
-
 
 
 <dl class="details">
@@ -273,9 +255,8 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Framework.js.html">Framework.js</a>, <a href="Framework.js.html#line31">line 31</a>
+        <a href="Framework.js.html">Framework.js</a>, <a href="Framework.js.html#line32">line 32</a>
     </li></ul></dd>
     
 
@@ -293,7 +274,7 @@
 
         
             
-<h4 class="name" id="commandHandler"><span class="type-signature"></span>commandHandler<span class="type-signature"> :<a href="CommandHandler.html">CommandHandler</a></span></h4>
+<h4 class="name" id="commandHandler"><span class="type-signature">(readonly) </span>commandHandler<span class="type-signature"> <a href="CommandHandler.html">CommandHandler</a></span></h4>
 
 
 
@@ -304,18 +285,6 @@
 
 
 
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><a href="CommandHandler.html">CommandHandler</a></span>
-
-
-        </li>
-    </ul>
-
-
-
 
 
 <dl class="details">
@@ -345,9 +314,8 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Framework.js.html">Framework.js</a>, <a href="Framework.js.html#line56">line 56</a>
+        <a href="Framework.js.html">Framework.js</a>, <a href="Framework.js.html#line59">line 59</a>
     </li></ul></dd>
     
 
@@ -365,7 +333,7 @@
 
         
             
-<h4 class="name" id="listenerHandler"><span class="type-signature"></span>listenerHandler<span class="type-signature"> :<a href="ListenerHandler.html">ListenerHandler</a></span></h4>
+<h4 class="name" id="listenerHandler"><span class="type-signature">(readonly) </span>listenerHandler<span class="type-signature"> <a href="ListenerHandler.html">ListenerHandler</a></span></h4>
 
 
 
@@ -376,18 +344,6 @@
 
 
 
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><a href="ListenerHandler.html">ListenerHandler</a></span>
-
-
-        </li>
-    </ul>
-
-
-
 
 
 <dl class="details">
@@ -417,9 +373,8 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Framework.js.html">Framework.js</a>, <a href="Framework.js.html#line62">line 62</a>
+        <a href="Framework.js.html">Framework.js</a>, <a href="Framework.js.html#line66">line 66</a>
     </li></ul></dd>
     
 
@@ -437,7 +392,7 @@
 
         
             
-<h4 class="name" id="options"><span class="type-signature"></span>options<span class="type-signature"> :<a href="global.html#FrameworkOptions">FrameworkOptions</a></span></h4>
+<h4 class="name" id="options"><span class="type-signature"></span>options<span class="type-signature"> <a href="global.html#FrameworkOptions">FrameworkOptions</a></span></h4>
 
 
 
@@ -445,18 +400,6 @@
 <div class="description">
     Framework options.
 </div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><a href="global.html#FrameworkOptions">FrameworkOptions</a></span>
-
-
-        </li>
-    </ul>
 
 
 
@@ -489,9 +432,8 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Framework.js.html">Framework.js</a>, <a href="Framework.js.html#line37">line 37</a>
+        <a href="Framework.js.html">Framework.js</a>, <a href="Framework.js.html#line38">line 38</a>
     </li></ul></dd>
     
 
@@ -567,9 +509,8 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Framework.js.html">Framework.js</a>, <a href="Framework.js.html#line69">line 69</a>
+        <a href="Framework.js.html">Framework.js</a>, <a href="Framework.js.html#line73">line 73</a>
     </li></ul></dd>
     
 
@@ -588,28 +529,6 @@
 
 
 
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise</span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 

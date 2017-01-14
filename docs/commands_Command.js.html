@@ -23,7 +23,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3>Events</h3><ul><li><a href="CommandHandler.html#event:commandBlocked">commandBlocked</a></li><li><a href="CommandHandler.html#event:commandFinished">commandFinished</a></li><li><a href="CommandHandler.html#event:commandInvalid">commandInvalid</a></li><li><a href="CommandHandler.html#event:commandPrefixInvalid">commandPrefixInvalid</a></li><li><a href="CommandHandler.html#event:commandStarted">commandStarted</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -43,9 +43,9 @@
  * @typedef {Object} Argument
  * @prop {string} id - ID of the argument.
  * @prop {string} [parse='word'] - Method to parse argument: 'word', 'prefix', 'flag', 'text', or 'content'. Word parses by the order of the words inputted. Prefix and flag ignores order and uses the value after the prefix (if prefix) or true/false (if flag). Text and content retrieves everything after the command, with the difference being that text ignores prefixes. Note that if the command's split type is plain or quote, text will also not have extra whitespace.
- * @prop {string} [type='string'] - Attempts to cast input to this type: 'string', 'number', or 'dynamic'. String does not care about type. Number attempts to parse the input to a number and if it is NaN, it will use the default value. Dynamic defaults to a string, but will parse to number if it is not NaN. 
+ * @prop {string} [type='string'] - Attempts to cast input to this type: 'string', 'number', 'integer', or 'dynamic'. String does not care about type. Number and integer attempts to parse the input to a number or an integer and if it is NaN, it will use the default value. Dynamic defaults to a string, but will parse to number if it is not NaN. 
  * @prop {string} [prefix] - Ignores word order and uses a word that starts with/matches this prefix. Applicable to 'prefix' and 'flag' only.
- * @prop {number} [index] - Word to start from. Applicable to 'word', 'text', or 'content' only. When using with word, this will offset all word arguments after it by 1, so you will have to include an index property for those.
+ * @prop {number} [index] - Word to start from. Applicable to 'word', 'text', or 'content' only. When using with word, this will offset all word arguments after it by 1 unless the index property is also specified for them.
  * @prop {(string|number)} [defaultValue=''] - Default value if a word is not inputted.
  */
 
@@ -62,8 +62,8 @@ class Command {
     /**
      * Creates a new Command.
      * @param {string} id - Command ID.
-     * @param {Array.&lt;string>} aliases - Names to call the command with.
-     * @param {Array.&lt;Argument>} args - Arguments for the command.
+     * @param {string[]} aliases - Names to call the command with.
+     * @param {Argument[]} args - Arguments for the command.
      * @param {function} exec - Function called when command is ran. (message, args)
      * @param {CommandOptions} options - Options for the command.
      */
@@ -76,13 +76,13 @@ class Command {
 
         /**
          * Command names.
-         * @type {Array.&lt;string>}
+         * @type {string[]}
          */
         this.aliases = aliases;
 
         /**
          * Arguments for the command.
-         * @type {Array.&lt;Argument>}
+         * @type {Argument[]}
          */
         this.args = args;
         this.args.forEach(arg => {
@@ -109,35 +109,53 @@ class Command {
 
         /**
          * Path to Command file.
+         * @readonly
          * @type {string}
          */
         this.filepath = null;
 
         /**
          * The Akairo framework.
+         * @readonly
          * @type {Framework}
          */
         this.framework = null;
 
+        /** 
+         * The Discord.js client. 
+         * @readonly
+         * @type {Client}
+         */
+        this.client = null;
+
         /**
          * The command handler.
+         * @readonly
          * @type {CommandHandler}
          */
         this.commandHandler = null;
     }
 
     /**
-     * Gets an example of the command using all arguments or one text argument.
+     * Shortcut to format(). Formats the arguments.
      * @type {string}
      */
     get example(){
-        if (this.args.length === 1 &amp;&amp; (this.args[0].parse === 'text' || this.args[0].parse === 'content')){
-            return `${this.aliases[0]} ${this.args[0].id}`;
-        }
+        return this.format();
+    }
 
-        let args = this.args.filter(arg => arg.parse !== 'text' &amp;&amp; arg.parse !== 'content').map(arg => {
+    /** 
+     * Formats the arguments.
+     * @param {string[]} [ignore=[]] - Ignores the specified argument IDs.
+     * @param {boolean} [whitelist=false] - Uses the ignore param as a whitelist instead of a blacklist.
+     */
+    format(ignore = [], whitelist = false){
+        let args = this.args.filter(arg => whitelist ? ignore.includes(arg.id) : !ignore.includes(arg.id));
+
+        args = args.map(arg => {
             if (arg.parse === 'flag') return arg.prefix;
             if (arg.parse === 'prefix') return `${arg.prefix}${arg.id}`;
+            if (arg.parse === 'text' || arg.parse === 'content') return `${arg.id}...`;
             return arg.id;
         });
 
@@ -191,7 +209,8 @@ class Command {
             if (this.options.split === 'quoted' &amp;&amp; /^".*"$/.test(word)) word = word.slice(1, -1);
 
             if ((arg.type === 'dynamic' || arg.type === 'number') &amp;&amp; !isNaN(word)) word = parseFloat(word);
-            if (arg.type === 'number' &amp;&amp; isNaN(word)) word = arg.defaultValue;
+            if (arg.type === 'integer' &amp;&amp; !isNaN(word)) word = parseInt(word);
+            if ((arg.type === 'number' || arg.type === 'integer') &amp;&amp; isNaN(word)) word = arg.defaultValue;
 
             args[arg.id] = word;
         });
@@ -205,7 +224,8 @@ class Command {
             word = word.replace(arg.prefix, '');
 
             if ((arg.type === 'dynamic' || arg.type === 'number') &amp;&amp; !isNaN(word)) word = parseFloat(word);
-            if (arg.type === 'number' &amp;&amp; isNaN(word)) word = arg.defaultValue;
+            if (arg.type === 'integer' &amp;&amp; !isNaN(word)) word = parseInt(word);
+            if ((arg.type === 'number' || arg.type === 'integer') &amp;&amp; isNaN(word)) word = arg.defaultValue;
 
             args[arg.id] = word;
         });
