@@ -92,25 +92,6 @@ class Command {
         this.commandHandler = null;
     }
 
-    /**
-     * Gets an example of the command using all arguments or one text/content argument.
-     * @deprecated Use format() instead, it's better.
-     * @type {string}
-     */
-    get example(){
-        if (this.args.length === 1 && (this.args[0].parse === 'text' || this.args[0].parse === 'content')){
-            return `${this.aliases[0]} ${this.args[0].id}`;
-        }
-
-        let args = this.args.filter(arg => arg.parse !== 'text' && arg.parse !== 'content').map(arg => {
-            if (arg.parse === 'flag') return arg.prefix;
-            if (arg.parse === 'prefix') return `${arg.prefix}${arg.id}`;
-            return arg.id;
-        });
-
-        return `${this.aliases[0]} ${args.join(' ')}`;
-    }
-
     /** 
      * Formats the arguments.
      * @param {Array.<string>} [ignore=[]] - Ignores the specified argument IDs.
