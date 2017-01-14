@@ -96,6 +96,14 @@ class Command {
         this.commandHandler = null;
     }
 
+    /**
+     * Shortcut to format(). Formats the arguments.
+     * @type {string}
+     */
+    get example(){
+        return this.format();
+    }
+
     /** 
      * Formats the arguments.
      * @param {string[]} [ignore=[]] - Ignores the specified argument IDs.
