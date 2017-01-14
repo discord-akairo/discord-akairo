@@ -93,7 +93,8 @@ class Command {
     }
 
     /**
-     * Gets an example of the command using all arguments or one text argument.
+     * Gets an example of the command using all arguments or one text/content argument.
+     * @deprecated Use format() instead, it's better.
      * @type {string}
      */
     get example(){
@@ -104,6 +105,24 @@ class Command {
         let args = this.args.filter(arg => arg.parse !== 'text' && arg.parse !== 'content').map(arg => {
             if (arg.parse === 'flag') return arg.prefix;
             if (arg.parse === 'prefix') return `${arg.prefix}${arg.id}`;
+            return arg.id;
+        });
+
+        return `${this.aliases[0]} ${args.join(' ')}`;
+    }
+
+    /** 
+     * Formats the arguments.
+     * @param {Array.<string>} [ignore=[]] - Ignores the specified argument IDs.
+     * @param {boolean} [whitelist=false] - Uses the ignore param as a whitelist instead of a blacklist.
+     */
+    format(ignore = [], whitelist = false){
+        let args = this.args.filter(arg => whitelist ? ignore.includes(arg.id) : !ignore.includes(arg.id));
+
+        args = args.map(arg => {
+            if (arg.parse === 'flag') return arg.prefix;
+            if (arg.parse === 'prefix') return `${arg.prefix}${arg.id}`;
+            if (arg.parse === 'text' || arg.parse === 'content') return `${arg.id}...`;
             return arg.id;
         });
 
