@@ -41,7 +41,6 @@ class SQLiteHandler extends DatabaseHandler {
 
     /**
      * Opens the database so that it can be used.
-     * @override
      * @return {Promise.<Database>}
      */
     open(){
@@ -56,7 +55,6 @@ class SQLiteHandler extends DatabaseHandler {
     /**
      * Initializes handler and database with IDs.
      * @param {Array.<string>} ids - Array of IDs.
-     * @override
      * @returns {Promise.<SQLiteHandler>}
      */
     init(ids){
@@ -80,7 +78,6 @@ class SQLiteHandler extends DatabaseHandler {
     /**
      * Adds into the database.
      * @param {string} id - ID of entry.
-     * @override
      * @returns {Promise.<SQLiteHandler>}
      */
     add(id){
@@ -103,7 +100,6 @@ class SQLiteHandler extends DatabaseHandler {
     /**
      * Adds into the in-memory config.
      * @param {string} id - ID of entry.
-     * @override
      * @returns {SQLiteHandler}
      */
     addMemory(id){
@@ -119,7 +115,6 @@ class SQLiteHandler extends DatabaseHandler {
     /**
      * Removes from the database.
      * @param {string} id - ID of entry.
-     * @override
      * @returns {Promise.<SQLiteHandler>}
      */
     remove(id){
@@ -138,7 +133,6 @@ class SQLiteHandler extends DatabaseHandler {
     /**
      * Removes from the in-memory config.
      * @param {string} id - ID of entry.
-     * @override
      * @returns {SQLiteHandler}
      */
     removeMemory(id){
@@ -150,7 +144,6 @@ class SQLiteHandler extends DatabaseHandler {
     /**
      * Checks if ID exists in config.
      * @param {string} id ID of entry.
-     * @override
      * @returns {boolean}
      */
     has(id){
@@ -160,7 +153,6 @@ class SQLiteHandler extends DatabaseHandler {
     /**
      * Gets configuration for an ID.
      * @param {string} id - ID of entry.
-     * @override
      * @returns {Object}
      */
     get(id){
@@ -182,7 +174,6 @@ class SQLiteHandler extends DatabaseHandler {
      * @param {string} id - ID of entry.
      * @param {string} key - Key to set.
      * @param {string|number} value - Value to set.
-     * @override
      * @returns {Promise.<SQLiteHandler>}
      */
     set(id, key, value){
@@ -224,7 +215,6 @@ class SQLiteHandler extends DatabaseHandler {
      * @param {string} id - ID of entry.
      * @param {string} key - Key to set.
      * @param {string|number} value - Value to set.
-     * @override
      * @returns {SQLiteHandler}
      */
     setMemory(id, key, value){
@@ -253,7 +243,6 @@ class SQLiteHandler extends DatabaseHandler {
     /**
      * Saves an in-memory config to the database.
      * @param {string} id - ID to save.
-     * @override
      * @returns {Promise.<SQLiteHandler>}
      */
     save(id){
@@ -285,7 +274,6 @@ class SQLiteHandler extends DatabaseHandler {
 
     /**
      * Saves all in-memory configs to the database.
-     * @override
      * @returns {Promise.<SQLiteHandler>}
      */
     saveAll(){
