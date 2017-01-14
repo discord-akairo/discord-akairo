@@ -40,7 +40,6 @@ sqlite: `npm install sqlite --save`
 
 # Documentation
 Documentation is available on [https://1computer1.github.io/discord-akairo/index.html](https://1computer1.github.io/discord-akairo/index.html).  
-See the examples folder for some examples.  
 If you need more help, message me on Discord: 1Computer#7952.  
 
 # Examples
