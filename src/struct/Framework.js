@@ -8,7 +8,7 @@ const ClientUtil = require('./utils/ClientUtil');
  * @prop {string} token - Client token.
  * @prop {string} [ownerID=''] - Discord ID of the client owner.
  * @prop {boolean} [selfbot=false] - Marks this bot as a selfbot.
- * @prop {boolean} [addUtil=false] - Adds to the client some utility functions. Accessible with client.util.
+ * @prop {boolean} [addUtil=false] - Adds some utility functions to the client. Accessible with client.util.
  * @prop {(string|function)} [prefix='!'] - Default command prefix or function returning prefix.
  * @prop {(boolean|function)} [allowMention=false] - Allow mentions to the client user as a prefix or function that returns true or false.
  * @prop {boolean} [disableBuiltIn=false] - Disables the built-in command inhibitors (i.e. blocking bots and the client and checking if the command is owner only or restricted to a channel). Not recommended.
@@ -48,7 +48,7 @@ class Framework {
         if (this.options.listenerDirectory === undefined) throw new Error('Listener directory must be defined.');
 
         if (this.options.addUtil){
-            this.client.util = new ClientUtil(this);
+            this.client.util = new ClientUtil(this.client);
         }
 
         /**
