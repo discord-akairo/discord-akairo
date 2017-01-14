@@ -20,13 +20,13 @@ const ClientUtil = require('./utils/ClientUtil');
 class Framework {
     /**
      * Creates a new Framework.
-     * @param {Discord.Client} client - The Discord.js client.
+     * @param {Client} client - The Discord.js client.
      * @param {FrameworkOptions} options - Options to use.
      */
     constructor(client, options = {}){
         /** 
          * The Discord.js client. 
-         * @type {Discord.Client}
+         * @type {Client}
          */
         this.client = client;
 

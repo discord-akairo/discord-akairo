@@ -81,7 +81,7 @@ class Command {
 
         /** 
          * The Discord.js client. 
-         * @type {Discord.Client}
+         * @type {Client}
          */
         this.client = null;
 

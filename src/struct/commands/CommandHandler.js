@@ -213,7 +213,7 @@ class CommandHandler extends EventEmitter {
 
     /**
      * Handles a Message.
-     * @param {Discord.Message} message - Message to handle.
+     * @param {Message} message - Message to handle.
      * @param {string} prefix - Prefix for command.
      * @param {boolean} allowMention - Allow mentions to the client user as a prefix.
      * @param {boolean} disableBuiltIn - Disables the built-in command inhibitors.
@@ -292,19 +292,19 @@ module.exports = CommandHandler;
 /**
  * Emitted when a message does not start with the prefix.
  * @event CommandHandler#commandPrefixInvalid
- * @param {Discord.Message} message Message sent.
+ * @param {Message} message Message sent.
  */
 
 /**
  * Emitted when a message does not match a command.
  * @event CommandHandler#commandInvalid
- * @param {Discord.Message} message Message sent.
+ * @param {Message} message Message sent.
  */
 
 /**
  * Emitted when a command is blocked by an inhibitor.
  * @event CommandHandler#commandBlocked
- * @param {Discord.Message} message Message sent.
+ * @param {Message} message Message sent.
  * @param {Command} command Command blocked.
  * @param {string} reason Reason for the block.
  */
@@ -312,13 +312,13 @@ module.exports = CommandHandler;
 /**
  * Emitted when a command starts execution.
  * @event CommandHandler#commandStarted
- * @param {Discord.Message} message Message sent.
+ * @param {Message} message Message sent.
  * @param {Command} command Command executed.
  */
 
 /**
  * Emitted when a command finishes execution.
  * @event CommandHandler#commandFinished
- * @param {Discord.Message} message Message sent.
+ * @param {Message} message Message sent.
  * @param {Command} command Command executed.
  */
