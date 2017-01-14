@@ -107,7 +107,8 @@ listenerHandler.reloadListener('commandBlocked');
 const guildSQL = new Akairo.SQLiteHandler('./databases/guilds.sqlite', 'guildConfigs', require('./databases/guildDefault.json'));
 
 akairo.login().then(() => {
-    guildSQL.init(client.guilds.map(g => g.id));
-    console.log(guildSQL.get('123456').prefix) // Hopefully not '!'
+    guildSQL.init(client.guilds.map(g => g.id)).then(() => {
+        console.log(guildSQL.get('123456').prefix) // Hopefully not '!'
+    });
 });
 ```
