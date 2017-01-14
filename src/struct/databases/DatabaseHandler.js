@@ -4,8 +4,10 @@ const Collection = require('discord.js').Collection;
 class DatabaseHandler {
     /**
      * This class should be extended, not used.
+     * @param {string} filepath - Path to database file.
+     * @param {Object} [defaultConfig={}] - Default configuration.
      */
-    constructor(filepath, defaultConfig){
+    constructor(filepath, defaultConfig = {}){
         /**
          * Path to the database file.
          * @type {string}

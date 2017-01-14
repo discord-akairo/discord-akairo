@@ -7,7 +7,7 @@ class SQLiteHandler extends DatabaseHandler {
      * Creates an SQLiteHandler. Table must have an 'id' column.
      * @param {string} filepath - Path to .sqlite file.
      * @param {string} tableName - Name of the table.
-     * @param {Object} defaultConfig - Default configuration.
+     * @param {Object} [defaultConfig={}] - Default configuration.
      */
     constructor(filepath, tableName, defaultConfig = {}){
         super(filepath, defaultConfig);
