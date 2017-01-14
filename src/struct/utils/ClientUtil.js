@@ -62,9 +62,9 @@ class ClientUtil {
 
         let check = u => {
             let username = caseSensitive ? u.username : u.username.toLowerCase();
-            let text = caseSensitive ? text : text.toLowerCase();
+            let t = caseSensitive ? text : text.toLowerCase();
 
-            return username === text || username === text.split('#')[0] && u.discriminator === text.split('#')[1];
+            return username === t || username === t.split('#')[0] && u.discriminator === t.split('#')[1];
         };
 
         return users.get(text) || users.find(check);
@@ -91,9 +91,9 @@ class ClientUtil {
         let check = m => {
             let username = caseSensitive ? m.user.username : m.user.username.toLowerCase();
             let displayName = caseSensitive ? m.displayName : m.displayName.toLowerCase();
-            let text = caseSensitive ? text : text.toLowerCase();
+            let t = caseSensitive ? text : text.toLowerCase();
 
-            return displayName === text || username === text || username === text.split('#')[0] && m.user.discriminator === text.split('#')[1];
+            return displayName === t || username === t || username === t.split('#')[0] && m.user.discriminator === t.split('#')[1];
         };
 
         return members.get(text) || members.find(check);
@@ -119,9 +119,9 @@ class ClientUtil {
 
         let check = c => {
             let name = caseSensitive ? c.name : c.name.toLowerCase();
-            let text = caseSensitive ? text : text.toLowerCase();
+            let t = caseSensitive ? text : text.toLowerCase();
 
-            return name === text || name === text.replace(/^#/, '');
+            return name === t || name === t.replace(/^#/, '');
         };
 
         return channels.get(text) || channels.find(check);
@@ -147,9 +147,9 @@ class ClientUtil {
 
         let check = r => {
             let name = caseSensitive ? r.name : r.name.toLowerCase();
-            let text = caseSensitive ? text : text.toLowerCase();
+            let t = caseSensitive ? t : text.toLowerCase();
 
-            return name === text || name === text.replace(/^@/, '');
+            return name === t || name === t.replace(/^@/, '');
         };
 
         return roles.get(text) || roles.find(check);
@@ -175,9 +175,9 @@ class ClientUtil {
 
         let check = e => {
             let name = caseSensitive ? e.name : e.name.toLowerCase();
-            let text = caseSensitive ? text : text.toLowerCase();
+            let t = caseSensitive ? text : text.toLowerCase();
 
-            return name === text || name === text.replace(/:/g, '');
+            return name === t || name === t.replace(/:/g, '');
         };
 
         return emojis.get(text) || emojis.find(check);
