@@ -79,6 +79,9 @@ class DatabaseHandler {
 
     /** Should update a config from memory to database. */
     save(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
+
+    /** Should update all configs from memory to database. */
+    saveAll(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
 }
 
 module.exports = DatabaseHandler;

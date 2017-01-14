@@ -282,6 +282,18 @@ class SQLiteHandler extends DatabaseHandler {
             }).catch(reject);
         });
     }
+
+    /**
+     * Saves all in-memory configs to the database.
+     * @override
+     * @returns {Promise.<SQLiteHandler>}
+     */
+    saveAll(){
+        return new Promise((resolve, reject) => {
+            let p = this.memory.map(config => this.save(config.id));
+            Promise.all(p).then(() => resolve(this)).catch(reject);
+        });
+    }
 }
 
 module.exports = SQLiteHandler;
