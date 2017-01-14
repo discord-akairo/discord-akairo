@@ -256,23 +256,15 @@ class CommandHandler extends EventEmitter {
             if (command.options.channelRestriction === 'dm' && message.guild) return block('dm');
         }
 
-        let results = [];
-
-        this.inhibitors.forEach(inhibitor => {
+        let p = this.inhibitors.map(inhibitor => {
             let inhibited = inhibitor.exec(message, command);
 
-            if (inhibited instanceof Promise){
-                return results.push(inhibited.catch(() => { throw inhibitor.reason; }));
-            }
-
-            if (!inhibited){
-                return results.push(Promise.resolve());
-            }
-
-            results.push(Promise.reject(inhibitor.reason));
+            if (inhibited instanceof Promise) return inhibited.catch(() => { throw inhibitor.reason; });
+            if (!inhibited) return Promise.resolve();
+            return Promise.reject(inhibitor.reason);
         });
 
-        Promise.all(results).then(() => {
+        Promise.all(p).then(() => {
             let content = message.content.slice(message.content.indexOf(name) + name.length + 1);
             let args = command.parse(content);
 
