@@ -10,6 +10,7 @@ class DatabaseHandler {
     constructor(filepath, defaultConfig = {}){
         /**
          * Path to the database file.
+         * @readonly
          * @type {string}
          */
         this.filepath = path.resolve(filepath);
@@ -28,6 +29,7 @@ class DatabaseHandler {
 
         /**
          * The database.
+         * @readonly
          * @type {Object}
          */
         this.db = null;
@@ -41,46 +43,88 @@ class DatabaseHandler {
         return Array.from(this.memory.keys());
     }
 
-    /** Should sanitize input. */
+    /** 
+     * Should sanitize input.
+     * @abstract
+     */
     sanitize(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
 
-    /** Should desanitize text for use. */
+    /** 
+     * Should desanitize text for use. 
+     * @abstract
+     */
     desanitize(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
 
-    /** Should open database. */
+    /** 
+     * Should open database. 
+     * @abstract
+     */
     open(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
     
-    /** Should initialize database. */
+    /** 
+     * Should initialize database. 
+     * @abstract
+     */
     init(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
 
-    /** Should add entry to database. */
+    /** 
+     * Should add entry to database. 
+     * @abstract
+     */
     add(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
 
-    /** Should add entry to memory. */
+    /** 
+     * Should add entry to memory. 
+     * @abstract
+     */
     addMemory(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
 
-    /** Should remove entry from database. */
+    /** 
+     * Should remove entry from database. 
+     * @abstract
+     */
     remove(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
 
-    /** Should remove entry from database. */
+    /** 
+     * Should remove entry from database. 
+     * @abstract
+     */
     removeMemory(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
 
-    /** Should check if entry is in memory. */
+    /** 
+     * Should check if entry is in memory. 
+     * @abstract
+     */
     has(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
 
-    /** Should get entry from memory. */
+    /** 
+     * Should get entry from memory.
+     * @abstract
+     */
     get(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
 
-    /** Should update a value in database. */
+    /** 
+     * Should update a value in database. 
+     * @abstract
+     */
     set(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
 
-    /** Should update a value in memory. */
+    /** 
+     * Should update a value in memory. 
+     * @abstract
+     */
     setMemory(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
 
-    /** Should update a config from memory to database. */
+    /** 
+     * Should update a config from memory to database. 
+     * @abstract
+     */
     save(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
 
-    /** Should update all configs from memory to database. */
+    /** 
+     * Should update all configs from memory to database.
+     * @abstract
+     */
     saveAll(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
 }
 

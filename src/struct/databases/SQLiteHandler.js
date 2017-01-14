@@ -14,6 +14,7 @@ class SQLiteHandler extends DatabaseHandler {
 
         /**
          * Name of the table.
+         * @readonly
          * @type {string}
          */
         this.tableName = tableName;

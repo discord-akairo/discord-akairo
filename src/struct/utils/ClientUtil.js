@@ -39,6 +39,7 @@ class ClientUtil {
     constructor(client){
         /** 
          * The Discord.js client. 
+         * @readonly
          * @type {Client}
          */
         this.client = client;

@@ -16,18 +16,21 @@ class CommandHandler extends EventEmitter {
 
         /**
          * The Akairo framework.
+         * @readonly
          * @type {Framework}
          */
         this.framework = framework;
 
         /**
          * Directory to commands.
+         * @readonly
          * @type {string}
          */
         this.commandDirectory = path.resolve(this.framework.options.commandDirectory);
 
         /**
          * Directory to inhibitors.
+         * @readonly
          * @type {string}
          */
         this.inhibitorDirectory = path.resolve(this.framework.options.inhibitorDirectory);

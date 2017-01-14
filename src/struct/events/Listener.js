@@ -40,24 +40,28 @@ class Listener {
 
         /**
          * Path to Listener file.
+         * @readonly
          * @type {string}
          */
         this.filepath = null;
 
         /**
          * The Akairo framework.
+         * @readonly
          * @type {Framework}
          */
         this.framework = null;
 
         /** 
          * The Discord.js client. 
+         * @readonly
          * @type {Client}
          */
         this.client = null;
 
         /**
          * The listener handler.
+         * @readonly
          * @type {ListenerHandler}
          */
         this.listenerHandler = null;

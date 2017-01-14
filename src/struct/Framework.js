@@ -26,6 +26,7 @@ class Framework {
     constructor(client, options = {}){
         /** 
          * The Discord.js client. 
+         * @readonly
          * @type {Client}
          */
         this.client = client;
@@ -51,12 +52,14 @@ class Framework {
 
         /**
          * The CommandHandler.
+         * @readonly
          * @type {CommandHandler}
          */
         this.commandHandler = new CommandHandler(this);
 
         /**
          * The ListenerHandler.
+         * @readonly
          * @type {ListenerHandler}
          */
         this.listenerHandler = new ListenerHandler(this);

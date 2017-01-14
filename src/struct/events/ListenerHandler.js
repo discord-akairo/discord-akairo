@@ -12,12 +12,14 @@ class ListenerHandler {
     constructor(framework){
         /**
          * The Akairo framework.
+         * @readonly
          * @type {Framework}
          */
         this.framework = framework;
 
         /**
          * Directory to listeners.
+         * @readonly
          * @type {string}
          */
         this.directory = path.resolve(this.framework.options.listenerDirectory);
