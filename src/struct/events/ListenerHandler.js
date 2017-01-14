@@ -6,7 +6,7 @@ const Listener = require('./Listener');
 
 class ListenerHandler {
     /**
-     * Creates a new ListenerHandler.
+     * Loads Listeners and register them with EventEmitters.
      * @param {Framework} framework - The Akairo framework.
      */
     constructor(framework){

@@ -6,9 +6,9 @@ const ClientUtil = require('./utils/ClientUtil');
  * Options used to determine how the framework behaves.
  * @typedef {Object} FrameworkOptions
  * @prop {string} token - Client token.
- * @prop {string} [ownerID] - Discord ID of the client owner.
+ * @prop {string} [ownerID=''] - Discord ID of the client owner.
  * @prop {boolean} [selfbot=false] - Marks this bot as a selfbot.
- * @prop {boolean} [addUtil=false] - Adds to the client a bunch of utility functions. Accessible with client.util.
+ * @prop {boolean} [addUtil=false] - Adds to the client some utility functions. Accessible with client.util.
  * @prop {(string|function)} [prefix='!'] - Default command prefix or function returning prefix.
  * @prop {(boolean|function)} [allowMention=false] - Allow mentions to the client user as a prefix or function that returns true or false.
  * @prop {boolean} [disableBuiltIn=false] - Disables the built-in command inhibitors (i.e. blocking bots and the client and checking if the command is owner only or restricted to a channel). Not recommended.
@@ -19,7 +19,7 @@ const ClientUtil = require('./utils/ClientUtil');
 
 class Framework {
     /**
-     * Creates a new Framework.
+     * The Akairo Framework. Creates the handlers and sets them up.
      * @param {Client} client - The Discord.js client.
      * @param {FrameworkOptions} options - Options to use.
      */
@@ -37,6 +37,7 @@ class Framework {
          */
         this.options = options;
         if (this.options.token === undefined) throw new Error('Token must be defined.');
+        if (this.options.ownerID === undefined) this.options.ownerID = '';
         if (this.options.selfbot === undefined) this.options.selfbot = false;
         if (this.options.addUtil === undefined) this.options.addUtil = false;
         if (this.options.prefix === undefined) this.options.prefix = '!';

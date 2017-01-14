@@ -33,7 +33,7 @@ const PERMISSIONS = {
 
 class ClientUtil {
     /**
-     * Creates client utilities.
+     * Client utilities to help with common tasks.
      * @param {Client} client - The Discord.js client.
      */
     constructor(client){

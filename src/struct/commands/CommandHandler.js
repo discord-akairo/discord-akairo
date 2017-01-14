@@ -8,7 +8,7 @@ const Inhibitor = require('./Inhibitor');
 /** @extends EventEmitter */
 class CommandHandler extends EventEmitter {
     /**
-     * Creates a new CommandHandler.
+     * Loads Commands and Inhibitors and handles messages.
      * @param {Framework} framework - The Akairo framework.
      */
     constructor(framework){
