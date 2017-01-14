@@ -5,7 +5,7 @@
  * @prop {string} [parse='word'] - Method to parse argument: 'word', 'prefix', 'flag', 'text', or 'content'. Word parses by the order of the words inputted. Prefix and flag ignores order and uses the value after the prefix (if prefix) or true/false (if flag). Text and content retrieves everything after the command, with the difference being that text ignores prefixes. Note that if the command's split type is plain or quote, text will also not have extra whitespace.
  * @prop {string} [type='string'] - Attempts to cast input to this type: 'string', 'number', or 'dynamic'. String does not care about type. Number attempts to parse the input to a number and if it is NaN, it will use the default value. Dynamic defaults to a string, but will parse to number if it is not NaN. 
  * @prop {string} [prefix] - Ignores word order and uses a word that starts with/matches this prefix. Applicable to 'prefix' and 'flag' only.
- * @prop {number} [index] - Word to start from. Applicable to 'word', 'text', or 'content' only. When using with word, this will offset all word arguments after it by 1, so you will have to include an index property for those.
+ * @prop {number} [index] - Word to start from. Applicable to 'word', 'text', or 'content' only. When using with word, this will offset all word arguments after it by 1 unless the index property is also specified for them.
  * @prop {(string|number)} [defaultValue=''] - Default value if a word is not inputted.
  */
 
