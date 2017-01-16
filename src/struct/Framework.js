@@ -47,6 +47,10 @@ class Framework {
         if (this.options.inhibitorDirectory === undefined) throw new Error('Inhibitor directory must be defined.');
         if (this.options.listenerDirectory === undefined) throw new Error('Listener directory must be defined.');
 
+        if (this.options.ownerID){
+            this.client.ownerID = this.options.ownerID;
+        }
+
         if (this.options.addUtil){
             this.client.util = new ClientUtil(this.client);
         }
