@@ -234,6 +234,12 @@
             
                 
 <span class="param-type">string</span>
+|
+
+<span class="param-type">Array.&lt;string></span>
+|
+
+<span class="param-type">function</span>
 
 
             
@@ -257,7 +263,7 @@
                 </td>
             
 
-            <td class="description last">Attempts to cast input to this type: 'string', 'number', 'integer', or 'dynamic'. String does not care about type. Number and integer attempts to parse the input to a number or an integer and if it is NaN, it will use the default value. Dynamic defaults to a string, but will parse to number if it is not NaN.</td>
+            <td class="description last">Attempts to cast input to this type: 'string', 'number', 'integer', or 'dynamic'. String does not care about type. Number and integer attempts to parse the input to a number or an integer and if it is NaN, it will use the default value. Dynamic defaults to a string, but will parse to number if it is not NaN. An array can be used to only allow those inputs (case-insensitive strings). A function can be used to verify a word however you like.</td>
         </tr>
 
     
@@ -271,6 +277,9 @@
             
                 
 <span class="param-type">string</span>
+|
+
+<span class="param-type">Array.&lt;string></span>
 
 
             
@@ -292,7 +301,7 @@
                 </td>
             
 
-            <td class="description last">Ignores word order and uses a word that starts with/matches this prefix. Applicable to 'prefix' and 'flag' only.</td>
+            <td class="description last">Ignores word order and uses a word that starts with/matches this prefix (or multiple prefixes if array). Applicable to 'prefix' and 'flag' only.</td>
         </tr>
 
     

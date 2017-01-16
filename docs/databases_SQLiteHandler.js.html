@@ -203,7 +203,7 @@ class SQLiteHandler extends DatabaseHandler {
         let copy = {};
 
         Object.keys(config).forEach(key => {
-            if (config[key] === undefined) return copy[key] = this.sanitize(this.defaultConfig[key]);
+            if (config[key] == undefined) return copy[key] = this.defaultConfig[key];
             copy[key] = this.desanitize(config[key]);
         });
 
