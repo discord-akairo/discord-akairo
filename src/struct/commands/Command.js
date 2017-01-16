@@ -178,11 +178,11 @@ class Command {
                 word = parseInt(word);
             } else
             if (Array.isArray(arg.type)){
-                if (!arg.type.map(t => t.toLowerCase()).includes(word.toLowerCase())) {
-                    return word = arg.defaultValue;
+                if (!arg.type.some(t => t.toLowerCase() === word.toLowerCase())){
+                    word = arg.defaultValue;
+                } else {
+                    word = word.toLowerCase();
                 }
-
-                word = word.toLowerCase();
             }
 
             args[arg.id] = word;
@@ -206,8 +206,10 @@ class Command {
                 word = parseInt(word);
             } else
             if (Array.isArray(arg.type)){
-                if (!arg.type.map(t => t.toLowerCase()).includes(word.toLowerCase())) {
-                    return word = arg.defaultValue;
+                if (!arg.type.some(t => t.toLowerCase() === word.toLowerCase())){
+                    word = arg.defaultValue;
+                } else {
+                    word = word.toLowerCase();
                 }
 
                 word = word.toLowerCase();
