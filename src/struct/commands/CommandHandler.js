@@ -259,7 +259,11 @@ class CommandHandler extends EventEmitter {
         let p = this.inhibitors.map(inhibitor => {
             let inhibited = inhibitor.exec(message, command);
 
-            if (inhibited instanceof Promise) return inhibited.catch(() => { throw inhibitor.reason; });
+            if (inhibited instanceof Promise) return inhibited.catch(err => {
+                if (err instanceof Error) throw err;
+                throw inhibitor.reason;
+            });
+            
             if (!inhibited) return Promise.resolve();
             return Promise.reject(inhibitor.reason);
         });
