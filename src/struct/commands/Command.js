@@ -159,7 +159,11 @@ class Command {
         let textArgs = this.args.filter(arg => arg.parse === 'text');
         let contentArgs = this.args.filter(arg => arg.parse === 'content');
 
-        let prefixes = prefixArgs.concat(flagArgs).reduce((res, cur) => Array.isArray(cur.prefix) ? res.push(...cur.prefix) : res.push(cur.prefix), []);
+        let prefixes = [];
+        [...prefixArgs, ...flagArgs].forEach(arg => {
+            Array.isArray(arg.prefix) ? prefixes.push(...arg.prefix) : prefixes.push(arg.prefix);
+        });
+
         let noPrefixWords = words.filter(w => !prefixes.some(p => w.startsWith(p))); 
 
         wordArgs.forEach((arg, i) => {
@@ -194,7 +198,7 @@ class Command {
             let word = words.find(w => Array.isArray(arg.prefix) ? arg.prefix.some(p => w.startsWith(p)) : w.startsWith(arg.prefix));
             if (!word) return args[arg.id] = arg.defaultValue;
 
-            word = word.replace(arg.prefix, '');
+            word = word.replace(prefixes.find(p => word.startsWith(p)), '');
 
             if (isNaN(word) && (arg.type === 'number' || arg.type === 'integer')){
                 word = arg.defaultValue;
@@ -211,8 +215,6 @@ class Command {
                 } else {
                     word = word.toLowerCase();
                 }
-
-                word = word.toLowerCase();
             }
 
             args[arg.id] = word;
