@@ -36,7 +36,7 @@ class Listener {
          * The function called when event emitted.
          * @type {function}
          */
-        this.exec = exec;
+        this.exec = exec.bind(this);
 
         /**
          * Path to Listener file.
