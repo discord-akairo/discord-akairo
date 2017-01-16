@@ -4,5 +4,6 @@ module.exports = {
     Inhibitor: require('./struct/commands/Inhibitor'),
     Listener: require('./struct/events/Listener'),
     DatabaseHandler: require('./struct/databases/DatabaseHandler'),
-    SQLiteHandler: require('./struct/databases/SQLiteHandler')
+    SQLiteHandler: require('./struct/databases/SQLiteHandler'),
+    version: require('../package.json').version
 };
