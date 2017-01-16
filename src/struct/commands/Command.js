@@ -3,8 +3,8 @@
  * @typedef {Object} Argument
  * @prop {string} id - ID of the argument.
  * @prop {string} [parse='word'] - Method to parse argument: 'word', 'prefix', 'flag', 'text', or 'content'. Word parses by the order of the words inputted. Prefix and flag ignores order and uses the value after the prefix (if prefix) or true/false (if flag). Text and content retrieves everything after the command, with the difference being that text ignores prefixes. Note that if the command's split type is plain or quote, text will also not have extra whitespace.
- * @prop {string} [type='string'] - Attempts to cast input to this type: 'string', 'number', 'integer', or 'dynamic'. String does not care about type. Number and integer attempts to parse the input to a number or an integer and if it is NaN, it will use the default value. Dynamic defaults to a string, but will parse to number if it is not NaN. 
- * @prop {string} [prefix] - Ignores word order and uses a word that starts with/matches this prefix. Applicable to 'prefix' and 'flag' only.
+ * @prop {(string|string[])} [type='string'] - Attempts to cast input to this type: 'string', 'number', 'integer', or 'dynamic'. String does not care about type. Number and integer attempts to parse the input to a number or an integer and if it is NaN, it will use the default value. Dynamic defaults to a string, but will parse to number if it is not NaN. An array can be used to only allow those inputs (case-insensitive strings).
+ * @prop {(string|string[])} [prefix] - Ignores word order and uses a word that starts with/matches this prefix (or multiple prefixes if array). Applicable to 'prefix' and 'flag' only.
  * @prop {number} [index] - Word to start from. Applicable to 'word', 'text', or 'content' only. When using with word, this will offset all word arguments after it by 1 unless the index property is also specified for them.
  * @prop {(string|number)} [defaultValue=''] - Default value if a word is not inputted.
  */
@@ -159,8 +159,8 @@ class Command {
         let textArgs = this.args.filter(arg => arg.parse === 'text');
         let contentArgs = this.args.filter(arg => arg.parse === 'content');
 
-        let prefixes = prefixArgs.concat(flagArgs).map(arg => arg.prefix);
-        let noPrefixWords = words.filter(w => !prefixes.some(p => w.startsWith(p)));
+        let prefixes = prefixArgs.concat(flagArgs).reduce((res, cur) => Array.isArray(cur.prefix) ? res.push(...cur.prefix) : res.push(cur.prefix), []);
+        let noPrefixWords = words.filter(w => !prefixes.some(p => w.startsWith(p))); 
 
         wordArgs.forEach((arg, i) => {
             let word = noPrefixWords[arg.index !== undefined ? arg.index : i];
@@ -168,9 +168,22 @@ class Command {
 
             if (this.options.split === 'quoted' && /^".*"$/.test(word)) word = word.slice(1, -1);
 
-            if ((arg.type === 'dynamic' || arg.type === 'number') && !isNaN(word)) word = parseFloat(word);
-            if (arg.type === 'integer' && !isNaN(word)) word = parseInt(word);
-            if ((arg.type === 'number' || arg.type === 'integer') && isNaN(word)) word = arg.defaultValue;
+            if (isNaN(word) && (arg.type === 'number' || arg.type === 'integer')){
+                word = arg.defaultValue;
+            } else
+            if (arg.type === 'dynamic' || arg.type === 'number'){
+                word = parseFloat(word);
+            } else
+            if (arg.type === 'integer'){
+                word = parseInt(word);
+            } else
+            if (Array.isArray(arg.type)){
+                if (!arg.type.map(t => t.toLowerCase()).includes(word.toLowerCase())) {
+                    return word = arg.defaultValue;
+                }
+
+                word = word.toLowerCase();
+            }
 
             args[arg.id] = word;
         });
@@ -178,20 +191,33 @@ class Command {
         words.reverse();
 
         prefixArgs.forEach(arg => {
-            let word = words.find(w => w.startsWith(arg.prefix));
+            let word = words.find(w => Array.isArray(arg.prefix) ? arg.prefix.some(p => w.startsWith(p)) : w.startsWith(arg.prefix));
             if (!word) return args[arg.id] = arg.defaultValue;
 
             word = word.replace(arg.prefix, '');
 
-            if ((arg.type === 'dynamic' || arg.type === 'number') && !isNaN(word)) word = parseFloat(word);
-            if (arg.type === 'integer' && !isNaN(word)) word = parseInt(word);
-            if ((arg.type === 'number' || arg.type === 'integer') && isNaN(word)) word = arg.defaultValue;
+            if (isNaN(word) && (arg.type === 'number' || arg.type === 'integer')){
+                word = arg.defaultValue;
+            } else
+            if (arg.type === 'dynamic' || arg.type === 'number'){
+                word = parseFloat(word);
+            } else
+            if (arg.type === 'integer'){
+                word = parseInt(word);
+            } else
+            if (Array.isArray(arg.type)){
+                if (!arg.type.map(t => t.toLowerCase()).includes(word.toLowerCase())) {
+                    return word = arg.defaultValue;
+                }
+
+                word = word.toLowerCase();
+            }
 
             args[arg.id] = word;
         });
 
         flagArgs.forEach(arg => {    
-            let word = words.find(w => w === arg.prefix);
+            let word = words.find(w => Array.isArray(arg.prefix) ? arg.prefix.some(p => w === p) : w === arg.prefix);
             return args[arg.id] = !!word;
         });
 
