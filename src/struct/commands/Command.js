@@ -3,7 +3,7 @@
  * @typedef {Object} Argument
  * @prop {string} id - ID of the argument.
  * @prop {string} [parse='word'] - Method to parse argument: 'word', 'prefix', 'flag', 'text', or 'content'. Word parses by the order of the words inputted. Prefix and flag ignores order and uses the value after the prefix (if prefix) or true/false (if flag). Text and content retrieves everything after the command, with the difference being that text ignores prefixes. Note that if the command's split type is plain or quote, text will also not have extra whitespace.
- * @prop {(string|string[])} [type='string'] - Attempts to cast input to this type: 'string', 'number', 'integer', or 'dynamic'. String does not care about type. Number and integer attempts to parse the input to a number or an integer and if it is NaN, it will use the default value. Dynamic defaults to a string, but will parse to number if it is not NaN. An array can be used to only allow those inputs (case-insensitive strings).
+ * @prop {(string|string[]|function)} [type='string'] - Attempts to cast input to this type: 'string', 'number', 'integer', or 'dynamic'. String does not care about type. Number and integer attempts to parse the input to a number or an integer and if it is NaN, it will use the default value. Dynamic defaults to a string, but will parse to number if it is not NaN. An array can be used to only allow those inputs (case-insensitive strings). A function can be used to verify a word however you like.
  * @prop {(string|string[])} [prefix] - Ignores word order and uses a word that starts with/matches this prefix (or multiple prefixes if array). Applicable to 'prefix' and 'flag' only.
  * @prop {number} [index] - Word to start from. Applicable to 'word', 'text', or 'content' only. When using with word, this will offset all word arguments after it by 1 unless the index property is also specified for them.
  * @prop {(string|number)} [defaultValue=''] - Default value if a word is not inputted.
@@ -187,6 +187,9 @@ class Command {
                 } else {
                     word = word.toLowerCase();
                 }
+            } else 
+            if (typeof arg.type === 'function'){
+                if (!arg.type(word)) word = arg.defaultValue;
             }
 
             args[arg.id] = word;
@@ -215,6 +218,9 @@ class Command {
                 } else {
                     word = word.toLowerCase();
                 }
+            } else 
+            if (typeof arg.type === 'function'){
+                if (!arg.type(word)) word = arg.defaultValue;
             }
 
             args[arg.id] = word;
