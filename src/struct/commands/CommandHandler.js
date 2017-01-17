@@ -234,7 +234,7 @@ class CommandHandler extends EventEmitter {
         if (allowMention && mentioned){
             start = mentioned[0];
         } else {
-            return this.emit('commandPrefixInvalid', message);
+            return this.emit('commandInvalid', message);
         }
 
         let firstWord = message.content.replace(start, '').search(/\S/) + start.length;
@@ -289,12 +289,6 @@ class CommandHandler extends EventEmitter {
 }
 
 module.exports = CommandHandler;
-
-/**
- * Emitted when a message does not start with the prefix.
- * @event CommandHandler#commandPrefixInvalid
- * @param {Message} message Message sent.
- */
 
 /**
  * Emitted when a message does not match a command.
