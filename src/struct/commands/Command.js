@@ -2,7 +2,7 @@
  * An argument in a command.
  * @typedef {Object} Argument
  * @prop {string} id - ID of the argument.
- * @prop {string} [parse='word'] - Method to parse argument: 'word', 'prefix', 'flag', 'text', or 'content'. Word parses by the order of the words inputted. Prefix and flag ignores order and uses the value after the prefix (if prefix) or true/false (if flag). Text and content retrieves everything after the command, with the difference being that text ignores prefixes. Note that if the command's split type is plain or quote, text will also not have extra whitespace.
+ * @prop {string} [match='word'] - Method to match argument: 'word', 'prefix', 'flag', 'text', or 'content'. Word matches by the order of the words inputted. Prefix and flag ignores order and uses the value after the prefix (if prefix) or true/false (if flag). Text and content retrieves everything after the command, with the difference being that text ignores prefixes. Note that if the command's split type is plain or quote, text will also not have extra whitespace.
  * @prop {(string|string[]|function)} [type='string'] - Attempts to cast input to this type: 'string', 'number', 'integer', or 'dynamic'. String does not care about type. Number and integer attempts to parse the input to a number or an integer and if it is NaN, it will use the default value. Dynamic defaults to a string, but will parse to number if it is not NaN. An array can be used to only allow those inputs (case-insensitive strings). A function can be used to verify a word however you like.
  * @prop {(string|string[])} [prefix] - Ignores word order and uses a word that starts with/matches this prefix (or multiple prefixes if array). Applicable to 'prefix' and 'flag' only.
  * @prop {number} [index] - Word to start from. Applicable to 'word', 'text', or 'content' only. When using with word, this will offset all word arguments after it by 1 unless the index property is also specified for them.
@@ -46,7 +46,7 @@ class Command {
          */
         this.args = args;
         this.args.forEach(arg => {
-            if (arg.parse === undefined) arg.parse = 'word';
+            if (arg.match === undefined) arg.match = 'word';
             if (arg.type === undefined) arg.type = 'string';
             if (arg.defaultValue === undefined) arg.defaultValue = '';
         });
@@ -104,9 +104,9 @@ class Command {
         let args = this.args.filter(ignore);
 
         args = args.map(arg => {
-            if (arg.parse === 'flag') return arg.prefix;
-            if (arg.parse === 'prefix') return `${arg.prefix}${arg.id}`;
-            if (arg.parse === 'text' || arg.parse === 'content') return `${arg.id}...`;
+            if (arg.match === 'flag') return arg.prefix;
+            if (arg.match === 'prefix') return `${arg.prefix}${arg.id}`;
+            if (arg.match === 'text' || arg.match === 'content') return `${arg.id}...`;
             return arg.id;
         });
 
@@ -144,11 +144,11 @@ class Command {
 
         let args = {};
 
-        let wordArgs = this.args.filter(arg => arg.parse === 'word');
-        let prefixArgs = this.args.filter(arg => arg.parse === 'prefix');
-        let flagArgs = this.args.filter(arg => arg.parse === 'flag');
-        let textArgs = this.args.filter(arg => arg.parse === 'text');
-        let contentArgs = this.args.filter(arg => arg.parse === 'content');
+        let wordArgs = this.args.filter(arg => arg.match === 'word');
+        let prefixArgs = this.args.filter(arg => arg.match === 'prefix');
+        let flagArgs = this.args.filter(arg => arg.match === 'flag');
+        let textArgs = this.args.filter(arg => arg.match === 'text');
+        let contentArgs = this.args.filter(arg => arg.match === 'content');
 
         let prefixes = [];
         [...prefixArgs, ...flagArgs].forEach(arg => {
