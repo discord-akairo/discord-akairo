@@ -52,7 +52,10 @@ class Command {
             if (arg.match === undefined) arg.match = 'word';
             if (arg.type === undefined) arg.type = 'string';
             if (arg.defaultValue === undefined) arg.defaultValue = '';
+
+            if (Array.isArray(arg.description)) arg.description = arg.description.join('\n');
             if (arg.description === undefined) arg.description = '';
+
             if (arg.formatted === undefined){
                 let res = arg.id;
 
@@ -83,7 +86,10 @@ class Command {
          */
         this.options = options;
         if (this.options.category === undefined) this.options.category = '';
+
+        if (Array.isArray(this.options.description)) this.options.description = this.options.description.join('\n');
         if (this.options.description === undefined) this.options.description = '';
+        
         if (this.options.ownerOnly === undefined) this.options.ownerOnly = false;
         if (this.options.channelRestriction === undefined) this.options.channelRestriction = 'none';
         if (this.options.split === undefined) this.options.split = 'plain';
