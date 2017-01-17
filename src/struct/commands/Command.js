@@ -57,10 +57,10 @@ class Command {
                 let res = arg.id;
 
                 if (arg.match === 'flag'){
-                    res = arg.prefix;
+                    res = Array.isArray(arg.prefix) ? arg.prefix[0] : arg.prefix;
                 } else
                 if (arg.match === 'prefix'){
-                    res = `${arg.prefix}${arg.id}`;
+                    res = `${Array.isArray(arg.prefix) ? arg.prefix[0] : arg.prefix}${arg.id}`;
                 } else
                 if (arg.match === 'text' || arg.match === 'content'){
                     res = `${arg.id}...`;
