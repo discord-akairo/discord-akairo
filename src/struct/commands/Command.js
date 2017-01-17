@@ -8,6 +8,7 @@
  * @prop {number} [index] - Word to start from. Applicable to 'word', 'text', or 'content' only. When using with word, this will offset all word arguments after it by 1 unless the index property is also specified for them.
  * @prop {(string|number)} [defaultValue=''] - Default value if a word is not inputted.
  * @prop {string} [description=''] - A description of the argument.
+ * @prop {string} [formatted] - A formatted string for the argument, automatically made if not defined.
  */
 
 /**
@@ -51,6 +52,22 @@ class Command {
             if (arg.type === undefined) arg.type = 'string';
             if (arg.defaultValue === undefined) arg.defaultValue = '';
             if (arg.description === undefined) arg.description = '';
+            if (arg.formatted === undefined){
+                let res = arg.id;
+
+                if (arg.match === 'flag'){
+                    res = arg.prefix;
+                } else
+                if (arg.match === 'prefix'){
+                    res = `${arg.prefix}${arg.id}`;
+                } else
+                if (arg.match === 'text' || arg.match === 'content'){
+                    res = `${arg.id}...`;
+                }
+
+                if (arg.defaultValue) res = `[${res}]`;
+                arg.formatted = res;
+            }
         });
 
         /**
@@ -96,37 +113,6 @@ class Command {
          * @type {CommandHandler}
          */
         this.commandHandler = null;
-    }
-
-    /** 
-     * Formats the arguments.
-     * @param {function} [filter] - Ignores arguments that returns false. (argument)
-     * @param {boolean} [includeExtra=false] - The returned arguments will be an object instead, containing the formatted text and the description.
-     * @return {(string[]|Object[])}
-     */
-    format(ignore = () => true, includeExtra = false){
-        let args = this.args.filter(ignore);
-
-        args = args.map(arg => {
-            let res = arg.id;
-
-            if (arg.match === 'flag'){
-                res = arg.prefix;
-            } else
-            if (arg.match === 'prefix'){
-                res = `${arg.prefix}${arg.id}`;
-            } else
-            if (arg.match === 'text' || arg.match === 'content'){
-                res = `${arg.id}...`;
-            }
-
-            if (arg.defaultValue) res = `[${res}]`;
-            
-            if (includeExtra) return {formatted: res, description: arg.description};
-            return res;
-        });
-
-        return args;
     }
 
     /**
