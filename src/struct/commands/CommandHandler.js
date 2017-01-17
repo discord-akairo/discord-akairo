@@ -4,6 +4,7 @@ const EventEmitter = require('events');
 const Collection = require('discord.js').Collection;
 const Command = require('./Command');
 const Inhibitor = require('./Inhibitor');
+const Category = require('./Category');
 
 /** @extends EventEmitter */
 class CommandHandler extends EventEmitter {
@@ -42,8 +43,8 @@ class CommandHandler extends EventEmitter {
         this.commands = new Collection();
 
         /**
-         * Commands categories mapped by name to array of Commands.
-         * @type {Collection.<string, Command[]>}
+         * Commands categories mapped by ID to Category.
+         * @type {Collection.<string, Category>}
          */
         this.categories = new Collection();
 
@@ -81,8 +82,8 @@ class CommandHandler extends EventEmitter {
 
         this.commands.set(command.id, command);
 
-        if (!this.categories.has(command.options.category)) this.categories.set(command.options.category, []);
-        this.categories.get(command.options.category).push(command);
+        if (!this.categories.has(command.options.category)) this.categories.set(command.options.category, new Category(command.options.category));
+        this.categories.get(command.options.category).commands.set(command.id, command);
     }
 
     /**
@@ -111,8 +112,7 @@ class CommandHandler extends EventEmitter {
         delete require.cache[require.resolve(command.filepath)];
         this.commands.delete(command.id);
         
-        let category = this.categories.get(command.options.category);
-        category.splice(category.indexOf(command), 1);
+        this.categories.get(command.options.category).commands.delete(command.id);
     }
 
     /**
@@ -128,8 +128,7 @@ class CommandHandler extends EventEmitter {
         delete require.cache[require.resolve(command.filepath)];
         this.commands.delete(command.id);
 
-        let category = this.categories.get(command.options.category);
-        category.splice(category.indexOf(command), 1);
+        this.categories.get(command.options.category).commands.delete(command.id);
         
         this.loadCommand(filepath);
     }
@@ -148,11 +147,12 @@ class CommandHandler extends EventEmitter {
     /**
      * Finds a category by name.
      * @param {string} name - Name to find with.
-     * @returns {Command[]}
+     * @returns {Category}
      */
     findCategory(name){
-        let key = Array.from(this.categories.keys()).find(k => k.toLowerCase() === name.toLowerCase());
-        return this.categories.get(key);
+        return this.categories.find(cat => {
+            return cat.id.toLowerCase() === name.toLowerCase();
+        });
     }
 
     /**
