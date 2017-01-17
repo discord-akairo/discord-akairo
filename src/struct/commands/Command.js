@@ -97,10 +97,21 @@ class Command {
     }
 
     /** 
-     * Formats the arguments.
+     * Formats the command and arguments.
      * @param {function} [filter] - Ignores arguments that returns false. (argument)
+     * @return {string}
      */
     format(ignore = () => true){
+        let args = this.formatArguments(ignore);
+        return `${this.aliases[0]} ${args.join(' ')}`;
+    }
+
+    /** 
+     * Formats the arguments.
+     * @param {function} [filter] - Ignores arguments that returns false. (argument)
+     * @return {string[]}
+     */
+    formatArguments(ignore = () => true){
         let args = this.args.filter(ignore);
 
         args = args.map(arg => {
@@ -120,7 +131,7 @@ class Command {
             return res;
         });
 
-        return `${this.aliases[0]} ${args.join(' ')}`;
+        return args;
     }
 
     /**
