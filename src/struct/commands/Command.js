@@ -104,10 +104,20 @@ class Command {
         let args = this.args.filter(ignore);
 
         args = args.map(arg => {
-            if (arg.match === 'flag') return arg.prefix;
-            if (arg.match === 'prefix') return `${arg.prefix}${arg.id}`;
-            if (arg.match === 'text' || arg.match === 'content') return `${arg.id}...`;
-            return arg.id;
+            let res = arg.id;
+
+            if (arg.match === 'flag'){
+                res = arg.prefix;
+            } else
+            if (arg.match === 'prefix'){
+                res = `${arg.prefix}${arg.id}`;
+            } else
+            if (arg.match === 'text' || arg.match === 'content'){
+                res = `${arg.id}...`;
+            }
+
+            if (arg.defaultValue) res = `[${res}]`;
+            return res;
         });
 
         return `${this.aliases[0]} ${args.join(' ')}`;
