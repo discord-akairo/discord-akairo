@@ -1,4 +1,5 @@
 node_modules
+out
+.git
 .eslintrc.json
 .gitattributes
-/out/

@@ -56,7 +56,7 @@ function exec(message, args){
 
 module.exports = new Command('roll', ['roll', 'dice', 'rng'], [
     {id: 'limit', type: 'number', defaultValue: 100},
-    {id: 'noFloor', parse: 'flag', prefix: '--noFloor'}
+    {id: 'noFloor', match: 'flag', prefix: '--noFloor'}
 ], exec, {
     channelRestriction: 'guild'
 });
