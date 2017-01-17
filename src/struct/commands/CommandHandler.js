@@ -219,11 +219,29 @@ class CommandHandler extends EventEmitter {
     /**
      * Handles a Message.
      * @param {Message} message - Message to handle.
-     * @param {string} prefix - Prefix for command.
-     * @param {boolean} allowMention - Allow mentions to the client user as a prefix.
-     * @param {boolean} disableBuiltIn - Disables the built-in command inhibitors.
      */
-    handle(message, prefix, allowMention, disableBuiltIn){
+    handle(message){
+        if (!this.framework.options.disableBuiltIn){
+            if (message.author.id !== this.framework.client.user.id && this.framework.options.selfbot) return this.emit('messageBlocked', message, 'notSelf');
+            if (message.author.id === this.framework.client.user.id && !this.framework.options.selfbot) return this.emit('messageBlocked', message, 'client');
+            if (message.author.bot) return this.emit('messageBlocked', message, 'bot');
+        }
+
+        let prefix;
+        let allowMention;
+
+        if (typeof this.options.prefix === 'function'){
+            prefix = this.framework.options.prefix(message) || '!';
+        } else {
+            prefix = this.framework.options.prefix || '!';
+        }
+
+        if (typeof this.options.allowMention === 'function'){
+            allowMention = this.framework.options.allowMention(message) || true;
+        } else {
+            allowMention = this.framework.options.allowMention || true;
+        }
+
         let start;
         let mentionRegex = new RegExp(`^<@!?${this.framework.client.user.id}>`);
         let mentioned = message.content.match(mentionRegex);
@@ -247,10 +265,7 @@ class CommandHandler extends EventEmitter {
             this.emit('commandBlocked', message, command, reason);
         };
 
-        if (!disableBuiltIn){
-            if (message.author.id !== this.framework.client.user.id && this.framework.options.selfbot) return block('notSelf');
-            if (message.author.id === this.framework.client.user.id && !this.framework.options.selfbot) return block('client');
-            if (message.author.bot) return block('bot');
+        if (!this.framework.options.disableBuiltIn){
             if (command.options.ownerOnly && message.author.id !== this.framework.options.ownerID) return block('owner');
             if (command.options.channelRestriction === 'guild' && !message.guild) return block('guild');
             if (command.options.channelRestriction === 'dm' && message.guild) return block('dm');
@@ -291,13 +306,20 @@ class CommandHandler extends EventEmitter {
 module.exports = CommandHandler;
 
 /**
- * Emitted when a message does not match a command.
+ * Emitted when a message is blocked by a built-in pre-command inhibitor. They are 'notSelf' (for selfbots), 'client', and 'bot'.
+ * @event CommandHandler#messageBlocked
+ * @param {Message} message Message sent.
+ * @param {string} reason Reason for the block.
+ */
+
+/**
+ * Emitted when a message does not start with the prefix or match a command.
  * @event CommandHandler#commandInvalid
  * @param {Message} message Message sent.
  */
 
 /**
- * Emitted when a command is blocked by an inhibitor.
+ * Emitted when a command is blocked by an inhibitor. The built-in inhibitors are 'owner', 'guild', 'dm'.
  * @event CommandHandler#commandBlocked
  * @param {Message} message Message sent.
  * @param {Command} command Command blocked.
