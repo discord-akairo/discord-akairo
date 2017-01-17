@@ -40,6 +40,14 @@ class Category {
     list(){
         return this.commands.map(command => command.aliases[0]);
     }
+
+    /**
+     * Returns the ID.
+     * @returns {string}
+     */
+    toString(){
+        return this.id;
+    }
 }
 
 module.exports = Category;
