@@ -74,7 +74,7 @@ class Framework {
         return new Promise((resolve, reject) => {
             this.client.login(this.options.token).catch(reject);
             this.client.once('ready', resolve);
-            this.client.on('message', this.commandHandler.handle);
+            this.client.on('message', m => { this.commandHandler.handle(m); });
         });
     }
 }

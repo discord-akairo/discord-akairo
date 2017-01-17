@@ -230,13 +230,13 @@ class CommandHandler extends EventEmitter {
         let prefix;
         let allowMention;
 
-        if (typeof this.options.prefix === 'function'){
+        if (typeof this.framework.options.prefix === 'function'){
             prefix = this.framework.options.prefix(message) || '!';
         } else {
             prefix = this.framework.options.prefix || '!';
         }
 
-        if (typeof this.options.allowMention === 'function'){
+        if (typeof this.framework.options.allowMention === 'function'){
             allowMention = this.framework.options.allowMention(message) || true;
         } else {
             allowMention = this.framework.options.allowMention || true;
