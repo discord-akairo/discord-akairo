@@ -8,7 +8,6 @@
  * @prop {number} [index] - Word to start from. Applicable to 'word', 'text', or 'content' only. When using with word, this will offset all word arguments after it by 1 unless the index property is also specified for them.
  * @prop {(string|number)} [defaultValue=''] - Default value if a word is not inputted.
  * @prop {string} [description=''] - A description of the argument.
- * @prop {string} [formatted] - A formatted string for the argument, automatically made if not defined.
  */
 
 /**
@@ -55,23 +54,6 @@ class Command {
 
             if (Array.isArray(arg.description)) arg.description = arg.description.join('\n');
             if (arg.description === undefined) arg.description = '';
-
-            if (arg.formatted === undefined){
-                let res = arg.id;
-
-                if (arg.match === 'flag'){
-                    res = Array.isArray(arg.prefix) ? arg.prefix[0] : arg.prefix;
-                } else
-                if (arg.match === 'prefix'){
-                    res = `${Array.isArray(arg.prefix) ? arg.prefix[0] : arg.prefix}${arg.id}`;
-                } else
-                if (arg.match === 'text' || arg.match === 'content'){
-                    res = `${arg.id}...`;
-                }
-
-                if (arg.defaultValue) res = `[${res}]`;
-                arg.formatted = res;
-            }
         });
 
         /**
