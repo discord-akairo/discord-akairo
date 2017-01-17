@@ -15,6 +15,7 @@
  * Options to use for command execution behavior.
  * @typedef {Object} CommandOptions
  * @prop {string} [category=''] - Command category for organization purposes.
+ * @prop {string} [description=''] - Description of the command.
  * @prop {boolean} [ownerOnly=false] - Allow client owner only.
  * @prop {string} [channelRestriction='none'] - Restricts channel: 'guild' or 'dm'.
  * @prop {string} [split='plain'] - Method to divide text into words: 'plain', 'split', or 'quoted'. Plain splits by space and ignores extra whitespace between words, while split is just split(' '). Quoted does the same as plain, but counts text in double quotes as one word.
@@ -82,6 +83,7 @@ class Command {
          */
         this.options = options;
         if (this.options.category === undefined) this.options.category = '';
+        if (this.options.description === undefined) this.options.description = '';
         if (this.options.ownerOnly === undefined) this.options.ownerOnly = false;
         if (this.options.channelRestriction === undefined) this.options.channelRestriction = 'none';
         if (this.options.split === undefined) this.options.split = 'plain';
