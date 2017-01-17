@@ -96,21 +96,12 @@ class Command {
         this.commandHandler = null;
     }
 
-    /**
-     * Shortcut to format(). Formats the arguments.
-     * @type {string}
-     */
-    get example(){
-        return this.format();
-    }
-
     /** 
      * Formats the arguments.
-     * @param {string[]} [ignore=[]] - Ignores the specified argument IDs.
-     * @param {boolean} [whitelist=false] - Uses the ignore param as a whitelist instead of a blacklist.
+     * @param {function} [filter] - Ignores arguments that returns true. (argument)
      */
-    format(ignore = [], whitelist = false){
-        let args = this.args.filter(arg => whitelist ? ignore.includes(arg.id) : !ignore.includes(arg.id));
+    format(ignore = () => false){
+        let args = this.args.filter(ignore);
 
         args = args.map(arg => {
             if (arg.parse === 'flag') return arg.prefix;
