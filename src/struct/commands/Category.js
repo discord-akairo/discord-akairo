@@ -23,14 +23,14 @@ class Category {
      * Reloads all commands in this category.
      */
     reloadAll(){
-        this.commands.forEach(command => command.reload());
+        Array.from(this.commands.values()).forEach(command => command.reload());
     }
 
     /**
      * Removes all commands in this category.
      */
     removeAll(){
-        this.commands.forEach(command => command.remove());
+        Array.from(this.commands.values()).forEach(command => command.remove());
     }
 
     /**
