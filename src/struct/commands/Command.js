@@ -98,9 +98,9 @@ class Command {
 
     /** 
      * Formats the arguments.
-     * @param {function} [filter] - Ignores arguments that returns true. (argument)
+     * @param {function} [filter] - Ignores arguments that returns false. (argument)
      */
-    format(ignore = () => false){
+    format(ignore = () => true){
         let args = this.args.filter(ignore);
 
         args = args.map(arg => {
