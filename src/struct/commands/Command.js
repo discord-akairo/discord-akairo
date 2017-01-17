@@ -7,6 +7,7 @@
  * @prop {(string|string[])} [prefix] - Ignores word order and uses a word that starts with/matches this prefix (or multiple prefixes if array). Applicable to 'prefix' and 'flag' only.
  * @prop {number} [index] - Word to start from. Applicable to 'word', 'text', or 'content' only. When using with word, this will offset all word arguments after it by 1 unless the index property is also specified for them.
  * @prop {(string|number)} [defaultValue=''] - Default value if a word is not inputted.
+ * @prop {string} [description=''] - A description of the argument.
  */
 
 /**
@@ -49,6 +50,7 @@ class Command {
             if (arg.match === undefined) arg.match = 'word';
             if (arg.type === undefined) arg.type = 'string';
             if (arg.defaultValue === undefined) arg.defaultValue = '';
+            if (arg.description === undefined) arg.description = '';
         });
 
         /**
@@ -97,21 +99,12 @@ class Command {
     }
 
     /** 
-     * Formats the command and arguments.
-     * @param {function} [filter] - Ignores arguments that returns false. (argument)
-     * @return {string}
-     */
-    format(ignore = () => true){
-        let args = this.formatArguments(ignore);
-        return `${this.aliases[0]} ${args.join(' ')}`;
-    }
-
-    /** 
      * Formats the arguments.
      * @param {function} [filter] - Ignores arguments that returns false. (argument)
-     * @return {string[]}
+     * @param {boolean} [includeExtra=false] - The returned arguments will be an object instead, containing the formatted text and the description.
+     * @return {(string[]|Object[])}
      */
-    formatArguments(ignore = () => true){
+    format(ignore = () => true, includeExtra = false){
         let args = this.args.filter(ignore);
 
         args = args.map(arg => {
@@ -128,6 +121,8 @@ class Command {
             }
 
             if (arg.defaultValue) res = `[${res}]`;
+            
+            if (includeExtra) return {formatted: res, description: arg.description};
             return res;
         });
 
