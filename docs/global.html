@@ -23,7 +23,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -190,7 +190,7 @@
 
         <tr>
             
-                <td class="name"><code>parse</code></td>
+                <td class="name"><code>match</code></td>
             
 
             <td class="type">
@@ -220,7 +220,7 @@
                 </td>
             
 
-            <td class="description last">Method to parse argument: 'word', 'prefix', 'flag', 'text', or 'content'. Word parses by the order of the words inputted. Prefix and flag ignores order and uses the value after the prefix (if prefix) or true/false (if flag). Text and content retrieves everything after the command, with the difference being that text ignores prefixes. Note that if the command's split type is plain or quote, text will also not have extra whitespace.</td>
+            <td class="description last">Method to match argument: 'word', 'prefix', 'flag', 'text', or 'content'. Word matches by the order of the words inputted. Prefix and flag ignores order and uses the value after the prefix (if prefix) or true/false (if flag). Text and content retrieves everything after the command, with the difference being that text ignores prefixes. Note that if the command's split type is plain or quote, text will also not have extra whitespace.</td>
         </tr>
 
     
@@ -377,6 +377,78 @@
             
 
             <td class="description last">Default value if a word is not inputted.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>description</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    optional<br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    ''
+                
+                </td>
+            
+
+            <td class="description last">A description of the argument.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>formatted</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    optional<br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">A formatted string for the argument, automatically made if not defined.</td>
         </tr>
 
     
@@ -654,7 +726,7 @@
 
     
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line12">line 12</a>
+        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line14">line 14</a>
     </li></ul></dd>
     
 
@@ -847,7 +919,7 @@
             
                 <td class="default">
                 
-                    false
+                    true
                 
                 </td>
             
@@ -927,7 +999,7 @@
             
                 <td class="default">
                 
-                    false
+                    true
                 
                 </td>
             

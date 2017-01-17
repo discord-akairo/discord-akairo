@@ -13,7 +13,7 @@ class Category {
         this.id = id;
 
         /**
-         * Collection of commands, mapped by ID to command.
+         * Collection of commands, mapped by ID to Command.
          * @type {Collection.<string, Command>}
          */
         this.commands = new Collection();

@@ -43,7 +43,7 @@ class CommandHandler extends EventEmitter {
         this.commands = new Collection();
 
         /**
-         * Commands categories mapped by ID to Category.
+         * Command categories, mapped by ID to Category.
          * @type {Collection.<string, Category>}
          */
         this.categories = new Collection();

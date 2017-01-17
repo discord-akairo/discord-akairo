@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Framework - Documentation</title>
+    <title>Category - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -28,7 +28,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Framework</h1>
+    <h1 class="page-title">Category</h1>
     
 
     
@@ -41,7 +41,7 @@
 <header>
     
         <h2>
-        Framework
+        Category
         </h2>
         
     
@@ -54,14 +54,14 @@
 
     
 
-    <h4 class="name" id="Framework"><span class="type-signature"></span>new Framework<span class="signature">(client, options)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Category"><span class="type-signature"></span>new Category<span class="signature">(id)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    The Akairo Framework. Creates the handlers and sets them up.
+    Creates a new command category.
 </div>
 
 
@@ -96,13 +96,13 @@
 
         <tr>
             
-                <td class="name"><code>client</code></td>
+                <td class="name"><code>id</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Client</span>
+<span class="param-type">string</span>
 
 
             
@@ -112,30 +112,7 @@
 
             
 
-            <td class="description last">The Discord.js client.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#FrameworkOptions">FrameworkOptions</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Options to use.</td>
+            <td class="description last">ID of the category.</td>
         </tr>
 
     
@@ -175,7 +152,7 @@
 
     
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Framework.js.html">Framework.js</a>, <a href="Framework.js.html#line26">line 26</a>
+        <a href="commands_Category.js.html">commands/Category.js</a>, <a href="commands_Category.js.html#line8">line 8</a>
     </li></ul></dd>
     
 
@@ -215,13 +192,13 @@
 
         
             
-<h4 class="name" id="client"><span class="type-signature">(readonly) </span>client<span class="type-signature"> Client</span></h4>
+<h4 class="name" id="commands"><span class="type-signature"></span>commands<span class="type-signature"> Collection.&lt;string, <a href="Command.html">Command</a>></span></h4>
 
 
 
 
 <div class="description">
-    The Discord.js client.
+    Collection of commands, mapped by ID to Command.
 </div>
 
 
@@ -256,7 +233,7 @@
 
     
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Framework.js.html">Framework.js</a>, <a href="Framework.js.html#line32">line 32</a>
+        <a href="commands_Category.js.html">commands/Category.js</a>, <a href="commands_Category.js.html#line19">line 19</a>
     </li></ul></dd>
     
 
@@ -274,13 +251,13 @@
 
         
             
-<h4 class="name" id="commandHandler"><span class="type-signature">(readonly) </span>commandHandler<span class="type-signature"> <a href="CommandHandler.html">CommandHandler</a></span></h4>
+<h4 class="name" id="id"><span class="type-signature"></span>id<span class="type-signature"> string</span></h4>
 
 
 
 
 <div class="description">
-    The CommandHandler.
+    ID of the category.
 </div>
 
 
@@ -315,125 +292,7 @@
 
     
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Framework.js.html">Framework.js</a>, <a href="Framework.js.html#line59">line 59</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="listenerHandler"><span class="type-signature">(readonly) </span>listenerHandler<span class="type-signature"> <a href="ListenerHandler.html">ListenerHandler</a></span></h4>
-
-
-
-
-<div class="description">
-    The ListenerHandler.
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Framework.js.html">Framework.js</a>, <a href="Framework.js.html#line66">line 66</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="options"><span class="type-signature"></span>options<span class="type-signature"> <a href="global.html#FrameworkOptions">FrameworkOptions</a></span></h4>
-
-
-
-
-<div class="description">
-    Framework options.
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Framework.js.html">Framework.js</a>, <a href="Framework.js.html#line38">line 38</a>
+        <a href="commands_Category.js.html">commands/Category.js</a>, <a href="commands_Category.js.html#line13">line 13</a>
     </li></ul></dd>
     
 
@@ -460,14 +319,14 @@
 
     
 
-    <h4 class="name" id="login"><span class="type-signature"></span>login<span class="signature">()</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+    <h4 class="name" id="list"><span class="type-signature"></span>list<span class="signature">()</span><span class="type-signature"> &rarr; {Array.&lt;string>}</span></h4>
 
     
 
 
 
 <div class="description">
-    Logins the client and creates a listener on client message event. Resolves once client is ready.
+    Gets the first alias of each command.
 </div>
 
 
@@ -510,7 +369,238 @@
 
     
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Framework.js.html">Framework.js</a>, <a href="Framework.js.html#line73">line 73</a>
+        <a href="commands_Category.js.html">commands/Category.js</a>, <a href="commands_Category.js.html#line40">line 40</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="reloadAll"><span class="type-signature"></span>reloadAll<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Reloads all commands in this category.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="commands_Category.js.html">commands/Category.js</a>, <a href="commands_Category.js.html#line25">line 25</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="removeAll"><span class="type-signature"></span>removeAll<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Removes all commands in this category.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="commands_Category.js.html">commands/Category.js</a>, <a href="commands_Category.js.html#line32">line 32</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="toString"><span class="type-signature"></span>toString<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns the ID.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="commands_Category.js.html">commands/Category.js</a>, <a href="commands_Category.js.html#line48">line 48</a>
     </li></ul></dd>
     
 

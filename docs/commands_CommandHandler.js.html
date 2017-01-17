@@ -23,7 +23,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -44,6 +44,7 @@ const EventEmitter = require('events');
 const Collection = require('discord.js').Collection;
 const Command = require('./Command');
 const Inhibitor = require('./Inhibitor');
+const Category = require('./Category');
 
 /** @extends EventEmitter */
 class CommandHandler extends EventEmitter {
@@ -82,8 +83,8 @@ class CommandHandler extends EventEmitter {
         this.commands = new Collection();
 
         /**
-         * Commands categories mapped by name to array of Commands.
-         * @type {Collection.&lt;string, Command[]>}
+         * Command categories, mapped by ID to Category.
+         * @type {Collection.&lt;string, Category>}
          */
         this.categories = new Collection();
 
@@ -121,8 +122,8 @@ class CommandHandler extends EventEmitter {
 
         this.commands.set(command.id, command);
 
-        if (!this.categories.has(command.options.category)) this.categories.set(command.options.category, []);
-        this.categories.get(command.options.category).push(command);
+        if (!this.categories.has(command.options.category)) this.categories.set(command.options.category, new Category(command.options.category));
+        this.categories.get(command.options.category).commands.set(command.id, command);
     }
 
     /**
@@ -151,8 +152,7 @@ class CommandHandler extends EventEmitter {
         delete require.cache[require.resolve(command.filepath)];
         this.commands.delete(command.id);
         
-        let category = this.categories.get(command.options.category);
-        category.splice(category.indexOf(command), 1);
+        this.categories.get(command.options.category).commands.delete(command.id);
     }
 
     /**
@@ -168,8 +168,7 @@ class CommandHandler extends EventEmitter {
         delete require.cache[require.resolve(command.filepath)];
         this.commands.delete(command.id);
 
-        let category = this.categories.get(command.options.category);
-        category.splice(category.indexOf(command), 1);
+        this.categories.get(command.options.category).commands.delete(command.id);
         
         this.loadCommand(filepath);
     }
@@ -188,11 +187,12 @@ class CommandHandler extends EventEmitter {
     /**
      * Finds a category by name.
      * @param {string} name - Name to find with.
-     * @returns {Command[]}
+     * @returns {Category}
      */
     findCategory(name){
-        let key = Array.from(this.categories.keys()).find(k => k.toLowerCase() === name.toLowerCase());
-        return this.categories.get(key);
+        return this.categories.find(cat => {
+            return cat.id.toLowerCase() === name.toLowerCase();
+        });
     }
 
     /**
@@ -259,11 +259,29 @@ class CommandHandler extends EventEmitter {
     /**
      * Handles a Message.
      * @param {Message} message - Message to handle.
-     * @param {string} prefix - Prefix for command.
-     * @param {boolean} allowMention - Allow mentions to the client user as a prefix.
-     * @param {boolean} disableBuiltIn - Disables the built-in command inhibitors.
      */
-    handle(message, prefix, allowMention, disableBuiltIn){
+    handle(message){
+        if (!this.framework.options.disableBuiltIn){
+            if (message.author.id !== this.framework.client.user.id &amp;&amp; this.framework.options.selfbot) return this.emit('messageBlocked', message, 'notSelf');
+            if (message.author.id === this.framework.client.user.id &amp;&amp; !this.framework.options.selfbot) return this.emit('messageBlocked', message, 'client');
+            if (message.author.bot) return this.emit('messageBlocked', message, 'bot');
+        }
+
+        let prefix;
+        let allowMention;
+
+        if (typeof this.framework.options.prefix === 'function'){
+            prefix = this.framework.options.prefix(message) || '!';
+        } else {
+            prefix = this.framework.options.prefix || '!';
+        }
+
+        if (typeof this.framework.options.allowMention === 'function'){
+            allowMention = this.framework.options.allowMention(message) || true;
+        } else {
+            allowMention = this.framework.options.allowMention || true;
+        }
+
         let start;
         let mentionRegex = new RegExp(`^&lt;@!?${this.framework.client.user.id}>`);
         let mentioned = message.content.match(mentionRegex);
@@ -274,7 +292,7 @@ class CommandHandler extends EventEmitter {
         if (allowMention &amp;&amp; mentioned){
             start = mentioned[0];
         } else {
-            return this.emit('commandPrefixInvalid', message);
+            return this.emit('commandInvalid', message);
         }
 
         let firstWord = message.content.replace(start, '').search(/\S/) + start.length;
@@ -287,10 +305,7 @@ class CommandHandler extends EventEmitter {
             this.emit('commandBlocked', message, command, reason);
         };
 
-        if (!disableBuiltIn){
-            if (message.author.id !== this.framework.client.user.id &amp;&amp; this.framework.options.selfbot) return block('notSelf');
-            if (message.author.id === this.framework.client.user.id &amp;&amp; !this.framework.options.selfbot) return block('client');
-            if (message.author.bot) return block('bot');
+        if (!this.framework.options.disableBuiltIn){
             if (command.options.ownerOnly &amp;&amp; message.author.id !== this.framework.options.ownerID) return block('owner');
             if (command.options.channelRestriction === 'guild' &amp;&amp; !message.guild) return block('guild');
             if (command.options.channelRestriction === 'dm' &amp;&amp; message.guild) return block('dm');
@@ -331,19 +346,20 @@ class CommandHandler extends EventEmitter {
 module.exports = CommandHandler;
 
 /**
- * Emitted when a message does not start with the prefix.
- * @event CommandHandler#commandPrefixInvalid
+ * Emitted when a message is blocked by a built-in pre-command inhibitor. They are 'notSelf' (for selfbots), 'client', and 'bot'.
+ * @event CommandHandler#messageBlocked
  * @param {Message} message Message sent.
+ * @param {string} reason Reason for the block.
  */
 
 /**
- * Emitted when a message does not match a command.
+ * Emitted when a message does not start with the prefix or match a command.
  * @event CommandHandler#commandInvalid
  * @param {Message} message Message sent.
  */
 
 /**
- * Emitted when a command is blocked by an inhibitor.
+ * Emitted when a command is blocked by an inhibitor. The built-in inhibitors are 'owner', 'guild', 'dm'.
  * @event CommandHandler#commandBlocked
  * @param {Message} message Message sent.
  * @param {Command} command Command blocked.
