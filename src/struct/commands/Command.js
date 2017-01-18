@@ -212,7 +212,7 @@ class Command {
             if (!word) return args[arg.id] = arg.defaultValue;
             
             if ((this.options.split === 'quoted' || this.options.split === 'sticky') && /^".*"$/.test(word)) word = word.slice(1, -1);
-            args[arg.id] = processType(word);
+            args[arg.id] = processType(arg, word);
         });
 
         words.reverse();
@@ -222,7 +222,7 @@ class Command {
             if (!word) return args[arg.id] = arg.defaultValue;
 
             word = word.replace(prefixes.find(p => word.startsWith(p)), '');
-            args[arg.id] = processType(word);
+            args[arg.id] = processType(arg, word);
         });
 
         flagArgs.forEach(arg => {    
