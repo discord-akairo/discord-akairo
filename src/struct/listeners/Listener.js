@@ -77,14 +77,14 @@ class Listener {
      * Reloads the Listener.
      */
     reload(){
-        this.handler.reload(this.id);
+        this.listenerHandler.reload(this.id);
     }
 
     /**
      * Removes the Listener. It can be readded with the listener handler.
      */
     remove(){
-        this.handler.remove(this.id);
+        this.listenerHandler.remove(this.id);
     }
 
     /**
