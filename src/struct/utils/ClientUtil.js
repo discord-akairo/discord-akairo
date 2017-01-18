@@ -64,7 +64,7 @@ class ClientUtil {
             let username = caseSensitive ? u.username : u.username.toLowerCase();
             let t = caseSensitive ? text : text.toLowerCase();
 
-            return username === (t) || username.includes(t.split('#')[0]) && u.discriminator.includes(t.split('#')[1]);
+            return username === t || username.includes(t.split('#')[0]) && u.discriminator.includes(t.split('#')[1]);
         };
  
         return users.get(text) || users.find(check);
