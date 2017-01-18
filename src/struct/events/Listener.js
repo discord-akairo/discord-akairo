@@ -2,10 +2,10 @@ class Listener {
     /**
      * Creates a new Listener.
      * @param {string} id - Listener ID.
-     * @param {(string|EventEmitter)} emitter - The event emitter: 'client' or 'commandHandler' or an EventEmitter.
+     * @param {string|EventEmitter} emitter - The event emitter: 'client' or 'commandHandler' or an EventEmitter.
      * @param {string} eventName - Event to listen to.
      * @param {string} type - Type of listener: 'on' or 'once'.
-     * @param {function} exec - The function called when event emitted. (...)
+     * @param {function} exec - The function (<code>(...) => {}</code>) called when event emitted.
      */
     constructor(id, emitter, eventName, type, exec){
         /**
@@ -16,7 +16,7 @@ class Listener {
 
         /**
          * The event emitter.
-         * @type {(string|EventEmitter)}
+         * @type {string|EventEmitter}
          */
         this.emitter = emitter;
 

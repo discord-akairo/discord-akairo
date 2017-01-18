@@ -75,7 +75,7 @@ class ClientUtil {
      * @param {string} text - Text to resolve.
      * @param {Guild} [guild] - Guild to find member in. If not specified, will resolve a User instead.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
-     * @returns {(GuildMember|User)}
+     * @returns {GuildMember|User}
      */
     resolveMember(text, guild, caseSensitive = false){
         if (!guild) return this.resolveUser(text);

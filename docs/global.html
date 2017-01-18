@@ -9,9 +9,8 @@
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
 </head>
 <body>
 
@@ -52,9 +51,6 @@
     
         
 
-        
-
-
 <dl class="details">
 
     
@@ -91,6 +87,10 @@
 </dl>
 
 
+
+
+        
+
         
     
     </div>
@@ -119,11 +119,46 @@
 
 
 
-<div class="description">
-    An argument in a command.
-</div>
 
+<dl class="details">
 
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
 
 
 
@@ -196,7 +231,7 @@
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type"><a href="global.html#ArgumentMatch">ArgumentMatch</a></span>
 
 
             
@@ -205,7 +240,7 @@
             
                 <td class="attributes">
                 
-                    optional<br>
+                    &lt;optional><br>
                 
 
                 
@@ -215,12 +250,12 @@
             
                 <td class="default">
                 
-                    'word'
+                    <code>'word'</code>
                 
                 </td>
             
 
-            <td class="description last">Method to match argument: 'word', 'prefix', 'flag', 'text', or 'content'. Word matches by the order of the words inputted. Prefix and flag ignores order and uses the value after the prefix (if prefix) or true/false (if flag). Text and content retrieves everything after the command, with the difference being that text ignores prefixes. Note that if the command's split type is plain or quote, text will also not have extra whitespace.</td>
+            <td class="description last">Method to match argument.</td>
         </tr>
 
     
@@ -233,13 +268,7 @@
             <td class="type">
             
                 
-<span class="param-type">string</span>
-|
-
-<span class="param-type">Array.&lt;string></span>
-|
-
-<span class="param-type">function</span>
+<span class="param-type"><a href="global.html#ArgumentType">ArgumentType</a></span>
 
 
             
@@ -248,7 +277,7 @@
             
                 <td class="attributes">
                 
-                    optional<br>
+                    &lt;optional><br>
                 
 
                 
@@ -258,12 +287,12 @@
             
                 <td class="default">
                 
-                    'string'
+                    <code>'string'</code>
                 
                 </td>
             
 
-            <td class="description last">Attempts to cast input to this type: 'string', 'number', 'integer', or 'dynamic'. String does not care about type. Number and integer attempts to parse the input to a number or an integer and if it is NaN, it will use the default value. Dynamic defaults to a string, but will parse to number if it is not NaN. An array can be used to only allow those inputs (case-insensitive strings). A function can be used to verify a word however you like.</td>
+            <td class="description last">Attempts to cast argument to this type.</td>
         </tr>
 
     
@@ -277,7 +306,7 @@
             
                 
 <span class="param-type">string</span>
-|
+ || 
 
 <span class="param-type">Array.&lt;string></span>
 
@@ -288,7 +317,7 @@
             
                 <td class="attributes">
                 
-                    optional<br>
+                    &lt;optional><br>
                 
 
                 
@@ -323,7 +352,7 @@
             
                 <td class="attributes">
                 
-                    optional<br>
+                    &lt;optional><br>
                 
 
                 
@@ -350,7 +379,7 @@
             
                 
 <span class="param-type">string</span>
-|
+ || 
 
 <span class="param-type">number</span>
 
@@ -361,7 +390,7 @@
             
                 <td class="attributes">
                 
-                    optional<br>
+                    &lt;optional><br>
                 
 
                 
@@ -371,12 +400,12 @@
             
                 <td class="default">
                 
-                    ''
+                    <code>''</code>
                 
                 </td>
             
 
-            <td class="description last">Default value if a word is not inputted.</td>
+            <td class="description last">Default value if a word is not inputted or a type could not be casted to.</td>
         </tr>
 
     
@@ -398,7 +427,7 @@
             
                 <td class="attributes">
                 
-                    optional<br>
+                    &lt;optional><br>
                 
 
                 
@@ -408,47 +437,12 @@
             
                 <td class="default">
                 
-                    ''
+                    <code>''</code>
                 
                 </td>
             
 
             <td class="description last">A description of the argument.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>formatted</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    optional<br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">A formatted string for the argument, automatically made if not defined.</td>
         </tr>
 
     
@@ -458,36 +452,68 @@
 
 
 
+
+
+<div class="description">
+    An argument in a command.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="ArgumentMatch">ArgumentMatch</h4>
+
+
+
+
+
 <dl class="details">
 
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
+    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line1">line 1</a>
+        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line13">line 13</a>
     </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
 
     
@@ -501,6 +527,175 @@
 
 
 
+<div class="description">
+    The method to match arguments from text. Possible strings are:<br/><code>'word'</code> Matches by the order of the words inputted. Ignores words that matches prefix or flag.<br/><code>'prefix'</code> Matches words that starts with the prefix. The word after the prefix is the evaluated argument.<br/><code>'flag'</code> Matches words that equal this prefix. The evaluated argument is true or false.<br/><code>'text'</code> Matches the entire text, except for the command, ignoring words that matches prefix or flag.<br/><code>'content'</code> Matches the entire text as it was inputted, except for the command.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="ArgumentSplit">ArgumentSplit</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line47">line 47</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    The method to split text into words. Possible strings are:<br/><code>'plain'</code> Splits word separated by whitespace. Extra whitespace is ignored.<br/><code>'split'</code> Splits word separated by whitespace.<br/><code>'quoted'</code> This is like plain, but counts text inside double quotes as one word.<br/><code>'sticky'</code> This is like quoted, but makes it so that quoted text must have a whitespace/another double quote before it to count as another word.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="ArgumentType">ArgumentType</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line23">line 23</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    The type that the argument should be cast to. Possible strings are:<br/><code>'string'</code> Does not cast to any type.<br/><code>'number'</code> Casts to an number with parseFloat(), default value if not a number.<br/><code>'integer'</code> Casts to an integer with parseInt(), default value if not a number.<br/><code>'dynamic'</code> Casts to a number with parseFloat() or a string if the argument is not a number.<br/><code>'dynamicInt'</code> Casts to an integer with parseInt() or a string if the argument is not a number.<br/><br/>An array of strings can be used to restrict input to only those strings, case insensitive. The evaluated argument will be all lowercase.<br/>A function (<code>arg => {}</code>) can also be used to filter arguments.<br/>If the input is not in the array or does not pass the function, the default value is used.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+ || 
+
+<span class="param-type">Array.&lt;string></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
 
             
                 
@@ -509,11 +704,46 @@
 
 
 
-<div class="description">
-    Options to use for command execution behavior.
-</div>
 
+<dl class="details">
 
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line37">line 37</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
 
 
 
@@ -562,7 +792,7 @@
             
                 <td class="attributes">
                 
-                    optional<br>
+                    &lt;optional><br>
                 
 
                 
@@ -572,7 +802,7 @@
             
                 <td class="default">
                 
-                    ''
+                    <code>''</code>
                 
                 </td>
             
@@ -599,7 +829,7 @@
             
                 <td class="attributes">
                 
-                    optional<br>
+                    &lt;optional><br>
                 
 
                 
@@ -609,7 +839,7 @@
             
                 <td class="default">
                 
-                    ''
+                    <code>''</code>
                 
                 </td>
             
@@ -636,7 +866,7 @@
             
                 <td class="attributes">
                 
-                    optional<br>
+                    &lt;optional><br>
                 
 
                 
@@ -646,7 +876,7 @@
             
                 <td class="default">
                 
-                    false
+                    <code>false</code>
                 
                 </td>
             
@@ -673,7 +903,7 @@
             
                 <td class="attributes">
                 
-                    optional<br>
+                    &lt;optional><br>
                 
 
                 
@@ -683,7 +913,7 @@
             
                 <td class="default">
                 
-                    'none'
+                    <code>'none'</code>
                 
                 </td>
             
@@ -701,7 +931,7 @@
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type"><a href="global.html#ArgumentSplit">ArgumentSplit</a></span>
 
 
             
@@ -710,7 +940,7 @@
             
                 <td class="attributes">
                 
-                    optional<br>
+                    &lt;optional><br>
                 
 
                 
@@ -720,12 +950,12 @@
             
                 <td class="default">
                 
-                    'plain'
+                    <code>'plain'</code>
                 
                 </td>
             
 
-            <td class="description last">Method to divide text into words: 'plain', 'split', or 'quoted'. Plain splits by space and ignores extra whitespace between words, while split is just split(' '). Quoted does the same as plain, but counts text in double quotes as one word.</td>
+            <td class="description last">Method to split text into words.</td>
         </tr>
 
     
@@ -735,44 +965,23 @@
 
 
 
-<dl class="details">
 
-    
 
-    
+<div class="description">
+    Options to use for command execution behavior.
+</div>
 
-    
 
-    
 
-    
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
 
-    
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line14">line 14</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
+        </li>
+    </ul>
 
 
 
@@ -786,11 +995,46 @@
 
 
 
-<div class="description">
-    Options used to determine how the framework behaves.
-</div>
 
+<dl class="details">
 
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Framework.js.html">Framework.js</a>, <a href="Framework.js.html#line5">line 5</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
 
 
 
@@ -872,7 +1116,7 @@
             
                 <td class="attributes">
                 
-                    optional<br>
+                    &lt;optional><br>
                 
 
                 
@@ -882,7 +1126,7 @@
             
                 <td class="default">
                 
-                    ''
+                    <code>''</code>
                 
                 </td>
             
@@ -909,7 +1153,7 @@
             
                 <td class="attributes">
                 
-                    optional<br>
+                    &lt;optional><br>
                 
 
                 
@@ -919,7 +1163,7 @@
             
                 <td class="default">
                 
-                    false
+                    <code>false</code>
                 
                 </td>
             
@@ -946,7 +1190,7 @@
             
                 <td class="attributes">
                 
-                    optional<br>
+                    &lt;optional><br>
                 
 
                 
@@ -956,7 +1200,7 @@
             
                 <td class="default">
                 
-                    true
+                    <code>true</code>
                 
                 </td>
             
@@ -975,7 +1219,7 @@
             
                 
 <span class="param-type">string</span>
-|
+ || 
 
 <span class="param-type">function</span>
 
@@ -986,7 +1230,7 @@
             
                 <td class="attributes">
                 
-                    optional<br>
+                    &lt;optional><br>
                 
 
                 
@@ -996,12 +1240,12 @@
             
                 <td class="default">
                 
-                    '!'
+                    <code>'!'</code>
                 
                 </td>
             
 
-            <td class="description last">Default command prefix or function returning prefix.</td>
+            <td class="description last">Default command prefix or function (<code>message => {}</code>)  returning prefix.</td>
         </tr>
 
     
@@ -1015,7 +1259,7 @@
             
                 
 <span class="param-type">boolean</span>
-|
+ || 
 
 <span class="param-type">function</span>
 
@@ -1026,7 +1270,7 @@
             
                 <td class="attributes">
                 
-                    optional<br>
+                    &lt;optional><br>
                 
 
                 
@@ -1036,12 +1280,12 @@
             
                 <td class="default">
                 
-                    true
+                    <code>true</code>
                 
                 </td>
             
 
-            <td class="description last">Allow mentions to the client user as a prefix or function that returns true or false.</td>
+            <td class="description last">Allow mentions to the client user as a prefix or function (<code>message => {}</code>) that returns true or false.</td>
         </tr>
 
     
@@ -1063,7 +1307,7 @@
             
                 <td class="attributes">
                 
-                    optional<br>
+                    &lt;optional><br>
                 
 
                 
@@ -1073,7 +1317,7 @@
             
                 <td class="default">
                 
-                    false
+                    <code>false</code>
                 
                 </td>
             
@@ -1187,44 +1431,23 @@
 
 
 
-<dl class="details">
 
-    
 
-    
+<div class="description">
+    Options used to determine how the framework behaves.
+</div>
 
-    
 
-    
 
-    
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
 
-    
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Framework.js.html">Framework.js</a>, <a href="Framework.js.html#line5">line 5</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
+        </li>
+    </ul>
 
 
 
@@ -1247,7 +1470,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> using the Minami theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

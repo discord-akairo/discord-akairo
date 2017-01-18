@@ -3,7 +3,7 @@ class Inhibitor {
      * Creates a new Inhibitor.
      * @param {string} id - Inhibitor ID.
      * @param {string} reason - Reason emitted when a command is blocked.
-     * @param {function} exec - Function called before a command is ran. Return true or a rejecting Promise to block. (message, command)
+     * @param {function} exec - Function (<code>(message, command) => {}</code>) called before a command is ran. Return true or a rejecting Promise to block.
      */
     constructor(id, reason, exec){
         /**

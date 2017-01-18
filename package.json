@@ -15,6 +15,7 @@
     "sqlite": "^2.2.4"
   },
   "devDependencies": {
+    "docdash": "^0.4.0",
     "jsdoc": "^3.4.3",
     "minami": "^1.1.1"
   },

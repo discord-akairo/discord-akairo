@@ -2,12 +2,36 @@
  * An argument in a command.
  * @typedef {Object} Argument
  * @prop {string} id - ID of the argument.
- * @prop {string} [match='word'] - Method to match argument: 'word', 'prefix', 'flag', 'text', or 'content'. Word matches by the order of the words inputted. Prefix and flag ignores order and uses the value after the prefix (if prefix) or true/false (if flag). Text and content retrieves everything after the command, with the difference being that text ignores prefixes. Note that if the command's split type is plain or quote, text will also not have extra whitespace.
- * @prop {(string|string[]|function)} [type='string'] - Attempts to cast input to this type: 'string', 'number', 'integer', or 'dynamic'. String does not care about type. Number and integer attempts to parse the input to a number or an integer and if it is NaN, it will use the default value. Dynamic defaults to a string, but will parse to number if it is not NaN. An array can be used to only allow those inputs (case-insensitive strings). A function can be used to verify a word however you like.
- * @prop {(string|string[])} [prefix] - Ignores word order and uses a word that starts with/matches this prefix (or multiple prefixes if array). Applicable to 'prefix' and 'flag' only.
+ * @prop {ArgumentMatch} [match='word'] - Method to match argument.
+ * @prop {ArgumentType} [type='string'] - Attempts to cast argument to this type.
+ * @prop {string|string[]} [prefix] - Ignores word order and uses a word that starts with/matches this prefix (or multiple prefixes if array). Applicable to 'prefix' and 'flag' only.
  * @prop {number} [index] - Word to start from. Applicable to 'word', 'text', or 'content' only. When using with word, this will offset all word arguments after it by 1 unless the index property is also specified for them.
- * @prop {(string|number)} [defaultValue=''] - Default value if a word is not inputted.
+ * @prop {(string|number)} [defaultValue=''] - Default value if a word is not inputted or a type could not be casted to.
  * @prop {string} [description=''] - A description of the argument.
+ */
+
+/**
+ * The method to match arguments from text. Possible strings are:
+ * <br/><code>'word'</code> Matches by the order of the words inputted. Ignores words that matches prefix or flag.
+ * <br/><code>'prefix'</code> Matches words that starts with the prefix. The word after the prefix is the evaluated argument.
+ * <br/><code>'flag'</code> Matches words that equal this prefix. The evaluated argument is true or false.
+ * <br/><code>'text'</code> Matches the entire text, except for the command, ignoring words that matches prefix or flag.
+ * <br/><code>'content'</code> Matches the entire text as it was inputted, except for the command.
+ * @typedef {string} ArgumentMatch
+ */
+
+/**
+ * The type that the argument should be cast to. Possible strings are:
+ * <br/><code>'string'</code> Does not cast to any type.
+ * <br/><code>'number'</code> Casts to an number with parseFloat(), default value if not a number.
+ * <br/><code>'integer'</code> Casts to an integer with parseInt(), default value if not a number.
+ * <br/><code>'dynamic'</code> Casts to a number with parseFloat() or a string if the argument is not a number.
+ * <br/><code>'dynamicInt'</code> Casts to an integer with parseInt() or a string if the argument is not a number.
+ * <br/>
+ * <br/>An array of strings can be used to restrict input to only those strings, case insensitive. The evaluated argument will be all lowercase.
+ * <br/>A function (<code>arg => {}</code>) can also be used to filter arguments.
+ * <br/>If the input is not in the array or does not pass the function, the default value is used.
+ * @typedef {string|string[]} ArgumentType
  */
 
 /**
@@ -17,7 +41,16 @@
  * @prop {string} [description=''] - Description of the command.
  * @prop {boolean} [ownerOnly=false] - Allow client owner only.
  * @prop {string} [channelRestriction='none'] - Restricts channel: 'guild' or 'dm'.
- * @prop {string} [split='plain'] - Method to divide text into words: 'plain', 'split', or 'quoted'. Plain splits by space and ignores extra whitespace between words, while split is just split(' '). Quoted does the same as plain, but counts text in double quotes as one word.
+ * @prop {ArgumentSplit} [split='plain'] - Method to split text into words.
+ */
+
+/**
+ * The method to split text into words. Possible strings are:
+ * <br/><code>'plain'</code> Splits word separated by whitespace. Extra whitespace is ignored.
+ * <br/><code>'split'</code> Splits word separated by whitespace.
+ * <br/><code>'quoted'</code> This is like plain, but counts text inside double quotes as one word.
+ * <br/><code>'sticky'</code> This is like quoted, but makes it so that quoted text must have a whitespace/another double quote before it to count as another word.
+ * @typedef {string} ArgumentSplit
  */
 
 class Command {
@@ -26,7 +59,7 @@ class Command {
      * @param {string} id - Command ID.
      * @param {string[]} aliases - Names to call the command with.
      * @param {Argument[]} args - Arguments for the command.
-     * @param {function} exec - Function called when command is ran. (message, args)
+     * @param {function} exec - Function (<code>(message, args) => {}</code>) called when command is ran.
      * @param {CommandOptions} options - Options for the command.
      */
     constructor(id, aliases = [], args = [], exec, options = {}){
@@ -63,7 +96,7 @@ class Command {
         this.exec = exec;
 
         /**
-         * CommandOptions.
+         * Options for the command. Note that you can define any value here that you want for your own use.
          * @type {CommandOptions}
          */
         this.options = options;
@@ -129,7 +162,8 @@ class Command {
         const argSplit = {
             plain: content.match(/[^\s]+/g),
             split: content.split(' '),
-            quoted: content.match(/".*?"|[^\s"]+|"/g)
+            quoted: content.match(/".*?"|[^\s"]+|"/g),
+            sticky: content.match(/[^\s"]*?".*?"|[^\s"]+|"/g)
         };
         
         words = argSplit[this.options.split] || [];
@@ -149,19 +183,14 @@ class Command {
 
         let noPrefixWords = words.filter(w => !prefixes.some(p => w.startsWith(p))); 
 
-        wordArgs.forEach((arg, i) => {
-            let word = noPrefixWords[arg.index !== undefined ? arg.index : i];
-            if (!word) return args[arg.id] = arg.defaultValue;
-
-            if (this.options.split === 'quoted' && /^".*"$/.test(word)) word = word.slice(1, -1);
-
+        let processType = (arg, word) => {
             if (isNaN(word) && (arg.type === 'number' || arg.type === 'integer')){
                 word = arg.defaultValue;
             } else
             if (arg.type === 'dynamic' || arg.type === 'number'){
                 word = parseFloat(word);
             } else
-            if (arg.type === 'integer'){
+            if (arg.type === 'dynamicInt' || arg.type === 'integer'){
                 word = parseInt(word);
             } else
             if (Array.isArray(arg.type)){
@@ -175,7 +204,15 @@ class Command {
                 if (!arg.type(word)) word = arg.defaultValue;
             }
 
-            args[arg.id] = word;
+            return word;
+        };
+
+        wordArgs.forEach((arg, i) => {
+            let word = noPrefixWords[arg.index !== undefined ? arg.index : i];
+            if (!word) return args[arg.id] = arg.defaultValue;
+            
+            if ((this.options.split === 'quoted' || this.options.split === 'sticky') && /^".*"$/.test(word)) word = word.slice(1, -1);
+            args[arg.id] = processType(word);
         });
 
         words.reverse();
@@ -185,28 +222,7 @@ class Command {
             if (!word) return args[arg.id] = arg.defaultValue;
 
             word = word.replace(prefixes.find(p => word.startsWith(p)), '');
-
-            if (isNaN(word) && (arg.type === 'number' || arg.type === 'integer')){
-                word = arg.defaultValue;
-            } else
-            if (arg.type === 'dynamic' || arg.type === 'number'){
-                word = parseFloat(word);
-            } else
-            if (arg.type === 'integer'){
-                word = parseInt(word);
-            } else
-            if (Array.isArray(arg.type)){
-                if (!arg.type.some(t => t.toLowerCase() === word.toLowerCase())){
-                    word = arg.defaultValue;
-                } else {
-                    word = word.toLowerCase();
-                }
-            } else 
-            if (typeof arg.type === 'function'){
-                if (!arg.type(word)) word = arg.defaultValue;
-            }
-
-            args[arg.id] = word;
+            args[arg.id] = processType(word);
         });
 
         flagArgs.forEach(arg => {    

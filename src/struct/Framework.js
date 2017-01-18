@@ -9,8 +9,8 @@ const ClientUtil = require('./utils/ClientUtil');
  * @prop {string} [ownerID=''] - Discord ID of the client owner.
  * @prop {boolean} [selfbot=false] - Marks this bot as a selfbot.
  * @prop {boolean} [addUtil=true] - Adds some utility functions to the client. Accessible with client.util.
- * @prop {(string|function)} [prefix='!'] - Default command prefix or function returning prefix.
- * @prop {(boolean|function)} [allowMention=true] - Allow mentions to the client user as a prefix or function that returns true or false.
+ * @prop {string|function} [prefix='!'] - Default command prefix or function (<code>message => {}</code>)  returning prefix.
+ * @prop {boolean|function} [allowMention=true] - Allow mentions to the client user as a prefix or function (<code>message => {}</code>) that returns true or false.
  * @prop {boolean} [disableBuiltIn=false] - Disables the built-in command inhibitors (i.e. blocking bots and the client and checking if the command is owner only or restricted to a channel). Not recommended.
  * @prop {string} commandDirectory - Directory to commands.
  * @prop {string} inhibitorDirectory - Directory to inhibitors.

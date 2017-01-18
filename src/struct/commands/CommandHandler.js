@@ -319,7 +319,7 @@ module.exports = CommandHandler;
  */
 
 /**
- * Emitted when a command is blocked by an inhibitor. The built-in inhibitors are 'owner', 'guild', 'dm'.
+ * Emitted when a command is blocked by an inhibitor. The built-in inhibitors are 'owner', 'guild', and 'dm'.
  * @event CommandHandler#commandBlocked
  * @param {Message} message Message sent.
  * @param {Command} command Command blocked.
