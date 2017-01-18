@@ -221,7 +221,6 @@ class ClientUtil {
     /**
      * Resolves a Guild from a string, such as an ID, or name.
      * @param {string} text - Text to resolve.
-     * @param {Client} client - The Discord.js client.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @returns {Guild}
      */
