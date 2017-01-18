@@ -45,10 +45,10 @@ const ClientUtil = require('./utils/ClientUtil');
 /**
  * Options used to determine how the framework behaves.
  * @typedef {Object} FrameworkOptions
- * @prop {string} [ownerID=''] - Discord ID of the client owner.
- * @prop {boolean} [selfbot=false] - Marks this bot as a selfbot.
+ * @prop {string} [ownerID=''] - Discord ID of the client owner. Defines client.ownerID.
+ * @prop {boolean} [selfbot=false] - Marks this bot as a selfbot. Defines client.selfbot.
  * @prop {string} [commandDirectory] - Directory to commands.
- * @prop {string|function} [prefix='!'] - Default command prefix or function (&lt;code>message => {}&lt;/code>)  returning prefix.
+ * @prop {string|function} [prefix='!'] - Default command prefix or function (&lt;code>message => {}&lt;/code>) returning prefix.
  * @prop {boolean|function} [allowMention=true] - Allow mentions to the client user as a prefix or function (&lt;code>message => {}&lt;/code>) that returns true or false.
  * @prop {string} [inhibitorDirectory] - Directory to inhibitors.
  * @prop {boolean} [disablePreInhib=false] - Disables the built-in pre-message inhibitors.
