@@ -64,10 +64,16 @@ class ClientUtil {
             let username = caseSensitive ? u.username : u.username.toLowerCase();
             let t = caseSensitive ? text : text.toLowerCase();
 
-            return username === t || username === t.split('#')[0] && u.discriminator === t.split('#')[1] || username.includes(t) || username.includes(t.split('#')[0]) && u.discriminator.includes(t.split('#')[1]);
+            return username === t || username === t.split('#')[0] && u.discriminator === t.split('#')[1];
         };
+        let checkInc = u => {
+            let username = caseSensitive ? u.username : u.username.toLowerCase();
+            let t = caseSensitive ? text : text.toLowerCase();
 
-        return users.get(text) || users.find(check);
+            return username.includes(t) || username.includes(t.split('#')[0]) && u.discriminator.includes(t.split('#')[1]);
+
+        };
+        return users.get(text) || users.find(check) || users.find(checkInc);
     }
 
     /**
@@ -93,10 +99,18 @@ class ClientUtil {
             let displayName = caseSensitive ? m.displayName : m.displayName.toLowerCase();
             let t = caseSensitive ? text : text.toLowerCase();
 
-            return displayName === t || username === t || username === t.split('#')[0] && m.user.discriminator === t.split('#')[1] || displayName.includes(t) || username.includes(t) || username.includes(t.split('#')[0]) && m.user.discriminator.includes(t.split('#')[1]);
+            return displayName === t || username === t || username === t.split('#')[0] && m.user.discriminator === t.split('#')[1];
+        };
+        let checkInc = m => {
+            let username = caseSensitive ? m.user.username : m.user.username.toLowerCase();
+            let displayName = caseSensitive ? m.displayName : m.displayName.toLowerCase();
+            let t = caseSensitive ? text : text.toLowerCase();
+
+            return displayName.includes(t) || username.includes(t) || username.includes(t.split('#')[0]) && m.user.discriminator.includes(t.split('#')[1]);
+
         };
 
-        return members.get(text) || members.find(check);
+        return members.get(text) || members.find(check) || members.find(checkInc);
     }
 
     /**
@@ -121,10 +135,17 @@ class ClientUtil {
             let name = caseSensitive ? c.name : c.name.toLowerCase();
             let t = caseSensitive ? text : text.toLowerCase();
 
-            return name === t || name === t.replace(/^#/, '') || name.includes(t) || name.includes(t.replace(/^#/, ''));
+            return name === t || name === t.replace(/^#/, '');
+        };
+        let checkInc = c => {
+            let name = caseSensitive ? c.name : c.name.toLowerCase();
+            let t = caseSensitive ? text : text.toLowerCase();
+
+            return name.includes(t) || name.includes(t.replace(/^#/, ''));
+
         };
 
-        return channels.get(text) || channels.find(check);
+        return channels.get(text) || channels.find(check) || channels.find(checkInc);
     }
 
     /**
@@ -149,10 +170,17 @@ class ClientUtil {
             let name = caseSensitive ? r.name : r.name.toLowerCase();
             let t = caseSensitive ? t : text.toLowerCase();
 
-            return name === t || name === t.replace(/^@/, '') || name.includes(t) || name.includes(t.replace(/^@/, ''));
+            return name === t || name === t.replace(/^@/, '');
+        };
+        let checkInc = r => {
+            let name = caseSensitive ? r.name : r.name.toLowerCase();
+            let t = caseSensitive ? text : text.toLowerCase();
+
+            return name.includes(t) || name.includes(t.replace(/^@/, ''));
+
         };
 
-        return roles.get(text) || roles.find(check);
+        return roles.get(text) || roles.find(check) || roles.find(checkInc);
     }
 
     /**
@@ -177,19 +205,27 @@ class ClientUtil {
             let name = caseSensitive ? e.name : e.name.toLowerCase();
             let t = caseSensitive ? text : text.toLowerCase();
 
-            return name === t || name === t.replace(/:/g, '') || name.includes(t) || name.includes(t.replace(/:/g, ''));
+            return name === t || name === t.replace(/:/g, '');
+        };
+        let checkInc = e => {
+            let name = caseSensitive ? e.name : e.name.toLowerCase();
+            let t = caseSensitive ? text : text.toLowerCase();
+
+            return name.includes(t) || name.includes(t.replace(/:/g, ''));
+
         };
 
-        return emojis.get(text) || emojis.find(check);
+        return emojis.get(text) || emojis.find(check) || emojis.find(checkInc);
     }
 
     /**
      * Resolves a Guild from a string, such as an ID, or name.
      * @param {string} text - Text to resolve.
+     * @param {Client} client - The Discord.js client.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @returns {Guild}
      */
-    resolveGuild(text, caseSensitive = false) {
+    resolveGuild(text, client, caseSensitive = false) {
         let guilds = client.guilds;
 
         let reg = /<@&(\d+)>/;
@@ -202,10 +238,17 @@ class ClientUtil {
             let name = caseSensitive ? g.name : g.name.toLowerCase();
             let t = caseSensitive ? t : text.toLowerCase();
 
-            return name === t || name.includes(t)
+            return name === t;
+        };
+        let checkInc = g => {
+            let name = caseSensitive ? g.name : g.name.toLowerCase();
+            let t = caseSensitive ? t : text.toLowerCase();
+
+            return name.includes(t);
+
         };
 
-        return guilds.get(text) || guilds.find(check);
+        return guilds.get(text) || guilds.find(check) || guilds.find(checkInc);
     }
 
     /**
