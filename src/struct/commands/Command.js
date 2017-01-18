@@ -90,12 +90,6 @@ class Command {
         });
 
         /**
-         * Function called for command.
-         * @type {function}
-         */
-        this.exec = exec;
-
-        /**
          * Options for the command. Note that you can define any value here that you want for your own use.
          * @type {CommandOptions}
          */
@@ -108,6 +102,18 @@ class Command {
         if (this.options.ownerOnly === undefined) this.options.ownerOnly = false;
         if (this.options.channelRestriction === undefined) this.options.channelRestriction = 'none';
         if (this.options.split === undefined) this.options.split = 'plain';
+
+        /**
+         * Function called for command.
+         * @type {function}
+         */
+        this.exec = exec;
+
+        /**
+         * Whether or not this command is enabled.
+         * @type {boolean}
+         */
+        this.enabled = true;
 
         /**
          * Path to Command file.
@@ -142,14 +148,30 @@ class Command {
      * Reloads the Command.
      */
     reload(){
-        this.handler.reload(this.id);
+        this.commandHandler.reload(this.id);
     }
 
     /**
      * Removes the Command. It can be readded with the command handler.
      */
     remove(){
-        this.handler.remove(this.id);
+        this.commandHandler.remove(this.id);
+    }
+
+    /**
+     * Enables the command.
+     */
+    enable(){
+        if (this.enabled) return;
+        this.enabled = true;
+    }
+
+    /**
+     * Disables the command.
+     */
+    disable(){
+        if (!this.enabled) return;
+        this.enabled = false;
     }
 
     /**

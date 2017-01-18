@@ -32,6 +32,12 @@ class Inhibitor {
         this.exec = exec;
 
         /**
+         * Whether or not this inhibitor is enabled.
+         * @type {boolean}
+         */
+        this.enabled = true;
+
+        /**
          * Path to Inhibitor file.
          * @readonly
          * @type {string}
@@ -64,14 +70,30 @@ class Inhibitor {
      * Reloads the inhibitor.
      */
     reload(){
-        this.handler.reload(this.id);
+        this.inhibitorHandler.reload(this.id);
     }
     
     /**
      * Removes the Inhibitor. It can be readded with the inhibitor handler.
      */
     remove(){
-        this.handler.remove(this.id);
+        this.inhibitorHandler.remove(this.id);
+    }
+
+    /**
+     * Enables the command.
+     */
+    enable(){
+        if (this.enabled) return;
+        this.enabled = true;
+    }
+
+    /**
+     * Disables the command.
+     */
+    disable(){
+        if (!this.enabled) return;
+        this.enabled = false;
     }
 
     /**

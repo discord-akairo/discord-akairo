@@ -39,6 +39,12 @@ class Listener {
         this.exec = exec.bind(this);
 
         /**
+         * Whether or not this listener is enabled.
+         * @type {boolean}
+         */
+        this.enabled = true;
+
+        /**
          * Path to Listener file.
          * @readonly
          * @type {string}
@@ -79,6 +85,26 @@ class Listener {
      */
     remove(){
         this.handler.remove(this.id);
+    }
+
+    /**
+     * Enables the command.
+     */
+    enable(){
+        if (this.enabled) return;
+
+        this.listenerHandler.registerListener(this.id);
+        this.enabled = true;
+    }
+
+    /**
+     * Disables the command.
+     */
+    disable(){
+        if (!this.enabled) return;
+
+        this.listenerHandler.deregisterListener(this.id);
+        this.enabled = false;
     }
 
     /**

@@ -199,6 +199,7 @@ class CommandHandler extends EventEmitter {
             let command = this.findCommand(name);
 
             if (!command) return this.emit('messageInvalid', message);
+            if (!command.enabled) return this.emit('commandDisabled', message, command);
 
             if (!this.postInhibDisabled){
                 if (command.options.ownerOnly && message.author.id !== this.framework.client.ownerID) return this.emit('commandBlocked', message, command, 'owner');
@@ -233,34 +234,41 @@ module.exports = CommandHandler;
 /**
  * Emitted when a message is blocked by a pre-message inhibitor. The built-in inhibitors are 'notSelf' (for selfbots), 'client', and 'bot'.
  * @event CommandHandler#messageBlocked
- * @param {Message} message Message sent.
- * @param {string} reason Reason for the block.
+ * @param {Message} message - Message sent.
+ * @param {string} reason - Reason for the block.
  */
 
 /**
  * Emitted when a message does not start with the prefix or match a command.
  * @event CommandHandler#messageInvalid
- * @param {Message} message Message sent.
+ * @param {Message} message - Message sent.
+ */
+
+/**
+ * Emitted when a command is found disabled.
+ * @event CommandHandler#commandDisabled
+ * @param {Message} message - Message sent.
+ * @param {Command} command - Command found.
  */
 
 /**
  * Emitted when a command is blocked by a post-message inhibitor. The built-in inhibitors are 'owner', 'guild', and 'dm'.
  * @event CommandHandler#commandBlocked
- * @param {Message} message Message sent.
- * @param {Command} command Command blocked.
- * @param {string} reason Reason for the block.
+ * @param {Message} message - Message sent.
+ * @param {Command} command - Command blocked.
+ * @param {string} reason - Reason for the block.
  */
 
 /**
  * Emitted when a command starts execution.
  * @event CommandHandler#commandStarted
- * @param {Message} message Message sent.
- * @param {Command} command Command executed.
+ * @param {Message} message - Message sent.
+ * @param {Command} command - Command executed.
  */
 
 /**
  * Emitted when a command finishes execution.
  * @event CommandHandler#commandFinished
- * @param {Message} message Message sent.
- * @param {Command} command Command executed.
+ * @param {Message} message - Message sent.
+ * @param {Command} command - Command executed.
  */

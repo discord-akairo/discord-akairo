@@ -105,7 +105,7 @@ class InhibitorHandler {
      */
     testMessage(message){
         return new Promise((resolve, reject) => {
-            let promises = this.inhibitors.filter(i => i.preMessage).map(inhibitor => {
+            let promises = this.inhibitors.filter(i => i.preMessage && i.enabled).map(inhibitor => {
                 let inhibited = inhibitor.exec(message);
 
                 if (inhibited instanceof Promise) return inhibited.catch(err => {
@@ -132,7 +132,7 @@ class InhibitorHandler {
      */
     testCommand(message, command){
         return new Promise((resolve, reject) => {
-            let promises = this.inhibitors.filter(i => !i.preMessage).map(inhibitor => {
+            let promises = this.inhibitors.filter(i => !i.preMessage && i.enabled).map(inhibitor => {
                 let inhibited = inhibitor.exec(message, command);
 
                 if (inhibited instanceof Promise) return inhibited.catch(err => {
