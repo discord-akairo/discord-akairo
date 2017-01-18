@@ -59,9 +59,10 @@ function exec(message, args){
 module.exports = new Command('roll', ['roll', 'dice', 'rng'], [
     {id: 'limit', type: 'number', defaultValue: 100},
     {id: 'noFloor', match: 'flag', prefix: '--noFloor'}
-], exec, {
+], {
+    category: 'numbers',
     channelRestriction: 'guild'
-});
+}, exec);
 ```
 
 ### Command Inhibitors

@@ -59,10 +59,10 @@ class Command {
      * @param {string} id - Command ID.
      * @param {string[]} aliases - Names to call the command with.
      * @param {Argument[]} args - Arguments for the command.
-     * @param {function} exec - Function (<code>(message, args) => {}</code>) called when command is ran.
      * @param {CommandOptions} options - Options for the command.
+     * @param {function} exec - Function (<code>(message, args) => {}</code>) called when command is ran.
      */
-    constructor(id, aliases = [], args = [], exec, options = {}){
+    constructor(id, aliases = [], args = [], options = {}, exec){
         /**
          * ID of the Command.
          * @type {string}
