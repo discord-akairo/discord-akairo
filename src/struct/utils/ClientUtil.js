@@ -207,7 +207,7 @@ class ClientUtil {
 
         return guilds.get(text) || guilds.find(check);
     }
-    
+
     /**
      * Gets the display color in decimal of the member.
      * @param {GuildMember} member - The member to find color of.
