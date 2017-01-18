@@ -12,7 +12,8 @@
 
 ## About
 A bot framework for Discord.js v11, where everything is reloadable, commands are easy as cake to make, and argument parsing is very flexible.  
-(Note that this framework is a work-in-progress, so expect frequent and perhaps breaking updates. But don't worry! They'll always be good.)  
+Note that this framework is a work-in-progress, so expect frequent and perhaps breaking updates.  
+But don't worry! They'll always be good.  
 
 ```js
 const Discord = require('discord.js');
@@ -20,16 +21,14 @@ const Akairo = require('discord-akairo');
 
 const client = new Discord.Client();
 const akairo = new Akairo.Framework(client, {
-    token: 'TOKEN', 
-    ownerID: 'ID', 
-    prefix: '!', 
-    allowMention: true, 
-    commandDirectory: './src/commands/', 
+    ownerID: 'ID',
+    prefix: '!',
+    commandDirectory: './src/commands/',
     inhibitorDirectory: './src/inhibitors/',
     listenerDirectory: './src/listeners/'
 });
 
-akairo.login().then(() => {
+akairo.login('TOKEN').then(() => {
     console.log('Started up!');
 });
 ```
@@ -45,7 +44,7 @@ Changelog is available on [https://github.com/1Computer1/discord-akairo/releases
 If you need more help, message me on Discord: 1Computer#7952.  
 
 ## Examples
-### Commands and Arguments
+#### Commands and Arguments
 ```js
 const Command = require('discord-akairo').Command;
 
@@ -65,7 +64,7 @@ module.exports = new Command('roll', ['roll', 'dice', 'rng'], [
 }, exec);
 ```
 
-### Command Inhibitors
+#### Command Inhibitors
 ```js
 const Inhibitor = require('discord-akairo').Inhibitor;
 const blockedUsers = ['1234', '5678', '1357', '2468'];
@@ -77,7 +76,7 @@ function exec(message){
 module.exports = new Inhibitor('blacklist', 'blacklist', false, exec);
 ```
 
-### Event Listeners
+#### Event Listeners
 ```js
 const Listener = require('discord-akairo').Listener;
 
@@ -95,7 +94,7 @@ function exec(message, command, reason){
 module.exports = new Listener('commandBlocked', 'commandHandler', 'commandBlocked', 'on', exec);
 ```
 
-### Reloading
+#### Reloading
 ```js
 // Somewhere...
 commandHandler.reloadCommand('roll');
@@ -105,12 +104,12 @@ listenerHandler.reloadListener('commandBlocked');
 // All reloaded!
 ```
 
-### SQLite Support
+#### SQLite Support
 ```js
 const guildDefault = require('./databases/guildDefault.json');
 const guildSQL = new Akairo.SQLiteHandler('./databases/guilds.sqlite', 'guildConfigs', guildDefault);
 
-akairo.login().then(() => {
+akairo.login('TOKEN').then(() => {
     guildSQL.init(client.guilds.map(g => g.id)).then(() => {
         console.log(guildSQL.get('123456').prefix) // Hopefully not '!'
     });
