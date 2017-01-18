@@ -10,7 +10,7 @@
     </a>
 </p>  
 
-# About
+## About
 A bot framework for Discord.js v11, where everything is reloadable, commands are easy as cake to make, and argument parsing is very flexible.  
 (Note that this framework is a work-in-progress, so expect frequent and perhaps breaking updates. But don't worry! They'll always be good.)  
 
@@ -34,17 +34,17 @@ akairo.login().then(() => {
 });
 ```
 
-# Installation
+## Installation
 discord-akairo: `npm install discord-akairo --save`  
 discord.js: `npm install discord.js --save`  
 sqlite (optional): `npm install sqlite --save`  
 
-# Documentation
+## Documentation
 Documentation is available on [https://1computer1.github.io/discord-akairo/index.html](https://1computer1.github.io/discord-akairo/index.html).  
 Changelog is available on [https://github.com/1Computer1/discord-akairo/releases](https://github.com/1Computer1/discord-akairo/releases).  
 If you need more help, message me on Discord: 1Computer#7952.  
 
-# Examples
+## Examples
 ### Commands and Arguments
 ```js
 const Command = require('discord-akairo').Command;
@@ -106,7 +106,8 @@ listenerHandler.reloadListener('commandBlocked');
 
 ### SQLite Support
 ```js
-const guildSQL = new Akairo.SQLiteHandler('./databases/guilds.sqlite', 'guildConfigs', require('./databases/guildDefault.json'));
+const guildDefault = require('./databases/guildDefault.json');
+const guildSQL = new Akairo.SQLiteHandler('./databases/guilds.sqlite', 'guildConfigs', guildDefault);
 
 akairo.login().then(() => {
     guildSQL.init(client.guilds.map(g => g.id)).then(() => {
