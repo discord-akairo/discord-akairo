@@ -1,5 +1,5 @@
 const CommandHandler = require('./commands/CommandHandler');
-const InhibitorHandler = require('./inhibitor/InhibitorHandler');
+const InhibitorHandler = require('./inhibitors/InhibitorHandler');
 const ListenerHandler = require('./events/ListenerHandler');
 const ClientUtil = require('./utils/ClientUtil');
 
