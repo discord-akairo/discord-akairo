@@ -26,6 +26,14 @@ class ListenerHandler {
         this.directory = path.resolve(options.listenerDirectory);
 
         /**
+         * EventEmitters for use, mapped by name to Listener. 'client' and 'commandHandler' are here by default.
+         * @type {Collection.<string, EventEmitter>}
+         */
+        this.emitters = new Collection();
+        this.emitters.set('client', this.framework.client);
+        this.emitters.set('commandHandler', this.framework.commandHandler);
+
+        /**
          * Listeners loaded, mapped by ID to Listener.
          * @type {Collection.<string, Listener>}
          */
@@ -35,14 +43,6 @@ class ListenerHandler {
         filepaths.forEach(filepath => {
             this.load(filepath);
         });
-
-        /**
-         * EventEmitters for use, mapped by name to Listener. 'client' and 'commandHandler' are here by default.
-         * @type {Collection.<string, Listener>}
-         */
-        this.emitters = new Collection();
-        this.emitters.set('client', this.framework.client);
-        this.emitters.set('commandHandler', this.framework.commandHandler);
     }
 
     /**
