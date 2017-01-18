@@ -1,12 +1,18 @@
+/**
+ * Options to use for inhibitor execution behavior.
+ * @typedef {Object} InhibitorOptions
+ * @prop {string} [reason=''] - Reason emitted when command or message is blocked.
+ * @prop {boolean} [preMessage=false] - Makes this inhibitor run before the message is handled rather than after.
+ */
+
 class Inhibitor {
     /**
      * Creates a new Inhibitor.
      * @param {string} id - Inhibitor ID.
-     * @param {string} reason - Reason emitted when a command/message is blocked.
-     * @param {boolean} preMessage - Makes this inhibitor run before the message is handled rather than after.
      * @param {function} exec - Function (<code>(message, command) => {}</code>) called before a command is ran. Return true or a rejecting Promise to block.
+     * @param {InhibitorOptions} [options={}] - Options for the inhibitor.
      */
-    constructor(id, reason, preMessage, exec){
+    constructor(id, exec, options = {}){
         /**
          * ID of the Inhibitor.
          * @type {string}
@@ -17,13 +23,13 @@ class Inhibitor {
          * Reason emitted when command is inhibited.
          * @type {string}
          */
-        this.reason = reason;
+        this.reason = options.reason || '';
 
         /**
          * Inhibitor runs before message is handled.
          * @type {boolean}
          */
-        this.preMessage = preMessage;
+        this.preMessage = !!options.preMessage;
 
         /**
          * Function called to inhibit.

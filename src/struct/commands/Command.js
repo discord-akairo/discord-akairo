@@ -37,11 +37,14 @@
 /**
  * Options to use for command execution behavior.
  * @typedef {Object} CommandOptions
+ * @prop {Argument[]} [args=[]] - Arguments to parse.
+ * @prop {string} [aliases=[]] - Command names.
  * @prop {string} [category=''] - Command category for organization purposes.
  * @prop {string|string[]} [description=''] - Description of the command.
  * @prop {boolean} [ownerOnly=false] - Allow client owner only.
  * @prop {string} [channelRestriction='none'] - Restricts channel: 'guild' or 'dm'.
  * @prop {ArgumentSplit} [split='plain'] - Method to split text into words.
+ * @prop {Object} [custom={}] - An object for custom options. Accessible with command.options.
  */
 
 /**
@@ -57,12 +60,10 @@ class Command {
     /**
      * Creates a new Command.
      * @param {string} id - Command ID.
-     * @param {string[]} aliases - Names to call the command with.
-     * @param {Argument[]} args - Arguments for the command.
-     * @param {CommandOptions} options - Options for the command.
      * @param {function} exec - Function (<code>(message, args) => {}</code>) called when command is ran.
+     * @param {CommandOptions} [options={}] - Options for the command.
      */
-    constructor(id, aliases = [], args = [], options = {}, exec){
+    constructor(id, exec, options = {}){
         /**
          * ID of the Command.
          * @type {string}
@@ -73,13 +74,13 @@ class Command {
          * Command names.
          * @type {string[]}
          */
-        this.aliases = aliases;
+        this.aliases = options.aliases || [];
 
         /**
          * Arguments for the command.
          * @type {Argument[]}
          */
-        this.args = args;
+        this.args = options.args || [];
         this.args.forEach(arg => {
             if (!arg.match) arg.match = 'word';
             if (!arg.type) arg.type = 'string';
@@ -90,18 +91,40 @@ class Command {
         });
 
         /**
-         * Options for the command. Note that you can define any value here that you want for your own use.
-         * @type {CommandOptions}
+         * Category this command belongs to.
+         * @type {Category}
          */
-        this.options = options;
-        if (!this.options.category) this.options.category = '';
+        this.category = null;
 
-        if (Array.isArray(this.options.description)) this.options.description = this.options.description.join('\n');
-        if (!this.options.description) this.options.description = '';
-        
-        this.options.ownerOnly = !!this.options.ownerOnly;
-        if (!this.options.channelRestriction) this.options.channelRestriction = 'none';
-        if (!this.options.split) this.options.split = 'plain';
+        /**
+         * Description of the command.
+         * @type {string}
+         */
+        this.description = (Array.isArray(options.description) ? options.description.join('\n') : options.description) || '';
+
+        /**
+         * Usable only by the client owner.
+         * @type {boolean}
+         */
+        this.ownerOnly = !!options.ownerOnly;
+
+        /**
+         * Usable only in this channel type.
+         * @type {string}
+         */
+        this.channelRestriction = options.channelRestriction || 'none';
+
+        /**
+         * The command split method.
+         * @type {ArgumentSplit}
+         */
+        this.split = options.split || 'plain';
+
+        /**
+         * Custom options for the command.
+         * @type {Object}
+         */
+        this.options = options.custom || {};
 
         /**
          * Function called for command.
@@ -188,7 +211,7 @@ class Command {
             sticky: content.match(/[^\s"]*?".*?"|[^\s"]+|"/g)
         };
         
-        words = argSplit[this.options.split] || [];
+        words = argSplit[this.split] || [];
 
         let args = {};
 
@@ -233,7 +256,7 @@ class Command {
             let word = noPrefixWords[arg.index !== undefined ? arg.index : i];
             if (!word) return args[arg.id] = arg.defaultValue;
             
-            if ((this.options.split === 'quoted' || this.options.split === 'sticky') && /^".*"$/.test(word)) word = word.slice(1, -1);
+            if ((this.split === 'quoted' || this.split === 'sticky') && /^".*"$/.test(word)) word = word.slice(1, -1);
             args[arg.id] = processType(arg, word);
         });
 
