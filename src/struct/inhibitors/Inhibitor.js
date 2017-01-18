@@ -81,7 +81,7 @@ class Inhibitor {
     }
 
     /**
-     * Enables the command.
+     * Enables the inhibitor.
      */
     enable(){
         if (this.enabled) return;
@@ -89,7 +89,7 @@ class Inhibitor {
     }
 
     /**
-     * Disables the command.
+     * Disables the inhibitor.
      */
     disable(){
         if (!this.enabled) return;

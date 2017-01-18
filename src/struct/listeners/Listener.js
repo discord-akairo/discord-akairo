@@ -88,7 +88,7 @@ class Listener {
     }
 
     /**
-     * Enables the command.
+     * Enables the listener.
      */
     enable(){
         if (this.enabled) return;
@@ -98,7 +98,7 @@ class Listener {
     }
 
     /**
-     * Disables the command.
+     * Disables the listener.
      */
     disable(){
         if (!this.enabled) return;
