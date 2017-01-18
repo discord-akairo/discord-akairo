@@ -48,11 +48,10 @@ class ClientUtil {
     /**
      * Resolves a User from a string, such as an ID, a username, etc.
      * @param {string} text - Text to resolve.
-     * @param {boolean} [useIncludes=false] - Makes user check also find users that include in name some text part given.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @returns {User}
      */
-    resolveUser(text, useIncludes = false, caseSensitive = false) {
+    resolveUser(text, caseSensitive = false) {
         let users = this.client.users;
 
         let reg = /<@!?(\d+)>/;
@@ -65,8 +64,7 @@ class ClientUtil {
             let username = caseSensitive ? u.username : u.username.toLowerCase();
             let t = caseSensitive ? text : text.toLowerCase();
 
-            if (useIncludes) return username.includes(t) || username.includes(t.split('#')[0]) && u.discriminator.includes(t.split('#')[1]);
-            return username === t || username === t.split('#')[0] && u.discriminator === t.split('#')[1];
+            return username === t || username === t.split('#')[0] && u.discriminator === t.split('#')[1] || username.includes(t) || username.includes(t.split('#')[0]) && u.discriminator.includes(t.split('#')[1]);
         };
 
         return users.get(text) || users.find(check);
@@ -75,12 +73,11 @@ class ClientUtil {
     /**
      * Resolves a GuildMember from a string, such as an ID, a nickname, a username, etc.
      * @param {string} text - Text to resolve.
-     * @param {boolean} [useIncludes=false] - Makes member check also find members that include in name some text part given.
      * @param {Guild} [guild] - Guild to find member in. If not specified, will resolve a User instead.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @returns {GuildMember|User}
      */
-    resolveMember(text, guild, useIncludes = false, caseSensitive = false) {
+    resolveMember(text, guild, caseSensitive = false) {
         if (!guild) return this.resolveUser(text);
 
         let members = guild.members;
@@ -96,8 +93,7 @@ class ClientUtil {
             let displayName = caseSensitive ? m.displayName : m.displayName.toLowerCase();
             let t = caseSensitive ? text : text.toLowerCase();
 
-            if (useIncludes) return displayName.includes(t) || username.includes(t) || username.includes(t.split('#')[0]) && m.user.discriminator.includes(t.split('#')[1]);
-            return displayName === t || username === t || username === t.split('#')[0] && m.user.discriminator === t.split('#')[1];
+            return displayName === t || username === t || username === t.split('#')[0] && m.user.discriminator === t.split('#')[1] || displayName.includes(t) || username.includes(t) || username.includes(t.split('#')[0]) && m.user.discriminator.includes(t.split('#')[1]);
         };
 
         return members.get(text) || members.find(check);
@@ -107,11 +103,10 @@ class ClientUtil {
      * Resolves a GuildChannel from a string, such as an ID, a name, etc.
      * @param {string} text - Text to resolve.
      * @param {Guild} guild - Guild to find channel in.
-     * @param {boolean} [useIncludes=false] - Makes channel check also find channels that include in name some text part given.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @returns {GuildChannel}
      */
-    resolveChannel(text, guild, useIncludes = false, caseSensitive = false) {
+    resolveChannel(text, guild, caseSensitive = false) {
         if (!guild) throw new Error('Guild must be specified.');
 
         let channels = guild.channels;
@@ -126,8 +121,7 @@ class ClientUtil {
             let name = caseSensitive ? c.name : c.name.toLowerCase();
             let t = caseSensitive ? text : text.toLowerCase();
 
-            if (useIncludes) return name.includes(t) || name.includes(t.replace(/^#/, ''));
-            return name === t || name === t.replace(/^#/, '');
+            return name === t || name === t.replace(/^#/, '') || name.includes(t) || name.includes(t.replace(/^#/, ''));
         };
 
         return channels.get(text) || channels.find(check);
@@ -137,11 +131,10 @@ class ClientUtil {
      * Resolves a Role from a string, such as an ID, a name, etc.
      * @param {string} text - Text to resolve.
      * @param {Guild} guild - Guild to find channel in.
-     * @param {boolean} [useIncludes=false] - Makes Role check also find roles that include in name some text part given.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @returns {Role}
      */
-    resolveRole(text, guild, useIncludes = false, caseSensitive = false) {
+    resolveRole(text, guild, caseSensitive = false) {
         if (!guild) throw new Error('Guild must be specified.');
 
         let roles = guild.roles;
@@ -156,8 +149,7 @@ class ClientUtil {
             let name = caseSensitive ? r.name : r.name.toLowerCase();
             let t = caseSensitive ? t : text.toLowerCase();
 
-            if (useIncludes) return name.includes(t) || name.includes(t.replace(/^@/, ''));
-            return name === t || name === t.replace(/^@/, '');
+            return name === t || name === t.replace(/^@/, '') || name.includes(t) || name.includes(t.replace(/^@/, ''));
         };
 
         return roles.get(text) || roles.find(check);
@@ -167,11 +159,10 @@ class ClientUtil {
      * Resolves an Emoji from a string, such as a name or a mention.
      * @param {string} text - Text to resolve.
      * @param {Guild} guild - Guild to find emoji in.
-     * @param {boolean} [useIncludes=false] - Makes emoji check also find emojis that include in name some text part given.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @returns {Emoji}
      */
-    resolveEmoji(text, guild, useIncludes = false, caseSensitive = false) {
+    resolveEmoji(text, guild, caseSensitive = false) {
         if (!guild) throw new Error('Guild must be specified.');
 
         let emojis = guild.emojis;
@@ -186,8 +177,7 @@ class ClientUtil {
             let name = caseSensitive ? e.name : e.name.toLowerCase();
             let t = caseSensitive ? text : text.toLowerCase();
 
-            if (useIncludes) return name.includes(t) || name.includes(t.replace(/:/g, ''));
-            return name === t || name === t.replace(/:/g, '');
+            return name === t || name === t.replace(/:/g, '') || name.includes(t) || name.includes(t.replace(/:/g, ''));
         };
 
         return emojis.get(text) || emojis.find(check);
@@ -196,11 +186,10 @@ class ClientUtil {
     /**
      * Resolves a Guild from a string, such as an ID, or name.
      * @param {string} text - Text to resolve.
-     * @param {boolean} [useIncludes=false] - Makes Guild check also find guilds that include in name some text part given.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @returns {Guild}
      */
-    resolveGuild(text, useIncludes = false, caseSensitive = false) {
+    resolveGuild(text, caseSensitive = false) {
         let guilds = client.guilds;
 
         let reg = /<@&(\d+)>/;
@@ -213,8 +202,7 @@ class ClientUtil {
             let name = caseSensitive ? g.name : g.name.toLowerCase();
             let t = caseSensitive ? t : text.toLowerCase();
 
-            if (useIncludes) return name.includes(t)
-            return name === t
+            return name === t || name.includes(t)
         };
 
         return guilds.get(text) || guilds.find(check);
