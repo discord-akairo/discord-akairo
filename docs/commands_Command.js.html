@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -98,10 +98,10 @@ class Command {
      * @param {string} id - Command ID.
      * @param {string[]} aliases - Names to call the command with.
      * @param {Argument[]} args - Arguments for the command.
-     * @param {function} exec - Function (&lt;code>(message, args) => {}&lt;/code>) called when command is ran.
      * @param {CommandOptions} options - Options for the command.
+     * @param {function} exec - Function (&lt;code>(message, args) => {}&lt;/code>) called when command is ran.
      */
-    constructor(id, aliases = [], args = [], exec, options = {}){
+    constructor(id, aliases = [], args = [], options = {}, exec){
         /**
          * ID of the Command.
          * @type {string}
@@ -129,12 +129,6 @@ class Command {
         });
 
         /**
-         * Function called for command.
-         * @type {function}
-         */
-        this.exec = exec;
-
-        /**
          * Options for the command. Note that you can define any value here that you want for your own use.
          * @type {CommandOptions}
          */
@@ -147,6 +141,18 @@ class Command {
         if (this.options.ownerOnly === undefined) this.options.ownerOnly = false;
         if (this.options.channelRestriction === undefined) this.options.channelRestriction = 'none';
         if (this.options.split === undefined) this.options.split = 'plain';
+
+        /**
+         * Function called for command.
+         * @type {function}
+         */
+        this.exec = exec;
+
+        /**
+         * Whether or not this command is enabled.
+         * @type {boolean}
+         */
+        this.enabled = true;
 
         /**
          * Path to Command file.
@@ -181,14 +187,30 @@ class Command {
      * Reloads the Command.
      */
     reload(){
-        this.commandHandler.reloadCommand(this.id);
+        this.commandHandler.reload(this.id);
     }
 
     /**
      * Removes the Command. It can be readded with the command handler.
      */
     remove(){
-        this.commandHandler.removeCommand(this.id);
+        this.commandHandler.remove(this.id);
+    }
+
+    /**
+     * Enables the command.
+     */
+    enable(){
+        if (this.enabled) return;
+        this.enabled = true;
+    }
+
+    /**
+     * Disables the command.
+     */
+    disable(){
+        if (!this.enabled) return;
+        this.enabled = false;
     }
 
     /**
@@ -251,7 +273,7 @@ class Command {
             if (!word) return args[arg.id] = arg.defaultValue;
             
             if ((this.options.split === 'quoted' || this.options.split === 'sticky') &amp;&amp; /^".*"$/.test(word)) word = word.slice(1, -1);
-            args[arg.id] = processType(word);
+            args[arg.id] = processType(arg, word);
         });
 
         words.reverse();
@@ -261,7 +283,7 @@ class Command {
             if (!word) return args[arg.id] = arg.defaultValue;
 
             word = word.replace(prefixes.find(p => word.startsWith(p)), '');
-            args[arg.id] = processType(word);
+            args[arg.id] = processType(arg, word);
         });
 
         flagArgs.forEach(arg => {    

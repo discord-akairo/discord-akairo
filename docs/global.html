@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -1001,7 +1001,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Framework.js.html">Framework.js</a>, <a href="Framework.js.html#line5">line 5</a>
+        <a href="Framework.js.html">Framework.js</a>, <a href="Framework.js.html#line6">line 6</a>
     </li></ul></dd>
     
 
@@ -1064,39 +1064,6 @@
     </thead>
 
     <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>token</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">Client token.</td>
-        </tr>
-
     
 
         <tr>
@@ -1175,13 +1142,13 @@
 
         <tr>
             
-                <td class="name"><code>addUtil</code></td>
+                <td class="name"><code>commandDirectory</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">boolean</span>
+<span class="param-type">string</span>
 
 
             
@@ -1200,12 +1167,10 @@
             
                 <td class="default">
                 
-                    <code>true</code>
-                
                 </td>
             
 
-            <td class="description last">Adds some utility functions to the client. Accessible with client.util.</td>
+            <td class="description last">Directory to commands.</td>
         </tr>
 
     
@@ -1292,7 +1257,42 @@
 
         <tr>
             
-                <td class="name"><code>disableBuiltIn</code></td>
+                <td class="name"><code>inhibitorDirectory</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Directory to inhibitors.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>disablePreInhib</code></td>
             
 
             <td class="type">
@@ -1322,20 +1322,20 @@
                 </td>
             
 
-            <td class="description last">Disables the built-in command inhibitor.<br/>For example, blocking bots, the client, and checking if the command is owner only or restricted to a channel.<br/>Not recommended.</td>
+            <td class="description last">Disables the built-in pre-message inhibitors.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>commandDirectory</code></td>
+                <td class="name"><code>disablePostInhib</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">boolean</span>
 
 
             
@@ -1343,6 +1343,8 @@
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -1352,43 +1354,12 @@
             
                 <td class="default">
                 
-                </td>
-            
-
-            <td class="description last">Directory to commands.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>inhibitorDirectory</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
+                    <code>false</code>
                 
                 </td>
             
 
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">Directory to inhibitors.</td>
+            <td class="description last">Disables the built-in post-message inhibitors.</td>
         </tr>
 
     
@@ -1409,6 +1380,8 @@
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
