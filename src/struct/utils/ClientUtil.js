@@ -231,7 +231,7 @@ class ClientUtil {
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
      * @returns {Guild}
      */
-    resolveGuild(text, caseSensitive = false, wholeWord = false) {
+    resolveGuild(text, caseSensitive = false, wholeWord = false){
         let guilds = this.client.guilds;
 
         let check = g => {
