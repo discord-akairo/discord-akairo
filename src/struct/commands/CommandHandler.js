@@ -8,7 +8,7 @@ const Category = require('./Category');
 /** @extends EventEmitter */
 class CommandHandler extends EventEmitter {
     /**
-     * Loads Commands and Inhibitors and handles messages.
+     * Loads Commands and handles messages.
      * @param {Framework} framework - The Akairo framework.
      * @param {Object} options - Options from framework.
      */

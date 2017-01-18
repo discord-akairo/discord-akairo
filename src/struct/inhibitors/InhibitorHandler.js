@@ -6,7 +6,7 @@ const Inhibitor = require('./Inhibitor');
 /** @extends EventEmitter */
 class InhibitorHandler {
     /**
-     * Loads Commands and Inhibitors and handles messages.
+     * Loads Inhibitors and checks messages.
      * @param {Framework} framework - The Akairo framework.
      * @param {Object} options - Options from framework.
      */

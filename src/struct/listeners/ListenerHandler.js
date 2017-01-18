@@ -53,7 +53,7 @@ class ListenerHandler {
         listener.listenerHandler = this;
 
         this.listeners.set(listener.id, listener);
-        this.registerListener(listener.id);
+        this.register(listener.id);
     }
 
     /**
@@ -80,7 +80,7 @@ class ListenerHandler {
         if (!listener) throw new Error(`Listener ${id} does not exist.`);
 
         delete require.cache[require.resolve(listener.filepath)];
-        this.deregisterListener(listener.id);
+        this.deregister(listener.id);
         this.listeners.delete(listener.id);
     }
 
@@ -95,7 +95,7 @@ class ListenerHandler {
         let filepath = listener.filepath;
 
         delete require.cache[require.resolve(listener.filepath)];
-        this.deregisterListener(listener.id);
+        this.deregister(listener.id);
         this.listeners.delete(listener.id);
         
         this.load(filepath);
@@ -105,7 +105,7 @@ class ListenerHandler {
      * Registers a Listener with the EventEmitter.
      * @param {string} id - ID of the Listener.
      */
-    registerListener(id){
+    register(id){
         let listener = this.listeners.get(id);
         if (!listener) throw new Error(`Listener ${id} does not exist.`);
 
@@ -128,7 +128,7 @@ class ListenerHandler {
      * Removes a Listener from the EventEmitter.
      * @param {string} id - ID of the Listener.
      */
-    deregisterListener(id){
+    deregister(id){
         let listener = this.listeners.get(id);
         if (!listener) throw new Error(`Listener ${id} does not exist.`);
 

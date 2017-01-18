@@ -93,7 +93,7 @@ class Listener {
     enable(){
         if (this.enabled) return;
 
-        this.listenerHandler.registerListener(this.id);
+        this.listenerHandler.register(this.id);
         this.enabled = true;
     }
 
@@ -103,7 +103,7 @@ class Listener {
     disable(){
         if (!this.enabled) return;
 
-        this.listenerHandler.deregisterListener(this.id);
+        this.listenerHandler.deregister(this.id);
         this.enabled = false;
     }
 
