@@ -227,7 +227,7 @@ class ClientUtil {
     resolveGuild(text, caseSensitive = false) {
         let guilds = this.client.guilds
 
-        let reg = (/id\:([0-9]{17,21})/;
+        let reg = /id\:([0-9]{17,21})/;
         if (reg.test(text)) {
             let id = text.match(reg)[1];
             return guilds.get(id);
