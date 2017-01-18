@@ -225,10 +225,10 @@ class ClientUtil {
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @returns {Guild}
      */
-    resolveGuild(text, client, caseSensitive = false) {
-        let guilds = client.guilds;
+    resolveGuild(text, caseSensitive = false) {
+        let guilds = this.client.guilds
 
-        let reg = /<@&(\d+)>/;
+        let reg = (/id\:([0-9]{17,21})/;
         if (reg.test(text)) {
             let id = text.match(reg)[1];
             return guilds.get(id);
