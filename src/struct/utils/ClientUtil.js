@@ -227,12 +227,6 @@ class ClientUtil {
     resolveGuild(text, caseSensitive = false) {
         let guilds = this.client.guilds
 
-        let reg = /[0-9]{17,21}/;
-        if (reg.test(text)) {
-            let id = text.match(reg)[1];
-            return guilds.get(id);
-        }
-
         let check = g => {
             let name = caseSensitive ? g.name : g.name.toLowerCase();
             let t = caseSensitive ? t : text.toLowerCase();
