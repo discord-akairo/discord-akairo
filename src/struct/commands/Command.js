@@ -6,8 +6,8 @@
  * @prop {ArgumentType} [type='string'] - Attempts to cast argument to this type.
  * @prop {string|string[]} [prefix] - Ignores word order and uses a word that starts with/matches this prefix (or multiple prefixes if array).<br/>Applicable to 'prefix' and 'flag' only.
  * @prop {number} [index] - Word to start from.<br/>Applicable to 'word', 'text', or 'content' only.<br/>When using with word, this will offset all word arguments after it by 1 unless the index property is also specified for them.
- * @prop {(string|number)} [defaultValue=''] - Default value if a word is not inputted or a type could not be casted to.
- * @prop {string} [description=''] - A description of the argument.
+ * @prop {string|number} [defaultValue=''] - Default value if a word is not inputted or a type could not be casted to.
+ * @prop {string|string[]} [description=''] - A description of the argument.
  */
 
 /**
@@ -38,7 +38,7 @@
  * Options to use for command execution behavior.
  * @typedef {Object} CommandOptions
  * @prop {string} [category=''] - Command category for organization purposes.
- * @prop {string} [description=''] - Description of the command.
+ * @prop {string|string[]} [description=''] - Description of the command.
  * @prop {boolean} [ownerOnly=false] - Allow client owner only.
  * @prop {string} [channelRestriction='none'] - Restricts channel: 'guild' or 'dm'.
  * @prop {ArgumentSplit} [split='plain'] - Method to split text into words.
@@ -81,12 +81,12 @@ class Command {
          */
         this.args = args;
         this.args.forEach(arg => {
-            if (arg.match === undefined) arg.match = 'word';
-            if (arg.type === undefined) arg.type = 'string';
-            if (arg.defaultValue === undefined) arg.defaultValue = '';
+            if (!arg.match) arg.match = 'word';
+            if (!arg.type) arg.type = 'string';
+            if (!arg.defaultValue) arg.defaultValue = '';
 
             if (Array.isArray(arg.description)) arg.description = arg.description.join('\n');
-            if (arg.description === undefined) arg.description = '';
+            if (!arg.description) arg.description = '';
         });
 
         /**
@@ -94,14 +94,14 @@ class Command {
          * @type {CommandOptions}
          */
         this.options = options;
-        if (this.options.category === undefined) this.options.category = '';
+        if (!this.options.category) this.options.category = '';
 
         if (Array.isArray(this.options.description)) this.options.description = this.options.description.join('\n');
-        if (this.options.description === undefined) this.options.description = '';
+        if (!this.options.description) this.options.description = '';
         
-        if (this.options.ownerOnly === undefined) this.options.ownerOnly = false;
-        if (this.options.channelRestriction === undefined) this.options.channelRestriction = 'none';
-        if (this.options.split === undefined) this.options.split = 'plain';
+        this.options.ownerOnly = !!this.options.ownerOnly;
+        if (!this.options.channelRestriction) this.options.channelRestriction = 'none';
+        if (!this.options.split) this.options.split = 'plain';
 
         /**
          * Function called for command.

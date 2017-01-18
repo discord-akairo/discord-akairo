@@ -2,7 +2,7 @@ const Collection = require('discord.js').Collection;
 
 class Category {
     /**
-     * Creates a new command category.
+     * A group of commands.
      * @param {string} id - ID of the category.
      */
     constructor(id){
