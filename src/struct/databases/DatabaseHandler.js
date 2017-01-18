@@ -36,11 +36,19 @@ class DatabaseHandler {
     }
 
     /**
-     * Array of IDs.
+     * Array of IDs. Note that this calls the Collection's keyArray().
      * @return {string[]}
      */
     get ids(){
-        return Array.from(this.memory.keys());
+        return this.memory.keyArray();
+    }
+
+    /**
+     * Array of configs. Note that this calls the Collection's array().
+     * @return {string[]}
+     */
+    get configs(){
+        return this.memory.array();
     }
 
     /** 
