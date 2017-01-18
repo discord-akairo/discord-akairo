@@ -35,6 +35,14 @@ class ListenerHandler {
         filepaths.forEach(filepath => {
             this.load(filepath);
         });
+
+        /**
+         * EventEmitters for use, mapped by name to Listener. 'client' and 'commandHandler' are here by default.
+         * @type {Collection.<string, Listener>}
+         */
+        this.emitters = new Collection();
+        this.emitters.set('client', this.framework.client);
+        this.emitters.set('commandHandler', this.framework.commandHandler);
     }
 
     /**
@@ -109,12 +117,7 @@ class ListenerHandler {
         let listener = this.listeners.get(id);
         if (!listener) throw new Error(`Listener ${id} does not exist.`);
 
-        let emitters = {
-            client: this.framework.client,
-            commandHandler: this.framework.commandHandler
-        };
-
-        let emitter = listener.emitter instanceof EventEmitter ? listener.emitter : emitters[listener.emitter];
+        let emitter = listener.emitter instanceof EventEmitter ? listener.emitter : this.emitters.get(listener.emitter);
         if (!(emitter instanceof EventEmitter)) throw new Error('Listener\'s emitter is not an EventEmitter');
 
         if (listener.type === 'once'){
@@ -132,12 +135,7 @@ class ListenerHandler {
         let listener = this.listeners.get(id);
         if (!listener) throw new Error(`Listener ${id} does not exist.`);
 
-        let emitters = {
-            client: this.framework.client,
-            commandHandler: this.framework.commandHandler
-        };
-
-        let emitter = listener.emitter instanceof EventEmitter ? listener.emitter : emitters[listener.emitter];
+        let emitter = listener.emitter instanceof EventEmitter ? listener.emitter : this.emitters.get(listener.emitter);
         if (!(emitter instanceof EventEmitter)) throw new Error('Listener\'s emitter is not an EventEmitter');
 
         emitter.removeListener(listener.eventName, listener.exec);
