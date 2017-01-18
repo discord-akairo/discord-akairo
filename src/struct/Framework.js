@@ -67,6 +67,7 @@ class Framework {
 
     /**
      * Logins the client and creates a listener on client message event. Resolves once client is ready.
+     * @param {string} token - Client token.
      * @returns {Promise}
      */
     login(token){

@@ -50,7 +50,7 @@ class InhibitorHandler {
         inhibitor.filepath = filepath;
         inhibitor.framework = this.framework;
         inhibitor.client = this.framework.client;
-        inhibitor.handler = this;
+        inhibitor.inhibitorHandler = this;
 
         this.inhibitors.set(inhibitor.id, inhibitor);
     }
@@ -74,7 +74,7 @@ class InhibitorHandler {
      * Removes an Inhibitor.
      * @param {string} id - ID of the Inhibitor.
      */
-    removeInhibitor(id){
+    remove(id){
         let inhibitor = this.inhibitors.get(id);
         if (!inhibitor) throw new Error(`Inhibitor ${id} does not exist.`);
 
@@ -86,7 +86,7 @@ class InhibitorHandler {
      * Reloads an Inhibitor.
      * @param {string} id - ID of the Inhibitor.
      */
-    reloadInhibitor(id){
+    reload(id){
         let inhibitor = this.inhibitors.get(id);
         if (!inhibitor) throw new Error(`Inhibitor ${id} does not exist.`);
 

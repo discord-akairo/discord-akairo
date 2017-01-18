@@ -50,7 +50,7 @@ class ListenerHandler {
         listener.filepath = filepath;
         listener.framework = this.framework;
         listener.client = this.framework.client;
-        listener.handler = this;
+        listener.listenerHandler = this;
 
         this.listeners.set(listener.id, listener);
         this.registerListener(listener.id);
@@ -75,7 +75,7 @@ class ListenerHandler {
      * Removes a Listener.
      * @param {string} id - ID of the Listener.
      */
-    removeListener(id){
+    remove(id){
         let listener = this.listeners.get(id);
         if (!listener) throw new Error(`Listener ${id} does not exist.`);
 
@@ -88,7 +88,7 @@ class ListenerHandler {
      * Reloads a Listener.
      * @param {string} id - ID of the Listener.
      */
-    reloadListener(id){
+    reload(id){
         let listener = this.listeners.get(id);
         if (!listener) throw new Error(`Listener ${id} does not exist.`);
 

@@ -57,21 +57,21 @@ class Inhibitor {
          * @readonly
          * @type {InhibitorHandler}
          */
-        this.handler = null;
+        this.inhibitorHandler = null;
     }
 
     /**
      * Reloads the inhibitor.
      */
     reload(){
-        this.handler.reloadInhibitor(this.id);
+        this.handler.reload(this.id);
     }
     
     /**
      * Removes the Inhibitor. It can be readded with the inhibitor handler.
      */
     remove(){
-        this.handler.removeInhibitor(this.id);
+        this.handler.remove(this.id);
     }
 
     /**

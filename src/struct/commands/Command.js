@@ -135,21 +135,21 @@ class Command {
          * @readonly
          * @type {CommandHandler}
          */
-        this.handler = null;
+        this.commandHandler = null;
     }
 
     /**
      * Reloads the Command.
      */
     reload(){
-        this.handler.reloadCommand(this.id);
+        this.handler.reload(this.id);
     }
 
     /**
      * Removes the Command. It can be readded with the command handler.
      */
     remove(){
-        this.handler.removeCommand(this.id);
+        this.handler.remove(this.id);
     }
 
     /**

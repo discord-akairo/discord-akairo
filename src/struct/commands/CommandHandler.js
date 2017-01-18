@@ -84,7 +84,7 @@ class CommandHandler extends EventEmitter {
         command.filepath = filepath;
         command.framework = this.framework;
         command.client = this.framework.client;
-        command.handler = this;
+        command.commandHandler = this;
 
         this.commands.set(command.id, command);
 
@@ -111,7 +111,7 @@ class CommandHandler extends EventEmitter {
      * Removes a Command.
      * @param {string} id - ID of the Command.
      */
-    removeCommand(id){
+    remove(id){
         let command = this.commands.get(id);
         if (!command) throw new Error(`Command ${id} does not exist.`);
 
@@ -125,7 +125,7 @@ class CommandHandler extends EventEmitter {
      * Reloads a Command.
      * @param {string} id - ID of the Command.
      */
-    reloadCommand(id){
+    reload(id){
         let command = this.commands.get(id);
         if (!command) throw new Error(`Command ${id} does not exist.`);
 
