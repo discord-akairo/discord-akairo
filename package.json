@@ -16,8 +16,7 @@
   },
   "devDependencies": {
     "docdash": "^0.4.0",
-    "jsdoc": "^3.4.3",
-    "minami": "^1.1.1"
+    "jsdoc": "^3.4.3"
   },
   "scripts": {
     "generate-docs": "node_modules/.bin/jsdoc --configure .jsdoc.json --verbose"
