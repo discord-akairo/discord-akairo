@@ -2,10 +2,11 @@ class Inhibitor {
     /**
      * Creates a new Inhibitor.
      * @param {string} id - Inhibitor ID.
-     * @param {string} reason - Reason emitted when a command is blocked.
+     * @param {string} reason - Reason emitted when a command/message is blocked.
+     * @param {boolean} preMessage - Makes this inhibitor run before the message is handled rather than after.
      * @param {function} exec - Function (<code>(message, command) => {}</code>) called before a command is ran. Return true or a rejecting Promise to block.
      */
-    constructor(id, reason, exec){
+    constructor(id, reason, preMessage, exec){
         /**
          * ID of the Inhibitor.
          * @type {string}
@@ -17,6 +18,12 @@ class Inhibitor {
          * @type {string}
          */
         this.reason = reason;
+
+        /**
+         * Inhibitor runs before message is handled.
+         * @type {boolean}
+         */
+        this.preMessage = preMessage;
 
         /**
          * Function called to inhibit.
@@ -46,25 +53,25 @@ class Inhibitor {
         this.client = null;
 
         /**
-         * The command handler.
+         * The inhibitor handler.
          * @readonly
-         * @type {CommandHandler}
+         * @type {InhibitorHandler}
          */
-        this.commandHandler = null;
+        this.handler = null;
     }
 
     /**
      * Reloads the inhibitor.
      */
     reload(){
-        this.commandHandler.reloadInhibitor(this.id);
+        this.handler.reloadInhibitor(this.id);
     }
     
     /**
-     * Removes the Inhibitor. It can be readded with the command handler.
+     * Removes the Inhibitor. It can be readded with the inhibitor handler.
      */
     remove(){
-        this.commandHandler.removeInhibitor(this.id);
+        this.handler.removeInhibitor(this.id);
     }
 
     /**

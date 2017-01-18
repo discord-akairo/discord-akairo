@@ -64,21 +64,21 @@ class Listener {
          * @readonly
          * @type {ListenerHandler}
          */
-        this.listenerHandler = null;
+        this.handler = null;
     }
 
     /**
      * Reloads the Listener.
      */
     reload(){
-        this.listenerHandler.reloadListener(this.id);
+        this.handler.reloadListener(this.id);
     }
 
     /**
      * Removes the Listener. It can be readded with the listener handler.
      */
     remove(){
-        this.listenerHandler.removeListener(this.id);
+        this.handler.removeListener(this.id);
     }
 
     /**

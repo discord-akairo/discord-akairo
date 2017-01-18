@@ -8,8 +8,9 @@ class ListenerHandler {
     /**
      * Loads Listeners and register them with EventEmitters.
      * @param {Framework} framework - The Akairo framework.
+     * @param {Object} options - Options from framework.
      */
-    constructor(framework){
+    constructor(framework, options){
         /**
          * The Akairo framework.
          * @readonly
@@ -22,7 +23,7 @@ class ListenerHandler {
          * @readonly
          * @type {string}
          */
-        this.directory = path.resolve(this.framework.options.listenerDirectory);
+        this.directory = path.resolve(options.listenerDirectory);
 
         /**
          * Listeners loaded, mapped by ID to Listener.
@@ -30,9 +31,9 @@ class ListenerHandler {
          */
         this.listeners = new Collection();
 
-        let lisPaths = rread.fileSync(this.directory);
-        lisPaths.forEach(filepath => {
-            this.loadListener(filepath);
+        let filepaths = rread.fileSync(this.directory);
+        filepaths.forEach(filepath => {
+            this.load(filepath);
         });
     }
 
@@ -40,7 +41,7 @@ class ListenerHandler {
      * Loads a Listener.
      * @param {string} filepath - Path to file.
      */
-    loadListener(filepath){
+    load(filepath){
         let listener = require(filepath);
 
         if (!(listener instanceof Listener)) return;
@@ -49,7 +50,7 @@ class ListenerHandler {
         listener.filepath = filepath;
         listener.framework = this.framework;
         listener.client = this.framework.client;
-        listener.listenerHandler = this;
+        listener.handler = this;
 
         this.listeners.set(listener.id, listener);
         this.registerListener(listener.id);
@@ -59,7 +60,7 @@ class ListenerHandler {
      * Adds a Listener.
      * @param {string} filename - Filename to lookup in the directory.
      */
-    addListener(filename){
+    add(filename){
         let files = rread.fileSync(this.directory);
         let filepath = files.find(file => file.endsWith(`${filename}.js`));
 
@@ -67,7 +68,7 @@ class ListenerHandler {
             throw new Error(`File ${filename} not found.`);
         }
 
-        this.loadListener(filepath);
+        this.load(filepath);
     }
 
     /**
@@ -97,7 +98,7 @@ class ListenerHandler {
         this.deregisterListener(listener.id);
         this.listeners.delete(listener.id);
         
-        this.loadListener(filepath);
+        this.load(filepath);
     }
     
     /**

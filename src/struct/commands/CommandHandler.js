@@ -3,7 +3,6 @@ const rread = require('readdir-recursive');
 const EventEmitter = require('events');
 const Collection = require('discord.js').Collection;
 const Command = require('./Command');
-const Inhibitor = require('./Inhibitor');
 const Category = require('./Category');
 
 /** @extends EventEmitter */
@@ -11,8 +10,9 @@ class CommandHandler extends EventEmitter {
     /**
      * Loads Commands and Inhibitors and handles messages.
      * @param {Framework} framework - The Akairo framework.
+     * @param {Object} options - Options from framework.
      */
-    constructor(framework){
+    constructor(framework, options = {}){
         super();
 
         /**
@@ -27,14 +27,31 @@ class CommandHandler extends EventEmitter {
          * @readonly
          * @type {string}
          */
-        this.commandDirectory = path.resolve(this.framework.options.commandDirectory);
+        this.directory = path.resolve(options.commandDirectory);
 
         /**
-         * Directory to inhibitors.
-         * @readonly
-         * @type {string}
+         * Whether or not the built-in pre-message inhibitors are disabled.
+         * @type {boolean}
          */
-        this.inhibitorDirectory = path.resolve(this.framework.options.inhibitorDirectory);
+        this.preInhibDisabled = !!options.disablePreInhib;
+
+        /**
+         * Whether or not the built-in post-message inhibitors are disabled.
+         * @type {boolean}
+         */
+        this.postInhibDisabled = !!options.disablePostInhib;
+
+        /**
+         * Gets the prefix.
+         * @type {function}
+         */
+        this.prefix = typeof options.prefix === 'function' ? options.prefix : () => options.prefix;
+
+        /**
+         * Gets if mentions are allowed for prefixing.
+         * @type {function}
+         */
+        this.allowMention = typeof options.prefix === 'function' ? options.prefix : () => options.allowMention;
 
         /**
          * Commands loaded, mapped by ID to Command.
@@ -48,20 +65,9 @@ class CommandHandler extends EventEmitter {
          */
         this.categories = new Collection();
 
-        /**
-         * Inhibitors loaded, mapped by ID to Inhibitor.
-         * @type {Collection.<string, Inhibitor>}
-         */
-        this.inhibitors = new Collection();
-
-        let cmdPaths = rread.fileSync(this.commandDirectory);
-        cmdPaths.forEach(filepath => {
-            this.loadCommand(filepath);
-        });
-
-        let inhibPaths = rread.fileSync(this.inhibitorDirectory);
-        inhibPaths.forEach(filepath => {
-            this.loadInhibitor(filepath);
+        let filepaths = rread.fileSync(this.directory);
+        filepaths.forEach(filepath => {
+            this.load(filepath);
         });
     }
 
@@ -69,7 +75,7 @@ class CommandHandler extends EventEmitter {
      * Loads a Command.
      * @param {string} filepath - Path to file.
      */
-    loadCommand(filepath){
+    load(filepath){
         let command = require(filepath);
 
         if (!(command instanceof Command)) return;
@@ -78,7 +84,7 @@ class CommandHandler extends EventEmitter {
         command.filepath = filepath;
         command.framework = this.framework;
         command.client = this.framework.client;
-        command.commandHandler = this;
+        command.handler = this;
 
         this.commands.set(command.id, command);
 
@@ -90,15 +96,15 @@ class CommandHandler extends EventEmitter {
      * Adds a Command.
      * @param {string} filename - Filename to lookup in the directory. A .js extension is assumed.
      */
-    addCommand(filename){
-        let files = rread.fileSync(this.commandDirectory);
+    add(filename){
+        let files = rread.fileSync(this.directory);
         let filepath = files.find(file => file.endsWith(`${filename}.js`));
 
         if (!filepath){
             throw new Error(`File ${filename} not found.`);
         }
 
-        this.loadCommand(filepath);
+        this.load(filepath);
     }
 
     /**
@@ -130,7 +136,7 @@ class CommandHandler extends EventEmitter {
 
         this.categories.get(command.options.category).commands.delete(command.id);
         
-        this.loadCommand(filepath);
+        this.load(filepath);
     }
 
     /**
@@ -150,70 +156,9 @@ class CommandHandler extends EventEmitter {
      * @returns {Category}
      */
     findCategory(name){
-        return this.categories.find(cat => {
-            return cat.id.toLowerCase() === name.toLowerCase();
+        return this.categories.find(category => {
+            return category.id.toLowerCase() === name.toLowerCase();
         });
-    }
-
-    /**
-     * Loads an Inhibitor.
-     * @param {string} filepath - Path to file.
-     */
-    loadInhibitor(filepath){
-        let inhibitor = require(filepath);
-
-        if (!(inhibitor instanceof Inhibitor)) return;
-        if (this.inhibitors.has(inhibitor.id)) throw new Error(`Inhibitor ${inhibitor.id} already loaded.`);
-
-        inhibitor.filepath = filepath;
-        inhibitor.framework = this.framework;
-        inhibitor.client = this.framework.client;
-        inhibitor.commandHandler = this;
-
-        this.inhibitors.set(inhibitor.id, inhibitor);
-    }
-
-    /**
-     * Adds an Inhibitor.
-     * @param {string} filename - Filename to lookup in the directory. A .js extension is assumed.
-     */
-    addInhibitor(filename){
-        let files = rread.fileSync(this.inhibitorDirectory);
-        let filepath = files.find(file => file.endsWith(`${filename}.js`));
-
-        if (!filepath){
-            throw new Error(`File ${filename} not found.`);
-        }
-
-        this.loadInhibitor(filepath);
-    }
-
-    /**
-     * Removes an Inhibitor.
-     * @param {string} id - ID of the Inhibitor.
-     */
-    removeInhibitor(id){
-        let inhibitor = this.inhibitors.get(id);
-        if (!inhibitor) throw new Error(`Inhibitor ${id} does not exist.`);
-
-        delete require.cache[require.resolve(inhibitor.filepath)];
-        this.inhibitors.delete(inhibitor.id);
-    }
-
-    /**
-     * Reloads an Inhibitor.
-     * @param {string} id - ID of the Inhibitor.
-     */
-    reloadInhibitor(id){
-        let inhibitor = this.inhibitors.get(id);
-        if (!inhibitor) throw new Error(`Inhibitor ${id} does not exist.`);
-
-        let filepath = inhibitor.filepath;
-
-        delete require.cache[require.resolve(inhibitor.filepath)];
-        this.inhibitors.delete(inhibitor.id);
-        
-        this.loadInhibitor(filepath);
     }
 
     /**
@@ -221,84 +166,64 @@ class CommandHandler extends EventEmitter {
      * @param {Message} message - Message to handle.
      */
     handle(message){
-        if (!this.framework.options.disableBuiltIn){
-            if (message.author.id !== this.framework.client.user.id && this.framework.options.selfbot) return this.emit('messageBlocked', message, 'notSelf');
-            if (message.author.id === this.framework.client.user.id && !this.framework.options.selfbot) return this.emit('messageBlocked', message, 'client');
+        if (!this.preInhibDisabled){
+            if (message.author.id !== this.framework.client.user.id && this.framework.client.selfbot) return this.emit('messageBlocked', message, 'notSelf');
+            if (message.author.id === this.framework.client.user.id && !this.framework.client.selfbot) return this.emit('messageBlocked', message, 'client');
             if (message.author.bot) return this.emit('messageBlocked', message, 'bot');
         }
 
-        let prefix;
-        let allowMention;
+        this.framework.inhibitorHandler.testMessage(message).then(() => {
+            let prefix = this.prefix(message);
+            let allowMention = this.allowMention(message);
 
-        if (typeof this.framework.options.prefix === 'function'){
-            prefix = this.framework.options.prefix(message) || '!';
-        } else {
-            prefix = this.framework.options.prefix || '!';
-        }
+            let start;
 
-        if (typeof this.framework.options.allowMention === 'function'){
-            allowMention = this.framework.options.allowMention(message) || true;
-        } else {
-            allowMention = this.framework.options.allowMention || true;
-        }
+            if (message.content.startsWith(prefix)){
+                start = prefix;
+            } else
+            if (allowMention){
+                let mentionRegex = new RegExp(`^<@!?${this.framework.client.user.id}>`);
+                let mentioned = message.content.match(mentionRegex);
+                
+                if (mentioned){
+                    start = mentioned[0]; 
+                } else {
+                    return this.emit('messageInvalid', message);
+                }
+            } else {
+                return this.emit('messageInvalid', message);
+            }
 
-        let start;
-        let mentionRegex = new RegExp(`^<@!?${this.framework.client.user.id}>`);
-        let mentioned = message.content.match(mentionRegex);
+            let firstWord = message.content.replace(start, '').search(/\S/) + start.length;
+            let name = message.content.slice(firstWord).split(' ')[0];
+            let command = this.findCommand(name);
 
-        if (message.content.startsWith(prefix)){
-            start = prefix;
-        } else
-        if (allowMention && mentioned){
-            start = mentioned[0];
-        } else {
-            return this.emit('commandInvalid', message);
-        }
+            if (!command) return this.emit('messageInvalid', message);
 
-        let firstWord = message.content.replace(start, '').search(/\S/) + start.length;
-        let name = message.content.slice(firstWord).split(' ')[0];
-        let command = this.findCommand(name);
+            if (!this.postInhibDisabled){
+                if (command.options.ownerOnly && message.author.id !== this.framework.client.ownerID) return this.emit('commandBlocked', message, command, 'owner');
+                if (command.options.channelRestriction === 'guild' && !message.guild) return this.emit('commandBlocked', message, command, 'guild');
+                if (command.options.channelRestriction === 'dm' && message.guild) return this.emit('commandBlocked', message, command, 'dm');
+            }
 
-        if (!command) return this.emit('commandInvalid', message);
+            this.framework.inhibitorHandler.testCommand(message, command).then(() => {
+                let content = message.content.slice(message.content.indexOf(name) + name.length + 1);
+                let args = command.parse(content);
 
-        let block = reason => {
-            this.emit('commandBlocked', message, command, reason);
-        };
+                this.emit('commandStarted', message, command);
+                let end = Promise.resolve(command.exec(message, args));
 
-        if (!this.framework.options.disableBuiltIn){
-            if (command.options.ownerOnly && message.author.id !== this.framework.options.ownerID) return block('owner');
-            if (command.options.channelRestriction === 'guild' && !message.guild) return block('guild');
-            if (command.options.channelRestriction === 'dm' && message.guild) return block('dm');
-        }
-
-        let p = this.inhibitors.map(inhibitor => {
-            let inhibited = inhibitor.exec(message, command);
-
-            if (inhibited instanceof Promise) return inhibited.catch(err => {
-                if (err instanceof Error) throw err;
-                throw inhibitor.reason;
-            });
-            
-            if (!inhibited) return Promise.resolve();
-            return Promise.reject(inhibitor.reason);
-        });
-
-        Promise.all(p).then(() => {
-            let content = message.content.slice(message.content.indexOf(name) + name.length + 1);
-            let args = command.parse(content);
-
-            this.emit('commandStarted', message, command);
-            let end = Promise.resolve(command.exec(message, args));
-
-            end.then(() => {
-                this.emit('commandFinished', message, command);
-            }).catch(err => {
-                this.emit('commandFinished', message, command);
-                throw err;
+                end.then(() => {
+                    this.emit('commandFinished', message, command);
+                }).catch(err => {
+                    this.emit('commandFinished', message, command);
+                    throw err;
+                });
+            }).catch(reason => {
+                this.emit('commandBlocked', message, command, reason);
             });
         }).catch(reason => {
-            if (reason instanceof Error) throw reason;
-            block(reason);
+            this.emit('messageBlocked', message, reason);
         });
     }
 }
@@ -306,7 +231,7 @@ class CommandHandler extends EventEmitter {
 module.exports = CommandHandler;
 
 /**
- * Emitted when a message is blocked by a built-in pre-command inhibitor. They are 'notSelf' (for selfbots), 'client', and 'bot'.
+ * Emitted when a message is blocked by a pre-message inhibitor. The built-in inhibitors are 'notSelf' (for selfbots), 'client', and 'bot'.
  * @event CommandHandler#messageBlocked
  * @param {Message} message Message sent.
  * @param {string} reason Reason for the block.
@@ -314,12 +239,12 @@ module.exports = CommandHandler;
 
 /**
  * Emitted when a message does not start with the prefix or match a command.
- * @event CommandHandler#commandInvalid
+ * @event CommandHandler#messageInvalid
  * @param {Message} message Message sent.
  */
 
 /**
- * Emitted when a command is blocked by an inhibitor. The built-in inhibitors are 'owner', 'guild', and 'dm'.
+ * Emitted when a command is blocked by a post-message inhibitor. The built-in inhibitors are 'owner', 'guild', and 'dm'.
  * @event CommandHandler#commandBlocked
  * @param {Message} message Message sent.
  * @param {Command} command Command blocked.

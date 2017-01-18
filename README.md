@@ -73,7 +73,7 @@ function exec(message){
     return blockedUsers.includes(message.author.id);
 }
 
-module.exports = new Inhibitor('blacklist', 'blacklist', exec);
+module.exports = new Inhibitor('blacklist', 'blacklist', false, exec);
 ```
 
 ### Event Listeners
@@ -98,7 +98,7 @@ module.exports = new Listener('commandBlocked', 'commandHandler', 'commandBlocke
 ```js
 // Somewhere...
 commandHandler.reloadCommand('roll');
-commandHandler.reloadInhibitor('blacklist');
+inhibitorHandler.reloadInhibitor('blacklist');
 listenerHandler.reloadListener('commandBlocked');
 
 // All reloaded!
