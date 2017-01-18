@@ -36,7 +36,7 @@ class ClientUtil {
      * Client utilities to help with common tasks. Accessible in client.util.
      * @param {Client} client - The Discord.js client.
      */
-    constructor(client){
+    constructor(client) {
         /** 
          * The Discord.js client. 
          * @readonly
@@ -51,11 +51,11 @@ class ClientUtil {
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @returns {User}
      */
-    resolveUser(text, caseSensitive = false){
+    resolveUser(text, caseSensitive = false) {
         let users = this.client.users;
 
         let reg = /<@!?(\d+)>/;
-        if (reg.test(text)){
+        if (reg.test(text)) {
             let id = text.match(reg)[1];
             return users.get(id);
         }
@@ -66,8 +66,14 @@ class ClientUtil {
 
             return username === t || username === t.split('#')[0] && u.discriminator === t.split('#')[1];
         };
+        let checkInc = u => {
+            let username = caseSensitive ? u.username : u.username.toLowerCase();
+            let t = caseSensitive ? text : text.toLowerCase();
 
-        return users.get(text) || users.find(check);
+            return username.includes(t) || username.includes(t.split('#')[0]) && u.discriminator.includes(t.split('#')[1]);
+
+        };
+        return users.get(text) || users.find(check) || users.find(checkInc);
     }
 
     /**
@@ -77,13 +83,13 @@ class ClientUtil {
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @returns {GuildMember|User}
      */
-    resolveMember(text, guild, caseSensitive = false){
+    resolveMember(text, guild, caseSensitive = false) {
         if (!guild) return this.resolveUser(text);
 
         let members = guild.members;
 
         let reg = /<@!?(\d+)>/;
-        if (reg.test(text)){
+        if (reg.test(text)) {
             let id = text.match(reg)[1];
             return members.get(id);
         }
@@ -95,8 +101,16 @@ class ClientUtil {
 
             return displayName === t || username === t || username === t.split('#')[0] && m.user.discriminator === t.split('#')[1];
         };
+        let checkInc = m => {
+            let username = caseSensitive ? m.user.username : m.user.username.toLowerCase();
+            let displayName = caseSensitive ? m.displayName : m.displayName.toLowerCase();
+            let t = caseSensitive ? text : text.toLowerCase();
 
-        return members.get(text) || members.find(check);
+            return displayName.includes(t) || username.includes(t) || username.includes(t.split('#')[0]) && m.user.discriminator.includes(t.split('#')[1]);
+
+        };
+
+        return members.get(text) || members.find(check) || members.find(checkInc);
     }
 
     /**
@@ -106,13 +120,13 @@ class ClientUtil {
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @returns {GuildChannel}
      */
-    resolveChannel(text, guild, caseSensitive = false){
+    resolveChannel(text, guild, caseSensitive = false) {
         if (!guild) throw new Error('Guild must be specified.');
 
         let channels = guild.channels;
 
         let reg = /<#(\d+)>/;
-        if (reg.test(text)){
+        if (reg.test(text)) {
             let id = text.match(reg)[1];
             return channels.get(id);
         }
@@ -123,8 +137,15 @@ class ClientUtil {
 
             return name === t || name === t.replace(/^#/, '');
         };
+        let checkInc = c => {
+            let name = caseSensitive ? c.name : c.name.toLowerCase();
+            let t = caseSensitive ? text : text.toLowerCase();
 
-        return channels.get(text) || channels.find(check);
+            return name.includes(t) || name.includes(t.replace(/^#/, ''));
+
+        };
+
+        return channels.get(text) || channels.find(check) || channels.find(checkInc);
     }
 
     /**
@@ -134,13 +155,13 @@ class ClientUtil {
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @returns {Role}
      */
-    resolveRole(text, guild, caseSensitive = false){
+    resolveRole(text, guild, caseSensitive = false) {
         if (!guild) throw new Error('Guild must be specified.');
 
         let roles = guild.roles;
 
         let reg = /<@&(\d+)>/;
-        if (reg.test(text)){
+        if (reg.test(text)) {
             let id = text.match(reg)[1];
             return roles.get(id);
         }
@@ -151,8 +172,15 @@ class ClientUtil {
 
             return name === t || name === t.replace(/^@/, '');
         };
+        let checkInc = r => {
+            let name = caseSensitive ? r.name : r.name.toLowerCase();
+            let t = caseSensitive ? text : text.toLowerCase();
 
-        return roles.get(text) || roles.find(check);
+            return name.includes(t) || name.includes(t.replace(/^@/, ''));
+
+        };
+
+        return roles.get(text) || roles.find(check) || roles.find(checkInc);
     }
 
     /**
@@ -162,13 +190,13 @@ class ClientUtil {
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @returns {Emoji}
      */
-    resolveEmoji(text, guild, caseSensitive = false){
+    resolveEmoji(text, guild, caseSensitive = false) {
         if (!guild) throw new Error('Guild must be specified.');
 
         let emojis = guild.emojis;
 
         let reg = /<:[a-zA-Z0-9_]+:(\d+)>/;
-        if (reg.test(text)){
+        if (reg.test(text)) {
             let id = text.match(reg)[1];
             return emojis.get(id);
         }
@@ -179,8 +207,41 @@ class ClientUtil {
 
             return name === t || name === t.replace(/:/g, '');
         };
+        let checkInc = e => {
+            let name = caseSensitive ? e.name : e.name.toLowerCase();
+            let t = caseSensitive ? text : text.toLowerCase();
 
-        return emojis.get(text) || emojis.find(check);
+            return name.includes(t) || name.includes(t.replace(/:/g, ''));
+
+        };
+
+        return emojis.get(text) || emojis.find(check) || emojis.find(checkInc);
+    }
+
+    /**
+     * Resolves a Guild from a string, such as an ID, or name.
+     * @param {string} text - Text to resolve.
+     * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
+     * @returns {Guild}
+     */
+    resolveGuild(text, caseSensitive = false) {
+        let guilds = this.client.guilds
+
+        let check = g => {
+            let name = caseSensitive ? g.name : g.name.toLowerCase();
+            let t = caseSensitive ? t : text.toLowerCase();
+
+            return name === t;
+        };
+        let checkInc = g => {
+            let name = caseSensitive ? g.name : g.name.toLowerCase();
+            let t = caseSensitive ? t : text.toLowerCase();
+
+            return name.includes(t);
+
+        };
+
+        return guilds.get(text) || guilds.find(check) || guilds.find(checkInc);
     }
 
     /**
@@ -188,10 +249,10 @@ class ClientUtil {
      * @param {GuildMember} member - The member to find color of.
      * @returns {number}
      */
-    displayColor(member){
+    displayColor(member) {
         let roles = member.roles.filter(r => r.color !== 0);
         if (roles.size === 0) return 0;
-        
+
         let highest = Math.max(...roles.map(r => r.position));
         return roles.find(r => r.position === highest).color;
     }
@@ -201,7 +262,7 @@ class ClientUtil {
      * @param {(number|PermissionResolvable[])} [permissions=0] - Permissions number or array of PermissionResolvables.
      * @return {Promise.<string>}
      */
-    createInvite(permissions = 0){
+    createInvite(permissions = 0) {
         return new Promise((resolve, reject) => {
             let perms = typeof permissions === 'number' ? permissions : this.client.resolver.resolvePermissions(permissions);
 
@@ -217,7 +278,7 @@ class ClientUtil {
      * @param {number} number - The permissions number.
      * @returns {string[]}
      */
-    resolvePermissionNumber(number){
+    resolvePermissionNumber(number) {
         let resolved = [];
 
         Object.keys(PERMISSIONS).forEach(key => {
