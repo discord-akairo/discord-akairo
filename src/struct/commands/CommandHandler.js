@@ -51,7 +51,7 @@ class CommandHandler extends EventEmitter {
          * Gets if mentions are allowed for prefixing.
          * @type {function}
          */
-        this.allowMention = typeof options.prefix === 'function' ? options.prefix : () => options.allowMention;
+        this.allowMention = typeof options.allowMention === 'function' ? options.allowMention : () => options.allowMention;
 
         /**
          * Commands loaded, mapped by ID to Command.
