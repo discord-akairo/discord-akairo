@@ -78,6 +78,15 @@ class Framework {
             if (this.commandHandler) this.client.on('message', m => { this.commandHandler.handle(m); });
         });
     }
+    
+    process.on('uncaughtException', err => {
+        console.error(err.stack.replace(new RegExp(`${__dirname}\/`, 'g'), './'));
+      });
+
+      process.on("unhandledRejection", err => {
+        console.error(`Uncaught Promise Error:\n${err.stack}`);
+      });
+    
 }
 
 module.exports = Framework;
