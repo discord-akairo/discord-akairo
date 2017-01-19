@@ -130,9 +130,9 @@ module.exports = new Listener('commandBlocked', exec, {
     eventName: 'commandBlocked',
     type: 'on'
 });</code></pre><h4>Reloading</h4><pre class="prettyprint source lang-js"><code>// Somewhere...
-commandHandler.reloadCommand('roll');
-inhibitorHandler.reloadInhibitor('blacklist');
-listenerHandler.reloadListener('commandBlocked');
+commandHandler.reload('roll');
+inhibitorHandler.reload('blacklist');
+listenerHandler.reload('commandBlocked');
 
 // All reloaded!</code></pre><h4>SQLite Support</h4><pre class="prettyprint source lang-js"><code>const guildDefault = require('./databases/guildDefault.json');
 const guildSQL = new Akairo.SQLiteHandler('./databases/guilds.sqlite', 'guildConfigs', guildDefault);
