@@ -61,7 +61,7 @@ module.exports = new Command('roll', exec, {
             id: 'limit',
             type: 'number',
             defaultValue: 100,
-            descriptions: 'Maximum number to roll.'
+            description: 'Maximum number to roll.'
         },
         {
             id: 'noFloor', 
@@ -71,7 +71,7 @@ module.exports = new Command('roll', exec, {
         }
     ],
     category: 'numbers',
-    descriptions: 'Rolls a number!',
+    description: 'Rolls a number!',
     channelRestriction: 'guild'
 });
 ```
