@@ -10,8 +10,9 @@
     </a>
 </p>  
 
-# About
-A bot framework for Discord.js v11, where everything is reloadable, commands are easy as cake to make, and argument parsing is very flexible.  
+## About
+A modular and customizable bot framework for Discord.js v11.  
+Everything is reloadable, commands are easy to make, and argument parsing is very flexible.  
 
 ```js
 const Discord = require('discord.js');
@@ -19,31 +20,30 @@ const Akairo = require('discord-akairo');
 
 const client = new Discord.Client();
 const akairo = new Akairo.Framework(client, {
-    token: 'TOKEN', 
-    ownerID: 'ID', 
-    prefix: '!', 
-    allowMention: true, 
-    commandDirectory: './src/commands/', 
+    ownerID: 'ID',
+    prefix: '!',
+    commandDirectory: './src/commands/',
     inhibitorDirectory: './src/inhibitors/',
     listenerDirectory: './src/listeners/'
 });
 
-akairo.login().then(() => {
+akairo.login('TOKEN').then(() => {
     console.log('Started up!');
 });
 ```
 
-# Installation
+## Installation
 discord-akairo: `npm install discord-akairo --save`  
 discord.js: `npm install discord.js --save`  
-sqlite: `npm install sqlite --save`  
+sqlite (optional): `npm install sqlite --save`  
 
-# Documentation
+## Documentation
 Documentation is available on [https://1computer1.github.io/discord-akairo/index.html](https://1computer1.github.io/discord-akairo/index.html).  
+Changelog is available on [https://github.com/1Computer1/discord-akairo/releases](https://github.com/1Computer1/discord-akairo/releases).  
 If you need more help, message me on Discord: 1Computer#7952.  
 
-# Examples
-### Commands and Arguments
+## Examples
+#### Commands and Arguments
 ```js
 const Command = require('discord-akairo').Command;
 
@@ -54,15 +54,29 @@ function exec(message, args){
     message.channel.send(random);
 }
 
-module.exports = new Command('roll', ['roll', 'dice', 'rng'], [
-    {id: 'limit', type: 'number', defaultValue: 100},
-    {id: 'noFloor', parse: 'flag', prefix: '--noFloor'}
-], exec, {
+module.exports = new Command('roll', exec, {
+    aliases: ['roll', 'dice', 'rng'],
+    args: [
+        {
+            id: 'limit',
+            type: 'number',
+            defaultValue: 100,
+            descriptions: 'Maximum number to roll.'
+        },
+        {
+            id: 'noFloor', 
+            match: 'flag', 
+            prefix: '--noFloor',
+            description: 'Disables flooring the output.'
+        }
+    ],
+    category: 'numbers',
+    descriptions: 'Rolls a number!',
     channelRestriction: 'guild'
 });
 ```
 
-### Command Inhibitors
+#### Command Inhibitors
 ```js
 const Inhibitor = require('discord-akairo').Inhibitor;
 const blockedUsers = ['1234', '5678', '1357', '2468'];
@@ -71,10 +85,12 @@ function exec(message){
     return blockedUsers.includes(message.author.id);
 }
 
-module.exports = new Inhibitor('blacklist', 'blacklist', exec);
+module.exports = new Inhibitor('blacklist', exec, {
+    reason: 'blacklist'
+});
 ```
 
-### Event Listeners
+#### Event Listeners
 ```js
 const Listener = require('discord-akairo').Listener;
 
@@ -89,24 +105,29 @@ function exec(message, command, reason){
     if (replies[reason]) message.reply(replies[reason]);
 }
 
-module.exports = new Listener('commandBlocked', 'commandHandler', 'commandBlocked', 'on', exec);
+module.exports = new Listener('commandBlocked', exec, {
+    emitter: 'commandHandler',
+    eventName: 'commandBlocked',
+    type: 'on'
+});
 ```
 
-### Reloading
+#### Reloading
 ```js
 // Somewhere...
 commandHandler.reloadCommand('roll');
-commandHandler.reloadInhibitor('blacklist');
+inhibitorHandler.reloadInhibitor('blacklist');
 listenerHandler.reloadListener('commandBlocked');
 
 // All reloaded!
 ```
 
-### SQLite Support
+#### SQLite Support
 ```js
-const guildSQL = new Akairo.SQLiteHandler('./databases/guilds.sqlite', 'guildConfigs', require('./databases/guildDefault.json'));
+const guildDefault = require('./databases/guildDefault.json');
+const guildSQL = new Akairo.SQLiteHandler('./databases/guilds.sqlite', 'guildConfigs', guildDefault);
 
-akairo.login().then(() => {
+akairo.login('TOKEN').then(() => {
     guildSQL.init(client.guilds.map(g => g.id)).then(() => {
         console.log(guildSQL.get('123456').prefix) // Hopefully not '!'
     });

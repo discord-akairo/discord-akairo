@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>inhibitors/InhibitorHandler.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">inhibitors/InhibitorHandler.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const path = require('path');
+const rread = require('readdir-recursive');
+const Collection = require('discord.js').Collection;
+const Inhibitor = require('./Inhibitor');
+
+/** @extends EventEmitter */
+class InhibitorHandler {
+    /**
+     * Loads Inhibitors and checks messages.
+     * @param {Framework} framework - The Akairo framework.
+     * @param {Object} options - Options from framework.
+     */
+    constructor(framework, options = {}){
+        /**
+         * The Akairo framework.
+         * @readonly
+         * @type {Framework}
+         */
+        this.framework = framework;
+
+        /**
+         * Directory to inhibitors.
+         * @readonly
+         * @type {string}
+         */
+        this.directory = path.resolve(options.inhibitorDirectory);
+
+        /**
+         * Inhibitors loaded, mapped by ID to Inhibitor.
+         * @type {Collection.&lt;string, Inhibitor>}
+         */
+        this.inhibitors = new Collection();
+
+        let filepaths = rread.fileSync(this.directory);
+        filepaths.forEach(filepath => {
+            this.load(filepath);
+        });
+    }
+
+    /**
+     * Loads an Inhibitor.
+     * @param {string} filepath - Path to file.
+     */
+    load(filepath){
+        let inhibitor = require(filepath);
+
+        if (!(inhibitor instanceof Inhibitor)) return;
+        if (this.inhibitors.has(inhibitor.id)) throw new Error(`Inhibitor ${inhibitor.id} already loaded.`);
+
+        inhibitor.filepath = filepath;
+        inhibitor.framework = this.framework;
+        inhibitor.client = this.framework.client;
+        inhibitor.inhibitorHandler = this;
+
+        this.inhibitors.set(inhibitor.id, inhibitor);
+    }
+
+    /**
+     * Adds an Inhibitor.
+     * @param {string} filename - Filename to lookup in the directory. A .js extension is assumed.
+     */
+    add(filename){
+        let files = rread.fileSync(this.directory);
+        let filepath = files.find(file => file.endsWith(`${filename}.js`));
+
+        if (!filepath){
+            throw new Error(`File ${filename} not found.`);
+        }
+
+        this.load(filepath);
+    }
+
+    /**
+     * Removes an Inhibitor.
+     * @param {string} id - ID of the Inhibitor.
+     */
+    remove(id){
+        let inhibitor = this.inhibitors.get(id);
+        if (!inhibitor) throw new Error(`Inhibitor ${id} does not exist.`);
+
+        delete require.cache[require.resolve(inhibitor.filepath)];
+        this.inhibitors.delete(inhibitor.id);
+    }
+
+    /**
+     * Reloads an Inhibitor.
+     * @param {string} id - ID of the Inhibitor.
+     */
+    reload(id){
+        let inhibitor = this.inhibitors.get(id);
+        if (!inhibitor) throw new Error(`Inhibitor ${id} does not exist.`);
+
+        let filepath = inhibitor.filepath;
+
+        delete require.cache[require.resolve(inhibitor.filepath)];
+        this.inhibitors.delete(inhibitor.id);
+        
+        this.load(filepath);
+    }
+
+    /**
+     * Tests the pre-message inhibitors against the message. Rejects with the reason if blocked.
+     * @param {Message} message - Message to test.
+     * @returns {Promise.&lt;string>}
+     */
+    testMessage(message){
+        return new Promise((resolve, reject) => {
+            let promises = this.inhibitors.filter(i => i.preMessage &amp;&amp; i.enabled).map(inhibitor => {
+                let inhibited = inhibitor.exec(message);
+
+                if (inhibited instanceof Promise) return inhibited.catch(err => {
+                    if (err instanceof Error) throw err;
+                    throw inhibitor.reason;
+                });
+                
+                if (!inhibited) return Promise.resolve();
+                return Promise.reject(inhibitor.reason);
+            });
+
+            Promise.all(promises).then(resolve).catch(errOrReason => {
+                if (errOrReason instanceof Error) throw errOrReason;
+                reject(errOrReason);
+            });
+        });
+    }
+
+    /**
+     * Tests the post-message inhibitors against the message and command. Rejects with the reason if blocked.
+     * @param {Message} message - Message to test.
+     * @param {Command} command - Command to test.
+     * @returns {Promise.&lt;string>}
+     */
+    testCommand(message, command){
+        return new Promise((resolve, reject) => {
+            let promises = this.inhibitors.filter(i => !i.preMessage &amp;&amp; i.enabled).map(inhibitor => {
+                let inhibited = inhibitor.exec(message, command);
+
+                if (inhibited instanceof Promise) return inhibited.catch(err => {
+                    if (err instanceof Error) throw err;
+                    throw inhibitor.reason;
+                });
+                
+                if (!inhibited) return Promise.resolve();
+                return Promise.reject(inhibitor.reason);
+            });
+
+            Promise.all(promises).then(resolve).catch(errOrReason => {
+                if (errOrReason instanceof Error) throw errOrReason;
+                reject(errOrReason);
+            });
+        });
+    }
+}
+
+module.exports = InhibitorHandler;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

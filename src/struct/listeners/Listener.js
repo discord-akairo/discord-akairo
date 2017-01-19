@@ -1,13 +1,19 @@
+/**
+ * Options to use for listener execution behavior.
+ * @typedef {Object} ListenerOptions
+ * @prop {string|EventEmitter} [emitter='client'] - The event emitter: 'client' or 'commandHandler' or an EventEmitter.
+ * @prop {string} [eventName='ready'] - Event name to listen to.
+ * @prop {string} [type='on'] - Type of listener: 'on' or 'once'.
+ */
+
 class Listener {
     /**
      * Creates a new Listener.
      * @param {string} id - Listener ID.
-     * @param {(string|EventEmitter)} emitter - The event emitter: 'client' or 'commandHandler' or an EventEmitter.
-     * @param {string} eventName - Event to listen to.
-     * @param {string} type - Type of listener: 'on' or 'once'.
-     * @param {function} exec - The function called when event emitted. (...)
+     * @param {function} exec - The function (<code>(...) => {}</code>) called when event emitted.
+     * @param {ListenerOptions} [options={}] - Options for the listener.
      */
-    constructor(id, emitter, eventName, type, exec){
+    constructor(id, exec, options = {}){
         /**
          * ID of the Listener.
          * @type {string}
@@ -16,27 +22,33 @@ class Listener {
 
         /**
          * The event emitter.
-         * @type {(string|EventEmitter)}
+         * @type {string|EventEmitter}
          */
-        this.emitter = emitter;
+        this.emitter = options.emitter || 'client';
 
         /**
          * The event name listened to.
          * @type {string}
          */
-        this.eventName = eventName;
+        this.eventName = options.eventName || 'ready';
 
         /**
          * Type of listener.
          * @type {string}
          */
-        this.type = type;
+        this.type = options.type || 'on';
 
         /**
          * The function called when event emitted.
          * @type {function}
          */
         this.exec = exec.bind(this);
+
+        /**
+         * Whether or not this listener is enabled.
+         * @type {boolean}
+         */
+        this.enabled = true;
 
         /**
          * Path to Listener file.
@@ -71,14 +83,34 @@ class Listener {
      * Reloads the Listener.
      */
     reload(){
-        this.listenerHandler.reloadListener(this.id);
+        this.listenerHandler.reload(this.id);
     }
 
     /**
      * Removes the Listener. It can be readded with the listener handler.
      */
     remove(){
-        this.listenerHandler.removeListener(this.id);
+        this.listenerHandler.remove(this.id);
+    }
+
+    /**
+     * Enables the listener.
+     */
+    enable(){
+        if (this.enabled) return;
+
+        this.listenerHandler.register(this.id);
+        this.enabled = true;
+    }
+
+    /**
+     * Disables the listener.
+     */
+    disable(){
+        if (!this.enabled) return;
+
+        this.listenerHandler.deregister(this.id);
+        this.enabled = false;
     }
 
     /**

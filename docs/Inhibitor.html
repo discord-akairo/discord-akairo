@@ -9,9 +9,8 @@
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
 </head>
 <body>
 
@@ -23,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -54,9 +53,54 @@
 
     
 
-    <h4 class="name" id="Inhibitor"><span class="type-signature"></span>new Inhibitor<span class="signature">(id, reason, exec)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Inhibitor"><span class="type-signature"></span>new Inhibitor<span class="signature">(id, exec, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line15">line 15</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
@@ -72,6 +116,9 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -84,7 +131,11 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -109,33 +160,22 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last">Inhibitor ID.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>reason</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Reason emitted when a command is blocked.</td>
         </tr>
 
     
@@ -155,10 +195,61 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
             
 
-            <td class="description last">Function called before a command is ran. Return true or a rejecting Promise to block. (message, command)</td>
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Function (<code>(message, command) => {}</code>) called before a command is ran. Return true or a rejecting Promise to block.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#InhibitorOptions">InhibitorOptions</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>{}</code>
+                
+                </td>
+            
+
+            <td class="description last">Options for the inhibitor.</td>
         </tr>
 
     
@@ -168,46 +259,6 @@
 
 
 
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Inhibitor.js.html">commands/Inhibitor.js</a>, <a href="commands_Inhibitor.js.html#line8">line 8</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -238,7 +289,52 @@
 
         
             
-<h4 class="name" id="client"><span class="type-signature">(readonly) </span>client<span class="type-signature"> Client</span></h4>
+<h4 class="name" id="client"><span class="type-signature">(readonly) </span>client<span class="type-signature"> :Client</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line65">line 65</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
 
 
 
@@ -249,38 +345,60 @@
 
 
 
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Client</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="enabled"><span class="type-signature"></span>enabled<span class="type-signature"> :boolean</span></h4>
+
+
+
 
 
 <dl class="details">
 
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
+    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Inhibitor.js.html">commands/Inhibitor.js</a>, <a href="commands_Inhibitor.js.html#line46">line 46</a>
+        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line44">line 44</a>
     </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
 
     
@@ -290,21 +408,34 @@
     
 </dl>
 
-
-
-
-
-
-        
-            
-<h4 class="name" id="commandHandler"><span class="type-signature">(readonly) </span>commandHandler<span class="type-signature"> <a href="CommandHandler.html">CommandHandler</a></span></h4>
 
 
 
 
 <div class="description">
-    The command handler.
+    Whether or not this inhibitor is enabled.
 </div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">boolean</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="exec"><span class="type-signature"></span>exec<span class="type-signature"> :function</span></h4>
 
 
 
@@ -313,33 +444,34 @@
 <dl class="details">
 
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
+    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Inhibitor.js.html">commands/Inhibitor.js</a>, <a href="commands_Inhibitor.js.html#line53">line 53</a>
+        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line38">line 38</a>
     </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
 
     
@@ -349,14 +481,6 @@
     
 </dl>
 
-
-
-
-
-
-        
-            
-<h4 class="name" id="exec"><span class="type-signature"></span>exec<span class="type-signature"> function</span></h4>
 
 
 
@@ -367,38 +491,60 @@
 
 
 
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">function</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="filepath"><span class="type-signature">(readonly) </span>filepath<span class="type-signature"> :string</span></h4>
+
+
+
 
 
 <dl class="details">
 
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
+    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Inhibitor.js.html">commands/Inhibitor.js</a>, <a href="commands_Inhibitor.js.html#line25">line 25</a>
+        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line51">line 51</a>
     </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
 
     
@@ -408,14 +554,6 @@
     
 </dl>
 
-
-
-
-
-
-        
-            
-<h4 class="name" id="filepath"><span class="type-signature">(readonly) </span>filepath<span class="type-signature"> string</span></h4>
 
 
 
@@ -426,38 +564,60 @@
 
 
 
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="framework"><span class="type-signature">(readonly) </span>framework<span class="type-signature"> :<a href="Framework.html">Framework</a></span></h4>
+
+
+
 
 
 <dl class="details">
 
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
+    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Inhibitor.js.html">commands/Inhibitor.js</a>, <a href="commands_Inhibitor.js.html#line32">line 32</a>
+        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line58">line 58</a>
     </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
 
     
@@ -467,14 +627,6 @@
     
 </dl>
 
-
-
-
-
-
-        
-            
-<h4 class="name" id="framework"><span class="type-signature">(readonly) </span>framework<span class="type-signature"> <a href="Framework.html">Framework</a></span></h4>
 
 
 
@@ -485,38 +637,60 @@
 
 
 
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="Framework.html">Framework</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="id"><span class="type-signature"></span>id<span class="type-signature"> :string</span></h4>
+
+
+
 
 
 <dl class="details">
 
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
+    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Inhibitor.js.html">commands/Inhibitor.js</a>, <a href="commands_Inhibitor.js.html#line39">line 39</a>
+        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line20">line 20</a>
     </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
 
     
@@ -526,14 +700,6 @@
     
 </dl>
 
-
-
-
-
-
-        
-            
-<h4 class="name" id="id"><span class="type-signature"></span>id<span class="type-signature"> string</span></h4>
 
 
 
@@ -544,38 +710,60 @@
 
 
 
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="inhibitorHandler"><span class="type-signature">(readonly) </span>inhibitorHandler<span class="type-signature"> :<a href="InhibitorHandler.html">InhibitorHandler</a></span></h4>
+
+
+
 
 
 <dl class="details">
 
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
+    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Inhibitor.js.html">commands/Inhibitor.js</a>, <a href="commands_Inhibitor.js.html#line13">line 13</a>
+        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line72">line 72</a>
     </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
 
     
@@ -589,10 +777,148 @@
 
 
 
+<div class="description">
+    The inhibitor handler.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="InhibitorHandler.html">InhibitorHandler</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
 
         
             
-<h4 class="name" id="reason"><span class="type-signature"></span>reason<span class="type-signature"> string</span></h4>
+<h4 class="name" id="preMessage"><span class="type-signature"></span>preMessage<span class="type-signature"> :boolean</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line32">line 32</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Inhibitor runs before message is handled.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">boolean</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="reason"><span class="type-signature"></span>reason<span class="type-signature"> :string</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line26">line 26</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
 
 
 
@@ -603,46 +929,15 @@
 
 
 
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Inhibitor.js.html">commands/Inhibitor.js</a>, <a href="commands_Inhibitor.js.html#line19">line 19</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
+        </li>
+    </ul>
 
 
 
@@ -660,9 +955,222 @@
 
     
 
+    <h4 class="name" id="disable"><span class="type-signature"></span>disable<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line100">line 100</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Disables the inhibitor.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="enable"><span class="type-signature"></span>enable<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line92">line 92</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Enables the inhibitor.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
     <h4 class="name" id="reload"><span class="type-signature"></span>reload<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line78">line 78</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
@@ -682,44 +1190,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Inhibitor.js.html">commands/Inhibitor.js</a>, <a href="commands_Inhibitor.js.html#line59">line 59</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -743,8 +1213,53 @@
 
 
 
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line85">line 85</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
 <div class="description">
-    Removes the Inhibitor. It can be readded with the command handler.
+    Removes the Inhibitor. It can be readded with the inhibitor handler.
 </div>
 
 
@@ -759,44 +1274,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Inhibitor.js.html">commands/Inhibitor.js</a>, <a href="commands_Inhibitor.js.html#line66">line 66</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -820,6 +1297,51 @@
 
 
 
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line109">line 109</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
 <div class="description">
     Returns the ID.
 </div>
@@ -836,54 +1358,34 @@
 
 
 
-<dl class="details">
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
+<h5>Returns:</h5>
 
-    
+        
 
-    
 
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Inhibitor.js.html">commands/Inhibitor.js</a>, <a href="commands_Inhibitor.js.html#line74">line 74</a>
-    </li></ul></dd>
-    
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
 
-    
 
-    
-
-    
+    </dd>
 </dl>
 
-
-
-
-
-
-
-
-
-
+    
 
 
         
@@ -904,7 +1406,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> using the Minami theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

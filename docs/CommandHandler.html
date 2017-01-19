@@ -9,9 +9,8 @@
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
 </head>
 <body>
 
@@ -23,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -54,14 +53,59 @@
 
     
 
-    <h4 class="name" id="CommandHandler"><span class="type-signature"></span>new CommandHandler<span class="signature">(framework)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="CommandHandler"><span class="type-signature"></span>new CommandHandler<span class="signature">(framework, options)</span><span class="type-signature"></span></h4>
 
     
 
 
 
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line9">line 9</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
 <div class="description">
-    Loads Commands and Inhibitors and handles messages.
+    Loads Commands and handles messages.
 </div>
 
 
@@ -72,6 +116,9 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -116,52 +163,35 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Options from framework.</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
 
 
 
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line9">line 9</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -203,14 +233,7 @@
 
         
             
-<h4 class="name" id="categories"><span class="type-signature"></span>categories<span class="type-signature"> Collection.&lt;string, Array.&lt;<a href="Command.html">Command</a>>></span></h4>
-
-
-
-
-<div class="description">
-    Commands categories mapped by name to array of Commands.
-</div>
+<h4 class="name" id="allowMention"><span class="type-signature"></span>allowMention<span class="type-signature"> :function</span></h4>
 
 
 
@@ -219,325 +242,7 @@
 <dl class="details">
 
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line48">line 48</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="commandDirectory"><span class="type-signature">(readonly) </span>commandDirectory<span class="type-signature"> string</span></h4>
-
-
-
-
-<div class="description">
-    Directory to commands.
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line29">line 29</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="commands"><span class="type-signature"></span>commands<span class="type-signature"> Collection.&lt;string, <a href="Command.html">Command</a>></span></h4>
-
-
-
-
-<div class="description">
-    Commands loaded, mapped by ID to Command.
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line42">line 42</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="framework"><span class="type-signature">(readonly) </span>framework<span class="type-signature"> <a href="Framework.html">Framework</a></span></h4>
-
-
-
-
-<div class="description">
-    The Akairo framework.
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line22">line 22</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="inhibitorDirectory"><span class="type-signature">(readonly) </span>inhibitorDirectory<span class="type-signature"> string</span></h4>
-
-
-
-
-<div class="description">
-    Directory to inhibitors.
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line36">line 36</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="inhibitors"><span class="type-signature"></span>inhibitors<span class="type-signature"> Collection.&lt;string, <a href="Inhibitor.html">Inhibitor</a>></span></h4>
-
-
-
-
-<div class="description">
-    Inhibitors loaded, mapped by ID to Inhibitor.
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
+    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line54">line 54</a>
     </li></ul></dd>
@@ -548,7 +253,562 @@
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
+
+
+
+
+
+<div class="description">
+    Gets if mentions are allowed for prefixing.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">function</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="categories"><span class="type-signature"></span>categories<span class="type-signature"> :Collection.&lt;string, <a href="Category.html">Category</a>></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line66">line 66</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Command categories, mapped by ID to Category.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Collection.&lt;string, <a href="Category.html">Category</a>></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="commands"><span class="type-signature"></span>commands<span class="type-signature"> :Collection.&lt;string, <a href="Command.html">Command</a>></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line60">line 60</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Commands loaded, mapped by ID to Command.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Collection.&lt;string, <a href="Command.html">Command</a>></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="directory"><span class="type-signature">(readonly) </span>directory<span class="type-signature"> :string</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line30">line 30</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Directory to commands.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="framework"><span class="type-signature">(readonly) </span>framework<span class="type-signature"> :<a href="Framework.html">Framework</a></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line23">line 23</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    The Akairo framework.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="Framework.html">Framework</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="postInhibDisabled"><span class="type-signature"></span>postInhibDisabled<span class="type-signature"> :boolean</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line42">line 42</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Whether or not the built-in post-message inhibitors are disabled.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">boolean</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="prefix"><span class="type-signature"></span>prefix<span class="type-signature"> :function</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line48">line 48</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Gets the prefix.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">function</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="preInhibDisabled"><span class="type-signature"></span>preInhibDisabled<span class="type-signature"> :boolean</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line36">line 36</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Whether or not the built-in pre-message inhibitors are disabled.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">boolean</span>
+
+
+        </li>
+    </ul>
 
 
 
@@ -566,9 +826,54 @@
 
     
 
-    <h4 class="name" id="addCommand"><span class="type-signature"></span>addCommand<span class="signature">(filename)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="add"><span class="type-signature"></span>add<span class="signature">(filename)</span><span class="type-signature"></span></h4>
 
     
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line101">line 101</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
@@ -584,6 +889,9 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -636,36 +944,59 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="findCategory"><span class="type-signature"></span>findCategory<span class="signature">(name)</span><span class="type-signature"> &rarr; {<a href="Category.html">Category</a>}</span></h4>
+
+    
+
+
+
+
 <dl class="details">
 
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
+    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line92">line 92</a>
+        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line160">line 160</a>
     </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
 
     
@@ -676,149 +1007,6 @@
 </dl>
 
 
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="addInhibitor"><span class="type-signature"></span>addInhibitor<span class="signature">(filename)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Adds an Inhibitor.
-</div>
-
-
-
-
-
-
-
-
-
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>filename</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Filename to lookup in the directory. A .js extension is assumed.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line180">line 180</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="findCategory"><span class="type-signature"></span>findCategory<span class="signature">(name)</span><span class="type-signature"> &rarr; {Array.&lt;<a href="Command.html">Command</a>>}</span></h4>
-
-    
 
 
 
@@ -834,6 +1022,9 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -886,54 +1077,32 @@
 
 
 
-<dl class="details">
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
+<h5>Returns:</h5>
 
-    
+        
 
-    
 
-    
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Category.html">Category</a></span>
 
-    
 
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line153">line 153</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
+    </dd>
 </dl>
 
-
-
-
-
-
-
-
-
-
+    
 
 
         
@@ -944,6 +1113,51 @@
     <h4 class="name" id="findCommand"><span class="type-signature"></span>findCommand<span class="signature">(name)</span><span class="type-signature"> &rarr; {<a href="Command.html">Command</a>}</span></h4>
 
     
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line149">line 149</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
@@ -959,6 +1173,9 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -1011,36 +1228,77 @@
 
 
 
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Command.html">Command</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="handle"><span class="type-signature"></span>handle<span class="signature">(message)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
 <dl class="details">
 
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
+    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line142">line 142</a>
+        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line170">line 170</a>
     </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
 
     
@@ -1051,24 +1309,6 @@
 </dl>
 
 
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="handle"><span class="type-signature"></span>handle<span class="signature">(message, prefix, allowMention, disableBuiltIn)</span><span class="type-signature"></span></h4>
-
-    
 
 
 
@@ -1084,6 +1324,9 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -1128,121 +1371,12 @@
         </tr>
 
     
-
-        <tr>
-            
-                <td class="name"><code>prefix</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Prefix for command.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>allowMention</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Allow mentions to the client user as a prefix.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>disableBuiltIn</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Disables the built-in command inhibitors.</td>
-        </tr>
-
-    
     </tbody>
 </table>
 
 
 
 
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line226">line 226</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -1260,9 +1394,54 @@
 
     
 
-    <h4 class="name" id="loadCommand"><span class="type-signature"></span>loadCommand<span class="signature">(filepath)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="load"><span class="type-signature"></span>load<span class="signature">(filepath)</span><span class="type-signature"></span></h4>
 
     
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line78">line 78</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
@@ -1278,6 +1457,9 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -1330,36 +1512,59 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="reload"><span class="type-signature"></span>reload<span class="signature">(id)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
 <dl class="details">
 
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
+    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line71">line 71</a>
+        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line130">line 130</a>
     </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
 
     
@@ -1370,149 +1575,6 @@
 </dl>
 
 
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="loadInhibitor"><span class="type-signature"></span>loadInhibitor<span class="signature">(filepath)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Loads an Inhibitor.
-</div>
-
-
-
-
-
-
-
-
-
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>filepath</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Path to file.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line162">line 162</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="reloadCommand"><span class="type-signature"></span>reloadCommand<span class="signature">(id)</span><span class="type-signature"></span></h4>
-
-    
 
 
 
@@ -1528,6 +1590,9 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -1580,36 +1645,59 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="remove"><span class="type-signature"></span>remove<span class="signature">(id)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
 <dl class="details">
 
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
+    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line122">line 122</a>
+        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line116">line 116</a>
     </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
 
     
@@ -1620,149 +1708,6 @@
 </dl>
 
 
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="reloadInhibitor"><span class="type-signature"></span>reloadInhibitor<span class="signature">(id)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Reloads an Inhibitor.
-</div>
-
-
-
-
-
-
-
-
-
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">ID of the Inhibitor.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line207">line 207</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="removeCommand"><span class="type-signature"></span>removeCommand<span class="signature">(id)</span><span class="type-signature"></span></h4>
-
-    
 
 
 
@@ -1778,6 +1723,9 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -1828,171 +1776,6 @@
 
 
 
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line107">line 107</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="removeInhibitor"><span class="type-signature"></span>removeInhibitor<span class="signature">(id)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Removes an Inhibitor.
-</div>
-
-
-
-
-
-
-
-
-
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">ID of the Inhibitor.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line195">line 195</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -2024,8 +1807,53 @@
 
 
 
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line256">line 256</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
 <div class="description">
-    Emitted when a command is blocked by an inhibitor.
+    Emitted when a command is blocked by a post-message inhibitor. The built-in inhibitors are 'owner', 'guild', and 'dm'.
 </div>
 
 
@@ -2036,6 +1864,9 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -2134,35 +1965,34 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="event:commandDisabled">commandDisabled</h4>
+
+    
+
+
+
+
 <dl class="details">
 
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
+    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line301">line 301</a>
+        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line249">line 249</a>
     </li></ul></dd>
     
 
@@ -2171,7 +2001,124 @@
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
+
+
+
+
+
+<div class="description">
+    Emitted when a command is found disabled.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Message</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Message sent.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>command</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Command.html">Command</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Command found.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
 
 
 
@@ -2195,6 +2142,51 @@
 
 
 
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line271">line 271</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
 <div class="description">
     Emitted when a command finishes execution.
 </div>
@@ -2207,6 +2199,9 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -2280,296 +2275,6 @@
 
 
 
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line316">line 316</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="event:commandInvalid">commandInvalid</h4>
-
-    
-
-
-
-<div class="description">
-    Emitted when a message does not match a command.
-</div>
-
-
-
-
-
-
-
-
-
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>message</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Message</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Message sent.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line295">line 295</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="event:commandPrefixInvalid">commandPrefixInvalid</h4>
-
-    
-
-
-
-<div class="description">
-    Emitted when a message does not start with the prefix.
-</div>
-
-
-
-
-
-
-
-
-
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>message</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Message</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Message sent.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line289">line 289</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -2593,6 +2298,51 @@
 
 
 
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line264">line 264</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
 <div class="description">
     Emitted when a command starts execution.
 </div>
@@ -2605,6 +2355,9 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -2680,35 +2433,34 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="event:messageBlocked">messageBlocked</h4>
+
+    
+
+
+
+
 <dl class="details">
 
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
+    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line309">line 309</a>
+        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line236">line 236</a>
     </li></ul></dd>
     
 
@@ -2717,7 +2469,257 @@
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
+
+
+
+
+
+<div class="description">
+    Emitted when a message is blocked by a pre-message inhibitor. The built-in inhibitors are 'notSelf' (for selfbots), 'client', and 'bot'.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Message</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Message sent.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>reason</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Reason for the block.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="event:messageInvalid">messageInvalid</h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line243">line 243</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Emitted when a message does not start with the prefix or match a command.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Message</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Message sent.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
 
 
 
@@ -2744,7 +2746,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> using the Minami theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

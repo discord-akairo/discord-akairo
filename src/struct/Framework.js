@@ -1,20 +1,20 @@
 const CommandHandler = require('./commands/CommandHandler');
-const ListenerHandler = require('./events/ListenerHandler');
+const InhibitorHandler = require('./inhibitors/InhibitorHandler');
+const ListenerHandler = require('./listeners/ListenerHandler');
 const ClientUtil = require('./utils/ClientUtil');
 
 /**
  * Options used to determine how the framework behaves.
  * @typedef {Object} FrameworkOptions
- * @prop {string} token - Client token.
- * @prop {string} [ownerID=''] - Discord ID of the client owner.
- * @prop {boolean} [selfbot=false] - Marks this bot as a selfbot.
- * @prop {boolean} [addUtil=false] - Adds some utility functions to the client. Accessible with client.util.
- * @prop {(string|function)} [prefix='!'] - Default command prefix or function returning prefix.
- * @prop {(boolean|function)} [allowMention=false] - Allow mentions to the client user as a prefix or function that returns true or false.
- * @prop {boolean} [disableBuiltIn=false] - Disables the built-in command inhibitors (i.e. blocking bots and the client and checking if the command is owner only or restricted to a channel). Not recommended.
- * @prop {string} commandDirectory - Directory to commands.
- * @prop {string} inhibitorDirectory - Directory to inhibitors.
- * @prop {string} listenerDirectory - Directory to listeners.
+ * @prop {string} [ownerID=''] - Discord ID of the client owner. Defines client.ownerID.
+ * @prop {boolean} [selfbot=false] - Marks this bot as a selfbot. Defines client.selfbot.
+ * @prop {string} [commandDirectory] - Directory to commands.
+ * @prop {string|function} [prefix='!'] - Default command prefix or function (<code>message => {}</code>) returning prefix.
+ * @prop {boolean|function} [allowMention=true] - Allow mentions to the client user as a prefix or function (<code>message => {}</code>) that returns true or false.
+ * @prop {string} [inhibitorDirectory] - Directory to inhibitors.
+ * @prop {boolean} [disablePreInhib=false] - Disables the built-in pre-message inhibitors.
+ * @prop {boolean} [disablePostInhib=false] - Disables the built-in post-message inhibitors.
+ * @prop {string} [listenerDirectory] - Directory to listeners.
  */
 
 class Framework {
@@ -31,68 +31,51 @@ class Framework {
          */
         this.client = client;
 
-        /** 
-         * Framework options. 
-         * @type {FrameworkOptions}
-         */
-        this.options = options;
-        if (this.options.token === undefined) throw new Error('Token must be defined.');
-        if (this.options.ownerID === undefined) this.options.ownerID = '';
-        if (this.options.selfbot === undefined) this.options.selfbot = false;
-        if (this.options.addUtil === undefined) this.options.addUtil = false;
-        if (this.options.prefix === undefined) this.options.prefix = '!';
-        if (this.options.allowMention === undefined) this.options.allowMention = false;
-        if (this.options.disableBuiltIn === undefined) this.options.disableBuiltIn = false;
-        if (this.options.commandDirectory === undefined) throw new Error('Command directory must be defined.');
-        if (this.options.inhibitorDirectory === undefined) throw new Error('Inhibitor directory must be defined.');
-        if (this.options.listenerDirectory === undefined) throw new Error('Listener directory must be defined.');
+        this.client.ownerID = options.ownerID;
+        this.client.selfbot = !!options.selfbot;
+        this.client.util = new ClientUtil(this.client);
 
-        if (this.options.addUtil){
-            this.client.util = new ClientUtil(this.client);
+        if (options.commandDirectory){
+            if (!options.inhibitorDirectory) throw new Error('Cannot use command handler without inhibitor handler.');
+
+            /**
+             * The CommandHandler.
+             * @readonly
+             * @type {CommandHandler}
+             */
+            this.commandHandler = new CommandHandler(this, options);
         }
 
-        /**
-         * The CommandHandler.
-         * @readonly
-         * @type {CommandHandler}
-         */
-        this.commandHandler = new CommandHandler(this);
+        if (options.inhibitorDirectory){
+            /**
+             * The InhibitorHandler.
+             * @readonly
+             * @type {InhibitorHandler}
+             */
+            this.inhibitorHandler = new InhibitorHandler(this, options);
+        }
 
-        /**
-         * The ListenerHandler.
-         * @readonly
-         * @type {ListenerHandler}
-         */
-        this.listenerHandler = new ListenerHandler(this);
+        if (options.listenerDirectory){
+            /**
+             * The ListenerHandler.
+             * @readonly
+             * @type {ListenerHandler}
+             */
+            this.listenerHandler = new ListenerHandler(this, options);
+        }
     }
 
     /**
      * Logins the client and creates a listener on client message event. Resolves once client is ready.
+     * @param {string} token - Client token.
      * @returns {Promise}
      */
-    login(){
+    login(token){
         return new Promise((resolve, reject) => {
-            this.client.login(this.options.token).catch(reject);
+            this.client.login(token).catch(reject);
             this.client.once('ready', resolve);
 
-            this.client.on('message', message => {
-                let prefix;
-                let allowMention;
-
-                if (typeof this.options.prefix === 'function'){
-                    prefix = this.options.prefix(message) || '!';
-                } else {
-                    prefix = this.options.prefix || '!';
-                }
-
-                if (typeof this.options.allowMention === 'function'){
-                    allowMention = this.options.allowMention(message) || false;
-                } else {
-                    allowMention = this.options.allowMention || false;
-                }
-
-                this.commandHandler.handle(message, prefix, allowMention, this.options.disableBuiltIn);
-            });
+            if (this.commandHandler) this.client.on('message', m => { this.commandHandler.handle(m); });
         });
     }
 }

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>ListenerHandler - Documentation</title>
+    <title>InhibitorHandler - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">ListenerHandler</h1>
+    <h1 class="page-title">InhibitorHandler</h1>
     
 
     
@@ -40,7 +40,7 @@
 <header>
     
         <h2>
-        ListenerHandler
+        InhibitorHandler
         </h2>
         
     
@@ -53,7 +53,7 @@
 
     
 
-    <h4 class="name" id="ListenerHandler"><span class="type-signature"></span>new ListenerHandler<span class="signature">(framework, options)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="InhibitorHandler"><span class="type-signature"></span>new InhibitorHandler<span class="signature">(framework, options)</span><span class="type-signature"></span></h4>
 
     
 
@@ -65,7 +65,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listeners_ListenerHandler.js.html">listeners/ListenerHandler.js</a>, <a href="listeners_ListenerHandler.js.html#line13">line 13</a>
+        <a href="inhibitors_InhibitorHandler.js.html">inhibitors/InhibitorHandler.js</a>, <a href="inhibitors_InhibitorHandler.js.html#line7">line 7</a>
     </li></ul></dd>
     
 
@@ -105,7 +105,7 @@
 
 
 <div class="description">
-    Loads Listeners and register them with EventEmitters.
+    Loads Inhibitors and checks messages.
 </div>
 
 
@@ -208,6 +208,17 @@
     </div>
 
     
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li>EventEmitter</li>
+    </ul>
+
+
+    
 
     
 
@@ -233,7 +244,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listeners_ListenerHandler.js.html">listeners/ListenerHandler.js</a>, <a href="listeners_ListenerHandler.js.html#line26">line 26</a>
+        <a href="inhibitors_InhibitorHandler.js.html">inhibitors/InhibitorHandler.js</a>, <a href="inhibitors_InhibitorHandler.js.html#line26">line 26</a>
     </li></ul></dd>
     
 
@@ -273,7 +284,7 @@
 
 
 <div class="description">
-    Directory to listeners.
+    Directory to inhibitors.
 </div>
 
 
@@ -283,79 +294,6 @@
         <li>
             
 <span class="param-type">string</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="emitters"><span class="type-signature"></span>emitters<span class="type-signature"> :Collection.&lt;string, EventEmitter></span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listeners_ListenerHandler.js.html">listeners/ListenerHandler.js</a>, <a href="listeners_ListenerHandler.js.html#line32">line 32</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    EventEmitters for use, mapped by name to EventEmitter. 'client' and 'commandHandler' are set by default.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Collection.&lt;string, EventEmitter></span>
 
 
         </li>
@@ -379,7 +317,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listeners_ListenerHandler.js.html">listeners/ListenerHandler.js</a>, <a href="listeners_ListenerHandler.js.html#line19">line 19</a>
+        <a href="inhibitors_InhibitorHandler.js.html">inhibitors/InhibitorHandler.js</a>, <a href="inhibitors_InhibitorHandler.js.html#line19">line 19</a>
     </li></ul></dd>
     
 
@@ -441,7 +379,7 @@
 
         
             
-<h4 class="name" id="listeners"><span class="type-signature"></span>listeners<span class="type-signature"> :Collection.&lt;string, <a href="Listener.html">Listener</a>></span></h4>
+<h4 class="name" id="inhibitors"><span class="type-signature"></span>inhibitors<span class="type-signature"> :Collection.&lt;string, <a href="Inhibitor.html">Inhibitor</a>></span></h4>
 
 
 
@@ -452,7 +390,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listeners_ListenerHandler.js.html">listeners/ListenerHandler.js</a>, <a href="listeners_ListenerHandler.js.html#line40">line 40</a>
+        <a href="inhibitors_InhibitorHandler.js.html">inhibitors/InhibitorHandler.js</a>, <a href="inhibitors_InhibitorHandler.js.html#line32">line 32</a>
     </li></ul></dd>
     
 
@@ -492,7 +430,7 @@
 
 
 <div class="description">
-    Listeners loaded, mapped by ID to Listener.
+    Inhibitors loaded, mapped by ID to Inhibitor.
 </div>
 
 
@@ -501,7 +439,7 @@
     <ul>
         <li>
             
-<span class="param-type">Collection.&lt;string, <a href="Listener.html">Listener</a>></span>
+<span class="param-type">Collection.&lt;string, <a href="Inhibitor.html">Inhibitor</a>></span>
 
 
         </li>
@@ -535,7 +473,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listeners_ListenerHandler.js.html">listeners/ListenerHandler.js</a>, <a href="listeners_ListenerHandler.js.html#line71">line 71</a>
+        <a href="inhibitors_InhibitorHandler.js.html">inhibitors/InhibitorHandler.js</a>, <a href="inhibitors_InhibitorHandler.js.html#line62">line 62</a>
     </li></ul></dd>
     
 
@@ -575,7 +513,7 @@
 
 
 <div class="description">
-    Adds a Listener.
+    Adds an Inhibitor.
 </div>
 
 
@@ -629,140 +567,7 @@
 
             
 
-            <td class="description last">Filename to lookup in the directory.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="deregister"><span class="type-signature"></span>deregister<span class="signature">(id)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listeners_ListenerHandler.js.html">listeners/ListenerHandler.js</a>, <a href="listeners_ListenerHandler.js.html#line134">line 134</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Removes a Listener from the EventEmitter.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">ID of the Listener.</td>
+            <td class="description last">Filename to lookup in the directory. A .js extension is assumed.</td>
         </tr>
 
     
@@ -801,7 +606,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listeners_ListenerHandler.js.html">listeners/ListenerHandler.js</a>, <a href="listeners_ListenerHandler.js.html#line52">line 52</a>
+        <a href="inhibitors_InhibitorHandler.js.html">inhibitors/InhibitorHandler.js</a>, <a href="inhibitors_InhibitorHandler.js.html#line44">line 44</a>
     </li></ul></dd>
     
 
@@ -841,7 +646,7 @@
 
 
 <div class="description">
-    Loads a Listener.
+    Loads an Inhibitor.
 </div>
 
 
@@ -922,139 +727,6 @@
 
     
 
-    <h4 class="name" id="register"><span class="type-signature"></span>register<span class="signature">(id)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listeners_ListenerHandler.js.html">listeners/ListenerHandler.js</a>, <a href="listeners_ListenerHandler.js.html#line116">line 116</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Registers a Listener with the EventEmitter.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">ID of the Listener.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
     <h4 class="name" id="reload"><span class="type-signature"></span>reload<span class="signature">(id)</span><span class="type-signature"></span></h4>
 
     
@@ -1067,7 +739,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listeners_ListenerHandler.js.html">listeners/ListenerHandler.js</a>, <a href="listeners_ListenerHandler.js.html#line99">line 99</a>
+        <a href="inhibitors_InhibitorHandler.js.html">inhibitors/InhibitorHandler.js</a>, <a href="inhibitors_InhibitorHandler.js.html#line89">line 89</a>
     </li></ul></dd>
     
 
@@ -1107,7 +779,7 @@
 
 
 <div class="description">
-    Reloads a Listener.
+    Reloads an Inhibitor.
 </div>
 
 
@@ -1161,7 +833,7 @@
 
             
 
-            <td class="description last">ID of the Listener.</td>
+            <td class="description last">ID of the Inhibitor.</td>
         </tr>
 
     
@@ -1200,7 +872,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listeners_ListenerHandler.js.html">listeners/ListenerHandler.js</a>, <a href="listeners_ListenerHandler.js.html#line86">line 86</a>
+        <a href="inhibitors_InhibitorHandler.js.html">inhibitors/InhibitorHandler.js</a>, <a href="inhibitors_InhibitorHandler.js.html#line77">line 77</a>
     </li></ul></dd>
     
 
@@ -1240,7 +912,7 @@
 
 
 <div class="description">
-    Removes a Listener.
+    Removes an Inhibitor.
 </div>
 
 
@@ -1294,7 +966,7 @@
 
             
 
-            <td class="description last">ID of the Listener.</td>
+            <td class="description last">ID of the Inhibitor.</td>
         </tr>
 
     
@@ -1314,6 +986,331 @@
 
 
 
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="testCommand"><span class="type-signature"></span>testCommand<span class="signature">(message, command)</span><span class="type-signature"> &rarr; {Promise.&lt;string>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="inhibitors_InhibitorHandler.js.html">inhibitors/InhibitorHandler.js</a>, <a href="inhibitors_InhibitorHandler.js.html#line133">line 133</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Tests the post-message inhibitors against the message and command. Rejects with the reason if blocked.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Message</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Message to test.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>command</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Command.html">Command</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Command to test.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;string></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="testMessage"><span class="type-signature"></span>testMessage<span class="signature">(message)</span><span class="type-signature"> &rarr; {Promise.&lt;string>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="inhibitors_InhibitorHandler.js.html">inhibitors/InhibitorHandler.js</a>, <a href="inhibitors_InhibitorHandler.js.html#line106">line 106</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Tests the pre-message inhibitors against the message. Rejects with the reason if blocked.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Message</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Message to test.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;string></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
         

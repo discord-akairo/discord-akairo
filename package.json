@@ -1,20 +1,22 @@
 {
   "name": "discord-akairo",
-  "version": "2.2.2",
+  "version": "3.0.0",
   "description": "A bot framework for Discord.js.",
   "main": "./src/index.js",
   "author": "1Computer",
   "license": "MIT",
   "dependencies": {
-    "discord.js": "^11.0.0",
     "readdir-recursive": "0.0.4"
   },
   "peerDependencies": {
+    "discord.js": "^11.0.0"
+  },
+  "optionalDependencies": {
     "sqlite": "^2.2.4"
   },
   "devDependencies": {
-    "jsdoc": "^3.4.3",
-    "minami": "^1.1.1"
+    "docdash": "^0.4.0",
+    "jsdoc": "^3.4.3"
   },
   "scripts": {
     "generate-docs": "node_modules/.bin/jsdoc --configure .jsdoc.json --verbose"

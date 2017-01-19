@@ -9,9 +9,8 @@
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
 </head>
 <body>
 
@@ -23,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -60,6 +59,51 @@
 
 
 
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line5">line 5</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
 <div class="description">
     Creates an SQLiteHandler. Table must have an 'id' column.
 </div>
@@ -72,6 +116,9 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -185,7 +232,7 @@
             
                 <td class="attributes">
                 
-                    optional<br>
+                    &lt;optional><br>
                 
 
                 
@@ -197,7 +244,7 @@
             
                 <td class="default">
                 
-                    {}
+                    <code>{}</code>
                 
                 </td>
             
@@ -212,46 +259,6 @@
 
 
 
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line5">line 5</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -293,20 +300,98 @@
 
         
             
-<h4 class="name" id="db"><span class="type-signature">(readonly) </span>db<span class="type-signature"> Object</span></h4>
-
-
-
-
-<div class="description">
-    The database.
-</div>
+<h4 class="name" id="configs"><span class="type-signature"></span>configs<span class="type-signature"> :Array.&lt;string></span></h4>
 
 
 
 
 
 <dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line50">line 50</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="DatabaseHandler.html#configs">DatabaseHandler#configs</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Array of configs. Note that this calls the Collection's array().
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Array.&lt;string></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="db"><span class="type-signature">(readonly) </span>db<span class="type-signature"> :Object</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line35">line 35</a>
+    </li></ul></dd>
+    
 
     
 
@@ -338,12 +423,6 @@
     
 
     
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line35">line 35</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
@@ -354,23 +433,43 @@
 
 
 
+<div class="description">
+    The database.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
 
         
             
-<h4 class="name" id="defaultConfig"><span class="type-signature"></span>defaultConfig<span class="type-signature"> Object</span></h4>
-
-
-
-
-<div class="description">
-    Default configuration.
-</div>
+<h4 class="name" id="defaultConfig"><span class="type-signature"></span>defaultConfig<span class="type-signature"> :Object</span></h4>
 
 
 
 
 
 <dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line22">line 22</a>
+    </li></ul></dd>
+    
 
     
 
@@ -402,12 +501,6 @@
     
 
     
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line22">line 22</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
@@ -418,23 +511,43 @@
 
 
 
+<div class="description">
+    Default configuration.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
 
         
             
-<h4 class="name" id="filepath"><span class="type-signature">(readonly) </span>filepath<span class="type-signature"> string</span></h4>
-
-
-
-
-<div class="description">
-    Path to the database file.
-</div>
+<h4 class="name" id="filepath"><span class="type-signature">(readonly) </span>filepath<span class="type-signature"> :string</span></h4>
 
 
 
 
 
 <dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line16">line 16</a>
+    </li></ul></dd>
+    
 
     
 
@@ -466,12 +579,6 @@
     
 
     
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line16">line 16</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
@@ -482,23 +589,43 @@
 
 
 
+<div class="description">
+    Path to the database file.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
 
         
             
-<h4 class="name" id="ids"><span class="type-signature"></span>ids<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    Array of IDs.
-</div>
+<h4 class="name" id="ids"><span class="type-signature"></span>ids<span class="type-signature"> :Array.&lt;string></span></h4>
 
 
 
 
 
 <dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line42">line 42</a>
+    </li></ul></dd>
+    
 
     
 
@@ -530,12 +657,6 @@
     
 
     
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line42">line 42</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
@@ -546,23 +667,43 @@
 
 
 
+<div class="description">
+    Array of IDs. Note that this calls the Collection's keyArray().
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Array.&lt;string></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
 
         
             
-<h4 class="name" id="memory"><span class="type-signature"></span>memory<span class="type-signature"> Collection.&lt;string, Object></span></h4>
-
-
-
-
-<div class="description">
-    Configurations stored in memory, mapped by ID to configuration. Note that if you modify/get values directly from here, you should use the handler's sanitize() and desanitize() methods.
-</div>
+<h4 class="name" id="memory"><span class="type-signature"></span>memory<span class="type-signature"> :Collection.&lt;string, Object></span></h4>
 
 
 
 
 
 <dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line28">line 28</a>
+    </li></ul></dd>
+    
 
     
 
@@ -594,12 +735,6 @@
     
 
     
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line28">line 28</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
@@ -610,17 +745,30 @@
 
 
 
+<div class="description">
+    Configurations stored in memory, mapped by ID to configuration. Note that if you modify/get values directly from here, you should use the handler's sanitize() and desanitize() methods.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Collection.&lt;string, Object></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
 
         
             
-<h4 class="name" id="tableName"><span class="type-signature">(readonly) </span>tableName<span class="type-signature"> string</span></h4>
-
-
-
-
-<div class="description">
-    Name of the table.
-</div>
+<h4 class="name" id="tableName"><span class="type-signature">(readonly) </span>tableName<span class="type-signature"> :string</span></h4>
 
 
 
@@ -629,30 +777,7 @@
 <dl class="details">
 
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
+    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line20">line 20</a>
     </li></ul></dd>
@@ -663,7 +788,51 @@
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
+
+
+
+
+
+<div class="description">
+    Name of the table.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
 
 
 
@@ -687,71 +856,15 @@
 
 
 
-<div class="description">
-    Adds into the database.
-</div>
-
-
-
-
-
-
-
-
-
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">ID of entry.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
 
 <dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line84">line 84</a>
+    </li></ul></dd>
+    
 
     
 
@@ -783,12 +896,6 @@
     
 
     
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line84">line 84</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
@@ -799,26 +906,8 @@
 
 
 
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="addMemory"><span class="type-signature"></span>addMemory<span class="signature">(id)</span><span class="type-signature"> &rarr; {<a href="SQLiteHandler.html">SQLiteHandler</a>}</span></h4>
-
-    
-
-
-
 <div class="description">
-    Adds into the in-memory config.
+    Adds into the database.
 </div>
 
 
@@ -829,6 +918,9 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -881,7 +973,54 @@
 
 
 
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;<a href="SQLiteHandler.html">SQLiteHandler</a>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="addMemory"><span class="type-signature"></span>addMemory<span class="signature">(id)</span><span class="type-signature"> &rarr; {<a href="SQLiteHandler.html">SQLiteHandler</a>}</span></h4>
+
+    
+
+
+
+
 <dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line106">line 106</a>
+    </li></ul></dd>
+    
 
     
 
@@ -913,12 +1052,6 @@
     
 
     
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line106">line 106</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
@@ -929,11 +1062,99 @@
 
 
 
+<div class="description">
+    Adds into the in-memory config.
+</div>
 
 
 
 
 
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID of entry.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="SQLiteHandler.html">SQLiteHandler</a></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
         
@@ -944,6 +1165,56 @@
     <h4 class="name" id="desanitize"><span class="type-signature"></span>desanitize<span class="signature">(input)</span><span class="type-signature"> &rarr; {string}</span></h4>
 
     
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line38">line 38</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="DatabaseHandler.html#desanitize">DatabaseHandler#desanitize</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
@@ -959,6 +1230,9 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -1011,59 +1285,32 @@
 
 
 
-<dl class="details">
 
-    
 
-    
 
-    
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="DatabaseHandler.html#desanitize">DatabaseHandler#desanitize</a>
-    </li></ul></dd>
-    
 
-    
 
-    
 
-    
 
-    
+<h5>Returns:</h5>
 
-    
+        
 
-    
 
-    
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
 
-    
 
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line38">line 38</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
+    </dd>
 </dl>
 
-
-
-
-
-
-
-
-
-
+    
 
 
         
@@ -1077,71 +1324,15 @@
 
 
 
-<div class="description">
-    Gets configuration for an ID.
-</div>
-
-
-
-
-
-
-
-
-
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">ID of entry.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
 
 <dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line159">line 159</a>
+    </li></ul></dd>
+    
 
     
 
@@ -1173,12 +1364,6 @@
     
 
     
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line159">line 159</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
@@ -1189,26 +1374,8 @@
 
 
 
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="has"><span class="type-signature"></span>has<span class="signature">(id)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-
-    
-
-
-
 <div class="description">
-    Checks if ID exists in config.
+    Gets configuration for an ID.
 </div>
 
 
@@ -1219,6 +1386,9 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -1271,7 +1441,54 @@
 
 
 
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="has"><span class="type-signature"></span>has<span class="signature">(id)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
 <dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line150">line 150</a>
+    </li></ul></dd>
+    
 
     
 
@@ -1303,12 +1520,6 @@
     
 
     
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line150">line 150</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
@@ -1319,11 +1530,99 @@
 
 
 
+<div class="description">
+    Checks if ID exists in config.
+</div>
 
 
 
 
 
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID of entry.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
         
@@ -1334,6 +1633,56 @@
     <h4 class="name" id="init"><span class="type-signature"></span>init<span class="signature">(ids)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="SQLiteHandler.html">SQLiteHandler</a>>}</span></h4>
 
     
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line61">line 61</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="DatabaseHandler.html#init">DatabaseHandler#init</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
@@ -1349,6 +1698,9 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -1401,59 +1753,32 @@
 
 
 
-<dl class="details">
 
-    
 
-    
 
-    
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="DatabaseHandler.html#init">DatabaseHandler#init</a>
-    </li></ul></dd>
-    
 
-    
 
-    
 
-    
 
-    
+<h5>Returns:</h5>
 
-    
+        
 
-    
 
-    
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;<a href="SQLiteHandler.html">SQLiteHandler</a>></span>
 
-    
 
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line61">line 61</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
+    </dd>
 </dl>
 
-
-
-
-
-
-
-
-
-
+    
 
 
         
@@ -1467,23 +1792,15 @@
 
 
 
-<div class="description">
-    Opens the database so that it can be used.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
 
 <dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line47">line 47</a>
+    </li></ul></dd>
+    
 
     
 
@@ -1515,12 +1832,6 @@
     
 
     
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line47">line 47</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
@@ -1531,11 +1842,50 @@
 
 
 
+<div class="description">
+    Opens the database so that it can be used.
+</div>
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Database></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
         
@@ -1549,71 +1899,15 @@
 
 
 
-<div class="description">
-    Removes from the database.
-</div>
-
-
-
-
-
-
-
-
-
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">ID of entry.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
 
 <dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line121">line 121</a>
+    </li></ul></dd>
+    
 
     
 
@@ -1645,12 +1939,6 @@
     
 
     
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line121">line 121</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
@@ -1661,26 +1949,8 @@
 
 
 
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="removeMemory"><span class="type-signature"></span>removeMemory<span class="signature">(id)</span><span class="type-signature"> &rarr; {<a href="SQLiteHandler.html">SQLiteHandler</a>}</span></h4>
-
-    
-
-
-
 <div class="description">
-    Removes from the in-memory config.
+    Removes from the database.
 </div>
 
 
@@ -1691,6 +1961,9 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -1743,7 +2016,54 @@
 
 
 
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;<a href="SQLiteHandler.html">SQLiteHandler</a>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="removeMemory"><span class="type-signature"></span>removeMemory<span class="signature">(id)</span><span class="type-signature"> &rarr; {<a href="SQLiteHandler.html">SQLiteHandler</a>}</span></h4>
+
+    
+
+
+
+
 <dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line139">line 139</a>
+    </li></ul></dd>
+    
 
     
 
@@ -1775,12 +2095,6 @@
     
 
     
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line139">line 139</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
@@ -1791,11 +2105,99 @@
 
 
 
+<div class="description">
+    Removes from the in-memory config.
+</div>
 
 
 
 
 
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID of entry.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="SQLiteHandler.html">SQLiteHandler</a></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
         
@@ -1806,6 +2208,56 @@
     <h4 class="name" id="sanitize"><span class="type-signature"></span>sanitize<span class="signature">(input)</span><span class="type-signature"> &rarr; {string}</span></h4>
 
     
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line28">line 28</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="DatabaseHandler.html#sanitize">DatabaseHandler#sanitize</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
@@ -1821,6 +2273,9 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -1873,59 +2328,32 @@
 
 
 
-<dl class="details">
 
-    
 
-    
 
-    
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="DatabaseHandler.html#sanitize">DatabaseHandler#sanitize</a>
-    </li></ul></dd>
-    
 
-    
 
-    
 
-    
 
-    
+<h5>Returns:</h5>
 
-    
+        
 
-    
 
-    
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
 
-    
 
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line28">line 28</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
+    </dd>
 </dl>
 
-
-
-
-
-
-
-
-
-
+    
 
 
         
@@ -1936,6 +2364,56 @@
     <h4 class="name" id="save"><span class="type-signature"></span>save<span class="signature">(id)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="SQLiteHandler.html">SQLiteHandler</a>>}</span></h4>
 
     
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line249">line 249</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="DatabaseHandler.html#save">DatabaseHandler#save</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
@@ -1951,6 +2429,9 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -2003,59 +2484,32 @@
 
 
 
-<dl class="details">
 
-    
 
-    
 
-    
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="DatabaseHandler.html#save">DatabaseHandler#save</a>
-    </li></ul></dd>
-    
 
-    
 
-    
 
-    
 
-    
+<h5>Returns:</h5>
 
-    
+        
 
-    
 
-    
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;<a href="SQLiteHandler.html">SQLiteHandler</a>></span>
 
-    
 
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line249">line 249</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
+    </dd>
 </dl>
 
-
-
-
-
-
-
-
-
-
+    
 
 
         
@@ -2069,23 +2523,15 @@
 
 
 
-<div class="description">
-    Saves all in-memory configs to the database.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
 
 <dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line280">line 280</a>
+    </li></ul></dd>
+    
 
     
 
@@ -2117,12 +2563,6 @@
     
 
     
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line280">line 280</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
@@ -2133,11 +2573,50 @@
 
 
 
+<div class="description">
+    Saves all in-memory configs to the database.
+</div>
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;<a href="SQLiteHandler.html">SQLiteHandler</a>></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
         
@@ -2151,120 +2630,15 @@
 
 
 
-<div class="description">
-    Updates the database.
-</div>
-
-
-
-
-
-
-
-
-
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">ID of entry.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>key</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Key to set.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>value</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-|
-
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Value to set.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
 
 <dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line180">line 180</a>
+    </li></ul></dd>
+    
 
     
 
@@ -2296,12 +2670,6 @@
     
 
     
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line180">line 180</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
@@ -2312,26 +2680,8 @@
 
 
 
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="setMemory"><span class="type-signature"></span>setMemory<span class="signature">(id, key, value)</span><span class="type-signature"> &rarr; {<a href="SQLiteHandler.html">SQLiteHandler</a>}</span></h4>
-
-    
-
-
-
 <div class="description">
-    Updates the in-memory configuration.
+    Updates the database.
 </div>
 
 
@@ -2342,6 +2692,9 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -2419,7 +2772,7 @@
             
                 
 <span class="param-type">string</span>
-|
+ || 
 
 <span class="param-type">number</span>
 
@@ -2443,7 +2796,54 @@
 
 
 
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;<a href="SQLiteHandler.html">SQLiteHandler</a>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="setMemory"><span class="type-signature"></span>setMemory<span class="signature">(id, key, value)</span><span class="type-signature"> &rarr; {<a href="SQLiteHandler.html">SQLiteHandler</a>}</span></h4>
+
+    
+
+
+
+
 <dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line221">line 221</a>
+    </li></ul></dd>
+    
 
     
 
@@ -2475,12 +2875,6 @@
     
 
     
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line221">line 221</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
@@ -2491,11 +2885,148 @@
 
 
 
+<div class="description">
+    Updates the in-memory configuration.
+</div>
 
 
 
 
 
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID of entry.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Key to set.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+ || 
+
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Value to set.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="SQLiteHandler.html">SQLiteHandler</a></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
         
@@ -2516,7 +3047,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> using the Minami theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

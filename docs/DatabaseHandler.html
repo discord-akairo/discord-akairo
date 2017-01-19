@@ -9,9 +9,8 @@
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
 </head>
 <body>
 
@@ -23,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -60,6 +59,51 @@
 
 
 
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line10">line 10</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
 <div class="description">
     This class should be extended, not used.
 </div>
@@ -72,6 +116,9 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -150,7 +197,7 @@
             
                 <td class="attributes">
                 
-                    optional<br>
+                    &lt;optional><br>
                 
 
                 
@@ -162,7 +209,7 @@
             
                 <td class="default">
                 
-                    {}
+                    <code>{}</code>
                 
                 </td>
             
@@ -177,46 +224,6 @@
 
 
 
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line10">line 10</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -247,14 +254,7 @@
 
         
             
-<h4 class="name" id="db"><span class="type-signature">(readonly) </span>db<span class="type-signature"> Object</span></h4>
-
-
-
-
-<div class="description">
-    The database.
-</div>
+<h4 class="name" id="configs"><span class="type-signature"></span>configs<span class="type-signature"> :Array.&lt;string></span></h4>
 
 
 
@@ -263,7 +263,10 @@
 <dl class="details">
 
     
-
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line50">line 50</a>
+    </li></ul></dd>
     
 
     
@@ -287,6 +290,53 @@
     
 
     
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Array of configs. Note that this calls the Collection's array().
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Array.&lt;string></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="db"><span class="type-signature">(readonly) </span>db<span class="type-signature"> :Object</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line35">line 35</a>
     </li></ul></dd>
@@ -297,7 +347,51 @@
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
+
+
+
+
+
+<div class="description">
+    The database.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
 
 
 
@@ -306,14 +400,7 @@
 
         
             
-<h4 class="name" id="defaultConfig"><span class="type-signature"></span>defaultConfig<span class="type-signature"> Object</span></h4>
-
-
-
-
-<div class="description">
-    Default configuration.
-</div>
+<h4 class="name" id="defaultConfig"><span class="type-signature"></span>defaultConfig<span class="type-signature"> :Object</span></h4>
 
 
 
@@ -322,30 +409,7 @@
 <dl class="details">
 
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
+    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line22">line 22</a>
     </li></ul></dd>
@@ -356,7 +420,51 @@
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
+
+
+
+
+
+<div class="description">
+    Default configuration.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
 
 
 
@@ -365,14 +473,7 @@
 
         
             
-<h4 class="name" id="filepath"><span class="type-signature">(readonly) </span>filepath<span class="type-signature"> string</span></h4>
-
-
-
-
-<div class="description">
-    Path to the database file.
-</div>
+<h4 class="name" id="filepath"><span class="type-signature">(readonly) </span>filepath<span class="type-signature"> :string</span></h4>
 
 
 
@@ -381,30 +482,7 @@
 <dl class="details">
 
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
+    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line16">line 16</a>
     </li></ul></dd>
@@ -415,7 +493,51 @@
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
+
+
+
+
+
+<div class="description">
+    Path to the database file.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
 
 
 
@@ -424,14 +546,7 @@
 
         
             
-<h4 class="name" id="ids"><span class="type-signature"></span>ids<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    Array of IDs.
-</div>
+<h4 class="name" id="ids"><span class="type-signature"></span>ids<span class="type-signature"> :Array.&lt;string></span></h4>
 
 
 
@@ -440,30 +555,7 @@
 <dl class="details">
 
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
+    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line42">line 42</a>
     </li></ul></dd>
@@ -474,7 +566,51 @@
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
+
+
+
+
+
+<div class="description">
+    Array of IDs. Note that this calls the Collection's keyArray().
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Array.&lt;string></span>
+
+
+        </li>
+    </ul>
 
 
 
@@ -483,14 +619,7 @@
 
         
             
-<h4 class="name" id="memory"><span class="type-signature"></span>memory<span class="type-signature"> Collection.&lt;string, Object></span></h4>
-
-
-
-
-<div class="description">
-    Configurations stored in memory, mapped by ID to configuration. Note that if you modify/get values directly from here, you should use the handler's sanitize() and desanitize() methods.
-</div>
+<h4 class="name" id="memory"><span class="type-signature"></span>memory<span class="type-signature"> :Collection.&lt;string, Object></span></h4>
 
 
 
@@ -499,30 +628,7 @@
 <dl class="details">
 
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
+    <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line28">line 28</a>
     </li></ul></dd>
@@ -533,7 +639,51 @@
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
+
+
+
+
+
+<div class="description">
+    Configurations stored in memory, mapped by ID to configuration. Note that if you modify/get values directly from here, you should use the handler's sanitize() and desanitize() methods.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Collection.&lt;string, Object></span>
+
+
+        </li>
+    </ul>
 
 
 
@@ -557,6 +707,51 @@
 
 
 
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line82">line 82</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
 <div class="description">
     Should add entry to database.
 </div>
@@ -573,44 +768,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line74">line 74</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -634,6 +791,51 @@
 
 
 
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line88">line 88</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
 <div class="description">
     Should add entry to memory.
 </div>
@@ -650,44 +852,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line80">line 80</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -711,6 +875,51 @@
 
 
 
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line64">line 64</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
 <div class="description">
     Should desanitize text for use.
 </div>
@@ -727,44 +936,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line56">line 56</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -788,6 +959,51 @@
 
 
 
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line112">line 112</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
 <div class="description">
     Should get entry from memory.
 </div>
@@ -804,44 +1020,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line104">line 104</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -865,6 +1043,51 @@
 
 
 
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line106">line 106</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
 <div class="description">
     Should check if entry is in memory.
 </div>
@@ -881,44 +1104,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line98">line 98</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -942,6 +1127,51 @@
 
 
 
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line76">line 76</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
 <div class="description">
     Should initialize database.
 </div>
@@ -958,44 +1188,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line68">line 68</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -1019,6 +1211,51 @@
 
 
 
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line70">line 70</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
 <div class="description">
     Should open database.
 </div>
@@ -1035,44 +1272,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line62">line 62</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -1096,6 +1295,51 @@
 
 
 
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line94">line 94</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
 <div class="description">
     Should remove entry from database.
 </div>
@@ -1112,44 +1356,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line86">line 86</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -1173,6 +1379,51 @@
 
 
 
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line100">line 100</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
 <div class="description">
     Should remove entry from database.
 </div>
@@ -1189,44 +1440,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line92">line 92</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -1250,6 +1463,51 @@
 
 
 
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line58">line 58</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
 <div class="description">
     Should sanitize input.
 </div>
@@ -1266,44 +1524,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line50">line 50</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -1327,6 +1547,51 @@
 
 
 
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line130">line 130</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
 <div class="description">
     Should update a config from memory to database.
 </div>
@@ -1343,44 +1608,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line122">line 122</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -1404,6 +1631,51 @@
 
 
 
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line136">line 136</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
 <div class="description">
     Should update all configs from memory to database.
 </div>
@@ -1420,44 +1692,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line128">line 128</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -1481,6 +1715,51 @@
 
 
 
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line118">line 118</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
 <div class="description">
     Should update a value in database.
 </div>
@@ -1497,44 +1776,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line110">line 110</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -1558,6 +1799,51 @@
 
 
 
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line124">line 124</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
 <div class="description">
     Should update a value in memory.
 </div>
@@ -1574,44 +1860,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line116">line 116</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -1642,7 +1890,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> using the Minami theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
