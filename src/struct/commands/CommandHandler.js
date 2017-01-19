@@ -175,9 +175,8 @@ class CommandHandler extends EventEmitter {
         }
 
         this.framework.inhibitorHandler.testMessage(message).then(() => {
-            let prefix = this.prefix(message);
+            let prefix = this.prefix(message).toLowerCase();
             let allowMention = this.allowMention(message);
-            prefix = prefix.toLowerCase();
             let start;
 
             if (message.content.toLowerCase().startsWith(prefix)){
