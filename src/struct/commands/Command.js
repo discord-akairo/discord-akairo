@@ -94,7 +94,7 @@ class Command {
          * Category this command belongs to.
          * @type {Category}
          */
-        this.category = null;
+        this.category = options.category || 'default';
 
         /**
          * Description of the command.
