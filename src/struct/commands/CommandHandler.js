@@ -120,7 +120,7 @@ class CommandHandler extends EventEmitter {
         delete require.cache[require.resolve(command.filepath)];
         this.commands.delete(command.id);
         
-        this.categories.get(command.category).commands.delete(command.id);
+        command.category.commands.delete(command.id);
     }
 
     /**
@@ -136,7 +136,7 @@ class CommandHandler extends EventEmitter {
         delete require.cache[require.resolve(command.filepath)];
         this.commands.delete(command.id);
 
-        this.categories.get(command.category).commands.delete(command.id);
+        command.category.commands.delete(command.id);
         
         this.load(filepath);
     }
