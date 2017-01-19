@@ -55,13 +55,26 @@ function exec(message, args){
     message.channel.send(random);
 }
 
-module.exports = new Command('roll', ['roll', 'dice', 'rng'], [
-    {id: 'limit', type: 'number', defaultValue: 100},
-    {id: 'noFloor', match: 'flag', prefix: '--noFloor'}
-], {
+module.exports = new Command('roll', {
+    aliases: ['roll', 'dice', 'rng'],
+    args: [
+        {
+            id: 'limit',
+            type: 'number',
+            defaultValue: 100,
+            descriptions: 'Maximum number to roll.'
+        },
+        {
+            id: 'noFloor', 
+            match: 'flag', 
+            prefix: '--noFloor',
+            description: 'Disables flooring the output.'
+        }
+    ],
     category: 'numbers',
+    descriptions: 'Rolls a number!',
     channelRestriction: 'guild'
-}, exec);
+});
 ```
 
 #### Command Inhibitors
@@ -73,7 +86,9 @@ function exec(message){
     return blockedUsers.includes(message.author.id);
 }
 
-module.exports = new Inhibitor('blacklist', 'blacklist', false, exec);
+module.exports = new Inhibitor('blacklist', exec, {
+    reason: 'blacklist'
+});
 ```
 
 #### Event Listeners
@@ -91,7 +106,11 @@ function exec(message, command, reason){
     if (replies[reason]) message.reply(replies[reason]);
 }
 
-module.exports = new Listener('commandBlocked', 'commandHandler', 'commandBlocked', 'on', exec);
+module.exports = new Listener('commandBlocked', exec, {
+    emitter: 'commandHandler',
+    eventName: 'commandBlocked',
+    type: 'on'
+});
 ```
 
 #### Reloading
