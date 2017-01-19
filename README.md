@@ -115,9 +115,9 @@ module.exports = new Listener('commandBlocked', exec, {
 #### Reloading
 ```js
 // Somewhere...
-commandHandler.reloadCommand('roll');
-inhibitorHandler.reloadInhibitor('blacklist');
-listenerHandler.reloadListener('commandBlocked');
+commandHandler.reload('roll');
+inhibitorHandler.reload('blacklist');
+listenerHandler.reload('commandBlocked');
 
 // All reloaded!
 ```
