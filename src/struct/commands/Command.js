@@ -39,7 +39,7 @@
  * @typedef {Object} CommandOptions
  * @prop {Argument[]} [args=[]] - Arguments to parse.
  * @prop {string} [aliases=[]] - Command names.
- * @prop {string} [category=''] - Command category for organization purposes.
+ * @prop {string} [category='default'] - Command category ID for organization purposes.
  * @prop {string|string[]} [description=''] - Description of the command.
  * @prop {boolean} [ownerOnly=false] - Allow client owner only.
  * @prop {string} [channelRestriction='none'] - Restricts channel: 'guild' or 'dm'.
