@@ -63,6 +63,19 @@ class Framework {
              */
             this.listenerHandler = new ListenerHandler(this, options);
         }
+        
+        process.on('uncaughtException', err => {
+            console.error(err.stack.replace(new RegExp(`${__dirname}\/`, 'g'), './'));
+        });
+
+        process.on("unhandledRejection", err => {
+            console.error(`Uncaught Promise Error:\n${err.stack}`);
+        });
+
+        this.client.on('error', console.error);
+        this.client.on('warn', console.warn);
+        this.client.on('disconnect', console.warn);
+        
     }
 
     /**
@@ -78,15 +91,7 @@ class Framework {
             if (this.commandHandler) this.client.on('message', m => { this.commandHandler.handle(m); });
         });
     }
-    
-    process.on('uncaughtException', err => {
-        console.error(err.stack.replace(new RegExp(`${__dirname}\/`, 'g'), './'));
-      });
 
-      process.on("unhandledRejection", err => {
-        console.error(`Uncaught Promise Error:\n${err.stack}`);
-      });
-    
 }
 
 module.exports = Framework;
