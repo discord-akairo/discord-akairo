@@ -419,6 +419,9 @@
             
                 
 <span class="param-type">string</span>
+ || 
+
+<span class="param-type">Array.&lt;string></span>
 
 
             
@@ -528,7 +531,7 @@
 
 
 <div class="description">
-    The method to match arguments from text. Possible strings are:<br/><code>'word'</code> Matches by the order of the words inputted. Ignores words that matches prefix or flag.<br/><code>'prefix'</code> Matches words that starts with the prefix. The word after the prefix is the evaluated argument.<br/><code>'flag'</code> Matches words that equal this prefix. The evaluated argument is true or false.<br/><code>'text'</code> Matches the entire text, except for the command, ignoring words that matches prefix or flag.<br/><code>'content'</code> Matches the entire text as it was inputted, except for the command.
+    The method to match arguments from text. Possible strings are:<br/><br/><code>'word'</code> Matches by the order of the words inputted. Ignores words that matches prefix or flag.<br/><code>'prefix'</code> Matches words that starts with the prefix. The word after the prefix is the evaluated argument.<br/><code>'flag'</code> Matches words that equal this prefix. The evaluated argument is true or false.<br/><code>'text'</code> Matches the entire text, except for the command, ignoring words that matches prefix or flag.<br/><code>'content'</code> Matches the entire text as it was inputted, except for the command.
 </div>
 
 
@@ -561,7 +564,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line47">line 47</a>
+        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line52">line 52</a>
     </li></ul></dd>
     
 
@@ -601,7 +604,7 @@
 
 
 <div class="description">
-    The method to split text into words. Possible strings are:<br/><code>'plain'</code> Splits word separated by whitespace. Extra whitespace is ignored.<br/><code>'split'</code> Splits word separated by whitespace.<br/><code>'quoted'</code> This is like plain, but counts text inside double quotes as one word.<br/><code>'sticky'</code> This is like quoted, but makes it so that quoted text must have a whitespace/another double quote before it to count as another word.
+    The method to split text into words. Possible strings are:<br/><br/><code>'plain'</code> Splits word separated by whitespace. Extra whitespace is ignored.<br/><code>'split'</code> Splits word separated by whitespace.<br/><code>'quoted'</code> This is like plain, but counts text inside double quotes as one word.<br/><code>'sticky'</code> This is like quoted, but makes it so that quoted text must have a whitespace/another double quote before it to count as another word. It will still span multiple words.
 </div>
 
 
@@ -634,7 +637,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line23">line 23</a>
+        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line24">line 24</a>
     </li></ul></dd>
     
 
@@ -674,7 +677,7 @@
 
 
 <div class="description">
-    The type that the argument should be cast to. Possible strings are:<br/><code>'string'</code> Does not cast to any type.<br/><code>'number'</code> Casts to an number with parseFloat(), default value if not a number.<br/><code>'integer'</code> Casts to an integer with parseInt(), default value if not a number.<br/><code>'dynamic'</code> Casts to a number with parseFloat() or a string if the argument is not a number.<br/><code>'dynamicInt'</code> Casts to an integer with parseInt() or a string if the argument is not a number.<br/><br/>An array of strings can be used to restrict input to only those strings, case insensitive. The evaluated argument will be all lowercase.<br/>A function (<code>arg => {}</code>) can also be used to filter arguments.<br/>If the input is not in the array or does not pass the function, the default value is used.
+    The type that the argument should be cast to. Possible strings are:<br/><br/><code>'string'</code> Does not cast to any type.<br/><code>'number'</code> Casts to an number with parseFloat(), default value if not a number.<br/><code>'integer'</code> Casts to an integer with parseInt(), default value if not a number.<br/><code>'dynamic'</code> Casts to a number with parseFloat() or a string if the argument is not a number.<br/><code>'dynamicInt'</code> Casts to an integer with parseInt() or a string if the argument is not a number.<br/><br/>An array of strings can be used to restrict input to only those strings, case insensitive. The evaluated argument will be all lowercase.<br/>A function (<code>arg => {}</code>) can also be used to filter arguments.<br/>If the input is not in the array or does not pass the function, the default value is used.
 </div>
 
 
@@ -710,7 +713,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line37">line 37</a>
+        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line39">line 39</a>
     </li></ul></dd>
     
 
@@ -777,6 +780,80 @@
 
         <tr>
             
+                <td class="name"><code>args</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;<a href="global.html#Argument">Argument</a>></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>[]</code>
+                
+                </td>
+            
+
+            <td class="description last">Arguments to parse.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>aliases</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>[]</code>
+                
+                </td>
+            
+
+            <td class="description last">Command names.</td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>category</code></td>
             
 
@@ -802,12 +879,12 @@
             
                 <td class="default">
                 
-                    <code>''</code>
+                    <code>'default'</code>
                 
                 </td>
             
 
-            <td class="description last">Command category for organization purposes.</td>
+            <td class="description last">Command category ID for organization purposes.</td>
         </tr>
 
     
@@ -821,6 +898,9 @@
             
                 
 <span class="param-type">string</span>
+ || 
+
+<span class="param-type">Array.&lt;string></span>
 
 
             
@@ -956,6 +1036,43 @@
             
 
             <td class="description last">Method to split text into words.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>custom</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>{}</code>
+                
+                </td>
+            
+
+            <td class="description last">An object for custom options. Accessible with command.options.</td>
         </tr>
 
     
@@ -1408,6 +1525,406 @@
 
 <div class="description">
     Options used to determine how the framework behaves.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="InhibitorOptions">InhibitorOptions</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>reason</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>''</code>
+                
+                </td>
+            
+
+            <td class="description last">Reason emitted when command or message is blocked.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>preMessage</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Makes this inhibitor run before the message is handled rather than after.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<div class="description">
+    Options to use for inhibitor execution behavior.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="ListenerOptions">ListenerOptions</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="listeners_Listener.js.html">listeners/Listener.js</a>, <a href="listeners_Listener.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>emitter</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+ || 
+
+<span class="param-type">EventEmitter</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>'client'</code>
+                
+                </td>
+            
+
+            <td class="description last">The event emitter: 'client' or 'commandHandler' or an EventEmitter.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>eventName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>'ready'</code>
+                
+                </td>
+            
+
+            <td class="description last">Event name to listen to.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>'on'</code>
+                
+                </td>
+            
+
+            <td class="description last">Type of listener: 'on' or 'once'.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<div class="description">
+    Options to use for listener execution behavior.
 </div>
 
 

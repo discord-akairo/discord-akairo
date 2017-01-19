@@ -293,7 +293,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line204">line 204</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line272">line 272</a>
     </li></ul></dd>
     
 
@@ -467,7 +467,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line191">line 191</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line259">line 259</a>
     </li></ul></dd>
     
 
@@ -606,7 +606,7 @@
 
     
 
-    <h4 class="name" id="resolveChannel"><span class="type-signature"></span>resolveChannel<span class="signature">(text, guild, caseSensitive<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {GuildChannel}</span></h4>
+    <h4 class="name" id="resolveChannel"><span class="type-signature"></span>resolveChannel<span class="signature">(text, guild, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {GuildChannel}</span></h4>
 
     
 
@@ -618,7 +618,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line109">line 109</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line127">line 127</a>
     </li></ul></dd>
     
 
@@ -806,6 +806,45 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>wholeWord</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Makes finding by name match full word only.</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -847,7 +886,7 @@
 
     
 
-    <h4 class="name" id="resolveEmoji"><span class="type-signature"></span>resolveEmoji<span class="signature">(text, guild, caseSensitive<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Emoji}</span></h4>
+    <h4 class="name" id="resolveEmoji"><span class="type-signature"></span>resolveEmoji<span class="signature">(text, guild, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Emoji}</span></h4>
 
     
 
@@ -859,7 +898,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line165">line 165</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line199">line 199</a>
     </li></ul></dd>
     
 
@@ -1047,6 +1086,45 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>wholeWord</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Makes finding by name match full word only.</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -1088,7 +1166,7 @@
 
     
 
-    <h4 class="name" id="resolveMember"><span class="type-signature"></span>resolveMember<span class="signature">(text, guild<span class="signature-attributes">opt</span>, caseSensitive<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {GuildMember|User}</span></h4>
+    <h4 class="name" id="resolveGuild"><span class="type-signature"></span>resolveGuild<span class="signature">(text, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Guild}</span></h4>
 
     
 
@@ -1100,7 +1178,252 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line80">line 80</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line234">line 234</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Resolves a Guild from a string, such as an ID, or name.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Text to resolve.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>caseSensitive</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Makes finding by name case sensitive.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>wholeWord</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Makes finding by name match full word only.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Guild</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="resolveMember"><span class="type-signature"></span>resolveMember<span class="signature">(text, guild<span class="signature-attributes">opt</span>, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {GuildMember|User}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line89">line 89</a>
     </li></ul></dd>
     
 
@@ -1290,6 +1613,45 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>wholeWord</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Makes finding by name match full word only.</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -1346,7 +1708,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line220">line 220</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line288">line 288</a>
     </li></ul></dd>
     
 
@@ -1485,7 +1847,7 @@
 
     
 
-    <h4 class="name" id="resolveRole"><span class="type-signature"></span>resolveRole<span class="signature">(text, guild, caseSensitive<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Role}</span></h4>
+    <h4 class="name" id="resolveRole"><span class="type-signature"></span>resolveRole<span class="signature">(text, guild, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Role}</span></h4>
 
     
 
@@ -1497,7 +1859,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line137">line 137</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line163">line 163</a>
     </li></ul></dd>
     
 
@@ -1685,6 +2047,45 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>wholeWord</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Makes finding by name match full word only.</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -1726,7 +2127,7 @@
 
     
 
-    <h4 class="name" id="resolveUser"><span class="type-signature"></span>resolveUser<span class="signature">(text, caseSensitive<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {User}</span></h4>
+    <h4 class="name" id="resolveUser"><span class="type-signature"></span>resolveUser<span class="signature">(text, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {User}</span></h4>
 
     
 
@@ -1738,7 +2139,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line54">line 54</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line55">line 55</a>
     </li></ul></dd>
     
 
@@ -1888,6 +2289,45 @@
             
 
             <td class="description last">Makes finding by name case sensitive.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>wholeWord</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Makes finding by name match full word only.</td>
         </tr>
 
     

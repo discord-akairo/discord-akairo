@@ -11,9 +11,8 @@
 </p>  
 
 ## About
-A bot framework for Discord.js v11, where everything is reloadable, commands are easy as cake to make, and argument parsing is very flexible.  
-Note that this framework is a work-in-progress, so expect frequent and perhaps breaking updates.  
-But don't worry! They'll always be good.  
+A modular and customizable bot framework for Discord.js v11.  
+Everything is reloadable, commands are easy to make, and argument parsing is very flexible.  
 
 ```js
 const Discord = require('discord.js');

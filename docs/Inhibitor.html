@@ -53,7 +53,7 @@
 
     
 
-    <h4 class="name" id="Inhibitor"><span class="type-signature"></span>new Inhibitor<span class="signature">(id, reason, preMessage, exec)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Inhibitor"><span class="type-signature"></span>new Inhibitor<span class="signature">(id, exec, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
@@ -65,7 +65,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line9">line 9</a>
+        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line15">line 15</a>
     </li></ul></dd>
     
 
@@ -131,7 +131,11 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -156,56 +160,22 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last">Inhibitor ID.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>reason</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Reason emitted when a command/message is blocked.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>preMessage</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Makes this inhibitor run before the message is handled rather than after.</td>
         </tr>
 
     
@@ -225,10 +195,61 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last">Function (<code>(message, command) => {}</code>) called before a command is ran. Return true or a rejecting Promise to block.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#InhibitorOptions">InhibitorOptions</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>{}</code>
+                
+                </td>
+            
+
+            <td class="description last">Options for the inhibitor.</td>
         </tr>
 
     
@@ -279,7 +300,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line59">line 59</a>
+        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line65">line 65</a>
     </li></ul></dd>
     
 
@@ -352,7 +373,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line38">line 38</a>
+        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line44">line 44</a>
     </li></ul></dd>
     
 
@@ -425,7 +446,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line32">line 32</a>
+        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line38">line 38</a>
     </li></ul></dd>
     
 
@@ -498,7 +519,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line45">line 45</a>
+        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line51">line 51</a>
     </li></ul></dd>
     
 
@@ -571,7 +592,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line52">line 52</a>
+        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line58">line 58</a>
     </li></ul></dd>
     
 
@@ -644,7 +665,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line14">line 14</a>
+        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line20">line 20</a>
     </li></ul></dd>
     
 
@@ -717,7 +738,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line66">line 66</a>
+        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line72">line 72</a>
     </li></ul></dd>
     
 
@@ -790,7 +811,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line26">line 26</a>
+        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line32">line 32</a>
     </li></ul></dd>
     
 
@@ -863,7 +884,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line20">line 20</a>
+        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line26">line 26</a>
     </li></ul></dd>
     
 
@@ -946,7 +967,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line94">line 94</a>
+        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line100">line 100</a>
     </li></ul></dd>
     
 
@@ -1030,7 +1051,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line86">line 86</a>
+        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line92">line 92</a>
     </li></ul></dd>
     
 
@@ -1114,7 +1135,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line72">line 72</a>
+        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line78">line 78</a>
     </li></ul></dd>
     
 
@@ -1198,7 +1219,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line79">line 79</a>
+        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line85">line 85</a>
     </li></ul></dd>
     
 
@@ -1282,7 +1303,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line103">line 103</a>
+        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line109">line 109</a>
     </li></ul></dd>
     
 

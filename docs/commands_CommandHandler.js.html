@@ -90,7 +90,7 @@ class CommandHandler extends EventEmitter {
          * Gets if mentions are allowed for prefixing.
          * @type {function}
          */
-        this.allowMention = typeof options.prefix === 'function' ? options.prefix : () => options.allowMention;
+        this.allowMention = typeof options.allowMention === 'function' ? options.allowMention : () => options.allowMention;
 
         /**
          * Commands loaded, mapped by ID to Command.
@@ -127,8 +127,10 @@ class CommandHandler extends EventEmitter {
 
         this.commands.set(command.id, command);
 
-        if (!this.categories.has(command.options.category)) this.categories.set(command.options.category, new Category(command.options.category));
-        this.categories.get(command.options.category).commands.set(command.id, command);
+        if (!this.categories.has(command.category)) this.categories.set(command.category, new Category(command.category));
+        let category = this.categories.get(command.category);
+        command.category = category;
+        category.set(command.id, command);
     }
 
     /**
@@ -157,7 +159,7 @@ class CommandHandler extends EventEmitter {
         delete require.cache[require.resolve(command.filepath)];
         this.commands.delete(command.id);
         
-        this.categories.get(command.options.category).commands.delete(command.id);
+        command.category.delete(command.id);
     }
 
     /**
@@ -173,7 +175,7 @@ class CommandHandler extends EventEmitter {
         delete require.cache[require.resolve(command.filepath)];
         this.commands.delete(command.id);
 
-        this.categories.get(command.options.category).commands.delete(command.id);
+        command.category.delete(command.id);
         
         this.load(filepath);
     }
@@ -241,9 +243,9 @@ class CommandHandler extends EventEmitter {
             if (!command.enabled) return this.emit('commandDisabled', message, command);
 
             if (!this.postInhibDisabled){
-                if (command.options.ownerOnly &amp;&amp; message.author.id !== this.framework.client.ownerID) return this.emit('commandBlocked', message, command, 'owner');
-                if (command.options.channelRestriction === 'guild' &amp;&amp; !message.guild) return this.emit('commandBlocked', message, command, 'guild');
-                if (command.options.channelRestriction === 'dm' &amp;&amp; message.guild) return this.emit('commandBlocked', message, command, 'dm');
+                if (command.ownerOnly &amp;&amp; message.author.id !== this.framework.client.ownerID) return this.emit('commandBlocked', message, command, 'owner');
+                if (command.channelRestriction === 'guild' &amp;&amp; !message.guild) return this.emit('commandBlocked', message, command, 'guild');
+                if (command.channelRestriction === 'dm' &amp;&amp; message.guild) return this.emit('commandBlocked', message, command, 'dm');
             }
 
             this.framework.inhibitorHandler.testCommand(message, command).then(() => {

@@ -12,6 +12,7 @@
 
 /**
  * The method to match arguments from text. Possible strings are:
+ * <br/>
  * <br/><code>'word'</code> Matches by the order of the words inputted. Ignores words that matches prefix or flag.
  * <br/><code>'prefix'</code> Matches words that starts with the prefix. The word after the prefix is the evaluated argument.
  * <br/><code>'flag'</code> Matches words that equal this prefix. The evaluated argument is true or false.
@@ -22,6 +23,7 @@
 
 /**
  * The type that the argument should be cast to. Possible strings are:
+ * <br/>
  * <br/><code>'string'</code> Does not cast to any type.
  * <br/><code>'number'</code> Casts to an number with parseFloat(), default value if not a number.
  * <br/><code>'integer'</code> Casts to an integer with parseInt(), default value if not a number.
@@ -49,10 +51,11 @@
 
 /**
  * The method to split text into words. Possible strings are:
+ * <br/>
  * <br/><code>'plain'</code> Splits word separated by whitespace. Extra whitespace is ignored.
  * <br/><code>'split'</code> Splits word separated by whitespace.
  * <br/><code>'quoted'</code> This is like plain, but counts text inside double quotes as one word.
- * <br/><code>'sticky'</code> This is like quoted, but makes it so that quoted text must have a whitespace/another double quote before it to count as another word.
+ * <br/><code>'sticky'</code> This is like quoted, but makes it so that quoted text must have a whitespace/another double quote before it to count as another word. It will still span multiple words.
  * @typedef {string} ArgumentSplit
  */
 

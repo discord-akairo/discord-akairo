@@ -289,17 +289,17 @@ footer {
 }
 
 .details {
-  visibility: hidden;
+  /*visibility: hidden;*/
   margin-top: 6px;
   margin-bottom: 0px;
-  /*border-left: 2px solid #DDD;*/
+  border-left: 2px solid #DDD;
   line-height: 20px;
   font-size: 12px;
-  text-align: right;
+  /*text-align: right;*/
 }
 
 .details dt {
-  visibility: hidden;
+  /*visibility: hidden;*/
   width: 120px;
   float: left;
   padding-left: 10px;

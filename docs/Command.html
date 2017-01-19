@@ -53,7 +53,7 @@
 
     
 
-    <h4 class="name" id="Command"><span class="type-signature"></span>new Command<span class="signature">(id, aliases, args, options, exec)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Command"><span class="type-signature"></span>new Command<span class="signature">(id, exec, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
@@ -65,7 +65,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line65">line 65</a>
+        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line69">line 69</a>
     </li></ul></dd>
     
 
@@ -131,7 +131,11 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -156,79 +160,22 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last">Command ID.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>aliases</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;string></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Names to call the command with.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>args</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;<a href="global.html#Argument">Argument</a>></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Arguments for the command.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#CommandOptions">CommandOptions</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Options for the command.</td>
         </tr>
 
     
@@ -248,10 +195,61 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last">Function (<code>(message, args) => {}</code>) called when command is ran.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#CommandOptions">CommandOptions</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>{}</code>
+                
+                </td>
+            
+
+            <td class="description last">Options for the command.</td>
         </tr>
 
     
@@ -302,7 +300,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line76">line 76</a>
+        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line80">line 80</a>
     </li></ul></dd>
     
 
@@ -375,7 +373,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line82">line 82</a>
+        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line86">line 86</a>
     </li></ul></dd>
     
 
@@ -437,6 +435,152 @@
 
         
             
+<h4 class="name" id="category"><span class="type-signature"></span>category<span class="type-signature"> :<a href="Category.html">Category</a></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line100">line 100</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Category this command belongs to.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="Category.html">Category</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="channelRestriction"><span class="type-signature"></span>channelRestriction<span class="type-signature"> :string</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line118">line 118</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Usable only in this channel type.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
 <h4 class="name" id="client"><span class="type-signature">(readonly) </span>client<span class="type-signature"> :Client</span></h4>
 
 
@@ -448,7 +592,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line137">line 137</a>
+        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line163">line 163</a>
     </li></ul></dd>
     
 
@@ -521,7 +665,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line144">line 144</a>
+        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line170">line 170</a>
     </li></ul></dd>
     
 
@@ -583,6 +727,79 @@
 
         
             
+<h4 class="name" id="description"><span class="type-signature"></span>description<span class="type-signature"> :string</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line106">line 106</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Description of the command.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
 <h4 class="name" id="enabled"><span class="type-signature"></span>enabled<span class="type-signature"> :boolean</span></h4>
 
 
@@ -594,7 +811,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line116">line 116</a>
+        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line142">line 142</a>
     </li></ul></dd>
     
 
@@ -667,7 +884,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line110">line 110</a>
+        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line136">line 136</a>
     </li></ul></dd>
     
 
@@ -740,7 +957,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line123">line 123</a>
+        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line149">line 149</a>
     </li></ul></dd>
     
 
@@ -813,7 +1030,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line130">line 130</a>
+        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line156">line 156</a>
     </li></ul></dd>
     
 
@@ -886,7 +1103,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line70">line 70</a>
+        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line74">line 74</a>
     </li></ul></dd>
     
 
@@ -948,7 +1165,7 @@
 
         
             
-<h4 class="name" id="options"><span class="type-signature"></span>options<span class="type-signature"> :<a href="global.html#CommandOptions">CommandOptions</a></span></h4>
+<h4 class="name" id="options"><span class="type-signature"></span>options<span class="type-signature"> :Object</span></h4>
 
 
 
@@ -959,7 +1176,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line96">line 96</a>
+        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line130">line 130</a>
     </li></ul></dd>
     
 
@@ -999,7 +1216,7 @@
 
 
 <div class="description">
-    Options for the command. Note that you can define any value here that you want for your own use.
+    Custom options for the command.
 </div>
 
 
@@ -1008,7 +1225,153 @@
     <ul>
         <li>
             
-<span class="param-type"><a href="global.html#CommandOptions">CommandOptions</a></span>
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="ownerOnly"><span class="type-signature"></span>ownerOnly<span class="type-signature"> :boolean</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line112">line 112</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Usable only by the client owner.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">boolean</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="split"><span class="type-signature"></span>split<span class="type-signature"> :<a href="global.html#ArgumentSplit">ArgumentSplit</a></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line124">line 124</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    The command split method.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="global.html#ArgumentSplit">ArgumentSplit</a></span>
 
 
         </li>
@@ -1042,7 +1405,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line172">line 172</a>
+        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line198">line 198</a>
     </li></ul></dd>
     
 
@@ -1126,7 +1489,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line164">line 164</a>
+        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line190">line 190</a>
     </li></ul></dd>
     
 
@@ -1210,7 +1573,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line182">line 182</a>
+        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line208">line 208</a>
     </li></ul></dd>
     
 
@@ -1361,7 +1724,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line150">line 150</a>
+        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line176">line 176</a>
     </li></ul></dd>
     
 
@@ -1445,7 +1808,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line157">line 157</a>
+        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line183">line 183</a>
     </li></ul></dd>
     
 
@@ -1529,7 +1892,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line270">line 270</a>
+        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line296">line 296</a>
     </li></ul></dd>
     
 

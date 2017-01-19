@@ -58,7 +58,7 @@
     </a>
 </p>  
 
-<h2>About</h2><p>A bot framework for Discord.js v11, where everything is reloadable, commands are easy as cake to make, and argument parsing is very flexible.<br>Note that this framework is a work-in-progress, so expect frequent and perhaps breaking updates.<br>But don't worry! They'll always be good.  </p>
+<h2>About</h2><p>A modular and customizable bot framework for Discord.js v11.<br>Everything is reloadable, commands are easy to make, and argument parsing is very flexible.  </p>
 <pre class="prettyprint source lang-js"><code>const Discord = require('discord.js');
 const Akairo = require('discord-akairo');
 
@@ -84,20 +84,35 @@ function exec(message, args){
     message.channel.send(random);
 }
 
-module.exports = new Command('roll', ['roll', 'dice', 'rng'], [
-    {id: 'limit', type: 'number', defaultValue: 100},
-    {id: 'noFloor', match: 'flag', prefix: '--noFloor'}
-], {
+module.exports = new Command('roll', exec, {
+    aliases: ['roll', 'dice', 'rng'],
+    args: [
+        {
+            id: 'limit',
+            type: 'number',
+            defaultValue: 100,
+            descriptions: 'Maximum number to roll.'
+        },
+        {
+            id: 'noFloor', 
+            match: 'flag', 
+            prefix: '--noFloor',
+            description: 'Disables flooring the output.'
+        }
+    ],
     category: 'numbers',
+    descriptions: 'Rolls a number!',
     channelRestriction: 'guild'
-}, exec);</code></pre><h4>Command Inhibitors</h4><pre class="prettyprint source lang-js"><code>const Inhibitor = require('discord-akairo').Inhibitor;
+});</code></pre><h4>Command Inhibitors</h4><pre class="prettyprint source lang-js"><code>const Inhibitor = require('discord-akairo').Inhibitor;
 const blockedUsers = ['1234', '5678', '1357', '2468'];
 
 function exec(message){
     return blockedUsers.includes(message.author.id);
 }
 
-module.exports = new Inhibitor('blacklist', 'blacklist', false, exec);</code></pre><h4>Event Listeners</h4><pre class="prettyprint source lang-js"><code>const Listener = require('discord-akairo').Listener;
+module.exports = new Inhibitor('blacklist', exec, {
+    reason: 'blacklist'
+});</code></pre><h4>Event Listeners</h4><pre class="prettyprint source lang-js"><code>const Listener = require('discord-akairo').Listener;
 
 function exec(message, command, reason){
     const replies = {
@@ -110,7 +125,11 @@ function exec(message, command, reason){
     if (replies[reason]) message.reply(replies[reason]);
 }
 
-module.exports = new Listener('commandBlocked', 'commandHandler', 'commandBlocked', 'on', exec);</code></pre><h4>Reloading</h4><pre class="prettyprint source lang-js"><code>// Somewhere...
+module.exports = new Listener('commandBlocked', exec, {
+    emitter: 'commandHandler',
+    eventName: 'commandBlocked',
+    type: 'on'
+});</code></pre><h4>Reloading</h4><pre class="prettyprint source lang-js"><code>// Somewhere...
 commandHandler.reloadCommand('roll');
 inhibitorHandler.reloadInhibitor('blacklist');
 listenerHandler.reloadListener('commandBlocked');
