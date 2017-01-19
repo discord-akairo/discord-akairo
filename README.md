@@ -55,7 +55,7 @@ function exec(message, args){
     message.channel.send(random);
 }
 
-module.exports = new Command('roll', {
+module.exports = new Command('roll', exec, {
     aliases: ['roll', 'dice', 'rng'],
     args: [
         {
