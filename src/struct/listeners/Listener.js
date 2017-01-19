@@ -1,8 +1,8 @@
 /**
  * Options to use for listener execution behavior.
  * @typedef {Object} ListenerOptions
- * @prop {string|EventEmitter} [emitter=''] - The event emitter: 'client' or 'commandHandler' or an EventEmitter.
- * @prop {string} [eventName=''] - Event name to listen to.
+ * @prop {string|EventEmitter} [emitter='client'] - The event emitter: 'client' or 'commandHandler' or an EventEmitter.
+ * @prop {string} [eventName='ready'] - Event name to listen to.
  * @prop {string} [type='on'] - Type of listener: 'on' or 'once'.
  */
 
@@ -24,13 +24,13 @@ class Listener {
          * The event emitter.
          * @type {string|EventEmitter}
          */
-        this.emitter = options.emitter || '';
+        this.emitter = options.emitter || 'client';
 
         /**
          * The event name listened to.
          * @type {string}
          */
-        this.eventName = options.eventName || '';
+        this.eventName = options.eventName || 'ready';
 
         /**
          * Type of listener.
