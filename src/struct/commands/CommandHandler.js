@@ -221,11 +221,13 @@ class CommandHandler extends EventEmitter {
                     this.emit('commandFinished', message, command);
                     throw err;
                 });
-            }).catch(reason => {
-                this.emit('commandBlocked', message, command, reason);
+            }).catch(errOrReason => {
+                if (errOrReason instanceof Error) throw errOrReason;
+                this.emit('commandBlocked', message, command, errOrReason);
             });
-        }).catch(reason => {
-            this.emit('messageBlocked', message, reason);
+        }).catch(errOrReason => {
+            if (errOrReason instanceof Error) throw errOrReason;
+            this.emit('messageBlocked', message, errOrReason);
         });
     }
 }
