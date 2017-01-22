@@ -15,7 +15,7 @@ class ClientUtil {
     }
 
     /**
-     * Resolves a User from a string, such as an ID, a username, etc.
+     * Resolves a User from a string, such as an ID, a name, or a mention.
      * @param {string} text - Text to resolve.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
@@ -48,7 +48,7 @@ class ClientUtil {
     }
 
     /**
-     * Resolves a GuildMember from a string, such as an ID, a nickname, a username, etc.
+     * Resolves a GuildMember from a string, such as an ID, a name, or a mention.
      * @param {string} text - Text to resolve.
      * @param {Guild} [guild] - Guild to find member in. If not specified, will resolve a User instead.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
@@ -86,7 +86,7 @@ class ClientUtil {
     }
 
     /**
-     * Resolves a GuildChannel from a string, such as an ID, a name, etc.
+     * Resolves a GuildChannel from a string, such as an ID, a name, or a mention.
      * @param {string} text - Text to resolve.
      * @param {Guild} guild - Guild to find channel in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
@@ -122,7 +122,7 @@ class ClientUtil {
     }
 
     /**
-     * Resolves a Role from a string, such as an ID, a name, etc.
+     * Resolves a Role from a string, such as an ID, a name, or a mention.
      * @param {string} text - Text to resolve.
      * @param {Guild} guild - Guild to find channel in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
@@ -158,7 +158,7 @@ class ClientUtil {
     }
 
     /**
-     * Resolves an Emoji from a string, such as a name or a mention.
+     * Resolves a custom Emoji from a string, such as a name or a mention.
      * @param {string} text - Text to resolve.
      * @param {Guild} guild - Guild to find emoji in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
@@ -194,7 +194,7 @@ class ClientUtil {
     }
 
     /**
-     * Resolves a Guild from a string, such as an ID, or name.
+     * Resolves a Guild from a string, such as an ID or a name.
      * @param {string} text - Text to resolve.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
@@ -262,6 +262,33 @@ class ClientUtil {
         });
 
         return resolved;
+    }
+
+    /**
+     * Resolves a channel permission overwrite. Returns an object with the `allowed` and `denied` arrays of permission names.
+     * @param {PermissionOverwrites} overwrite - Permissions overwrite.
+     * @returns {Object}
+     */
+    resolvePermissionOverwrite(overwrite){
+        return {
+            allowed: this.resolvePermissionNumber(overwrite.allow),
+            denied: this.resolvePermissionNumber(overwrite.deny),
+        };
+    }
+
+    /**
+     * Compares two member objects presences and checks if they started/stopped a stream or not. Returns `'started'`, `'stopped'`, or false if no change.
+     * @param {GuildMember} oldMember - The old member.
+     * @param {GuildMember} newMember - The new member.
+     * @returns {string}
+     */
+    compareStreaming(oldMember, newMember){
+        let s1 = oldMember.presence.game && oldMember.presence.game.streaming;
+        let s2 = newMember.presence.game && newMember.presence.game.streaming;
+
+        if (s1 === s2) return false;
+        if (s1) return 'stopped';
+        if (s2) return 'started';
     }
 }
 
