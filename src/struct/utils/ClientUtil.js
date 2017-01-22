@@ -1,4 +1,4 @@
-const PermissionFlags = require('discord.js').Constants.PermissionFlags;
+const Constants = require('discord.js').Constants;
 
 class ClientUtil {
     /**
@@ -44,7 +44,7 @@ class ClientUtil {
             return username.includes(t) || username.includes(t.split('#')[0]) && u.discriminator.includes(t.split('#')[1]);
         };
 
-        return users.get(text) || users.find(check) || !wholeWord ? users.find(checkInc) : null;
+        return users.get(text) || users.find(check) || (!wholeWord ? users.find(checkInc) : null);
     }
 
     /**
@@ -82,7 +82,7 @@ class ClientUtil {
             return displayName.includes(t) || username.includes(t) || username.includes(t.split('#')[0]) && m.user.discriminator.includes(t.split('#')[1]);
         };
 
-        return members.get(text) || members.find(check) || !wholeWord ? members.find(checkInc) : null;
+        return members.get(text) || members.find(check) || (!wholeWord ? members.find(checkInc) : null);
     }
 
     /**
@@ -118,7 +118,7 @@ class ClientUtil {
             return name.includes(t) || name.includes(t.replace(/^#/, ''));
         };
 
-        return channels.get(text) || channels.find(check) || !wholeWord ? channels.find(checkInc) : null;
+        return channels.get(text) || channels.find(check) || (!wholeWord ? channels.find(checkInc) : null);
     }
 
     /**
@@ -154,7 +154,7 @@ class ClientUtil {
             return name.includes(t) || name.includes(t.replace(/^@/, ''));
         };
 
-        return roles.get(text) || roles.find(check) || !wholeWord ? roles.find(checkInc) : null;
+        return roles.get(text) || roles.find(check) || (!wholeWord ? roles.find(checkInc) : null);
     }
 
     /**
@@ -190,7 +190,7 @@ class ClientUtil {
             return name.includes(t) || name.includes(t.replace(/:/g, ''));
         };
 
-        return emojis.get(text) || emojis.find(check) || !wholeWord ? emojis.find(checkInc) : null;
+        return emojis.get(text) || emojis.find(check) || (!wholeWord ? emojis.find(checkInc) : null);
     }
 
     /**
@@ -217,7 +217,7 @@ class ClientUtil {
             return name.includes(t);
         };
 
-        return guilds.get(text) || guilds.find(check) || !wholeWord ? guilds.find(checkInc) : null;
+        return guilds.get(text) || guilds.find(check) || (!wholeWord ? guilds.find(checkInc) : null);
     }
 
     /**
@@ -257,8 +257,8 @@ class ClientUtil {
     resolvePermissionNumber(number){
         let resolved = [];
 
-        Object.keys(PermissionFlags).forEach(key => {
-            if (number & PermissionFlags[key]) resolved.push(key);
+        Object.keys(Constants.PermissionFlags).forEach(key => {
+            if (number & Constants.PermissionFlags[key]) resolved.push(key);
         });
 
         return resolved;
