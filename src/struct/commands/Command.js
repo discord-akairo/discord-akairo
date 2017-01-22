@@ -270,6 +270,7 @@ class Command {
             if (!word) return args[arg.id] = arg.defaultValue;
 
             word = word.replace(prefixes.find(p => word.startsWith(p)), '');
+            if (this.split === 'sticky' && /^".*"$/.test(word)) word = word.slice(1, -1);
             args[arg.id] = processType(arg, word);
         });
 

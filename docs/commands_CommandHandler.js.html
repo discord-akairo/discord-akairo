@@ -214,12 +214,11 @@ class CommandHandler extends EventEmitter {
         }
 
         this.framework.inhibitorHandler.testMessage(message).then(() => {
-            let prefix = this.prefix(message);
+            let prefix = this.prefix(message).toLowerCase();
             let allowMention = this.allowMention(message);
-
             let start;
 
-            if (message.content.startsWith(prefix)){
+            if (message.content.toLowerCase().startsWith(prefix)){
                 start = prefix;
             } else
             if (allowMention){
@@ -261,11 +260,13 @@ class CommandHandler extends EventEmitter {
                     this.emit('commandFinished', message, command);
                     throw err;
                 });
-            }).catch(reason => {
-                this.emit('commandBlocked', message, command, reason);
+            }).catch(errOrReason => {
+                if (errOrReason instanceof Error) throw errOrReason;
+                this.emit('commandBlocked', message, command, errOrReason);
             });
-        }).catch(reason => {
-            this.emit('messageBlocked', message, reason);
+        }).catch(errOrReason => {
+            if (errOrReason instanceof Error) throw errOrReason;
+            this.emit('messageBlocked', message, errOrReason);
         });
     }
 }
@@ -312,7 +313,8 @@ module.exports = CommandHandler;
  * @event CommandHandler#commandFinished
  * @param {Message} message - Message sent.
  * @param {Command} command - Command executed.
- */</code></pre>
+ */
+</code></pre>
         </article>
     </section>
 
