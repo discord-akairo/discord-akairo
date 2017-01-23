@@ -15,6 +15,14 @@ class ClientUtil {
     }
 
     /**
+     * Array of permission names.
+     * @type {string[]}
+     */
+    get permissionNames(){
+        return Object.keys(Constants.PermissionFlags);
+    }
+
+    /**
      * Resolves a User from a string, such as an ID, a name, or a mention.
      * @param {string} text - Text to resolve.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
@@ -235,6 +243,7 @@ class ClientUtil {
 
     /**
      * Creates an invite link for the client.
+     * @deprecated Use client.generateInvite(). When was that added!?
      * @param {(number|PermissionResolvable[])} [permissions=0] - Permissions number or array of PermissionResolvables.
      * @return {Promise.<string>}
      */
