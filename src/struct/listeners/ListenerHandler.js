@@ -30,12 +30,14 @@ class ListenerHandler extends EventEmitter {
         this.directory = path.resolve(options.listenerDirectory);
 
         /**
-         * EventEmitters for use, mapped by name to EventEmitter. 'client' and 'commandHandler' are set by default.
+         * EventEmitters for use, mapped by name to EventEmitter. 'client', 'commandHandler', 'inhibitorHandler', 'listenerHandler' are set by default.
          * @type {Collection.<string, EventEmitter>}
          */
         this.emitters = new Collection();
         this.emitters.set('client', this.framework.client);
         this.emitters.set('commandHandler', this.framework.commandHandler);
+        this.emitters.set('inhibitorHandler', this.framework.inhibitorHandler);
+        this.emitters.set('listenerHandler', this.framework.listenerHandler);
 
         /**
          * Listeners loaded, mapped by ID to Listener.
