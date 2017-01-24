@@ -230,7 +230,7 @@ class CommandHandler extends EventEmitter {
 
             return test(message, command).then(() => {
                 let content = message.content.slice(message.content.indexOf(name) + name.length + 1);
-                let args = command.parse(content);
+                let args = command.parse(content, message);
 
                 this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command);
                 let end = Promise.resolve(command.exec(message, args));

@@ -11,7 +11,13 @@ module.exports = {
         NUMBER: 'number',
         INTEGER: 'integer',
         DYNAMIC: 'dynamic',
-        DYNAMIC_INT: 'dynamicInt'
+        DYNAMIC_INT: 'dynamicInt',
+        USER: 'user',
+        MEMBER: 'member',
+        CHANNEL: 'channel',
+        TEXT_CHANNEL: 'textChannel',
+        VOICE_CHANNEL: 'voiceChannel',
+        ROLE: 'role'
     },
     ArgumentSplits: {
         PLAIN: 'plain',

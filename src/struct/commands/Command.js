@@ -205,9 +205,10 @@ class Command {
     /**
      * Parses text based on this Command's args.
      * @param {string} content - String to parse.
+     * @param {Message} [message] - Message to use.
      * @returns {Object}
      */
-    parse(content){
+    parse(content, message){
         if (this.args.length === 0) return {};
 
         let words = (ArgumentSplitMethods[this.split] || (() => []))();
@@ -237,6 +238,34 @@ class Command {
 
             if (arg.type === ArgumentTypes.DYNAMIC_INT || arg.type === ArgumentTypes.INTEGER){
                 return parseInt(word);
+            }
+
+            if (arg.type === ArgumentTypes.USER){
+                return this.client.util.resolveUser(word, false, true) || arg.defaultValue;
+            }
+
+            if (arg.type === ArgumentTypes.MEMBER){
+                return this.client.util.resolveMember(word, message.guild, false, true) || arg.defaultValue;
+            }
+
+            if (arg.type === ArgumentTypes.CHANNEL){
+                return this.client.util.resolveChannel(word, message.guild, false, true) || arg.defaultValue;
+            }
+
+            if (arg.type === ArgumentTypes.TEXT_CHANNEL){
+                let chan = this.client.util.resolveChannel(word, message.guild, false, true);
+                if (!chan || chan.type !== 'text') return arg.defaultValue;
+                return chan;
+            }
+
+            if (arg.type === ArgumentTypes.VOICE_CHANNEL){
+                let chan = this.client.util.resolveChannel(word, message.guild, false, true);
+                if (!chan || chan.type !== 'voice') return arg.defaultValue;
+                return chan;
+            }
+
+            if (arg.type === ArgumentTypes.ROLE){
+                return this.client.util.resolveRole(word, message.guild, false, true) || arg.defaultValue;
             }
 
             if (Array.isArray(arg.type)){
