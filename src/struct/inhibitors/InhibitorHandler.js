@@ -1,16 +1,20 @@
 const path = require('path');
 const rread = require('readdir-recursive');
+const EventEmitter = require('events');
 const {Collection} = require('discord.js');
 const Inhibitor = require('./Inhibitor');
+const {InhibitorHandlerEvents} = require('../utils/Constants');
 
 /** @extends EventEmitter */
-class InhibitorHandler {
+class InhibitorHandler extends EventEmitter {
     /**
      * Loads Inhibitors and checks messages.
      * @param {Framework} framework - The Akairo framework.
      * @param {Object} options - Options from framework.
      */
     constructor(framework, options = {}){
+        super(); 
+
         /**
          * The Akairo framework.
          * @readonly
@@ -40,6 +44,7 @@ class InhibitorHandler {
     /**
      * Loads an Inhibitor.
      * @param {string} filepath - Path to file.
+     * @returns {Inhibitor}
      */
     load(filepath){
         let inhibitor = require(filepath);
@@ -53,6 +58,7 @@ class InhibitorHandler {
         inhibitor.inhibitorHandler = this;
 
         this.inhibitors.set(inhibitor.id, inhibitor);
+        return inhibitor;
     }
 
     /**
@@ -67,7 +73,7 @@ class InhibitorHandler {
             throw new Error(`File ${filename} not found.`);
         }
 
-        this.load(filepath);
+        this.emit(InhibitorHandlerEvents.ADD, this.load(filepath));
     }
 
     /**
@@ -80,6 +86,8 @@ class InhibitorHandler {
 
         delete require.cache[require.resolve(inhibitor.filepath)];
         this.inhibitors.delete(inhibitor.id);
+
+        this.emit(InhibitorHandlerEvents.REMOVE, inhibitor);
     }
 
     /**
@@ -95,7 +103,7 @@ class InhibitorHandler {
         delete require.cache[require.resolve(inhibitor.filepath)];
         this.inhibitors.delete(inhibitor.id);
         
-        this.load(filepath);
+        this.emit(InhibitorHandlerEvents.RELOAD, this.load(filepath));
     }
 
     /**
@@ -153,3 +161,21 @@ class InhibitorHandler {
 }
 
 module.exports = InhibitorHandler;
+
+/**
+ * Emitted when an inhibitor is added.
+ * @event InhibitorHandler#add
+ * @param {Inhibitor} inhibitor - Inhibitor added.
+ */
+
+/**
+ * Emitted when an inhibitor is removed.
+ * @event InhibitorHandler#remove
+ * @param {Inhibitor} inhibitor - Inhibitor removed.
+ */
+
+/**
+ * Emitted when an inhibitor is reloaded.
+ * @event InhibitorHandler#reload
+ * @param {Inhibitor} inhibitor - Inhibitor reloaded.
+ */

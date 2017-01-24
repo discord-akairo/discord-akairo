@@ -75,6 +75,7 @@ class CommandHandler extends EventEmitter {
     /**
      * Loads a Command.
      * @param {string} filepath - Path to file.
+     * @returns {Command}
      */
     load(filepath){
         let command = require(filepath);
@@ -93,6 +94,8 @@ class CommandHandler extends EventEmitter {
         let category = this.categories.get(command.category);
         command.category = category;
         category.set(command.id, command);
+
+        return command;
     }
 
     /**
@@ -107,7 +110,7 @@ class CommandHandler extends EventEmitter {
             throw new Error(`File ${filename} not found.`);
         }
 
-        this.load(filepath);
+        this.emit(CommandHandlerEvents.ADD, this.load(filepath));
     }
 
     /**
@@ -122,6 +125,8 @@ class CommandHandler extends EventEmitter {
         this.commands.delete(command.id);
         
         command.category.delete(command.id);
+
+        this.emit(CommandHandlerEvents.REMOVE, command);
     }
 
     /**
@@ -139,7 +144,7 @@ class CommandHandler extends EventEmitter {
 
         command.category.delete(command.id);
         
-        this.load(filepath);
+        this.emit(CommandHandlerEvents.RELOAD, this.load(filepath));
     }
 
     /**
@@ -234,6 +239,24 @@ class CommandHandler extends EventEmitter {
 }
 
 module.exports = CommandHandler;
+
+/**
+ * Emitted when a command is added.
+ * @event CommandHandler#add
+ * @param {Command} command - Command added.
+ */
+
+/**
+ * Emitted when a command is removed.
+ * @event CommandHandler#remove
+ * @param {Command} command - Command removed.
+ */
+
+/**
+ * Emitted when a command is reloaded.
+ * @event CommandHandler#reload
+ * @param {Command} command - Command reloaded.
+ */
 
 /**
  * Emitted when a message is blocked by a pre-message inhibitor. The built-in inhibitors are 'notSelf' (for selfbots), 'client', and 'bot'.

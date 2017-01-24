@@ -3,14 +3,18 @@ const rread = require('readdir-recursive');
 const EventEmitter = require('events');
 const {Collection} = require('discord.js');
 const Listener = require('./Listener');
+const {ListenerHandlerEvents} = require('../utils/Constants');
 
-class ListenerHandler {
+/** @extends EventEmitter */
+class ListenerHandler extends EventEmitter {
     /**
      * Loads Listeners and register them with EventEmitters.
      * @param {Framework} framework - The Akairo framework.
      * @param {Object} options - Options from framework.
      */
     constructor(framework, options){
+        super();
+
         /**
          * The Akairo framework.
          * @readonly
@@ -48,6 +52,7 @@ class ListenerHandler {
     /**
      * Loads a Listener.
      * @param {string} filepath - Path to file.
+     * @returns {Listener}
      */
     load(filepath){
         let listener = require(filepath);
@@ -62,6 +67,8 @@ class ListenerHandler {
 
         this.listeners.set(listener.id, listener);
         this.register(listener.id);
+
+        return listener;
     }
 
     /**
@@ -76,7 +83,7 @@ class ListenerHandler {
             throw new Error(`File ${filename} not found.`);
         }
 
-        this.load(filepath);
+        this.emit(ListenerHandlerEvents.ADD, this.load(filepath));
     }
 
     /**
@@ -90,6 +97,8 @@ class ListenerHandler {
         delete require.cache[require.resolve(listener.filepath)];
         this.deregister(listener.id);
         this.listeners.delete(listener.id);
+
+        this.emit(ListenerHandlerEvents.REMOVE, listener);
     }
 
     /**
@@ -106,7 +115,7 @@ class ListenerHandler {
         this.deregister(listener.id);
         this.listeners.delete(listener.id);
         
-        this.load(filepath);
+        this.emit(ListenerHandlerEvents.REMOVE, this.load(filepath));
     }
     
     /**
@@ -143,3 +152,21 @@ class ListenerHandler {
 }
 
 module.exports = ListenerHandler;
+
+/**
+ * Emitted when an listener is added.
+ * @event ListenerHandler#add
+ * @param {Listener} listener - Listener added.
+ */
+
+/**
+ * Emitted when an listener is removed.
+ * @event ListenerHandler#remove
+ * @param {Listener} listener - Listener removed.
+ */
+
+/**
+ * Emitted when an listener is reloaded.
+ * @event ListenerHandler#reload
+ * @param {Listener} listener - Listener reloaded.
+ */
