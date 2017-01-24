@@ -185,7 +185,7 @@ class CommandHandler extends EventEmitter {
                 return this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.BOT);
         }
 
-        let pretest = this.framework.inhibitorHandler ? this.framework.inhibitorHandler.testMessage.bind(this.framework.inhibitorHandler) : Promise.resolve;
+        let pretest = this.framework.inhibitorHandler ? this.framework.inhibitorHandler.testMessage.bind(this.framework.inhibitorHandler) : (() => Promise.resolve());
 
         pretest(message).then(() => {
             let prefix = this.prefix(message).toLowerCase();
@@ -226,7 +226,7 @@ class CommandHandler extends EventEmitter {
                     return this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.DM);
             }
 
-            let test = this.framework.inhibitorHandler ? this.framework.inhibitorHandler.testCommand.bind(this.framework.inhibitorHandler) : Promise.resolve;
+            let test = this.framework.inhibitorHandler ? this.framework.inhibitorHandler.testCommand.bind(this.framework.inhibitorHandler) : (() => Promise.resolve());
 
             return test(message, command).then(() => {
                 let content = message.content.slice(message.content.indexOf(name) + name.length + 1);
