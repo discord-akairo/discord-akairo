@@ -33,7 +33,7 @@ const {ArgumentMatches, ArgumentTypes, ArgumentSplits, ArgumentSplitMethods} = r
  * <br/><code>'dynamicInt'</code> Casts to an integer with parseInt() or a string if the argument is not a number.
  * <br/>
  * <br/>An array of strings can be used to restrict input to only those strings, case insensitive. The evaluated argument will be all lowercase.
- * <br/>A function (<code>arg => {}</code>) can also be used to filter arguments.
+ * <br/>A function <code>(arg => {})</code> can also be used to filter arguments.
  * <br/>If the input is not in the array or does not pass the function, the default value is used.
  * @typedef {string|string[]} ArgumentType
  */
@@ -65,7 +65,7 @@ class Command {
     /**
      * Creates a new Command.
      * @param {string} id - Command ID.
-     * @param {function} exec - Function (<code>(message, args) => {}</code>) called when command is ran.
+     * @param {function} exec - Function <code>((message, args) => {})</code> called when command is ran.
      * @param {CommandOptions} [options={}] - Options for the command.
      */
     constructor(id, exec, options = {}){

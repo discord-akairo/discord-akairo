@@ -1,4 +1,4 @@
-const Collection = require('discord.js').Collection;
+const {Collection} = require('discord.js');
 
 /** @extends Collection */
 class Category extends Collection {
