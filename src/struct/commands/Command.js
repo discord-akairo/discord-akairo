@@ -32,6 +32,15 @@ const {ArgumentMatches, ArgumentTypes, ArgumentSplits, ArgumentSplitMethods} = r
  * <br/><code>'dynamic'</code> Casts to a number with parseFloat() or a string if the argument is not a number.
  * <br/><code>'dynamicInt'</code> Casts to an integer with parseInt() or a string if the argument is not a number.
  * <br/>
+ * <br/>Possible Discord-related strings:
+ * <br/><code>'user'</code> Tries to resolve to a user.
+ * <br/><code>'member'</code> Tries to resolve to a member.
+ * <br/><code>'channel'</code> Tries to resolve to a channel.
+ * <br/><code>'textChannel'</code> Tries to resolve to a text channel.
+ * <br/><code>'voiceChannel'</code> Tries to resolve to a voice channel.
+ * <br/><code>'role'</code> Tries to resolve to a role.
+ * <br/>If any of the above are not valid, the default value will be resolved (so use an ID).
+ * <br/>
  * <br/>An array of strings can be used to restrict input to only those strings, case insensitive. The evaluated argument will be all lowercase.
  * <br/>A function <code>(arg => {})</code> can also be used to filter arguments.
  * <br/>If the input is not in the array or does not pass the function, the default value is used.
@@ -241,31 +250,39 @@ class Command {
             }
 
             if (arg.type === ArgumentTypes.USER){
-                return this.client.util.resolveUser(word, false, true) || arg.defaultValue;
+                let user = this.client.util.resolveUser(word, false, true);
+                if (!user) user = this.client.util.resolveUser(arg.defaultValue, false, true);
+                return user;
             }
 
             if (arg.type === ArgumentTypes.MEMBER){
-                return this.client.util.resolveMember(word, message.guild, false, true) || arg.defaultValue;
+                let member = this.client.util.resolveMember(word, message.guild, false, true);
+                if (!member) member = this.client.util.resolveMember(arg.defaultValue, message.guild, false, true);
+                return member;
             }
 
             if (arg.type === ArgumentTypes.CHANNEL){
-                return this.client.util.resolveChannel(word, message.guild, false, true) || arg.defaultValue;
+                let channel = this.client.util.resolveChannel(word, message.guild, false, true);
+                if (!channel) channel = this.client.util.resolveChannel(arg.defaultValue, message.guild, false, true);
+                return channel;
             }
 
             if (arg.type === ArgumentTypes.TEXT_CHANNEL){
-                let chan = this.client.util.resolveChannel(word, message.guild, false, true);
-                if (!chan || chan.type !== 'text') return arg.defaultValue;
-                return chan;
+                let channel = this.client.util.resolveChannel(word, message.guild, false, true);
+                if (!channel || channel.type !== 'text') channel = this.client.util.resolveChannel(arg.defaultValue, message.guild, false, true);
+                return channel;
             }
 
             if (arg.type === ArgumentTypes.VOICE_CHANNEL){
-                let chan = this.client.util.resolveChannel(word, message.guild, false, true);
-                if (!chan || chan.type !== 'voice') return arg.defaultValue;
-                return chan;
+                let channel = this.client.util.resolveChannel(word, message.guild, false, true);
+                if (!channel || channel.type !== 'voice') channel = this.client.util.resolveChannel(arg.defaultValue, message.guild, false, true);
+                return channel;
             }
 
             if (arg.type === ArgumentTypes.ROLE){
-                return this.client.util.resolveRole(word, message.guild, false, true) || arg.defaultValue;
+                let role = this.client.util.resolveRole(word, message.guild, false, true);
+                if (!role) role = this.client.util.resolveRole(arg.defaultValue, message.guild, false, true);
+                return role;
             }
 
             if (Array.isArray(arg.type)){
