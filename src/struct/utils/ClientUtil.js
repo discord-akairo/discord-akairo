@@ -274,7 +274,7 @@ class ClientUtil {
     }
 
     /**
-     * Resolves a channel permission overwrite. Returns an object with the `allowed` and `denied` arrays of permission names.
+     * Resolves a channel permission overwrite. Returns an object with the allowed and denied arrays of permission names.
      * @param {PermissionOverwrites} overwrite - Permissions overwrite.
      * @returns {Object}
      */
@@ -286,10 +286,10 @@ class ClientUtil {
     }
 
     /**
-     * Compares two member objects presences and checks if they started/stopped a stream or not. Returns `'started'`, `'stopped'`, or false if no change.
+     * Compares two member objects presences and checks if they started/stopped a stream or not. Returns 'started', 'stopped', or false if no change.
      * @param {GuildMember} oldMember - The old member.
      * @param {GuildMember} newMember - The new member.
-     * @returns {string}
+     * @returns {string|boolean}
      */
     compareStreaming(oldMember, newMember){
         let s1 = oldMember.presence.game && oldMember.presence.game.streaming;

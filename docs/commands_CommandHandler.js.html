@@ -40,9 +40,10 @@
             <pre class="prettyprint source linenums"><code>const path = require('path');
 const rread = require('readdir-recursive');
 const EventEmitter = require('events');
-const Collection = require('discord.js').Collection;
+const {Collection} = require('discord.js');
 const Command = require('./Command');
 const Category = require('./Category');
+const {CommandHandlerEvents, BuiltInReasons} = require('../utils/Constants');
 
 /** @extends EventEmitter */
 class CommandHandler extends EventEmitter {
@@ -113,6 +114,7 @@ class CommandHandler extends EventEmitter {
     /**
      * Loads a Command.
      * @param {string} filepath - Path to file.
+     * @returns {Command}
      */
     load(filepath){
         let command = require(filepath);
@@ -131,6 +133,8 @@ class CommandHandler extends EventEmitter {
         let category = this.categories.get(command.category);
         command.category = category;
         category.set(command.id, command);
+
+        return command;
     }
 
     /**
@@ -145,7 +149,7 @@ class CommandHandler extends EventEmitter {
             throw new Error(`File ${filename} not found.`);
         }
 
-        this.load(filepath);
+        this.emit(CommandHandlerEvents.ADD, this.load(filepath));
     }
 
     /**
@@ -160,6 +164,8 @@ class CommandHandler extends EventEmitter {
         this.commands.delete(command.id);
         
         command.category.delete(command.id);
+
+        this.emit(CommandHandlerEvents.REMOVE, command);
     }
 
     /**
@@ -177,7 +183,7 @@ class CommandHandler extends EventEmitter {
 
         command.category.delete(command.id);
         
-        this.load(filepath);
+        this.emit(CommandHandlerEvents.RELOAD, this.load(filepath));
     }
 
     /**
@@ -208,12 +214,19 @@ class CommandHandler extends EventEmitter {
      */
     handle(message){
         if (!this.preInhibDisabled){
-            if (message.author.id !== this.framework.client.user.id &amp;&amp; this.framework.client.selfbot) return this.emit('messageBlocked', message, 'notSelf');
-            if (message.author.id === this.framework.client.user.id &amp;&amp; !this.framework.client.selfbot) return this.emit('messageBlocked', message, 'client');
-            if (message.author.bot) return this.emit('messageBlocked', message, 'bot');
+            if (message.author.id !== this.framework.client.user.id &amp;&amp; this.framework.client.selfbot) 
+                return this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.NOT_SELF);
+
+            if (message.author.id === this.framework.client.user.id &amp;&amp; !this.framework.client.selfbot) 
+                return this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.CLIENT);
+
+            if (message.author.bot) 
+                return this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.BOT);
         }
 
-        this.framework.inhibitorHandler.testMessage(message).then(() => {
+        let pretest = this.framework.inhibitorHandler ? this.framework.inhibitorHandler.testMessage.bind(this.framework.inhibitorHandler) : (() => Promise.resolve());
+
+        pretest(message).then(() => {
             let prefix = this.prefix(message).toLowerCase();
             let allowMention = this.allowMention(message);
             let start;
@@ -228,50 +241,75 @@ class CommandHandler extends EventEmitter {
                 if (mentioned){
                     start = mentioned[0]; 
                 } else {
-                    return this.emit('messageInvalid', message);
+                    return this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
                 }
             } else {
-                return this.emit('messageInvalid', message);
+                return this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
             }
 
             let firstWord = message.content.replace(start, '').search(/\S/) + start.length;
             let name = message.content.slice(firstWord).split(' ')[0];
             let command = this.findCommand(name);
 
-            if (!command) return this.emit('messageInvalid', message);
-            if (!command.enabled) return this.emit('commandDisabled', message, command);
+            if (!command) return this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
+            if (!command.enabled) return this.emit(CommandHandlerEvents.COMMAND_DISABLED, message, command);
 
             if (!this.postInhibDisabled){
-                if (command.ownerOnly &amp;&amp; message.author.id !== this.framework.client.ownerID) return this.emit('commandBlocked', message, command, 'owner');
-                if (command.channelRestriction === 'guild' &amp;&amp; !message.guild) return this.emit('commandBlocked', message, command, 'guild');
-                if (command.channelRestriction === 'dm' &amp;&amp; message.guild) return this.emit('commandBlocked', message, command, 'dm');
+                if (command.ownerOnly &amp;&amp; message.author.id !== this.framework.client.ownerID) 
+                    return this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.OWNER);
+
+                if (command.channelRestriction === 'guild' &amp;&amp; !message.guild)
+                    return this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.GUILD);
+
+                if (command.channelRestriction === 'dm' &amp;&amp; message.guild)
+                    return this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.DM);
             }
 
-            this.framework.inhibitorHandler.testCommand(message, command).then(() => {
-                let content = message.content.slice(message.content.indexOf(name) + name.length + 1);
-                let args = command.parse(content);
+            let test = this.framework.inhibitorHandler ? this.framework.inhibitorHandler.testCommand.bind(this.framework.inhibitorHandler) : (() => Promise.resolve());
 
-                this.emit('commandStarted', message, command);
+            return test(message, command).then(() => {
+                let content = message.content.slice(message.content.indexOf(name) + name.length + 1);
+                let args = command.parse(content, message);
+
+                this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command);
                 let end = Promise.resolve(command.exec(message, args));
 
-                end.then(() => {
-                    this.emit('commandFinished', message, command);
+                return end.then(() => {
+                    this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command);
                 }).catch(err => {
-                    this.emit('commandFinished', message, command);
+                    this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command);
                     throw err;
                 });
             }).catch(errOrReason => {
                 if (errOrReason instanceof Error) throw errOrReason;
-                this.emit('commandBlocked', message, command, errOrReason);
+                this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, errOrReason);
             });
         }).catch(errOrReason => {
             if (errOrReason instanceof Error) throw errOrReason;
-            this.emit('messageBlocked', message, errOrReason);
+            this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, errOrReason);
         });
     }
 }
 
 module.exports = CommandHandler;
+
+/**
+ * Emitted when a command is added.
+ * @event CommandHandler#add
+ * @param {Command} command - Command added.
+ */
+
+/**
+ * Emitted when a command is removed.
+ * @event CommandHandler#remove
+ * @param {Command} command - Command removed.
+ */
+
+/**
+ * Emitted when a command is reloaded.
+ * @event CommandHandler#reload
+ * @param {Command} command - Command reloaded.
+ */
 
 /**
  * Emitted when a message is blocked by a pre-message inhibitor. The built-in inhibitors are 'notSelf' (for selfbots), 'client', and 'bot'.
@@ -313,8 +351,7 @@ module.exports = CommandHandler;
  * @event CommandHandler#commandFinished
  * @param {Message} message - Message sent.
  * @param {Command} command - Command executed.
- */
-</code></pre>
+ */</code></pre>
         </article>
     </section>
 

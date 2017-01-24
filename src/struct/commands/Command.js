@@ -5,7 +5,7 @@ const {ArgumentMatches, ArgumentTypes, ArgumentSplits, ArgumentSplitMethods} = r
  * @typedef {Object} Argument
  * @prop {string} id - ID of the argument.
  * @prop {ArgumentMatch} [match='word'] - Method to match argument.
- * @prop {ArgumentType} [type='string'] - Attempts to cast argument to this type.
+ * @prop {ArgumentType|string[]|function} [type='string'] - Attempts to cast argument to this type.<br/>An array or a function can be used (more details in ArgumentType).
  * @prop {string|string[]} [prefix] - Ignores word order and uses a word that starts with/matches this prefix (or multiple prefixes if array).<br/>Applicable to 'prefix' and 'flag' only.
  * @prop {number} [index] - Word to start from.<br/>Applicable to 'word', 'text', or 'content' only.<br/>When using with word, this will offset all word arguments after it by 1 unless the index property is also specified for them.
  * @prop {string|number} [defaultValue=''] - Default value if a word is not inputted or a type could not be casted to.
@@ -14,7 +14,6 @@ const {ArgumentMatches, ArgumentTypes, ArgumentSplits, ArgumentSplitMethods} = r
 
 /**
  * The method to match arguments from text. Possible strings are:
- * <br/>
  * <br/><code>'word'</code> Matches by the order of the words inputted. Ignores words that matches prefix or flag.
  * <br/><code>'prefix'</code> Matches words that starts with the prefix. The word after the prefix is the evaluated argument.
  * <br/><code>'flag'</code> Matches words that equal this prefix. The evaluated argument is true or false.
@@ -25,7 +24,6 @@ const {ArgumentMatches, ArgumentTypes, ArgumentSplits, ArgumentSplitMethods} = r
 
 /**
  * The type that the argument should be cast to. Possible strings are:
- * <br/>
  * <br/><code>'string'</code> Does not cast to any type.
  * <br/><code>'number'</code> Casts to an number with parseFloat(), default value if not a number.
  * <br/><code>'integer'</code> Casts to an integer with parseInt(), default value if not a number.
@@ -47,8 +45,8 @@ const {ArgumentMatches, ArgumentTypes, ArgumentSplits, ArgumentSplitMethods} = r
  * <br/>
  * <br/>A function <code>((word, message) => {})</code> can also be used to filter or modify arguments.
  * <br/>A return value of true will let the word pass, a falsey return value will use the default value for the argument.
- * <br/>Another other truthy return value will be used as the argument.
- * @typedef {string|string[]} ArgumentType
+ * <br/>Any other truthy return value will be used as the argument.
+ * @typedef {string} ArgumentType
  */
 
 /**
@@ -66,7 +64,6 @@ const {ArgumentMatches, ArgumentTypes, ArgumentSplits, ArgumentSplitMethods} = r
 
 /**
  * The method to split text into words. Possible strings are:
- * <br/>
  * <br/><code>'plain'</code> Splits word separated by whitespace. Extra whitespace is ignored.
  * <br/><code>'split'</code> Splits word separated by whitespace.
  * <br/><code>'quoted'</code> This is like plain, but counts text inside double quotes as one word.
