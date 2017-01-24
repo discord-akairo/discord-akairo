@@ -1,20 +1,11 @@
-const path = require('path');
 const Collection = require('discord.js').Collection;
 
 class DatabaseHandler {
     /**
-     * This class should be extended, not used.
-     * @param {string} filepath - Path to database file.
+     * An in-memory database.
      * @param {Object} [defaultConfig={}] - Default configuration.
      */
-    constructor(filepath, defaultConfig = {}){
-        /**
-         * Path to the database file.
-         * @readonly
-         * @type {string}
-         */
-        this.filepath = path.resolve(filepath);
-        
+    constructor(defaultConfig = {}){
         /**
          * Default configuration.
          * @type {Object}
@@ -22,17 +13,10 @@ class DatabaseHandler {
         this.defaultConfig = defaultConfig;
 
         /** 
-         * Configurations stored in memory, mapped by ID to configuration. Note that if you modify/get values directly from here, you should use the handler's sanitize() and desanitize() methods.
+         * Configurations stored in memory, mapped by ID to configuration.
          * @type {Collection.<string, Object>}
          */
         this.memory = new Collection();
-
-        /**
-         * The database.
-         * @readonly
-         * @type {Object}
-         */
-        this.db = null;
     }
 
     /**
@@ -52,88 +36,91 @@ class DatabaseHandler {
     }
 
     /** 
-     * Should sanitize input.
-     * @abstract
+     * Initializes with IDs.
+     * @param {string[]} ids - Array of IDs.
+     * @returns {DatabaseHandler}
      */
-    sanitize(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
+    init(ids){ 
+        ids.forEach(id => {
+            if (!this.has(id)) this.add(id);
+        });
+
+        return this;
+    }
 
     /** 
-     * Should desanitize text for use. 
-     * @abstract
+     * Adds an entry.
+     * @param {string} id - ID of entry.
+     * @returns {DatabaseHandler}
      */
-    desanitize(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
+    add(id){ 
+        if (this.has(id)) throw new Error(`${id} already exists.`);
+
+        let config = this.defaultConfig;
+
+        config.id = id;
+        this.memory.set(id, config);
+        return this;
+    }
 
     /** 
-     * Should open database. 
-     * @abstract
+     * Removes an entry.
+     * @param {string} id - ID of entry.
+     * @returns {DatabaseHandler}
      */
-    open(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
-    
-    /** 
-     * Should initialize database. 
-     * @abstract
-     */
-    init(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
+    remove(id){ 
+        if (!this.has(id)) throw new Error(`${id} does not exist.`);
+        this.memory.delete(id);
+        return this;
+    }
 
     /** 
-     * Should add entry to database. 
-     * @abstract
+     * Checks if ID exists.
+     * @param {string} id ID of entry.
+     * @returns {boolean}
      */
-    add(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
+    has(id){
+        return this.memory.has(id);
+    }
 
-    /** 
-     * Should add entry to memory. 
-     * @abstract
+    /**
+     * Gets configuration for an ID.
+     * @param {string} id - ID of entry.
+     * @returns {Object}
      */
-    addMemory(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
+    get(id){
+        if (!this.has(id)) return this.defaultConfig;
+        
+        let config = this.memory.get(id);
+        let copy = {};
 
-    /** 
-     * Should remove entry from database. 
-     * @abstract
-     */
-    remove(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
+        Object.keys(config).forEach(key => {
+            if (config[key] == undefined) return copy[key] = this.defaultConfig[key];
+            copy[key] = this.desanitize(config[key]);
+        });
 
-    /** 
-     * Should remove entry from database. 
-     * @abstract
-     */
-    removeMemory(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
+        return copy;
+    }
 
-    /** 
-     * Should check if entry is in memory. 
-     * @abstract
+    /**
+     * Updates a value.
+     * @param {string} id - ID of entry.
+     * @param {string} key - Key to set.
+     * @param {string|number} value - Value to set.
+     * @returns {DatabaseHandler}
      */
-    has(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
+    set(id, key, value){
+        if (!this.has(id)) throw new Error(`${id} not found.`);
 
-    /** 
-     * Should get entry from memory.
-     * @abstract
-     */
-    get(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
+        let config = this.memory.get(id);
 
-    /** 
-     * Should update a value in database. 
-     * @abstract
-     */
-    set(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
+        if (!config.hasOwnProperty(key)) throw new Error(`Key ${key} was not found for ${id}.`);
+        if (key === 'id') throw new Error('The id key is read-only.');
 
-    /** 
-     * Should update a value in memory. 
-     * @abstract
-     */
-    setMemory(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
-
-    /** 
-     * Should update a config from memory to database. 
-     * @abstract
-     */
-    save(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
-
-    /** 
-     * Should update all configs from memory to database.
-     * @abstract
-     */
-    saveAll(){ throw new Error('Cannot use base DatabaseHandler. Please extend it!'); }
+        config[key] = value;
+        this.memory.set(id, config);
+        return this;
+    }
 }
 
 module.exports = DatabaseHandler;
