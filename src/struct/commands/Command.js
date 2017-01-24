@@ -224,7 +224,7 @@ class Command {
     parse(content, message){
         if (this.args.length === 0) return {};
 
-        let words = (ArgumentSplitMethods[this.split] || (() => []))();
+        let words = (ArgumentSplitMethods[this.split.toUpperCase()] || (() => []))(content);
         let args = {};
 
         let wordArgs = this.args.filter(arg => arg.match === ArgumentMatches.WORD);
