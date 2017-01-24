@@ -19,6 +19,12 @@ module.exports = {
         QUOTED: 'quoted',
         STICKY: 'sticky'
     },
+    ArgumentSplitMethods: {
+        PLAIN: t => t.match(/[^\s]+/g),
+        SPLIT: t => t.split(' '),
+        QUOTED: t => t.match(/".*?"|[^\s"]+|"/g),
+        STICKY: t => t.match(/[^\s"]*?".*?"|[^\s"]+|"/g)
+    },
     CommandHandlerEvents: {
         ADD: 'add',
         REMOVE: 'remove',
@@ -39,5 +45,13 @@ module.exports = {
         ADD: 'add',
         REMOVE: 'remove',
         RELOAD: 'reload'
+    },
+    BuiltInReasons: {
+        NOT_SELF: 'notSelf',
+        CLIENT: 'client',
+        BOT: 'bot',
+        OWNER: 'owner',
+        GUILD: 'guild',
+        DM: 'dm'
     }
 };

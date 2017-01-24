@@ -1,4 +1,4 @@
-const {ArgumentMatches, ArgumentTypes, ArgumentSplits} = require('../utils/Constants');
+const {ArgumentMatches, ArgumentTypes, ArgumentSplits, ArgumentSplitMethods} = require('../utils/Constants');
 
 /**
  * An argument in a command.
@@ -208,16 +208,7 @@ class Command {
      * @returns {Object}
      */
     parse(content){
-        let words = [];
-        const argSplit = {
-            plain: content.match(/[^\s]+/g),
-            split: content.split(' '),
-            quoted: content.match(/".*?"|[^\s"]+|"/g),
-            sticky: content.match(/[^\s"]*?".*?"|[^\s"]+|"/g)
-        };
-        
-        words = argSplit[this.split] || [];
-
+        let words = (ArgumentSplitMethods[this.split] || (() => []))();
         let args = {};
 
         let wordArgs = this.args.filter(arg => arg.match === ArgumentMatches.WORD);

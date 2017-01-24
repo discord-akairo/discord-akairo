@@ -4,7 +4,7 @@ const EventEmitter = require('events');
 const {Collection} = require('discord.js');
 const Command = require('./Command');
 const Category = require('./Category');
-const {CommandHandlerEvents} = require('../utils/Constants');
+const {CommandHandlerEvents, BuiltInReasons} = require('../utils/Constants');
 
 /** @extends EventEmitter */
 class CommandHandler extends EventEmitter {
@@ -175,9 +175,14 @@ class CommandHandler extends EventEmitter {
      */
     handle(message){
         if (!this.preInhibDisabled){
-            if (message.author.id !== this.framework.client.user.id && this.framework.client.selfbot) return this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, 'notSelf');
-            if (message.author.id === this.framework.client.user.id && !this.framework.client.selfbot) return this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, 'client');
-            if (message.author.bot) return this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, 'bot');
+            if (message.author.id !== this.framework.client.user.id && this.framework.client.selfbot) 
+                return this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.NOT_SELF);
+
+            if (message.author.id === this.framework.client.user.id && !this.framework.client.selfbot) 
+                return this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.CLIENT);
+
+            if (message.author.bot) 
+                return this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.BOT);
         }
 
         let pretest = this.framework.inhibitorHandler ? this.framework.inhibitorHandler.testMessage : Promise.resolve;
@@ -211,9 +216,14 @@ class CommandHandler extends EventEmitter {
             if (!command.enabled) return this.emit(CommandHandlerEvents.COMMAND_DISABLED, message, command);
 
             if (!this.postInhibDisabled){
-                if (command.ownerOnly && message.author.id !== this.framework.client.ownerID) return this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, 'owner');
-                if (command.channelRestriction === 'guild' && !message.guild) return this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, 'guild');
-                if (command.channelRestriction === 'dm' && message.guild) return this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, 'dm');
+                if (command.ownerOnly && message.author.id !== this.framework.client.ownerID) 
+                    return this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.OWNER);
+
+                if (command.channelRestriction === 'guild' && !message.guild)
+                    return this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.GUILD);
+
+                if (command.channelRestriction === 'dm' && message.guild)
+                    return this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.DM);
             }
 
             let test = this.framework.inhibitorHandler ? this.framework.inhibitorHandler.testCommand : Promise.resolve;
