@@ -1,9 +1,11 @@
+const {ArgumentMatches, ArgumentTypes, ArgumentSplits, ArgumentSplitMethods} = require('../utils/Constants');
+
 /**
  * An argument in a command.
  * @typedef {Object} Argument
  * @prop {string} id - ID of the argument.
  * @prop {ArgumentMatch} [match='word'] - Method to match argument.
- * @prop {ArgumentType} [type='string'] - Attempts to cast argument to this type.
+ * @prop {ArgumentType|string[]|function} [type='string'] - Attempts to cast argument to this type.<br/>An array or a function can be used (more details in ArgumentType).
  * @prop {string|string[]} [prefix] - Ignores word order and uses a word that starts with/matches this prefix (or multiple prefixes if array).<br/>Applicable to 'prefix' and 'flag' only.
  * @prop {number} [index] - Word to start from.<br/>Applicable to 'word', 'text', or 'content' only.<br/>When using with word, this will offset all word arguments after it by 1 unless the index property is also specified for them.
  * @prop {string|number} [defaultValue=''] - Default value if a word is not inputted or a type could not be casted to.
@@ -12,7 +14,6 @@
 
 /**
  * The method to match arguments from text. Possible strings are:
- * <br/>
  * <br/><code>'word'</code> Matches by the order of the words inputted. Ignores words that matches prefix or flag.
  * <br/><code>'prefix'</code> Matches words that starts with the prefix. The word after the prefix is the evaluated argument.
  * <br/><code>'flag'</code> Matches words that equal this prefix. The evaluated argument is true or false.
@@ -23,17 +24,29 @@
 
 /**
  * The type that the argument should be cast to. Possible strings are:
- * <br/>
  * <br/><code>'string'</code> Does not cast to any type.
  * <br/><code>'number'</code> Casts to an number with parseFloat(), default value if not a number.
  * <br/><code>'integer'</code> Casts to an integer with parseInt(), default value if not a number.
  * <br/><code>'dynamic'</code> Casts to a number with parseFloat() or a string if the argument is not a number.
  * <br/><code>'dynamicInt'</code> Casts to an integer with parseInt() or a string if the argument is not a number.
  * <br/>
- * <br/>An array of strings can be used to restrict input to only those strings, case insensitive. The evaluated argument will be all lowercase.
- * <br/>A function (<code>arg => {}</code>) can also be used to filter arguments.
- * <br/>If the input is not in the array or does not pass the function, the default value is used.
- * @typedef {string|string[]} ArgumentType
+ * <br/>Possible Discord-related strings:
+ * <br/><code>'user'</code> Tries to resolve to a user.
+ * <br/><code>'member'</code> Tries to resolve to a member.
+ * <br/><code>'channel'</code> Tries to resolve to a channel.
+ * <br/><code>'textChannel'</code> Tries to resolve to a text channel.
+ * <br/><code>'voiceChannel'</code> Tries to resolve to a voice channel.
+ * <br/><code>'role'</code> Tries to resolve to a role.
+ * <br/>If any of the above are not valid, the default value will be resolved (so use an ID).
+ * <br/>
+ * <br/>An array of strings can be used to restrict input to only those strings, case insensitive.
+ * <br/>The evaluated argument will be all lowercase.
+ * <br/>If the input is not in the array, the default value is used.
+ * <br/>
+ * <br/>A function <code>((word, message) => {})</code> can also be used to filter or modify arguments.
+ * <br/>A return value of true will let the word pass, a falsey return value will use the default value for the argument.
+ * <br/>Any other truthy return value will be used as the argument.
+ * @typedef {string} ArgumentType
  */
 
 /**
@@ -51,7 +64,6 @@
 
 /**
  * The method to split text into words. Possible strings are:
- * <br/>
  * <br/><code>'plain'</code> Splits word separated by whitespace. Extra whitespace is ignored.
  * <br/><code>'split'</code> Splits word separated by whitespace.
  * <br/><code>'quoted'</code> This is like plain, but counts text inside double quotes as one word.
@@ -63,7 +75,7 @@ class Command {
     /**
      * Creates a new Command.
      * @param {string} id - Command ID.
-     * @param {function} exec - Function (<code>(message, args) => {}</code>) called when command is ran.
+     * @param {function} exec - Function <code>((message, args) => {})</code> called when command is ran.
      * @param {CommandOptions} [options={}] - Options for the command.
      */
     constructor(id, exec, options = {}){
@@ -85,8 +97,8 @@ class Command {
          */
         this.args = options.args || [];
         this.args.forEach(arg => {
-            if (!arg.match) arg.match = 'word';
-            if (!arg.type) arg.type = 'string';
+            if (!arg.match) arg.match = ArgumentMatches.WORD;
+            if (!arg.type) arg.type = ArgumentTypes.STRING;
             if (!arg.defaultValue) arg.defaultValue = '';
 
             if (Array.isArray(arg.description)) arg.description = arg.description.join('\n');
@@ -121,7 +133,7 @@ class Command {
          * The command split method.
          * @type {ArgumentSplit}
          */
-        this.split = options.split || 'plain';
+        this.split = options.split || ArgumentSplits.PLAIN;
 
         /**
          * Custom options for the command.
@@ -203,26 +215,20 @@ class Command {
     /**
      * Parses text based on this Command's args.
      * @param {string} content - String to parse.
+     * @param {Message} [message] - Message to use.
      * @returns {Object}
      */
-    parse(content){
-        let words = [];
-        const argSplit = {
-            plain: content.match(/[^\s]+/g),
-            split: content.split(' '),
-            quoted: content.match(/".*?"|[^\s"]+|"/g),
-            sticky: content.match(/[^\s"]*?".*?"|[^\s"]+|"/g)
-        };
-        
-        words = argSplit[this.split] || [];
+    parse(content, message){
+        if (this.args.length === 0) return {};
 
+        let words = (ArgumentSplitMethods[this.split.toUpperCase()] || (() => []))(content);
         let args = {};
 
-        let wordArgs = this.args.filter(arg => arg.match === 'word');
-        let prefixArgs = this.args.filter(arg => arg.match === 'prefix');
-        let flagArgs = this.args.filter(arg => arg.match === 'flag');
-        let textArgs = this.args.filter(arg => arg.match === 'text');
-        let contentArgs = this.args.filter(arg => arg.match === 'content');
+        let wordArgs = this.args.filter(arg => arg.match === ArgumentMatches.WORD);
+        let prefixArgs = this.args.filter(arg => arg.match === ArgumentMatches.PREFIX);
+        let flagArgs = this.args.filter(arg => arg.match === ArgumentMatches.FLAG);
+        let textArgs = this.args.filter(arg => arg.match === ArgumentMatches.TEXT);
+        let contentArgs = this.args.filter(arg => arg.match === ArgumentMatches.CONTENT);
 
         let prefixes = [];
         [...prefixArgs, ...flagArgs].forEach(arg => {
@@ -232,24 +238,68 @@ class Command {
         let noPrefixWords = words.filter(w => !prefixes.some(p => w.startsWith(p))); 
 
         let processType = (arg, word) => {
-            if (isNaN(word) && (arg.type === 'number' || arg.type === 'integer')){
-                word = arg.defaultValue;
-            } else
-            if (arg.type === 'dynamic' || arg.type === 'number'){
-                word = parseFloat(word);
-            } else
-            if (arg.type === 'dynamicInt' || arg.type === 'integer'){
-                word = parseInt(word);
-            } else
+            if (isNaN(word) && (arg.type === ArgumentTypes.NUMBER || arg.type === ArgumentTypes.INTEGER)){
+                return arg.defaultValue;
+            }
+
+            if (arg.type === ArgumentTypes.DYNAMIC || arg.type === ArgumentTypes.NUMBER){
+                return parseFloat(word);
+            }
+
+            if (arg.type === ArgumentTypes.DYNAMIC_INT || arg.type === ArgumentTypes.INTEGER){
+                return parseInt(word);
+            }
+
+            if (arg.type === ArgumentTypes.USER){
+                let user = this.client.util.resolveUser(word, false, true);
+                if (!user) user = this.client.util.resolveUser(arg.defaultValue, false, true);
+                return user;
+            }
+
+            if (arg.type === ArgumentTypes.MEMBER){
+                let member = this.client.util.resolveMember(word, message.guild, false, true);
+                if (!member) member = this.client.util.resolveMember(arg.defaultValue, message.guild, false, true);
+                return member;
+            }
+
+            if (arg.type === ArgumentTypes.CHANNEL){
+                let channel = this.client.util.resolveChannel(word, message.guild, false, true);
+                if (!channel) channel = this.client.util.resolveChannel(arg.defaultValue, message.guild, false, true);
+                return channel;
+            }
+
+            if (arg.type === ArgumentTypes.TEXT_CHANNEL){
+                let channel = this.client.util.resolveChannel(word, message.guild, false, true);
+                if (!channel || channel.type !== 'text') channel = this.client.util.resolveChannel(arg.defaultValue, message.guild, false, true);
+                return channel;
+            }
+
+            if (arg.type === ArgumentTypes.VOICE_CHANNEL){
+                let channel = this.client.util.resolveChannel(word, message.guild, false, true);
+                if (!channel || channel.type !== 'voice') channel = this.client.util.resolveChannel(arg.defaultValue, message.guild, false, true);
+                return channel;
+            }
+
+            if (arg.type === ArgumentTypes.ROLE){
+                let role = this.client.util.resolveRole(word, message.guild, false, true);
+                if (!role) role = this.client.util.resolveRole(arg.defaultValue, message.guild, false, true);
+                return role;
+            }
+
             if (Array.isArray(arg.type)){
                 if (!arg.type.some(t => t.toLowerCase() === word.toLowerCase())){
-                    word = arg.defaultValue;
-                } else {
-                    word = word.toLowerCase();
+                    return arg.defaultValue;
                 }
-            } else 
+                
+                return word.toLowerCase();
+            }
+
             if (typeof arg.type === 'function'){
-                if (!arg.type(word)) word = arg.defaultValue;
+                let res = arg.type(word, message);
+                if (res === true) return word;
+                if (!res) return arg.defaultValue;
+
+                return res;
             }
 
             return word;
@@ -259,7 +309,7 @@ class Command {
             let word = noPrefixWords[arg.index !== undefined ? arg.index : i];
             if (!word) return args[arg.id] = arg.defaultValue;
             
-            if ((this.split === 'quoted' || this.split === 'sticky') && /^".*"$/.test(word)) word = word.slice(1, -1);
+            if ((this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY) && /^".*"$/.test(word)) word = word.slice(1, -1);
             args[arg.id] = processType(arg, word);
         });
 
@@ -270,7 +320,7 @@ class Command {
             if (!word) return args[arg.id] = arg.defaultValue;
 
             word = word.replace(prefixes.find(p => word.startsWith(p)), '');
-            if (this.split === 'sticky' && /^".*"$/.test(word)) word = word.slice(1, -1);
+            if (this.split === ArgumentSplits.STICKY && /^".*"$/.test(word)) word = word.slice(1, -1);
             args[arg.id] = processType(arg, word);
         });
 

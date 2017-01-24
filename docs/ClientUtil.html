@@ -271,10 +271,260 @@
 
 
         
+            
+<h4 class="name" id="permissionNames"><span class="type-signature"></span>permissionNames<span class="type-signature"> :Array.&lt;string></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line21">line 21</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Array of permission names.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Array.&lt;string></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
     
 
     
         <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="compareStreaming"><span class="type-signature"></span>compareStreaming<span class="signature">(oldMember, newMember)</span><span class="type-signature"> &rarr; {string|boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line294">line 294</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Compares two member objects presences and checks if they started/stopped a stream or not. Returns 'started', 'stopped', or false if no change.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>oldMember</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">GuildMember</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The old member.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>newMember</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">GuildMember</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The new member.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+ || 
+
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
 
         
             
@@ -293,7 +543,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line241">line 241</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line250">line 250</a>
     </li></ul></dd>
     
 
@@ -311,6 +561,8 @@
 
     
 
+    
+        <dt class="important tag-deprecated">Deprecated:</dt><dd><ul class="dummy"><li>Use client.generateInvite(). When was that added!?</li></ul></dd>
     
 
     
@@ -467,7 +719,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line228">line 228</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line236">line 236</a>
     </li></ul></dd>
     
 
@@ -606,7 +858,7 @@
 
     
 
-    <h4 class="name" id="resolveChannel"><span class="type-signature"></span>resolveChannel<span class="signature">(text, guild, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {GuildChannel}</span></h4>
+    <h4 class="name" id="fetchMemberFrom"><span class="type-signature"></span>fetchMemberFrom<span class="signature">(guild, id, cache)</span><span class="type-signature"> &rarr; {Promise.&lt;GuildMember>}</span></h4>
 
     
 
@@ -618,7 +870,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line96">line 96</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line310">line 310</a>
     </li></ul></dd>
     
 
@@ -658,7 +910,204 @@
 
 
 <div class="description">
-    Resolves a GuildChannel from a string, such as an ID, a name, etc.
+    Combination of client.fetchUser() and guild.fetchMember().
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>guild</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Guild</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Guild to fetch in.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID of the user.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cache</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Whether or not to add to cache.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;GuildMember></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="resolveChannel"><span class="type-signature"></span>resolveChannel<span class="signature">(text, guild, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {GuildChannel}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line104">line 104</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Resolves a GuildChannel from a string, such as an ID, a name, or a mention.
 </div>
 
 
@@ -898,7 +1347,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line168">line 168</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line176">line 176</a>
     </li></ul></dd>
     
 
@@ -938,7 +1387,7 @@
 
 
 <div class="description">
-    Resolves an Emoji from a string, such as a name or a mention.
+    Resolves a custom Emoji from a string, such as a name or a mention.
 </div>
 
 
@@ -1178,7 +1627,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line203">line 203</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line211">line 211</a>
     </li></ul></dd>
     
 
@@ -1218,7 +1667,7 @@
 
 
 <div class="description">
-    Resolves a Guild from a string, such as an ID, or name.
+    Resolves a Guild from a string, such as an ID or a name.
 </div>
 
 
@@ -1423,7 +1872,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line58">line 58</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line66">line 66</a>
     </li></ul></dd>
     
 
@@ -1463,7 +1912,7 @@
 
 
 <div class="description">
-    Resolves a GuildMember from a string, such as an ID, a nickname, a username, etc.
+    Resolves a GuildMember from a string, such as an ID, a name, or a mention.
 </div>
 
 
@@ -1708,7 +2157,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line257">line 257</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line266">line 266</a>
     </li></ul></dd>
     
 
@@ -1847,7 +2296,7 @@
 
     
 
-    <h4 class="name" id="resolveRole"><span class="type-signature"></span>resolveRole<span class="signature">(text, guild, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Role}</span></h4>
+    <h4 class="name" id="resolvePermissionOverwrite"><span class="type-signature"></span>resolvePermissionOverwrite<span class="signature">(overwrite)</span><span class="type-signature"> &rarr; {Object}</span></h4>
 
     
 
@@ -1859,7 +2308,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line132">line 132</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line281">line 281</a>
     </li></ul></dd>
     
 
@@ -1899,7 +2348,158 @@
 
 
 <div class="description">
-    Resolves a Role from a string, such as an ID, a name, etc.
+    Resolves a channel permission overwrite. Returns an object with the allowed and denied arrays of permission names.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>overwrite</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">PermissionOverwrites</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Permissions overwrite.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="resolveRole"><span class="type-signature"></span>resolveRole<span class="signature">(text, guild, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Role}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line140">line 140</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Resolves a Role from a string, such as an ID, a name, or a mention.
 </div>
 
 
@@ -2139,7 +2739,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line24">line 24</a>
+        <a href="utils_ClientUtil.js.html">utils/ClientUtil.js</a>, <a href="utils_ClientUtil.js.html#line32">line 32</a>
     </li></ul></dd>
     
 
@@ -2179,7 +2779,7 @@
 
 
 <div class="description">
-    Resolves a User from a string, such as an ID, a username, etc.
+    Resolves a User from a string, such as an ID, a name, or a mention.
 </div>
 
 

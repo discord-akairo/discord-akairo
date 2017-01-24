@@ -1,4 +1,4 @@
-const PermissionFlags = require('discord.js').Constants.PermissionFlags;
+const {Constants} = require('discord.js');
 
 class ClientUtil {
     /**
@@ -15,7 +15,15 @@ class ClientUtil {
     }
 
     /**
-     * Resolves a User from a string, such as an ID, a username, etc.
+     * Array of permission names.
+     * @type {string[]}
+     */
+    get permissionNames(){
+        return Object.keys(Constants.PermissionFlags);
+    }
+
+    /**
+     * Resolves a User from a string, such as an ID, a name, or a mention.
      * @param {string} text - Text to resolve.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
@@ -44,11 +52,11 @@ class ClientUtil {
             return username.includes(t) || username.includes(t.split('#')[0]) && u.discriminator.includes(t.split('#')[1]);
         };
 
-        return users.get(text) || users.find(check) || !wholeWord ? users.find(checkInc) : null;
+        return users.get(text) || users.find(check) || (!wholeWord ? users.find(checkInc) : null);
     }
 
     /**
-     * Resolves a GuildMember from a string, such as an ID, a nickname, a username, etc.
+     * Resolves a GuildMember from a string, such as an ID, a name, or a mention.
      * @param {string} text - Text to resolve.
      * @param {Guild} [guild] - Guild to find member in. If not specified, will resolve a User instead.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
@@ -82,11 +90,11 @@ class ClientUtil {
             return displayName.includes(t) || username.includes(t) || username.includes(t.split('#')[0]) && m.user.discriminator.includes(t.split('#')[1]);
         };
 
-        return members.get(text) || members.find(check) || !wholeWord ? members.find(checkInc) : null;
+        return members.get(text) || members.find(check) || (!wholeWord ? members.find(checkInc) : null);
     }
 
     /**
-     * Resolves a GuildChannel from a string, such as an ID, a name, etc.
+     * Resolves a GuildChannel from a string, such as an ID, a name, or a mention.
      * @param {string} text - Text to resolve.
      * @param {Guild} guild - Guild to find channel in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
@@ -118,11 +126,11 @@ class ClientUtil {
             return name.includes(t) || name.includes(t.replace(/^#/, ''));
         };
 
-        return channels.get(text) || channels.find(check) || !wholeWord ? channels.find(checkInc) : null;
+        return channels.get(text) || channels.find(check) || (!wholeWord ? channels.find(checkInc) : null);
     }
 
     /**
-     * Resolves a Role from a string, such as an ID, a name, etc.
+     * Resolves a Role from a string, such as an ID, a name, or a mention.
      * @param {string} text - Text to resolve.
      * @param {Guild} guild - Guild to find channel in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
@@ -154,11 +162,11 @@ class ClientUtil {
             return name.includes(t) || name.includes(t.replace(/^@/, ''));
         };
 
-        return roles.get(text) || roles.find(check) || !wholeWord ? roles.find(checkInc) : null;
+        return roles.get(text) || roles.find(check) || (!wholeWord ? roles.find(checkInc) : null);
     }
 
     /**
-     * Resolves an Emoji from a string, such as a name or a mention.
+     * Resolves a custom Emoji from a string, such as a name or a mention.
      * @param {string} text - Text to resolve.
      * @param {Guild} guild - Guild to find emoji in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
@@ -190,11 +198,11 @@ class ClientUtil {
             return name.includes(t) || name.includes(t.replace(/:/g, ''));
         };
 
-        return emojis.get(text) || emojis.find(check) || !wholeWord ? emojis.find(checkInc) : null;
+        return emojis.get(text) || emojis.find(check) || (!wholeWord ? emojis.find(checkInc) : null);
     }
 
     /**
-     * Resolves a Guild from a string, such as an ID, or name.
+     * Resolves a Guild from a string, such as an ID or a name.
      * @param {string} text - Text to resolve.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
@@ -217,7 +225,7 @@ class ClientUtil {
             return name.includes(t);
         };
 
-        return guilds.get(text) || guilds.find(check) || !wholeWord ? guilds.find(checkInc) : null;
+        return guilds.get(text) || guilds.find(check) || (!wholeWord ? guilds.find(checkInc) : null);
     }
 
     /**
@@ -235,6 +243,7 @@ class ClientUtil {
 
     /**
      * Creates an invite link for the client.
+     * @deprecated Use client.generateInvite(). When was that added!?
      * @param {(number|PermissionResolvable[])} [permissions=0] - Permissions number or array of PermissionResolvables.
      * @return {Promise.<string>}
      */
@@ -257,11 +266,51 @@ class ClientUtil {
     resolvePermissionNumber(number){
         let resolved = [];
 
-        Object.keys(PermissionFlags).forEach(key => {
-            if (number & PermissionFlags[key]) resolved.push(key);
+        Object.keys(Constants.PermissionFlags).forEach(key => {
+            if (number & Constants.PermissionFlags[key]) resolved.push(key);
         });
 
         return resolved;
+    }
+
+    /**
+     * Resolves a channel permission overwrite. Returns an object with the allowed and denied arrays of permission names.
+     * @param {PermissionOverwrites} overwrite - Permissions overwrite.
+     * @returns {Object}
+     */
+    resolvePermissionOverwrite(overwrite){
+        return {
+            allowed: this.resolvePermissionNumber(overwrite.allow),
+            denied: this.resolvePermissionNumber(overwrite.deny),
+        };
+    }
+
+    /**
+     * Compares two member objects presences and checks if they started/stopped a stream or not. Returns 'started', 'stopped', or false if no change.
+     * @param {GuildMember} oldMember - The old member.
+     * @param {GuildMember} newMember - The new member.
+     * @returns {string|boolean}
+     */
+    compareStreaming(oldMember, newMember){
+        let s1 = oldMember.presence.game && oldMember.presence.game.streaming;
+        let s2 = newMember.presence.game && newMember.presence.game.streaming;
+
+        if (s1 === s2) return false;
+        if (s1) return 'stopped';
+        if (s2) return 'started';
+    }
+
+    /**
+     * Combination of client.fetchUser() and guild.fetchMember().
+     * @param {Guild} guild - Guild to fetch in.
+     * @param {string} id - ID of the user.
+     * @param {boolean} cache - Whether or not to add to cache.
+     * @returns {Promise.<GuildMember>}
+     */
+    fetchMemberFrom(guild, user, cache){
+        return this.client.fetchUser(user, cache).then(user => {
+            return guild.fetchMember(user, cache);
+        });
     }
 }
 

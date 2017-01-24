@@ -1,4 +1,4 @@
-const Collection = require('discord.js').Collection;
+const {Collection} = require('discord.js');
 
 /** @extends Collection */
 class Category extends Collection {
@@ -39,7 +39,7 @@ class Category extends Collection {
      * @returns {Category}
      */
     enableAll(){
-        Array.from(this.values()).forEach(c => c.enable());
+        this.forEach(c => c.enable());
         return this;
     }
 
@@ -48,7 +48,7 @@ class Category extends Collection {
      * @returns {Category}
      */
     disableAll(){
-        Array.from(this.values()).forEach(c => c.disable());
+        this.forEach(c => c.disable());
         return this;
     }
 

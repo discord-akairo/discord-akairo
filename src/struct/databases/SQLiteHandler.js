@@ -1,4 +1,5 @@
 const sql = require('sqlite');
+const path = require('path');
 const DatabaseHandler = require('./DatabaseHandler');
 
 /** @extends DatabaseHandler */
@@ -10,7 +11,14 @@ class SQLiteHandler extends DatabaseHandler {
      * @param {Object} [defaultConfig={}] - Default configuration.
      */
     constructor(filepath, tableName, defaultConfig = {}){
-        super(filepath, defaultConfig);
+        super(defaultConfig);
+
+        /**
+         * Path to the database file.
+         * @readonly
+         * @type {string}
+         */
+        this.filepath = path.resolve(filepath);
 
         /**
          * Name of the table.
@@ -18,6 +26,13 @@ class SQLiteHandler extends DatabaseHandler {
          * @type {string}
          */
         this.tableName = tableName;
+
+        /**
+         * The database.
+         * @readonly
+         * @type {Object}
+         */
+        this.db = null;
     }
 
     /**
@@ -184,20 +199,13 @@ class SQLiteHandler extends DatabaseHandler {
             key = this.sanitize(key);
             value = this.sanitize(value);
 
-            if (!this.has(id)){
-                return reject(new Error(`${id} not found.`));
-            }
-
+            if (!this.has(id)) return reject(new Error(`${id} not found.`));
+            
             let config = this.memory.get(id);
 
-            if (!config.hasOwnProperty(key)){
-                return reject(new Error(`Key ${key} was not found for ${id}.`));
-            }
-
-            if (key === 'id'){
-                return reject(new Error('The id key is read-only.'));
-            }
-
+            if (!config.hasOwnProperty(key)) return reject(new Error(`Key ${key} was not found for ${id}.`));
+            if (key === 'id') return reject(new Error('The id key is read-only.'));
+            
             config[key] = value;
             this.memory.set(id, config);
 
@@ -222,20 +230,13 @@ class SQLiteHandler extends DatabaseHandler {
         key = this.sanitize(key);
         value = this.sanitize(value);
 
-        if (!this.has(id)){
-            throw new Error(`${id} not found.`);
-        }
-
+        if (!this.has(id)) throw new Error(`${id} not found.`);
+        
         let config = this.memory.get(id);
 
-        if (!config.hasOwnProperty(key)){
-            throw new Error(`Key ${key} was not found for ${id}.`);
-        }
-
-        if (key === 'id'){
-            throw new Error('The id key is read-only.');
-        }
-
+        if (!config.hasOwnProperty(key)) throw new Error(`Key ${key} was not found for ${id}.`);
+        if (key === 'id') throw new Error('The id key is read-only.');
+        
         config[key] = value;
         this.memory.set(id, config);
         return this;

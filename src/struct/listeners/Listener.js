@@ -10,7 +10,7 @@ class Listener {
     /**
      * Creates a new Listener.
      * @param {string} id - Listener ID.
-     * @param {function} exec - The function (<code>(...) => {}</code>) called when event emitted.
+     * @param {function} exec - The function <code>((...) => {})</code> called when event emitted.
      * @param {ListenerOptions} [options={}] - Options for the listener.
      */
     constructor(id, exec, options = {}){

@@ -9,8 +9,8 @@ const ClientUtil = require('./utils/ClientUtil');
  * @prop {string} [ownerID=''] - Discord ID of the client owner. Defines client.ownerID.
  * @prop {boolean} [selfbot=false] - Marks this bot as a selfbot. Defines client.selfbot.
  * @prop {string} [commandDirectory] - Directory to commands.
- * @prop {string|function} [prefix='!'] - Default command prefix or function (<code>message => {}</code>) returning prefix.
- * @prop {boolean|function} [allowMention=true] - Allow mentions to the client user as a prefix or function (<code>message => {}</code>) that returns true or false.
+ * @prop {string|function} [prefix='!'] - Default command prefix or function <code>(message => {})</code> returning prefix.
+ * @prop {boolean|function} [allowMention=true] - Allow mentions to the client user as a prefix or function <code>(message => {})</code> that returns true or false.
  * @prop {string} [inhibitorDirectory] - Directory to inhibitors.
  * @prop {boolean} [disablePreInhib=false] - Disables the built-in pre-message inhibitors.
  * @prop {boolean} [disablePostInhib=false] - Disables the built-in post-message inhibitors.
@@ -36,8 +36,6 @@ class Framework {
         this.client.util = new ClientUtil(this.client);
 
         if (options.commandDirectory){
-            if (!options.inhibitorDirectory) throw new Error('Cannot use command handler without inhibitor handler.');
-
             /**
              * The CommandHandler.
              * @readonly
