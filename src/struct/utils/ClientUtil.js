@@ -1,4 +1,4 @@
-const Constants = require('discord.js').Constants;
+const {Constants} = require('discord.js');
 
 class ClientUtil {
     /**

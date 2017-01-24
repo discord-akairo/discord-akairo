@@ -1,4 +1,4 @@
-const Collection = require('discord.js').Collection;
+const {Collection} = require('discord.js');
 
 class DatabaseHandler {
     /**

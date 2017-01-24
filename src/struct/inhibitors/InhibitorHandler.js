@@ -1,6 +1,6 @@
 const path = require('path');
 const rread = require('readdir-recursive');
-const Collection = require('discord.js').Collection;
+const {Collection} = require('discord.js');
 const Inhibitor = require('./Inhibitor');
 
 /** @extends EventEmitter */

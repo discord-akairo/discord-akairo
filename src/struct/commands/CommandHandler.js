@@ -1,10 +1,10 @@
 const path = require('path');
 const rread = require('readdir-recursive');
 const EventEmitter = require('events');
-const Collection = require('discord.js').Collection;
+const {Collection} = require('discord.js');
 const Command = require('./Command');
 const Category = require('./Category');
-const CommandHandlerEvents = require('../utils/Constants').CommandHandlerEvents;
+const {CommandHandlerEvents} = require('../utils/Constants');
 
 /** @extends EventEmitter */
 class CommandHandler extends EventEmitter {

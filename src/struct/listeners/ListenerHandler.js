@@ -1,7 +1,7 @@
 const path = require('path');
 const rread = require('readdir-recursive');
 const EventEmitter = require('events');
-const Collection = require('discord.js').Collection;
+const {Collection} = require('discord.js');
 const Listener = require('./Listener');
 
 class ListenerHandler {
