@@ -208,6 +208,8 @@ class Command {
      * @returns {Object}
      */
     parse(content){
+        if (this.args.length === 0) return {};
+
         let words = (ArgumentSplitMethods[this.split] || (() => []))();
         let args = {};
 
@@ -226,23 +228,27 @@ class Command {
 
         let processType = (arg, word) => {
             if (isNaN(word) && (arg.type === ArgumentTypes.NUMBER || arg.type === ArgumentTypes.INTEGER)){
-                word = arg.defaultValue;
-            } else
+                return arg.defaultValue;
+            }
+
             if (arg.type === ArgumentTypes.DYNAMIC || arg.type === ArgumentTypes.NUMBER){
-                word = parseFloat(word);
-            } else
+                return parseFloat(word);
+            }
+
             if (arg.type === ArgumentTypes.DYNAMIC_INT || arg.type === ArgumentTypes.INTEGER){
-                word = parseInt(word);
-            } else
+                return parseInt(word);
+            }
+
             if (Array.isArray(arg.type)){
                 if (!arg.type.some(t => t.toLowerCase() === word.toLowerCase())){
-                    word = arg.defaultValue;
-                } else {
-                    word = word.toLowerCase();
+                    return arg.defaultValue;
                 }
-            } else 
+                
+                return word.toLowerCase();
+            }
+
             if (typeof arg.type === 'function'){
-                if (!arg.type(word)) word = arg.defaultValue;
+                if (!arg.type(word)) return arg.defaultValue;
             }
 
             return word;
