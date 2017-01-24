@@ -299,6 +299,19 @@ class ClientUtil {
         if (s1) return 'stopped';
         if (s2) return 'started';
     }
+
+    /**
+     * Combination of client.fetchUser() and guild.fetchMember().
+     * @param {Guild} guild - Guild to fetch in.
+     * @param {string} id - ID of the user.
+     * @param {boolean} cache - Whether or not to add to cache.
+     * @returns {Promise.<GuildMember>}
+     */
+    fetchMemberFrom(guild, user, cache){
+        return this.client.fetchUser(user, cache).then(user => {
+            return guild.fetchMember(user, cache);
+        });
+    }
 }
 
 module.exports = ClientUtil;
