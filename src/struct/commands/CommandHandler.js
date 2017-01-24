@@ -180,7 +180,9 @@ class CommandHandler extends EventEmitter {
             if (message.author.bot) return this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, 'bot');
         }
 
-        this.framework.inhibitorHandler.testMessage(message).then(() => {
+        let pretest = this.framework.inhibitorHandler ? this.framework.inhibitorHandler.testMessage : Promise.resolve;
+
+        pretest(message).then(() => {
             let prefix = this.prefix(message).toLowerCase();
             let allowMention = this.allowMention(message);
             let start;
@@ -214,7 +216,9 @@ class CommandHandler extends EventEmitter {
                 if (command.channelRestriction === 'dm' && message.guild) return this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, 'dm');
             }
 
-            return this.framework.inhibitorHandler.testCommand(message, command).then(() => {
+            let test = this.framework.inhibitorHandler ? this.framework.inhibitorHandler.testCommand : Promise.resolve;
+
+            return test(message, command).then(() => {
                 let content = message.content.slice(message.content.indexOf(name) + name.length + 1);
                 let args = command.parse(content);
 

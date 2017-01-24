@@ -36,8 +36,6 @@ class Framework {
         this.client.util = new ClientUtil(this.client);
 
         if (options.commandDirectory){
-            if (!options.inhibitorDirectory) throw new Error('Cannot use command handler without inhibitor handler.');
-
             /**
              * The CommandHandler.
              * @readonly
