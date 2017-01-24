@@ -1,3 +1,5 @@
+const {ArgumentMatches, ArgumentTypes, ArgumentSplits} = require('../utils/Constants');
+
 /**
  * An argument in a command.
  * @typedef {Object} Argument
@@ -85,8 +87,8 @@ class Command {
          */
         this.args = options.args || [];
         this.args.forEach(arg => {
-            if (!arg.match) arg.match = 'word';
-            if (!arg.type) arg.type = 'string';
+            if (!arg.match) arg.match = ArgumentMatches.WORD;
+            if (!arg.type) arg.type = ArgumentTypes.STRING;
             if (!arg.defaultValue) arg.defaultValue = '';
 
             if (Array.isArray(arg.description)) arg.description = arg.description.join('\n');
@@ -121,7 +123,7 @@ class Command {
          * The command split method.
          * @type {ArgumentSplit}
          */
-        this.split = options.split || 'plain';
+        this.split = options.split || ArgumentSplits.PLAIN;
 
         /**
          * Custom options for the command.
@@ -218,11 +220,11 @@ class Command {
 
         let args = {};
 
-        let wordArgs = this.args.filter(arg => arg.match === 'word');
-        let prefixArgs = this.args.filter(arg => arg.match === 'prefix');
-        let flagArgs = this.args.filter(arg => arg.match === 'flag');
-        let textArgs = this.args.filter(arg => arg.match === 'text');
-        let contentArgs = this.args.filter(arg => arg.match === 'content');
+        let wordArgs = this.args.filter(arg => arg.match === ArgumentMatches.WORD);
+        let prefixArgs = this.args.filter(arg => arg.match === ArgumentMatches.PREFIX);
+        let flagArgs = this.args.filter(arg => arg.match === ArgumentMatches.FLAG);
+        let textArgs = this.args.filter(arg => arg.match === ArgumentMatches.TEXT);
+        let contentArgs = this.args.filter(arg => arg.match === ArgumentMatches.CONTENT);
 
         let prefixes = [];
         [...prefixArgs, ...flagArgs].forEach(arg => {
@@ -232,13 +234,13 @@ class Command {
         let noPrefixWords = words.filter(w => !prefixes.some(p => w.startsWith(p))); 
 
         let processType = (arg, word) => {
-            if (isNaN(word) && (arg.type === 'number' || arg.type === 'integer')){
+            if (isNaN(word) && (arg.type === ArgumentTypes.NUMBER || arg.type === ArgumentTypes.INTEGER)){
                 word = arg.defaultValue;
             } else
-            if (arg.type === 'dynamic' || arg.type === 'number'){
+            if (arg.type === ArgumentTypes.DYNAMIC || arg.type === ArgumentTypes.NUMBER){
                 word = parseFloat(word);
             } else
-            if (arg.type === 'dynamicInt' || arg.type === 'integer'){
+            if (arg.type === ArgumentTypes.DYNAMIC_INT || arg.type === ArgumentTypes.INTEGER){
                 word = parseInt(word);
             } else
             if (Array.isArray(arg.type)){
@@ -259,7 +261,7 @@ class Command {
             let word = noPrefixWords[arg.index !== undefined ? arg.index : i];
             if (!word) return args[arg.id] = arg.defaultValue;
             
-            if ((this.split === 'quoted' || this.split === 'sticky') && /^".*"$/.test(word)) word = word.slice(1, -1);
+            if ((this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY) && /^".*"$/.test(word)) word = word.slice(1, -1);
             args[arg.id] = processType(arg, word);
         });
 
@@ -270,7 +272,7 @@ class Command {
             if (!word) return args[arg.id] = arg.defaultValue;
 
             word = word.replace(prefixes.find(p => word.startsWith(p)), '');
-            if (this.split === 'sticky' && /^".*"$/.test(word)) word = word.slice(1, -1);
+            if (this.split === ArgumentSplits.STICKY && /^".*"$/.test(word)) word = word.slice(1, -1);
             args[arg.id] = processType(arg, word);
         });
 

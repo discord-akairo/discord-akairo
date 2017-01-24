@@ -4,6 +4,7 @@ const EventEmitter = require('events');
 const Collection = require('discord.js').Collection;
 const Command = require('./Command');
 const Category = require('./Category');
+const CommandHandlerEvents = require('../utils/Constants').CommandHandlerEvents;
 
 /** @extends EventEmitter */
 class CommandHandler extends EventEmitter {
@@ -169,9 +170,9 @@ class CommandHandler extends EventEmitter {
      */
     handle(message){
         if (!this.preInhibDisabled){
-            if (message.author.id !== this.framework.client.user.id && this.framework.client.selfbot) return this.emit('messageBlocked', message, 'notSelf');
-            if (message.author.id === this.framework.client.user.id && !this.framework.client.selfbot) return this.emit('messageBlocked', message, 'client');
-            if (message.author.bot) return this.emit('messageBlocked', message, 'bot');
+            if (message.author.id !== this.framework.client.user.id && this.framework.client.selfbot) return this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, 'notSelf');
+            if (message.author.id === this.framework.client.user.id && !this.framework.client.selfbot) return this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, 'client');
+            if (message.author.bot) return this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, 'bot');
         }
 
         this.framework.inhibitorHandler.testMessage(message).then(() => {
@@ -189,45 +190,45 @@ class CommandHandler extends EventEmitter {
                 if (mentioned){
                     start = mentioned[0]; 
                 } else {
-                    return this.emit('messageInvalid', message);
+                    return this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
                 }
             } else {
-                return this.emit('messageInvalid', message);
+                return this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
             }
 
             let firstWord = message.content.replace(start, '').search(/\S/) + start.length;
             let name = message.content.slice(firstWord).split(' ')[0];
             let command = this.findCommand(name);
 
-            if (!command) return this.emit('messageInvalid', message);
-            if (!command.enabled) return this.emit('commandDisabled', message, command);
+            if (!command) return this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
+            if (!command.enabled) return this.emit(CommandHandlerEvents.COMMAND_DISABLED, message, command);
 
             if (!this.postInhibDisabled){
-                if (command.ownerOnly && message.author.id !== this.framework.client.ownerID) return this.emit('commandBlocked', message, command, 'owner');
-                if (command.channelRestriction === 'guild' && !message.guild) return this.emit('commandBlocked', message, command, 'guild');
-                if (command.channelRestriction === 'dm' && message.guild) return this.emit('commandBlocked', message, command, 'dm');
+                if (command.ownerOnly && message.author.id !== this.framework.client.ownerID) return this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, 'owner');
+                if (command.channelRestriction === 'guild' && !message.guild) return this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, 'guild');
+                if (command.channelRestriction === 'dm' && message.guild) return this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, 'dm');
             }
 
-            this.framework.inhibitorHandler.testCommand(message, command).then(() => {
+            return this.framework.inhibitorHandler.testCommand(message, command).then(() => {
                 let content = message.content.slice(message.content.indexOf(name) + name.length + 1);
                 let args = command.parse(content);
 
-                this.emit('commandStarted', message, command);
+                this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command);
                 let end = Promise.resolve(command.exec(message, args));
 
-                end.then(() => {
-                    this.emit('commandFinished', message, command);
+                return end.then(() => {
+                    this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command);
                 }).catch(err => {
-                    this.emit('commandFinished', message, command);
+                    this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command);
                     throw err;
                 });
             }).catch(errOrReason => {
                 if (errOrReason instanceof Error) throw errOrReason;
-                this.emit('commandBlocked', message, command, errOrReason);
+                this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, errOrReason);
             });
         }).catch(errOrReason => {
             if (errOrReason instanceof Error) throw errOrReason;
-            this.emit('messageBlocked', message, errOrReason);
+            this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, errOrReason);
         });
     }
 }
