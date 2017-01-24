@@ -41,9 +41,13 @@ const {ArgumentMatches, ArgumentTypes, ArgumentSplits, ArgumentSplitMethods} = r
  * <br/><code>'role'</code> Tries to resolve to a role.
  * <br/>If any of the above are not valid, the default value will be resolved (so use an ID).
  * <br/>
- * <br/>An array of strings can be used to restrict input to only those strings, case insensitive. The evaluated argument will be all lowercase.
- * <br/>A function <code>(arg => {})</code> can also be used to filter arguments.
- * <br/>If the input is not in the array or does not pass the function, the default value is used.
+ * <br/>An array of strings can be used to restrict input to only those strings, case insensitive.
+ * <br/>The evaluated argument will be all lowercase.
+ * <br/>If the input is not in the array, the default value is used.
+ * <br/>
+ * <br/>A function <code>((word, message) => {})</code> can also be used to filter or modify arguments.
+ * <br/>A return value of true will let the word pass, a falsey return value will use the default value for the argument.
+ * <br/>Another other truthy return value will be used as the argument.
  * @typedef {string|string[]} ArgumentType
  */
 
@@ -294,7 +298,11 @@ class Command {
             }
 
             if (typeof arg.type === 'function'){
-                if (!arg.type(word)) return arg.defaultValue;
+                let res = arg.type(word, message);
+                if (res === true) return word;
+                if (!res) return arg.defaultValue;
+
+                return res;
             }
 
             return word;
