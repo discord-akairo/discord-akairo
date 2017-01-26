@@ -3,3 +3,4 @@ out
 .git
 .eslintrc.json
 .gitattributes
+.vscode
