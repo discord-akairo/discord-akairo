@@ -167,8 +167,8 @@ class Command {
          */
         this.framework = null;
 
-        /** 
-         * The Discord.js client. 
+        /**
+         * The Discord.js client.
          * @readonly
          * @type {Client}
          */
@@ -221,70 +221,82 @@ class Command {
     parse(content, message){
         if (this.args.length === 0) return {};
 
-        let words = (ArgumentSplitMethods[this.split.toUpperCase()] || (() => []))(content) || [];
-        let args = {};
+        const words = (ArgumentSplitMethods[this.split.toUpperCase()] || (() => []))(content) || [];
+        const args = {};
 
-        let wordArgs = this.args.filter(arg => arg.match === ArgumentMatches.WORD);
-        let prefixArgs = this.args.filter(arg => arg.match === ArgumentMatches.PREFIX);
-        let flagArgs = this.args.filter(arg => arg.match === ArgumentMatches.FLAG);
-        let textArgs = this.args.filter(arg => arg.match === ArgumentMatches.TEXT);
-        let contentArgs = this.args.filter(arg => arg.match === ArgumentMatches.CONTENT);
+        const wordArgs = this.args.filter(arg => arg.match === ArgumentMatches.WORD);
+        const prefixArgs = this.args.filter(arg => arg.match === ArgumentMatches.PREFIX);
+        const flagArgs = this.args.filter(arg => arg.match === ArgumentMatches.FLAG);
+        const textArgs = this.args.filter(arg => arg.match === ArgumentMatches.TEXT);
+        const contentArgs = this.args.filter(arg => arg.match === ArgumentMatches.CONTENT);
 
-        let prefixes = [];
+        const prefixes = [];
         [...prefixArgs, ...flagArgs].forEach(arg => {
             Array.isArray(arg.prefix) ? prefixes.push(...arg.prefix) : prefixes.push(arg.prefix);
         });
 
-        let noPrefixWords = words.filter(w => !prefixes.some(p => w.startsWith(p))); 
+        const noPrefixWords = words.filter(w => !prefixes.some(p => w.startsWith(p)));
 
-        let processType = (arg, word) => {
-            if (isNaN(word) && (arg.type === ArgumentTypes.NUMBER || arg.type === ArgumentTypes.INTEGER)){
-                return arg.defaultValue;
-            }
+        const processType = (arg, word) => {
+            const func = {
+                [ArgumentTypes.STRING]: () => word || arg.defaultValue,
+                [ArgumentTypes.NUMBER]: () => {
+                    if (isNaN(word) || !word) return arg.defaultValue;
+                    return parseFloat(word);
+                },
+                [ArgumentTypes.INTEGER]: () => {
+                    if (isNaN(word) || !word) return arg.defaultValue;
+                    return parseInt(word);
+                },
+                [ArgumentTypes.DYNAMIC]: () => {
+                    if (!word) return arg.defaultValue;
+                    if (isNaN(word)) return word;
+                    return parseFloat(word);
+                },
+                [ArgumentTypes.DYNAMIC_INT]: () => {
+                    if (!word) return arg.defaultValue;
+                    if (isNaN(word)) return word;
+                    return parseInt(word);
+                },
+                [ArgumentTypes.USER]: () => {
+                    if (!word) return this.client.util.resolveUser(arg.defaultValue, false, true);
+                    const user = this.client.util.resolveUser(word, false, true);
 
-            if (arg.type === ArgumentTypes.DYNAMIC || arg.type === ArgumentTypes.NUMBER){
-                return parseFloat(word);
-            }
+                    return user || this.client.util.resolveUser(arg.defaultValue, false, true);
+                },
+                [ArgumentTypes.MEMBER]: () => {
+                    if (!word) return this.client.util.resolveMember(arg.defaultValue, message.guild, false, true);
+                    const member = this.client.util.resolveMember(word, message.guild, false, true);
 
-            if (arg.type === ArgumentTypes.DYNAMIC_INT || arg.type === ArgumentTypes.INTEGER){
-                return parseInt(word);
-            }
+                    return member || this.client.util.resolveMember(arg.defaultValue, message.guild, false, true);
+                },
+                [ArgumentTypes.CHANNEL]: () => {
+                    if (!word) return this.client.util.resolveChannel(arg.defaultValue, message.guild, false, true);
+                    const channel = this.client.util.resolveChannel(word, message.guild, false, true);
 
-            if (arg.type === ArgumentTypes.USER){
-                let user = this.client.util.resolveUser(word, false, true);
-                if (!user) user = this.client.util.resolveUser(arg.defaultValue, false, true);
-                return user;
-            }
+                    return channel || this.client.util.resolveChannel(arg.defaultValue, message.guild, false, true);
+                },
+                [ArgumentTypes.TEXT_CHANNEL]: () => {
+                    if (!word) return this.client.util.resolveChannel(arg.defaultValue, message.guild, false, true);
+                    const channel = this.client.util.resolveChannel(word, message.guild, false, true);
 
-            if (arg.type === ArgumentTypes.MEMBER){
-                let member = this.client.util.resolveMember(word, message.guild, false, true);
-                if (!member) member = this.client.util.resolveMember(arg.defaultValue, message.guild, false, true);
-                return member;
-            }
+                    if (!channel || channel.type !== 'text') return this.client.util.resolveChannel(arg.defaultValue, message.guild, false, true);
+                    return channel;
+                },
+                [ArgumentTypes.VOICE_CHANNEL]: () => {
+                    if (!word) return this.client.util.resolveChannel(arg.defaultValue, message.guild, false, true);
+                    const channel = this.client.util.resolveChannel(word, message.guild, false, true);
 
-            if (arg.type === ArgumentTypes.CHANNEL){
-                let channel = this.client.util.resolveChannel(word, message.guild, false, true);
-                if (!channel) channel = this.client.util.resolveChannel(arg.defaultValue, message.guild, false, true);
-                return channel;
-            }
+                    if (!channel || channel.type !== 'voice') return this.client.util.resolveChannel(arg.defaultValue, message.guild, false, true);
+                    return channel;
+                },
+                [ArgumentTypes.ROLE]: () => {
+                    if (!word) return this.client.util.resolveRole(arg.defaultValue, message.guild, false, true);
+                    const role = this.client.util.resolveRole(word, message.guild, false, true);
 
-            if (arg.type === ArgumentTypes.TEXT_CHANNEL){
-                let channel = this.client.util.resolveChannel(word, message.guild, false, true);
-                if (!channel || channel.type !== 'text') channel = this.client.util.resolveChannel(arg.defaultValue, message.guild, false, true);
-                return channel;
-            }
-
-            if (arg.type === ArgumentTypes.VOICE_CHANNEL){
-                let channel = this.client.util.resolveChannel(word, message.guild, false, true);
-                if (!channel || channel.type !== 'voice') channel = this.client.util.resolveChannel(arg.defaultValue, message.guild, false, true);
-                return channel;
-            }
-
-            if (arg.type === ArgumentTypes.ROLE){
-                let role = this.client.util.resolveRole(word, message.guild, false, true);
-                if (!role) role = this.client.util.resolveRole(arg.defaultValue, message.guild, false, true);
-                return role;
-            }
+                    return role || this.client.util.resolveRole(arg.defaultValue, message.guild, false, true);
+                },
+            };
 
             if (Array.isArray(arg.type)){
                 if (!arg.type.some(t => t.toLowerCase() === word.toLowerCase())){
@@ -295,37 +307,37 @@ class Command {
             }
 
             if (typeof arg.type === 'function'){
-                let res = arg.type(word, message);
+                const res = arg.type(word, message);
                 if (res === true) return word;
                 if (!res) return arg.defaultValue;
 
                 return res;
             }
 
-            return word;
+            if (func[arg.type]) return func[arg.type]();
+            return word || arg.defaultValue;
         };
 
         wordArgs.forEach((arg, i) => {
-            let word = noPrefixWords[arg.index !== undefined ? arg.index : i];
-            if (!word) return args[arg.id] = arg.defaultValue;
-            
+            let word = noPrefixWords[arg.index !== undefined ? arg.index : i] || '';
             if ((this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY) && /^".*"$/.test(word)) word = word.slice(1, -1);
+
             args[arg.id] = processType(arg, word);
         });
 
         words.reverse();
 
         prefixArgs.forEach(arg => {
-            let word = words.find(w => Array.isArray(arg.prefix) ? arg.prefix.some(p => w.startsWith(p)) : w.startsWith(arg.prefix));
-            if (!word) return args[arg.id] = arg.defaultValue;
-
+            let word = words.find(w => Array.isArray(arg.prefix) ? arg.prefix.some(p => w.startsWith(p)) : w.startsWith(arg.prefix)) || '';
             word = word.replace(prefixes.find(p => word.startsWith(p)), '');
+            
             if (this.split === ArgumentSplits.STICKY && /^".*"$/.test(word)) word = word.slice(1, -1);
+
             args[arg.id] = processType(arg, word);
         });
 
-        flagArgs.forEach(arg => {    
-            let word = words.find(w => Array.isArray(arg.prefix) ? arg.prefix.some(p => w === p) : w === arg.prefix);
+        flagArgs.forEach(arg => {
+            const word = words.find(w => Array.isArray(arg.prefix) ? arg.prefix.some(p => w === p) : w === arg.prefix);
             return args[arg.id] = !!word;
         });
 
