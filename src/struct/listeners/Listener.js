@@ -1,7 +1,7 @@
 /**
  * Options to use for listener execution behavior.
  * @typedef {Object} ListenerOptions
- * @prop {string|EventEmitter} [emitter='client'] - The event emitter: 'client' or 'commandHandler' or an EventEmitter.
+ * @prop {string|EventEmitter} [emitter='client'] - The event emitter, either a key from listenerHandler.emitters or an EventEmitter.
  * @prop {string} [eventName='ready'] - Event name to listen to.
  * @prop {string} [type='on'] - Type of listener: 'on' or 'once'.
  */

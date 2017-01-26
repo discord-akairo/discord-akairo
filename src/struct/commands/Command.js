@@ -1,4 +1,4 @@
-const { ArgumentMatches, ArgumentTypes, ArgumentSplits, ArgumentSplitMethods } = require('../utils/Constants');
+const { ArgumentMatches, ArgumentTypes, ArgumentSplits } = require('../utils/Constants');
 
 /**
  * An argument in a command.
@@ -37,7 +37,7 @@ const { ArgumentMatches, ArgumentTypes, ArgumentSplits, ArgumentSplitMethods } =
  * <br/><code>'textChannel'</code> Tries to resolve to a text channel.
  * <br/><code>'voiceChannel'</code> Tries to resolve to a voice channel.
  * <br/><code>'role'</code> Tries to resolve to a role.
- * <br/>If any of the above are not valid, the default value will be resolved (so use an ID).
+ * <br/>If any of the above are not valid, the default value will be resolved (recommended to use an ID).
  * <br/>
  * <br/>An array of strings can be used to restrict input to only those strings, case insensitive.
  * <br/>The evaluated argument will be all lowercase.
@@ -302,7 +302,7 @@ class Command {
                     const res = val => this.client.util.resolveRole(val, message.guild, false, true);
                     if (!word) return res(arg.defaultValue);
                     return res(word) || res(arg.defaultValue);
-                },
+                }
             };
 
             if (Array.isArray(arg.type)){

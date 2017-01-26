@@ -142,7 +142,7 @@ class SQLiteHandler extends DatabaseHandler {
             if (this.has(id)) return reject(`${id} already exists.`);
 
             this.db.run(`INSERT INTO "${this.tableName}" (id) VALUES ('${id}')`).then(() => {
-                let config = this.defaultConfig;
+                const config = this.defaultConfig;
 
                 config.id = id;
                 this.memory.set(id, config);
@@ -160,7 +160,7 @@ class SQLiteHandler extends DatabaseHandler {
     addMemory(id){
         if (this.has(id)) throw new Error(`${id} already exists.`);
 
-        let config = this.defaultConfig;
+        const config = this.defaultConfig;
 
         config.id = id;
         this.memory.set(id, config);
@@ -213,8 +213,8 @@ class SQLiteHandler extends DatabaseHandler {
     get(id){
         if (!this.has(id)) return this.defaultConfig;
         
-        let config = this.memory.get(id);
-        let copy = {};
+        const config = this.memory.get(id);
+        const copy = {};
 
         Object.keys(config).forEach(key => {
             if (config[key] == undefined) return copy[key] = this.defaultConfig[key];
@@ -240,7 +240,7 @@ class SQLiteHandler extends DatabaseHandler {
 
             if (!this.has(id)) return reject(new Error(`${id} not found.`));
             
-            let config = this.memory.get(id);
+            const config = this.memory.get(id);
 
             if (!config.hasOwnProperty(key)) return reject(new Error(`Key ${key} was not found for ${id}.`));
             if (key === 'id') return reject(new Error('The id key is read-only.'));
@@ -271,7 +271,7 @@ class SQLiteHandler extends DatabaseHandler {
 
         if (!this.has(id)) throw new Error(`${id} not found.`);
         
-        let config = this.memory.get(id);
+        const config = this.memory.get(id);
 
         if (!config.hasOwnProperty(key)) throw new Error(`Key ${key} was not found for ${id}.`);
         if (key === 'id') throw new Error('The id key is read-only.');
@@ -294,8 +294,8 @@ class SQLiteHandler extends DatabaseHandler {
                 return reject(new Error(`${id} not found.`));
             }
 
-            let config = this.memory.get(id);
-            let sets = [];
+            const config = this.memory.get(id);
+            const sets = [];
 
             Object.keys(config).forEach(key => {
                 let value = config[key];
@@ -319,7 +319,7 @@ class SQLiteHandler extends DatabaseHandler {
      */
     saveAll(){
         return new Promise((resolve, reject) => {
-            let p = this.memory.map(config => this.save(config.id));
+            const p = this.memory.map(config => this.save(config.id));
             Promise.all(p).then(() => resolve(this)).catch(reject);
         });
     }

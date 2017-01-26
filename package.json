@@ -1,6 +1,6 @@
 {
   "name": "discord-akairo",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "description": "A bot framework for Discord.js.",
   "main": "./src/index.js",
   "author": "1Computer",
@@ -9,9 +9,7 @@
     "readdir-recursive": "0.0.4"
   },
   "peerDependencies": {
-    "discord.js": "^11.0.0"
-  },
-  "optionalDependencies": {
+    "discord.js": "^11.0.0",
     "sqlite": "^2.2.4"
   },
   "devDependencies": {
