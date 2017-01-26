@@ -1,4 +1,4 @@
-const {ArgumentMatches, ArgumentTypes, ArgumentSplits, ArgumentSplitMethods} = require('../utils/Constants');
+const { ArgumentMatches, ArgumentTypes, ArgumentSplits, ArgumentSplitMethods } = require('../utils/Constants');
 
 /**
  * An argument in a command.
@@ -221,7 +221,14 @@ class Command {
     parse(content, message){
         if (this.args.length === 0) return {};
 
-        const words = (ArgumentSplitMethods[this.split.toUpperCase()] || (() => []))(content) || [];
+        const splitFunc = {
+            [ArgumentSplits.PLAIN]: () => content.match(/[^\s]+/g),
+            [ArgumentSplits.SPLIT]: () => content.split(' '),
+            [ArgumentSplits.QUOTED]: () => content.match(/".*?"|[^\s"]+|"/g),
+            [ArgumentSplits.STICKY]: () => content.match(/[^\s"]*?".*?"|[^\s"]+|"/g)
+        };
+
+        const words = splitFunc[this.split] ? splitFunc[this.split]() || [] : [];
         const args = {};
 
         const wordArgs = this.args.filter(arg => arg.match === ArgumentMatches.WORD);
@@ -238,7 +245,7 @@ class Command {
         const noPrefixWords = words.filter(w => !prefixes.some(p => w.startsWith(p)));
 
         const processType = (arg, word) => {
-            const func = {
+            const typeFunc = {
                 [ArgumentTypes.STRING]: () => word || arg.defaultValue,
                 [ArgumentTypes.NUMBER]: () => {
                     if (isNaN(word) || !word) return arg.defaultValue;
@@ -259,42 +266,42 @@ class Command {
                     return parseInt(word);
                 },
                 [ArgumentTypes.USER]: () => {
-                    if (!word) return this.client.util.resolveUser(arg.defaultValue, false, true);
-                    const user = this.client.util.resolveUser(word, false, true);
-
-                    return user || this.client.util.resolveUser(arg.defaultValue, false, true);
+                    const res = val => this.client.util.resolveUser(val, false, true);
+                    if (!word) return res(arg.defaultValue);
+                    return res(word) || res(arg.defaultValue);
                 },
                 [ArgumentTypes.MEMBER]: () => {
-                    if (!word) return this.client.util.resolveMember(arg.defaultValue, message.guild, false, true);
-                    const member = this.client.util.resolveMember(word, message.guild, false, true);
-
-                    return member || this.client.util.resolveMember(arg.defaultValue, message.guild, false, true);
+                    const res = val => this.client.util.resolveMember(val, message.guild, false, true);
+                    if (!word) return res(arg.defaultValue);
+                    return res(word) || res(arg.defaultValue);
                 },
                 [ArgumentTypes.CHANNEL]: () => {
-                    if (!word) return this.client.util.resolveChannel(arg.defaultValue, message.guild, false, true);
-                    const channel = this.client.util.resolveChannel(word, message.guild, false, true);
-
-                    return channel || this.client.util.resolveChannel(arg.defaultValue, message.guild, false, true);
+                    const res = val => this.client.util.resolveChannel(val, message.guild, false, true);
+                    if (!word) return res(arg.defaultValue);
+                    return res(word) || res(arg.defaultValue);
                 },
                 [ArgumentTypes.TEXT_CHANNEL]: () => {
-                    if (!word) return this.client.util.resolveChannel(arg.defaultValue, message.guild, false, true);
-                    const channel = this.client.util.resolveChannel(word, message.guild, false, true);
+                    const res = val => this.client.util.resolveChannel(val, message.guild, false, true);
+                    if (!word) return res(arg.defaultValue);
 
-                    if (!channel || channel.type !== 'text') return this.client.util.resolveChannel(arg.defaultValue, message.guild, false, true);
+                    const channel = res(word);
+                    if (!channel || channel.type !== 'text') return res(arg.defaultValue);
+
                     return channel;
                 },
                 [ArgumentTypes.VOICE_CHANNEL]: () => {
-                    if (!word) return this.client.util.resolveChannel(arg.defaultValue, message.guild, false, true);
-                    const channel = this.client.util.resolveChannel(word, message.guild, false, true);
+                    const res = val => this.client.util.resolveChannel(val, message.guild, false, true);
+                    if (!word) return res(arg.defaultValue);
 
-                    if (!channel || channel.type !== 'voice') return this.client.util.resolveChannel(arg.defaultValue, message.guild, false, true);
+                    const channel = res(word);
+                    if (!channel || channel.type !== 'voice') return res(arg.defaultValue);
+
                     return channel;
                 },
                 [ArgumentTypes.ROLE]: () => {
-                    if (!word) return this.client.util.resolveRole(arg.defaultValue, message.guild, false, true);
-                    const role = this.client.util.resolveRole(word, message.guild, false, true);
-
-                    return role || this.client.util.resolveRole(arg.defaultValue, message.guild, false, true);
+                    const res = val => this.client.util.resolveRole(val, message.guild, false, true);
+                    if (!word) return res(arg.defaultValue);
+                    return res(word) || res(arg.defaultValue);
                 },
             };
 
@@ -314,7 +321,7 @@ class Command {
                 return res;
             }
 
-            if (func[arg.type]) return func[arg.type]();
+            if (typeFunc[arg.type]) return typeFunc[arg.type]();
             return word || arg.defaultValue;
         };
 

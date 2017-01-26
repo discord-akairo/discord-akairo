@@ -1,4 +1,4 @@
-const {Collection} = require('discord.js');
+const { Collection } = require('discord.js');
 
 class DatabaseHandler {
     /**
@@ -12,7 +12,7 @@ class DatabaseHandler {
          */
         this.defaultConfig = defaultConfig;
 
-        /** 
+        /**
          * Configurations stored in memory, mapped by ID to configuration.
          * @type {Collection.<string, Object>}
          */
@@ -35,12 +35,12 @@ class DatabaseHandler {
         return this.memory.array();
     }
 
-    /** 
+    /**
      * Initializes with IDs.
      * @param {string[]} ids - Array of IDs.
      * @returns {DatabaseHandler}
      */
-    init(ids){ 
+    init(ids){
         ids.forEach(id => {
             if (!this.has(id)) this.add(id);
         });
@@ -48,33 +48,33 @@ class DatabaseHandler {
         return this;
     }
 
-    /** 
+    /**
      * Adds an entry.
      * @param {string} id - ID of entry.
      * @returns {DatabaseHandler}
      */
-    add(id){ 
+    add(id){
         if (this.has(id)) throw new Error(`${id} already exists.`);
 
-        let config = this.defaultConfig;
+        const config = this.defaultConfig;
 
         config.id = id;
         this.memory.set(id, config);
         return this;
     }
 
-    /** 
+    /**
      * Removes an entry.
      * @param {string} id - ID of entry.
      * @returns {DatabaseHandler}
      */
-    remove(id){ 
+    remove(id){
         if (!this.has(id)) throw new Error(`${id} does not exist.`);
         this.memory.delete(id);
         return this;
     }
 
-    /** 
+    /**
      * Checks if ID exists.
      * @param {string} id ID of entry.
      * @returns {boolean}
@@ -91,8 +91,8 @@ class DatabaseHandler {
     get(id){
         if (!this.has(id)) return this.defaultConfig;
         
-        let config = this.memory.get(id);
-        let copy = {};
+        const config = this.memory.get(id);
+        const copy = {};
 
         Object.keys(config).forEach(key => {
             if (config[key] == undefined) return copy[key] = this.defaultConfig[key];
@@ -112,7 +112,7 @@ class DatabaseHandler {
     set(id, key, value){
         if (!this.has(id)) throw new Error(`${id} not found.`);
 
-        let config = this.memory.get(id);
+        const config = this.memory.get(id);
 
         if (!config.hasOwnProperty(key)) throw new Error(`Key ${key} was not found for ${id}.`);
         if (key === 'id') throw new Error('The id key is read-only.');

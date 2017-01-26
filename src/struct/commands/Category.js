@@ -1,4 +1,4 @@
-const {Collection} = require('discord.js');
+const { Collection } = require('discord.js');
 
 /** @extends Collection */
 class Category extends Collection {
@@ -11,7 +11,7 @@ class Category extends Collection {
 
         /**
          * ID of the category.
-         * @type {string} 
+         * @type {string}
          */
         this.id = id;
     }

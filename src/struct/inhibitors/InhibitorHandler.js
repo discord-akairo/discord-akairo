@@ -1,9 +1,9 @@
 const path = require('path');
 const rread = require('readdir-recursive');
 const EventEmitter = require('events');
-const {Collection} = require('discord.js');
+const { Collection } = require('discord.js');
 const Inhibitor = require('./Inhibitor');
-const {InhibitorHandlerEvents} = require('../utils/Constants');
+const { InhibitorHandlerEvents } = require('../utils/Constants');
 
 /** @extends EventEmitter */
 class InhibitorHandler extends EventEmitter {
@@ -13,7 +13,7 @@ class InhibitorHandler extends EventEmitter {
      * @param {Object} options - Options from framework.
      */
     constructor(framework, options = {}){
-        super(); 
+        super();
 
         /**
          * The Akairo framework.
@@ -35,7 +35,7 @@ class InhibitorHandler extends EventEmitter {
          */
         this.inhibitors = new Collection();
 
-        let filepaths = rread.fileSync(this.directory);
+        const filepaths = rread.fileSync(this.directory);
         filepaths.forEach(filepath => {
             this.load(filepath);
         });
@@ -47,7 +47,7 @@ class InhibitorHandler extends EventEmitter {
      * @returns {Inhibitor}
      */
     load(filepath){
-        let inhibitor = require(filepath);
+        const inhibitor = require(filepath);
 
         if (!(inhibitor instanceof Inhibitor)) return;
         if (this.inhibitors.has(inhibitor.id)) throw new Error(`Inhibitor ${inhibitor.id} already loaded.`);
@@ -66,8 +66,8 @@ class InhibitorHandler extends EventEmitter {
      * @param {string} filename - Filename to lookup in the directory. A .js extension is assumed.
      */
     add(filename){
-        let files = rread.fileSync(this.directory);
-        let filepath = files.find(file => file.endsWith(`${filename}.js`));
+        const files = rread.fileSync(this.directory);
+        const filepath = files.find(file => file.endsWith(`${filename}.js`));
 
         if (!filepath){
             throw new Error(`File ${filename} not found.`);
@@ -81,7 +81,7 @@ class InhibitorHandler extends EventEmitter {
      * @param {string} id - ID of the Inhibitor.
      */
     remove(id){
-        let inhibitor = this.inhibitors.get(id);
+        const inhibitor = this.inhibitors.get(id);
         if (!inhibitor) throw new Error(`Inhibitor ${id} does not exist.`);
 
         delete require.cache[require.resolve(inhibitor.filepath)];
@@ -95,10 +95,10 @@ class InhibitorHandler extends EventEmitter {
      * @param {string} id - ID of the Inhibitor.
      */
     reload(id){
-        let inhibitor = this.inhibitors.get(id);
+        const inhibitor = this.inhibitors.get(id);
         if (!inhibitor) throw new Error(`Inhibitor ${id} does not exist.`);
 
-        let filepath = inhibitor.filepath;
+        const filepath = inhibitor.filepath;
 
         delete require.cache[require.resolve(inhibitor.filepath)];
         this.inhibitors.delete(inhibitor.id);
@@ -113,8 +113,8 @@ class InhibitorHandler extends EventEmitter {
      */
     testMessage(message){
         return new Promise((resolve, reject) => {
-            let promises = this.inhibitors.filter(i => i.preMessage && i.enabled).map(inhibitor => {
-                let inhibited = inhibitor.exec(message);
+            const promises = this.inhibitors.filter(i => i.preMessage && i.enabled).map(inhibitor => {
+                const inhibited = inhibitor.exec(message);
 
                 if (inhibited instanceof Promise) return inhibited.catch(err => {
                     if (err instanceof Error) throw err;
@@ -140,8 +140,8 @@ class InhibitorHandler extends EventEmitter {
      */
     testCommand(message, command){
         return new Promise((resolve, reject) => {
-            let promises = this.inhibitors.filter(i => !i.preMessage && i.enabled).map(inhibitor => {
-                let inhibited = inhibitor.exec(message, command);
+            const promises = this.inhibitors.filter(i => !i.preMessage && i.enabled).map(inhibitor => {
+                const inhibited = inhibitor.exec(message, command);
 
                 if (inhibited instanceof Promise) return inhibited.catch(err => {
                     if (err instanceof Error) throw err;

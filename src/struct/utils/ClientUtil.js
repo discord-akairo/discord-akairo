@@ -1,4 +1,4 @@
-const {Constants} = require('discord.js');
+const { Constants } = require('discord.js');
 
 class ClientUtil {
     /**
@@ -6,8 +6,8 @@ class ClientUtil {
      * @param {Client} client - The Discord.js client.
      */
     constructor(client){
-        /** 
-         * The Discord.js client. 
+        /**
+         * The Discord.js client.
          * @readonly
          * @type {Client}
          */
@@ -30,24 +30,24 @@ class ClientUtil {
      * @returns {User}
      */
     resolveUser(text, caseSensitive = false, wholeWord = false){
-        let users = this.client.users;
+        const users = this.client.users;
 
-        let reg = /<@!?(\d+)>/;
+        const reg = /<@!?(\d+)>/;
         if (reg.test(text)){
-            let id = text.match(reg)[1];
+            const id = text.match(reg)[1];
             return users.get(id);
         }
 
-        let check = u => {
-            let username = caseSensitive ? u.username : u.username.toLowerCase();
-            let t = caseSensitive ? text : text.toLowerCase();
+        const check = u => {
+            const username = caseSensitive ? u.username : u.username.toLowerCase();
+            const t = caseSensitive ? text : text.toLowerCase();
 
             return username === t || username === t.split('#')[0] && u.discriminator === t.split('#')[1];
         };
 
-        let checkInc = u => {
-            let username = caseSensitive ? u.username : u.username.toLowerCase();
-            let t = caseSensitive ? text : text.toLowerCase();
+        const checkInc = u => {
+            const username = caseSensitive ? u.username : u.username.toLowerCase();
+            const t = caseSensitive ? text : text.toLowerCase();
 
             return username.includes(t) || username.includes(t.split('#')[0]) && u.discriminator.includes(t.split('#')[1]);
         };
@@ -66,26 +66,26 @@ class ClientUtil {
     resolveMember(text, guild, caseSensitive = false, wholeWord = false){
         if (!guild) return this.resolveUser(text);
 
-        let members = guild.members;
+        const members = guild.members;
 
-        let reg = /<@!?(\d+)>/;
+        const reg = /<@!?(\d+)>/;
         if (reg.test(text)){
-            let id = text.match(reg)[1];
+            const id = text.match(reg)[1];
             return members.get(id);
         }
 
-        let check = m => {
-            let username = caseSensitive ? m.user.username : m.user.username.toLowerCase();
-            let displayName = caseSensitive ? m.displayName : m.displayName.toLowerCase();
-            let t = caseSensitive ? text : text.toLowerCase();
+        const check = m => {
+            const username = caseSensitive ? m.user.username : m.user.username.toLowerCase();
+            const displayName = caseSensitive ? m.displayName : m.displayName.toLowerCase();
+            const t = caseSensitive ? text : text.toLowerCase();
 
             return displayName === t || username === t || username === t.split('#')[0] && m.user.discriminator === t.split('#')[1];
         };
 
-        let checkInc = m => {
-            let username = caseSensitive ? m.user.username : m.user.username.toLowerCase();
-            let displayName = caseSensitive ? m.displayName : m.displayName.toLowerCase();
-            let t = caseSensitive ? text : text.toLowerCase();
+        const checkInc = m => {
+            const username = caseSensitive ? m.user.username : m.user.username.toLowerCase();
+            const displayName = caseSensitive ? m.displayName : m.displayName.toLowerCase();
+            const t = caseSensitive ? text : text.toLowerCase();
 
             return displayName.includes(t) || username.includes(t) || username.includes(t.split('#')[0]) && m.user.discriminator.includes(t.split('#')[1]);
         };
@@ -104,24 +104,24 @@ class ClientUtil {
     resolveChannel(text, guild, caseSensitive = false, wholeWord = false){
         if (!guild) throw new Error('Guild must be specified.');
 
-        let channels = guild.channels;
+        const channels = guild.channels;
 
-        let reg = /<#(\d+)>/;
+        const reg = /<#(\d+)>/;
         if (reg.test(text)){
-            let id = text.match(reg)[1];
+            const id = text.match(reg)[1];
             return channels.get(id);
         }
 
-        let check = c => {
-            let name = caseSensitive ? c.name : c.name.toLowerCase();
-            let t = caseSensitive ? text : text.toLowerCase();
+        const check = c => {
+            const name = caseSensitive ? c.name : c.name.toLowerCase();
+            const t = caseSensitive ? text : text.toLowerCase();
 
             return name === t || name === t.replace(/^#/, '');
         };
 
-        let checkInc = c => {
-            let name = caseSensitive ? c.name : c.name.toLowerCase();
-            let t = caseSensitive ? text : text.toLowerCase();
+        const checkInc = c => {
+            const name = caseSensitive ? c.name : c.name.toLowerCase();
+            const t = caseSensitive ? text : text.toLowerCase();
 
             return name.includes(t) || name.includes(t.replace(/^#/, ''));
         };
@@ -140,24 +140,24 @@ class ClientUtil {
     resolveRole(text, guild, caseSensitive = false, wholeWord = false){
         if (!guild) throw new Error('Guild must be specified.');
 
-        let roles = guild.roles;
+        const roles = guild.roles;
 
-        let reg = /<@&(\d+)>/;
+        const reg = /<@&(\d+)>/;
         if (reg.test(text)){
-            let id = text.match(reg)[1];
+            const id = text.match(reg)[1];
             return roles.get(id);
         }
 
-        let check = r => {
-            let name = caseSensitive ? r.name : r.name.toLowerCase();
-            let t = caseSensitive ? t : text.toLowerCase();
+        const check = r => {
+            const name = caseSensitive ? r.name : r.name.toLowerCase();
+            const t = caseSensitive ? t : text.toLowerCase();
 
             return name === t || name === t.replace(/^@/, '');
         };
 
-        let checkInc = r => {
-            let name = caseSensitive ? r.name : r.name.toLowerCase();
-            let t = caseSensitive ? text : text.toLowerCase();
+        const checkInc = r => {
+            const name = caseSensitive ? r.name : r.name.toLowerCase();
+            const t = caseSensitive ? text : text.toLowerCase();
 
             return name.includes(t) || name.includes(t.replace(/^@/, ''));
         };
@@ -176,24 +176,24 @@ class ClientUtil {
     resolveEmoji(text, guild, caseSensitive = false, wholeWord = false){
         if (!guild) throw new Error('Guild must be specified.');
 
-        let emojis = guild.emojis;
+        const emojis = guild.emojis;
 
-        let reg = /<:[a-zA-Z0-9_]+:(\d+)>/;
+        const reg = /<:[a-zA-Z0-9_]+:(\d+)>/;
         if (reg.test(text)){
-            let id = text.match(reg)[1];
+            const id = text.match(reg)[1];
             return emojis.get(id);
         }
 
-        let check = e => {
-            let name = caseSensitive ? e.name : e.name.toLowerCase();
-            let t = caseSensitive ? text : text.toLowerCase();
+        const check = e => {
+            const name = caseSensitive ? e.name : e.name.toLowerCase();
+            const t = caseSensitive ? text : text.toLowerCase();
 
             return name === t || name === t.replace(/:/g, '');
         };
 
-        let checkInc = e => {
-            let name = caseSensitive ? e.name : e.name.toLowerCase();
-            let t = caseSensitive ? text : text.toLowerCase();
+        const checkInc = e => {
+            const name = caseSensitive ? e.name : e.name.toLowerCase();
+            const t = caseSensitive ? text : text.toLowerCase();
 
             return name.includes(t) || name.includes(t.replace(/:/g, ''));
         };
@@ -209,18 +209,18 @@ class ClientUtil {
      * @returns {Guild}
      */
     resolveGuild(text, caseSensitive = false, wholeWord = false){
-        let guilds = this.client.guilds;
+        const guilds = this.client.guilds;
 
-        let check = g => {
-            let name = caseSensitive ? g.name : g.name.toLowerCase();
-            let t = caseSensitive ? t : text.toLowerCase();
+        const check = g => {
+            const name = caseSensitive ? g.name : g.name.toLowerCase();
+            const t = caseSensitive ? t : text.toLowerCase();
 
             return name === t;
         };
 
-        let checkInc = g => {
-            let name = caseSensitive ? g.name : g.name.toLowerCase();
-            let t = caseSensitive ? t : text.toLowerCase();
+        const checkInc = g => {
+            const name = caseSensitive ? g.name : g.name.toLowerCase();
+            const t = caseSensitive ? t : text.toLowerCase();
 
             return name.includes(t);
         };
@@ -234,10 +234,10 @@ class ClientUtil {
      * @returns {number}
      */
     displayColor(member){
-        let roles = member.roles.filter(r => r.color !== 0);
+        const roles = member.roles.filter(r => r.color !== 0);
         if (roles.size === 0) return 0;
 
-        let highest = Math.max(...roles.map(r => r.position));
+        const highest = Math.max(...roles.map(r => r.position));
         return roles.find(r => r.position === highest).color;
     }
 
@@ -249,10 +249,10 @@ class ClientUtil {
      */
     createInvite(permissions = 0){
         return new Promise((resolve, reject) => {
-            let perms = typeof permissions === 'number' ? permissions : this.client.resolver.resolvePermissions(permissions);
+            const perms = typeof permissions === 'number' ? permissions : this.client.resolver.resolvePermissions(permissions);
 
             this.client.fetchApplication().then(app => {
-                let invite = `https://discordapp.com/oauth2/authorize?permissions=${perms}&scope=bot&client_id=${app.id}`;
+                const invite = `https://discordapp.com/oauth2/authorize?permissions=${perms}&scope=bot&client_id=${app.id}`;
                 resolve(invite);
             }).catch(reject);
         });
@@ -264,7 +264,7 @@ class ClientUtil {
      * @returns {string[]}
      */
     resolvePermissionNumber(number){
-        let resolved = [];
+        const resolved = [];
 
         Object.keys(Constants.PermissionFlags).forEach(key => {
             if (number & Constants.PermissionFlags[key]) resolved.push(key);
@@ -292,8 +292,8 @@ class ClientUtil {
      * @returns {string|boolean}
      */
     compareStreaming(oldMember, newMember){
-        let s1 = oldMember.presence.game && oldMember.presence.game.streaming;
-        let s2 = newMember.presence.game && newMember.presence.game.streaming;
+        const s1 = oldMember.presence.game && oldMember.presence.game.streaming;
+        const s2 = newMember.presence.game && newMember.presence.game.streaming;
 
         if (s1 === s2) return false;
         if (s1) return 'stopped';

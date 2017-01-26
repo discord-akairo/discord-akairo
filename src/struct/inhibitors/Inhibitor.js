@@ -57,8 +57,8 @@ class Inhibitor {
          */
         this.framework = null;
 
-        /** 
-         * The Discord.js client. 
+        /**
+         * The Discord.js client.
          * @readonly
          * @type {Client}
          */

@@ -1,0 +1,40 @@
+{
+    "env": {
+        "es6": true,
+        "node": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+        "sourceType": "module"
+    },
+    "rules": {
+        "no-console": "off",
+        "no-extra-parens": "error",
+        "no-var": "error",
+        "no-shadow": [
+            "error",
+            { "allow": ["err", "resolve", "reject"] }
+        ],
+        "no-trailing-spaces": [
+            "error",
+            { "skipBlankLines": true }
+        ],
+        "handle-callback-err": "off",
+        "yoda": "error",
+        "block-spacing": "error",
+        "object-curly-spacing": ["error", "always"],
+        "prefer-const": "error",
+        "indent": [
+            "error",
+            4
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ]
+    }
+}

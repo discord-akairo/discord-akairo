@@ -1,10 +1,10 @@
 const path = require('path');
 const rread = require('readdir-recursive');
 const EventEmitter = require('events');
-const {Collection} = require('discord.js');
+const { Collection } = require('discord.js');
 const Command = require('./Command');
 const Category = require('./Category');
-const {CommandHandlerEvents, BuiltInReasons} = require('../utils/Constants');
+const { CommandHandlerEvents, BuiltInReasons } = require('../utils/Constants');
 
 /** @extends EventEmitter */
 class CommandHandler extends EventEmitter {
@@ -66,7 +66,7 @@ class CommandHandler extends EventEmitter {
          */
         this.categories = new Collection();
 
-        let filepaths = rread.fileSync(this.directory);
+        const filepaths = rread.fileSync(this.directory);
         filepaths.forEach(filepath => {
             this.load(filepath);
         });
@@ -78,7 +78,7 @@ class CommandHandler extends EventEmitter {
      * @returns {Command}
      */
     load(filepath){
-        let command = require(filepath);
+        const command = require(filepath);
 
         if (!(command instanceof Command)) return;
         if (this.commands.has(command.id)) throw new Error(`Command ${command.id} already loaded.`);
@@ -91,7 +91,7 @@ class CommandHandler extends EventEmitter {
         this.commands.set(command.id, command);
 
         if (!this.categories.has(command.category)) this.categories.set(command.category, new Category(command.category));
-        let category = this.categories.get(command.category);
+        const category = this.categories.get(command.category);
         command.category = category;
         category.set(command.id, command);
 
@@ -103,8 +103,8 @@ class CommandHandler extends EventEmitter {
      * @param {string} filename - Filename to lookup in the directory. A .js extension is assumed.
      */
     add(filename){
-        let files = rread.fileSync(this.directory);
-        let filepath = files.find(file => file.endsWith(`${filename}.js`));
+        const files = rread.fileSync(this.directory);
+        const filepath = files.find(file => file.endsWith(`${filename}.js`));
 
         if (!filepath){
             throw new Error(`File ${filename} not found.`);
@@ -118,7 +118,7 @@ class CommandHandler extends EventEmitter {
      * @param {string} id - ID of the Command.
      */
     remove(id){
-        let command = this.commands.get(id);
+        const command = this.commands.get(id);
         if (!command) throw new Error(`Command ${id} does not exist.`);
 
         delete require.cache[require.resolve(command.filepath)];
@@ -134,10 +134,10 @@ class CommandHandler extends EventEmitter {
      * @param {string} id - ID of the Command.
      */
     reload(id){
-        let command = this.commands.get(id);
+        const command = this.commands.get(id);
         if (!command) throw new Error(`Command ${id} does not exist.`);
 
-        let filepath = command.filepath;
+        const filepath = command.filepath;
 
         delete require.cache[require.resolve(command.filepath)];
         this.commands.delete(command.id);
@@ -175,32 +175,35 @@ class CommandHandler extends EventEmitter {
      */
     handle(message){
         if (!this.preInhibDisabled){
-            if (message.author.id !== this.framework.client.user.id && this.framework.client.selfbot) 
+            if (message.author.id !== this.framework.client.user.id && this.framework.client.selfbot){
                 return this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.NOT_SELF);
+            }
 
-            if (message.author.id === this.framework.client.user.id && !this.framework.client.selfbot) 
+            if (message.author.id === this.framework.client.user.id && !this.framework.client.selfbot){
                 return this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.CLIENT);
+            }
 
-            if (message.author.bot) 
+            if (message.author.bot){
                 return this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.BOT);
+            }
         }
 
-        let pretest = this.framework.inhibitorHandler ? this.framework.inhibitorHandler.testMessage.bind(this.framework.inhibitorHandler) : (() => Promise.resolve());
+        const pretest = this.framework.inhibitorHandler ? this.framework.inhibitorHandler.testMessage.bind(this.framework.inhibitorHandler) : () => Promise.resolve();
 
         pretest(message).then(() => {
-            let prefix = this.prefix(message).toLowerCase();
-            let allowMention = this.allowMention(message);
+            const prefix = this.prefix(message).toLowerCase();
+            const allowMention = this.allowMention(message);
             let start;
 
             if (message.content.toLowerCase().startsWith(prefix)){
                 start = prefix;
             } else
             if (allowMention){
-                let mentionRegex = new RegExp(`^<@!?${this.framework.client.user.id}>`);
-                let mentioned = message.content.match(mentionRegex);
+                const mentionRegex = new RegExp(`^<@!?${this.framework.client.user.id}>`);
+                const mentioned = message.content.match(mentionRegex);
                 
                 if (mentioned){
-                    start = mentioned[0]; 
+                    start = mentioned[0];
                 } else {
                     return this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
                 }
@@ -208,15 +211,15 @@ class CommandHandler extends EventEmitter {
                 return this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
             }
 
-            let firstWord = message.content.replace(start, '').search(/\S/) + start.length;
-            let name = message.content.slice(firstWord).split(' ')[0];
-            let command = this.findCommand(name);
+            const firstWord = message.content.replace(start, '').search(/\S/) + start.length;
+            const name = message.content.slice(firstWord).split(' ')[0];
+            const command = this.findCommand(name);
 
             if (!command) return this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
             if (!command.enabled) return this.emit(CommandHandlerEvents.COMMAND_DISABLED, message, command);
 
             if (!this.postInhibDisabled){
-                if (command.ownerOnly && message.author.id !== this.framework.client.ownerID) 
+                if (command.ownerOnly && message.author.id !== this.framework.client.ownerID)
                     return this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.OWNER);
 
                 if (command.channelRestriction === 'guild' && !message.guild)
@@ -226,14 +229,14 @@ class CommandHandler extends EventEmitter {
                     return this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.DM);
             }
 
-            let test = this.framework.inhibitorHandler ? this.framework.inhibitorHandler.testCommand.bind(this.framework.inhibitorHandler) : (() => Promise.resolve());
+            const test = this.framework.inhibitorHandler ? this.framework.inhibitorHandler.testCommand.bind(this.framework.inhibitorHandler) : () => Promise.resolve();
 
             return test(message, command).then(() => {
-                let content = message.content.slice(message.content.indexOf(name) + name.length + 1);
-                let args = command.parse(content, message);
+                const content = message.content.slice(message.content.indexOf(name) + name.length + 1);
+                const args = command.parse(content, message);
 
                 this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command);
-                let end = Promise.resolve(command.exec(message, args));
+                const end = Promise.resolve(command.exec(message, args));
 
                 return end.then(() => {
                     this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command);
