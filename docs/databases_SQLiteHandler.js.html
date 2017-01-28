@@ -37,8 +37,7 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const sql = require('sqlite');
-const path = require('path');
+            <pre class="prettyprint source linenums"><code>const path = require('path');
 const DatabaseHandler = require('./DatabaseHandler');
 
 /** @extends DatabaseHandler */
@@ -100,7 +99,7 @@ class SQLiteHandler extends DatabaseHandler {
      */
     open(){
         return new Promise((resolve, reject) => {
-            sql.open(this.filepath).then(db => {
+            require('sqlite').open(this.filepath).then(db => {
                 this.db = db;
                 resolve(this.db);
             }).catch(reject);
