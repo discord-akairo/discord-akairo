@@ -37,7 +37,7 @@ class Framework {
 
         if (options.commandDirectory){
             /**
-             * The CommandHandler.
+             * The command handler.
              * @readonly
              * @type {CommandHandler}
              */
@@ -46,7 +46,7 @@ class Framework {
 
         if (options.inhibitorDirectory){
             /**
-             * The InhibitorHandler.
+             * The inhibitor handler.
              * @readonly
              * @type {InhibitorHandler}
              */
@@ -55,7 +55,7 @@ class Framework {
 
         if (options.listenerDirectory){
             /**
-             * The ListenerHandler.
+             * The listener handler.
              * @readonly
              * @type {ListenerHandler}
              */

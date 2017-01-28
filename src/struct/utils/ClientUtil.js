@@ -234,11 +234,24 @@ class ClientUtil {
      * @returns {number}
      */
     displayColor(member){
-        const roles = member.roles.filter(r => r.color !== 0);
-        if (roles.size === 0) return 0;
+        const roles = member.roles.filter(r => r.color);
+        if (!roles.size) return 0;
 
         const highest = Math.max(...roles.map(r => r.position));
         return roles.find(r => r.position === highest).color;
+    }
+
+    /**
+     * Gets the display color in hex code of the member.
+     * @param {GuildMember} member - The member to find color of.
+     * @returns {string}
+     */
+    displayHexColor(member){
+        const roles = member.roles.filter(r => r.color);
+        if (!roles.size) return 0;
+
+        const highest = Math.max(...roles.map(r => r.position));
+        return roles.find(r => r.position === highest).hexColor;
     }
 
     /**
@@ -307,9 +320,9 @@ class ClientUtil {
      * @param {boolean} cache - Whether or not to add to cache.
      * @returns {Promise.<GuildMember>}
      */
-    fetchMemberFrom(guild, user, cache){
-        return this.client.fetchUser(user, cache).then(user => {
-            return guild.fetchMember(user, cache);
+    fetchMemberFrom(guild, id, cache){
+        return this.client.fetchUser(id, cache).then(fetched => {
+            return guild.fetchMember(fetched, cache);
         });
     }
 }

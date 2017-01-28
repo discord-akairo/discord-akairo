@@ -1,4 +1,3 @@
-const sql = require('sqlite');
 const path = require('path');
 const DatabaseHandler = require('./DatabaseHandler');
 
@@ -61,7 +60,7 @@ class SQLiteHandler extends DatabaseHandler {
      */
     open(){
         return new Promise((resolve, reject) => {
-            sql.open(this.filepath).then(db => {
+            require('sql').open(this.filepath).then(db => {
                 this.db = db;
                 resolve(this.db);
             }).catch(reject);
