@@ -60,7 +60,7 @@ class SQLiteHandler extends DatabaseHandler {
      */
     open(){
         return new Promise((resolve, reject) => {
-            require('sql').open(this.filepath).then(db => {
+            require('sqlite').open(this.filepath).then(db => {
                 this.db = db;
                 resolve(this.db);
             }).catch(reject);
