@@ -29,7 +29,7 @@ module.exports = {
         ADD: 'add',
         REMOVE: 'remove',
         RELOAD: 'reload',
-        MESSAGE_BLOCKED: 'mesageBlocked',
+        MESSAGE_BLOCKED: 'messageBlocked',
         MESSAGE_INVALID: 'messageInvalid',
         COMMAND_DISABLED: 'commandDisabled',
         COMMAND_BLOCKED: 'commandBlocked',
