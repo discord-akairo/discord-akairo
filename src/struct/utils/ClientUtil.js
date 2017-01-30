@@ -234,11 +234,11 @@ class ClientUtil {
      * @returns {number}
      */
     displayColor(member){
-        const roles = member.roles.filter(r => r.color);
+        const roles = member.roles.filter(r => r.color !== 0);
         if (!roles.size) return 0;
 
-        const highest = Math.max(...roles.map(r => r.position));
-        return roles.find(r => r.position === highest).color;
+        const highest = roles.array().sort((a, b) => b.comparePositionTo(a))[0];
+        return highest.color;
     }
 
     /**
@@ -247,11 +247,11 @@ class ClientUtil {
      * @returns {string}
      */
     displayHexColor(member){
-        const roles = member.roles.filter(r => r.color);
+        const roles = member.roles.filter(r => r.color !== 0);
         if (!roles.size) return 0;
 
-        const highest = Math.max(...roles.map(r => r.position));
-        return roles.find(r => r.position === highest).hexColor;
+        const highest = roles.array().sort((a, b) => b.comparePositionTo(a))[0];
+        return highest.hexColor;
     }
 
     /**
