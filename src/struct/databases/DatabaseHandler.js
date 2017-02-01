@@ -96,7 +96,7 @@ class DatabaseHandler {
 
         Object.keys(config).forEach(key => {
             if (config[key] == undefined) return copy[key] = this.defaultConfig[key];
-            copy[key] = this.desanitize(config[key]);
+            copy[key] = config[key];
         });
 
         return copy;
