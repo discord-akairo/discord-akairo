@@ -1,16 +1,27 @@
 const path = require('path');
-const DatabaseHandler = require('./DatabaseHandler');
+const EventEmitter = require('events');
+const { Collection } = require('discord.js');
+let sql;
 
-/** @extends DatabaseHandler */
-class SQLiteHandler extends DatabaseHandler {
+/**
+ * Options to use for the SQLiteHandler.
+ * @typedef {Object} SQLiteOptions
+ * @prop {string} [tablename='configs'] - Name of the table.
+ * @prop {Object} [defaultConfig={}] - Default configuration.
+ * @prop {boolean} [json=false] - Whether or not to stringify and parse input and output.
+ */
+
+/** @extends EventEmitter */
+class SQLiteHandler extends EventEmitter {
     /**
-     * Creates an SQLiteHandler. Table must have an 'id' column.
+     * Creates an SQLiteHandler. Tables must have an 'id' column.
      * @param {string} filepath - Path to .sqlite file.
-     * @param {string} tableName - Name of the table.
-     * @param {Object} [defaultConfig={}] - Default configuration.
+     * @param {SQLiteOptions} options - Options for the handler.
      */
-    constructor(filepath, tableName, defaultConfig = {}){
-        super(defaultConfig);
+    constructor(filepath, options = {}){
+        super();
+
+        sql = require('sqlite');
 
         /**
          * Path to the database file.
@@ -24,7 +35,21 @@ class SQLiteHandler extends DatabaseHandler {
          * @readonly
          * @type {string}
          */
-        this.tableName = tableName;
+        this.tableName = options.tableName || 'configs';
+
+        /**
+         * Default configuration.
+         * @readonly
+         * @type {Object}
+         */
+        this.defaultConfig = options.defaultConfig || {};
+
+        /**
+         * Whether or not to stringify and parse input and output.
+         * @readonly
+         * @type {boolean}
+         */
+        this.json = !!options.json;
 
         /**
          * The database.
@@ -32,6 +57,28 @@ class SQLiteHandler extends DatabaseHandler {
          * @type {Object}
          */
         this.db = null;
+
+        /**
+         * Configurations stored in memory, mapped by ID to configuration.
+         * @type {Collection.<string, Object>}
+         */
+        this.memory = new Collection();
+    }
+
+    /**
+     * Array of IDs. Note that this calls the Collection's keyArray().
+     * @type {string[]}
+     */
+    get ids(){
+        return this.memory.keyArray();
+    }
+
+    /**
+     * Array of configs. Note that this calls the Collection's array().
+     * @type {string[]}
+     */
+    get configs(){
+        return this.memory.array();
     }
 
     /**
@@ -40,6 +87,7 @@ class SQLiteHandler extends DatabaseHandler {
      * @return {string}
      */
     sanitize(input){
+        if (this.json) return JSON.stringify(input).replace(/'/g, '\'\'');
         if (typeof input !== 'string') return input;
         return input.replace(/'/g, '\'\'');
     }
@@ -50,6 +98,7 @@ class SQLiteHandler extends DatabaseHandler {
      * @return {string}
      */
     desanitize(input){
+        if (this.json) return JSON.parse(input.replace(/''/g, '\''));
         if (typeof input !== 'string') return input;
         return input.replace(/''/g, '\'');
     }
@@ -59,11 +108,9 @@ class SQLiteHandler extends DatabaseHandler {
      * @return {Promise.<Database>}
      */
     open(){
-        return new Promise((resolve, reject) => {
-            require('sqlite').open(this.filepath).then(db => {
-                this.db = db;
-                resolve(this.db);
-            }).catch(reject);
+        return sql.open(this.filepath).then(db => {
+            this.db = db;
+            return this.db;
         });
     }
 
@@ -73,20 +120,20 @@ class SQLiteHandler extends DatabaseHandler {
      * @returns {Promise.<SQLiteHandler>}
      */
     init(ids){
-        return new Promise((resolve, reject) => {
-            this.open().then(db => {
-                db.all(`SELECT * FROM "${this.tableName}"`).then(rows => {
-                    rows.forEach((row) => {
-                        this.memory.set(row.id, row);
-                    });
+        return this.open().then(db => {
+            return db.all(`SELECT * FROM "${this.tableName}"`).then(rows => {
+                rows.forEach((row) => {
+                    this.memory.set(row.id, row);
+                });
 
-                    ids.forEach(id => {
-                        if (!this.has(id)) this.add(id).catch(reject);
-                    });
-                    
-                    resolve(this);
-                }).catch(reject);
-            }).catch(reject);
+                const promises = [];
+
+                ids.forEach(id => {
+                    if (!this.has(id)) promises.push(this.add(id));
+                });
+                
+                return promises.then(() => this);
+            });
         });
     }
 
@@ -97,18 +144,15 @@ class SQLiteHandler extends DatabaseHandler {
      */
     add(id){
         if (!this.db) return Promise.reject(new Error('Database not opened.'));
+        if (this.has(id)) return Promise.reject(`${id} already exists.`);
 
-        return new Promise((resolve, reject) => {
-            if (this.has(id)) return reject(`${id} already exists.`);
+        return this.db.run(`INSERT INTO "${this.tableName}" (id) VALUES ('${id}')`).then(() => {
+            const config = Object.assign({}, this.defaultConfig);
 
-            this.db.run(`INSERT INTO "${this.tableName}" (id) VALUES ('${id}')`).then(() => {
-                const config = Object.assign({}, this.defaultConfig);
+            config.id = id;
+            this.memory.set(id, config);
 
-                config.id = id;
-                this.memory.set(id, config);
-
-                resolve(this);
-            }).catch(reject);
+            return this;
         });
     }
 
@@ -134,14 +178,11 @@ class SQLiteHandler extends DatabaseHandler {
      */
     remove(id){
         if (!this.db) return Promise.reject(new Error('Database not opened.'));
-
-        return new Promise((resolve, reject) => {
-            if (!this.has(id)) return reject(`${id} does not exist.`);
-            
-            this.db.run(`DELETE FROM "${this.tableName}" WHERE id = '${id}'`).then(() => {
-                this.memory.delete(id);
-                resolve(this);
-            }).catch(reject);
+        if (!this.has(id)) return Promise.reject(`${id} does not exist.`);
+        
+        return this.db.run(`DELETE FROM "${this.tableName}" WHERE id = '${id}'`).then(() => {
+            this.memory.delete(id);
+            return this;
         });
     }
 
@@ -194,28 +235,24 @@ class SQLiteHandler extends DatabaseHandler {
     set(id, key, value){
         if (!this.db) return Promise.reject(new Error('Database not opened.'));
 
-        return new Promise((resolve, reject) => {
-            key = this.sanitize(key);
-            value = this.sanitize(value);
+        key = this.sanitize(key);
+        value = this.sanitize(value);
 
-            if (!this.has(id)) return reject(new Error(`${id} not found.`));
-            
-            const config = this.memory.get(id);
+        if (!this.has(id)) return Promise.reject(new Error(`${id} not found.`));
+        
+        const config = this.memory.get(id);
 
-            if (!config.hasOwnProperty(key)) return reject(new Error(`Key ${key} was not found for ${id}.`));
-            if (key === 'id') return reject(new Error('The id key is read-only.'));
-            
-            config[key] = value;
-            this.memory.set(id, config);
+        if (!config.hasOwnProperty(key)) return Promise.reject(new Error(`Key ${key} was not found for ${id}.`));
+        if (key === 'id') return Promise.reject(new Error('The id key is read-only.'));
+        
+        config[key] = value;
+        this.memory.set(id, config);
 
-            if (isNaN(value)){
-                value = `'${value}'`;
-            }
-            
-            this.db.run(`UPDATE "${this.tableName}" SET ${key} = ${value} WHERE id = '${id}'`).then(() => {
-                resolve(this);
-            }).catch(reject);
-        });
+        if (isNaN(value)){
+            value = `'${value}'`;
+        }
+        
+        return this.db.run(`UPDATE "${this.tableName}" SET ${key} = ${value} WHERE id = '${id}'`).then(() => this);
     }
 
     /**
@@ -248,36 +285,32 @@ class SQLiteHandler extends DatabaseHandler {
      */
     save(id){
         if (!this.db) return Promise.reject(new Error('Database not opened.'));
+        if (!this.has(id)) return Promise.reject(new Error(`${id} not found.`));
 
-        return new Promise((resolve, reject) => {
-            if (!this.has(id)){
-                return reject(new Error(`${id} not found.`));
+        const config = this.memory.get(id);
+        const sets = [];
+
+        Object.keys(config).forEach(key => {
+            let value = config[key];
+
+            if (isNaN(value)){
+                value = `'${value}'`;
             }
 
-            const config = this.memory.get(id);
-            const sets = [];
-
-            Object.keys(config).forEach(key => {
-                let value = config[key];
-
-                if (isNaN(value)){
-                    value = `'${value}'`;
-                }
-
-                sets.push(`${key} = ${value}`);
-            });
-
-            this.db.get(`SELECT count(1) FROM "${this.tableName}" WHERE id = '${id}'`).then(count => {
-                let p;
-                if (!count['count(1)']){
-                    p = this.db.run(`INSERT INTO "${this.tableName}" (id) VALUES ('${id}')`);
-                } else {
-                    p = Promise.resolve();
-                }
-                
-                return p.then(() => this.db.run(`UPDATE "${this.tableName}" SET ${sets.join(', ')} WHERE id = '${id}'`));
-            }).then(() => resolve(this)).catch(reject);
+            sets.push(`${key} = ${value}`);
         });
+
+        return this.db.get(`SELECT count(1) FROM "${this.tableName}" WHERE id = '${id}'`).then(count => {
+            let promise;
+
+            if (!count['count(1)']){
+                promise = this.db.run(`INSERT INTO "${this.tableName}" (id) VALUES ('${id}')`);
+            } else {
+                promise = Promise.resolve();
+            }
+            
+            return promise.then(() => this.db.run(`UPDATE "${this.tableName}" SET ${sets.join(', ')} WHERE id = '${id}'`));
+        }).then(() => this);
     }
 
     /**
@@ -285,10 +318,8 @@ class SQLiteHandler extends DatabaseHandler {
      * @returns {Promise.<SQLiteHandler>}
      */
     saveAll(){
-        return new Promise((resolve, reject) => {
-            const p = this.memory.map(config => this.save(config.id));
-            Promise.all(p).then(() => resolve(this)).catch(reject);
-        });
+        const promises = this.memory.map(config => this.save(config.id));
+        return Promise.all(promises).then(() => this);
     }
 }
 
