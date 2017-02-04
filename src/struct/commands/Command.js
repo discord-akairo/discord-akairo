@@ -8,7 +8,7 @@ const { ArgumentMatches, ArgumentTypes, ArgumentSplits } = require('../utils/Con
  * @prop {ArgumentType|string[]|function} [type='string'] - Attempts to cast argument to this type.<br/>An array or a function can be used (more details in ArgumentType).
  * @prop {string|string[]} [prefix] - Ignores word order and uses a word that starts with/matches this prefix (or multiple prefixes if array).<br/>Applicable to 'prefix' and 'flag' only.
  * @prop {number} [index] - Word to start from.<br/>Applicable to 'word', 'text', or 'content' only.<br/>When using with word, this will offset all word arguments after it by 1 unless the index property is also specified for them.
- * @prop {string|number} [defaultValue=''] - Default value if a word is not inputted or a type could not be casted to.
+ * @prop {string|number} [defaultValue=''] - Default value if a word is not inputted or a type could not be casted to.<br/>Can also be a function <code>(message => {})</code>.
  * @prop {string|string[]} [description=''] - A description of the argument.
  */
 
@@ -245,69 +245,71 @@ class Command {
         const noPrefixWords = words.filter(w => !prefixes.some(p => w.startsWith(p)));
 
         const processType = (arg, word) => {
+            const def = typeof arg.defaultValue === 'function' ? arg.defaultValue(message) : arg.defaultValue;
+
             const typeFunc = {
-                [ArgumentTypes.STRING]: () => word || arg.defaultValue,
+                [ArgumentTypes.STRING]: () => word || def,
                 [ArgumentTypes.NUMBER]: () => {
-                    if (isNaN(word) || !word) return arg.defaultValue;
+                    if (isNaN(word) || !word) return def;
                     return parseFloat(word);
                 },
                 [ArgumentTypes.INTEGER]: () => {
-                    if (isNaN(word) || !word) return arg.defaultValue;
+                    if (isNaN(word) || !word) return def;
                     return parseInt(word);
                 },
                 [ArgumentTypes.DYNAMIC]: () => {
-                    if (!word) return arg.defaultValue;
+                    if (!word) return def;
                     if (isNaN(word)) return word;
                     return parseFloat(word);
                 },
                 [ArgumentTypes.DYNAMIC_INT]: () => {
-                    if (!word) return arg.defaultValue;
+                    if (!word) return def;
                     if (isNaN(word)) return word;
                     return parseInt(word);
                 },
                 [ArgumentTypes.USER]: () => {
                     const res = val => this.client.util.resolveUser(val, false, true);
-                    if (!word) return res(arg.defaultValue);
-                    return res(word) || res(arg.defaultValue);
+                    if (!word) return res(def);
+                    return res(word) || res(def);
                 },
                 [ArgumentTypes.MEMBER]: () => {
                     const res = val => this.client.util.resolveMember(val, message.guild, false, true);
-                    if (!word) return res(arg.defaultValue);
-                    return res(word) || res(arg.defaultValue);
+                    if (!word) return res(def);
+                    return res(word) || res(def);
                 },
                 [ArgumentTypes.CHANNEL]: () => {
                     const res = val => this.client.util.resolveChannel(val, message.guild, false, true);
-                    if (!word) return res(arg.defaultValue);
-                    return res(word) || res(arg.defaultValue);
+                    if (!word) return res(def);
+                    return res(word) || res(def);
                 },
                 [ArgumentTypes.TEXT_CHANNEL]: () => {
                     const res = val => this.client.util.resolveChannel(val, message.guild, false, true);
-                    if (!word) return res(arg.defaultValue);
+                    if (!word) return res(def);
 
                     const channel = res(word);
-                    if (!channel || channel.type !== 'text') return res(arg.defaultValue);
+                    if (!channel || channel.type !== 'text') return res(def);
 
                     return channel;
                 },
                 [ArgumentTypes.VOICE_CHANNEL]: () => {
                     const res = val => this.client.util.resolveChannel(val, message.guild, false, true);
-                    if (!word) return res(arg.defaultValue);
+                    if (!word) return res(def);
 
                     const channel = res(word);
-                    if (!channel || channel.type !== 'voice') return res(arg.defaultValue);
+                    if (!channel || channel.type !== 'voice') return res(def);
 
                     return channel;
                 },
                 [ArgumentTypes.ROLE]: () => {
                     const res = val => this.client.util.resolveRole(val, message.guild, false, true);
-                    if (!word) return res(arg.defaultValue);
-                    return res(word) || res(arg.defaultValue);
+                    if (!word) return res(def);
+                    return res(word) || res(def);
                 }
             };
 
             if (Array.isArray(arg.type)){
                 if (!arg.type.some(t => t.toLowerCase() === word.toLowerCase())){
-                    return arg.defaultValue;
+                    return def;
                 }
                 
                 return word.toLowerCase();
@@ -316,13 +318,13 @@ class Command {
             if (typeof arg.type === 'function'){
                 const res = arg.type(word, message);
                 if (res === true) return word;
-                if (!res) return arg.defaultValue;
+                if (!res) return def;
 
                 return res;
             }
 
             if (typeFunc[arg.type]) return typeFunc[arg.type]();
-            return word || arg.defaultValue;
+            return word || def;
         };
 
         wordArgs.forEach((arg, i) => {
@@ -349,11 +351,13 @@ class Command {
         });
 
         textArgs.forEach(arg => {
-            args[arg.id] = noPrefixWords.slice(arg.index).join(' ') || arg.defaultValue;
+            const def = typeof arg.defaultValue === 'function' ? arg.defaultValue(message) : arg.defaultValue;
+            args[arg.id] = noPrefixWords.slice(arg.index).join(' ') || def;
         });
 
         contentArgs.forEach(arg => {
-            args[arg.id] = content.split(' ').slice(arg.index).join(' ') || arg.defaultValue;
+            const def = typeof arg.defaultValue === 'function' ? arg.defaultValue(message) : arg.defaultValue;
+            args[arg.id] = content.split(' ').slice(arg.index).join(' ') || def;
         });
 
         return args;
