@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -53,7 +53,7 @@
 
     
 
-    <h4 class="name" id="SQLiteHandler"><span class="type-signature"></span>new SQLiteHandler<span class="signature">(filepath, tableName, defaultConfig<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="SQLiteHandler"><span class="type-signature"></span>new SQLiteHandler<span class="signature">(filepath, options)</span><span class="type-signature"></span></h4>
 
     
 
@@ -65,7 +65,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line5">line 5</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line16">line 16</a>
     </li></ul></dd>
     
 
@@ -105,7 +105,7 @@
 
 
 <div class="description">
-    Creates an SQLiteHandler. Table must have an 'id' column.
+    Creates an SQLiteHandler. Tables must have an 'id' column.
 </div>
 
 
@@ -131,11 +131,7 @@
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
-        
-        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -160,19 +156,7 @@
             </td>
 
             
-                <td class="attributes">
-                
 
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
             
 
             <td class="description last">Path to .sqlite file.</td>
@@ -182,74 +166,23 @@
 
         <tr>
             
-                <td class="name"><code>tableName</code></td>
+                <td class="name"><code>options</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type"><a href="global.html#SQLiteOptions">SQLiteOptions</a></span>
 
 
             
             </td>
 
             
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
 
             
-                <td class="default">
-                
-                </td>
-            
 
-            <td class="description last">Name of the table.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>defaultConfig</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    <code>{}</code>
-                
-                </td>
-            
-
-            <td class="description last">Default configuration.</td>
+            <td class="description last">Options for the handler.</td>
         </tr>
 
     
@@ -281,7 +214,7 @@
 
 
     <ul>
-        <li><a href="DatabaseHandler.html">DatabaseHandler</a></li>
+        <li>EventEmitter</li>
     </ul>
 
 
@@ -311,7 +244,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line34">line 34</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line81">line 81</a>
     </li></ul></dd>
     
 
@@ -319,11 +252,6 @@
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="DatabaseHandler.html#configs">DatabaseHandler#configs</a>
-    </li></ul></dd>
     
 
     
@@ -389,7 +317,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line34">line 34</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line60">line 60</a>
     </li></ul></dd>
     
 
@@ -451,7 +379,7 @@
 
         
             
-<h4 class="name" id="defaultConfig"><span class="type-signature"></span>defaultConfig<span class="type-signature"> :Object</span></h4>
+<h4 class="name" id="defaultConfig"><span class="type-signature">(readonly) </span>defaultConfig<span class="type-signature"> :Object</span></h4>
 
 
 
@@ -462,7 +390,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line13">line 13</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line46">line 46</a>
     </li></ul></dd>
     
 
@@ -470,11 +398,6 @@
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="DatabaseHandler.html#defaultConfig">DatabaseHandler#defaultConfig</a>
-    </li></ul></dd>
     
 
     
@@ -540,7 +463,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line20">line 20</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line32">line 32</a>
     </li></ul></dd>
     
 
@@ -613,7 +536,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line26">line 26</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line73">line 73</a>
     </li></ul></dd>
     
 
@@ -621,11 +544,6 @@
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="DatabaseHandler.html#ids">DatabaseHandler#ids</a>
-    </li></ul></dd>
     
 
     
@@ -680,6 +598,79 @@
 
         
             
+<h4 class="name" id="json"><span class="type-signature">(readonly) </span>json<span class="type-signature"> :boolean</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line53">line 53</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Whether or not to stringify and parse input and output.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">boolean</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
 <h4 class="name" id="memory"><span class="type-signature"></span>memory<span class="type-signature"> :Collection.&lt;string, Object></span></h4>
 
 
@@ -691,7 +682,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_DatabaseHandler.js.html">databases/DatabaseHandler.js</a>, <a href="databases_DatabaseHandler.js.html#line19">line 19</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line66">line 66</a>
     </li></ul></dd>
     
 
@@ -699,11 +690,6 @@
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="DatabaseHandler.html#memory">DatabaseHandler#memory</a>
-    </li></ul></dd>
     
 
     
@@ -769,7 +755,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line27">line 27</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line39">line 39</a>
     </li></ul></dd>
     
 
@@ -852,7 +838,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line98">line 98</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line149">line 149</a>
     </li></ul></dd>
     
 
@@ -862,11 +848,6 @@
 
     
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="DatabaseHandler.html#add">DatabaseHandler#add</a>
-    </li></ul></dd>
     
 
     
@@ -1008,7 +989,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line120">line 120</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line169">line 169</a>
     </li></ul></dd>
     
 
@@ -1159,7 +1140,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line52">line 52</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line101">line 101</a>
     </li></ul></dd>
     
 
@@ -1310,7 +1291,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line173">line 173</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line223">line 223</a>
     </li></ul></dd>
     
 
@@ -1320,11 +1301,6 @@
 
     
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="DatabaseHandler.html#get">DatabaseHandler#get</a>
-    </li></ul></dd>
     
 
     
@@ -1466,7 +1442,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line164">line 164</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line214">line 214</a>
     </li></ul></dd>
     
 
@@ -1476,11 +1452,6 @@
 
     
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="DatabaseHandler.html#has">DatabaseHandler#has</a>
-    </li></ul></dd>
     
 
     
@@ -1622,7 +1593,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line75">line 75</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line123">line 123</a>
     </li></ul></dd>
     
 
@@ -1632,11 +1603,6 @@
 
     
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="DatabaseHandler.html#init">DatabaseHandler#init</a>
-    </li></ul></dd>
     
 
     
@@ -1778,7 +1744,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line61">line 61</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line111">line 111</a>
     </li></ul></dd>
     
 
@@ -1880,7 +1846,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line135">line 135</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line186">line 186</a>
     </li></ul></dd>
     
 
@@ -1890,11 +1856,6 @@
 
     
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="DatabaseHandler.html#remove">DatabaseHandler#remove</a>
-    </li></ul></dd>
     
 
     
@@ -2036,7 +1997,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line153">line 153</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line202">line 202</a>
     </li></ul></dd>
     
 
@@ -2187,7 +2148,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line42">line 42</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line90">line 90</a>
     </li></ul></dd>
     
 
@@ -2338,7 +2299,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line249">line 249</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line299">line 299</a>
     </li></ul></dd>
     
 
@@ -2489,7 +2450,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line280">line 280</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line341">line 341</a>
     </li></ul></dd>
     
 
@@ -2591,7 +2552,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line194">line 194</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line244">line 244</a>
     </li></ul></dd>
     
 
@@ -2601,11 +2562,6 @@
 
     
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="DatabaseHandler.html#set">DatabaseHandler#set</a>
-    </li></ul></dd>
     
 
     
@@ -2796,7 +2752,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line228">line 228</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line277">line 277</a>
     </li></ul></dd>
     
 
@@ -2984,6 +2940,802 @@
 
     
 
+    
+        <h3 class="subsection-title">Events</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="event:add">add</h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line357">line 357</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Emitted when a config is added.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>config</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Config added.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>memory</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Whether or not this was done in memory only.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="event:init">init</h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line352">line 352</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Emitted when the handler is initalized.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="event:remove">remove</h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line364">line 364</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Emitted when an ID is removed.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID removed.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>memory</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Whether or not this was done in memory only.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="event:save">save</h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line378">line 378</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Emitted when a config was saved from memory.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>config</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Config that was saved.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>newInsert</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Whether or not the config has been in the database before.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="event:saveAll">saveAll</h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line385">line 385</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Emitted when many configs were saved from memory.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="event:set">set</h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line371">line 371</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Emitted when something was set.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>config</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Config that changed.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>memory</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Whether or not this was done in memory only.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
     
 </article>
 

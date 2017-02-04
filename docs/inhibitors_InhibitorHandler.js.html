@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -38,8 +38,8 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>const path = require('path');
-const rread = require('readdir-recursive');
 const EventEmitter = require('events');
+const rread = require('readdir-recursive');
 const { Collection } = require('discord.js');
 const Inhibitor = require('./Inhibitor');
 const { InhibitorHandlerEvents } = require('../utils/Constants');
@@ -152,7 +152,7 @@ class InhibitorHandler extends EventEmitter {
      */
     testMessage(message){
         return new Promise((resolve, reject) => {
-            const promises = this.inhibitors.filter(i => i.preMessage &amp;&amp; i.enabled).map(inhibitor => {
+            const promises = this.inhibitors.filter(i => i.type === 'pre' &amp;&amp; i.enabled).map(inhibitor => {
                 const inhibited = inhibitor.exec(message);
 
                 if (inhibited instanceof Promise) return inhibited.catch(err => {
@@ -179,7 +179,7 @@ class InhibitorHandler extends EventEmitter {
      */
     testCommand(message, command){
         return new Promise((resolve, reject) => {
-            const promises = this.inhibitors.filter(i => !i.preMessage &amp;&amp; i.enabled).map(inhibitor => {
+            const promises = this.inhibitors.filter(i => i.type === 'post' &amp;&amp; i.enabled).map(inhibitor => {
                 const inhibited = inhibitor.exec(message, command);
 
                 if (inhibited instanceof Promise) return inhibited.catch(err => {
@@ -217,7 +217,8 @@ module.exports = InhibitorHandler;
  * Emitted when an inhibitor is reloaded.
  * @event InhibitorHandler#reload
  * @param {Inhibitor} inhibitor - Inhibitor reloaded.
- */</code></pre>
+ */
+</code></pre>
         </article>
     </section>
 

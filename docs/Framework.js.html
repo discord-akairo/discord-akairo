@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -51,9 +51,10 @@ const ClientUtil = require('./utils/ClientUtil');
  * @prop {string|function} [prefix='!'] - Default command prefix or function &lt;code>(message => {})&lt;/code> returning prefix.
  * @prop {boolean|function} [allowMention=true] - Allow mentions to the client user as a prefix or function &lt;code>(message => {})&lt;/code> that returns true or false.
  * @prop {string} [inhibitorDirectory] - Directory to inhibitors.
- * @prop {boolean} [disablePreInhib=false] - Disables the built-in pre-message inhibitors.
- * @prop {boolean} [disablePostInhib=false] - Disables the built-in post-message inhibitors.
+ * @prop {boolean} [preInhibitors=false] - Disables the built-in pre-message inhibitors.
+ * @prop {boolean} [postInhibitors=false] - Disables the built-in post-message inhibitors.
  * @prop {string} [listenerDirectory] - Directory to listeners.
+ * @prop {Object} [emitters] - Emitters to load onto the listener handler.
  */
 
 class Framework {
@@ -117,7 +118,8 @@ class Framework {
     }
 }
 
-module.exports = Framework;</code></pre>
+module.exports = Framework;
+</code></pre>
         </article>
     </section>
 

@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -38,8 +38,8 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>const path = require('path');
-const rread = require('readdir-recursive');
 const EventEmitter = require('events');
+const rread = require('readdir-recursive');
 const { Collection } = require('discord.js');
 const Command = require('./Command');
 const Category = require('./Category');
@@ -73,13 +73,13 @@ class CommandHandler extends EventEmitter {
          * Whether or not the built-in pre-message inhibitors are disabled.
          * @type {boolean}
          */
-        this.preInhibDisabled = !!options.disablePreInhib;
+        this.preInhibitors = !!options.preInhibitors;
 
         /**
          * Whether or not the built-in post-message inhibitors are disabled.
          * @type {boolean}
          */
-        this.postInhibDisabled = !!options.disablePostInhib;
+        this.postInhibitors = !!options.postInhibitors;
 
         /**
          * Gets the prefix.
@@ -213,7 +213,7 @@ class CommandHandler extends EventEmitter {
      * @param {Message} message - Message to handle.
      */
     handle(message){
-        if (!this.preInhibDisabled){
+        if (!this.preInhibitors){
             if (message.author.id !== this.framework.client.user.id &amp;&amp; this.framework.client.selfbot){
                 return this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.NOT_SELF);
             }
@@ -257,7 +257,7 @@ class CommandHandler extends EventEmitter {
             if (!command) return this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
             if (!command.enabled) return this.emit(CommandHandlerEvents.COMMAND_DISABLED, message, command);
 
-            if (!this.postInhibDisabled){
+            if (!this.postInhibitors){
                 if (command.ownerOnly &amp;&amp; message.author.id !== this.framework.client.ownerID)
                     return this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.OWNER);
 
@@ -354,7 +354,8 @@ module.exports = CommandHandler;
  * @event CommandHandler#commandFinished
  * @param {Message} message - Message sent.
  * @param {Command} command - Command executed.
- */</code></pre>
+ */
+</code></pre>
         </article>
     </section>
 

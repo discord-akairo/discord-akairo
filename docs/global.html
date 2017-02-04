@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="DatabaseHandler.html">DatabaseHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -411,7 +411,7 @@
                 </td>
             
 
-            <td class="description last">Default value if a word is not inputted or a type could not be casted to.</td>
+            <td class="description last">Default value if a word is not inputted or a type could not be casted to.<br/>Can also be a function <code>(message => {})</code>.</td>
         </tr>
 
     
@@ -1412,7 +1412,7 @@
 
         <tr>
             
-                <td class="name"><code>disablePreInhib</code></td>
+                <td class="name"><code>preInhibitors</code></td>
             
 
             <td class="type">
@@ -1449,7 +1449,7 @@
 
         <tr>
             
-                <td class="name"><code>disablePostInhib</code></td>
+                <td class="name"><code>postInhibitors</code></td>
             
 
             <td class="type">
@@ -1515,6 +1515,41 @@
             
 
             <td class="description last">Directory to listeners.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>emitters</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Emitters to load onto the listener handler.</td>
         </tr>
 
     
@@ -1664,7 +1699,7 @@
 
         <tr>
             
-                <td class="name"><code>preMessage</code></td>
+                <td class="name"><code>type</code></td>
             
 
             <td class="type">
@@ -1689,12 +1724,12 @@
             
                 <td class="default">
                 
-                    <code>false</code>
+                    <code>'post'</code>
                 
                 </td>
             
 
-            <td class="description last">Makes this inhibitor run before the message is handled rather than after.</td>
+            <td class="description last">Set to 'pre' to make this run before the message is handled rather than after.</td>
         </tr>
 
     
@@ -1928,6 +1963,223 @@
 
 <div class="description">
     Options to use for listener execution behavior.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="SQLiteOptions">SQLiteOptions</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line7">line 7</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>tablename</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>'configs'</code>
+                
+                </td>
+            
+
+            <td class="description last">Name of the table.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>defaultConfig</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>{}</code>
+                
+                </td>
+            
+
+            <td class="description last">Default configuration.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>json</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Whether or not to stringify and parse input and output.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<div class="description">
+    Options to use for the SQLiteHandler.
 </div>
 
 
