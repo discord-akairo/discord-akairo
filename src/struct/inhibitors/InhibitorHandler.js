@@ -1,6 +1,6 @@
 const path = require('path');
-const rread = require('readdir-recursive');
 const EventEmitter = require('events');
+const rread = require('readdir-recursive');
 const { Collection } = require('discord.js');
 const Inhibitor = require('./Inhibitor');
 const { InhibitorHandlerEvents } = require('../utils/Constants');
@@ -113,7 +113,7 @@ class InhibitorHandler extends EventEmitter {
      */
     testMessage(message){
         return new Promise((resolve, reject) => {
-            const promises = this.inhibitors.filter(i => i.preMessage && i.enabled).map(inhibitor => {
+            const promises = this.inhibitors.filter(i => i.type === 'pre' && i.enabled).map(inhibitor => {
                 const inhibited = inhibitor.exec(message);
 
                 if (inhibited instanceof Promise) return inhibited.catch(err => {
@@ -140,7 +140,7 @@ class InhibitorHandler extends EventEmitter {
      */
     testCommand(message, command){
         return new Promise((resolve, reject) => {
-            const promises = this.inhibitors.filter(i => !i.preMessage && i.enabled).map(inhibitor => {
+            const promises = this.inhibitors.filter(i => i.type === 'post' && i.enabled).map(inhibitor => {
                 const inhibited = inhibitor.exec(message, command);
 
                 if (inhibited instanceof Promise) return inhibited.catch(err => {

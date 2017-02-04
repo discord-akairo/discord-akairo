@@ -2,7 +2,7 @@
  * Options to use for inhibitor execution behavior.
  * @typedef {Object} InhibitorOptions
  * @prop {string} [reason=''] - Reason emitted when command or message is blocked.
- * @prop {boolean} [preMessage=false] - Makes this inhibitor run before the message is handled rather than after.
+ * @prop {boolean} [type='post'] - Set to 'pre' to make this run before the message is handled rather than after.
  */
 
 class Inhibitor {
@@ -26,10 +26,10 @@ class Inhibitor {
         this.reason = options.reason || '';
 
         /**
-         * Inhibitor runs before message is handled.
+         * When the inhibitor is ran.
          * @type {boolean}
          */
-        this.preMessage = !!options.preMessage;
+        this.type = !!options.type;
 
         /**
          * Function called to inhibit.

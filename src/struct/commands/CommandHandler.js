@@ -1,6 +1,6 @@
 const path = require('path');
-const rread = require('readdir-recursive');
 const EventEmitter = require('events');
+const rread = require('readdir-recursive');
 const { Collection } = require('discord.js');
 const Command = require('./Command');
 const Category = require('./Category');
