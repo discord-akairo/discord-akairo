@@ -41,7 +41,7 @@ class ListenerHandler extends EventEmitter {
 
         Object.keys(options.emitters).forEach(key => {
             if (this.emitters.has(key)) return;
-            this.emitters.set(key, options.emitter[key]);
+            this.emitters.set(key, options.emitters[key]);
         });
 
         /**
