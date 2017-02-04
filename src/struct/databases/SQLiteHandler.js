@@ -267,8 +267,15 @@ class SQLiteHandler extends DatabaseHandler {
                 sets.push(`${key} = ${value}`);
             });
 
-            this.db.run(`UPDATE "${this.tableName}" SET ${sets.join(', ')} WHERE id = '${id}'`).then(() => {
-                resolve(this);
+            this.db.run(`SELECT count(1) FROM "${this.tableName}" WHERE id = '${id}'`).then(count => {
+                let p;
+                if (!count){
+                    p = this.add(id);
+                } else {
+                    p = Promise.resolve();
+                }
+                
+                return p.then(() => this.db.run(`UPDATE "${this.tableName}" SET ${sets.join(', ')} WHERE id = '${id}'`).then(() => resolve(this)));
             }).catch(reject);
         });
     }
