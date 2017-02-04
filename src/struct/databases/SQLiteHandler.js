@@ -102,7 +102,7 @@ class SQLiteHandler extends DatabaseHandler {
             if (this.has(id)) return reject(`${id} already exists.`);
 
             this.db.run(`INSERT INTO "${this.tableName}" (id) VALUES ('${id}')`).then(() => {
-                const config = this.defaultConfig;
+                const config = Object.assign({}, this.defaultConfig);
 
                 config.id = id;
                 this.memory.set(id, config);
@@ -120,7 +120,7 @@ class SQLiteHandler extends DatabaseHandler {
     addMemory(id){
         if (this.has(id)) throw new Error(`${id} already exists.`);
 
-        const config = this.defaultConfig;
+        const config = Object.assign({}, this.defaultConfig);
 
         config.id = id;
         this.memory.set(id, config);
@@ -171,7 +171,7 @@ class SQLiteHandler extends DatabaseHandler {
      * @returns {Object}
      */
     get(id){
-        if (!this.has(id)) return this.defaultConfig;
+        if (!this.has(id)) return Object.assign({}, this.defaultConfig);
         
         const config = this.memory.get(id);
         const copy = {};
