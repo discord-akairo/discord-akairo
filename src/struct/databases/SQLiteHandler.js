@@ -87,7 +87,7 @@ class SQLiteHandler extends EventEmitter {
      * @return {string}
      */
     sanitize(input){
-        if (this.json) return JSON.stringify(input).replace(/'/g, '\'\'');
+        if (this.json && typeof input !== 'string') return JSON.stringify(input).replace(/'/g, '\'\'');
         if (typeof input !== 'string') return input;
         return input.replace(/'/g, '\'\'');
     }
@@ -98,7 +98,7 @@ class SQLiteHandler extends EventEmitter {
      * @return {string}
      */
     desanitize(input){
-        if (this.json) return JSON.parse(input.replace(/''/g, '\''));
+        if (this.json && typeof input !== 'string') return JSON.parse(input.replace(/''/g, '\''));
         if (typeof input !== 'string') return input;
         return input.replace(/''/g, '\'');
     }
