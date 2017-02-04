@@ -132,7 +132,7 @@ class SQLiteHandler extends EventEmitter {
                     if (!this.has(id)) promises.push(this.add(id));
                 });
                 
-                return promises.then(() => this);
+                return Promise.all(promises).then(() => this);
             });
         });
     }
