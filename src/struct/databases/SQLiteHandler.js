@@ -339,7 +339,10 @@ class SQLiteHandler extends EventEmitter {
      */
     saveAll(){
         const promises = this.memory.map(config => this.save(config.id));
-        return Promise.all(promises).then(() => this);
+        return Promise.all(promises).then(() => {
+            this.emit('saveAll');
+            return this;
+        });
     }
 }
 
@@ -376,4 +379,9 @@ module.exports = SQLiteHandler;
  * @event SQLiteHandler#save
  * @param {Object} config - Config that was saved.
  * @param {boolean} newInsert - Whether or not the config has been in the database before.
+ */
+
+/**
+ * Emitted when many configs were saved from memory.
+ * @event SQLiteHandler#saveAll
  */
