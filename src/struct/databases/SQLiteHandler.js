@@ -1,6 +1,7 @@
 const path = require('path');
 const EventEmitter = require('events');
 const { Collection } = require('discord.js');
+const { SQLiteHandlerEvents } = require('../utils/Constants');
 let sql;
 
 /**
@@ -133,7 +134,7 @@ class SQLiteHandler extends EventEmitter {
                 });
                 
                 return Promise.all(promises).then(() => {
-                    this.emit('init');
+                    this.emit(SQLiteHandlerEvents.INIT);
                     return this;
                 });
             });
@@ -155,7 +156,7 @@ class SQLiteHandler extends EventEmitter {
             config.id = id;
             this.memory.set(id, config);
 
-            this.emit('add', config, false);
+            this.emit(SQLiteHandlerEvents.ADD, config, false);
             return this;
         });
     }
@@ -173,7 +174,7 @@ class SQLiteHandler extends EventEmitter {
         config.id = id;
         this.memory.set(id, config);
 
-        this.emit('add', config, true);
+        this.emit(SQLiteHandlerEvents.ADD, config, true);
         return this;
     }
 
@@ -188,7 +189,7 @@ class SQLiteHandler extends EventEmitter {
         
         return this.db.run(`DELETE FROM "${this.tableName}" WHERE id = '${id}'`).then(() => {
             this.memory.delete(id);
-            this.emit('remove', id, false);
+            this.emit(SQLiteHandlerEvents.REMOVE, id, false);
             return this;
         });
     }
@@ -201,7 +202,7 @@ class SQLiteHandler extends EventEmitter {
     removeMemory(id){
         if (!this.has(id)) throw new Error(`${id} does not exist.`);
         this.memory.delete(id);
-        this.emit('remove', id, true);
+        this.emit(SQLiteHandlerEvents.REMOVE, id, true);
         return this;
     }
 
@@ -261,7 +262,7 @@ class SQLiteHandler extends EventEmitter {
         }
         
         return this.db.run(`UPDATE "${this.tableName}" SET ${key} = ${value} WHERE id = '${id}'`).then(() => {
-            this.emit('set', config, true);
+            this.emit(SQLiteHandlerEvents.SET, config, true);
             return this;
         });
     }
@@ -286,7 +287,7 @@ class SQLiteHandler extends EventEmitter {
         
         config[key] = value;
         this.memory.set(id, config);
-        this.emit('set', config, false);
+        this.emit(SQLiteHandlerEvents.SET, config, false);
         return this;
     }
 
@@ -328,7 +329,7 @@ class SQLiteHandler extends EventEmitter {
                 return insert;
             });
         }).then(insert => {
-            this.emit('save', config, insert);
+            this.emit(SQLiteHandlerEvents.SAVE, config, insert);
             return this;
         });
     }
@@ -340,7 +341,7 @@ class SQLiteHandler extends EventEmitter {
     saveAll(){
         const promises = this.memory.map(config => this.save(config.id));
         return Promise.all(promises).then(() => {
-            this.emit('saveAll');
+            this.emit(SQLiteHandlerEvents.SAVE_ALL);
             return this;
         });
     }

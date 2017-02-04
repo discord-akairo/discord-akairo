@@ -124,12 +124,14 @@ listenerHandler.reload('commandBlocked');
 
 #### SQLite Support
 ```js
-const guildDefault = require('./databases/guildDefault.json');
-const guildSQL = new Akairo.SQLiteHandler('./databases/guilds.sqlite', 'guildConfigs', guildDefault);
+const guildSQL = new Akairo.SQLiteHandler('./databases/guilds.sqlite', {
+    tableName: 'configs',
+    defaultConfig: require('./databases/guildDefault.json')
+});
 
 akairo.login('TOKEN').then(() => {
     guildSQL.init(client.guilds.map(g => g.id)).then(() => {
-        console.log(guildSQL.get('123456').prefix) // Hopefully not '!'
+        console.log(guildSQL.get('1234567890').prefix) // Hopefully not '!'
     });
 });
 ```

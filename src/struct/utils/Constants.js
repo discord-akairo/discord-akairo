@@ -46,6 +46,14 @@ module.exports = {
         REMOVE: 'remove',
         RELOAD: 'reload'
     },
+    SQLiteHandlerEvents: {
+        INIT: 'init',
+        ADD: 'add',
+        REMOVE: 'remove',
+        SET: 'set',
+        SAVE: 'save',
+        SAVE_ALL: 'saveAll'
+    },
     BuiltInReasons: {
         NOT_SELF: 'notSelf',
         CLIENT: 'client',

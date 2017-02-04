@@ -34,13 +34,13 @@ class CommandHandler extends EventEmitter {
          * Whether or not the built-in pre-message inhibitors are disabled.
          * @type {boolean}
          */
-        this.preInhibDisabled = !!options.disablePreInhib;
+        this.preInhibitors = !!options.preInhibitors;
 
         /**
          * Whether or not the built-in post-message inhibitors are disabled.
          * @type {boolean}
          */
-        this.postInhibDisabled = !!options.disablePostInhib;
+        this.postInhibitors = !!options.postInhibitors;
 
         /**
          * Gets the prefix.
@@ -174,7 +174,7 @@ class CommandHandler extends EventEmitter {
      * @param {Message} message - Message to handle.
      */
     handle(message){
-        if (!this.preInhibDisabled){
+        if (!this.preInhibitors){
             if (message.author.id !== this.framework.client.user.id && this.framework.client.selfbot){
                 return this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.NOT_SELF);
             }
@@ -218,7 +218,7 @@ class CommandHandler extends EventEmitter {
             if (!command) return this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
             if (!command.enabled) return this.emit(CommandHandlerEvents.COMMAND_DISABLED, message, command);
 
-            if (!this.postInhibDisabled){
+            if (!this.postInhibitors){
                 if (command.ownerOnly && message.author.id !== this.framework.client.ownerID)
                     return this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.OWNER);
 
