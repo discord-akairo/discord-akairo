@@ -120,8 +120,6 @@ class SQLiteHandler extends EventEmitter {
      * @returns {Promise.<SQLiteHandler>}
      */
     init(ids){
-        ids = ids.map(id => this.sanitize(id));
-
         return this.open().then(db => {
             return db.all(`SELECT * FROM "${this.tableName}"`).then(rows => {
                 rows.forEach((row) => {
@@ -145,8 +143,6 @@ class SQLiteHandler extends EventEmitter {
      * @returns {Promise.<SQLiteHandler>}
      */
     add(id){
-        id = this.sanitize(id);
-
         if (!this.db) return Promise.reject(new Error('Database not opened.'));
         if (this.has(id)) return Promise.reject(`${id} already exists.`);
 
@@ -166,8 +162,6 @@ class SQLiteHandler extends EventEmitter {
      * @returns {SQLiteHandler}
      */
     addMemory(id){
-        id = this.sanitize(id);
-
         if (this.has(id)) throw new Error(`${id} already exists.`);
 
         const config = Object.assign({}, this.defaultConfig);
@@ -183,8 +177,6 @@ class SQLiteHandler extends EventEmitter {
      * @returns {Promise.<SQLiteHandler>}
      */
     remove(id){
-        id = this.sanitize(id);
-        
         if (!this.db) return Promise.reject(new Error('Database not opened.'));
         if (!this.has(id)) return Promise.reject(`${id} does not exist.`);
         
@@ -200,8 +192,6 @@ class SQLiteHandler extends EventEmitter {
      * @returns {SQLiteHandler}
      */
     removeMemory(id){
-        id = this.sanitize(id);
-
         if (!this.has(id)) throw new Error(`${id} does not exist.`);
         this.memory.delete(id);
         return this;
@@ -213,7 +203,6 @@ class SQLiteHandler extends EventEmitter {
      * @returns {boolean}
      */
     has(id){
-        id = this.sanitize(id);
         return this.memory.has(id);
     }
 
@@ -223,8 +212,6 @@ class SQLiteHandler extends EventEmitter {
      * @returns {Object}
      */
     get(id){
-        id = this.sanitize(id);
-        
         if (!this.has(id)) return Object.assign({}, this.defaultConfig);
         
         const config = this.memory.get(id);
@@ -246,8 +233,6 @@ class SQLiteHandler extends EventEmitter {
      * @returns {Promise.<SQLiteHandler>}
      */
     set(id, key, value){
-        id = this.sanitize(id);
-
         if (!this.db) return Promise.reject(new Error('Database not opened.'));
 
         key = this.sanitize(key);
@@ -278,7 +263,6 @@ class SQLiteHandler extends EventEmitter {
      * @returns {SQLiteHandler}
      */
     setMemory(id, key, value){
-        id = this.sanitize(id);
         key = this.sanitize(key);
         value = this.sanitize(value);
 
@@ -300,8 +284,6 @@ class SQLiteHandler extends EventEmitter {
      * @returns {Promise.<SQLiteHandler>}
      */
     save(id){
-        id = this.sanitize(id);
-
         if (!this.db) return Promise.reject(new Error('Database not opened.'));
         if (!this.has(id)) return Promise.reject(new Error(`${id} not found.`));
 
