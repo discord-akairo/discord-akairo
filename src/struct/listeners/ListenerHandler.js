@@ -39,7 +39,7 @@ class ListenerHandler extends EventEmitter {
         this.emitters.set('inhibitorHandler', this.framework.inhibitorHandler);
         this.emitters.set('listenerHandler', this.framework.listenerHandler);
 
-        Object.keys(options.emitters).forEach(key => {
+        if (options.emitter) Object.keys(options.emitters).forEach(key => {
             if (this.emitters.has(key)) return;
             this.emitters.set(key, options.emitters[key]);
         });

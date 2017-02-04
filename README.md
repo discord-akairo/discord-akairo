@@ -126,12 +126,15 @@ listenerHandler.reload('commandBlocked');
 ```js
 const guildSQL = new Akairo.SQLiteHandler('./databases/guilds.sqlite', {
     tableName: 'configs',
-    defaultConfig: require('./databases/guildDefault.json')
+    defaultConfig: {
+        prefix: '!'
+    }
 });
 
 akairo.login('TOKEN').then(() => {
     guildSQL.init(client.guilds.map(g => g.id)).then(() => {
-        console.log(guildSQL.get('1234567890').prefix) // Hopefully not '!'
+        const prefix = guildSQL.get('1234567890').prefix;
+        console.log(prefix) // Hopefully not '!'
     });
 });
 ```
