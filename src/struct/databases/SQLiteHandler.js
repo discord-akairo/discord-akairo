@@ -132,7 +132,10 @@ class SQLiteHandler extends EventEmitter {
                     if (!this.has(id)) promises.push(this.add(id));
                 });
                 
-                return Promise.all(promises).then(() => this);
+                return Promise.all(promises).then(() => {
+                    this.emit('init');
+                    return this;
+                });
             });
         });
     }
@@ -152,6 +155,7 @@ class SQLiteHandler extends EventEmitter {
             config.id = id;
             this.memory.set(id, config);
 
+            this.emit('add', config, false);
             return this;
         });
     }
@@ -168,6 +172,8 @@ class SQLiteHandler extends EventEmitter {
 
         config.id = id;
         this.memory.set(id, config);
+
+        this.emit('add', config, true);
         return this;
     }
 
@@ -182,6 +188,7 @@ class SQLiteHandler extends EventEmitter {
         
         return this.db.run(`DELETE FROM "${this.tableName}" WHERE id = '${id}'`).then(() => {
             this.memory.delete(id);
+            this.emit('remove', id, false);
             return this;
         });
     }
@@ -194,6 +201,7 @@ class SQLiteHandler extends EventEmitter {
     removeMemory(id){
         if (!this.has(id)) throw new Error(`${id} does not exist.`);
         this.memory.delete(id);
+        this.emit('remove', id, true);
         return this;
     }
 
@@ -252,7 +260,10 @@ class SQLiteHandler extends EventEmitter {
             value = `'${value}'`;
         }
         
-        return this.db.run(`UPDATE "${this.tableName}" SET ${key} = ${value} WHERE id = '${id}'`).then(() => this);
+        return this.db.run(`UPDATE "${this.tableName}" SET ${key} = ${value} WHERE id = '${id}'`).then(() => {
+            this.emit('set', config, true);
+            return this;
+        });
     }
 
     /**
@@ -275,6 +286,7 @@ class SQLiteHandler extends EventEmitter {
         
         config[key] = value;
         this.memory.set(id, config);
+        this.emit('set', config, false);
         return this;
     }
 
@@ -302,15 +314,23 @@ class SQLiteHandler extends EventEmitter {
 
         return this.db.get(`SELECT count(1) FROM "${this.tableName}" WHERE id = '${id}'`).then(count => {
             let promise;
+            let insert = false;
 
             if (!count['count(1)']){
                 promise = this.db.run(`INSERT INTO "${this.tableName}" (id) VALUES ('${id}')`);
+                insert = true;
             } else {
                 promise = Promise.resolve();
             }
             
-            return promise.then(() => this.db.run(`UPDATE "${this.tableName}" SET ${sets.join(', ')} WHERE id = '${id}'`));
-        }).then(() => this);
+            return promise.then(() => {
+                this.db.run(`UPDATE "${this.tableName}" SET ${sets.join(', ')} WHERE id = '${id}'`);
+                return insert;
+            });
+        }).then(insert => {
+            this.emit('save', config, insert);
+            return this;
+        });
     }
 
     /**
@@ -324,3 +344,36 @@ class SQLiteHandler extends EventEmitter {
 }
 
 module.exports = SQLiteHandler;
+
+/**
+ * Emitted when the handler is initalized.
+ * @event SQLiteHandler#init
+ */
+
+/**
+ * Emitted when a config is added.
+ * @event SQLiteHandler#add
+ * @param {Object} config - Config added.
+ * @param {boolean} memory - Whether or not this was done in memory only.
+ */
+
+/**
+ * Emitted when an ID is removed.
+ * @event SQLiteHandler#remove
+ * @param {string} id - ID removed.
+ * @param {boolean} memory - Whether or not this was done in memory only.
+ */
+
+/**
+ * Emitted when something was set.
+ * @event SQLiteHandler#set
+ * @param {Object} config - Config that changed.
+ * @param {boolean} memory - Whether or not this was done in memory only.
+ */
+
+/**
+ * Emitted when a config was saved from memory.
+ * @event SQLiteHandler#save
+ * @param {Object} config - Config that was saved.
+ * @param {boolean} newInsert - Whether or not the config has been in the database before.
+ */
