@@ -887,7 +887,7 @@
                 </td>
             
 
-            <td class="description last">Command category ID for organization purposes.</td>
+            <td class="description last">Category ID for organization purposes.</td>
         </tr>
 
     
@@ -1546,6 +1546,8 @@
             
                 <td class="default">
                 
+                    <code>{}</code>
+                
                 </td>
             
 
@@ -1730,6 +1732,43 @@
             
 
             <td class="description last">Set to 'pre' to make this run before the message is handled rather than after.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>category</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>'default'</code>
+                
+                </td>
+            
+
+            <td class="description last">Category ID for organization purposes.</td>
         </tr>
 
     
@@ -1953,6 +1992,43 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>category</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>'default'</code>
+                
+                </td>
+            
+
+            <td class="description last">Category ID for organization purposes.</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -2142,7 +2218,7 @@
             <td class="type">
             
                 
-<span class="param-type">boolean</span>
+<span class="param-type">Array.&lt;string></span>
 
 
             
@@ -2161,12 +2237,12 @@
             
                 <td class="default">
                 
-                    <code>false</code>
+                    <code>[]</code>
                 
                 </td>
             
 
-            <td class="description last">Whether or not to stringify and parse input and output.</td>
+            <td class="description last">Array of keys to parse and stringify as JSON.</td>
         </tr>
 
     

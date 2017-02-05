@@ -53,7 +53,7 @@
 
     
 
-    <h4 class="name" id="SQLiteHandler"><span class="type-signature"></span>new SQLiteHandler<span class="signature">(filepath, options)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="SQLiteHandler"><span class="type-signature"></span>new SQLiteHandler<span class="signature">(filepath, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
@@ -131,7 +131,11 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -156,7 +160,19 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last">Path to .sqlite file.</td>
@@ -179,7 +195,23 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>{}</code>
+                
+                </td>
             
 
             <td class="description last">Options for the handler.</td>
@@ -598,7 +630,7 @@
 
         
             
-<h4 class="name" id="json"><span class="type-signature">(readonly) </span>json<span class="type-signature"> :boolean</span></h4>
+<h4 class="name" id="json"><span class="type-signature">(readonly) </span>json<span class="type-signature"> :Array.&lt;string></span></h4>
 
 
 
@@ -649,7 +681,7 @@
 
 
 <div class="description">
-    Whether or not to stringify and parse input and output.
+    Keys to parse and stringify as JSON.
 </div>
 
 
@@ -658,7 +690,7 @@
     <ul>
         <li>
             
-<span class="param-type">boolean</span>
+<span class="param-type">Array.&lt;string></span>
 
 
         </li>
@@ -838,7 +870,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line149">line 149</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line151">line 151</a>
     </li></ul></dd>
     
 
@@ -989,7 +1021,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line169">line 169</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line171">line 171</a>
     </li></ul></dd>
     
 
@@ -1128,7 +1160,7 @@
 
     
 
-    <h4 class="name" id="desanitize"><span class="type-signature"></span>desanitize<span class="signature">(input)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="desanitize"><span class="type-signature"></span>desanitize<span class="signature">(input, json<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {string}</span></h4>
 
     
 
@@ -1140,7 +1172,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line101">line 101</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line103">line 103</a>
     </li></ul></dd>
     
 
@@ -1206,7 +1238,11 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -1231,10 +1267,61 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last">Input text.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>json</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Whether to parse or not.</td>
         </tr>
 
     
@@ -1291,7 +1378,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line223">line 223</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line225">line 225</a>
     </li></ul></dd>
     
 
@@ -1442,7 +1529,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line214">line 214</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line216">line 216</a>
     </li></ul></dd>
     
 
@@ -1593,7 +1680,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line123">line 123</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line125">line 125</a>
     </li></ul></dd>
     
 
@@ -1744,7 +1831,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line111">line 111</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line113">line 113</a>
     </li></ul></dd>
     
 
@@ -1846,7 +1933,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line186">line 186</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line188">line 188</a>
     </li></ul></dd>
     
 
@@ -1997,7 +2084,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line202">line 202</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line204">line 204</a>
     </li></ul></dd>
     
 
@@ -2136,7 +2223,7 @@
 
     
 
-    <h4 class="name" id="sanitize"><span class="type-signature"></span>sanitize<span class="signature">(input)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="sanitize"><span class="type-signature"></span>sanitize<span class="signature">(input, json)</span><span class="type-signature"> &rarr; {string}</span></h4>
 
     
 
@@ -2148,7 +2235,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line90">line 90</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line91">line 91</a>
     </li></ul></dd>
     
 
@@ -2216,6 +2303,8 @@
         
 
         
+        <th>Default</th>
+        
 
         <th class="last">Description</th>
     </tr>
@@ -2241,8 +2330,41 @@
             
 
             
+                <td class="default">
+                
+                </td>
+            
 
             <td class="description last">Input text.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>json</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Whether to stringify or not.</td>
         </tr>
 
     
@@ -2299,7 +2421,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line299">line 299</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line301">line 301</a>
     </li></ul></dd>
     
 
@@ -2450,7 +2572,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line341">line 341</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line343">line 343</a>
     </li></ul></dd>
     
 
@@ -2552,7 +2674,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line244">line 244</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line246">line 246</a>
     </li></ul></dd>
     
 
@@ -2752,7 +2874,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line277">line 277</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line279">line 279</a>
     </li></ul></dd>
     
 
@@ -2960,7 +3082,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line357">line 357</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line359">line 359</a>
     </li></ul></dd>
     
 
@@ -3116,7 +3238,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line352">line 352</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line354">line 354</a>
     </li></ul></dd>
     
 
@@ -3200,7 +3322,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line364">line 364</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line366">line 366</a>
     </li></ul></dd>
     
 
@@ -3356,7 +3478,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line378">line 378</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line380">line 380</a>
     </li></ul></dd>
     
 
@@ -3512,7 +3634,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line385">line 385</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line387">line 387</a>
     </li></ul></dd>
     
 
@@ -3596,7 +3718,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line371">line 371</a>
+        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line373">line 373</a>
     </li></ul></dd>
     
 

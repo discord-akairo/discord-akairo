@@ -15,7 +15,7 @@ const ClientUtil = require('./utils/ClientUtil');
  * @prop {boolean} [preInhibitors=false] - Disables the built-in pre-message inhibitors.
  * @prop {boolean} [postInhibitors=false] - Disables the built-in post-message inhibitors.
  * @prop {string} [listenerDirectory] - Directory to listeners.
- * @prop {Object} [emitters] - Emitters to load onto the listener handler.
+ * @prop {Object} [emitters={}] - Emitters to load onto the listener handler.
  */
 
 class Framework {

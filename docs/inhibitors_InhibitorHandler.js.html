@@ -42,12 +42,13 @@ const EventEmitter = require('events');
 const rread = require('readdir-recursive');
 const { Collection } = require('discord.js');
 const Inhibitor = require('./Inhibitor');
+const Category = require('../utils/Category');
 const { InhibitorHandlerEvents } = require('../utils/Constants');
 
 /** @extends EventEmitter */
 class InhibitorHandler extends EventEmitter {
     /**
-     * Loads Inhibitors and checks messages.
+     * Loads inhibitors and checks messages.
      * @param {Framework} framework - The Akairo framework.
      * @param {Object} options - Options from framework.
      */
@@ -74,6 +75,12 @@ class InhibitorHandler extends EventEmitter {
          */
         this.inhibitors = new Collection();
 
+        /**
+         * Inhibitor categories, mapped by ID to Category.
+         * @type {Collection.&lt;string, Category>}
+         */
+        this.categories = new Collection();
+
         const filepaths = rread.fileSync(this.directory);
         filepaths.forEach(filepath => {
             this.load(filepath);
@@ -81,7 +88,7 @@ class InhibitorHandler extends EventEmitter {
     }
 
     /**
-     * Loads an Inhibitor.
+     * Loads an inhibitor.
      * @param {string} filepath - Path to file.
      * @returns {Inhibitor}
      */
@@ -96,12 +103,17 @@ class InhibitorHandler extends EventEmitter {
         inhibitor.client = this.framework.client;
         inhibitor.inhibitorHandler = this;
 
+        if (!this.categories.has(inhibitor.category)) this.categories.set(inhibitor.category, new Category(inhibitor.category));
+        const category = this.categories.get(inhibitor.category);
+        inhibitor.category = category;
+        category.set(inhibitor.id, inhibitor);
+
         this.inhibitors.set(inhibitor.id, inhibitor);
         return inhibitor;
     }
 
     /**
-     * Adds an Inhibitor.
+     * Adds an inhibitor.
      * @param {string} filename - Filename to lookup in the directory. A .js extension is assumed.
      */
     add(filename){
@@ -116,8 +128,8 @@ class InhibitorHandler extends EventEmitter {
     }
 
     /**
-     * Removes an Inhibitor.
-     * @param {string} id - ID of the Inhibitor.
+     * Removes an inhibitor.
+     * @param {string} id - ID of the inhibitor.
      */
     remove(id){
         const inhibitor = this.inhibitors.get(id);
@@ -126,12 +138,14 @@ class InhibitorHandler extends EventEmitter {
         delete require.cache[require.resolve(inhibitor.filepath)];
         this.inhibitors.delete(inhibitor.id);
 
+        inhibitor.category.delete(inhibitor.id);
+
         this.emit(InhibitorHandlerEvents.REMOVE, inhibitor);
     }
 
     /**
-     * Reloads an Inhibitor.
-     * @param {string} id - ID of the Inhibitor.
+     * Reloads an inhibitor.
+     * @param {string} id - ID of the inhibitor.
      */
     reload(id){
         const inhibitor = this.inhibitors.get(id);
@@ -141,8 +155,17 @@ class InhibitorHandler extends EventEmitter {
 
         delete require.cache[require.resolve(inhibitor.filepath)];
         this.inhibitors.delete(inhibitor.id);
+
+        inhibitor.category.delete(inhibitor.id);
         
         this.emit(InhibitorHandlerEvents.RELOAD, this.load(filepath));
+    }
+
+    /**
+     * Reloads all inhibitors.
+     */
+    reloadAll(){
+        this.inhibitors.forEach(i => i.reload());
     }
 
     /**
@@ -151,24 +174,19 @@ class InhibitorHandler extends EventEmitter {
      * @returns {Promise.&lt;string>}
      */
     testMessage(message){
-        return new Promise((resolve, reject) => {
-            const promises = this.inhibitors.filter(i => i.type === 'pre' &amp;&amp; i.enabled).map(inhibitor => {
-                const inhibited = inhibitor.exec(message);
+        const promises = this.inhibitors.filter(i => i.type === 'pre' &amp;&amp; i.enabled).map(inhibitor => {
+            const inhibited = inhibitor.exec(message);
 
-                if (inhibited instanceof Promise) return inhibited.catch(err => {
-                    if (err instanceof Error) throw err;
-                    throw inhibitor.reason;
-                });
-                
-                if (!inhibited) return Promise.resolve();
+            if (inhibited instanceof Promise) return inhibited.catch(err => {
+                if (err instanceof Error) throw err;
                 return Promise.reject(inhibitor.reason);
             });
-
-            Promise.all(promises).then(resolve).catch(errOrReason => {
-                if (errOrReason instanceof Error) throw errOrReason;
-                reject(errOrReason);
-            });
+            
+            if (!inhibited) return Promise.resolve();
+            return Promise.reject(inhibitor.reason);
         });
+
+        return Promise.all(promises);
     }
 
     /**
@@ -178,24 +196,19 @@ class InhibitorHandler extends EventEmitter {
      * @returns {Promise.&lt;string>}
      */
     testCommand(message, command){
-        return new Promise((resolve, reject) => {
-            const promises = this.inhibitors.filter(i => i.type === 'post' &amp;&amp; i.enabled).map(inhibitor => {
-                const inhibited = inhibitor.exec(message, command);
+        const promises = this.inhibitors.filter(i => i.type === 'post' &amp;&amp; i.enabled).map(inhibitor => {
+            const inhibited = inhibitor.exec(message, command);
 
-                if (inhibited instanceof Promise) return inhibited.catch(err => {
-                    if (err instanceof Error) throw err;
-                    throw inhibitor.reason;
-                });
-                
-                if (!inhibited) return Promise.resolve();
+            if (inhibited instanceof Promise) return inhibited.catch(err => {
+                if (err instanceof Error) throw err;
                 return Promise.reject(inhibitor.reason);
             });
-
-            Promise.all(promises).then(resolve).catch(errOrReason => {
-                if (errOrReason instanceof Error) throw errOrReason;
-                reject(errOrReason);
-            });
+            
+            if (!inhibited) return Promise.resolve();
+            return Promise.reject(inhibitor.reason);
         });
+
+        return Promise.all(promises);
     }
 }
 
