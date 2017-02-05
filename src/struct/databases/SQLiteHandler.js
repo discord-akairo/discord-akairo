@@ -100,7 +100,7 @@ class SQLiteHandler extends EventEmitter {
      * @param {boolean} [json] - Whether to parse or not.
      * @return {string}
      */
-    desanitize(input, json = true){
+    desanitize(input, json = false){
         if (json && typeof input === 'string') return JSON.parse(input.replace(/''/g, '\''));
         if (typeof input !== 'string') return input;
         return input.replace(/''/g, '\'');
