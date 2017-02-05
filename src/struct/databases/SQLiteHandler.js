@@ -9,7 +9,7 @@ let sql;
  * @typedef {Object} SQLiteOptions
  * @prop {string} [tablename='configs'] - Name of the table.
  * @prop {Object} [defaultConfig={}] - Default configuration.
- * @prop {boolean} [json=false] - Whether or not to stringify and parse input and output.
+ * @prop {string[]} [json=[]] - Array of keys to parse and stringify as JSON.
  */
 
 /** @extends EventEmitter */
@@ -46,11 +46,11 @@ class SQLiteHandler extends EventEmitter {
         this.defaultConfig = options.defaultConfig || {};
 
         /**
-         * Whether or not to stringify and parse input and output.
+         * Keys to parse and stringify as JSON.
          * @readonly
-         * @type {boolean}
+         * @type {string[]}
          */
-        this.json = !!options.json;
+        this.json = options.json || [];
 
         /**
          * The database.
@@ -85,10 +85,11 @@ class SQLiteHandler extends EventEmitter {
     /**
      * Sanitizes a string by replacing single quotes with two single quotes.
      * @param {string} input - Input text.
+     * @param {boolean} json - Whether to stringify or not.
      * @return {string}
      */
-    sanitize(input){
-        if (this.json && typeof input !== 'string') return JSON.stringify(input).replace(/'/g, '\'\'');
+    sanitize(input, json = false){
+        if (json && typeof input !== 'string') return JSON.stringify(input).replace(/'/g, '\'\'');
         if (typeof input !== 'string') return input;
         return input.replace(/'/g, '\'\'');
     }
@@ -96,10 +97,11 @@ class SQLiteHandler extends EventEmitter {
     /**
      * Desanitizes a string for use by replacing two single quotes with a single quote.
      * @param {string} input - Input text.
+     * @param {boolean} [json] - Whether to parse or not.
      * @return {string}
      */
-    desanitize(input){
-        if (this.json && typeof input === 'string') return JSON.parse(input.replace(/''/g, '\''));
+    desanitize(input, json = true){
+        if (json && typeof input === 'string') return JSON.parse(input.replace(/''/g, '\''));
         if (typeof input !== 'string') return input;
         return input.replace(/''/g, '\'');
     }
@@ -123,7 +125,7 @@ class SQLiteHandler extends EventEmitter {
     init(ids){
         return this.open().then(db => {
             return db.all(`SELECT * FROM "${this.tableName}"`).then(rows => {
-                rows.forEach((row) => {
+                rows.forEach(row => {
                     this.memory.set(row.id, row);
                 });
 
@@ -228,7 +230,7 @@ class SQLiteHandler extends EventEmitter {
 
         Object.keys(config).forEach(key => {
             if (config[key] == undefined) return copy[key] = this.defaultConfig[key];
-            copy[key] = this.desanitize(config[key]);
+            copy[key] = this.desanitize(config[key], this.json.includes(key));
         });
 
         return copy;
@@ -245,7 +247,7 @@ class SQLiteHandler extends EventEmitter {
         if (!this.db) return Promise.reject(new Error('Database not opened.'));
 
         key = this.sanitize(key);
-        value = this.sanitize(value);
+        value = this.sanitize(value, this.json.includes(key));
 
         if (!this.has(id)) return Promise.reject(new Error(`${id} not found.`));
         
@@ -276,7 +278,7 @@ class SQLiteHandler extends EventEmitter {
      */
     setMemory(id, key, value){
         key = this.sanitize(key);
-        value = this.sanitize(value);
+        value = this.sanitize(value, this.json.includes(key));
 
         if (!this.has(id)) throw new Error(`${id} not found.`);
         
