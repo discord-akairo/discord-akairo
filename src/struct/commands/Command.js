@@ -73,14 +73,14 @@ const { ArgumentMatches, ArgumentTypes, ArgumentSplits } = require('../utils/Con
 
 class Command {
     /**
-     * Creates a new Command.
+     * Creates a new command.
      * @param {string} id - Command ID.
      * @param {function} exec - Function <code>((message, args) => {})</code> called when command is ran.
      * @param {CommandOptions} [options={}] - Options for the command.
      */
     constructor(id, exec, options = {}){
         /**
-         * ID of the Command.
+         * ID of the command.
          * @type {string}
          */
         this.id = id;
@@ -154,7 +154,7 @@ class Command {
         this.enabled = true;
 
         /**
-         * Path to Command file.
+         * Path to command file.
          * @readonly
          * @type {string}
          */
@@ -183,14 +183,14 @@ class Command {
     }
 
     /**
-     * Reloads the Command.
+     * Reloads the command.
      */
     reload(){
         this.commandHandler.reload(this.id);
     }
 
     /**
-     * Removes the Command. It can be readded with the command handler.
+     * Removes the command. It can be readded with the command handler.
      */
     remove(){
         this.commandHandler.remove(this.id);
@@ -213,7 +213,7 @@ class Command {
     }
 
     /**
-     * Parses text based on this Command's args.
+     * Parses text based on this command's args.
      * @param {string} content - String to parse.
      * @param {Message} [message] - Message to use.
      * @returns {Object}

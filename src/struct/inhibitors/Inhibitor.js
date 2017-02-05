@@ -14,7 +14,7 @@ class Inhibitor {
      */
     constructor(id, exec, options = {}){
         /**
-         * ID of the Inhibitor.
+         * ID of the inhibitor.
          * @type {string}
          */
         this.id = id;
@@ -44,7 +44,7 @@ class Inhibitor {
         this.enabled = true;
 
         /**
-         * Path to Inhibitor file.
+         * Path to inhibitor file.
          * @readonly
          * @type {string}
          */
@@ -80,7 +80,7 @@ class Inhibitor {
     }
     
     /**
-     * Removes the Inhibitor. It can be readded with the inhibitor handler.
+     * Removes the inhibitor. It can be readded with the inhibitor handler.
      */
     remove(){
         this.inhibitorHandler.remove(this.id);

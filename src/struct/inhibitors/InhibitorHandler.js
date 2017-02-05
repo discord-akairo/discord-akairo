@@ -8,7 +8,7 @@ const { InhibitorHandlerEvents } = require('../utils/Constants');
 /** @extends EventEmitter */
 class InhibitorHandler extends EventEmitter {
     /**
-     * Loads Inhibitors and checks messages.
+     * Loads inhibitors and checks messages.
      * @param {Framework} framework - The Akairo framework.
      * @param {Object} options - Options from framework.
      */
@@ -42,7 +42,7 @@ class InhibitorHandler extends EventEmitter {
     }
 
     /**
-     * Loads an Inhibitor.
+     * Loads an inhibitor.
      * @param {string} filepath - Path to file.
      * @returns {Inhibitor}
      */
@@ -62,7 +62,7 @@ class InhibitorHandler extends EventEmitter {
     }
 
     /**
-     * Adds an Inhibitor.
+     * Adds an inhibitor.
      * @param {string} filename - Filename to lookup in the directory. A .js extension is assumed.
      */
     add(filename){
@@ -77,8 +77,8 @@ class InhibitorHandler extends EventEmitter {
     }
 
     /**
-     * Removes an Inhibitor.
-     * @param {string} id - ID of the Inhibitor.
+     * Removes an inhibitor.
+     * @param {string} id - ID of the inhibitor.
      */
     remove(id){
         const inhibitor = this.inhibitors.get(id);
@@ -91,8 +91,8 @@ class InhibitorHandler extends EventEmitter {
     }
 
     /**
-     * Reloads an Inhibitor.
-     * @param {string} id - ID of the Inhibitor.
+     * Reloads an inhibitor.
+     * @param {string} id - ID of the inhibitor.
      */
     reload(id){
         const inhibitor = this.inhibitors.get(id);
@@ -104,6 +104,13 @@ class InhibitorHandler extends EventEmitter {
         this.inhibitors.delete(inhibitor.id);
         
         this.emit(InhibitorHandlerEvents.RELOAD, this.load(filepath));
+    }
+
+    /**
+     * Reloads all inhibitors.
+     */
+    reloadAll(){
+        this.inhibitors.forEach(i => i.reload());
     }
 
     /**

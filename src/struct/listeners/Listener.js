@@ -15,7 +15,7 @@ class Listener {
      */
     constructor(id, exec, options = {}){
         /**
-         * ID of the Listener.
+         * ID of the listener.
          * @type {string}
          */
         this.id = id;
@@ -51,7 +51,7 @@ class Listener {
         this.enabled = true;
 
         /**
-         * Path to Listener file.
+         * Path to listener file.
          * @readonly
          * @type {string}
          */
@@ -80,14 +80,14 @@ class Listener {
     }
 
     /**
-     * Reloads the Listener.
+     * Reloads the listener.
      */
     reload(){
         this.listenerHandler.reload(this.id);
     }
 
     /**
-     * Removes the Listener. It can be readded with the listener handler.
+     * Removes the listener. It can be readded with the listener handler.
      */
     remove(){
         this.listenerHandler.remove(this.id);

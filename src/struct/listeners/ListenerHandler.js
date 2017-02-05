@@ -8,7 +8,7 @@ const { ListenerHandlerEvents } = require('../utils/Constants');
 /** @extends EventEmitter */
 class ListenerHandler extends EventEmitter {
     /**
-     * Loads Listeners and register them with EventEmitters.
+     * Loads listeners and register them with EventEmitters.
      * @param {Framework} framework - The Akairo framework.
      * @param {Object} options - Options from framework.
      */
@@ -57,7 +57,7 @@ class ListenerHandler extends EventEmitter {
     }
 
     /**
-     * Loads a Listener.
+     * Loads a listener.
      * @param {string} filepath - Path to file.
      * @returns {Listener}
      */
@@ -79,7 +79,7 @@ class ListenerHandler extends EventEmitter {
     }
 
     /**
-     * Adds a Listener.
+     * Adds a listener.
      * @param {string} filename - Filename to lookup in the directory.
      */
     add(filename){
@@ -94,8 +94,8 @@ class ListenerHandler extends EventEmitter {
     }
 
     /**
-     * Removes a Listener.
-     * @param {string} id - ID of the Listener.
+     * Removes a listener.
+     * @param {string} id - ID of the listener.
      */
     remove(id){
         const listener = this.listeners.get(id);
@@ -109,8 +109,8 @@ class ListenerHandler extends EventEmitter {
     }
 
     /**
-     * Reloads a Listener.
-     * @param {string} id - ID of the Listener.
+     * Reloads a listener.
+     * @param {string} id - ID of the listener.
      */
     reload(id){
         const listener = this.listeners.get(id);
@@ -124,10 +124,17 @@ class ListenerHandler extends EventEmitter {
         
         this.emit(ListenerHandlerEvents.REMOVE, this.load(filepath));
     }
+
+    /**
+     * Reloads all listeners.
+     */
+    reloadAll(){
+        this.listeners.forEach(l => l.reload());
+    }
     
     /**
-     * Registers a Listener with the EventEmitter.
-     * @param {string} id - ID of the Listener.
+     * Registers a listener with the EventEmitter.
+     * @param {string} id - ID of the listener.
      */
     register(id){
         const listener = this.listeners.get(id);
@@ -144,8 +151,8 @@ class ListenerHandler extends EventEmitter {
     }
 
     /**
-     * Removes a Listener from the EventEmitter.
-     * @param {string} id - ID of the Listener.
+     * Removes a listener from the EventEmitter.
+     * @param {string} id - ID of the listener.
      */
     deregister(id){
         const listener = this.listeners.get(id);

@@ -9,7 +9,7 @@ const { CommandHandlerEvents, BuiltInReasons } = require('../utils/Constants');
 /** @extends EventEmitter */
 class CommandHandler extends EventEmitter {
     /**
-     * Loads Commands and handles messages.
+     * Loads commands and handles messages.
      * @param {Framework} framework - The Akairo framework.
      * @param {Object} options - Options from framework.
      */
@@ -73,7 +73,7 @@ class CommandHandler extends EventEmitter {
     }
 
     /**
-     * Loads a Command.
+     * Loads a command.
      * @param {string} filepath - Path to file.
      * @returns {Command}
      */
@@ -99,7 +99,7 @@ class CommandHandler extends EventEmitter {
     }
 
     /**
-     * Adds a Command.
+     * Adds a command.
      * @param {string} filename - Filename to lookup in the directory. A .js extension is assumed.
      */
     add(filename){
@@ -114,8 +114,8 @@ class CommandHandler extends EventEmitter {
     }
 
     /**
-     * Removes a Command.
-     * @param {string} id - ID of the Command.
+     * Removes a command.
+     * @param {string} id - ID of the command.
      */
     remove(id){
         const command = this.commands.get(id);
@@ -130,8 +130,8 @@ class CommandHandler extends EventEmitter {
     }
 
     /**
-     * Reloads a Command.
-     * @param {string} id - ID of the Command.
+     * Reloads a command.
+     * @param {string} id - ID of the command.
      */
     reload(id){
         const command = this.commands.get(id);
@@ -145,6 +145,13 @@ class CommandHandler extends EventEmitter {
         command.category.delete(command.id);
         
         this.emit(CommandHandlerEvents.RELOAD, this.load(filepath));
+    }
+
+    /**
+     * Reloads all commands.
+     */
+    reloadAll(){
+        this.commands.forEach(c => c.reload());
     }
 
     /**
@@ -170,7 +177,7 @@ class CommandHandler extends EventEmitter {
     }
 
     /**
-     * Handles a Message.
+     * Handles a message.
      * @param {Message} message - Message to handle.
      */
     handle(message){
