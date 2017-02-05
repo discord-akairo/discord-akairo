@@ -3,6 +3,7 @@ const EventEmitter = require('events');
 const rread = require('readdir-recursive');
 const { Collection } = require('discord.js');
 const Inhibitor = require('./Inhibitor');
+const Category = require('./Category');
 const { InhibitorHandlerEvents } = require('../utils/Constants');
 
 /** @extends EventEmitter */
@@ -35,6 +36,12 @@ class InhibitorHandler extends EventEmitter {
          */
         this.inhibitors = new Collection();
 
+        /**
+         * Inhibitor categories, mapped by ID to Category.
+         * @type {Collection.<string, Category>}
+         */
+        this.categories = new Collection();
+
         const filepaths = rread.fileSync(this.directory);
         filepaths.forEach(filepath => {
             this.load(filepath);
@@ -56,6 +63,11 @@ class InhibitorHandler extends EventEmitter {
         inhibitor.framework = this.framework;
         inhibitor.client = this.framework.client;
         inhibitor.inhibitorHandler = this;
+
+        if (!this.categories.has(inhibitor.category)) this.categories.set(inhibitor.category, new Category(inhibitor.category));
+        const category = this.categories.get(inhibitor.category);
+        inhibitor.category = category;
+        category.set(inhibitor.id, inhibitor);
 
         this.inhibitors.set(inhibitor.id, inhibitor);
         return inhibitor;
@@ -87,6 +99,8 @@ class InhibitorHandler extends EventEmitter {
         delete require.cache[require.resolve(inhibitor.filepath)];
         this.inhibitors.delete(inhibitor.id);
 
+        inhibitor.category.delete(inhibitor.id);
+
         this.emit(InhibitorHandlerEvents.REMOVE, inhibitor);
     }
 
@@ -102,6 +116,8 @@ class InhibitorHandler extends EventEmitter {
 
         delete require.cache[require.resolve(inhibitor.filepath)];
         this.inhibitors.delete(inhibitor.id);
+
+        inhibitor.category.delete(inhibitor.id);
         
         this.emit(InhibitorHandlerEvents.RELOAD, this.load(filepath));
     }

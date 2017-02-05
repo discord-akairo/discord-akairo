@@ -3,7 +3,7 @@ const { Collection } = require('discord.js');
 /** @extends Collection */
 class Category extends Collection {
     /**
-     * A group of commands.
+     * A group of commands/inhibitors/listeners.
      * @param {string} id - ID of the category.
      */
     constructor(id){
@@ -17,7 +17,7 @@ class Category extends Collection {
     }
 
     /**
-     * Calls reload() on all commands in this category.
+     * Calls reload() on all items in this category.
      * @returns {Category}
      */
     reloadAll(){
@@ -26,7 +26,7 @@ class Category extends Collection {
     }
 
     /**
-     * Calls remove() on all commands in this category.
+     * Calls remove() on all items in this category.
      * @returns {Category}
      */
     removeAll(){
@@ -35,7 +35,7 @@ class Category extends Collection {
     }
 
     /**
-     * Calls enable() on all commands in this category.
+     * Calls enable() on all items in this category.
      * @returns {Category}
      */
     enableAll(){
@@ -44,20 +44,12 @@ class Category extends Collection {
     }
 
     /**
-     * Calls disable() on all commands in this category.
+     * Calls disable() on all items in this category.
      * @returns {Category}
      */
     disableAll(){
         this.forEach(c => c.disable());
         return this;
-    }
-
-    /**
-     * Gets the first alias of each command.
-     * @returns {string[]}
-     */
-    list(){
-        return this.map(c => c.aliases[0]);
     }
 
     /**

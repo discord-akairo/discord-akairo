@@ -4,6 +4,7 @@
  * @prop {string|EventEmitter} [emitter='client'] - The event emitter, either a key from listenerHandler.emitters or an EventEmitter.
  * @prop {string} [eventName='ready'] - Event name to listen to.
  * @prop {string} [type='on'] - Type of listener: 'on' or 'once'.
+ * @prop {string} [category='default'] - Category ID for organization purposes.
  */
 
 class Listener {
@@ -37,6 +38,12 @@ class Listener {
          * @type {string}
          */
         this.type = options.type || 'on';
+
+        /**
+         * Category this listener belongs to.
+         * @type {Category}
+         */
+        this.category = options.category || 'default';
 
         /**
          * The function called when event emitted.

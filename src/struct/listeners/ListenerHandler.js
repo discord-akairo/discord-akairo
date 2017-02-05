@@ -3,6 +3,7 @@ const EventEmitter = require('events');
 const rread = require('readdir-recursive');
 const { Collection } = require('discord.js');
 const Listener = require('./Listener');
+const Category = require('./Category');
 const { ListenerHandlerEvents } = require('../utils/Constants');
 
 /** @extends EventEmitter */
@@ -50,6 +51,12 @@ class ListenerHandler extends EventEmitter {
          */
         this.listeners = new Collection();
 
+        /**
+         * Listener categories, mapped by ID to Category.
+         * @type {Collection.<string, Category>}
+         */
+        this.categories = new Collection();
+
         const filepaths = rread.fileSync(this.directory);
         filepaths.forEach(filepath => {
             this.load(filepath);
@@ -74,6 +81,11 @@ class ListenerHandler extends EventEmitter {
 
         this.listeners.set(listener.id, listener);
         this.register(listener.id);
+
+        if (!this.categories.has(listener.category)) this.categories.set(listener.category, new Category(listener.category));
+        const category = this.categories.get(listener.category);
+        listener.category = category;
+        category.set(listener.id, listener);
 
         return listener;
     }
@@ -105,6 +117,8 @@ class ListenerHandler extends EventEmitter {
         this.deregister(listener.id);
         this.listeners.delete(listener.id);
 
+        listener.category.delete(listener.id);
+
         this.emit(ListenerHandlerEvents.REMOVE, listener);
     }
 
@@ -121,6 +135,8 @@ class ListenerHandler extends EventEmitter {
         delete require.cache[require.resolve(listener.filepath)];
         this.deregister(listener.id);
         this.listeners.delete(listener.id);
+
+        listener.category.delete(listener.id);
         
         this.emit(ListenerHandlerEvents.REMOVE, this.load(filepath));
     }

@@ -3,6 +3,7 @@
  * @typedef {Object} InhibitorOptions
  * @prop {string} [reason=''] - Reason emitted when command or message is blocked.
  * @prop {boolean} [type='post'] - Set to 'pre' to make this run before the message is handled rather than after.
+ * @prop {string} [category='default'] - Category ID for organization purposes.
  */
 
 class Inhibitor {
@@ -30,6 +31,12 @@ class Inhibitor {
          * @type {string}
          */
         this.type = options.type || 'post';
+
+        /**
+         * Category this inhibitor belongs to.
+         * @type {Category}
+         */
+        this.category = options.category || 'default';
 
         /**
          * Function called to inhibit.
