@@ -130,7 +130,7 @@ class InhibitorHandler extends EventEmitter {
      * @returns {Promise.<string>}
      */
     testCommand(message, command){
-        const promises = this.inhibitors.filter(i => i.type === 'pre' && i.enabled).map(inhibitor => {
+        const promises = this.inhibitors.filter(i => i.type === 'post' && i.enabled).map(inhibitor => {
             const inhibited = Promise.resolve(inhibitor.exec(message, command));
             return inhibited;
         });
