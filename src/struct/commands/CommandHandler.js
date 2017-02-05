@@ -3,7 +3,7 @@ const EventEmitter = require('events');
 const rread = require('readdir-recursive');
 const { Collection } = require('discord.js');
 const Command = require('./Command');
-const Category = require('./Category');
+const Category = require('../utils/Category');
 const { CommandHandlerEvents, BuiltInReasons } = require('../utils/Constants');
 
 /** @extends EventEmitter */

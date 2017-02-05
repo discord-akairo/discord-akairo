@@ -8,5 +8,6 @@ module.exports = {
     Listener: require('./struct/listeners/Listener'),
     SQLiteHandler: require('./struct/databases/SQLiteHandler'),
     Constants: require('./struct/utils/Constants'),
+    Category: require('./struct/utils/Category'),
     version: require('../package.json').version
 };
