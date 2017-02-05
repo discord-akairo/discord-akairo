@@ -113,14 +113,18 @@ class InhibitorHandler extends EventEmitter {
      */
     testMessage(message){
         const promises = this.inhibitors.filter(i => i.type === 'pre' && i.enabled).map(inhibitor => {
-            const inhibited = Promise.resolve(inhibitor.exec(message));
-            return inhibited;
+            const inhibited = inhibitor.exec(message);
+
+            if (inhibited instanceof Promise) return inhibited.catch(err => {
+                if (err instanceof Error) throw err;
+                return Promise.reject(inhibitor.reason);
+            });
+            
+            if (!inhibited) return Promise.resolve();
+            return Promise.reject(inhibitor.reason);
         });
 
-        return Promise.all(promises).catch(errOrReason => {
-            if (errOrReason instanceof Error) throw errOrReason;
-            return errOrReason;
-        });
+        return Promise.all(promises);
     }
 
     /**
@@ -131,14 +135,18 @@ class InhibitorHandler extends EventEmitter {
      */
     testCommand(message, command){
         const promises = this.inhibitors.filter(i => i.type === 'post' && i.enabled).map(inhibitor => {
-            const inhibited = Promise.resolve(inhibitor.exec(message, command));
-            return inhibited;
+            const inhibited = inhibitor.exec(message, command);
+
+            if (inhibited instanceof Promise) return inhibited.catch(err => {
+                if (err instanceof Error) throw err;
+                return Promise.reject(inhibitor.reason);
+            });
+            
+            if (!inhibited) return Promise.resolve();
+            return Promise.reject(inhibitor.reason);
         });
 
-        return Promise.all(promises).catch(errOrReason => {
-            if (errOrReason instanceof Error) throw errOrReason;
-            return errOrReason;
-        });
+        return Promise.all(promises);
     }
 }
 
