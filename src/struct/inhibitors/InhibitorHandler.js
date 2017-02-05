@@ -112,23 +112,14 @@ class InhibitorHandler extends EventEmitter {
      * @returns {Promise.<string>}
      */
     testMessage(message){
-        return new Promise((resolve, reject) => {
-            const promises = this.inhibitors.filter(i => i.type === 'pre' && i.enabled).map(inhibitor => {
-                const inhibited = inhibitor.exec(message);
+        const promises = this.inhibitors.filter(i => i.type === 'pre' && i.enabled).map(inhibitor => {
+            const inhibited = Promise.resolve(inhibitor.exec(message));
+            return inhibited;
+        });
 
-                if (inhibited instanceof Promise) return inhibited.catch(err => {
-                    if (err instanceof Error) throw err;
-                    throw inhibitor.reason;
-                });
-                
-                if (!inhibited) return Promise.resolve();
-                return Promise.reject(inhibitor.reason);
-            });
-
-            Promise.all(promises).then(resolve).catch(errOrReason => {
-                if (errOrReason instanceof Error) throw errOrReason;
-                reject(errOrReason);
-            });
+        return Promise.all(promises).catch(errOrReason => {
+            if (errOrReason instanceof Error) throw errOrReason;
+            return errOrReason;
         });
     }
 
@@ -139,23 +130,14 @@ class InhibitorHandler extends EventEmitter {
      * @returns {Promise.<string>}
      */
     testCommand(message, command){
-        return new Promise((resolve, reject) => {
-            const promises = this.inhibitors.filter(i => i.type === 'post' && i.enabled).map(inhibitor => {
-                const inhibited = inhibitor.exec(message, command);
+        const promises = this.inhibitors.filter(i => i.type === 'pre' && i.enabled).map(inhibitor => {
+            const inhibited = Promise.resolve(inhibitor.exec(message, command));
+            return inhibited;
+        });
 
-                if (inhibited instanceof Promise) return inhibited.catch(err => {
-                    if (err instanceof Error) throw err;
-                    throw inhibitor.reason;
-                });
-                
-                if (!inhibited) return Promise.resolve();
-                return Promise.reject(inhibitor.reason);
-            });
-
-            Promise.all(promises).then(resolve).catch(errOrReason => {
-                if (errOrReason instanceof Error) throw errOrReason;
-                reject(errOrReason);
-            });
+        return Promise.all(promises).catch(errOrReason => {
+            if (errOrReason instanceof Error) throw errOrReason;
+            return errOrReason;
         });
     }
 }
