@@ -27,9 +27,9 @@ class Inhibitor {
 
         /**
          * When the inhibitor is ran.
-         * @type {boolean}
+         * @type {string}
          */
-        this.type = !!options.type;
+        this.type = options.type || 'post';
 
         /**
          * Function called to inhibit.

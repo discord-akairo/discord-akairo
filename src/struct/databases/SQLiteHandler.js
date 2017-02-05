@@ -17,7 +17,7 @@ class SQLiteHandler extends EventEmitter {
     /**
      * Creates an SQLiteHandler. Tables must have an 'id' column.
      * @param {string} filepath - Path to .sqlite file.
-     * @param {SQLiteOptions} options - Options for the handler.
+     * @param {SQLiteOptions} [options={}] - Options for the handler.
      */
     constructor(filepath, options = {}){
         super();
@@ -150,7 +150,7 @@ class SQLiteHandler extends EventEmitter {
      */
     add(id){
         if (!this.db) return Promise.reject(new Error('Database not opened.'));
-        if (this.has(id)) return Promise.reject(`${id} already exists.`);
+        if (this.has(id)) return Promise.reject(new Error(`${id} already exists.`));
 
         return this.db.run(`INSERT INTO "${this.tableName}" (id) VALUES ('${id}')`).then(() => {
             const config = Object.assign({}, this.defaultConfig);
@@ -187,7 +187,7 @@ class SQLiteHandler extends EventEmitter {
      */
     remove(id){
         if (!this.db) return Promise.reject(new Error('Database not opened.'));
-        if (!this.has(id)) return Promise.reject(`${id} does not exist.`);
+        if (!this.has(id)) return Promise.reject(new Error(`${id} does not exist.`));
         
         return this.db.run(`DELETE FROM "${this.tableName}" WHERE id = '${id}'`).then(() => {
             this.memory.delete(id);
