@@ -15,13 +15,13 @@ A modular and customizable bot framework for Discord.js v11.
 Everything is reloadable, commands are easy to make, and argument parsing is very flexible.  
 
 ```js
-const Discord = require('discord.js');
-const Akairo = require('discord-akairo');
+const { Client } = require('discord.js');
+const { Framework } = require('discord-akairo');
 
-const client = new Discord.Client();
-const akairo = new Akairo.Framework(client, {
-    ownerID: 'ID',
-    prefix: '!',
+const client = new Client();
+const akairo = new Framework(client, {
+    ownerID: '9876543210',
+    prefix: '$',
     commandDirectory: './src/commands/',
     inhibitorDirectory: './src/inhibitors/',
     listenerDirectory: './src/listeners/'
@@ -45,7 +45,7 @@ If you need more help, message me on Discord: 1Computer#7952.
 ## Examples
 #### Commands and Arguments
 ```js
-const Command = require('discord-akairo').Command;
+const { Command } = require('discord-akairo');
 
 function exec(message, args){
     let random = Math.random() * args.limit + 1;
@@ -78,7 +78,7 @@ module.exports = new Command('roll', exec, {
 
 #### Command Inhibitors
 ```js
-const Inhibitor = require('discord-akairo').Inhibitor;
+const { Inhibitor } = require('discord-akairo');
 const blockedUsers = ['1234', '5678', '1357', '2468'];
 
 function exec(message){
@@ -92,7 +92,7 @@ module.exports = new Inhibitor('blacklist', exec, {
 
 #### Event Listeners
 ```js
-const Listener = require('discord-akairo').Listener;
+const { Listener } = require('discord-akairo');
 
 function exec(message, command, reason){
     const replies = {
@@ -115,6 +115,7 @@ module.exports = new Listener('commandBlocked', exec, {
 #### Reloading
 ```js
 // Somewhere...
+
 commandHandler.reload('roll');
 inhibitorHandler.reload('blacklist');
 listenerHandler.reload('commandBlocked');
@@ -124,17 +125,28 @@ listenerHandler.reload('commandBlocked');
 
 #### SQLite Support
 ```js
-const guildSQL = new Akairo.SQLiteHandler('./databases/guilds.sqlite', {
+const { SQLiteHandler } = require('discord-akairo');
+
+const guildSQL = new SQLiteHandler('./databases/guilds.sqlite', {
     tableName: 'configs',
     defaultConfig: {
-        prefix: '!'
+        prefix: '$'
     }
 });
 
 akairo.login('TOKEN').then(() => {
-    guildSQL.init(client.guilds.map(g => g.id)).then(() => {
+    guildSQL.init(client.guilds.keyArray()).then(() => {
         const prefix = guildSQL.get('1234567890').prefix;
-        console.log(prefix) // Hopefully not '!'
+        console.log(prefix); // Hopefully not '!'
     });
 });
+
+// And inside framework options...
+
+{
+    prefix: message => {
+        const id = message.guild ? mesage.guild.id : 'default';
+        return guildSQL.get(id).prefix;
+    }
+}
 ```
