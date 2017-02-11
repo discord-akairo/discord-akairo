@@ -72,17 +72,39 @@ class AkairoClient extends Client {
              */
             this.listenerHandler = new ListenerHandler(this, options);
         }
+
+        /**
+         * Databases added.
+         * @type {Object}
+         */
+        this.databases = {};
     }
 
     /**
-     * Logins the client and creates a listener on client message event. Resolves once client is ready.
+     * Adds a database that will be initialized once ready.
+     * @param {string} name - Name of database.
+     * @param {SQLiteHandler} database - The database.
+     */
+    addDatabase(name, database){
+        this.databases[name] = database;
+    }
+
+    /**
+     * Logins the client, creates message listener, and init databases. Resolves once client is ready.
      * @param {string} token - Client token.
      * @returns {Promise}
      */
     login(token){
         return new Promise((resolve, reject) => {
             super.login(token).catch(reject);
-            this.once('ready', resolve);
+            this.once('ready', () => {
+                const promises = Object.keys(this.databases).map(key => {
+                    const ids = this.databases[key].init(this);
+                    this.databases[key].load(ids);
+                });
+
+                Promise.all(promises).then(() => resolve()).catch(reject);
+            });
 
             if (this.commandHandler) this.on('message', m => { this.commandHandler.handle(m); });
         });

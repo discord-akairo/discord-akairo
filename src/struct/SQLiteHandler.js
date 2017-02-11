@@ -11,6 +11,7 @@ let sql;
  * @prop {string} [tablename='configs'] - Name of the table.
  * @prop {Object} [defaultConfig={}] - Default configuration.
  * @prop {string[]} [json=[]] - Array of keys to parse and stringify as JSON.
+ * @prop {function} [init] - Function <code>(client => {})</code> that returns an array of IDs.
  */
 
 /** @extends EventEmitter */
@@ -52,6 +53,12 @@ class SQLiteHandler extends EventEmitter {
          * @type {string[]}
          */
         this.json = options.json || [];
+
+        /**
+         * Function called to initialize IDs.
+         * @type {function}
+         */
+        this.init = this.init;
 
         /**
          * The database.
@@ -119,11 +126,11 @@ class SQLiteHandler extends EventEmitter {
     }
 
     /**
-     * Initializes handler and database with IDs.
+     * Loads handler and database with IDs.
      * @param {string[]} ids - Array of IDs.
      * @returns {Promise.<SQLiteHandler>}
      */
-    init(ids){
+    load(ids){
         return this.open().then(db => {
             return db.all(`SELECT * FROM "${this.tableName}"`).then(rows => {
                 rows.forEach(row => {

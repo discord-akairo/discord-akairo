@@ -125,13 +125,6 @@ listenerHandler.reload('commandBlocked');
 ```js
 const { SQLiteHandler, AkairoClient } = require('discord-akairo');
 
-const guildSQL = new SQLiteHandler('./databases/guilds.sqlite', {
-    tableName: 'configs',
-    defaultConfig: {
-        prefix: '$'
-    }
-});
-
 const client = new AkairoClient({
     ownerID: '9876543210',
     prefix: '$',
@@ -140,14 +133,20 @@ const client = new AkairoClient({
     listenerDirectory: './src/listeners/',
     prefix: message => {
         const id = message.guild ? mesage.guild.id : 'default';
-        return guildSQL.get(id).prefix;
+        return client.databases.guilds.get(id).prefix;
     }
 });
 
-akairo.login('TOKEN').then(() => {
-    guildSQL.init(client.guilds.keyArray()).then(() => {
-        const prefix = guildSQL.get('1234567890').prefix;
-        console.log(prefix); // Hopefully not '!'
-    });
+client.addDatabase('guilds', new SQLiteHandler('./databases/guilds.sqlite', {
+    init: client => client.guilds.keyArray(),
+    tableName: 'configs',
+    defaultConfig: {
+        prefix: '$'
+    }
+});
+
+client.login('TOKEN').then(() => {
+    const prefix = client.databases.guilds.get('1234567890').prefix;
+    console.log(prefix); // Hopefully not '!'
 });
 ```
