@@ -298,6 +298,11 @@ class Command {
                     const res = val => this.client.util.resolveRole(val, message.guild, false, true);
                     if (!word) return res(def);
                     return res(word) || res(def);
+                },
+                [ArgumentTypes.EMOJI]: () => {
+                    const res = val => this.client.util.resolveEmoji(val, message.guild, false, true);
+                    if (!word) return res(def);
+                    return res(word) || res(def);
                 }
             };
 

@@ -18,7 +18,8 @@ module.exports = {
         CHANNEL: 'channel',
         TEXT_CHANNEL: 'textChannel',
         VOICE_CHANNEL: 'voiceChannel',
-        ROLE: 'role'
+        ROLE: 'role',
+        EMOJI: 'emoji'
     },
     ArgumentSplits: {
         PLAIN: 'plain',
