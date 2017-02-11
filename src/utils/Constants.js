@@ -30,7 +30,9 @@ module.exports = {
     AkairoHandlerEvents: {
         ADD: 'add',
         REMOVE: 'remove',
-        RELOAD: 'reload'
+        RELOAD: 'reload',
+        ENABLE: 'enable',
+        DISABLE: 'disable'
     },
     CommandHandlerEvents: {
         MESSAGE_BLOCKED: 'messageBlocked',

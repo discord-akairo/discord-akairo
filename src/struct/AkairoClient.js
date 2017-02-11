@@ -1,8 +1,8 @@
 const { Client } = require('discord.js');
-const CommandHandler = require('./commands/CommandHandler');
-const InhibitorHandler = require('./inhibitors/InhibitorHandler');
-const ListenerHandler = require('./listeners/ListenerHandler');
-const ClientUtil = require('./utils/ClientUtil');
+const CommandHandler = require('./CommandHandler');
+const InhibitorHandler = require('./InhibitorHandler');
+const ListenerHandler = require('./ListenerHandler');
+const ClientUtil = require('../utils/ClientUtil');
 
 /**
  * Options used to determine how the framework behaves.
@@ -83,7 +83,7 @@ class AkairoClient extends Client {
         return new Promise((resolve, reject) => {
             super.login(token).catch(reject);
             this.once('ready', resolve);
-            
+
             if (this.commandHandler) this.on('message', m => { this.commandHandler.handle(m); });
         });
     }

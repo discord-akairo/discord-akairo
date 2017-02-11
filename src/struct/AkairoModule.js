@@ -1,3 +1,5 @@
+const { AkairoHandlerEvents } = require('../utils/Constants');
+
 /**
  * Options for module.
  * @typedef {Object} ModuleOptions
@@ -78,6 +80,7 @@ class AkairoModule {
     enable(){
         if (this.enabled) return;
         this.enabled = true;
+        this.handler.emit(AkairoHandlerEvents.ENABLE, this);
     }
 
     /**
@@ -86,6 +89,7 @@ class AkairoModule {
     disable(){
         if (!this.enabled) return;
         this.enabled = false;
+        this.handler.emit(AkairoHandlerEvents.DISABLE, this);
     }
 
     /**

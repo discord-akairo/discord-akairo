@@ -1,4 +1,4 @@
-const AkairoModule = require('../AkairoModule');
+const AkairoModule = require('./AkairoModule');
 
 /**
  * Options to use for listener execution behavior.

@@ -1,4 +1,4 @@
-const AkairoHandler = require('../AkairoHandler');
+const AkairoHandler = require('./AkairoHandler');
 const { Collection } = require('discord.js');
 const EventEmitter = require('events');
 

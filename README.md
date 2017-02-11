@@ -123,12 +123,24 @@ listenerHandler.reload('commandBlocked');
 
 #### SQLite Support
 ```js
-const { SQLiteHandler } = require('discord-akairo');
+const { SQLiteHandler, AkairoClient } = require('discord-akairo');
 
 const guildSQL = new SQLiteHandler('./databases/guilds.sqlite', {
     tableName: 'configs',
     defaultConfig: {
         prefix: '$'
+    }
+});
+
+const client = new AkairoClient({
+    ownerID: '9876543210',
+    prefix: '$',
+    commandDirectory: './src/commands/',
+    inhibitorDirectory: './src/inhibitors/',
+    listenerDirectory: './src/listeners/',
+    prefix: message => {
+        const id = message.guild ? mesage.guild.id : 'default';
+        return guildSQL.get(id).prefix;
     }
 });
 
@@ -138,13 +150,4 @@ akairo.login('TOKEN').then(() => {
         console.log(prefix); // Hopefully not '!'
     });
 });
-
-// And inside the options...
-
-{
-    prefix: message => {
-        const id = message.guild ? mesage.guild.id : 'default';
-        return guildSQL.get(id).prefix;
-    }
-}
 ```

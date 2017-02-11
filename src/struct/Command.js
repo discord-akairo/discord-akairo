@@ -1,4 +1,4 @@
-const AkairoModule = require('../AkairoModule');
+const AkairoModule = require('./AkairoModule');
 const { ArgumentMatches, ArgumentTypes, ArgumentSplits } = require('../utils/Constants');
 
 /**

@@ -1,4 +1,4 @@
-const AkairoHandler = require('../AkairoHandler');
+const AkairoHandler = require('./AkairoHandler');
 const { CommandHandlerEvents, BuiltInReasons } = require('../utils/Constants');
 
 /** @extends AkairoHandler */

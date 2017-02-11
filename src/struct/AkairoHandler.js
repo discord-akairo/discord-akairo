@@ -2,8 +2,8 @@ const path = require('path');
 const EventEmitter = require('events');
 const rread = require('readdir-recursive');
 const AkairoModule = require('./AkairoModule');
-const Category = require('./utils/Category');
-const { AkairoHandlerEvents } = require('./utils/Constants');
+const Category = require('../utils/Category');
+const { AkairoHandlerEvents } = require('../utils/Constants');
 const { Collection } = require('discord.js');
 
 /** @extends EventEmitter */
@@ -167,4 +167,16 @@ module.exports = AkairoHandler;
  * Emitted when a module is reloaded.
  * @event AkairoHandler#reload
  * @param {AkairoModule} mod - Module reloaded.
+ */
+
+/**
+ * Emitted when a module is enabled.
+ * @event AkairoHandler#enable
+ * @param {AkairoModule} mod - Module enabled.
+ */
+
+/**
+ * Emitted when a module is disabled.
+ * @event AkairoHandler#disable
+ * @param {AkairoModule} mod - Module disabled.
  */

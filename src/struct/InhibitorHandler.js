@@ -1,4 +1,4 @@
-const AkairoHandler = require('../AkairoHandler');
+const AkairoHandler = require('./AkairoHandler');
 
 /** @extends AkairoHandler */
 class InhibitorHandler extends AkairoHandler {
