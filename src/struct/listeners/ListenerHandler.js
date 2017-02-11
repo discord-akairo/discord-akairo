@@ -26,6 +26,8 @@ class ListenerHandler extends AkairoHandler {
             if (this.emitters.has(key)) return;
             this.emitters.set(key, options.emitters[key]);
         });
+
+        this.modules.forEach(m => this.register(m.id));
     }
 
     /**
@@ -43,7 +45,6 @@ class ListenerHandler extends AkairoHandler {
      */
     load(filepath){
         const listener = super.load(filepath);
-        this.register(listener);
         return listener;
     }
 

@@ -19,6 +19,7 @@ class Listener extends AkairoModule {
      */
     constructor(id, exec, options = {}){
         super(id, exec, options);
+        this.exec = this.exec.bind(this);
 
         /**
          * The event emitter.
