@@ -58,7 +58,7 @@ class SQLiteHandler extends EventEmitter {
          * Function called to initialize IDs.
          * @type {function}
          */
-        this.init = this.init;
+        this.init = options.init || (() => []);
 
         /**
          * The database.
