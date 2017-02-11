@@ -1,4 +1,5 @@
 const AkairoHandler = require('./AkairoHandler');
+const Command = require('./Command');
 const { CommandHandlerEvents, BuiltInReasons } = require('../utils/Constants');
 
 /** @extends AkairoHandler */
@@ -9,7 +10,7 @@ class CommandHandler extends AkairoHandler {
      * @param {Object} options - Options from client.
      */
     constructor(client, options = {}){
-        super(client, options.commandDirectory);
+        super(client, options.commandDirectory, Command);
 
         /**
          * Whether or not the built-in pre-message inhibitors are disabled.

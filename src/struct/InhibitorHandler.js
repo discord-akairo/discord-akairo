@@ -1,4 +1,5 @@
 const AkairoHandler = require('./AkairoHandler');
+const Inhibitor = require('./Inhibitor');
 
 /** @extends AkairoHandler */
 class InhibitorHandler extends AkairoHandler {
@@ -8,7 +9,7 @@ class InhibitorHandler extends AkairoHandler {
      * @param {Object} options - Options from client.
      */
     constructor(client, options = {}){
-        super(client, options.inhibitorDirectory);
+        super(client, options.inhibitorDirectory, Inhibitor);
     }
 
     /**

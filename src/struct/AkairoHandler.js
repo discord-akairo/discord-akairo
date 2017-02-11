@@ -12,8 +12,9 @@ class AkairoHandler extends EventEmitter {
      * Handles modules.
      * @param {AkairoClient} client - The Akairo client.
      * @param {string} directory - Directory to modules.
+     * @param {class} classToHandle - Only instances of this can be handled. Other classes are ignored.
      */
-    constructor(client, directory){
+    constructor(client, directory, classToHandle){
         super();
 
         /**
@@ -29,6 +30,13 @@ class AkairoHandler extends EventEmitter {
          * @type {string}
          */
         this.directory = path.resolve(directory);
+
+        /**
+         * Class to handler.
+         * @readonly
+         * @type {class}
+         */
+        this.classToHandle = classToHandle;
 
         /**
          * Modules loaded, mapped by ID to AkairoModule.
@@ -56,7 +64,7 @@ class AkairoHandler extends EventEmitter {
     load(filepath){
         const mod = require(filepath);
 
-        if (!(mod instanceof AkairoModule)) return;
+        if (!(mod instanceof this.classToHandle)) return;
         if (this.modules.has(mod.id)) throw new Error(`${mod.id} already loaded.`);
 
         mod.filepath = filepath;

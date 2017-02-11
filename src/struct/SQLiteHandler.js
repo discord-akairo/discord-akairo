@@ -127,6 +127,7 @@ class SQLiteHandler extends EventEmitter {
 
     /**
      * Loads handler and database with IDs.
+     * Use manually if you want to load database before client is ready.
      * @param {string[]} ids - Array of IDs.
      * @returns {Promise.<SQLiteHandler>}
      */
