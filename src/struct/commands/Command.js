@@ -327,7 +327,7 @@ class Command {
             if (arg.match === ArgumentMatches.REST){
                 word = noPrefixWords.slice(arg.index !== undefined ? arg.index : i) || '';
             } else {
-                word = noPrefixWords[arg.index !== undefined ? arg.index : i] || '';
+                word = noPrefixWords[arg.index !== undefined ? arg.index : i].join(' ') || '';
             }
 
             if ((this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY) && /^".*"$/.test(word)) word = word.slice(1, -1);
