@@ -1,3 +1,4 @@
+const { Client } = require('discord.js');
 const CommandHandler = require('./commands/CommandHandler');
 const InhibitorHandler = require('./inhibitors/InhibitorHandler');
 const ListenerHandler = require('./listeners/ListenerHandler');
@@ -5,7 +6,8 @@ const ClientUtil = require('./utils/ClientUtil');
 
 /**
  * Options used to determine how the framework behaves.
- * @typedef {Object} FrameworkOptions
+ * This is also passed to Discord JS's client options.
+ * @typedef {Object} AkairoOptions
  * @prop {string} [ownerID=''] - Discord ID of the client owner. Defines client.ownerID.
  * @prop {boolean} [selfbot=false] - Marks this bot as a selfbot. Defines client.selfbot.
  * @prop {string} [commandDirectory] - Directory to commands.
@@ -18,23 +20,31 @@ const ClientUtil = require('./utils/ClientUtil');
  * @prop {Object} [emitters={}] - Emitters to load onto the listener handler.
  */
 
-class Framework {
+class AkairoClient extends Client {
     /**
-     * The Akairo Framework. Creates the handlers and sets them up.
-     * @param {Client} client - The Discord.js client.
-     * @param {FrameworkOptions} options - Options to use.
+     * The Akairo client. Creates the handlers and sets them up.
+     * @param {AkairoOptions} options - Options to use for the framework and the client.
      */
-    constructor(client, options = {}){
-        /**
-         * The Discord.js client.
-         * @readonly
-         * @type {Client}
-         */
-        this.client = client;
+    constructor(options = {}){
+        super(options);
 
-        this.client.ownerID = options.ownerID;
-        this.client.selfbot = !!options.selfbot;
-        this.client.util = new ClientUtil(this.client);
+        /**
+         * The ID of the owner.
+         * @type {string}
+         */
+        this.ownerID = options.ownerID;
+
+        /**
+         * Whether or not this is a selfbot.
+         * @type {boolean}
+         */
+        this.selfbot = !!options.selfbot;
+
+        /**
+         * Utility methods.
+         * @type {ClientUtil}
+         */
+        this.util = new ClientUtil(this.client);
 
         if (options.commandDirectory){
             /**
@@ -71,12 +81,12 @@ class Framework {
      */
     login(token){
         return new Promise((resolve, reject) => {
-            this.client.login(token).catch(reject);
-            this.client.once('ready', resolve);
-
-            if (this.commandHandler) this.client.on('message', m => { this.commandHandler.handle(m); });
+            super.login(token).catch(reject);
+            this.once('ready', resolve);
+            
+            if (this.commandHandler) this.on('message', m => { this.commandHandler.handle(m); });
         });
     }
 }
 
-module.exports = Framework;
+module.exports = AkairoClient;

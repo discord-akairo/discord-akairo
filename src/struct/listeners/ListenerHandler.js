@@ -10,18 +10,18 @@ const { ListenerHandlerEvents } = require('../utils/Constants');
 class ListenerHandler extends EventEmitter {
     /**
      * Loads listeners and register them with EventEmitters.
-     * @param {Framework} framework - The Akairo framework.
-     * @param {Object} options - Options from framework.
+     * @param {AkairoClient} client - The Akairo client.
+     * @param {Object} options - Options from client.
      */
-    constructor(framework, options){
+    constructor(client, options){
         super();
 
         /**
-         * The Akairo framework.
+         * The Akairo client.
          * @readonly
-         * @type {Framework}
+         * @type {AkairoClient}
          */
-        this.framework = framework;
+        this.client = client;
 
         /**
          * Directory to listeners.
@@ -35,10 +35,10 @@ class ListenerHandler extends EventEmitter {
          * @type {Collection.<string, EventEmitter>}
          */
         this.emitters = new Collection();
-        this.emitters.set('client', this.framework.client);
-        this.emitters.set('commandHandler', this.framework.commandHandler);
-        this.emitters.set('inhibitorHandler', this.framework.inhibitorHandler);
-        this.emitters.set('listenerHandler', this.framework.listenerHandler);
+        this.emitters.set('client', this.client);
+        this.emitters.set('commandHandler', this.client.commandHandler);
+        this.emitters.set('inhibitorHandler', this.client.inhibitorHandler);
+        this.emitters.set('listenerHandler', this.client.listenerHandler);
 
         if (options.emitters) Object.keys(options.emitters).forEach(key => {
             if (this.emitters.has(key)) return;
@@ -75,8 +75,7 @@ class ListenerHandler extends EventEmitter {
         if (this.listeners.has(listener.id)) throw new Error(`Listener ${listener.id} already loaded.`);
 
         listener.filepath = filepath;
-        listener.framework = this.framework;
-        listener.client = this.framework.client;
+        listener.client = this.client;
         listener.listenerHandler = this;
 
         this.listeners.set(listener.id, listener);

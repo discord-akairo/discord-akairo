@@ -10,18 +10,18 @@ const { InhibitorHandlerEvents } = require('../utils/Constants');
 class InhibitorHandler extends EventEmitter {
     /**
      * Loads inhibitors and checks messages.
-     * @param {Framework} framework - The Akairo framework.
-     * @param {Object} options - Options from framework.
+     * @param {AkairoClient} client - The Akairo client.
+     * @param {Object} options - Options from client.
      */
-    constructor(framework, options = {}){
+    constructor(client, options = {}){
         super();
 
         /**
-         * The Akairo framework.
+         * The Akairo client.
          * @readonly
-         * @type {Framework}
+         * @type {AkairoClient}
          */
-        this.framework = framework;
+        this.client = client;
 
         /**
          * Directory to inhibitors.
@@ -60,8 +60,7 @@ class InhibitorHandler extends EventEmitter {
         if (this.inhibitors.has(inhibitor.id)) throw new Error(`Inhibitor ${inhibitor.id} already loaded.`);
 
         inhibitor.filepath = filepath;
-        inhibitor.framework = this.framework;
-        inhibitor.client = this.framework.client;
+        inhibitor.client = this.client;
         inhibitor.inhibitorHandler = this;
 
         if (!this.categories.has(inhibitor.category)) this.categories.set(inhibitor.category, new Category(inhibitor.category));

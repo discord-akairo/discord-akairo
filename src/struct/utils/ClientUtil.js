@@ -2,14 +2,14 @@ const { Constants } = require('discord.js');
 
 class ClientUtil {
     /**
-     * Client utilities to help with common tasks. Accessible in client.util.
-     * @param {Client} client - The Discord.js client.
+     * Client utilities to help with common tasks.
+     * @param {Client} client - The client.
      */
     constructor(client){
         /**
-         * The Discord.js client.
+         * The Akairo client.
          * @readonly
-         * @type {Client}
+         * @type {AkairoClient}
          */
         this.client = client;
     }

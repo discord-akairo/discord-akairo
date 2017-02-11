@@ -1,5 +1,5 @@
 module.exports = {
-    Framework: require('./struct/Framework'),
+    AkairoClient: require('./struct/AkairoClient'),
     CommandHandler: require('./struct/commands/CommandHandler'),
     InhibitorHandler: require('./struct/inhibitors/InhibitorHandler'),
     ListenerHandler: require('./struct/listeners/ListenerHandler'),

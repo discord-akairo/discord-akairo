@@ -15,11 +15,9 @@ A modular and customizable bot framework for Discord.js v11.
 Everything is reloadable, commands are easy to make, and argument parsing is very flexible.  
 
 ```js
-const { Client } = require('discord.js');
-const { Framework } = require('discord-akairo');
+const { AkairoClient } = require('discord-akairo');
 
-const client = new Client();
-const akairo = new Framework(client, {
+const client = new AkairoClient({
     ownerID: '9876543210',
     prefix: '$',
     commandDirectory: './src/commands/',
@@ -27,7 +25,7 @@ const akairo = new Framework(client, {
     listenerDirectory: './src/listeners/'
 });
 
-akairo.login('TOKEN').then(() => {
+client.login('TOKEN').then(() => {
     console.log('Started up!');
 });
 ```
@@ -141,7 +139,7 @@ akairo.login('TOKEN').then(() => {
     });
 });
 
-// And inside framework options...
+// And inside the options...
 
 {
     prefix: message => {

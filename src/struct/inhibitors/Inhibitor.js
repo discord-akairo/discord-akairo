@@ -58,16 +58,9 @@ class Inhibitor {
         this.filepath = null;
 
         /**
-         * The Akairo framework.
+         * The Akairo client.
          * @readonly
-         * @type {Framework}
-         */
-        this.framework = null;
-
-        /**
-         * The Discord.js client.
-         * @readonly
-         * @type {Client}
+         * @type {AkairoClient}
          */
         this.client = null;
 

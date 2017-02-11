@@ -10,18 +10,18 @@ const { CommandHandlerEvents, BuiltInReasons } = require('../utils/Constants');
 class CommandHandler extends EventEmitter {
     /**
      * Loads commands and handles messages.
-     * @param {Framework} framework - The Akairo framework.
-     * @param {Object} options - Options from framework.
+     * @param {AkairoClient} client - The Akairo client.
+     * @param {Object} options - Options from client.
      */
-    constructor(framework, options = {}){
+    constructor(client, options = {}){
         super();
 
         /**
-         * The Akairo framework.
+         * The Akairo client.
          * @readonly
-         * @type {Framework}
+         * @type {AkairoClient}
          */
-        this.framework = framework;
+        this.client = client;
 
         /**
          * Directory to commands.
@@ -84,8 +84,7 @@ class CommandHandler extends EventEmitter {
         if (this.commands.has(command.id)) throw new Error(`Command ${command.id} already loaded.`);
 
         command.filepath = filepath;
-        command.framework = this.framework;
-        command.client = this.framework.client;
+        command.client = this.client;
         command.commandHandler = this;
 
         this.commands.set(command.id, command);
@@ -182,12 +181,12 @@ class CommandHandler extends EventEmitter {
      */
     handle(message){
         if (!this.preInhibitors){
-            if (message.author.id !== this.framework.client.user.id && this.framework.client.selfbot){
+            if (message.author.id !== this.client.user.id && this.client.selfbot){
                 this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.NOT_SELF);
                 return;
             }
 
-            if (message.author.id === this.framework.client.user.id && !this.framework.client.selfbot){
+            if (message.author.id === this.client.user.id && !this.client.selfbot){
                 this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.CLIENT);
                 return;
             }
@@ -198,8 +197,8 @@ class CommandHandler extends EventEmitter {
             }
         }
 
-        const pretest = this.framework.inhibitorHandler
-        ? m => this.framework.inhibitorHandler.testMessage(m)
+        const pretest = this.client.inhibitorHandler
+        ? m => this.client.inhibitorHandler.testMessage(m)
         : () => Promise.resolve();
 
         pretest(message).then(() => {
@@ -211,7 +210,7 @@ class CommandHandler extends EventEmitter {
                 start = prefix;
             } else
             if (allowMention){
-                const mentionRegex = new RegExp(`^<@!?${this.framework.client.user.id}>`);
+                const mentionRegex = new RegExp(`^<@!?${this.client.user.id}>`);
                 const mentioned = message.content.match(mentionRegex);
                 
                 if (mentioned){
@@ -233,7 +232,7 @@ class CommandHandler extends EventEmitter {
             if (!command.enabled) return this.emit(CommandHandlerEvents.COMMAND_DISABLED, message, command);
 
             if (!this.postInhibitors){
-                if (command.ownerOnly && message.author.id !== this.framework.client.ownerID){
+                if (command.ownerOnly && message.author.id !== this.client.ownerID){
                     this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.OWNER);
                     return;
                 }
@@ -249,8 +248,8 @@ class CommandHandler extends EventEmitter {
                 }
             }
 
-            const test = this.framework.inhibitorHandler
-            ? (m, c) => this.framework.inhibitorHandler.testCommand(m, c)
+            const test = this.client.inhibitorHandler
+            ? (m, c) => this.client.inhibitorHandler.testCommand(m, c)
             : () => Promise.resolve();
 
             return test(message, command).then(() => {
