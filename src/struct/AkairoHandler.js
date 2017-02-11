@@ -1,10 +1,10 @@
 const path = require('path');
 const EventEmitter = require('events');
 const rread = require('readdir-recursive');
-const { Collection } = require('discord.js');
-const Category = require('../utils/Category');
 const AkairoModule = require('./AkairoModule');
-const { AkairoHandlerEvents } = require('../utils/Constants');
+const Category = require('./utils/Category');
+const { AkairoHandlerEvents } = require('./utils/Constants');
+const { Collection } = require('discord.js');
 
 /** @extends EventEmitter */
 class AkairoHandler extends EventEmitter {
