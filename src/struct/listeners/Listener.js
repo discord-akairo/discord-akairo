@@ -1,3 +1,5 @@
+const AkairoModule = require('../AkairoModule');
+
 /**
  * Options to use for listener execution behavior.
  * @typedef {Object} ListenerOptions
@@ -7,7 +9,8 @@
  * @prop {string} [category='default'] - Category ID for organization purposes.
  */
 
-class Listener {
+/** @extends AkairoModule */
+class Listener extends AkairoModule {
     /**
      * Creates a new Listener.
      * @param {string} id - Listener ID.
@@ -15,11 +18,7 @@ class Listener {
      * @param {ListenerOptions} [options={}] - Options for the listener.
      */
     constructor(id, exec, options = {}){
-        /**
-         * ID of the listener.
-         * @type {string}
-         */
-        this.id = id;
+        super(id, exec, options);
 
         /**
          * The event emitter.
@@ -38,87 +37,30 @@ class Listener {
          * @type {string}
          */
         this.type = options.type || 'on';
-
-        /**
-         * Category this listener belongs to.
-         * @type {Category}
-         */
-        this.category = options.category || 'default';
-
-        /**
-         * The function called when event emitted.
-         * @type {function}
-         */
-        this.exec = exec.bind(this);
-
-        /**
-         * Whether or not this listener is enabled.
-         * @type {boolean}
-         */
-        this.enabled = true;
-
-        /**
-         * Path to listener file.
-         * @readonly
-         * @type {string}
-         */
-        this.filepath = null;
-
-        /**
-         * The Akairo client.
-         * @readonly
-         * @type {AkairoClient}
-         */
-        this.client = null;
-
-        /**
-         * The listener handler.
-         * @readonly
-         * @type {ListenerHandler}
-         */
-        this.listenerHandler = null;
     }
 
     /**
-     * Reloads the listener.
+     * The listener handler.
+     * @type {ListenerHandler}
      */
-    reload(){
-        this.listenerHandler.reload(this.id);
-    }
-
-    /**
-     * Removes the listener. It can be readded with the listener handler.
-     */
-    remove(){
-        this.listenerHandler.remove(this.id);
+    get listenerHandler(){
+        return this.handler;
     }
 
     /**
      * Enables the listener.
      */
     enable(){
-        if (this.enabled) return;
-
+        super.enable();
         this.listenerHandler.register(this.id);
-        this.enabled = true;
     }
 
     /**
      * Disables the listener.
      */
     disable(){
-        if (!this.enabled) return;
-
+        super.disable();
         this.listenerHandler.deregister(this.id);
-        this.enabled = false;
-    }
-
-    /**
-     * Returns the ID.
-     * @returns {string}
-     */
-    toString(){
-        return this.id;
     }
 }
 

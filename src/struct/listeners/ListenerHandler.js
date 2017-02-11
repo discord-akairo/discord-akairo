@@ -1,34 +1,16 @@
-const path = require('path');
-const EventEmitter = require('events');
-const rread = require('readdir-recursive');
+const AkairoHandler = require('../AkairoHandler');
 const { Collection } = require('discord.js');
-const Listener = require('./Listener');
-const Category = require('../utils/Category');
-const { ListenerHandlerEvents } = require('../utils/Constants');
+const EventEmitter = require('events');
 
-/** @extends EventEmitter */
-class ListenerHandler extends EventEmitter {
+/** @extends AkairoHandler */
+class ListenerHandler extends AkairoHandler {
     /**
-     * Loads listeners and register them with EventEmitters.
+     * Loads listeners and registers them with EventEmitters.
      * @param {AkairoClient} client - The Akairo client.
      * @param {Object} options - Options from client.
      */
     constructor(client, options){
-        super();
-
-        /**
-         * The Akairo client.
-         * @readonly
-         * @type {AkairoClient}
-         */
-        this.client = client;
-
-        /**
-         * Directory to listeners.
-         * @readonly
-         * @type {string}
-         */
-        this.directory = path.resolve(options.listenerDirectory);
+        super(client, options.listenerDirectory);
 
         /**
          * EventEmitters for use, mapped by name to EventEmitter. 'client', 'commandHandler', 'inhibitorHandler', 'listenerHandler' are set by default.
@@ -44,23 +26,14 @@ class ListenerHandler extends EventEmitter {
             if (this.emitters.has(key)) return;
             this.emitters.set(key, options.emitters[key]);
         });
+    }
 
-        /**
-         * Listeners loaded, mapped by ID to Listener.
-         * @type {Collection.<string, Listener>}
-         */
-        this.listeners = new Collection();
-
-        /**
-         * Listener categories, mapped by ID to Category.
-         * @type {Collection.<string, Category>}
-         */
-        this.categories = new Collection();
-
-        const filepaths = rread.fileSync(this.directory);
-        filepaths.forEach(filepath => {
-            this.load(filepath);
-        });
+    /**
+     * Collection of listeners.
+     * @type {Collection.<string, Listener>}
+     */
+    get listeners(){
+        return this.modules;
     }
 
     /**
@@ -69,82 +42,33 @@ class ListenerHandler extends EventEmitter {
      * @returns {Listener}
      */
     load(filepath){
-        const listener = require(filepath);
-
-        if (!(listener instanceof Listener)) return;
-        if (this.listeners.has(listener.id)) throw new Error(`Listener ${listener.id} already loaded.`);
-
-        listener.filepath = filepath;
-        listener.client = this.client;
-        listener.listenerHandler = this;
-
-        this.listeners.set(listener.id, listener);
-        this.register(listener.id);
-
-        if (!this.categories.has(listener.category)) this.categories.set(listener.category, new Category(listener.category));
-        const category = this.categories.get(listener.category);
-        listener.category = category;
-        category.set(listener.id, listener);
-
+        const listener = super.load(filepath);
+        this.register(listener);
         return listener;
-    }
-
-    /**
-     * Adds a listener.
-     * @param {string} filename - Filename to lookup in the directory.
-     */
-    add(filename){
-        const files = rread.fileSync(this.directory);
-        const filepath = files.find(file => file.endsWith(`${filename}.js`));
-
-        if (!filepath){
-            throw new Error(`File ${filename} not found.`);
-        }
-
-        this.emit(ListenerHandlerEvents.ADD, this.load(filepath));
     }
 
     /**
      * Removes a listener.
      * @param {string} id - ID of the listener.
+     * @returns {Listener}
      */
     remove(id){
-        const listener = this.listeners.get(id);
-        if (!listener) throw new Error(`Listener ${id} does not exist.`);
-
-        delete require.cache[require.resolve(listener.filepath)];
-        this.deregister(listener.id);
-        this.listeners.delete(listener.id);
-
-        listener.category.delete(listener.id);
-
-        this.emit(ListenerHandlerEvents.REMOVE, listener);
+        this.deregister(id);
+        return super.remove(id);
     }
 
     /**
      * Reloads a listener.
      * @param {string} id - ID of the listener.
+     * @returns {Listener}
      */
     reload(id){
-        const listener = this.listeners.get(id);
-        if (!listener) throw new Error(`Listener ${id} does not exist.`);
+        this.deregister(id);
 
-        const filepath = listener.filepath;
-
-        delete require.cache[require.resolve(listener.filepath)];
-        this.deregister(listener.id);
-        this.listeners.delete(listener.id);
-
-        listener.category.delete(listener.id);
+        const listener = super.reload(id);
+        this.register(listener.id);
         
-        this.emit(ListenerHandlerEvents.REMOVE, this.load(filepath));
-    }
-
-    /**
-     * Reloads all listeners.
-     */
-    reloadAll(){
-        this.listeners.forEach(l => l.reload());
+        return listener;
     }
     
     /**
@@ -181,21 +105,3 @@ class ListenerHandler extends EventEmitter {
 }
 
 module.exports = ListenerHandler;
-
-/**
- * Emitted when an listener is added.
- * @event ListenerHandler#add
- * @param {Listener} listener - Listener added.
- */
-
-/**
- * Emitted when an listener is removed.
- * @event ListenerHandler#remove
- * @param {Listener} listener - Listener removed.
- */
-
-/**
- * Emitted when an listener is reloaded.
- * @event ListenerHandler#reload
- * @param {Listener} listener - Listener reloaded.
- */

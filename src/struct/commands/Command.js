@@ -1,3 +1,4 @@
+const AkairoModule = require('../AkairoModule');
 const { ArgumentMatches, ArgumentTypes, ArgumentSplits } = require('../utils/Constants');
 
 /**
@@ -72,7 +73,8 @@ const { ArgumentMatches, ArgumentTypes, ArgumentSplits } = require('../utils/Con
  * @typedef {string} ArgumentSplit
  */
 
-class Command {
+/** @extends AkairoModule */
+class Command extends AkairoModule {
     /**
      * Creates a new command.
      * @param {string} id - Command ID.
@@ -80,11 +82,7 @@ class Command {
      * @param {CommandOptions} [options={}] - Options for the command.
      */
     constructor(id, exec, options = {}){
-        /**
-         * ID of the command.
-         * @type {string}
-         */
-        this.id = id;
+        super(id, exec, options);
 
         /**
          * Command names.
@@ -105,12 +103,6 @@ class Command {
             if (Array.isArray(arg.description)) arg.description = arg.description.join('\n');
             if (!arg.description) arg.description = '';
         });
-
-        /**
-         * Category this command belongs to.
-         * @type {Category}
-         */
-        this.category = options.category || 'default';
 
         /**
          * Description of the command.
@@ -141,69 +133,14 @@ class Command {
          * @type {Object}
          */
         this.options = options.custom || {};
-
-        /**
-         * Function called for command.
-         * @type {function}
-         */
-        this.exec = exec;
-
-        /**
-         * Whether or not this command is enabled.
-         * @type {boolean}
-         */
-        this.enabled = true;
-
-        /**
-         * Path to command file.
-         * @readonly
-         * @type {string}
-         */
-        this.filepath = null;
-
-        /**
-         * The Akairo client.
-         * @readonly
-         * @type {AkairoClient}
-         */
-        this.client = null;
-
-        /**
-         * The command handler.
-         * @readonly
-         * @type {CommandHandler}
-         */
-        this.commandHandler = null;
     }
 
     /**
-     * Reloads the command.
+     * The command handler.
+     * @type {CommandHandler}
      */
-    reload(){
-        this.commandHandler.reload(this.id);
-    }
-
-    /**
-     * Removes the command. It can be readded with the command handler.
-     */
-    remove(){
-        this.commandHandler.remove(this.id);
-    }
-
-    /**
-     * Enables the command.
-     */
-    enable(){
-        if (this.enabled) return;
-        this.enabled = true;
-    }
-
-    /**
-     * Disables the command.
-     */
-    disable(){
-        if (!this.enabled) return;
-        this.enabled = false;
+    get commandHandler(){
+        return this.handler;
     }
 
     /**
@@ -371,14 +308,6 @@ class Command {
         });
 
         return args;
-    }
-
-    /**
-     * Returns the ID.
-     * @returns {string}
-     */
-    toString(){
-        return this.id;
     }
 }
 

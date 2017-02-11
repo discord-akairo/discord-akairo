@@ -1,131 +1,22 @@
-const path = require('path');
-const EventEmitter = require('events');
-const rread = require('readdir-recursive');
-const { Collection } = require('discord.js');
-const Inhibitor = require('./Inhibitor');
-const Category = require('../utils/Category');
-const { InhibitorHandlerEvents } = require('../utils/Constants');
+const AkairoHandler = require('../AkairoHandler');
 
-/** @extends EventEmitter */
-class InhibitorHandler extends EventEmitter {
+/** @extends AkairoHandler */
+class InhibitorHandler extends AkairoHandler {
     /**
      * Loads inhibitors and checks messages.
      * @param {AkairoClient} client - The Akairo client.
      * @param {Object} options - Options from client.
      */
     constructor(client, options = {}){
-        super();
-
-        /**
-         * The Akairo client.
-         * @readonly
-         * @type {AkairoClient}
-         */
-        this.client = client;
-
-        /**
-         * Directory to inhibitors.
-         * @readonly
-         * @type {string}
-         */
-        this.directory = path.resolve(options.inhibitorDirectory);
-
-        /**
-         * Inhibitors loaded, mapped by ID to Inhibitor.
-         * @type {Collection.<string, Inhibitor>}
-         */
-        this.inhibitors = new Collection();
-
-        /**
-         * Inhibitor categories, mapped by ID to Category.
-         * @type {Collection.<string, Category>}
-         */
-        this.categories = new Collection();
-
-        const filepaths = rread.fileSync(this.directory);
-        filepaths.forEach(filepath => {
-            this.load(filepath);
-        });
+        super(client, options.inhibitorDirectory);
     }
 
     /**
-     * Loads an inhibitor.
-     * @param {string} filepath - Path to file.
-     * @returns {Inhibitor}
+     * Collection of inhibitors.
+     * @type {Collection.<string, Inhibitor>}
      */
-    load(filepath){
-        const inhibitor = require(filepath);
-
-        if (!(inhibitor instanceof Inhibitor)) return;
-        if (this.inhibitors.has(inhibitor.id)) throw new Error(`Inhibitor ${inhibitor.id} already loaded.`);
-
-        inhibitor.filepath = filepath;
-        inhibitor.client = this.client;
-        inhibitor.inhibitorHandler = this;
-
-        if (!this.categories.has(inhibitor.category)) this.categories.set(inhibitor.category, new Category(inhibitor.category));
-        const category = this.categories.get(inhibitor.category);
-        inhibitor.category = category;
-        category.set(inhibitor.id, inhibitor);
-
-        this.inhibitors.set(inhibitor.id, inhibitor);
-        return inhibitor;
-    }
-
-    /**
-     * Adds an inhibitor.
-     * @param {string} filename - Filename to lookup in the directory. A .js extension is assumed.
-     */
-    add(filename){
-        const files = rread.fileSync(this.directory);
-        const filepath = files.find(file => file.endsWith(`${filename}.js`));
-
-        if (!filepath){
-            throw new Error(`File ${filename} not found.`);
-        }
-
-        this.emit(InhibitorHandlerEvents.ADD, this.load(filepath));
-    }
-
-    /**
-     * Removes an inhibitor.
-     * @param {string} id - ID of the inhibitor.
-     */
-    remove(id){
-        const inhibitor = this.inhibitors.get(id);
-        if (!inhibitor) throw new Error(`Inhibitor ${id} does not exist.`);
-
-        delete require.cache[require.resolve(inhibitor.filepath)];
-        this.inhibitors.delete(inhibitor.id);
-
-        inhibitor.category.delete(inhibitor.id);
-
-        this.emit(InhibitorHandlerEvents.REMOVE, inhibitor);
-    }
-
-    /**
-     * Reloads an inhibitor.
-     * @param {string} id - ID of the inhibitor.
-     */
-    reload(id){
-        const inhibitor = this.inhibitors.get(id);
-        if (!inhibitor) throw new Error(`Inhibitor ${id} does not exist.`);
-
-        const filepath = inhibitor.filepath;
-
-        delete require.cache[require.resolve(inhibitor.filepath)];
-        this.inhibitors.delete(inhibitor.id);
-
-        inhibitor.category.delete(inhibitor.id);
-        
-        this.emit(InhibitorHandlerEvents.RELOAD, this.load(filepath));
-    }
-
-    /**
-     * Reloads all inhibitors.
-     */
-    reloadAll(){
-        this.inhibitors.forEach(i => i.reload());
+    get inhibitors(){
+        return this.modules;
     }
 
     /**
@@ -173,21 +64,3 @@ class InhibitorHandler extends EventEmitter {
 }
 
 module.exports = InhibitorHandler;
-
-/**
- * Emitted when an inhibitor is added.
- * @event InhibitorHandler#add
- * @param {Inhibitor} inhibitor - Inhibitor added.
- */
-
-/**
- * Emitted when an inhibitor is removed.
- * @event InhibitorHandler#remove
- * @param {Inhibitor} inhibitor - Inhibitor removed.
- */
-
-/**
- * Emitted when an inhibitor is reloaded.
- * @event InhibitorHandler#reload
- * @param {Inhibitor} inhibitor - Inhibitor reloaded.
- */

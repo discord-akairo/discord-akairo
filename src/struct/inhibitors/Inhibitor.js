@@ -1,3 +1,5 @@
+const AkairoModule = require('../AkairoModule');
+
 /**
  * Options to use for inhibitor execution behavior.
  * @typedef {Object} InhibitorOptions
@@ -6,7 +8,8 @@
  * @prop {string} [category='default'] - Category ID for organization purposes.
  */
 
-class Inhibitor {
+/** @extends AkairoModule */
+class Inhibitor extends AkairoModule {
     /**
      * Creates a new Inhibitor.
      * @param {string} id - Inhibitor ID.
@@ -14,11 +17,7 @@ class Inhibitor {
      * @param {InhibitorOptions} [options={}] - Options for the inhibitor.
      */
     constructor(id, exec, options = {}){
-        /**
-         * ID of the inhibitor.
-         * @type {string}
-         */
-        this.id = id;
+        super(id, exec, options);
 
         /**
          * Reason emitted when command is inhibited.
@@ -31,83 +30,14 @@ class Inhibitor {
          * @type {string}
          */
         this.type = options.type || 'post';
-
-        /**
-         * Category this inhibitor belongs to.
-         * @type {Category}
-         */
-        this.category = options.category || 'default';
-
-        /**
-         * Function called to inhibit.
-         * @type {function}
-         */
-        this.exec = exec;
-
-        /**
-         * Whether or not this inhibitor is enabled.
-         * @type {boolean}
-         */
-        this.enabled = true;
-
-        /**
-         * Path to inhibitor file.
-         * @readonly
-         * @type {string}
-         */
-        this.filepath = null;
-
-        /**
-         * The Akairo client.
-         * @readonly
-         * @type {AkairoClient}
-         */
-        this.client = null;
-
-        /**
-         * The inhibitor handler.
-         * @readonly
-         * @type {InhibitorHandler}
-         */
-        this.inhibitorHandler = null;
     }
 
     /**
-     * Reloads the inhibitor.
+     * The inhibitor handler.
+     * @type {InhibitorHandler}
      */
-    reload(){
-        this.inhibitorHandler.reload(this.id);
-    }
-    
-    /**
-     * Removes the inhibitor. It can be readded with the inhibitor handler.
-     */
-    remove(){
-        this.inhibitorHandler.remove(this.id);
-    }
-
-    /**
-     * Enables the inhibitor.
-     */
-    enable(){
-        if (this.enabled) return;
-        this.enabled = true;
-    }
-
-    /**
-     * Disables the inhibitor.
-     */
-    disable(){
-        if (!this.enabled) return;
-        this.enabled = false;
-    }
-
-    /**
-     * Returns the ID.
-     * @returns {string}
-     */
-    toString(){
-        return this.id;
+    get inhibitorHandler(){
+        return this.handler;
     }
 }
 

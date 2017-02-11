@@ -27,10 +27,12 @@ module.exports = {
         QUOTED: 'quoted',
         STICKY: 'sticky'
     },
-    CommandHandlerEvents: {
+    AkairoHandlerEvents: {
         ADD: 'add',
         REMOVE: 'remove',
-        RELOAD: 'reload',
+        RELOAD: 'reload'
+    },
+    CommandHandlerEvents: {
         MESSAGE_BLOCKED: 'messageBlocked',
         MESSAGE_INVALID: 'messageInvalid',
         COMMAND_DISABLED: 'commandDisabled',
@@ -38,16 +40,8 @@ module.exports = {
         COMMAND_STARTED: 'commandStarted',
         COMMAND_FINISHED: 'commandFinished'
     },
-    InhibitorHandlerEvents: {
-        ADD: 'add',
-        REMOVE: 'remove',
-        RELOAD: 'reload'
-    },
-    ListenerHandlerEvents: {
-        ADD: 'add',
-        REMOVE: 'remove',
-        RELOAD: 'reload'
-    },
+    InhibitorHandlerEvents: {},
+    ListenerHandlerEvents: {},
     SQLiteHandlerEvents: {
         INIT: 'init',
         ADD: 'add',

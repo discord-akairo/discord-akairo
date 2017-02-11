@@ -1,34 +1,15 @@
-const path = require('path');
-const EventEmitter = require('events');
-const rread = require('readdir-recursive');
-const { Collection } = require('discord.js');
-const Command = require('./Command');
-const Category = require('../utils/Category');
+const AkairoHandler = require('../AkairoHandler');
 const { CommandHandlerEvents, BuiltInReasons } = require('../utils/Constants');
 
-/** @extends EventEmitter */
-class CommandHandler extends EventEmitter {
+/** @extends AkairoHandler */
+class CommandHandler extends AkairoHandler {
     /**
      * Loads commands and handles messages.
      * @param {AkairoClient} client - The Akairo client.
      * @param {Object} options - Options from client.
      */
     constructor(client, options = {}){
-        super();
-
-        /**
-         * The Akairo client.
-         * @readonly
-         * @type {AkairoClient}
-         */
-        this.client = client;
-
-        /**
-         * Directory to commands.
-         * @readonly
-         * @type {string}
-         */
-        this.directory = path.resolve(options.commandDirectory);
+        super(client, options.commandDirectory);
 
         /**
          * Whether or not the built-in pre-message inhibitors are disabled.
@@ -53,104 +34,14 @@ class CommandHandler extends EventEmitter {
          * @type {function}
          */
         this.allowMention = typeof options.allowMention === 'function' ? options.allowMention : () => options.allowMention;
-
-        /**
-         * Commands loaded, mapped by ID to Command.
-         * @type {Collection.<string, Command>}
-         */
-        this.commands = new Collection();
-
-        /**
-         * Command categories, mapped by ID to Category.
-         * @type {Collection.<string, Category>}
-         */
-        this.categories = new Collection();
-
-        const filepaths = rread.fileSync(this.directory);
-        filepaths.forEach(filepath => {
-            this.load(filepath);
-        });
     }
 
     /**
-     * Loads a command.
-     * @param {string} filepath - Path to file.
-     * @returns {Command}
+     * Collection of commands.
+     * @type {Collection.<string, Command>}
      */
-    load(filepath){
-        const command = require(filepath);
-
-        if (!(command instanceof Command)) return;
-        if (this.commands.has(command.id)) throw new Error(`Command ${command.id} already loaded.`);
-
-        command.filepath = filepath;
-        command.client = this.client;
-        command.commandHandler = this;
-
-        this.commands.set(command.id, command);
-
-        if (!this.categories.has(command.category)) this.categories.set(command.category, new Category(command.category));
-        const category = this.categories.get(command.category);
-        command.category = category;
-        category.set(command.id, command);
-
-        return command;
-    }
-
-    /**
-     * Adds a command.
-     * @param {string} filename - Filename to lookup in the directory. A .js extension is assumed.
-     */
-    add(filename){
-        const files = rread.fileSync(this.directory);
-        const filepath = files.find(file => file.endsWith(`${filename}.js`));
-
-        if (!filepath){
-            throw new Error(`File ${filename} not found.`);
-        }
-
-        this.emit(CommandHandlerEvents.ADD, this.load(filepath));
-    }
-
-    /**
-     * Removes a command.
-     * @param {string} id - ID of the command.
-     */
-    remove(id){
-        const command = this.commands.get(id);
-        if (!command) throw new Error(`Command ${id} does not exist.`);
-
-        delete require.cache[require.resolve(command.filepath)];
-        this.commands.delete(command.id);
-        
-        command.category.delete(command.id);
-
-        this.emit(CommandHandlerEvents.REMOVE, command);
-    }
-
-    /**
-     * Reloads a command.
-     * @param {string} id - ID of the command.
-     */
-    reload(id){
-        const command = this.commands.get(id);
-        if (!command) throw new Error(`Command ${id} does not exist.`);
-
-        const filepath = command.filepath;
-
-        delete require.cache[require.resolve(command.filepath)];
-        this.commands.delete(command.id);
-
-        command.category.delete(command.id);
-        
-        this.emit(CommandHandlerEvents.RELOAD, this.load(filepath));
-    }
-
-    /**
-     * Reloads all commands.
-     */
-    reloadAll(){
-        this.commands.forEach(c => c.reload());
+    get commands(){
+        return this.modules;
     }
 
     /**
@@ -161,17 +52,6 @@ class CommandHandler extends EventEmitter {
     findCommand(name){
         return this.commands.find(command => {
             return command.aliases.some(a => a.toLowerCase() === name.toLowerCase());
-        });
-    }
-
-    /**
-     * Finds a category by name.
-     * @param {string} name - Name to find with.
-     * @returns {Category}
-     */
-    findCategory(name){
-        return this.categories.find(category => {
-            return category.id.toLowerCase() === name.toLowerCase();
         });
     }
 
@@ -275,24 +155,6 @@ class CommandHandler extends EventEmitter {
 }
 
 module.exports = CommandHandler;
-
-/**
- * Emitted when a command is added.
- * @event CommandHandler#add
- * @param {Command} command - Command added.
- */
-
-/**
- * Emitted when a command is removed.
- * @event CommandHandler#remove
- * @param {Command} command - Command removed.
- */
-
-/**
- * Emitted when a command is reloaded.
- * @event CommandHandler#reload
- * @param {Command} command - Command reloaded.
- */
 
 /**
  * Emitted when a message is blocked by a pre-message inhibitor. The built-in inhibitors are 'notSelf' (for selfbots), 'client', and 'bot'.

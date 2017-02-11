@@ -1,4 +1,4 @@
-const { Constants } = require('discord.js');
+const { Constants, RichEmbed } = require('discord.js');
 
 class ClientUtil {
     /**
@@ -307,6 +307,14 @@ class ClientUtil {
         return this.client.fetchUser(id, cache).then(fetched => {
             return guild.fetchMember(fetched, cache);
         });
+    }
+
+    /**
+     * Makes a RichEmbed.
+     * @returns {RichEmbed}
+     */
+    embed(){
+        return new RichEmbed();
     }
 }
 
