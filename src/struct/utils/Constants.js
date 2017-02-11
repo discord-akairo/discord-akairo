@@ -4,7 +4,8 @@ module.exports = {
         PREFIX: 'prefix',
         FLAG: 'flag',
         TEXT: 'text',
-        CONTENT: 'content'
+        CONTENT: 'content',
+        REST: 'rest'
     },
     ArgumentTypes: {
         STRING: 'string',

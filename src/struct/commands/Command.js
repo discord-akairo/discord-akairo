@@ -15,6 +15,7 @@ const { ArgumentMatches, ArgumentTypes, ArgumentSplits } = require('../utils/Con
 /**
  * The method to match arguments from text. Possible strings are:
  * <br/><code>'word'</code> Matches by the order of the words inputted. Ignores words that matches prefix or flag.
+ * <br/><code>'rest'</code> Matches the rest of the words in order. Ignores words that matches prefix or flag.
  * <br/><code>'prefix'</code> Matches words that starts with the prefix. The word after the prefix is the evaluated argument.
  * <br/><code>'flag'</code> Matches words that equal this prefix. The evaluated argument is true or false.
  * <br/><code>'text'</code> Matches the entire text, except for the command, ignoring words that matches prefix or flag.
@@ -224,7 +225,7 @@ class Command {
         const words = splitFunc[this.split] ? splitFunc[this.split]() || [] : [];
         const args = {};
 
-        const wordArgs = this.args.filter(arg => arg.match === ArgumentMatches.WORD);
+        const wordArgs = this.args.filter(arg => arg.match === ArgumentMatches.WORD || arg.match === ArgumentMatches.REST);
         const prefixArgs = this.args.filter(arg => arg.match === ArgumentMatches.PREFIX);
         const flagArgs = this.args.filter(arg => arg.match === ArgumentMatches.FLAG);
         const textArgs = this.args.filter(arg => arg.match === ArgumentMatches.TEXT);
@@ -321,7 +322,14 @@ class Command {
         };
 
         wordArgs.forEach((arg, i) => {
-            let word = noPrefixWords[arg.index !== undefined ? arg.index : i] || '';
+            let word;
+
+            if (arg.match === ArgumentMatches.REST){
+                word = noPrefixWords.slice(arg.index !== undefined ? arg.index : i) || '';
+            } else {
+                word = noPrefixWords[arg.index !== undefined ? arg.index : i] || '';
+            }
+
             if ((this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY) && /^".*"$/.test(word)) word = word.slice(1, -1);
 
             args[arg.id] = processType(arg, word);
@@ -345,12 +353,16 @@ class Command {
 
         textArgs.forEach(arg => {
             const def = typeof arg.defaultValue === 'function' ? arg.defaultValue(message) : arg.defaultValue;
-            args[arg.id] = noPrefixWords.slice(arg.index).join(' ') || def;
+            const w = noPrefixWords.slice(arg.index).join(' ') || def;
+
+            args[arg.id] = processType(arg, w);
         });
 
         contentArgs.forEach(arg => {
             const def = typeof arg.defaultValue === 'function' ? arg.defaultValue(message) : arg.defaultValue;
-            args[arg.id] = content.split(' ').slice(arg.index).join(' ') || def;
+            const w = content.split(' ').slice(arg.index).join(' ') || def;
+
+            args[arg.id] = processType(arg, w);
         });
 
         return args;
