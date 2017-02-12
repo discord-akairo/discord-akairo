@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>inhibitors/Inhibitor.js - Documentation</title>
+    <title>Inhibitor.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -22,12 +22,12 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
     
-    <h1 class="page-title">inhibitors/Inhibitor.js</h1>
+    <h1 class="page-title">Inhibitor.js</h1>
     
 
     
@@ -37,7 +37,9 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
+            <pre class="prettyprint source linenums"><code>const AkairoModule = require('./AkairoModule');
+
+/**
  * Options to use for inhibitor execution behavior.
  * @typedef {Object} InhibitorOptions
  * @prop {string} [reason=''] - Reason emitted when command or message is blocked.
@@ -45,7 +47,8 @@
  * @prop {string} [category='default'] - Category ID for organization purposes.
  */
 
-class Inhibitor {
+/** @extends AkairoModule */
+class Inhibitor extends AkairoModule {
     /**
      * Creates a new Inhibitor.
      * @param {string} id - Inhibitor ID.
@@ -53,11 +56,7 @@ class Inhibitor {
      * @param {InhibitorOptions} [options={}] - Options for the inhibitor.
      */
     constructor(id, exec, options = {}){
-        /**
-         * ID of the inhibitor.
-         * @type {string}
-         */
-        this.id = id;
+        super(id, exec, options);
 
         /**
          * Reason emitted when command is inhibited.
@@ -71,89 +70,35 @@ class Inhibitor {
          */
         this.type = options.type || 'post';
 
-        /**
-         * Category this inhibitor belongs to.
-         * @type {Category}
-         */
-        this.category = options.category || 'default';
+        // The properties below are from AkairoModule.
+        // They are only here for documentation purposes.
 
         /**
-         * Function called to inhibit.
-         * @type {function}
-         */
-        this.exec = exec;
-
-        /**
-         * Whether or not this inhibitor is enabled.
-         * @type {boolean}
-         */
-        this.enabled = true;
-
-        /**
-         * Path to inhibitor file.
-         * @readonly
+         * The ID of this inhibitor.
          * @type {string}
          */
-        this.filepath = null;
+        this.id;
 
         /**
-         * The Akairo framework.
-         * @readonly
-         * @type {Framework}
+         * Function called when inhibitor is ran.
+         * @type {function}
          */
-        this.framework = null;
-
-        /**
-         * The Discord.js client.
-         * @readonly
-         * @type {Client}
-         */
-        this.client = null;
+        this.exec;
 
         /**
          * The inhibitor handler.
          * @readonly
          * @type {InhibitorHandler}
          */
-        this.inhibitorHandler = null;
+        this.handler;
     }
 
     /**
-     * Reloads the inhibitor.
+     * The inhibitor handler. Alias to this.handler.
+     * @type {InhibitorHandler}
      */
-    reload(){
-        this.inhibitorHandler.reload(this.id);
-    }
-    
-    /**
-     * Removes the inhibitor. It can be readded with the inhibitor handler.
-     */
-    remove(){
-        this.inhibitorHandler.remove(this.id);
-    }
-
-    /**
-     * Enables the inhibitor.
-     */
-    enable(){
-        if (this.enabled) return;
-        this.enabled = true;
-    }
-
-    /**
-     * Disables the inhibitor.
-     */
-    disable(){
-        if (!this.enabled) return;
-        this.enabled = false;
-    }
-
-    /**
-     * Returns the ID.
-     * @returns {string}
-     */
-    toString(){
-        return this.id;
+    get inhibitorHandler(){
+        return this.handler;
     }
 }
 

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Listener - Documentation</title>
+    <title>AkairoModule - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Listener</h1>
+    <h1 class="page-title">AkairoModule</h1>
     
 
     
@@ -40,7 +40,7 @@
 <header>
     
         <h2>
-        Listener
+        AkairoModule
         </h2>
         
     
@@ -53,7 +53,7 @@
 
     
 
-    <h4 class="name" id="Listener"><span class="type-signature"></span>new Listener<span class="signature">(id, exec, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="AkairoModule"><span class="type-signature"></span>new AkairoModule<span class="signature">(id, exec, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
@@ -65,7 +65,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Listener.js.html">Listener.js</a>, <a href="Listener.js.html#line13">line 13</a>
+        <a href="AkairoModule.js.html">AkairoModule.js</a>, <a href="AkairoModule.js.html#line16">line 16</a>
     </li></ul></dd>
     
 
@@ -105,7 +105,7 @@
 
 
 <div class="description">
-    Creates a new Listener.
+    Creates a new module.
 </div>
 
 
@@ -175,7 +175,7 @@
                 </td>
             
 
-            <td class="description last">Listener ID.</td>
+            <td class="description last">ID of module.</td>
         </tr>
 
     
@@ -210,7 +210,7 @@
                 </td>
             
 
-            <td class="description last">The function <code>((...) => {})</code> called when event emitted.</td>
+            <td class="description last">Function called when module is used.</td>
         </tr>
 
     
@@ -223,7 +223,7 @@
             <td class="type">
             
                 
-<span class="param-type"><a href="global.html#ListenerOptions">ListenerOptions</a></span>
+<span class="param-type"><a href="global.html#ModuleOptions">ModuleOptions</a></span>
 
 
             
@@ -249,7 +249,7 @@
                 </td>
             
 
-            <td class="description last">Options for the listener.</td>
+            <td class="description last">Options.</td>
         </tr>
 
     
@@ -273,17 +273,6 @@
 
     
     </div>
-
-    
-        <h3 class="subsection-title">Extends</h3>
-
-        
-
-
-    <ul>
-        <li><a href="AkairoModule.html">AkairoModule</a></li>
-    </ul>
-
 
     
 
@@ -319,11 +308,6 @@
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="AkairoModule.html#category">AkairoModule#category</a>
-    </li></ul></dd>
     
 
     
@@ -398,11 +382,6 @@
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="AkairoModule.html#client">AkairoModule#client</a>
-    </li></ul></dd>
-    
 
     
 
@@ -456,82 +435,6 @@
 
         
             
-<h4 class="name" id="emitter"><span class="type-signature"></span>emitter<span class="type-signature"> :string|EventEmitter</span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Listener.js.html">Listener.js</a>, <a href="Listener.js.html#line33">line 33</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    The event emitter.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">string</span>
- || 
-
-<span class="param-type">EventEmitter</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-        
-            
 <h4 class="name" id="enabled"><span class="type-signature"></span>enabled<span class="type-signature"> :boolean</span></h4>
 
 
@@ -551,11 +454,6 @@
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="AkairoModule.html#enabled">AkairoModule#enabled</a>
-    </li></ul></dd>
     
 
     
@@ -610,79 +508,6 @@
 
         
             
-<h4 class="name" id="eventName"><span class="type-signature"></span>eventName<span class="type-signature"> :string</span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Listener.js.html">Listener.js</a>, <a href="Listener.js.html#line39">line 39</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    The event name listened to.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">string</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-        
-            
 <h4 class="name" id="exec"><span class="type-signature"></span>exec<span class="type-signature"> :function</span></h4>
 
 
@@ -694,7 +519,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Listener.js.html">Listener.js</a>, <a href="Listener.js.html#line27">line 27</a>
+        <a href="AkairoModule.js.html">AkairoModule.js</a>, <a href="AkairoModule.js.html#line33">line 33</a>
     </li></ul></dd>
     
 
@@ -704,11 +529,6 @@
 
     
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="AkairoModule.html#exec">AkairoModule#exec</a>
-    </li></ul></dd>
     
 
     
@@ -739,7 +559,7 @@
 
 
 <div class="description">
-    Function called when listener is ran.
+    Function called for module.
 </div>
 
 
@@ -780,11 +600,6 @@
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="AkairoModule.html#filepath">AkairoModule#filepath</a>
-    </li></ul></dd>
     
 
     
@@ -839,7 +654,7 @@
 
         
             
-<h4 class="name" id="handler"><span class="type-signature">(readonly) </span>handler<span class="type-signature"> :<a href="ListenerHandler.html">ListenerHandler</a></span></h4>
+<h4 class="name" id="handler"><span class="type-signature">(readonly) </span>handler<span class="type-signature"> :<a href="AkairoHandler.html">AkairoHandler</a></span></h4>
 
 
 
@@ -850,7 +665,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Listener.js.html">Listener.js</a>, <a href="Listener.js.html#line61">line 61</a>
+        <a href="AkairoModule.js.html">AkairoModule.js</a>, <a href="AkairoModule.js.html#line60">line 60</a>
     </li></ul></dd>
     
 
@@ -860,11 +675,6 @@
 
     
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="AkairoModule.html#handler">AkairoModule#handler</a>
-    </li></ul></dd>
     
 
     
@@ -895,7 +705,7 @@
 
 
 <div class="description">
-    The listener handler.
+    The handler.
 </div>
 
 
@@ -904,7 +714,7 @@
     <ul>
         <li>
             
-<span class="param-type"><a href="ListenerHandler.html">ListenerHandler</a></span>
+<span class="param-type"><a href="AkairoHandler.html">AkairoHandler</a></span>
 
 
         </li>
@@ -928,85 +738,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Listener.js.html">Listener.js</a>, <a href="Listener.js.html#line54">line 54</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="AkairoModule.html#id">AkairoModule#id</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    The ID of this listener.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">string</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="listenerHandler"><span class="type-signature"></span>listenerHandler<span class="type-signature"> :<a href="ListenerHandler.html">ListenerHandler</a></span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Listener.js.html">Listener.js</a>, <a href="Listener.js.html#line68">line 68</a>
+        <a href="AkairoModule.js.html">AkairoModule.js</a>, <a href="AkairoModule.js.html#line21">line 21</a>
     </li></ul></dd>
     
 
@@ -1046,80 +778,7 @@
 
 
 <div class="description">
-    The listener handler. Alias to this.handler.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><a href="ListenerHandler.html">ListenerHandler</a></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="type"><span class="type-signature"></span>type<span class="type-signature"> :string</span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Listener.js.html">Listener.js</a>, <a href="Listener.js.html#line45">line 45</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Type of listener.
+    ID of the module.
 </div>
 
 
@@ -1162,7 +821,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Listener.js.html">Listener.js</a>, <a href="Listener.js.html#line83">line 83</a>
+        <a href="AkairoModule.js.html">AkairoModule.js</a>, <a href="AkairoModule.js.html#line89">line 89</a>
     </li></ul></dd>
     
 
@@ -1172,11 +831,6 @@
 
     
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="AkairoModule.html#disable">AkairoModule#disable</a>
-    </li></ul></dd>
     
 
     
@@ -1207,7 +861,7 @@
 
 
 <div class="description">
-    Disables the listener.
+    Disables this.
 </div>
 
 
@@ -1251,7 +905,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Listener.js.html">Listener.js</a>, <a href="Listener.js.html#line75">line 75</a>
+        <a href="AkairoModule.js.html">AkairoModule.js</a>, <a href="AkairoModule.js.html#line80">line 80</a>
     </li></ul></dd>
     
 
@@ -1261,11 +915,6 @@
 
     
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="AkairoModule.html#enable">AkairoModule#enable</a>
-    </li></ul></dd>
     
 
     
@@ -1296,7 +945,7 @@
 
 
 <div class="description">
-    Enables the listener.
+    Enables this.
 </div>
 
 
@@ -1348,11 +997,6 @@
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="AkairoModule.html#reload">AkairoModule#reload</a>
-    </li></ul></dd>
     
 
     
@@ -1438,11 +1082,6 @@
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="AkairoModule.html#remove">AkairoModule#remove</a>
-    </li></ul></dd>
-    
 
     
 
@@ -1526,11 +1165,6 @@
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="AkairoModule.html#toString">AkairoModule#toString</a>
-    </li></ul></dd>
     
 
     

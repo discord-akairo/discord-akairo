@@ -30,10 +30,32 @@ class Inhibitor extends AkairoModule {
          * @type {string}
          */
         this.type = options.type || 'post';
+
+        // The properties below are from AkairoModule.
+        // They are only here for documentation purposes.
+
+        /**
+         * The ID of this inhibitor.
+         * @type {string}
+         */
+        this.id;
+
+        /**
+         * Function called when inhibitor is ran.
+         * @type {function}
+         */
+        this.exec;
+
+        /**
+         * The inhibitor handler.
+         * @readonly
+         * @type {InhibitorHandler}
+         */
+        this.handler;
     }
 
     /**
-     * The inhibitor handler.
+     * The inhibitor handler. Alias to this.handler.
      * @type {InhibitorHandler}
      */
     get inhibitorHandler(){

@@ -123,7 +123,7 @@ listenerHandler.reload('commandBlocked');
 
 #### SQLite Support
 ```js
-const { SQLiteHandler, AkairoClient } = require('discord-akairo');
+const { AkairoClient, SQLiteHandler } = require('discord-akairo');
 
 const client = new AkairoClient({
     ownerID: '9876543210',

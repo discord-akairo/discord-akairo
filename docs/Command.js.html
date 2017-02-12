@@ -1,4 +1,43 @@
-const AkairoModule = require('./AkairoModule');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Command.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">Command.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const AkairoModule = require('./AkairoModule');
 const { ArgumentMatches, ArgumentTypes, ArgumentSplits } = require('../utils/Constants');
 
 /**
@@ -6,50 +45,50 @@ const { ArgumentMatches, ArgumentTypes, ArgumentSplits } = require('../utils/Con
  * @typedef {Object} Argument
  * @prop {string} id - ID of the argument.
  * @prop {ArgumentMatch} [match='word'] - Method to match argument.
- * @prop {ArgumentType|string[]|function} [type='string'] - Attempts to cast argument to this type.<br/>An array or a function can be used (more details in ArgumentType).
- * @prop {string|string[]} [prefix] - Ignores word order and uses a word that starts with/matches this prefix (or multiple prefixes if array).<br/>Applicable to 'prefix' and 'flag' only.
- * @prop {number} [index] - Word to start from.<br/>Applicable to 'word', 'text', or 'content' only.<br/>When using with word, this will offset all word arguments after it by 1 unless the index property is also specified for them.
- * @prop {string|number} [defaultValue=''] - Default value if a word is not inputted or a type could not be casted to.<br/>Can also be a function <code>(message => {})</code>.
+ * @prop {ArgumentType|string[]|function} [type='string'] - Attempts to cast argument to this type.&lt;br/>An array or a function can be used (more details in ArgumentType).
+ * @prop {string|string[]} [prefix] - Ignores word order and uses a word that starts with/matches this prefix (or multiple prefixes if array).&lt;br/>Applicable to 'prefix' and 'flag' only.
+ * @prop {number} [index] - Word to start from.&lt;br/>Applicable to 'word', 'text', or 'content' only.&lt;br/>When using with word, this will offset all word arguments after it by 1 unless the index property is also specified for them.
+ * @prop {string|number} [defaultValue=''] - Default value if a word is not inputted or a type could not be casted to.&lt;br/>Can also be a function &lt;code>(message => {})&lt;/code>.
  * @prop {string|string[]} [description=''] - A description of the argument.
  */
 
 /**
  * The method to match arguments from text. Possible strings are:
- * <br/><code>'word'</code> Matches by the order of the words inputted. Ignores words that matches prefix or flag.
- * <br/><code>'rest'</code> Matches the rest of the words in order. Ignores words that matches prefix or flag.
- * <br/><code>'prefix'</code> Matches words that starts with the prefix. The word after the prefix is the evaluated argument.
- * <br/><code>'flag'</code> Matches words that equal this prefix. The evaluated argument is true or false.
- * <br/><code>'text'</code> Matches the entire text, except for the command, ignoring words that matches prefix or flag.
- * <br/><code>'content'</code> Matches the entire text as it was inputted, except for the command.
+ * &lt;br/>&lt;code>'word'&lt;/code> Matches by the order of the words inputted. Ignores words that matches prefix or flag.
+ * &lt;br/>&lt;code>'rest'&lt;/code> Matches the rest of the words in order. Ignores words that matches prefix or flag.
+ * &lt;br/>&lt;code>'prefix'&lt;/code> Matches words that starts with the prefix. The word after the prefix is the evaluated argument.
+ * &lt;br/>&lt;code>'flag'&lt;/code> Matches words that equal this prefix. The evaluated argument is true or false.
+ * &lt;br/>&lt;code>'text'&lt;/code> Matches the entire text, except for the command, ignoring words that matches prefix or flag.
+ * &lt;br/>&lt;code>'content'&lt;/code> Matches the entire text as it was inputted, except for the command.
  * @typedef {string} ArgumentMatch
  */
 
 /**
  * The type that the argument should be cast to. Possible strings are:
- * <br/><code>'string'</code> Does not cast to any type.
- * <br/><code>'number'</code> Casts to an number with parseFloat(), default value if not a number.
- * <br/><code>'integer'</code> Casts to an integer with parseInt(), default value if not a number.
- * <br/><code>'dynamic'</code> Casts to a number with parseFloat() or a string if the argument is not a number.
- * <br/><code>'dynamicInt'</code> Casts to an integer with parseInt() or a string if the argument is not a number.
- * <br/>
- * <br/>Possible Discord-related strings:
- * <br/><code>'user'</code> Tries to resolve to a user.
- * <br/><code>'member'</code> Tries to resolve to a member.
- * <br/><code>'channel'</code> Tries to resolve to a channel.
- * <br/><code>'textChannel'</code> Tries to resolve to a text channel.
- * <br/><code>'voiceChannel'</code> Tries to resolve to a voice channel.
- * <br/><code>'role'</code> Tries to resolve to a role.
- * <br/><code>'emoji'</code> Tries to resolve to a custom emoji.
- * <br/>Many of these types can only be used in a guild.
- * <br/>If any of the above are invalid, the default value will be resolved (recommended to use an ID).
- * <br/>
- * <br/>An array of strings can be used to restrict input to only those strings, case insensitive.
- * <br/>The evaluated argument will be all lowercase.
- * <br/>If the input is not in the array, the default value is used.
- * <br/>
- * <br/>A function <code>((word, message) => {})</code> can also be used to filter or modify arguments.
- * <br/>A return value of true will let the word pass, a falsey return value will use the default value for the argument.
- * <br/>Any other truthy return value will be used as the argument.
+ * &lt;br/>&lt;code>'string'&lt;/code> Does not cast to any type.
+ * &lt;br/>&lt;code>'number'&lt;/code> Casts to an number with parseFloat(), default value if not a number.
+ * &lt;br/>&lt;code>'integer'&lt;/code> Casts to an integer with parseInt(), default value if not a number.
+ * &lt;br/>&lt;code>'dynamic'&lt;/code> Casts to a number with parseFloat() or a string if the argument is not a number.
+ * &lt;br/>&lt;code>'dynamicInt'&lt;/code> Casts to an integer with parseInt() or a string if the argument is not a number.
+ * &lt;br/>
+ * &lt;br/>Possible Discord-related strings:
+ * &lt;br/>&lt;code>'user'&lt;/code> Tries to resolve to a user.
+ * &lt;br/>&lt;code>'member'&lt;/code> Tries to resolve to a member.
+ * &lt;br/>&lt;code>'channel'&lt;/code> Tries to resolve to a channel.
+ * &lt;br/>&lt;code>'textChannel'&lt;/code> Tries to resolve to a text channel.
+ * &lt;br/>&lt;code>'voiceChannel'&lt;/code> Tries to resolve to a voice channel.
+ * &lt;br/>&lt;code>'role'&lt;/code> Tries to resolve to a role.
+ * &lt;br/>&lt;code>'emoji'&lt;/code> Tries to resolve to a custom emoji.
+ * &lt;br/>Many of these types can only be used in a guild.
+ * &lt;br/>If any of the above are invalid, the default value will be resolved (recommended to use an ID).
+ * &lt;br/>
+ * &lt;br/>An array of strings can be used to restrict input to only those strings, case insensitive.
+ * &lt;br/>The evaluated argument will be all lowercase.
+ * &lt;br/>If the input is not in the array, the default value is used.
+ * &lt;br/>
+ * &lt;br/>A function &lt;code>((word, message) => {})&lt;/code> can also be used to filter or modify arguments.
+ * &lt;br/>A return value of true will let the word pass, a falsey return value will use the default value for the argument.
+ * &lt;br/>Any other truthy return value will be used as the argument.
  * @typedef {string} ArgumentType
  */
 
@@ -68,10 +107,10 @@ const { ArgumentMatches, ArgumentTypes, ArgumentSplits } = require('../utils/Con
 
 /**
  * The method to split text into words. Possible strings are:
- * <br/><code>'plain'</code> Splits word separated by whitespace. Extra whitespace is ignored.
- * <br/><code>'split'</code> Splits word separated by whitespace.
- * <br/><code>'quoted'</code> This is like plain, but counts text inside double quotes as one word.
- * <br/><code>'sticky'</code> This is like quoted, but makes it so that quoted text must have a whitespace/another double quote before it to count as another word. It will still span multiple words.
+ * &lt;br/>&lt;code>'plain'&lt;/code> Splits word separated by whitespace. Extra whitespace is ignored.
+ * &lt;br/>&lt;code>'split'&lt;/code> Splits word separated by whitespace.
+ * &lt;br/>&lt;code>'quoted'&lt;/code> This is like plain, but counts text inside double quotes as one word.
+ * &lt;br/>&lt;code>'sticky'&lt;/code> This is like quoted, but makes it so that quoted text must have a whitespace/another double quote before it to count as another word. It will still span multiple words.
  * @typedef {string} ArgumentSplit
  */
 
@@ -80,7 +119,7 @@ class Command extends AkairoModule {
     /**
      * Creates a new command.
      * @param {string} id - Command ID.
-     * @param {function} exec - Function <code>((message, args) => {})</code> called when command is ran.
+     * @param {function} exec - Function &lt;code>((message, args) => {})&lt;/code> called when command is ran.
      * @param {CommandOptions} [options={}] - Options for the command.
      */
     constructor(id, exec, options = {}){
@@ -296,7 +335,7 @@ class Command extends AkairoModule {
                 word = noPrefixWords[arg.index !== undefined ? arg.index : i] || '';
             }
 
-            if ((this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY) && /^".*"$/.test(word)) word = word.slice(1, -1);
+            if ((this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY) &amp;&amp; /^".*"$/.test(word)) word = word.slice(1, -1);
 
             args[arg.id] = processType(arg, word);
         });
@@ -307,7 +346,7 @@ class Command extends AkairoModule {
             let word = words.find(w => Array.isArray(arg.prefix) ? arg.prefix.some(p => w.startsWith(p)) : w.startsWith(arg.prefix)) || '';
             word = word.replace(prefixes.find(p => word.startsWith(p)), '');
             
-            if (this.split === ArgumentSplits.STICKY && /^".*"$/.test(word)) word = word.slice(1, -1);
+            if (this.split === ArgumentSplits.STICKY &amp;&amp; /^".*"$/.test(word)) word = word.slice(1, -1);
 
             args[arg.id] = processType(arg, word);
         });
@@ -336,3 +375,22 @@ class Command extends AkairoModule {
 }
 
 module.exports = Command;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

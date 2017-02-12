@@ -1,4 +1,43 @@
-const path = require('path');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>SQLiteHandler.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">SQLiteHandler.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const path = require('path');
 const EventEmitter = require('events');
 const { Collection } = require('discord.js');
 const { SQLiteHandlerEvents } = require('../utils/Constants');
@@ -11,7 +50,7 @@ let sql;
  * @prop {string} [tablename='configs'] - Name of the table.
  * @prop {Object} [defaultConfig={}] - Default configuration.
  * @prop {string[]} [json=[]] - Array of keys to parse and stringify as JSON.
- * @prop {function} [init=[]] - Array or function <code>(client => {})</code> that returns an array of IDs.<br/>If you want to load the database before login, use SQLiteHandler#load.
+ * @prop {function} [init=[]] - Array or function &lt;code>(client => {})&lt;/code> that returns an array of IDs.&lt;br/>If you want to load the database before login, use SQLiteHandler#load.
  */
 
 /** @extends EventEmitter */
@@ -69,7 +108,7 @@ class SQLiteHandler extends EventEmitter {
 
         /**
          * Configurations stored in memory, mapped by ID to configuration.
-         * @type {Collection.<string, Object>}
+         * @type {Collection.&lt;string, Object>}
          */
         this.memory = new Collection();
     }
@@ -97,7 +136,7 @@ class SQLiteHandler extends EventEmitter {
      * @return {string}
      */
     sanitize(input, json = false){
-        if (json && typeof input !== 'string') return JSON.stringify(input).replace(/'/g, '\'\'');
+        if (json &amp;&amp; typeof input !== 'string') return JSON.stringify(input).replace(/'/g, '\'\'');
         if (typeof input !== 'string') return input;
         return input.replace(/'/g, '\'\'');
     }
@@ -109,14 +148,14 @@ class SQLiteHandler extends EventEmitter {
      * @return {string}
      */
     desanitize(input, json = false){
-        if (json && typeof input === 'string') return JSON.parse(input.replace(/''/g, '\''));
+        if (json &amp;&amp; typeof input === 'string') return JSON.parse(input.replace(/''/g, '\''));
         if (typeof input !== 'string') return input;
         return input.replace(/''/g, '\'');
     }
 
     /**
      * Opens the database so that it can be used.
-     * @return {Promise.<Database>}
+     * @return {Promise.&lt;Database>}
      */
     open(){
         return sql.open(this.filepath).then(db => {
@@ -129,7 +168,7 @@ class SQLiteHandler extends EventEmitter {
      * Loads handler and database with IDs.
      * Use manually if you want to load database before client is ready.
      * @param {string[]} ids - Array of IDs.
-     * @returns {Promise.<SQLiteHandler>}
+     * @returns {Promise.&lt;SQLiteHandler>}
      */
     load(ids){
         return this.open().then(db => {
@@ -156,7 +195,7 @@ class SQLiteHandler extends EventEmitter {
     /**
      * Adds into the database.
      * @param {string} id - ID of entry.
-     * @returns {Promise.<SQLiteHandler>}
+     * @returns {Promise.&lt;SQLiteHandler>}
      */
     add(id){
         if (!this.db) return Promise.reject(new Error('Database not opened.'));
@@ -196,7 +235,7 @@ class SQLiteHandler extends EventEmitter {
     /**
      * Removes from the database.
      * @param {string} id - ID of entry.
-     * @returns {Promise.<SQLiteHandler>}
+     * @returns {Promise.&lt;SQLiteHandler>}
      */
     remove(id){
         if (!this.db) return Promise.reject(new Error('Database not opened.'));
@@ -260,7 +299,7 @@ class SQLiteHandler extends EventEmitter {
      * @param {string} id - ID of entry.
      * @param {string} key - Key to set.
      * @param {string|number} value - Value to set.
-     * @returns {Promise.<SQLiteHandler>}
+     * @returns {Promise.&lt;SQLiteHandler>}
      */
     set(id, key, value){
         if (!this.db) return Promise.reject(new Error('Database not opened.'));
@@ -317,7 +356,7 @@ class SQLiteHandler extends EventEmitter {
     /**
      * Saves an in-memory config to the database.
      * @param {string} id - ID to save.
-     * @returns {Promise.<SQLiteHandler>}
+     * @returns {Promise.&lt;SQLiteHandler>}
      */
     save(id){
         if (!this.db) return Promise.reject(new Error('Database not opened.'));
@@ -361,7 +400,7 @@ class SQLiteHandler extends EventEmitter {
 
     /**
      * Saves all in-memory configs to the database.
-     * @returns {Promise.<SQLiteHandler>}
+     * @returns {Promise.&lt;SQLiteHandler>}
      */
     saveAll(){
         const promises = this.memory.map(config => this.save(config.id));
@@ -411,3 +450,22 @@ module.exports = SQLiteHandler;
  * Emitted when many configs were saved from memory.
  * @event SQLiteHandler#saveAll
  */
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

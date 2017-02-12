@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>listeners/Listener.js - Documentation</title>
+    <title>Listener.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -22,12 +22,12 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
     
-    <h1 class="page-title">listeners/Listener.js</h1>
+    <h1 class="page-title">Listener.js</h1>
     
 
     
@@ -37,16 +37,19 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
+            <pre class="prettyprint source linenums"><code>const AkairoModule = require('./AkairoModule');
+
+/**
  * Options to use for listener execution behavior.
  * @typedef {Object} ListenerOptions
- * @prop {string|EventEmitter} [emitter='client'] - The event emitter, either a key from listenerHandler.emitters or an EventEmitter.
+ * @prop {string|EventEmitter} [emitter='client'] - The event emitter, either a key from ListenerHandler#emitters or an EventEmitter.
  * @prop {string} [eventName='ready'] - Event name to listen to.
  * @prop {string} [type='on'] - Type of listener: 'on' or 'once'.
  * @prop {string} [category='default'] - Category ID for organization purposes.
  */
 
-class Listener {
+/** @extends AkairoModule */
+class Listener extends AkairoModule {
     /**
      * Creates a new Listener.
      * @param {string} id - Listener ID.
@@ -54,11 +57,13 @@ class Listener {
      * @param {ListenerOptions} [options={}] - Options for the listener.
      */
     constructor(id, exec, options = {}){
+        super(id, exec, options);
+
         /**
-         * ID of the listener.
-         * @type {string}
+         * Function called when listener is ran.
+         * @type {function}
          */
-        this.id = id;
+        this.exec = this.exec.bind(this);
 
         /**
          * The event emitter.
@@ -78,93 +83,45 @@ class Listener {
          */
         this.type = options.type || 'on';
 
-        /**
-         * Category this listener belongs to.
-         * @type {Category}
-         */
-        this.category = options.category || 'default';
+        // The properties below are from AkairoModule.
+        // They are only here for documentation purposes.
 
         /**
-         * The function called when event emitted.
-         * @type {function}
-         */
-        this.exec = exec.bind(this);
-
-        /**
-         * Whether or not this listener is enabled.
-         * @type {boolean}
-         */
-        this.enabled = true;
-
-        /**
-         * Path to listener file.
-         * @readonly
+         * The ID of this listener.
          * @type {string}
          */
-        this.filepath = null;
-
-        /**
-         * The Akairo framework.
-         * @readonly
-         * @type {Framework}
-         */
-        this.framework = null;
-
-        /**
-         * The Discord.js client.
-         * @readonly
-         * @type {Client}
-         */
-        this.client = null;
+        this.id;
 
         /**
          * The listener handler.
          * @readonly
          * @type {ListenerHandler}
          */
-        this.listenerHandler = null;
+        this.handler;
     }
 
     /**
-     * Reloads the listener.
+     * The listener handler. Alias to this.handler.
+     * @type {ListenerHandler}
      */
-    reload(){
-        this.listenerHandler.reload(this.id);
-    }
-
-    /**
-     * Removes the listener. It can be readded with the listener handler.
-     */
-    remove(){
-        this.listenerHandler.remove(this.id);
+    get listenerHandler(){
+        return this.handler;
     }
 
     /**
      * Enables the listener.
      */
     enable(){
-        if (this.enabled) return;
-
+        super.enable();
         this.listenerHandler.register(this.id);
-        this.enabled = true;
     }
 
     /**
      * Disables the listener.
      */
     disable(){
-        if (!this.enabled) return;
-
+        super.disable();
         this.listenerHandler.deregister(this.id);
-        this.enabled = false;
-    }
-
-    /**
-     * Returns the ID.
-     * @returns {string}
-     */
-    toString(){
-        return this.id;
     }
 }
 

@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -53,7 +53,7 @@
 
     
 
-    <h4 class="name" id="CommandHandler"><span class="type-signature"></span>new CommandHandler<span class="signature">(framework, options)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="CommandHandler"><span class="type-signature"></span>new CommandHandler<span class="signature">(client, options)</span><span class="type-signature"></span></h4>
 
     
 
@@ -65,7 +65,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line10">line 10</a>
+        <a href="CommandHandler.js.html">CommandHandler.js</a>, <a href="CommandHandler.js.html#line6">line 6</a>
     </li></ul></dd>
     
 
@@ -143,13 +143,13 @@
 
         <tr>
             
-                <td class="name"><code>framework</code></td>
+                <td class="name"><code>client</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="Framework.html">Framework</a></span>
+<span class="param-type"><a href="AkairoClient.html">AkairoClient</a></span>
 
 
             
@@ -159,7 +159,7 @@
 
             
 
-            <td class="description last">The Akairo framework.</td>
+            <td class="description last">The Akairo client.</td>
         </tr>
 
     
@@ -182,7 +182,7 @@
 
             
 
-            <td class="description last">Options from framework.</td>
+            <td class="description last">Options from client.</td>
         </tr>
 
     
@@ -214,7 +214,7 @@
 
 
     <ul>
-        <li>EventEmitter</li>
+        <li><a href="AkairoHandler.html">AkairoHandler</a></li>
     </ul>
 
 
@@ -244,7 +244,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line55">line 55</a>
+        <a href="CommandHandler.js.html">CommandHandler.js</a>, <a href="CommandHandler.js.html#line37">line 37</a>
     </li></ul></dd>
     
 
@@ -306,7 +306,7 @@
 
         
             
-<h4 class="name" id="categories"><span class="type-signature"></span>categories<span class="type-signature"> :Collection.&lt;string, <a href="Category.html">Category</a>></span></h4>
+<h4 class="name" id="categories"><span class="type-signature"></span>categories<span class="type-signature"> :Collection.&lt;string, Category></span></h4>
 
 
 
@@ -317,7 +317,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line67">line 67</a>
+        <a href="AkairoHandler.js.html">AkairoHandler.js</a>, <a href="AkairoHandler.js.html#line51">line 51</a>
     </li></ul></dd>
     
 
@@ -325,6 +325,11 @@
 
     
 
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#categories">AkairoHandler#categories</a>
+    </li></ul></dd>
     
 
     
@@ -357,7 +362,7 @@
 
 
 <div class="description">
-    Command categories, mapped by ID to Category.
+    Categories, mapped by ID to Category.
 </div>
 
 
@@ -366,7 +371,163 @@
     <ul>
         <li>
             
-<span class="param-type">Collection.&lt;string, <a href="Category.html">Category</a>></span>
+<span class="param-type">Collection.&lt;string, Category></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="classToHandle"><span class="type-signature">(readonly) </span>classToHandle<span class="type-signature"> :class</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AkairoHandler.js.html">AkairoHandler.js</a>, <a href="AkairoHandler.js.html#line39">line 39</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#classToHandle">AkairoHandler#classToHandle</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Class to handle.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">class</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="client"><span class="type-signature">(readonly) </span>client<span class="type-signature"> :<a href="AkairoClient.html">AkairoClient</a></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AkairoHandler.js.html">AkairoHandler.js</a>, <a href="AkairoHandler.js.html#line25">line 25</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#client">AkairoHandler#client</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    The Akairo client.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="AkairoClient.html">AkairoClient</a></span>
 
 
         </li>
@@ -390,7 +551,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line61">line 61</a>
+        <a href="CommandHandler.js.html">CommandHandler.js</a>, <a href="CommandHandler.js.html#line60">line 60</a>
     </li></ul></dd>
     
 
@@ -430,7 +591,7 @@
 
 
 <div class="description">
-    Commands loaded, mapped by ID to Command.
+    Collection of commands. Alias to this.modules.
 </div>
 
 
@@ -463,7 +624,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line31">line 31</a>
+        <a href="CommandHandler.js.html">CommandHandler.js</a>, <a href="CommandHandler.js.html#line47">line 47</a>
     </li></ul></dd>
     
 
@@ -473,6 +634,11 @@
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#directory">AkairoHandler#directory</a>
+    </li></ul></dd>
     
 
     
@@ -525,7 +691,7 @@
 
         
             
-<h4 class="name" id="framework"><span class="type-signature">(readonly) </span>framework<span class="type-signature"> :<a href="Framework.html">Framework</a></span></h4>
+<h4 class="name" id="modules"><span class="type-signature"></span>modules<span class="type-signature"> :Collection.&lt;string, <a href="Command.html">Command</a>></span></h4>
 
 
 
@@ -536,7 +702,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line24">line 24</a>
+        <a href="CommandHandler.js.html">CommandHandler.js</a>, <a href="CommandHandler.js.html#line53">line 53</a>
     </li></ul></dd>
     
 
@@ -546,6 +712,11 @@
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#modules">AkairoHandler#modules</a>
+    </li></ul></dd>
     
 
     
@@ -576,7 +747,7 @@
 
 
 <div class="description">
-    The Akairo framework.
+    Commands loaded, mapped by ID to Command.
 </div>
 
 
@@ -585,7 +756,7 @@
     <ul>
         <li>
             
-<span class="param-type"><a href="Framework.html">Framework</a></span>
+<span class="param-type">Collection.&lt;string, <a href="Command.html">Command</a>></span>
 
 
         </li>
@@ -609,7 +780,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line43">line 43</a>
+        <a href="CommandHandler.js.html">CommandHandler.js</a>, <a href="CommandHandler.js.html#line25">line 25</a>
     </li></ul></dd>
     
 
@@ -682,7 +853,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line49">line 49</a>
+        <a href="CommandHandler.js.html">CommandHandler.js</a>, <a href="CommandHandler.js.html#line31">line 31</a>
     </li></ul></dd>
     
 
@@ -755,7 +926,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line37">line 37</a>
+        <a href="CommandHandler.js.html">CommandHandler.js</a>, <a href="CommandHandler.js.html#line19">line 19</a>
     </li></ul></dd>
     
 
@@ -826,7 +997,7 @@
 
     
 
-    <h4 class="name" id="add"><span class="type-signature"></span>add<span class="signature">(filename)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="add"><span class="type-signature"></span>add<span class="signature">(filename)</span><span class="type-signature"> &rarr; {<a href="Command.html">Command</a>}</span></h4>
 
     
 
@@ -838,7 +1009,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line105">line 105</a>
+        <a href="CommandHandler.js.html">CommandHandler.js</a>, <a href="CommandHandler.js.html#line187">line 187</a>
     </li></ul></dd>
     
 
@@ -848,6 +1019,11 @@
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#add">AkairoHandler#add</a>
+    </li></ul></dd>
     
 
     
@@ -952,6 +1128,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Command.html">Command</a></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
         
@@ -959,7 +1153,7 @@
 
     
 
-    <h4 class="name" id="findCategory"><span class="type-signature"></span>findCategory<span class="signature">(name)</span><span class="type-signature"> &rarr; {<a href="Category.html">Category</a>}</span></h4>
+    <h4 class="name" id="findCategory"><span class="type-signature"></span>findCategory<span class="signature">(name)</span><span class="type-signature"> &rarr; {Category}</span></h4>
 
     
 
@@ -971,7 +1165,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line173">line 173</a>
+        <a href="AkairoHandler.js.html">AkairoHandler.js</a>, <a href="AkairoHandler.js.html#line153">line 153</a>
     </li></ul></dd>
     
 
@@ -979,6 +1173,11 @@
 
     
 
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#findCategory">AkairoHandler#findCategory</a>
+    </li></ul></dd>
     
 
     
@@ -1096,7 +1295,7 @@
     </dt>
     <dd>
         
-<span class="param-type"><a href="Category.html">Category</a></span>
+<span class="param-type">Category</span>
 
 
     </dd>
@@ -1122,7 +1321,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line162">line 162</a>
+        <a href="CommandHandler.js.html">CommandHandler.js</a>, <a href="CommandHandler.js.html#line69">line 69</a>
     </li></ul></dd>
     
 
@@ -1273,7 +1472,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line183">line 183</a>
+        <a href="CommandHandler.js.html">CommandHandler.js</a>, <a href="CommandHandler.js.html#line79">line 79</a>
     </li></ul></dd>
     
 
@@ -1406,7 +1605,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line80">line 80</a>
+        <a href="CommandHandler.js.html">CommandHandler.js</a>, <a href="CommandHandler.js.html#line180">line 180</a>
     </li></ul></dd>
     
 
@@ -1416,6 +1615,11 @@
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#load">AkairoHandler#load</a>
+    </li></ul></dd>
     
 
     
@@ -1545,7 +1749,7 @@
 
     
 
-    <h4 class="name" id="reload"><span class="type-signature"></span>reload<span class="signature">(id)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="reload"><span class="type-signature"></span>reload<span class="signature">(id)</span><span class="type-signature"> &rarr; {<a href="Command.html">Command</a>}</span></h4>
 
     
 
@@ -1557,7 +1761,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line136">line 136</a>
+        <a href="CommandHandler.js.html">CommandHandler.js</a>, <a href="CommandHandler.js.html#line201">line 201</a>
     </li></ul></dd>
     
 
@@ -1567,6 +1771,11 @@
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#reload">AkairoHandler#reload</a>
+    </li></ul></dd>
     
 
     
@@ -1671,6 +1880,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Command.html">Command</a></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
         
@@ -1690,7 +1917,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line153">line 153</a>
+        <a href="CommandHandler.js.html">CommandHandler.js</a>, <a href="CommandHandler.js.html#line206">line 206</a>
     </li></ul></dd>
     
 
@@ -1700,6 +1927,11 @@
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#reloadAll">AkairoHandler#reloadAll</a>
+    </li></ul></dd>
     
 
     
@@ -1762,7 +1994,7 @@
 
     
 
-    <h4 class="name" id="remove"><span class="type-signature"></span>remove<span class="signature">(id)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="remove"><span class="type-signature"></span>remove<span class="signature">(id)</span><span class="type-signature"> &rarr; {<a href="Command.html">Command</a>}</span></h4>
 
     
 
@@ -1774,7 +2006,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line120">line 120</a>
+        <a href="CommandHandler.js.html">CommandHandler.js</a>, <a href="CommandHandler.js.html#line194">line 194</a>
     </li></ul></dd>
     
 
@@ -1784,6 +2016,11 @@
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#remove">AkairoHandler#remove</a>
+    </li></ul></dd>
     
 
     
@@ -1888,6 +2125,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Command.html">Command</a></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
         
@@ -1915,7 +2170,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line280">line 280</a>
+        <a href="CommandHandler.js.html">CommandHandler.js</a>, <a href="CommandHandler.js.html#line253">line 253</a>
     </li></ul></dd>
     
 
@@ -1925,6 +2180,11 @@
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#event:add">AkairoHandler#event:add</a>
+    </li></ul></dd>
     
 
     
@@ -2048,7 +2308,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line318">line 318</a>
+        <a href="CommandHandler.js.html">CommandHandler.js</a>, <a href="CommandHandler.js.html#line231">line 231</a>
     </li></ul></dd>
     
 
@@ -2227,7 +2487,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line311">line 311</a>
+        <a href="CommandHandler.js.html">CommandHandler.js</a>, <a href="CommandHandler.js.html#line224">line 224</a>
     </li></ul></dd>
     
 
@@ -2383,7 +2643,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line333">line 333</a>
+        <a href="CommandHandler.js.html">CommandHandler.js</a>, <a href="CommandHandler.js.html#line246">line 246</a>
     </li></ul></dd>
     
 
@@ -2539,7 +2799,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line326">line 326</a>
+        <a href="CommandHandler.js.html">CommandHandler.js</a>, <a href="CommandHandler.js.html#line239">line 239</a>
     </li></ul></dd>
     
 
@@ -2683,6 +2943,282 @@
 
     
 
+    <h4 class="name" id="event:disable">disable</h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="CommandHandler.js.html">CommandHandler.js</a>, <a href="CommandHandler.js.html#line277">line 277</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#event:disable">AkairoHandler#event:disable</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Emitted when a command is disabled.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>command</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Command.html">Command</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Command disabled.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="event:enable">enable</h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="CommandHandler.js.html">CommandHandler.js</a>, <a href="CommandHandler.js.html#line271">line 271</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#event:enable">AkairoHandler#event:enable</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Emitted when a command is enabled.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>command</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Command.html">Command</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Command enabled.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
     <h4 class="name" id="event:messageBlocked">messageBlocked</h4>
 
     
@@ -2695,7 +3231,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line298">line 298</a>
+        <a href="CommandHandler.js.html">CommandHandler.js</a>, <a href="CommandHandler.js.html#line211">line 211</a>
     </li></ul></dd>
     
 
@@ -2851,7 +3387,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line305">line 305</a>
+        <a href="CommandHandler.js.html">CommandHandler.js</a>, <a href="CommandHandler.js.html#line218">line 218</a>
     </li></ul></dd>
     
 
@@ -2984,7 +3520,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line292">line 292</a>
+        <a href="CommandHandler.js.html">CommandHandler.js</a>, <a href="CommandHandler.js.html#line265">line 265</a>
     </li></ul></dd>
     
 
@@ -2994,6 +3530,11 @@
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#event:reload">AkairoHandler#event:reload</a>
+    </li></ul></dd>
     
 
     
@@ -3117,7 +3658,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_CommandHandler.js.html">commands/CommandHandler.js</a>, <a href="commands_CommandHandler.js.html#line286">line 286</a>
+        <a href="CommandHandler.js.html">CommandHandler.js</a>, <a href="CommandHandler.js.html#line259">line 259</a>
     </li></ul></dd>
     
 
@@ -3127,6 +3668,11 @@
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#event:remove">AkairoHandler#event:remove</a>
+    </li></ul></dd>
     
 
     

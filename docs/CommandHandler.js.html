@@ -1,4 +1,43 @@
-const AkairoHandler = require('./AkairoHandler');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>CommandHandler.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">CommandHandler.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const AkairoHandler = require('./AkairoHandler');
 const Command = require('./Command');
 const { CommandHandlerEvents, BuiltInReasons } = require('../utils/Constants');
 
@@ -48,14 +87,14 @@ class CommandHandler extends AkairoHandler {
 
         /**
          * Commands loaded, mapped by ID to Command.
-         * @type {Collection.<string, Command>}
+         * @type {Collection.&lt;string, Command>}
          */
         this.modules;
     }
 
     /**
      * Collection of commands. Alias to this.modules.
-     * @type {Collection.<string, Command>}
+     * @type {Collection.&lt;string, Command>}
      */
     get commands(){
         return this.modules;
@@ -78,12 +117,12 @@ class CommandHandler extends AkairoHandler {
      */
     handle(message){
         if (!this.preInhibitors){
-            if (message.author.id !== this.client.user.id && this.client.selfbot){
+            if (message.author.id !== this.client.user.id &amp;&amp; this.client.selfbot){
                 this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.NOT_SELF);
                 return;
             }
 
-            if (message.author.id === this.client.user.id && !this.client.selfbot){
+            if (message.author.id === this.client.user.id &amp;&amp; !this.client.selfbot){
                 this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.CLIENT);
                 return;
             }
@@ -107,7 +146,7 @@ class CommandHandler extends AkairoHandler {
                 start = prefix;
             } else
             if (allowMention){
-                const mentionRegex = new RegExp(`^<@!?${this.client.user.id}>`);
+                const mentionRegex = new RegExp(`^&lt;@!?${this.client.user.id}>`);
                 const mentioned = message.content.match(mentionRegex);
                 
                 if (mentioned){
@@ -129,17 +168,17 @@ class CommandHandler extends AkairoHandler {
             if (!command.enabled) return this.emit(CommandHandlerEvents.COMMAND_DISABLED, message, command);
 
             if (!this.postInhibitors){
-                if (command.ownerOnly && message.author.id !== this.client.ownerID){
+                if (command.ownerOnly &amp;&amp; message.author.id !== this.client.ownerID){
                     this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.OWNER);
                     return;
                 }
 
-                if (command.channelRestriction === 'guild' && !message.guild){
+                if (command.channelRestriction === 'guild' &amp;&amp; !message.guild){
                     this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.GUILD);
                     return;
                 }
 
-                if (command.channelRestriction === 'dm' && message.guild){
+                if (command.channelRestriction === 'dm' &amp;&amp; message.guild){
                     this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.DM);
                     return;
                 }
@@ -279,3 +318,22 @@ module.exports = CommandHandler;
  * @event CommandHandler#disable
  * @param {Command} command - Command disabled.
  */
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

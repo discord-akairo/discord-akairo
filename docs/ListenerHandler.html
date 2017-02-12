@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -53,7 +53,7 @@
 
     
 
-    <h4 class="name" id="ListenerHandler"><span class="type-signature"></span>new ListenerHandler<span class="signature">(framework, options)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="ListenerHandler"><span class="type-signature"></span>new ListenerHandler<span class="signature">(client, options)</span><span class="type-signature"></span></h4>
 
     
 
@@ -65,7 +65,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listeners_ListenerHandler.js.html">listeners/ListenerHandler.js</a>, <a href="listeners_ListenerHandler.js.html#line10">line 10</a>
+        <a href="ListenerHandler.js.html">ListenerHandler.js</a>, <a href="ListenerHandler.js.html#line7">line 7</a>
     </li></ul></dd>
     
 
@@ -105,7 +105,7 @@
 
 
 <div class="description">
-    Loads listeners and register them with EventEmitters.
+    Loads listeners and registers them with EventEmitters.
 </div>
 
 
@@ -143,13 +143,13 @@
 
         <tr>
             
-                <td class="name"><code>framework</code></td>
+                <td class="name"><code>client</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="Framework.html">Framework</a></span>
+<span class="param-type"><a href="AkairoClient.html">AkairoClient</a></span>
 
 
             
@@ -159,7 +159,7 @@
 
             
 
-            <td class="description last">The Akairo framework.</td>
+            <td class="description last">The Akairo client.</td>
         </tr>
 
     
@@ -182,7 +182,7 @@
 
             
 
-            <td class="description last">Options from framework.</td>
+            <td class="description last">Options from client.</td>
         </tr>
 
     
@@ -214,7 +214,7 @@
 
 
     <ul>
-        <li>EventEmitter</li>
+        <li><a href="AkairoHandler.html">AkairoHandler</a></li>
     </ul>
 
 
@@ -233,7 +233,7 @@
 
         
             
-<h4 class="name" id="categories"><span class="type-signature"></span>categories<span class="type-signature"> :Collection.&lt;string, <a href="Category.html">Category</a>></span></h4>
+<h4 class="name" id="categories"><span class="type-signature"></span>categories<span class="type-signature"> :Collection.&lt;string, Category></span></h4>
 
 
 
@@ -244,7 +244,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listeners_ListenerHandler.js.html">listeners/ListenerHandler.js</a>, <a href="listeners_ListenerHandler.js.html#line58">line 58</a>
+        <a href="AkairoHandler.js.html">AkairoHandler.js</a>, <a href="AkairoHandler.js.html#line51">line 51</a>
     </li></ul></dd>
     
 
@@ -252,6 +252,11 @@
 
     
 
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#categories">AkairoHandler#categories</a>
+    </li></ul></dd>
     
 
     
@@ -284,7 +289,7 @@
 
 
 <div class="description">
-    Listener categories, mapped by ID to Category.
+    Categories, mapped by ID to Category.
 </div>
 
 
@@ -293,7 +298,163 @@
     <ul>
         <li>
             
-<span class="param-type">Collection.&lt;string, <a href="Category.html">Category</a>></span>
+<span class="param-type">Collection.&lt;string, Category></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="classToHandle"><span class="type-signature">(readonly) </span>classToHandle<span class="type-signature"> :class</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AkairoHandler.js.html">AkairoHandler.js</a>, <a href="AkairoHandler.js.html#line39">line 39</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#classToHandle">AkairoHandler#classToHandle</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Class to handle.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">class</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="client"><span class="type-signature">(readonly) </span>client<span class="type-signature"> :<a href="AkairoClient.html">AkairoClient</a></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AkairoHandler.js.html">AkairoHandler.js</a>, <a href="AkairoHandler.js.html#line25">line 25</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#client">AkairoHandler#client</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    The Akairo client.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="AkairoClient.html">AkairoClient</a></span>
 
 
         </li>
@@ -317,7 +478,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listeners_ListenerHandler.js.html">listeners/ListenerHandler.js</a>, <a href="listeners_ListenerHandler.js.html#line31">line 31</a>
+        <a href="ListenerHandler.js.html">ListenerHandler.js</a>, <a href="ListenerHandler.js.html#line41">line 41</a>
     </li></ul></dd>
     
 
@@ -327,6 +488,11 @@
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#directory">AkairoHandler#directory</a>
+    </li></ul></dd>
     
 
     
@@ -390,7 +556,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listeners_ListenerHandler.js.html">listeners/ListenerHandler.js</a>, <a href="listeners_ListenerHandler.js.html#line37">line 37</a>
+        <a href="ListenerHandler.js.html">ListenerHandler.js</a>, <a href="ListenerHandler.js.html#line20">line 20</a>
     </li></ul></dd>
     
 
@@ -452,7 +618,7 @@
 
         
             
-<h4 class="name" id="framework"><span class="type-signature">(readonly) </span>framework<span class="type-signature"> :<a href="Framework.html">Framework</a></span></h4>
+<h4 class="name" id="listeners"><span class="type-signature"></span>listeners<span class="type-signature"> :Collection.&lt;string, <a href="Listener.html">Listener</a>></span></h4>
 
 
 
@@ -463,7 +629,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listeners_ListenerHandler.js.html">listeners/ListenerHandler.js</a>, <a href="listeners_ListenerHandler.js.html#line24">line 24</a>
+        <a href="ListenerHandler.js.html">ListenerHandler.js</a>, <a href="ListenerHandler.js.html#line54">line 54</a>
     </li></ul></dd>
     
 
@@ -503,7 +669,7 @@
 
 
 <div class="description">
-    The Akairo framework.
+    Collection of listeners. Alias to this.modules.
 </div>
 
 
@@ -512,7 +678,7 @@
     <ul>
         <li>
             
-<span class="param-type"><a href="Framework.html">Framework</a></span>
+<span class="param-type">Collection.&lt;string, <a href="Listener.html">Listener</a>></span>
 
 
         </li>
@@ -525,7 +691,7 @@
 
         
             
-<h4 class="name" id="listeners"><span class="type-signature"></span>listeners<span class="type-signature"> :Collection.&lt;string, <a href="Listener.html">Listener</a>></span></h4>
+<h4 class="name" id="modules"><span class="type-signature"></span>modules<span class="type-signature"> :Collection.&lt;string, <a href="Listener.html">Listener</a>></span></h4>
 
 
 
@@ -536,7 +702,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listeners_ListenerHandler.js.html">listeners/ListenerHandler.js</a>, <a href="listeners_ListenerHandler.js.html#line52">line 52</a>
+        <a href="ListenerHandler.js.html">ListenerHandler.js</a>, <a href="ListenerHandler.js.html#line47">line 47</a>
     </li></ul></dd>
     
 
@@ -546,6 +712,11 @@
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#modules">AkairoHandler#modules</a>
+    </li></ul></dd>
     
 
     
@@ -607,7 +778,7 @@
 
     
 
-    <h4 class="name" id="add"><span class="type-signature"></span>add<span class="signature">(filename)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="add"><span class="type-signature"></span>add<span class="signature">(filename)</span><span class="type-signature"> &rarr; {<a href="Inhibitor.html">Inhibitor</a>}</span></h4>
 
     
 
@@ -619,7 +790,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listeners_ListenerHandler.js.html">listeners/ListenerHandler.js</a>, <a href="listeners_ListenerHandler.js.html#line97">line 97</a>
+        <a href="ListenerHandler.js.html">ListenerHandler.js</a>, <a href="ListenerHandler.js.html#line131">line 131</a>
     </li></ul></dd>
     
 
@@ -629,6 +800,11 @@
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#add">AkairoHandler#add</a>
+    </li></ul></dd>
     
 
     
@@ -659,7 +835,7 @@
 
 
 <div class="description">
-    Adds a listener.
+    Adds an inhibitor.
 </div>
 
 
@@ -713,7 +889,7 @@
 
             
 
-            <td class="description last">Filename to lookup in the directory.</td>
+            <td class="description last">Filename to lookup in the directory. A .js extension is assumed.</td>
         </tr>
 
     
@@ -733,6 +909,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Inhibitor.html">Inhibitor</a></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
         
@@ -752,7 +946,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listeners_ListenerHandler.js.html">listeners/ListenerHandler.js</a>, <a href="listeners_ListenerHandler.js.html#line173">line 173</a>
+        <a href="ListenerHandler.js.html">ListenerHandler.js</a>, <a href="ListenerHandler.js.html#line114">line 114</a>
     </li></ul></dd>
     
 
@@ -873,6 +1067,162 @@
 
     
 
+    <h4 class="name" id="findCategory"><span class="type-signature"></span>findCategory<span class="signature">(name)</span><span class="type-signature"> &rarr; {Category}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AkairoHandler.js.html">AkairoHandler.js</a>, <a href="AkairoHandler.js.html#line153">line 153</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#findCategory">AkairoHandler#findCategory</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Finds a category by name.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Name to find with.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Category</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
     <h4 class="name" id="load"><span class="type-signature"></span>load<span class="signature">(filepath)</span><span class="type-signature"> &rarr; {<a href="Listener.html">Listener</a>}</span></h4>
 
     
@@ -885,7 +1235,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listeners_ListenerHandler.js.html">listeners/ListenerHandler.js</a>, <a href="listeners_ListenerHandler.js.html#line71">line 71</a>
+        <a href="ListenerHandler.js.html">ListenerHandler.js</a>, <a href="ListenerHandler.js.html#line63">line 63</a>
     </li></ul></dd>
     
 
@@ -895,6 +1245,11 @@
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#load">AkairoHandler#load</a>
+    </li></ul></dd>
     
 
     
@@ -1036,7 +1391,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listeners_ListenerHandler.js.html">listeners/ListenerHandler.js</a>, <a href="listeners_ListenerHandler.js.html#line155">line 155</a>
+        <a href="ListenerHandler.js.html">ListenerHandler.js</a>, <a href="ListenerHandler.js.html#line96">line 96</a>
     </li></ul></dd>
     
 
@@ -1157,7 +1512,7 @@
 
     
 
-    <h4 class="name" id="reload"><span class="type-signature"></span>reload<span class="signature">(id)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="reload"><span class="type-signature"></span>reload<span class="signature">(id)</span><span class="type-signature"> &rarr; {<a href="Listener.html">Listener</a>}</span></h4>
 
     
 
@@ -1169,7 +1524,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listeners_ListenerHandler.js.html">listeners/ListenerHandler.js</a>, <a href="listeners_ListenerHandler.js.html#line129">line 129</a>
+        <a href="ListenerHandler.js.html">ListenerHandler.js</a>, <a href="ListenerHandler.js.html#line83">line 83</a>
     </li></ul></dd>
     
 
@@ -1179,6 +1534,11 @@
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#reload">AkairoHandler#reload</a>
+    </li></ul></dd>
     
 
     
@@ -1283,6 +1643,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Listener.html">Listener</a></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
         
@@ -1302,7 +1680,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listeners_ListenerHandler.js.html">listeners/ListenerHandler.js</a>, <a href="listeners_ListenerHandler.js.html#line147">line 147</a>
+        <a href="ListenerHandler.js.html">ListenerHandler.js</a>, <a href="ListenerHandler.js.html#line136">line 136</a>
     </li></ul></dd>
     
 
@@ -1312,6 +1690,11 @@
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#reloadAll">AkairoHandler#reloadAll</a>
+    </li></ul></dd>
     
 
     
@@ -1342,7 +1725,7 @@
 
 
 <div class="description">
-    Reloads all listeners.
+    Reloads all inhibitors.
 </div>
 
 
@@ -1374,7 +1757,7 @@
 
     
 
-    <h4 class="name" id="remove"><span class="type-signature"></span>remove<span class="signature">(id)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="remove"><span class="type-signature"></span>remove<span class="signature">(id)</span><span class="type-signature"> &rarr; {<a href="Listener.html">Listener</a>}</span></h4>
 
     
 
@@ -1386,7 +1769,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listeners_ListenerHandler.js.html">listeners/ListenerHandler.js</a>, <a href="listeners_ListenerHandler.js.html#line112">line 112</a>
+        <a href="ListenerHandler.js.html">ListenerHandler.js</a>, <a href="ListenerHandler.js.html#line73">line 73</a>
     </li></ul></dd>
     
 
@@ -1396,6 +1779,11 @@
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#remove">AkairoHandler#remove</a>
+    </li></ul></dd>
     
 
     
@@ -1500,6 +1888,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Listener.html">Listener</a></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
         
@@ -1527,7 +1933,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listeners_ListenerHandler.js.html">listeners/ListenerHandler.js</a>, <a href="listeners_ListenerHandler.js.html#line186">line 186</a>
+        <a href="ListenerHandler.js.html">ListenerHandler.js</a>, <a href="ListenerHandler.js.html#line141">line 141</a>
     </li></ul></dd>
     
 
@@ -1537,6 +1943,11 @@
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#event:add">AkairoHandler#event:add</a>
+    </li></ul></dd>
     
 
     
@@ -1567,7 +1978,7 @@
 
 
 <div class="description">
-    Emitted when an listener is added.
+    Emitted when a listener is added.
 </div>
 
 
@@ -1648,7 +2059,7 @@
 
     
 
-    <h4 class="name" id="event:reload">reload</h4>
+    <h4 class="name" id="event:disable">disable</h4>
 
     
 
@@ -1660,7 +2071,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listeners_ListenerHandler.js.html">listeners/ListenerHandler.js</a>, <a href="listeners_ListenerHandler.js.html#line198">line 198</a>
+        <a href="ListenerHandler.js.html">ListenerHandler.js</a>, <a href="ListenerHandler.js.html#line165">line 165</a>
     </li></ul></dd>
     
 
@@ -1670,6 +2081,11 @@
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#event:disable">AkairoHandler#event:disable</a>
+    </li></ul></dd>
     
 
     
@@ -1700,7 +2116,283 @@
 
 
 <div class="description">
-    Emitted when an listener is reloaded.
+    Emitted when a listener is disabled.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>listener</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Listener.html">Listener</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Listener disabled.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="event:enable">enable</h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ListenerHandler.js.html">ListenerHandler.js</a>, <a href="ListenerHandler.js.html#line159">line 159</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#event:enable">AkairoHandler#event:enable</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Emitted when a listener is enabled.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>listener</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Listener.html">Listener</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Listener enabled.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="event:reload">reload</h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ListenerHandler.js.html">ListenerHandler.js</a>, <a href="ListenerHandler.js.html#line153">line 153</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#event:reload">AkairoHandler#event:reload</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Emitted when a listener is reloaded.
 </div>
 
 
@@ -1793,7 +2485,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listeners_ListenerHandler.js.html">listeners/ListenerHandler.js</a>, <a href="listeners_ListenerHandler.js.html#line192">line 192</a>
+        <a href="ListenerHandler.js.html">ListenerHandler.js</a>, <a href="ListenerHandler.js.html#line147">line 147</a>
     </li></ul></dd>
     
 
@@ -1803,6 +2495,11 @@
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#event:remove">AkairoHandler#event:remove</a>
+    </li></ul></dd>
     
 
     
@@ -1833,7 +2530,7 @@
 
 
 <div class="description">
-    Emitted when an listener is removed.
+    Emitted when a listener is removed.
 </div>
 
 

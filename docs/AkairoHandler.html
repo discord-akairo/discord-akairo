@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>InhibitorHandler - Documentation</title>
+    <title>AkairoHandler - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">InhibitorHandler</h1>
+    <h1 class="page-title">AkairoHandler</h1>
     
 
     
@@ -40,7 +40,7 @@
 <header>
     
         <h2>
-        InhibitorHandler
+        AkairoHandler
         </h2>
         
     
@@ -53,7 +53,7 @@
 
     
 
-    <h4 class="name" id="InhibitorHandler"><span class="type-signature"></span>new InhibitorHandler<span class="signature">(client, options)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="AkairoHandler"><span class="type-signature"></span>new AkairoHandler<span class="signature">(client, directory, classToHandle)</span><span class="type-signature"></span></h4>
 
     
 
@@ -65,7 +65,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InhibitorHandler.js.html">InhibitorHandler.js</a>, <a href="InhibitorHandler.js.html#line5">line 5</a>
+        <a href="AkairoHandler.js.html">AkairoHandler.js</a>, <a href="AkairoHandler.js.html#line10">line 10</a>
     </li></ul></dd>
     
 
@@ -105,7 +105,7 @@
 
 
 <div class="description">
-    Loads inhibitors and checks messages.
+    Handles modules.
 </div>
 
 
@@ -166,13 +166,13 @@
 
         <tr>
             
-                <td class="name"><code>options</code></td>
+                <td class="name"><code>directory</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type">string</span>
 
 
             
@@ -182,7 +182,30 @@
 
             
 
-            <td class="description last">Options from client.</td>
+            <td class="description last">Directory to modules.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>classToHandle</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">class</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Only instances of this can be handled. Other classes are ignored.</td>
         </tr>
 
     
@@ -214,7 +237,7 @@
 
 
     <ul>
-        <li><a href="AkairoHandler.html">AkairoHandler</a></li>
+        <li>EventEmitter</li>
     </ul>
 
 
@@ -252,11 +275,6 @@
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="AkairoHandler.html#categories">AkairoHandler#categories</a>
-    </li></ul></dd>
     
 
     
@@ -331,11 +349,6 @@
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="AkairoHandler.html#classToHandle">AkairoHandler#classToHandle</a>
-    </li></ul></dd>
-    
 
     
 
@@ -409,11 +422,6 @@
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="AkairoHandler.html#client">AkairoHandler#client</a>
-    </li></ul></dd>
-    
 
     
 
@@ -478,7 +486,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InhibitorHandler.js.html">InhibitorHandler.js</a>, <a href="InhibitorHandler.js.html#line22">line 22</a>
+        <a href="AkairoHandler.js.html">AkairoHandler.js</a>, <a href="AkairoHandler.js.html#line32">line 32</a>
     </li></ul></dd>
     
 
@@ -488,11 +496,6 @@
 
     
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="AkairoHandler.html#directory">AkairoHandler#directory</a>
-    </li></ul></dd>
     
 
     
@@ -523,7 +526,7 @@
 
 
 <div class="description">
-    Directory to inhibitors.
+    Directory to modules.
 </div>
 
 
@@ -545,7 +548,7 @@
 
         
             
-<h4 class="name" id="inhibitors"><span class="type-signature"></span>inhibitors<span class="type-signature"> :Collection.&lt;string, <a href="Inhibitor.html">Inhibitor</a>></span></h4>
+<h4 class="name" id="modules"><span class="type-signature"></span>modules<span class="type-signature"> :Collection.&lt;string, <a href="AkairoModule.html">AkairoModule</a>></span></h4>
 
 
 
@@ -556,7 +559,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InhibitorHandler.js.html">InhibitorHandler.js</a>, <a href="InhibitorHandler.js.html#line35">line 35</a>
+        <a href="AkairoHandler.js.html">AkairoHandler.js</a>, <a href="AkairoHandler.js.html#line45">line 45</a>
     </li></ul></dd>
     
 
@@ -596,7 +599,7 @@
 
 
 <div class="description">
-    Collection of inhibitors. Alias to this.modules.
+    Modules loaded, mapped by ID to AkairoModule.
 </div>
 
 
@@ -605,85 +608,7 @@
     <ul>
         <li>
             
-<span class="param-type">Collection.&lt;string, <a href="Inhibitor.html">Inhibitor</a>></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="modules"><span class="type-signature"></span>modules<span class="type-signature"> :Collection.&lt;string, <a href="Inhibitor.html">Inhibitor</a>></span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InhibitorHandler.js.html">InhibitorHandler.js</a>, <a href="InhibitorHandler.js.html#line28">line 28</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="AkairoHandler.html#modules">AkairoHandler#modules</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Inhibitors loaded, mapped by ID to Inhibitor.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Collection.&lt;string, <a href="Inhibitor.html">Inhibitor</a>></span>
+<span class="param-type">Collection.&lt;string, <a href="AkairoModule.html">AkairoModule</a>></span>
 
 
         </li>
@@ -705,7 +630,7 @@
 
     
 
-    <h4 class="name" id="add"><span class="type-signature"></span>add<span class="signature">(filename)</span><span class="type-signature"> &rarr; {<a href="Inhibitor.html">Inhibitor</a>}</span></h4>
+    <h4 class="name" id="add"><span class="type-signature"></span>add<span class="signature">(filename)</span><span class="type-signature"> &rarr; {<a href="AkairoModule.html">AkairoModule</a>}</span></h4>
 
     
 
@@ -717,7 +642,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InhibitorHandler.js.html">InhibitorHandler.js</a>, <a href="InhibitorHandler.js.html#line96">line 96</a>
+        <a href="AkairoHandler.js.html">AkairoHandler.js</a>, <a href="AkairoHandler.js.html#line89">line 89</a>
     </li></ul></dd>
     
 
@@ -727,11 +652,6 @@
 
     
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="AkairoHandler.html#add">AkairoHandler#add</a>
-    </li></ul></dd>
     
 
     
@@ -762,7 +682,7 @@
 
 
 <div class="description">
-    Adds an inhibitor.
+    Adds a module.
 </div>
 
 
@@ -847,7 +767,7 @@
     </dt>
     <dd>
         
-<span class="param-type"><a href="Inhibitor.html">Inhibitor</a></span>
+<span class="param-type"><a href="AkairoModule.html">AkairoModule</a></span>
 
 
     </dd>
@@ -881,11 +801,6 @@
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="AkairoHandler.html#findCategory">AkairoHandler#findCategory</a>
-    </li></ul></dd>
     
 
     
@@ -1017,7 +932,7 @@
 
     
 
-    <h4 class="name" id="load"><span class="type-signature"></span>load<span class="signature">(filepath)</span><span class="type-signature"> &rarr; {<a href="Inhibitor.html">Inhibitor</a>}</span></h4>
+    <h4 class="name" id="load"><span class="type-signature"></span>load<span class="signature">(filepath)</span><span class="type-signature"> &rarr; {<a href="AkairoModule.html">AkairoModule</a>}</span></h4>
 
     
 
@@ -1029,7 +944,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InhibitorHandler.js.html">InhibitorHandler.js</a>, <a href="InhibitorHandler.js.html#line89">line 89</a>
+        <a href="AkairoHandler.js.html">AkairoHandler.js</a>, <a href="AkairoHandler.js.html#line64">line 64</a>
     </li></ul></dd>
     
 
@@ -1039,11 +954,6 @@
 
     
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="AkairoHandler.html#load">AkairoHandler#load</a>
-    </li></ul></dd>
     
 
     
@@ -1074,7 +984,7 @@
 
 
 <div class="description">
-    Loads an inhibitor.
+    Loads a module.
 </div>
 
 
@@ -1159,7 +1069,7 @@
     </dt>
     <dd>
         
-<span class="param-type"><a href="Inhibitor.html">Inhibitor</a></span>
+<span class="param-type"><a href="AkairoModule.html">AkairoModule</a></span>
 
 
     </dd>
@@ -1173,7 +1083,7 @@
 
     
 
-    <h4 class="name" id="reload"><span class="type-signature"></span>reload<span class="signature">(id)</span><span class="type-signature"> &rarr; {<a href="Inhibitor.html">Inhibitor</a>}</span></h4>
+    <h4 class="name" id="reload"><span class="type-signature"></span>reload<span class="signature">(id)</span><span class="type-signature"> &rarr; {<a href="AkairoModule.html">AkairoModule</a>}</span></h4>
 
     
 
@@ -1185,7 +1095,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InhibitorHandler.js.html">InhibitorHandler.js</a>, <a href="InhibitorHandler.js.html#line110">line 110</a>
+        <a href="AkairoHandler.js.html">AkairoHandler.js</a>, <a href="AkairoHandler.js.html#line125">line 125</a>
     </li></ul></dd>
     
 
@@ -1195,11 +1105,6 @@
 
     
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="AkairoHandler.html#reload">AkairoHandler#reload</a>
-    </li></ul></dd>
     
 
     
@@ -1230,7 +1135,7 @@
 
 
 <div class="description">
-    Reloads an inhibitor.
+    Reloads a module.
 </div>
 
 
@@ -1284,7 +1189,7 @@
 
             
 
-            <td class="description last">ID of the command.</td>
+            <td class="description last">ID of the module.</td>
         </tr>
 
     
@@ -1315,7 +1220,7 @@
     </dt>
     <dd>
         
-<span class="param-type"><a href="Inhibitor.html">Inhibitor</a></span>
+<span class="param-type"><a href="AkairoModule.html">AkairoModule</a></span>
 
 
     </dd>
@@ -1341,7 +1246,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InhibitorHandler.js.html">InhibitorHandler.js</a>, <a href="InhibitorHandler.js.html#line115">line 115</a>
+        <a href="AkairoHandler.js.html">AkairoHandler.js</a>, <a href="AkairoHandler.js.html#line144">line 144</a>
     </li></ul></dd>
     
 
@@ -1351,11 +1256,6 @@
 
     
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="AkairoHandler.html#reloadAll">AkairoHandler#reloadAll</a>
-    </li></ul></dd>
     
 
     
@@ -1386,7 +1286,7 @@
 
 
 <div class="description">
-    Reloads all inhibitors.
+    Reloads all modules.
 </div>
 
 
@@ -1418,7 +1318,7 @@
 
     
 
-    <h4 class="name" id="remove"><span class="type-signature"></span>remove<span class="signature">(id)</span><span class="type-signature"> &rarr; {<a href="Inhibitor.html">Inhibitor</a>}</span></h4>
+    <h4 class="name" id="remove"><span class="type-signature"></span>remove<span class="signature">(id)</span><span class="type-signature"> &rarr; {<a href="AkairoModule.html">AkairoModule</a>}</span></h4>
 
     
 
@@ -1430,7 +1330,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InhibitorHandler.js.html">InhibitorHandler.js</a>, <a href="InhibitorHandler.js.html#line103">line 103</a>
+        <a href="AkairoHandler.js.html">AkairoHandler.js</a>, <a href="AkairoHandler.js.html#line107">line 107</a>
     </li></ul></dd>
     
 
@@ -1440,11 +1340,6 @@
 
     
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="AkairoHandler.html#remove">AkairoHandler#remove</a>
-    </li></ul></dd>
     
 
     
@@ -1475,7 +1370,7 @@
 
 
 <div class="description">
-    Removes an inhibitor.
+    Removes a module.
 </div>
 
 
@@ -1529,7 +1424,7 @@
 
             
 
-            <td class="description last">ID of the command.</td>
+            <td class="description last">ID of the module.</td>
         </tr>
 
     
@@ -1560,332 +1455,7 @@
     </dt>
     <dd>
         
-<span class="param-type"><a href="Inhibitor.html">Inhibitor</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="testCommand"><span class="type-signature"></span>testCommand<span class="signature">(message, command)</span><span class="type-signature"> &rarr; {Promise.&lt;string>}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InhibitorHandler.js.html">InhibitorHandler.js</a>, <a href="InhibitorHandler.js.html#line66">line 66</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Tests the post-message inhibitors against the message and command. Rejects with the reason if blocked.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>message</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Message</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Message to test.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>command</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Command.html">Command</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Command to test.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;string></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="testMessage"><span class="type-signature"></span>testMessage<span class="signature">(message)</span><span class="type-signature"> &rarr; {Promise.&lt;string>}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InhibitorHandler.js.html">InhibitorHandler.js</a>, <a href="InhibitorHandler.js.html#line44">line 44</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Tests the pre-message inhibitors against the message. Rejects with the reason if blocked.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>message</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Message</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Message to test.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;string></span>
+<span class="param-type"><a href="AkairoModule.html">AkairoModule</a></span>
 
 
     </dd>
@@ -1919,7 +1489,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InhibitorHandler.js.html">InhibitorHandler.js</a>, <a href="InhibitorHandler.js.html#line120">line 120</a>
+        <a href="AkairoHandler.js.html">AkairoHandler.js</a>, <a href="AkairoHandler.js.html#line162">line 162</a>
     </li></ul></dd>
     
 
@@ -1929,11 +1499,6 @@
 
     
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="AkairoHandler.html#event:add">AkairoHandler#event:add</a>
-    </li></ul></dd>
     
 
     
@@ -1964,7 +1529,7 @@
 
 
 <div class="description">
-    Emitted when an inhibitor is added.
+    Emitted when a module is added.
 </div>
 
 
@@ -2002,13 +1567,13 @@
 
         <tr>
             
-                <td class="name"><code>inhibitor</code></td>
+                <td class="name"><code>mod</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="Inhibitor.html">Inhibitor</a></span>
+<span class="param-type"><a href="AkairoModule.html">AkairoModule</a></span>
 
 
             
@@ -2018,7 +1583,7 @@
 
             
 
-            <td class="description last">Inhibitor added.</td>
+            <td class="description last">Module added.</td>
         </tr>
 
     
@@ -2057,7 +1622,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InhibitorHandler.js.html">InhibitorHandler.js</a>, <a href="InhibitorHandler.js.html#line144">line 144</a>
+        <a href="AkairoHandler.js.html">AkairoHandler.js</a>, <a href="AkairoHandler.js.html#line186">line 186</a>
     </li></ul></dd>
     
 
@@ -2067,11 +1632,6 @@
 
     
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="AkairoHandler.html#event:disable">AkairoHandler#event:disable</a>
-    </li></ul></dd>
     
 
     
@@ -2102,7 +1662,7 @@
 
 
 <div class="description">
-    Emitted when an inhibitor is disabled.
+    Emitted when a module is disabled.
 </div>
 
 
@@ -2140,13 +1700,13 @@
 
         <tr>
             
-                <td class="name"><code>inhibitor</code></td>
+                <td class="name"><code>mod</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="Inhibitor.html">Inhibitor</a></span>
+<span class="param-type"><a href="AkairoModule.html">AkairoModule</a></span>
 
 
             
@@ -2156,7 +1716,7 @@
 
             
 
-            <td class="description last">Inhibitor disabled.</td>
+            <td class="description last">Module disabled.</td>
         </tr>
 
     
@@ -2195,7 +1755,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InhibitorHandler.js.html">InhibitorHandler.js</a>, <a href="InhibitorHandler.js.html#line138">line 138</a>
+        <a href="AkairoHandler.js.html">AkairoHandler.js</a>, <a href="AkairoHandler.js.html#line180">line 180</a>
     </li></ul></dd>
     
 
@@ -2205,11 +1765,6 @@
 
     
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="AkairoHandler.html#event:enable">AkairoHandler#event:enable</a>
-    </li></ul></dd>
     
 
     
@@ -2240,7 +1795,7 @@
 
 
 <div class="description">
-    Emitted when an inhibitor is enabled.
+    Emitted when a module is enabled.
 </div>
 
 
@@ -2278,13 +1833,13 @@
 
         <tr>
             
-                <td class="name"><code>inhibitor</code></td>
+                <td class="name"><code>mod</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="Inhibitor.html">Inhibitor</a></span>
+<span class="param-type"><a href="AkairoModule.html">AkairoModule</a></span>
 
 
             
@@ -2294,7 +1849,7 @@
 
             
 
-            <td class="description last">Inhibitor enabled.</td>
+            <td class="description last">Module enabled.</td>
         </tr>
 
     
@@ -2333,7 +1888,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InhibitorHandler.js.html">InhibitorHandler.js</a>, <a href="InhibitorHandler.js.html#line132">line 132</a>
+        <a href="AkairoHandler.js.html">AkairoHandler.js</a>, <a href="AkairoHandler.js.html#line174">line 174</a>
     </li></ul></dd>
     
 
@@ -2343,11 +1898,6 @@
 
     
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="AkairoHandler.html#event:reload">AkairoHandler#event:reload</a>
-    </li></ul></dd>
     
 
     
@@ -2378,7 +1928,7 @@
 
 
 <div class="description">
-    Emitted when an inhibitor is reloaded.
+    Emitted when a module is reloaded.
 </div>
 
 
@@ -2416,13 +1966,13 @@
 
         <tr>
             
-                <td class="name"><code>inhibitor</code></td>
+                <td class="name"><code>mod</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="Inhibitor.html">Inhibitor</a></span>
+<span class="param-type"><a href="AkairoModule.html">AkairoModule</a></span>
 
 
             
@@ -2432,7 +1982,7 @@
 
             
 
-            <td class="description last">Inhibitor reloaded.</td>
+            <td class="description last">Module reloaded.</td>
         </tr>
 
     
@@ -2471,7 +2021,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InhibitorHandler.js.html">InhibitorHandler.js</a>, <a href="InhibitorHandler.js.html#line126">line 126</a>
+        <a href="AkairoHandler.js.html">AkairoHandler.js</a>, <a href="AkairoHandler.js.html#line168">line 168</a>
     </li></ul></dd>
     
 
@@ -2481,11 +2031,6 @@
 
     
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="AkairoHandler.html#event:remove">AkairoHandler#event:remove</a>
-    </li></ul></dd>
     
 
     
@@ -2516,7 +2061,7 @@
 
 
 <div class="description">
-    Emitted when an inhibitor is removed.
+    Emitted when a module is removed.
 </div>
 
 
@@ -2554,13 +2099,13 @@
 
         <tr>
             
-                <td class="name"><code>inhibitor</code></td>
+                <td class="name"><code>mod</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="Inhibitor.html">Inhibitor</a></span>
+<span class="param-type"><a href="AkairoModule.html">AkairoModule</a></span>
 
 
             
@@ -2570,7 +2115,7 @@
 
             
 
-            <td class="description last">Inhibitor removed.</td>
+            <td class="description last">Module removed.</td>
         </tr>
 
     

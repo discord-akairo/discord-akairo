@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Framework.html">Framework</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -114,6 +114,482 @@
 
         
                 
+<h4 class="name" id="AkairoOptions">AkairoOptions</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AkairoClient.js.html">AkairoClient.js</a>, <a href="AkairoClient.js.html#line7">line 7</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>ownerID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>''</code>
+                
+                </td>
+            
+
+            <td class="description last">Discord ID of the client owner.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>selfbot</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Marks this bot as a selfbot.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>commandDirectory</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Directory to commands.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>prefix</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+ || 
+
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>'!'</code>
+                
+                </td>
+            
+
+            <td class="description last">Default command prefix or function <code>(message => {})</code> returning prefix.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>allowMention</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+ || 
+
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>true</code>
+                
+                </td>
+            
+
+            <td class="description last">Allow mentions to the client user as a prefix or function <code>(message => {})</code> that returns true or false.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>inhibitorDirectory</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Directory to inhibitors.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>preInhibitors</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Disables the built-in pre-message inhibitors.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>postInhibitors</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Disables the built-in post-message inhibitors.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>listenerDirectory</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Directory to listeners.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>emitters</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>{}</code>
+                
+                </td>
+            
+
+            <td class="description last">Emitters to load onto the listener handler.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<div class="description">
+    Options used to determine how the framework behaves.This is also passed to Discord JS's client options.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+                
 <h4 class="name" id="Argument">Argument</h4>
 
 
@@ -125,7 +601,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line3">line 3</a>
+        <a href="Command.js.html">Command.js</a>, <a href="Command.js.html#line4">line 4</a>
     </li></ul></dd>
     
 
@@ -497,7 +973,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line15">line 15</a>
+        <a href="Command.js.html">Command.js</a>, <a href="Command.js.html#line16">line 16</a>
     </li></ul></dd>
     
 
@@ -537,7 +1013,7 @@
 
 
 <div class="description">
-    The method to match arguments from text. Possible strings are:<br/><code>'word'</code> Matches by the order of the words inputted. Ignores words that matches prefix or flag.<br/><code>'prefix'</code> Matches words that starts with the prefix. The word after the prefix is the evaluated argument.<br/><code>'flag'</code> Matches words that equal this prefix. The evaluated argument is true or false.<br/><code>'text'</code> Matches the entire text, except for the command, ignoring words that matches prefix or flag.<br/><code>'content'</code> Matches the entire text as it was inputted, except for the command.
+    The method to match arguments from text. Possible strings are:<br/><code>'word'</code> Matches by the order of the words inputted. Ignores words that matches prefix or flag.<br/><code>'rest'</code> Matches the rest of the words in order. Ignores words that matches prefix or flag.<br/><code>'prefix'</code> Matches words that starts with the prefix. The word after the prefix is the evaluated argument.<br/><code>'flag'</code> Matches words that equal this prefix. The evaluated argument is true or false.<br/><code>'text'</code> Matches the entire text, except for the command, ignoring words that matches prefix or flag.<br/><code>'content'</code> Matches the entire text as it was inputted, except for the command.
 </div>
 
 
@@ -570,7 +1046,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line65">line 65</a>
+        <a href="Command.js.html">Command.js</a>, <a href="Command.js.html#line69">line 69</a>
     </li></ul></dd>
     
 
@@ -643,7 +1119,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line25">line 25</a>
+        <a href="Command.js.html">Command.js</a>, <a href="Command.js.html#line27">line 27</a>
     </li></ul></dd>
     
 
@@ -683,7 +1159,7 @@
 
 
 <div class="description">
-    The type that the argument should be cast to. Possible strings are:<br/><code>'string'</code> Does not cast to any type.<br/><code>'number'</code> Casts to an number with parseFloat(), default value if not a number.<br/><code>'integer'</code> Casts to an integer with parseInt(), default value if not a number.<br/><code>'dynamic'</code> Casts to a number with parseFloat() or a string if the argument is not a number.<br/><code>'dynamicInt'</code> Casts to an integer with parseInt() or a string if the argument is not a number.<br/><br/>Possible Discord-related strings:<br/><code>'user'</code> Tries to resolve to a user.<br/><code>'member'</code> Tries to resolve to a member.<br/><code>'channel'</code> Tries to resolve to a channel.<br/><code>'textChannel'</code> Tries to resolve to a text channel.<br/><code>'voiceChannel'</code> Tries to resolve to a voice channel.<br/><code>'role'</code> Tries to resolve to a role.<br/>If any of the above are not valid, the default value will be resolved (recommended to use an ID).<br/><br/>An array of strings can be used to restrict input to only those strings, case insensitive.<br/>The evaluated argument will be all lowercase.<br/>If the input is not in the array, the default value is used.<br/><br/>A function <code>((word, message) => {})</code> can also be used to filter or modify arguments.<br/>A return value of true will let the word pass, a falsey return value will use the default value for the argument.<br/>Any other truthy return value will be used as the argument.
+    The type that the argument should be cast to. Possible strings are:<br/><code>'string'</code> Does not cast to any type.<br/><code>'number'</code> Casts to an number with parseFloat(), default value if not a number.<br/><code>'integer'</code> Casts to an integer with parseInt(), default value if not a number.<br/><code>'dynamic'</code> Casts to a number with parseFloat() or a string if the argument is not a number.<br/><code>'dynamicInt'</code> Casts to an integer with parseInt() or a string if the argument is not a number.<br/><br/>Possible Discord-related strings:<br/><code>'user'</code> Tries to resolve to a user.<br/><code>'member'</code> Tries to resolve to a member.<br/><code>'channel'</code> Tries to resolve to a channel.<br/><code>'textChannel'</code> Tries to resolve to a text channel.<br/><code>'voiceChannel'</code> Tries to resolve to a voice channel.<br/><code>'role'</code> Tries to resolve to a role.<br/><code>'emoji'</code> Tries to resolve to a custom emoji.<br/>Many of these types can only be used in a guild.<br/>If any of the above are invalid, the default value will be resolved (recommended to use an ID).<br/><br/>An array of strings can be used to restrict input to only those strings, case insensitive.<br/>The evaluated argument will be all lowercase.<br/>If the input is not in the array, the default value is used.<br/><br/>A function <code>((word, message) => {})</code> can also be used to filter or modify arguments.<br/>A return value of true will let the word pass, a falsey return value will use the default value for the argument.<br/>Any other truthy return value will be used as the argument.
 </div>
 
 
@@ -716,7 +1192,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commands_Command.js.html">commands/Command.js</a>, <a href="commands_Command.js.html#line52">line 52</a>
+        <a href="Command.js.html">Command.js</a>, <a href="Command.js.html#line56">line 56</a>
     </li></ul></dd>
     
 
@@ -1075,7 +1551,7 @@
                 </td>
             
 
-            <td class="description last">An object for custom options. Accessible with command.options.</td>
+            <td class="description last">An object for custom options. Accessible with Command#options.</td>
         </tr>
 
     
@@ -1110,482 +1586,6 @@
 
             
                 
-<h4 class="name" id="FrameworkOptions">FrameworkOptions</h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Framework.js.html">Framework.js</a>, <a href="Framework.js.html#line6">line 6</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>ownerID</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    <code>''</code>
-                
-                </td>
-            
-
-            <td class="description last">Discord ID of the client owner. Defines client.ownerID.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>selfbot</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    <code>false</code>
-                
-                </td>
-            
-
-            <td class="description last">Marks this bot as a selfbot. Defines client.selfbot.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>commandDirectory</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">Directory to commands.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>prefix</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
- || 
-
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    <code>'!'</code>
-                
-                </td>
-            
-
-            <td class="description last">Default command prefix or function <code>(message => {})</code> returning prefix.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>allowMention</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
- || 
-
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    <code>true</code>
-                
-                </td>
-            
-
-            <td class="description last">Allow mentions to the client user as a prefix or function <code>(message => {})</code> that returns true or false.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>inhibitorDirectory</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">Directory to inhibitors.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>preInhibitors</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    <code>false</code>
-                
-                </td>
-            
-
-            <td class="description last">Disables the built-in pre-message inhibitors.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>postInhibitors</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    <code>false</code>
-                
-                </td>
-            
-
-            <td class="description last">Disables the built-in post-message inhibitors.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>listenerDirectory</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">Directory to listeners.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>emitters</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    <code>{}</code>
-                
-                </td>
-            
-
-            <td class="description last">Emitters to load onto the listener handler.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<div class="description">
-    Options used to determine how the framework behaves.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Object</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-            
-                
 <h4 class="name" id="InhibitorOptions">InhibitorOptions</h4>
 
 
@@ -1597,7 +1597,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="inhibitors_Inhibitor.js.html">inhibitors/Inhibitor.js</a>, <a href="inhibitors_Inhibitor.js.html#line1">line 1</a>
+        <a href="Inhibitor.js.html">Inhibitor.js</a>, <a href="Inhibitor.js.html#line3">line 3</a>
     </li></ul></dd>
     
 
@@ -1814,7 +1814,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listeners_Listener.js.html">listeners/Listener.js</a>, <a href="listeners_Listener.js.html#line1">line 1</a>
+        <a href="Listener.js.html">Listener.js</a>, <a href="Listener.js.html#line3">line 3</a>
     </li></ul></dd>
     
 
@@ -1914,7 +1914,7 @@
                 </td>
             
 
-            <td class="description last">The event emitter, either a key from listenerHandler.emitters or an EventEmitter.</td>
+            <td class="description last">The event emitter, either a key from ListenerHandler#emitters or an EventEmitter.</td>
         </tr>
 
     
@@ -2060,6 +2060,149 @@
 
             
                 
+<h4 class="name" id="ModuleOptions">ModuleOptions</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AkairoModule.js.html">AkairoModule.js</a>, <a href="AkairoModule.js.html#line3">line 3</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>category</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>'default'</code>
+                
+                </td>
+            
+
+            <td class="description last">Category ID for organization purposes.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<div class="description">
+    Options for module.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+                
 <h4 class="name" id="SQLiteOptions">SQLiteOptions</h4>
 
 
@@ -2071,7 +2214,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="databases_SQLiteHandler.js.html">databases/SQLiteHandler.js</a>, <a href="databases_SQLiteHandler.js.html#line7">line 7</a>
+        <a href="SQLiteHandler.js.html">SQLiteHandler.js</a>, <a href="SQLiteHandler.js.html#line8">line 8</a>
     </li></ul></dd>
     
 
@@ -2243,6 +2386,43 @@
             
 
             <td class="description last">Array of keys to parse and stringify as JSON.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>init</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>[]</code>
+                
+                </td>
+            
+
+            <td class="description last">Array or function <code>(client => {})</code> that returns an array of IDs.<br/>If you want to load the database before login, use SQLiteHandler#load.</td>
         </tr>
 
     
