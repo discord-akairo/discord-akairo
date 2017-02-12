@@ -129,7 +129,11 @@ class CommandHandler extends AkairoHandler {
             if (!command.enabled) return this.emit(CommandHandlerEvents.COMMAND_DISABLED, message, command);
 
             if (!this.postInhibitors){
-                if (command.ownerOnly && message.author.id !== this.client.ownerID){
+                const notOwner = Array.isArray(this.client.ownerID)
+                ? !this.client.ownerID.includes(message.author.id)
+                : message.author.id !== this.client.ownerID;
+
+                if (command.ownerOnly && notOwner){
                     this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.OWNER);
                     return;
                 }

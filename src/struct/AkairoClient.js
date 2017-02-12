@@ -8,7 +8,7 @@ const ClientUtil = require('../utils/ClientUtil');
  * Options used to determine how the framework behaves.
  * This is also passed to Discord JS's client options.
  * @typedef {Object} AkairoOptions
- * @prop {string} [ownerID=''] - Discord ID of the client owner.
+ * @prop {string|string[]} [ownerID=''] - Discord ID of the client owner.
  * @prop {boolean} [selfbot=false] - Marks this bot as a selfbot.
  * @prop {string} [commandDirectory] - Directory to commands.
  * @prop {string|function} [prefix='!'] - Default command prefix or function <code>(message => {})</code> returning prefix.
