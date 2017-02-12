@@ -81,7 +81,7 @@ class InhibitorHandler extends AkairoHandler {
      * @method
      * @param {string} filepath - Path to file.
      * @name InhibitorHandler#load
-     * @returns {Command}
+     * @returns {Inhibitor}
      */
 
     /**
@@ -89,7 +89,7 @@ class InhibitorHandler extends AkairoHandler {
      * @method
      * @param {string} filename - Filename to lookup in the directory.<br/>A .js extension is assumed.
      * @name InhibitorHandler#add
-     * @returns {Command}
+     * @returns {Inhibitor}
      */
 
     /**
@@ -97,7 +97,7 @@ class InhibitorHandler extends AkairoHandler {
      * @method
      * @param {string} id - ID of the inhibitor.
      * @name InhibitorHandler#remove
-     * @returns {Command}
+     * @returns {Inhibitor}
      */
 
     /**
@@ -105,7 +105,7 @@ class InhibitorHandler extends AkairoHandler {
      * @method
      * @param {string} id - ID of the inhibitor.
      * @name InhibitorHandler#reload
-     * @returns {Command}
+     * @returns {Inhibitor}
      */
 
     /**

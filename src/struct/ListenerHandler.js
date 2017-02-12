@@ -123,7 +123,7 @@ class ListenerHandler extends AkairoHandler {
      * @method
      * @param {string} filename - Filename to lookup in the directory.<br/>A .js extension is assumed.
      * @name ListenerHandler#add
-     * @returns {Inhibitor}
+     * @returns {Listener}
      */
 
     /**
