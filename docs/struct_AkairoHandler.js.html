@@ -59,23 +59,29 @@ class AkairoHandler extends EventEmitter {
         /**
          * The Akairo client.
          * @readonly
+         * @name AkairoHandler#client
          * @type {AkairoClient}
          */
-        this.client = client;
 
         /**
          * Directory to modules.
          * @readonly
+         * @name AkairoHandler#directory
          * @type {string}
          */
-        this.directory = path.resolve(directory);
 
         /**
          * Class to handle.
          * @readonly
+         * @name AkairoHandler#classToHandle
          * @type {class}
          */
-        this.classToHandle = classToHandle || AkairoModule;
+
+        Object.defineProperties(this, {
+            client: { value: client },
+            directory: { value: path.resolve(directory) },
+            classToHandle: { value: classToHandle || AkairoModule }
+        });
 
         /**
          * Modules loaded, mapped by ID to AkairoModule.

@@ -68,36 +68,37 @@ class SQLiteHandler extends EventEmitter {
         /**
          * Path to the database file.
          * @readonly
+         * @name SQLiteHandler#filepath
          * @type {string}
          */
-        this.filepath = path.resolve(filepath);
 
         /**
          * Name of the table.
          * @readonly
+         * @name SQLiteHandler#tableName
          * @type {string}
          */
-        this.tableName = options.tableName || 'configs';
 
         /**
          * Default configuration.
          * @readonly
+         * @name SQLiteHandler#defaultConfig
          * @type {Object}
          */
-        this.defaultConfig = options.defaultConfig || {};
 
         /**
          * Keys to parse and stringify as JSON.
          * @readonly
+         * @name SQLiteHandler#json
          * @type {string[]}
          */
-        this.json = options.json || [];
 
-        /**
-         * Function called to initialize IDs.
-         * @type {function}
-         */
-        this.init = typeof options.init === 'function' ? options.init : () => options.init;
+        Object.defineProperties(this, {
+            filepath: { value: path.resolve(filepath) },
+            tableName: { value: options.tableName || 'configs' },
+            defaultConfig: { value: options.defaultConfig || {} },
+            json: { value: options.json || [] }
+        });
 
         /**
          * The database.
@@ -111,6 +112,14 @@ class SQLiteHandler extends EventEmitter {
          * @type {Collection.&lt;string, Object>}
          */
         this.memory = new Collection();
+
+        /**
+         * Returns an array of IDs.
+         * @method
+         * @param {AkairoClient} client - Client to use.
+         * @returns {string[]}
+         */
+        this.init = typeof options.init === 'function' ? options.init : () => options.init;
     }
 
     /**

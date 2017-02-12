@@ -27,12 +27,6 @@ class AkairoModule {
         this.category = options.category || 'default';
 
         /**
-         * Function called for module.
-         * @type {function}
-         */
-        this.exec = exec;
-
-        /**
          * Whether or not this is enabled.
          * @type {boolean}
          */
@@ -58,38 +52,49 @@ class AkairoModule {
          * @type {AkairoHandler}
          */
         this.handler = null;
+
+        /**
+         * Executes the module.
+         * @method
+         * @returns {*}
+         */
+        this.exec = exec;
     }
 
     /**
-     * Reloads this.
+     * Reloads the module.
      */
     reload(){
         this.handler.reload(this.id);
     }
 
     /**
-     * Removes this.<br/>It can be readded with its handler.
+     * Removes the module.
      */
     remove(){
         this.handler.remove(this.id);
     }
 
     /**
-     * Enables this.
+     * Enables the module.
+     * @returns {boolean}
      */
     enable(){
-        if (this.enabled) return;
+        if (this.enabled) return false;
         this.enabled = true;
         this.handler.emit(AkairoHandlerEvents.ENABLE, this);
+        return true;
     }
 
     /**
-     * Disables this.
+     * Disables the module.
+     * @returns {boolean}
      */
     disable(){
-        if (!this.enabled) return;
+        if (!this.enabled) return false;
         this.enabled = false;
         this.handler.emit(AkairoHandlerEvents.DISABLE, this);
+        return true;
     }
 
     /**

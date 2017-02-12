@@ -60,12 +60,6 @@ class Listener extends AkairoModule {
         super(id, exec, options);
 
         /**
-         * Function called when listener is ran.
-         * @type {function}
-         */
-        this.exec = this.exec.bind(this);
-
-        /**
          * The event emitter.
          * @type {string|EventEmitter}
          */
@@ -83,25 +77,31 @@ class Listener extends AkairoModule {
          */
         this.type = options.type || 'on';
 
-        // The properties below are from AkairoModule.
-        // They are only here for documentation purposes.
+        /**
+         * Executes the listener.
+         * @method
+         * @name Listener#exec
+         * @returns {*}
+         */
+        this.exec = this.exec.bind(this);
 
         /**
          * The ID of this listener.
+         * @name Listener#id
          * @type {string}
          */
-        this.id;
 
         /**
          * The listener handler.
          * @readonly
+         * @name Listener#handler
          * @type {ListenerHandler}
          */
-        this.handler;
     }
 
     /**
      * The listener handler.&lt;br/>Alias to this.handler.
+     * @readonly
      * @type {ListenerHandler}
      */
     get listenerHandler(){
@@ -110,19 +110,35 @@ class Listener extends AkairoModule {
 
     /**
      * Enables the listener.
+     * @returns {boolean}
      */
     enable(){
-        super.enable();
+        if (!super.enable()) return false;
         this.listenerHandler.register(this.id);
+        return true;
     }
 
     /**
      * Disables the listener.
+     * @returns {boolean}
      */
     disable(){
-        super.disable();
+        if (!super.disable()) return false;
         this.listenerHandler.deregister(this.id);
+        return true;
     }
+
+    /**
+     * Reloads the listener.
+     * @method
+     * @name Listener#reload
+     */
+
+    /**
+     * Removes the listener.
+     * @method
+     * @name Listener#reload
+     */
 }
 
 module.exports = Listener;

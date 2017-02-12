@@ -50,21 +50,18 @@ class InhibitorHandler extends AkairoHandler {
     constructor(client, options = {}){
         super(client, options.inhibitorDirectory, Inhibitor);
 
-        // The properties below are from AkairoHandler.
-        // They are only here for documentation purposes.
-
         /**
          * Directory to inhibitors.
          * @readonly
+         * @name InhibitorHandler#directory
          * @type {string}
          */
-        this.directory;
 
         /**
          * Inhibitors loaded, mapped by ID to Inhibitor.
+         * @name InhibitorHandler#modules
          * @type {Collection.&lt;string, Inhibitor>}
          */
-        this.modules;
     }
 
     /**
@@ -118,40 +115,43 @@ class InhibitorHandler extends AkairoHandler {
         return Promise.all(promises);
     }
 
-    // Only here for documentation.
-
     /**
      * Loads an inhibitor.
+     * @method
      * @param {string} filepath - Path to file.
-     * @returns {Inhibitor}
+     * @name InhibitorHandler#load
+     * @returns {Command}
      */
-    load(...args){ super.load(...args); }
 
     /**
      * Adds an inhibitor.
+     * @method
      * @param {string} filename - Filename to lookup in the directory.&lt;br/>A .js extension is assumed.
-     * @returns {Inhibitor}
+     * @name InhibitorHandler#add
+     * @returns {Command}
      */
-    add(...args){ super.add(...args); }
 
     /**
      * Removes an inhibitor.
-     * @param {string} id - ID of the command.
-     * @returns {Inhibitor}
+     * @method
+     * @param {string} id - ID of the inhibitor.
+     * @name InhibitorHandler#remove
+     * @returns {Command}
      */
-    remove(...args){ super.remove(...args); }
 
     /**
      * Reloads an inhibitor.
-     * @param {string} id - ID of the command.
-     * @returns {Inhibitor}
+     * @method
+     * @param {string} id - ID of the inhibitor.
+     * @name InhibitorHandler#reload
+     * @returns {Command}
      */
-    reload(...args){ super.reload(...args); }
 
     /**
      * Reloads all inhibitors.
+     * @method
+     * @name InhibitorHandler#reloadAll
      */
-    reloadAll(...args){ super.reloadAll(...args); }
 }
 
 module.exports = InhibitorHandler;

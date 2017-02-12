@@ -26,31 +26,30 @@ class CommandHandler extends AkairoHandler {
 
         /**
          * Gets the prefix.
-         * @type {function}
+         * @method
+         * @returns {string}
          */
         this.prefix = typeof options.prefix === 'function' ? options.prefix : () => options.prefix;
 
         /**
          * Gets if mentions are allowed for prefixing.
-         * @type {function}
+         * @method
+         * @returns {boolean}
          */
         this.allowMention = typeof options.allowMention === 'function' ? options.allowMention : () => options.allowMention;
-
-        // The properties below are from AkairoHandler.
-        // They are only here for documentation purposes.
 
         /**
          * Directory to commands.
          * @readonly
+         * @name CommandHandler#directory
          * @type {string}
          */
-        this.directory;
 
         /**
          * Commands loaded, mapped by ID to Command.
+         * @name CommandHandler#modules
          * @type {Collection.<string, Command>}
          */
-        this.modules;
     }
 
     /**
@@ -75,22 +74,23 @@ class CommandHandler extends AkairoHandler {
     /**
      * Handles a message.
      * @param {Message} message - Message to handle.
+     * @returns {Promise}
      */
     handle(message){
         if (!this.preInhibitors){
             if (message.author.id !== this.client.user.id && this.client.selfbot){
                 this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.NOT_SELF);
-                return;
+                return Promise.resolve();
             }
 
             if (message.author.id === this.client.user.id && !this.client.selfbot){
                 this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.CLIENT);
-                return;
+                return Promise.resolve();
             }
 
             if (message.author.bot){
                 this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.BOT);
-                return;
+                return Promise.resolve();
             }
         }
 
@@ -98,7 +98,7 @@ class CommandHandler extends AkairoHandler {
         ? m => this.client.inhibitorHandler.testMessage(m)
         : () => Promise.resolve();
 
-        pretest(message).then(() => {
+        return pretest(message).then(() => {
             const prefix = this.prefix(message).toLowerCase();
             const allowMention = this.allowMention(message);
             let start;
@@ -174,40 +174,43 @@ class CommandHandler extends AkairoHandler {
         });
     }
 
-    // Only here for documentation.
-
     /**
      * Loads a command.
+     * @method
      * @param {string} filepath - Path to file.
+     * @name CommandHandler#load
      * @returns {Command}
      */
-    load(...args){ super.load(...args); }
 
     /**
      * Adds a command.
+     * @method
      * @param {string} filename - Filename to lookup in the directory.<br/>A .js extension is assumed.
+     * @name CommandHandler#add
      * @returns {Command}
      */
-    add(...args){ super.add(...args); }
 
     /**
      * Removes a command.
+     * @method
      * @param {string} id - ID of the command.
+     * @name CommandHandler#remove
      * @returns {Command}
      */
-    remove(...args){ super.remove(...args); }
 
     /**
      * Reloads a command.
+     * @method
      * @param {string} id - ID of the command.
+     * @name CommandHandler#reload
      * @returns {Command}
      */
-    reload(...args){ super.reload(...args); }
 
     /**
      * Reloads all commands.
+     * @method
+     * @name CommandHandler#reloadAll
      */
-    reloadAll(...args){ super.reloadAll(...args); }
 }
 
 module.exports = CommandHandler;

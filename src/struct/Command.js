@@ -162,31 +162,30 @@ class Command extends AkairoModule {
          */
         this.options = options.custom || {};
 
-        // The properties below are from AkairoModule.
-        // They are only here for documentation purposes.
-
         /**
          * The ID of this command.
+         * @name Command#id
          * @type {string}
          */
-        this.id;
 
         /**
-         * Function called when command is ran.
-         * @type {function}
+         * Executes the command.
+         * @method
+         * @name Command#exec
+         * @returns {*}
          */
-        this.exec;
 
         /**
          * The command handler.
          * @readonly
+         * @name Command#handler
          * @type {CommandHandler}
          */
-        this.handler;
     }
 
     /**
      * The command handler.<br/>Alias to this.handler.
+     * @readonly
      * @type {CommandHandler}
      */
     get commandHandler(){
@@ -359,6 +358,32 @@ class Command extends AkairoModule {
 
         return args;
     }
+
+    /**
+     * Reloads the command.
+     * @method
+     * @name Command#reload
+     */
+
+    /**
+     * Removes the command.
+     * @method
+     * @name Command#reload
+     */
+
+    /**
+     * Enables the command.
+     * @method
+     * @name Command#enable
+     * @returns {boolean}
+     */
+
+    /**
+     * Disables the command.
+     * @method
+     * @name Command#disable
+     * @returns {boolean}
+     */
 }
 
 module.exports = Command;

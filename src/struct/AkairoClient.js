@@ -49,27 +49,36 @@ class AkairoClient extends Client {
             /**
              * The command handler.
              * @readonly
+             * @name AkairoClient#commandHandler
              * @type {CommandHandler}
              */
-            this.commandHandler = new CommandHandler(this, options);
+            Object.defineProperty(this, 'commandHandler', {
+                value: new CommandHandler(this, options)
+            });
         }
 
         if (options.inhibitorDirectory){
             /**
              * The inhibitor handler.
              * @readonly
+             * @name AkairoClient#inhibitorHandler
              * @type {InhibitorHandler}
              */
-            this.inhibitorHandler = new InhibitorHandler(this, options);
+            Object.defineProperty(this, 'inhibitorHandler', {
+                value: new InhibitorHandler(this, options)
+            });
         }
 
         if (options.listenerDirectory){
             /**
              * The listener handler.
              * @readonly
+             * @name AkairoClient#listenerHandler
              * @type {ListenerHandler}
              */
-            this.listenerHandler = new ListenerHandler(this, options);
+            Object.defineProperty(this, 'listenerHandler', {
+                value: new ListenerHandler(this, options)
+            });
         }
 
         /**
@@ -85,7 +94,9 @@ class AkairoClient extends Client {
      * @param {SQLiteHandler} database - The database.
      */
     addDatabase(name, database){
-        this.databases[name] = database;
+        Object.defineProperty(this.databases, name, {
+            value: database
+        });
     }
 
     /**
@@ -105,7 +116,9 @@ class AkairoClient extends Client {
                 Promise.all(promises).then(() => resolve()).catch(reject);
             });
 
-            if (this.commandHandler) this.on('message', m => { this.commandHandler.handle(m); });
+            if (this.commandHandler) this.on('message', m => {
+                this.commandHandler.handle(m).catch(console.error);
+            });
         });
     }
 }

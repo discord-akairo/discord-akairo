@@ -31,36 +31,61 @@ class Inhibitor extends AkairoModule {
          */
         this.type = options.type || 'post';
 
-        // The properties below are from AkairoModule.
-        // They are only here for documentation purposes.
-
         /**
          * The ID of this inhibitor.
+         * @name Inhibitor#id
          * @type {string}
          */
-        this.id;
 
         /**
-         * Function called when inhibitor is ran.
-         * @type {function}
+         * Executes the inhibitor.
+         * @method
+         * @name Inhibitor#exec
+         * @returns {*}
          */
-        this.exec;
 
         /**
          * The inhibitor handler.
          * @readonly
+         * @name Inhibitor#handler
          * @type {InhibitorHandler}
          */
-        this.handler;
     }
 
     /**
      * The inhibitor handler.<br/>Alias to this.handler.
+     * @readonly
      * @type {InhibitorHandler}
      */
     get inhibitorHandler(){
         return this.handler;
     }
+
+    /**
+     * Reloads the inhibitor.
+     * @method
+     * @name Inhibitor#reload
+     */
+
+    /**
+     * Removes the inhibitor.
+     * @method
+     * @name Inhibitor#reload
+     */
+
+    /**
+     * Enables the inhibitor.
+     * @method
+     * @name Inhibitor#enable
+     * @returns {boolean}
+     */
+
+    /**
+     * Disables the inhibitor.
+     * @method
+     * @name Inhibitor#disable
+     * @returns {boolean}
+     */
 }
 
 module.exports = Inhibitor;

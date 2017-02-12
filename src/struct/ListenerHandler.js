@@ -30,21 +30,18 @@ class ListenerHandler extends AkairoHandler {
 
         this.modules.forEach(m => this.register(m.id));
 
-        // The properties below are from AkairoHandler.
-        // They are only here for documentation purposes.
-
         /**
          * Directory to listeners.
          * @readonly
+         * @name ListenerHandler#directory
          * @type {string}
          */
-        this.directory;
 
         /**
          * Listeners loaded, mapped by ID to Listener.
+         * @name ListenerHandler#modules
          * @type {Collection.<string, Listener>}
          */
-        this.modules;
     }
 
     /**
@@ -121,19 +118,19 @@ class ListenerHandler extends AkairoHandler {
         emitter.removeListener(listener.eventName, listener.exec);
     }
 
-     // Only here for documentation.
-
     /**
-     * Adds an inhibitor.
+     * Adds a listener.
+     * @method
      * @param {string} filename - Filename to lookup in the directory.<br/>A .js extension is assumed.
+     * @name ListenerHandler#add
      * @returns {Inhibitor}
      */
-    add(...args){ super.add(...args); }
 
     /**
-     * Reloads all inhibitors.
+     * Reloads all listeners.
+     * @method
+     * @name ListenerHandler#reloadAll
      */
-    reloadAll(...args){ super.reloadAll(...args); }
 }
 
 module.exports = ListenerHandler;
