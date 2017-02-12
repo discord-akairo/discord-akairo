@@ -127,7 +127,6 @@ const { AkairoClient, SQLiteHandler } = require('discord-akairo');
 
 const client = new AkairoClient({
     ownerID: '9876543210',
-    prefix: '$',
     commandDirectory: './src/commands/',
     inhibitorDirectory: './src/inhibitors/',
     listenerDirectory: './src/listeners/',
