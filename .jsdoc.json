@@ -4,7 +4,7 @@
         "dictionaries": ["jsdoc"]
     },
     "source": {
-        "include": ["README.md", "src/struct", "package.json"],
+        "include": ["README.md", "src/struct", "src/utils", "package.json"],
         "includePattern": ".js$",
         "excludePattern": "(node_modules/|docs)"
     },
@@ -18,6 +18,7 @@
     },
     "opts": {
         "destination": "./out/",
+        "tutorials": "./tutorials/",
         "encoding": "utf8",
         "private": true,
         "recurse": true,

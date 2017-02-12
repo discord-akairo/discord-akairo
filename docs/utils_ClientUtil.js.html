@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>utils/ClientUtil.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">utils/ClientUtil.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const { Constants, RichEmbed } = require('discord.js');
+
+class ClientUtil {
+    /**
+     * Client utilities to help with common tasks.
+     * @param {Client} client - The client.
+     */
+    constructor(client){
+        /**
+         * The Akairo client.
+         * @readonly
+         * @type {AkairoClient}
+         */
+        this.client = client;
+    }
+
+    /**
+     * Resolves a User from a string, such as an ID, a name, or a mention.
+     * @param {string} text - Text to resolve.
+     * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
+     * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
+     * @returns {User}
+     */
+    resolveUser(text, caseSensitive = false, wholeWord = false){
+        const users = this.client.users;
+
+        const reg = /&lt;@!?(\d+)>/;
+        if (reg.test(text)){
+            const id = text.match(reg)[1];
+            return users.get(id);
+        }
+
+        const check = u => {
+            const username = caseSensitive ? u.username : u.username.toLowerCase();
+            const t = caseSensitive ? text : text.toLowerCase();
+
+            return username === t || username === t.split('#')[0] &amp;&amp; u.discriminator === t.split('#')[1];
+        };
+
+        const checkInc = u => {
+            const username = caseSensitive ? u.username : u.username.toLowerCase();
+            const t = caseSensitive ? text : text.toLowerCase();
+
+            return username.includes(t) || username.includes(t.split('#')[0]) &amp;&amp; u.discriminator.includes(t.split('#')[1]);
+        };
+
+        return users.get(text) || users.find(check) || (!wholeWord ? users.find(checkInc) : null);
+    }
+
+    /**
+     * Resolves a GuildMember from a string, such as an ID, a name, or a mention.
+     * @param {string} text - Text to resolve.
+     * @param {Guild} [guild] - Guild to find member in.&lt;br/>If not specified, will resolve a User instead.
+     * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
+     * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
+     * @returns {GuildMember|User}
+     */
+    resolveMember(text, guild, caseSensitive = false, wholeWord = false){
+        if (!guild) return this.resolveUser(text);
+
+        const members = guild.members;
+
+        const reg = /&lt;@!?(\d+)>/;
+        if (reg.test(text)){
+            const id = text.match(reg)[1];
+            return members.get(id);
+        }
+
+        const check = m => {
+            const username = caseSensitive ? m.user.username : m.user.username.toLowerCase();
+            const displayName = caseSensitive ? m.displayName : m.displayName.toLowerCase();
+            const t = caseSensitive ? text : text.toLowerCase();
+
+            return displayName === t || username === t || username === t.split('#')[0] &amp;&amp; m.user.discriminator === t.split('#')[1];
+        };
+
+        const checkInc = m => {
+            const username = caseSensitive ? m.user.username : m.user.username.toLowerCase();
+            const displayName = caseSensitive ? m.displayName : m.displayName.toLowerCase();
+            const t = caseSensitive ? text : text.toLowerCase();
+
+            return displayName.includes(t) || username.includes(t) || username.includes(t.split('#')[0]) &amp;&amp; m.user.discriminator.includes(t.split('#')[1]);
+        };
+
+        return members.get(text) || members.find(check) || (!wholeWord ? members.find(checkInc) : null);
+    }
+
+    /**
+     * Resolves a GuildChannel from a string, such as an ID, a name, or a mention.
+     * @param {string} text - Text to resolve.
+     * @param {Guild} guild - Guild to find channel in.
+     * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
+     * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
+     * @returns {GuildChannel}
+     */
+    resolveChannel(text, guild, caseSensitive = false, wholeWord = false){
+        if (!guild) throw new Error('Guild must be specified.');
+
+        const channels = guild.channels;
+
+        const reg = /&lt;#(\d+)>/;
+        if (reg.test(text)){
+            const id = text.match(reg)[1];
+            return channels.get(id);
+        }
+
+        const check = c => {
+            const name = caseSensitive ? c.name : c.name.toLowerCase();
+            const t = caseSensitive ? text : text.toLowerCase();
+
+            return name === t || name === t.replace(/^#/, '');
+        };
+
+        const checkInc = c => {
+            const name = caseSensitive ? c.name : c.name.toLowerCase();
+            const t = caseSensitive ? text : text.toLowerCase();
+
+            return name.includes(t) || name.includes(t.replace(/^#/, ''));
+        };
+
+        return channels.get(text) || channels.find(check) || (!wholeWord ? channels.find(checkInc) : null);
+    }
+
+    /**
+     * Resolves a Role from a string, such as an ID, a name, or a mention.
+     * @param {string} text - Text to resolve.
+     * @param {Guild} guild - Guild to find channel in.
+     * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
+     * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
+     * @returns {Role}
+     */
+    resolveRole(text, guild, caseSensitive = false, wholeWord = false){
+        if (!guild) throw new Error('Guild must be specified.');
+
+        const roles = guild.roles;
+
+        const reg = /&lt;@&amp;(\d+)>/;
+        if (reg.test(text)){
+            const id = text.match(reg)[1];
+            return roles.get(id);
+        }
+
+        const check = r => {
+            const name = caseSensitive ? r.name : r.name.toLowerCase();
+            const t = caseSensitive ? t : text.toLowerCase();
+
+            return name === t || name === t.replace(/^@/, '');
+        };
+
+        const checkInc = r => {
+            const name = caseSensitive ? r.name : r.name.toLowerCase();
+            const t = caseSensitive ? text : text.toLowerCase();
+
+            return name.includes(t) || name.includes(t.replace(/^@/, ''));
+        };
+
+        return roles.get(text) || roles.find(check) || (!wholeWord ? roles.find(checkInc) : null);
+    }
+
+    /**
+     * Resolves a custom Emoji from a string, such as a name or a mention.
+     * @param {string} text - Text to resolve.
+     * @param {Guild} guild - Guild to find emoji in.
+     * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
+     * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
+     * @returns {Emoji}
+     */
+    resolveEmoji(text, guild, caseSensitive = false, wholeWord = false){
+        if (!guild) throw new Error('Guild must be specified.');
+
+        const emojis = guild.emojis;
+
+        const reg = /&lt;:[a-zA-Z0-9_]+:(\d+)>/;
+        if (reg.test(text)){
+            const id = text.match(reg)[1];
+            return emojis.get(id);
+        }
+
+        const check = e => {
+            const name = caseSensitive ? e.name : e.name.toLowerCase();
+            const t = caseSensitive ? text : text.toLowerCase();
+
+            return name === t || name === t.replace(/:/g, '');
+        };
+
+        const checkInc = e => {
+            const name = caseSensitive ? e.name : e.name.toLowerCase();
+            const t = caseSensitive ? text : text.toLowerCase();
+
+            return name.includes(t) || name.includes(t.replace(/:/g, ''));
+        };
+
+        return emojis.get(text) || emojis.find(check) || (!wholeWord ? emojis.find(checkInc) : null);
+    }
+
+    /**
+     * Resolves a Guild from a string, such as an ID or a name.
+     * @param {string} text - Text to resolve.
+     * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
+     * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
+     * @returns {Guild}
+     */
+    resolveGuild(text, caseSensitive = false, wholeWord = false){
+        const guilds = this.client.guilds;
+
+        const check = g => {
+            const name = caseSensitive ? g.name : g.name.toLowerCase();
+            const t = caseSensitive ? t : text.toLowerCase();
+
+            return name === t;
+        };
+
+        const checkInc = g => {
+            const name = caseSensitive ? g.name : g.name.toLowerCase();
+            const t = caseSensitive ? t : text.toLowerCase();
+
+            return name.includes(t);
+        };
+
+        return guilds.get(text) || guilds.find(check) || (!wholeWord ? guilds.find(checkInc) : null);
+    }
+
+    /**
+     * Gets the display color in decimal of the member.
+     * @param {GuildMember} member - The member to find color of.
+     * @returns {number}
+     */
+    displayColor(member){
+        const roles = member.roles.filter(r => r.color !== 0);
+        if (!roles.size) return 0;
+
+        const highest = roles.array().sort((a, b) => b.comparePositionTo(a))[0];
+        return highest.color;
+    }
+
+    /**
+     * Gets the display color in hex code of the member.
+     * @param {GuildMember} member - The member to find color of.
+     * @returns {string}
+     */
+    displayHexColor(member){
+        const roles = member.roles.filter(r => r.color !== 0);
+        if (!roles.size) return 0;
+
+        const highest = roles.array().sort((a, b) => b.comparePositionTo(a))[0];
+        return highest.hexColor;
+    }
+
+    /**
+     * Array of permission names.
+     * @returns {string[]}
+     */
+    permissionNames(){
+        return Object.keys(Constants.PermissionFlags);
+    }
+
+    /**
+     * Resolves a permission number and returns an array of permission names.
+     * @param {number} number - The permissions number.
+     * @returns {string[]}
+     */
+    resolvePermissionNumber(number){
+        const resolved = [];
+
+        Object.keys(Constants.PermissionFlags).forEach(key => {
+            if (number &amp; Constants.PermissionFlags[key]) resolved.push(key);
+        });
+
+        return resolved;
+    }
+
+    /**
+     * Resolves a channel permission overwrite.&lt;br/>Returns an object with the allowed and denied arrays of permission names.
+     * @param {PermissionOverwrites} overwrite - Permissions overwrite.
+     * @returns {Object}
+     */
+    resolvePermissionOverwrite(overwrite){
+        return {
+            allowed: this.resolvePermissionNumber(overwrite.allow),
+            denied: this.resolvePermissionNumber(overwrite.deny),
+        };
+    }
+
+    /**
+     * Compares two member objects presences and checks if they started/stopped a stream or not.&lt;br/>Returns 'started', 'stopped', or false if no change.
+     * @param {GuildMember} oldMember - The old member.
+     * @param {GuildMember} newMember - The new member.
+     * @returns {string|boolean}
+     */
+    compareStreaming(oldMember, newMember){
+        const s1 = oldMember.presence.game &amp;&amp; oldMember.presence.game.streaming;
+        const s2 = newMember.presence.game &amp;&amp; newMember.presence.game.streaming;
+
+        if (s1 === s2) return false;
+        if (s1) return 'stopped';
+        if (s2) return 'started';
+    }
+
+    /**
+     * Combination of client.fetchUser() and guild.fetchMember().
+     * @param {Guild} guild - Guild to fetch in.
+     * @param {string} id - ID of the user.
+     * @param {boolean} cache - Whether or not to add to cache.
+     * @returns {Promise.&lt;GuildMember>}
+     */
+    fetchMemberFrom(guild, id, cache){
+        return this.client.fetchUser(id, cache).then(fetched => {
+            return guild.fetchMember(fetched, cache);
+        });
+    }
+
+    /**
+     * Makes a RichEmbed.
+     * @returns {RichEmbed}
+     */
+    embed(){
+        return new RichEmbed();
+    }
+}
+
+module.exports = ClientUtil;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

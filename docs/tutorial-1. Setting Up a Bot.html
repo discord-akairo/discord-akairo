@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Home - Documentation</title>
+    <title>Tutorial: 1. Setting Up a Bot - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,59 +27,38 @@
 
 <div id="main">
     
-
+    <h1 class="page-title">Tutorial: 1. Setting Up a Bot</h1>
     
 
+    <section>
 
-
-    
-
-
-
-
-
-
-
-
-
-    
-
-
-    <section class="readme">
-        <article><p align="center">
-    <a href=https://github.com/1Computer1/discord-akairo>
-        <img src=https://u.nya.is/fweoqf.png/>
-    </a>
-</p>  
-
-<p align="center">
-    <a href=https://nodei.co/npm/discord-akairo>
-        <img src=https://nodei.co/npm/discord-akairo.png/>
-    </a>
-</p>  
-
-<h2>About</h2><p>A modular and customizable bot framework for Discord.js v11.<br>Everything is reloadable, commands are easy to make, and argument parsing is very flexible.  </p>
+<article>
+    <p>This tutorial is for setting up a bot.<br>All tutorials require that you have knowledge of JS and how to use Discord JS.  </p>
+<h2>The Client</h2><p>First, make a .js file and name it what you like.<br>Then, require and declare a new AkairoClient from discord-akairo.<br>Remember to fill the options with what you want.  </p>
 <pre class="prettyprint source lang-js"><code>const { AkairoClient } = require('discord-akairo');
-
 const client = new AkairoClient({
-    ownerID: '9876543210',
-    prefix: '$',
-    commandDirectory: './src/commands/',
-    inhibitorDirectory: './src/inhibitors/',
-    listenerDirectory: './src/listeners/'
+    ownerID: '123992700587343872',
+    prefix: '$'
 });
 
-client.login('TOKEN').then(() => {
-    console.log('Started up!');
-});</code></pre><h2>Installation</h2><p>discord-akairo: <code>npm install discord-akairo --save</code><br>discord.js: <code>npm install discord.js --save</code><br>sqlite (optional): <code>npm install sqlite --save</code>  </p>
-<h2>Links</h2><p>Github page is available on <a href="https://github.com/1Computer1/discord-akairo">https://github.com/1Computer1/discord-akairo</a>.<br>Changelog is available on <a href="https://github.com/1Computer1/discord-akairo/releases">https://github.com/1Computer1/discord-akairo/releases</a>.<br>Documentation is available on <a href="https://1computer1.github.io/discord-akairo/">https://1computer1.github.io/discord-akairo</a>.<br>If you need more help, message me on Discord: 1Computer#7952.  </p>
-<h2>Tutorials</h2><p><a href="https://1computer1.github.io/discord-akairo/tutorial-1.%20Setting%20Up%20a%20Bot.html">1. Setting Up a Bot</a><br><a href="https://1computer1.github.io/discord-akairo/tutorial-2.%20Creating%20a%20Command.html">2. Creating a Command</a><br><a href="https://1computer1.github.io/discord-akairo/tutorial-3.%20Customizing%20Commands.html">3. Customizing Commands</a><br><a href="https://1computer1.github.io/discord-akairo/tutorial-4.%20Creating%20an%20Inhibitor.html">4. Creating an Inhibitor</a><br><a href="https://1computer1.github.io/discord-akairo/tutorial-5.%20Creating%20a%20Listener.html">5. Creating a Listener</a><br><a href="https://1computer1.github.io/discord-akairo/tutorial-6.%20Storing%20Data%20with%20SQLite.html">6. Storing Data with SQLite</a>  </p></article>
-    </section>
+client.login('token').then(() => {
+    console.log('Ready!');
+});</code></pre><p>Of course, this bot doesn't do much at the moment other than login.<br>We now can add commands, inhibitors, or listeners.<br>Create some folders to hold these and add them to the options:  </p>
+<pre class="prettyprint source lang-js"><code>const { AkairoClient } = require('discord-akairo');
+const client = new AkairoClient({
+    ownerID: '123992700587343872',
+    prefix: '$',
+    commandDirectory: './commands/',
+    inhibitorDirectory: './commands/',
+    listenerDirectory: './listeners/'
+});
 
+client.login('token').then(() => {
+    console.log('Ready!');
+});</code></pre><p>Once there are commands, inhibitors, or listeners, they will be loaded.<br>See their respective tutorials to learn how to use them.</p>
+</article>
 
-
-
-
+</section>
 
 </div>
 

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Tutorial: 3. Customizing Commands - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">Tutorial: 3. Customizing Commands</h1>
+    
+
+    <section>
+
+<article>
+    <p>This tutorial is about how to customize commands further.<br>A user info command will be made.  </p>
+<h2>User Info Command</h2><p>Create a new command.  </p>
+<pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
+
+function exec(message, args){
+    // TODO: Make command.
+}
+
+module.exports = new Command('userinfo', exec, {
+    aliases: ['userinfo', 'user', 'whois'], // More aliases!
+    args: []
+});</code></pre><p>We want our command to give information on a guild member.<br>The idea is that the user will enter something like a username or a mention, and information will be returned.  </p>
+<p>This is simple with Akairo!<br>Create a new argument with the type &quot;member&quot;.</p>
+<pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
+
+function exec(message, args){
+    // You can make it give more info.
+    // This is just for the tutorial.
+    return message.reply(args.member.id);
+}
+
+module.exports = new Command('userinfo', exec, {
+    aliases: ['userinfo', 'user', 'whois'],
+    args: [
+        {
+            id: 'member',
+            type: 'member'
+        }
+    ]
+});</code></pre><p>Of course, there are come problems here.<br>What if the command is used in a DM?<br>Or what if the user did not input a member?<br>Or even, what if the input was over one word long? (The argument only matches one word.)<br>Here's how to prevent those problems from breaking the command:  </p>
+<pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
+
+function exec(message, args){
+    return message.reply(args.member.id);
+}
+
+module.exports = new Command('userinfo', exec, {
+    aliases: ['userinfo', 'user', 'whois'],
+    args: [
+        {
+            id: 'member',
+            type: 'member',
+            match: 'text',
+            defaultValue: message => message.member
+        }
+    ],
+    channelRestriction: 'guild'
+});</code></pre><p>Three new things were added.  </p>
+<p>First is the channelRestriction.<br>This just makes it so that the command can only be used in channels belonging to a guild.  </p>
+<p>Second is the defaultValue.<br>Unlike in the first tutorial, this is a function.<br>This lets you create dynamic default values, such as here where the message author is used.  </p>
+<p>Last is the match option of &quot;text&quot;.<br>What this does is that it makes the argument match the entire user input instead of one word.  </p>
+<h2>Even More Stuff!</h2><p>Let's add more functionality.<br>If the user types --owner, we should give info of the guild owner, regardless of where it is in the input.<br>And just for fun, let's make this command quoted, and if two members are inputted, we should output both of them.  </p>
+<p>The first requires the match option &quot;flag&quot;.  </p>
+<pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
+
+function exec(message, args){
+    if (args.owner){
+        return message.reply(message.guild.ownerID);
+    }
+
+    return message.reply(args.member.id);
+}
+
+module.exports = new Command('userinfo', exec, {
+    aliases: ['userinfo', 'user', 'whois'],
+    args: [
+        {
+            id: 'member',
+            type: 'member',
+            match: 'text',
+            defaultValue: message => message.member
+        },
+        {
+            id: 'owner',
+            match: 'flag',
+            prefix: '--owner'
+        }
+    ],
+    channelRestriction: 'guild'
+});</code></pre><p>args.owner is a boolean that tells you if --owner was inside the input text.<br>Now let's make this command quoted:  </p>
+<pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
+
+function exec(message, args){
+    if (args.owner){
+        return message.reply(message.guild.ownerID);
+    }
+
+    if (args.second){
+        // This is actually a terribly weak and cumbersome command.
+        // But it's an example!
+        return message.reply(`${args.member.id}` and `${args.second.id}`)
+    }
+
+    return message.reply(args.member.id);
+}
+
+module.exports = new Command('userinfo', exec, {
+    aliases: ['userinfo', 'user', 'whois'],
+    args: [
+        {
+            id: 'member',
+            type: 'member',
+            defaultValue: message => message.member
+        },
+        {
+            id: 'second',
+            type: 'member'
+        },
+        {
+            id: 'owner',
+            match: 'flag',
+            prefix: '--owner'
+        }
+    ],
+    channelRestriction: 'guild',
+    split: 'quoted'
+});</code></pre><p>As you can see, the command split is now &quot;quoted&quot;.<br>To use this command with two member, one could do something like:  </p>
+<p>!userinfo 1Computer &quot;someone with a long name&quot;  </p>
+<p>That's all to it!<br>See the docs for more ways to customize.  </p>
+</article>
+
+</section>
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
