@@ -41,9 +41,12 @@ class AkairoClient extends Client {
 
         /**
          * Utility methods.
+         * @name AkairoClient#util
          * @type {ClientUtil}
          */
-        this.util = new ClientUtil(this.client);
+        Object.defineProperty(this, 'util', {
+            value: new ClientUtil(this)
+        });
 
         if (options.commandDirectory){
             /**

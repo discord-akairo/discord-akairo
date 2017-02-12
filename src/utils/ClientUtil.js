@@ -3,15 +3,18 @@ const { Constants, RichEmbed } = require('discord.js');
 class ClientUtil {
     /**
      * Client utilities to help with common tasks.
-     * @param {Client} client - The client.
+     * @param {AkairoClient} client - The client.
      */
     constructor(client){
         /**
          * The Akairo client.
          * @readonly
+         * @name ClientUtil#client
          * @type {AkairoClient}
          */
-        this.client = client;
+        Object.defineProperty(this, 'client', {
+            value: client
+        });
     }
 
     /**
