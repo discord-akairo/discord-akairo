@@ -221,16 +221,26 @@ class ClientUtil {
     }
 
     /**
+     * Gets the role which is used to display the member's color.
+     * @param {GuildMember} member - The member to find the role.
+     * @returns {Role}
+     */
+    displayRole(member){
+        const roles = member.roles.filter(r => r.color !== 0);
+        if (!roles.size) return 0;
+
+        const highest = roles.array().sort((a, b) => b.comparePositionTo(a))[0];
+        return highest;
+    }
+
+    /**
      * Gets the display color in decimal of the member.
      * @param {GuildMember} member - The member to find color of.
      * @returns {number}
      */
     displayColor(member){
-        const roles = member.roles.filter(r => r.color !== 0);
-        if (!roles.size) return 0;
-
-        const highest = roles.array().sort((a, b) => b.comparePositionTo(a))[0];
-        return highest.color;
+        const role = this.displayRole(member);
+        return role && role.color;
     }
 
     /**
@@ -239,11 +249,21 @@ class ClientUtil {
      * @returns {string}
      */
     displayHexColor(member){
-        const roles = member.roles.filter(r => r.color !== 0);
+        const role = this.displayRole(member);
+        return role && role.hexColor;
+    }
+
+    /**
+     * Gets the role which is used to hoist the member.
+     * @param {GuildMember} member - The member to find the role.
+     * @returns {Role}
+     */
+    hoistedRole(member){
+        const roles = member.roles.filter(r => r.hoist);
         if (!roles.size) return 0;
 
         const highest = roles.array().sort((a, b) => b.comparePositionTo(a))[0];
-        return highest.hexColor;
+        return highest;
     }
 
     /**
