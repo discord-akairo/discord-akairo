@@ -50,7 +50,7 @@ class ClientUtil {
     /**
      * Resolves a GuildMember from a string, such as an ID, a name, or a mention.
      * @param {string} text - Text to resolve.
-     * @param {Guild} [guild] - Guild to find member in. If not specified, will resolve a User instead.
+     * @param {Guild} [guild] - Guild to find member in.<br/>If not specified, will resolve a User instead.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
      * @returns {GuildMember|User}
@@ -270,7 +270,7 @@ class ClientUtil {
     }
 
     /**
-     * Resolves a channel permission overwrite. Returns an object with the allowed and denied arrays of permission names.
+     * Resolves a channel permission overwrite.<br/>Returns an object with the allowed and denied arrays of permission names.
      * @param {PermissionOverwrites} overwrite - Permissions overwrite.
      * @returns {Object}
      */
@@ -282,7 +282,7 @@ class ClientUtil {
     }
 
     /**
-     * Compares two member objects presences and checks if they started/stopped a stream or not. Returns 'started', 'stopped', or false if no change.
+     * Compares two member objects presences and checks if they started/stopped a stream or not.<br/>Returns 'started', 'stopped', or false if no change.
      * @param {GuildMember} oldMember - The old member.
      * @param {GuildMember} newMember - The new member.
      * @returns {string|boolean}

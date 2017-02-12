@@ -6,9 +6,8 @@ const ClientUtil = require('../utils/ClientUtil');
 
 /**
  * Options used to determine how the framework behaves.
- * This is also passed to Discord JS's client options.
  * @typedef {Object} AkairoOptions
- * @prop {string|string[]} [ownerID=''] - Discord ID of the client owner.
+ * @prop {string|string[]} [ownerID=''] - Discord ID of the client owner(s).
  * @prop {boolean} [selfbot=false] - Marks this bot as a selfbot.
  * @prop {string} [commandDirectory] - Directory to commands.
  * @prop {string|function} [prefix='!'] - Default command prefix or function <code>(message => {})</code> returning prefix.
@@ -22,8 +21,8 @@ const ClientUtil = require('../utils/ClientUtil');
 
 class AkairoClient extends Client {
     /**
-     * The Akairo client. Creates the handlers and sets them up.
-     * @param {AkairoOptions} options - Options to use for the framework and the client.
+     * The Akairo framework client.<br/>Creates the handlers and sets them up.
+     * @param {AkairoOptions} options - Options to use for the framework.<br/>This is also passed to Discord JS's ClientOptions.
      */
     constructor(options = {}){
         super(options);
@@ -90,7 +89,7 @@ class AkairoClient extends Client {
     }
 
     /**
-     * Logins the client, creates message listener, and init databases. Resolves once client is ready.
+     * Logins the client, creates message listener, and init databases.<br/>Resolves once client is ready.
      * @param {string} token - Client token.
      * @returns {Promise}
      */

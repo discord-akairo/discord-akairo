@@ -29,7 +29,7 @@ class InhibitorHandler extends AkairoHandler {
     }
 
     /**
-     * Collection of inhibitors. Alias to this.modules.
+     * Collection of inhibitors.<br/>Alias to this.modules.
      * @type {Collection.<string, Inhibitor>}
      */
     get inhibitors(){
@@ -37,7 +37,7 @@ class InhibitorHandler extends AkairoHandler {
     }
 
     /**
-     * Tests the pre-message inhibitors against the message. Rejects with the reason if blocked.
+     * Tests the pre-message inhibitors against the message.<br/>Rejects with the reason if blocked.
      * @param {Message} message - Message to test.
      * @returns {Promise.<string>}
      */
@@ -58,7 +58,7 @@ class InhibitorHandler extends AkairoHandler {
     }
 
     /**
-     * Tests the post-message inhibitors against the message and command. Rejects with the reason if blocked.
+     * Tests the post-message inhibitors against the message and command.<br/>Rejects with the reason if blocked.
      * @param {Message} message - Message to test.
      * @param {Command} command - Command to test.
      * @returns {Promise.<string>}
@@ -90,7 +90,7 @@ class InhibitorHandler extends AkairoHandler {
 
     /**
      * Adds an inhibitor.
-     * @param {string} filename - Filename to lookup in the directory. A .js extension is assumed.
+     * @param {string} filename - Filename to lookup in the directory.<br/>A .js extension is assumed.
      * @returns {Inhibitor}
      */
     add(...args){ super.add(...args); }

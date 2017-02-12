@@ -53,32 +53,53 @@ const { ArgumentMatches, ArgumentTypes, ArgumentSplits } = require('../utils/Con
  */
 
 /**
- * The method to match arguments from text. Possible strings are:
- * &lt;br/>&lt;code>'word'&lt;/code> Matches by the order of the words inputted. Ignores words that matches prefix or flag.
- * &lt;br/>&lt;code>'rest'&lt;/code> Matches the rest of the words in order. Ignores words that matches prefix or flag.
- * &lt;br/>&lt;code>'prefix'&lt;/code> Matches words that starts with the prefix. The word after the prefix is the evaluated argument.
- * &lt;br/>&lt;code>'flag'&lt;/code> Matches words that equal this prefix. The evaluated argument is true or false.
+ * The method to match arguments from text.
+ * &lt;br/>Possible strings are:
+ * &lt;br/>
+ * &lt;br/>&lt;code>'word'&lt;/code> Matches by the order of the words inputted.&lt;br/>Ignores words that matches prefix or flag.
+ * &lt;br/>
+ * &lt;br/>&lt;code>'rest'&lt;/code> Matches the rest of the words in order.&lt;br/>Ignores words that matches prefix or flag.
+ * &lt;br/>
+ * &lt;br/>&lt;code>'prefix'&lt;/code> Matches words that starts with the prefix.&lt;br/>The word after the prefix is the evaluated argument.
+ * &lt;br/>
+ * &lt;br/>&lt;code>'flag'&lt;/code> Matches words that equal this prefix.&lt;br/>The evaluated argument is true or false.
+ * &lt;br/>
  * &lt;br/>&lt;code>'text'&lt;/code> Matches the entire text, except for the command, ignoring words that matches prefix or flag.
+ * &lt;br/>
  * &lt;br/>&lt;code>'content'&lt;/code> Matches the entire text as it was inputted, except for the command.
  * @typedef {string} ArgumentMatch
  */
 
 /**
- * The type that the argument should be cast to. Possible strings are:
+ * The type that the argument should be cast to.
+ * &lt;br/>Possible strings are:
+ * &lt;br/>
  * &lt;br/>&lt;code>'string'&lt;/code> Does not cast to any type.
+ * &lt;br/>
  * &lt;br/>&lt;code>'number'&lt;/code> Casts to an number with parseFloat(), default value if not a number.
+ * &lt;br/>
  * &lt;br/>&lt;code>'integer'&lt;/code> Casts to an integer with parseInt(), default value if not a number.
+ * &lt;br/>
  * &lt;br/>&lt;code>'dynamic'&lt;/code> Casts to a number with parseFloat() or a string if the argument is not a number.
+ * &lt;br/>
  * &lt;br/>&lt;code>'dynamicInt'&lt;/code> Casts to an integer with parseInt() or a string if the argument is not a number.
  * &lt;br/>
  * &lt;br/>Possible Discord-related strings:
+ * &lt;br/>
  * &lt;br/>&lt;code>'user'&lt;/code> Tries to resolve to a user.
+ * &lt;br/>
  * &lt;br/>&lt;code>'member'&lt;/code> Tries to resolve to a member.
+ * &lt;br/>
  * &lt;br/>&lt;code>'channel'&lt;/code> Tries to resolve to a channel.
+ * &lt;br/>
  * &lt;br/>&lt;code>'textChannel'&lt;/code> Tries to resolve to a text channel.
+ * &lt;br/>
  * &lt;br/>&lt;code>'voiceChannel'&lt;/code> Tries to resolve to a voice channel.
+ * &lt;br/>
  * &lt;br/>&lt;code>'role'&lt;/code> Tries to resolve to a role.
+ * &lt;br/>
  * &lt;br/>&lt;code>'emoji'&lt;/code> Tries to resolve to a custom emoji.
+ * &lt;br/>
  * &lt;br/>Many of these types can only be used in a guild.
  * &lt;br/>If any of the above are invalid, the default value will be resolved (recommended to use an ID).
  * &lt;br/>
@@ -89,7 +110,7 @@ const { ArgumentMatches, ArgumentTypes, ArgumentSplits } = require('../utils/Con
  * &lt;br/>A function &lt;code>((word, message) => {})&lt;/code> can also be used to filter or modify arguments.
  * &lt;br/>A return value of true will let the word pass, a falsey return value will use the default value for the argument.
  * &lt;br/>Any other truthy return value will be used as the argument.
- * @typedef {string} ArgumentType
+ * @typedef {string|string[]} ArgumentType
  */
 
 /**
@@ -102,15 +123,20 @@ const { ArgumentMatches, ArgumentTypes, ArgumentSplits } = require('../utils/Con
  * @prop {boolean} [ownerOnly=false] - Allow client owner only.
  * @prop {string} [channelRestriction='none'] - Restricts channel: 'guild' or 'dm'.
  * @prop {ArgumentSplit} [split='plain'] - Method to split text into words.
- * @prop {Object} [custom={}] - An object for custom options. Accessible with Command#options.
+ * @prop {Object} [custom={}] - An object for custom options.&lt;br/>Accessible with Command#options.
  */
 
 /**
- * The method to split text into words. Possible strings are:
- * &lt;br/>&lt;code>'plain'&lt;/code> Splits word separated by whitespace. Extra whitespace is ignored.
+ * The method to split text into words.
+ * &lt;br/>Possible strings are:
+ * &lt;br/>
+ * &lt;br/>&lt;code>'plain'&lt;/code> Splits word separated by whitespace.&lt;br/>Extra whitespace is ignored.
+ * &lt;br/>
  * &lt;br/>&lt;code>'split'&lt;/code> Splits word separated by whitespace.
+ * &lt;br/>
  * &lt;br/>&lt;code>'quoted'&lt;/code> This is like plain, but counts text inside double quotes as one word.
- * &lt;br/>&lt;code>'sticky'&lt;/code> This is like quoted, but makes it so that quoted text must have a whitespace/another double quote before it to count as another word. It will still span multiple words.
+ * &lt;br/>
+ * &lt;br/>&lt;code>'sticky'&lt;/code> This is like quoted, but makes it so that quoted text must have a whitespace/another double quote before it to count as another word.&lt;br/>It will still span multiple words.
  * @typedef {string} ArgumentSplit
  */
 
@@ -199,7 +225,7 @@ class Command extends AkairoModule {
     }
 
     /**
-     * The command handler. Alias to this.handler.
+     * The command handler.&lt;br/>Alias to this.handler.
      * @type {CommandHandler}
      */
     get commandHandler(){

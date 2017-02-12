@@ -3,7 +3,7 @@ const { Collection } = require('discord.js');
 /** @extends Collection */
 class Category extends Collection {
     /**
-     * A group of commands/inhibitors/listeners.
+     * A group of modules.
      * @param {string} id - ID of the category.
      */
     constructor(id){

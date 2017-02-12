@@ -17,7 +17,7 @@ let sql;
 /** @extends EventEmitter */
 class SQLiteHandler extends EventEmitter {
     /**
-     * Creates an SQLiteHandler. Tables must have an 'id' column.
+     * Creates an SQLiteHandler.<br/>Tables must have an 'id' column.
      * @param {string} filepath - Path to .sqlite file.
      * @param {SQLiteOptions} [options={}] - Options for the handler.
      */
@@ -75,7 +75,7 @@ class SQLiteHandler extends EventEmitter {
     }
 
     /**
-     * Array of IDs. Note that this calls the Collection's keyArray().
+     * Array of IDs.<br/>Note that this calls the Collection's keyArray().
      * @type {string[]}
      */
     get ids(){
@@ -83,7 +83,7 @@ class SQLiteHandler extends EventEmitter {
     }
 
     /**
-     * Array of configs. Note that this calls the Collection's array().
+     * Array of configs.<br/>Note that this calls the Collection's array().<br/>Values from here should be desanitized.
      * @type {string[]}
      */
     get configs(){
@@ -126,7 +126,7 @@ class SQLiteHandler extends EventEmitter {
     }
 
     /**
-     * Loads handler and database with IDs.
+     * Loads handler and database with IDs.<br/>
      * Use manually if you want to load database before client is ready.
      * @param {string[]} ids - Array of IDs.
      * @returns {Promise.<SQLiteHandler>}

@@ -45,6 +45,7 @@ If you need more help, message me on Discord: 1Computer#7952.
 ```js
 const { Command } = require('discord-akairo');
 
+// Use the function keyword if you would like to access this.client.
 function exec(message, args){
     let random = Math.random() * args.limit + 1;
     if (!args.noFloor) random = Math.floor(random);
@@ -112,11 +113,11 @@ module.exports = new Listener('commandBlocked', exec, {
 
 #### Reloading
 ```js
-// Somewhere...
+// For example, in a command:
 
-commandHandler.reload('roll');
-inhibitorHandler.reload('blacklist');
-listenerHandler.reload('commandBlocked');
+this.client.commandHandler.reload('roll');
+this.client.inhibitorHandler.reload('blacklist');
+this.client.listenerHandler.reload('commandBlocked');
 
 // All reloaded!
 ```

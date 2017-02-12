@@ -68,7 +68,7 @@ class AkairoModule {
     }
 
     /**
-     * Removes this. It can be readded with its handler.
+     * Removes this.<br/>It can be readded with its handler.
      */
     remove(){
         this.handler.remove(this.id);
