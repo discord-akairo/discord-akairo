@@ -138,11 +138,23 @@ class CommandHandler extends AkairoHandler {
         : () => Promise.resolve();
 
         return pretest(message).then(() => {
-            const prefix = this.prefix(message).toLowerCase();
+            const prefix = this.prefix(message);
             const allowMention = this.allowMention(message);
             let start;
 
-            if (message.content.toLowerCase().startsWith(prefix)){
+            if (Array.isArray(prefix)){
+                const match = prefix.find(p => {
+                    return message.content.toLowerCase().startsWith(p.toLowerCase());
+                });
+
+                if (!match){
+                    this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
+                    return;
+                }
+
+                start = match;
+            } else
+            if (message.content.toLowerCase().startsWith(prefix.toLowerCase())){
                 start = prefix;
             } else
             if (allowMention){

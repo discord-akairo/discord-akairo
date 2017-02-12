@@ -49,7 +49,7 @@ const ClientUtil = require('../utils/ClientUtil');
  * @prop {string|string[]} [ownerID=''] - Discord ID of the client owner(s).
  * @prop {boolean} [selfbot=false] - Marks this bot as a selfbot.
  * @prop {string} [commandDirectory] - Directory to commands.
- * @prop {string|function} [prefix='!'] - Default command prefix or function &lt;code>(message => {})&lt;/code> returning prefix.
+ * @prop {string|string[]|function} [prefix='!'] - Default command prefix(es) or function &lt;code>(message => {})&lt;/code> returning prefix(es).
  * @prop {boolean|function} [allowMention=true] - Allow mentions to the client user as a prefix or function &lt;code>(message => {})&lt;/code> that returns true or false.
  * @prop {string} [inhibitorDirectory] - Directory to inhibitors.
  * @prop {boolean} [preInhibitors=false] - Disables the built-in pre-message inhibitors.
@@ -80,9 +80,12 @@ class AkairoClient extends Client {
 
         /**
          * Utility methods.
+         * @name AkairoClient#util
          * @type {ClientUtil}
          */
-        this.util = new ClientUtil(this.client);
+        Object.defineProperty(this, 'util', {
+            value: new ClientUtil(this)
+        });
 
         if (options.commandDirectory){
             /**
