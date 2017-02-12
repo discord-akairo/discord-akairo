@@ -227,7 +227,7 @@ class ClientUtil {
      */
     displayRole(member){
         const roles = member.roles.filter(r => r.color !== 0);
-        if (!roles.size) return 0;
+        if (!roles.size) return null;
 
         const highest = roles.array().sort((a, b) => b.comparePositionTo(a))[0];
         return highest;
@@ -260,7 +260,7 @@ class ClientUtil {
      */
     hoistedRole(member){
         const roles = member.roles.filter(r => r.hoist);
-        if (!roles.size) return 0;
+        if (!roles.size) return null;
 
         const highest = roles.array().sort((a, b) => b.comparePositionTo(a))[0];
         return highest;
