@@ -22,10 +22,11 @@ const ClientUtil = require('../utils/ClientUtil');
 class AkairoClient extends Client {
     /**
      * The Akairo framework client.<br/>Creates the handlers and sets them up.
-     * @param {AkairoOptions} options - Options to use for the framework.<br/>This is also passed to Discord JS's ClientOptions.
+     * @param {AkairoOptions} [options={}] - Options to use for the framework.
+     * @param {ClientOptions} [clientOptions] - Options for Discord JS client.<br/>If not specified, the previous options parameter is used instead.
      */
-    constructor(options = {}){
-        super(options);
+    constructor(options = {}, clientOptions){
+        super(clientOptions || options);
 
         /**
          * The ID of the owner.
