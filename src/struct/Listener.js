@@ -93,12 +93,14 @@ class Listener extends AkairoModule {
      * Reloads the listener.
      * @method
      * @name Listener#reload
+     * @returns {Listener}
      */
 
     /**
      * Removes the listener.
      * @method
-     * @name Listener#reload
+     * @name Listener#remove
+     * @returns {Listener}
      */
 }
 

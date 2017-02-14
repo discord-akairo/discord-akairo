@@ -71,7 +71,7 @@ class AkairoHandler extends EventEmitter {
         const mod = require(filepath);
 
         if (!(mod instanceof this.classToHandle)) return;
-        if (this.modules.has(mod.id)) throw new Error(`${mod.id} already loaded.`);
+        if (this.modules.has(mod.id)) throw new Error(`${this.classToHandle.name} ${mod.id} already loaded.`);
 
         mod.filepath = filepath;
         mod.client = this.client;
@@ -112,7 +112,7 @@ class AkairoHandler extends EventEmitter {
      */
     remove(id){
         const mod = this.modules.get(id);
-        if (!mod) throw new Error(`${id} does not exist.`);
+        if (!mod) throw new Error(`${this.classToHandle.name} ${id} does not exist.`);
 
         delete require.cache[require.resolve(mod.filepath)];
         this.modules.delete(mod.id);
@@ -130,7 +130,7 @@ class AkairoHandler extends EventEmitter {
      */
     reload(id){
         const mod = this.modules.get(id);
-        if (!mod) throw new Error(`${id} does not exist.`);
+        if (!mod) throw new Error(`${this.classToHandle.name} ${id} does not exist.`);
 
         const filepath = mod.filepath;
 

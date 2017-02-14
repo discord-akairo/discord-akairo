@@ -168,10 +168,10 @@ class SQLiteHandler extends EventEmitter {
      * @returns {Promise.<SQLiteHandler>}
      */
     add(id){
-        if (!this.db) return Promise.reject(new Error('Database not opened.'));
+        if (!this.db) return Promise.reject(new Error(`Database with table ${this.tableName} not opened.`));
 
         id = this.sanitize(id);
-        if (this.has(id)) return Promise.reject(new Error(`${id} already exists.`));
+        if (this.has(id)) return Promise.reject(new Error(`${id} already exists in ${this.tableName}.`));
 
         return this.db.run(`INSERT INTO "${this.tableName}" (id) VALUES ('${id}')`).then(() => {
             const config = Object.assign({}, this.defaultConfig);
@@ -191,7 +191,7 @@ class SQLiteHandler extends EventEmitter {
      */
     addMemory(id){
         id = this.sanitize(id);
-        if (this.has(id)) throw new Error(`${id} already exists.`);
+        if (this.has(id)) throw new Error(`${id} already exists in ${this.tableName}.`);
 
         const config = Object.assign({}, this.defaultConfig);
 
@@ -208,10 +208,10 @@ class SQLiteHandler extends EventEmitter {
      * @returns {Promise.<SQLiteHandler>}
      */
     remove(id){
-        if (!this.db) return Promise.reject(new Error('Database not opened.'));
+        if (!this.db) return Promise.reject(new Error(`Database with table ${this.tableName} not opened.`));
         
         id = this.sanitize(id);
-        if (!this.has(id)) return Promise.reject(new Error(`${id} does not exist.`));
+        if (!this.has(id)) return Promise.reject(new Error(`${id} does not exist in ${this.tableName}.`));
         
         return this.db.run(`DELETE FROM "${this.tableName}" WHERE id = '${id}'`).then(() => {
             this.memory.delete(id);
@@ -227,7 +227,7 @@ class SQLiteHandler extends EventEmitter {
      */
     removeMemory(id){
         id = this.sanitize(id);
-        if (!this.has(id)) throw new Error(`${id} does not exist.`);
+        if (!this.has(id)) throw new Error(`${id} does not exist in ${this.tableName}.`);
 
         this.memory.delete(id);
         this.emit(SQLiteHandlerEvents.REMOVE, id, true);
@@ -272,17 +272,17 @@ class SQLiteHandler extends EventEmitter {
      * @returns {Promise.<SQLiteHandler>}
      */
     set(id, key, value){
-        if (!this.db) return Promise.reject(new Error('Database not opened.'));
+        if (!this.db) return Promise.reject(new Error(`Database with table ${this.tableName} not opened.`));
 
         id = this.sanitize(id);
         key = this.sanitize(key);
         value = this.sanitize(value, this.json.includes(key));
 
-        if (!this.has(id)) return Promise.reject(new Error(`${id} not found.`));
+        if (!this.has(id)) return Promise.reject(new Error(`${id} not found in ${this.tableName}.`));
         
         const config = this.memory.get(id);
 
-        if (!config.hasOwnProperty(key)) return Promise.reject(new Error(`Key ${key} was not found for ${id}.`));
+        if (!config.hasOwnProperty(key)) return Promise.reject(new Error(`Key ${key} was not found for ${id} in ${this.tableName}.`));
         if (key === 'id') return Promise.reject(new Error('The id key is read-only.'));
         
         config[key] = value;
@@ -310,11 +310,11 @@ class SQLiteHandler extends EventEmitter {
         key = this.sanitize(key);
         value = this.sanitize(value, this.json.includes(key));
 
-        if (!this.has(id)) throw new Error(`${id} not found.`);
+        if (!this.has(id)) throw new Error(`${id} not found in ${this.tableName}.`);
         
         const config = this.memory.get(id);
 
-        if (!config.hasOwnProperty(key)) throw new Error(`Key ${key} was not found for ${id}.`);
+        if (!config.hasOwnProperty(key)) throw new Error(`Key ${key} was not found for ${id} in ${this.tableName}.`);
         if (key === 'id') throw new Error('The id key is read-only.');
         
         config[key] = value;
@@ -329,10 +329,10 @@ class SQLiteHandler extends EventEmitter {
      * @returns {Promise.<SQLiteHandler>}
      */
     save(id){
-        if (!this.db) return Promise.reject(new Error('Database not opened.'));
+        if (!this.db) return Promise.reject(new Error(`Database with table ${this.tableName} not opened.`));
 
         id = this.sanitize(id);
-        if (!this.has(id)) return Promise.reject(new Error(`${id} not found.`));
+        if (!this.has(id)) return Promise.reject(new Error(`${id} not found in ${this.tableName}.`));
 
         const config = this.memory.get(id);
         const sets = [];

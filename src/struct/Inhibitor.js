@@ -65,12 +65,14 @@ class Inhibitor extends AkairoModule {
      * Reloads the inhibitor.
      * @method
      * @name Inhibitor#reload
+     * @returns {Inhibitor}
      */
 
     /**
      * Removes the inhibitor.
      * @method
-     * @name Inhibitor#reload
+     * @name Inhibitor#remove
+     * @returns {Inhibitor}
      */
 
     /**

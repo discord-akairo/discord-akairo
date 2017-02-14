@@ -8,13 +8,13 @@ const ClientUtil = require('../utils/ClientUtil');
  * Options used to determine how the framework behaves.
  * @typedef {Object} AkairoOptions
  * @prop {string|string[]} [ownerID=''] - Discord ID of the client owner(s).
- * @prop {boolean} [selfbot=false] - Marks this bot as a selfbot.
+ * @prop {boolean} [selfbot=false] - Whether or not this bot is a selfbot.
  * @prop {string} [commandDirectory] - Directory to commands.
  * @prop {string|string[]|function} [prefix='!'] - Default command prefix(es) or function <code>(message => {})</code> returning prefix(es).
- * @prop {boolean|function} [allowMention=true] - Allow mentions to the client user as a prefix or function <code>(message => {})</code> that returns true or false.
+ * @prop {boolean|function} [allowMention=true] - Whether or not to allow mentions to the client user as a prefix.<br/> Can be function <code>(message => {})</code> that returns true or false.
  * @prop {string} [inhibitorDirectory] - Directory to inhibitors.
- * @prop {boolean} [preInhibitors=false] - Disables the built-in pre-message inhibitors.
- * @prop {boolean} [postInhibitors=false] - Disables the built-in post-message inhibitors.
+ * @prop {boolean} [preInhibitors=false] - Whether or not to disable the built-in pre-message inhibitors.
+ * @prop {boolean} [postInhibitors=false] -Whether or not to disable the built-in post-message inhibitors.
  * @prop {string} [listenerDirectory] - Directory to listeners.
  * @prop {Object} [emitters={}] - Emitters to load onto the listener handler.
  */

@@ -63,16 +63,18 @@ class AkairoModule {
 
     /**
      * Reloads the module.
+     * @returns {AkairoModule}
      */
     reload(){
-        this.handler.reload(this.id);
+        return this.handler.reload(this.id);
     }
 
     /**
      * Removes the module.
+     * @returns {AkairoModule}
      */
     remove(){
-        this.handler.remove(this.id);
+        return this.handler.remove(this.id);
     }
 
     /**
