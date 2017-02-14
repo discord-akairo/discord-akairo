@@ -120,7 +120,7 @@ const { ArgumentMatches, ArgumentTypes, ArgumentSplits } = require('../utils/Con
  * @prop {string} [aliases=[]] - Command names.
  * @prop {string} [category='default'] - Category ID for organization purposes.
  * @prop {string|string[]} [description=''] - Description of the command.
- * @prop {boolean} [ownerOnly=false] - Allow client owner only.
+ * @prop {boolean} [ownerOnly=false] - Whether or not to allow client owner(s) only.
  * @prop {string} [channelRestriction='none'] - Restricts channel: 'guild' or 'dm'.
  * @prop {ArgumentSplit} [split='plain'] - Method to split text into words.
  * @prop {Object} [custom={}] - An object for custom options.&lt;br/>Accessible with Command#options.
@@ -365,7 +365,7 @@ class Command extends AkairoModule {
             args[arg.id] = processType(arg, word);
         });
 
-        words.reverse();
+        if (prefixArgs.length || flagArgs.length) words.reverse();
 
         prefixArgs.forEach(arg => {
             let word = words.find(w => Array.isArray(arg.prefix) ? arg.prefix.some(p => w.startsWith(p)) : w.startsWith(arg.prefix)) || '';
@@ -402,12 +402,14 @@ class Command extends AkairoModule {
      * Reloads the command.
      * @method
      * @name Command#reload
+     * @returns {Command}
      */
 
     /**
      * Removes the command.
      * @method
-     * @name Command#reload
+     * @name Command#remove
+     * @returns {Command}
      */
 
     /**

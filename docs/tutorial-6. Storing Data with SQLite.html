@@ -58,7 +58,9 @@ client.login('token').then(() => {
     console.log('Ready!');
 });</code></pre><p>Let's take a look at what the addDatabase line does.<br>We first create a new SQLiteHandler which points to our guilds.sqlite file.  </p>
 <p>The init option is what we want to have the database be filled with.<br>The tableName is the name of our table that we set up.<br>The defaultConfig are the values used when the corresponding row from the database is null.  </p>
-<p>The SQLiteHandler is added under the name &quot;guilds&quot; which we can now access with client.databases.guilds.<br>Let's implement per-guild prefix now:  </p>
+<p>The SQLiteHandler is added under the name &quot;guilds&quot; which we can now access with client.databases.guilds.  </p>
+<p>Note: If you would like to use the SQLiteHandler in listeners, create it as a separate variable.<br>Then, add it inside the emitters property in your client options.  </p>
+<p>Let's implement per-guild prefix now:  </p>
 <pre class="prettyprint source lang-js"><code>const { AkairoClient, SQLiteHandler } = require('discord-akairo');
 const client = new AkairoClient({
     ownerID: '123992700587343872',
@@ -103,7 +105,7 @@ module.exports = new Command('prefix', exec, {
     ],
     channelRestriction: 'guild'
 });</code></pre><p>It should be obvious how the options in the command works.<br>The command can only be used in guilds, and if no characters are provided, we use the default one from the database.  </p>
-<p>The set method returns a Promise, so you can then it to do something after the result as well.<br>Don't worry about injection!<br>Akairo handles it for you by replacing quotes.  </p>
+<p>The set method returns a Promise, so you can then it to do something after the result as well.<br>Don't worry about injection, Akairo handles it for you by replacing quotes.  </p>
 <h2>Tags Command</h2><p>A tag command is one where tags can be stored and the bot will respond with the tag's text.<br>We will store tags per-guild by making a row in our .sqlite file called tags.  </p>
 <pre class="prettyprint source lang-js"><code>client.addDatabase('guilds', new SQLiteHandler('./guilds.sqlite', {
     init: () => client.guilds.keyArray(),
