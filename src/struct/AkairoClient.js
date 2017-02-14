@@ -99,7 +99,8 @@ class AkairoClient extends Client {
      */
     addDatabase(name, database){
         Object.defineProperty(this.databases, name, {
-            value: database
+            value: database,
+            enumerable: true
         });
     }
 
