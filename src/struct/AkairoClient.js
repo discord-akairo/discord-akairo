@@ -114,7 +114,7 @@ class AkairoClient extends Client {
             this.once('ready', () => {
                 const promises = Object.keys(this.databases).map(key => {
                     const ids = this.databases[key].init(this);
-                    this.databases[key].load(ids);
+                    return this.databases[key].load(ids);
                 });
 
                 Promise.all(promises).then(() => resolve()).catch(reject);
