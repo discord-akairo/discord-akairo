@@ -13,13 +13,13 @@ class CommandHandler extends AkairoHandler {
         super(client, options.commandDirectory, Command);
 
         /**
-         * Whether or not the built-in pre-message inhibitors are disabled.
+         * Whether or not the built-in pre-message inhibitors are enabled.
          * @type {boolean}
          */
         this.preInhibitors = !!options.preInhibitors;
-
+        
         /**
-         * Whether or not the built-in post-message inhibitors are disabled.
+         * Whether or not the built-in post-message inhibitors are enabled.
          * @type {boolean}
          */
         this.postInhibitors = !!options.postInhibitors;
@@ -77,7 +77,7 @@ class CommandHandler extends AkairoHandler {
      * @returns {Promise}
      */
     handle(message){
-        if (!this.preInhibitors){
+        if (this.preInhibitors){
             if (message.author.id !== this.client.user.id && this.client.selfbot){
                 this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.NOT_SELF);
                 return Promise.resolve();
@@ -140,7 +140,7 @@ class CommandHandler extends AkairoHandler {
             if (!command) return this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
             if (!command.enabled) return this.emit(CommandHandlerEvents.COMMAND_DISABLED, message, command);
 
-            if (!this.postInhibitors){
+            if (this.postInhibitors){
                 const notOwner = Array.isArray(this.client.ownerID)
                 ? !this.client.ownerID.includes(message.author.id)
                 : message.author.id !== this.client.ownerID;

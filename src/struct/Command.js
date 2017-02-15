@@ -84,7 +84,7 @@ const { ArgumentMatches, ArgumentTypes, ArgumentSplits } = require('../utils/Con
  * @prop {boolean} [ownerOnly=false] - Whether or not to allow client owner(s) only.
  * @prop {string} [channelRestriction='none'] - Restricts channel: 'guild' or 'dm'.
  * @prop {ArgumentSplit} [split='plain'] - Method to split text into words.
- * @prop {Object} [custom={}] - An object for custom options.<br/>Accessible with Command#options.
+ * @prop {Object} [options={}] - An object for custom options.<br/>Accessible with Command#options.
  */
 
 /**
@@ -160,7 +160,7 @@ class Command extends AkairoModule {
          * Custom options for the command.
          * @type {Object}
          */
-        this.options = options.custom || {};
+        this.options = options.custom || options.options || {};
 
         /**
          * The ID of this command.

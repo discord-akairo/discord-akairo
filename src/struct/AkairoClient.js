@@ -13,8 +13,8 @@ const ClientUtil = require('../utils/ClientUtil');
  * @prop {string|string[]|function} [prefix='!'] - Default command prefix(es) or function <code>(message => {})</code> returning prefix(es).
  * @prop {boolean|function} [allowMention=true] - Whether or not to allow mentions to the client user as a prefix.<br/> Can be function <code>(message => {})</code> that returns true or false.
  * @prop {string} [inhibitorDirectory] - Directory to inhibitors.
- * @prop {boolean} [preInhibitors=false] - Whether or not to disable the built-in pre-message inhibitors.
- * @prop {boolean} [postInhibitors=false] -Whether or not to disable the built-in post-message inhibitors.
+ * @prop {boolean} [preInhibitors=true] - Whether or not to disable the built-in pre-message inhibitors.
+ * @prop {boolean} [postInhibitors=true] -Whether or not to disable the built-in post-message inhibitors.
  * @prop {string} [listenerDirectory] - Directory to listeners.
  * @prop {Object} [emitters={}] - Emitters to load onto the listener handler.
  */
