@@ -103,15 +103,25 @@ class CommandHandler extends AkairoHandler {
             const allowMention = this.allowMention(message);
             let start;
 
+            const notCommand = () => {
+                const commands = this.commands.filter(c => c.trigger);
+                const triggered = [];
+
+                commands.forEach(c => {
+                    const match = message.content.match(c.trigger);
+                    if (match) triggered.push([c, match]);
+                });
+
+                if (!triggered.length) return void this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
+                triggered.forEach(c => c[0].exec(message, c[1]));
+            };
+
             if (Array.isArray(prefix)){
                 const match = prefix.find(p => {
                     return message.content.toLowerCase().startsWith(p.toLowerCase());
                 });
 
-                if (!match){
-                    this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
-                    return;
-                }
+                if (!match) return notCommand();
 
                 start = match;
             } else
@@ -125,19 +135,17 @@ class CommandHandler extends AkairoHandler {
                 if (mentioned){
                     start = mentioned[0];
                 } else {
-                    this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
-                    return;
+                    return notCommand();
                 }
             } else {
-                this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
-                return;
+                return notCommand();
             }
 
             const firstWord = message.content.replace(start, '').search(/\S/) + start.length;
             const name = message.content.slice(firstWord).split(' ')[0];
             const command = this.findCommand(name);
 
-            if (!command) return this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
+            if (!command) return notCommand();
             if (!command.enabled) return this.emit(CommandHandlerEvents.COMMAND_DISABLED, message, command);
 
             if (this.postInhibitors){

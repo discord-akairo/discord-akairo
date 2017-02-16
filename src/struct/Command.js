@@ -84,6 +84,7 @@ const { ArgumentMatches, ArgumentTypes, ArgumentSplits } = require('../utils/Con
  * @prop {boolean} [ownerOnly=false] - Whether or not to allow client owner(s) only.
  * @prop {string} [channelRestriction='none'] - Restricts channel: 'guild' or 'dm'.
  * @prop {ArgumentSplit} [split='plain'] - Method to split text into words.
+ * @prop {RegExp} [trigger] - A regex to match in messages that are not commands.<br/>Arguments will be the matched text.
  * @prop {Object} [options={}] - An object for custom options.<br/>Accessible with Command#options.
  */
 
