@@ -98,6 +98,15 @@ class CommandHandler extends AkairoHandler {
         ? m => this.client.inhibitorHandler.testMessage(m)
         : () => Promise.resolve();
 
+        const errored = (err, msg, cmd) => {
+            if (this.listenerCount(CommandHandlerEvents.ERROR)){
+                this.emit(CommandHandlerEvents.ERROR, err, msg, cmd);
+                return;
+            }
+
+            throw err;
+        };
+
         return pretest(message).then(() => {
             const prefix = this.prefix(message);
             const allowMention = this.allowMention(message);
@@ -146,7 +155,7 @@ class CommandHandler extends AkairoHandler {
             const command = this.findCommand(name);
 
             if (!command) return notCommand();
-            if (!command.enabled) return this.emit(CommandHandlerEvents.COMMAND_DISABLED, message, command);
+            if (!command.enabled) return void this.emit(CommandHandlerEvents.COMMAND_DISABLED, message, command);
 
             if (this.postInhibitors){
                 const notOwner = Array.isArray(this.client.ownerID)
@@ -181,14 +190,14 @@ class CommandHandler extends AkairoHandler {
                 const end = Promise.resolve(command.exec(message, args));
 
                 return end.then(() => void this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command)).catch(err => {
-                    return void this.emit(CommandHandlerEvents.ERROR, err, message, command);
+                    return errored(err, message, command);
                 });
             }).catch(reason => {
-                if (reason instanceof Error) return void this.emit(CommandHandlerEvents.ERROR, reason, message, command);
+                if (reason instanceof Error) return errored(reason, message, command);
                 this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
             });
         }).catch(reason => {
-            if (reason instanceof Error) return void this.emit(CommandHandlerEvents.ERROR, reason, message);
+            if (reason instanceof Error) return errored(reason, message);
             this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, reason);
         });
     }
@@ -274,6 +283,14 @@ module.exports = CommandHandler;
  * @event CommandHandler#commandFinished
  * @param {Message} message - Message sent.
  * @param {Command} command - Command executed.
+ */
+
+/**
+ * Emitted when a command or inhibitor errors.
+ * @event CommandHandler#error
+ * @param {Error} error - The error.
+ * @param {Message} message - Message sent.
+ * @param {?Command} command - Command executed.
  */
 
 /**
