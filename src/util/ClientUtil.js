@@ -229,11 +229,9 @@ class ClientUtil {
      * @returns {Role}
      */
     displayRole(member){
-        const roles = member.roles.filter(r => r.color !== 0);
-        if (!roles.size) return null;
-
-        const highest = roles.array().sort((a, b) => b.comparePositionTo(a))[0];
-        return highest;
+        const coloredRoles = member.roles.filter(role => role.color);
+        if (!coloredRoles.size) return null;
+        return coloredRoles.reduce((prev, role) => !prev || role.comparePositionTo(prev) > 0 ? role : prev);
     }
 
     /**
@@ -243,7 +241,7 @@ class ClientUtil {
      */
     displayColor(member){
         const role = this.displayRole(member);
-        return role && role.color;
+        return role && role.color || 0;
     }
 
     /**
@@ -253,7 +251,7 @@ class ClientUtil {
      */
     displayHexColor(member){
         const role = this.displayRole(member);
-        return role && role.hexColor;
+        return role && role.hexColor || '#000000';
     }
 
     /**
@@ -262,11 +260,9 @@ class ClientUtil {
      * @returns {Role}
      */
     hoistedRole(member){
-        const roles = member.roles.filter(r => r.hoist);
-        if (!roles.size) return null;
-
-        const highest = roles.array().sort((a, b) => b.comparePositionTo(a))[0];
-        return highest;
+        const hoistedRoles = member.roles.filter(role => role.hoist);
+        if (!hoistedRoles.size) return null;
+        return hoistedRoles.reduce((prev, role) => !prev || role.comparePositionTo(prev) > 0 ? role : prev);
     }
 
     /**
