@@ -323,7 +323,7 @@ class Command extends AkairoModule {
             return word || def;
         };
 
-        wordArgs.forEach((arg, i) => {
+        for (const [i, arg] of wordArgs.entries()){
             let word;
 
             if (arg.match === ArgumentMatches.REST){
@@ -335,7 +335,7 @@ class Command extends AkairoModule {
             if ((this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY) && /^".*"$/.test(word)) word = word.slice(1, -1);
 
             args[arg.id] = processType(arg, word);
-        });
+        }
 
         if (prefixArgs.length || flagArgs.length) words.reverse();
 
