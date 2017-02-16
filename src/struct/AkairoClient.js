@@ -121,9 +121,7 @@ class AkairoClient extends Client {
                 Promise.all(promises).then(() => resolve()).catch(reject);
             });
 
-            if (this.commandHandler) this.on('message', m => {
-                this.commandHandler.handle(m).catch(console.error);
-            });
+            if (this.commandHandler) this.on('message', m => { this.commandHandler.handle(m); });
         });
     }
 }

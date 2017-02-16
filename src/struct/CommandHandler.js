@@ -17,7 +17,7 @@ class CommandHandler extends AkairoHandler {
          * @type {boolean}
          */
         this.preInhibitors = !!options.preInhibitors;
-        
+
         /**
          * Whether or not the built-in post-message inhibitors are enabled.
          * @type {boolean}
@@ -172,16 +172,15 @@ class CommandHandler extends AkairoHandler {
                 this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command);
                 const end = Promise.resolve(command.exec(message, args));
 
-                return end.then(() => this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command)).catch(err => {
-                    this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command);
-                    throw err;
+                return end.then(() => void this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command)).catch(err => {
+                    return void this.emit(CommandHandlerEvents.ERROR, err, message, command);
                 });
             }).catch(reason => {
-                if (reason instanceof Error) throw reason;
+                if (reason instanceof Error) return void this.emit(CommandHandlerEvents.ERROR, reason, message, command);
                 this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
             });
         }).catch(reason => {
-            if (reason instanceof Error) throw reason;
+            if (reason instanceof Error) return void this.emit(CommandHandlerEvents.ERROR, reason, message);
             this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, reason);
         });
     }

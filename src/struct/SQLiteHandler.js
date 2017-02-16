@@ -257,7 +257,7 @@ class SQLiteHandler extends EventEmitter {
         const copy = {};
 
         Object.keys(config).forEach(key => {
-            if (config[key] == undefined) return copy[key] = this.defaultConfig[key];
+            if (config[key] == null) return copy[key] = this.defaultConfig[key];
             copy[key] = this.desanitize(config[key], this.json.includes(key));
         });
 

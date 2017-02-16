@@ -40,7 +40,8 @@ module.exports = {
         COMMAND_DISABLED: 'commandDisabled',
         COMMAND_BLOCKED: 'commandBlocked',
         COMMAND_STARTED: 'commandStarted',
-        COMMAND_FINISHED: 'commandFinished'
+        COMMAND_FINISHED: 'commandFinished',
+        ERROR: 'error'
     },
     InhibitorHandlerEvents: {},
     ListenerHandlerEvents: {},

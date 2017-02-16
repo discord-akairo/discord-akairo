@@ -316,9 +316,9 @@ class Command extends AkairoModule {
             let word;
 
             if (arg.match === ArgumentMatches.REST){
-                word = noPrefixWords.slice(arg.index !== undefined ? arg.index : i).join(' ') || '';
+                word = noPrefixWords.slice(arg.index == null ? arg.index : i).join(' ') || '';
             } else {
-                word = noPrefixWords[arg.index !== undefined ? arg.index : i] || '';
+                word = noPrefixWords[arg.index == null ? arg.index : i] || '';
             }
 
             if ((this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY) && /^".*"$/.test(word)) word = word.slice(1, -1);
