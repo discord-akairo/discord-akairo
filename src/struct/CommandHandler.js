@@ -118,14 +118,26 @@ class CommandHandler extends AkairoHandler {
 
                 commands.forEach(c => {
                     const match = message.content.match(c.trigger);
-                    if (match) triggered.push([c, match]);
+                    if (match){
+                        const groups = [];
+
+                        if (c.trigger.global){
+                            let group;
+                            
+                            while((group = c.trigger.exec(message.content)) != null){
+                                groups.push(group);
+                            }
+                        }
+                        
+                        triggered.push([c, match, groups]);
+                    }
                 });
 
                 if (!triggered.length) return void this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
 
                 triggered.forEach(c => {
                     this.emit(CommandHandlerEvents.COMMAND_STARTED, message, c[0]);
-                    const end = Promise.resolve(c[0].exec(message, c[1]));
+                    const end = Promise.resolve(c[0].exec(message, c[1], c[2]));
 
                     return end.then(() => void this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, c[0])).catch(err => {
                         return errored(err, message, c[0]);
