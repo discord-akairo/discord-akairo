@@ -1,6 +1,6 @@
 const AkairoHandler = require('./AkairoHandler');
 const Command = require('./Command');
-const { CommandHandlerEvents, BuiltInReasons } = require('../utils/Constants');
+const { CommandHandlerEvents, BuiltInReasons } = require('../util/Constants');
 
 /** @extends AkairoHandler */
 class CommandHandler extends AkairoHandler {

@@ -1,4 +1,4 @@
-const { AkairoHandlerEvents } = require('../utils/Constants');
+const { AkairoHandlerEvents } = require('../util/Constants');
 
 /**
  * Options for module.
