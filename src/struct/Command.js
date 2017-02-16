@@ -353,14 +353,14 @@ class Command extends AkairoModule {
             return args[arg.id] = !!word;
         }
 
-        for (const arg of this.textArgs){
+        for (const arg of textArgs){
             const def = typeof arg.defaultValue === 'function' ? arg.defaultValue(message) : arg.defaultValue;
             const w = noPrefixWords.slice(arg.index).join(' ') || def;
 
             args[arg.id] = processType(arg, w);
         }
 
-        for (const arg of this.contentArgs){
+        for (const arg of contentArgs){
             const def = typeof arg.defaultValue === 'function' ? arg.defaultValue(message) : arg.defaultValue;
             const w = content.split(' ').slice(arg.index).join(' ') || def;
 
