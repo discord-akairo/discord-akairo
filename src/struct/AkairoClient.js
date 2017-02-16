@@ -14,7 +14,7 @@ const ClientUtil = require('../utils/ClientUtil');
  * @prop {boolean|function} [allowMention=true] - Whether or not to allow mentions to the client user as a prefix.<br/> Can be function <code>(message => {})</code> that returns true or false.
  * @prop {string} [inhibitorDirectory] - Directory to inhibitors.
  * @prop {boolean} [preInhibitors=true] - Whether or not to enable the built-in pre-message inhibitors.
- * @prop {boolean} [postInhibitors=true] -Whether or not to enable the built-in post-message inhibitors.
+ * @prop {boolean} [postInhibitors=true] - Whether or not to enable the built-in post-message inhibitors.
  * @prop {string} [listenerDirectory] - Directory to listeners.
  * @prop {Object} [emitters={}] - Emitters to load onto the listener handler.
  */
