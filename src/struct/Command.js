@@ -99,6 +99,8 @@ const { ArgumentMatches, ArgumentTypes, ArgumentSplits } = require('../utils/Con
  * <br/><code>'quoted'</code> This is like plain, but counts text inside double quotes as one word.
  * <br/>
  * <br/><code>'sticky'</code> This is like quoted, but makes it so that quoted text must have a whitespace/another double quote before it to count as another word.<br/>It will still span multiple words.
+ * <br/>
+ * <br/>A regex or a character can be used instead (for example, a comma) to split the message by that regex or character.
  * @typedef {string} ArgumentSplit
  */
 
@@ -217,7 +219,7 @@ class Command extends AkairoModule {
             [ArgumentSplits.STICKY]: () => content.match(/[^\s"]*?".*?"|[^\s"]+|"/g)
         };
 
-        const words = splitFunc[this.split] ? splitFunc[this.split]() || [] : [];
+        const words = splitFunc[this.split] ? splitFunc[this.split]() || [] : content.split(this.split);
         const args = {};
 
         const wordArgs = this.args.filter(arg => arg.match === ArgumentMatches.WORD || arg.match === ArgumentMatches.REST);
