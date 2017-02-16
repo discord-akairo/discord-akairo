@@ -57,9 +57,9 @@ class AkairoHandler extends EventEmitter {
         this.categories = new Collection();
 
         const filepaths = rread.fileSync(this.directory);
-        filepaths.forEach(filepath => {
+        for (const filepath of filepaths){
             this.load(filepath);
-        });
+        }
     }
 
     /**
@@ -148,7 +148,7 @@ class AkairoHandler extends EventEmitter {
      * Reloads all modules.
      */
     reloadAll(){
-        this.modules.forEach(c => c.reload());
+        for (const m of this.modules.values()) m.reload();
     }
 
     /**

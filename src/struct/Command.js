@@ -126,14 +126,14 @@ class Command extends AkairoModule {
          * @type {Argument[]}
          */
         this.args = options.args || [];
-        this.args.forEach(arg => {
+        for (const arg of this.args){
             if (!arg.match) arg.match = ArgumentMatches.WORD;
             if (!arg.type) arg.type = ArgumentTypes.STRING;
             if (!arg.defaultValue) arg.defaultValue = '';
 
             if (Array.isArray(arg.description)) arg.description = arg.description.join('\n');
             if (!arg.description) arg.description = '';
-        });
+        }
 
         /**
          * Description of the command.
@@ -229,9 +229,9 @@ class Command extends AkairoModule {
         const contentArgs = this.args.filter(arg => arg.match === ArgumentMatches.CONTENT);
 
         const prefixes = [];
-        [...prefixArgs, ...flagArgs].forEach(arg => {
+        for (const arg of [...prefixArgs, ...flagArgs]){
             Array.isArray(arg.prefix) ? prefixes.push(...arg.prefix) : prefixes.push(arg.prefix);
-        });
+        }
 
         const noPrefixWords = words.filter(w => !prefixes.some(p => w.startsWith(p)));
 
@@ -339,33 +339,33 @@ class Command extends AkairoModule {
 
         if (prefixArgs.length || flagArgs.length) words.reverse();
 
-        prefixArgs.forEach(arg => {
+        for (const arg of prefixArgs){
             let word = words.find(w => Array.isArray(arg.prefix) ? arg.prefix.some(p => w.startsWith(p)) : w.startsWith(arg.prefix)) || '';
             word = word.replace(prefixes.find(p => word.startsWith(p)), '');
             
             if (this.split === ArgumentSplits.STICKY && /^".*"$/.test(word)) word = word.slice(1, -1);
 
             args[arg.id] = processType(arg, word);
-        });
+        }
 
-        flagArgs.forEach(arg => {
+        for (const arg of flagArgs){
             const word = words.find(w => Array.isArray(arg.prefix) ? arg.prefix.some(p => w === p) : w === arg.prefix);
             return args[arg.id] = !!word;
-        });
+        }
 
-        textArgs.forEach(arg => {
+        for (const arg of this.textArgs){
             const def = typeof arg.defaultValue === 'function' ? arg.defaultValue(message) : arg.defaultValue;
             const w = noPrefixWords.slice(arg.index).join(' ') || def;
 
             args[arg.id] = processType(arg, w);
-        });
+        }
 
-        contentArgs.forEach(arg => {
+        for (const arg of this.contentArgs){
             const def = typeof arg.defaultValue === 'function' ? arg.defaultValue(message) : arg.defaultValue;
             const w = content.split(' ').slice(arg.index).join(' ') || def;
 
             args[arg.id] = processType(arg, w);
-        });
+        }
 
         return args;
     }

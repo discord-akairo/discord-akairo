@@ -23,12 +23,12 @@ class ListenerHandler extends AkairoHandler {
         this.emitters.set('inhibitorHandler', this.client.inhibitorHandler);
         this.emitters.set('listenerHandler', this.client.listenerHandler);
 
-        if (options.emitters) Object.keys(options.emitters).forEach(key => {
+        if (options.emitters) for (const key of Object.keys(options.emitters)){
             if (this.emitters.has(key)) return;
             this.emitters.set(key, options.emitters[key]);
-        });
+        }
 
-        this.modules.forEach(m => this.register(m.id));
+        for (const m of this.modules.values()) this.register(m.id);
 
         /**
          * Directory to listeners.

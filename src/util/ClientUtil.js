@@ -285,9 +285,9 @@ class ClientUtil {
     resolvePermissionNumber(number){
         const resolved = [];
 
-        Object.keys(Constants.PermissionFlags).forEach(key => {
+        for (const key of Object.keys(Constants.PermissionFlags)){
             if (number & Constants.PermissionFlags[key]) resolved.push(key);
-        });
+        }
 
         return resolved;
     }

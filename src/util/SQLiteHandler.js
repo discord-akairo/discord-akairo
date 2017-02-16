@@ -143,16 +143,16 @@ class SQLiteHandler extends EventEmitter {
     load(ids){
         return this.open().then(db => {
             return db.all(`SELECT * FROM "${this.tableName}"`).then(rows => {
-                rows.forEach(row => {
+                for (const row of rows){
                     this.memory.set(row.id, row);
-                });
+                }
 
                 const promises = [];
 
-                ids.forEach(id => {
+                for (let id of ids){
                     id = this.sanitize(id);
                     if (!this.has(id)) promises.push(this.add(id));
-                });
+                }
                 
                 return Promise.all(promises).then(() => {
                     this.emit(SQLiteHandlerEvents.INIT);
@@ -256,10 +256,10 @@ class SQLiteHandler extends EventEmitter {
         const config = this.memory.get(id);
         const copy = {};
 
-        Object.keys(config).forEach(key => {
+        for (const key of Object.keys(config)){
             if (config[key] == null) return copy[key] = this.defaultConfig[key];
             copy[key] = this.desanitize(config[key], this.json.includes(key));
-        });
+        }
 
         return copy;
     }
@@ -337,7 +337,7 @@ class SQLiteHandler extends EventEmitter {
         const config = this.memory.get(id);
         const sets = [];
 
-        Object.keys(config).forEach(key => {
+        for (const key of Object.keys(config)){
             let value = config[key];
 
             if (isNaN(value)){
@@ -345,7 +345,7 @@ class SQLiteHandler extends EventEmitter {
             }
 
             sets.push(`${key} = ${value}`);
-        });
+        }
 
         return this.db.get(`SELECT count(1) FROM "${this.tableName}" WHERE id = '${id}'`).then(count => {
             let promise;

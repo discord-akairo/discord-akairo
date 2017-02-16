@@ -8,9 +8,9 @@ module.exports = {
     Command: require('./struct/Command'),
     Inhibitor: require('./struct/Inhibitor'),
     Listener: require('./struct/Listener'),
-    SQLiteHandler: require('./struct/SQLiteHandler'),
-    ClientUtil: require('./utils/ClientUtil'),
-    Constants: require('./utils/Constants'),
-    Category: require('./utils/Category'),
+    SQLiteHandler: require('./util/SQLiteHandler'),
+    ClientUtil: require('./util/ClientUtil'),
+    Constants: require('./util/Constants'),
+    Category: require('./util/Category'),
     version: require('../package.json').version
 };

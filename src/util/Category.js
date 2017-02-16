@@ -21,7 +21,7 @@ class Category extends Collection {
      * @returns {Category}
      */
     reloadAll(){
-        Array.from(this.values()).forEach(c => c.reload());
+        for (const m of Array.from(this.values())) m.reload();
         return this;
     }
 
@@ -30,7 +30,7 @@ class Category extends Collection {
      * @returns {Category}
      */
     removeAll(){
-        Array.from(this.values()).forEach(c => c.remove());
+        for (const m of Array.from(this.values())) m.remove();
         return this;
     }
 
@@ -39,7 +39,7 @@ class Category extends Collection {
      * @returns {Category}
      */
     enableAll(){
-        this.forEach(c => c.enable());
+        for (const m of this.values()) m.enable();
         return this;
     }
 
@@ -48,7 +48,7 @@ class Category extends Collection {
      * @returns {Category}
      */
     disableAll(){
-        this.forEach(c => c.disable());
+        for (const m of this.values()) m.disable();
         return this;
     }
 
