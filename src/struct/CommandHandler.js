@@ -27,6 +27,7 @@ class CommandHandler extends AkairoHandler {
         /**
          * Gets the prefix.
          * @method
+         * @param {Message} message - Message being handled.
          * @returns {string}
          */
         this.prefix = typeof options.prefix === 'function' ? options.prefix : () => options.prefix;
@@ -34,6 +35,7 @@ class CommandHandler extends AkairoHandler {
         /**
          * Gets if mentions are allowed for prefixing.
          * @method
+         * @param {Message} message - Message being handled.
          * @returns {boolean}
          */
         this.allowMention = typeof options.allowMention === 'function' ? options.allowMention : () => options.allowMention;
@@ -113,18 +115,20 @@ class CommandHandler extends AkairoHandler {
             let start;
 
             const notCommand = () => {
-                const commands = this.commands.filter(c => c.trigger);
+                const commands = this.commands.filter(c => c.trigger(message));
                 const triggered = [];
 
                 commands.forEach(c => {
-                    const match = message.content.match(c.trigger);
+                    const regex = c.trigger(message);
+                    const match = message.content.match(regex);
+
                     if (match){
                         const groups = [];
 
                         if (c.trigger.global){
                             let group;
                             
-                            while((group = c.trigger.exec(message.content)) != null){
+                            while((group = regex.exec(message.content)) != null){
                                 groups.push(group);
                             }
                         }

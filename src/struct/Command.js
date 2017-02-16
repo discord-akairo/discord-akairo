@@ -84,7 +84,7 @@ const { ArgumentMatches, ArgumentTypes, ArgumentSplits } = require('../utils/Con
  * @prop {boolean} [ownerOnly=false] - Whether or not to allow client owner(s) only.
  * @prop {string} [channelRestriction='none'] - Restricts channel: 'guild' or 'dm'.
  * @prop {ArgumentSplit} [split='plain'] - Method to split text into words.
- * @prop {RegExp} [trigger] - A regex to match in messages that are NOT commands.<br/>Arguments will be the matched text.<br/>The exec function is now <code>((message, match) => {})</code> if non-global, ((message, match, groups) => {}) if global.
+ * @prop {RegExp|function} [trigger] - A regex or function <code>(message => {})</code> returning regex to match in messages that are NOT commands.<br/>The exec function is now <code>((message, match) => {})</code> if non-global.<br/>Or, <code>((message, match, groups) => {})</code> if global.
  * @prop {Object} [options={}] - An object for custom options.<br/>Accessible with Command#options.
  */
 
@@ -158,16 +158,18 @@ class Command extends AkairoModule {
         this.split = options.split || ArgumentSplits.PLAIN;
 
         /**
-         * The regex trigger.
-         * @type {?RegExp}
-         */
-        this.trigger = options.trigger;
-
-        /**
          * Custom options for the command.
          * @type {Object}
          */
         this.options = options.custom || options.options || {};
+
+        /**
+         * Gets the regex trigger, if specified.
+         * @method
+         * @param {Message} message - Message being handled.
+         * @returns {RegExp}
+         */
+        this.trigger = typeof options.trigger === 'function' ? options.trigger : () => options.trigger;
 
         /**
          * The ID of this command.
