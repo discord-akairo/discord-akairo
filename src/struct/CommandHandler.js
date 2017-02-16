@@ -125,7 +125,7 @@ class CommandHandler extends AkairoHandler {
                     if (match){
                         const groups = [];
 
-                        if (c.trigger.global){
+                        if (regex.global){
                             let group;
                             
                             while((group = regex.exec(message.content)) != null){
