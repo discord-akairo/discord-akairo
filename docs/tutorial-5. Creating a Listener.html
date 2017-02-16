@@ -48,6 +48,7 @@ module.exports = new Listener('blocked', exec, {
     type: 'on'
 });</code></pre><p>The listener now listens to the command handler for when a command is blocked.<br>The emitter name <code>commandHandler</code> comes from <code>client.listenerHandler.emitters</code>.<br>You can add more to that by setting the <code>emitters</code> option in your client.  </p>
 <p>(By the way, inhibitors with type <code>pre</code> goes to the event <code>messageBlocked</code>.)  </p>
+<h2>Word Listener</h2><p>This tutorial used to exist, but a better method was added instead of using <code>messageInvalid</code>.<br>See the 7th tutorial on trigger commands.  </p>
 </article>
 
 </section>

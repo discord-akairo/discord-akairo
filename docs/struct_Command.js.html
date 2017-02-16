@@ -38,7 +38,7 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>const AkairoModule = require('./AkairoModule');
-const { ArgumentMatches, ArgumentTypes, ArgumentSplits } = require('../utils/Constants');
+const { ArgumentMatches, ArgumentTypes, ArgumentSplits } = require('../util/Constants');
 
 /**
  * An argument in a command.
@@ -123,7 +123,7 @@ const { ArgumentMatches, ArgumentTypes, ArgumentSplits } = require('../utils/Con
  * @prop {boolean} [ownerOnly=false] - Whether or not to allow client owner(s) only.
  * @prop {string} [channelRestriction='none'] - Restricts channel: 'guild' or 'dm'.
  * @prop {ArgumentSplit} [split='plain'] - Method to split text into words.
- * @prop {RegExp} [trigger] - A regex to match in messages that are NOT commands.&lt;br/>Arguments will be the matched text.
+ * @prop {RegExp|function} [trigger] - A regex or function &lt;code>(message => {})&lt;/code> returning regex to match in messages that are NOT commands.&lt;br/>The exec function is now &lt;code>((message, match) => {})&lt;/code> if non-global.&lt;br/>Or, &lt;code>((message, match, groups) => {})&lt;/code> if global.
  * @prop {Object} [options={}] - An object for custom options.&lt;br/>Accessible with Command#options.
  */
 
@@ -138,6 +138,8 @@ const { ArgumentMatches, ArgumentTypes, ArgumentSplits } = require('../utils/Con
  * &lt;br/>&lt;code>'quoted'&lt;/code> This is like plain, but counts text inside double quotes as one word.
  * &lt;br/>
  * &lt;br/>&lt;code>'sticky'&lt;/code> This is like quoted, but makes it so that quoted text must have a whitespace/another double quote before it to count as another word.&lt;br/>It will still span multiple words.
+ * &lt;br/>
+ * &lt;br/>A regex or a character can be used instead (for example, a comma) to split the message by that regex or character.
  * @typedef {string} ArgumentSplit
  */
 
@@ -163,14 +165,14 @@ class Command extends AkairoModule {
          * @type {Argument[]}
          */
         this.args = options.args || [];
-        this.args.forEach(arg => {
+        for (const arg of this.args){
             if (!arg.match) arg.match = ArgumentMatches.WORD;
             if (!arg.type) arg.type = ArgumentTypes.STRING;
             if (!arg.defaultValue) arg.defaultValue = '';
 
             if (Array.isArray(arg.description)) arg.description = arg.description.join('\n');
             if (!arg.description) arg.description = '';
-        });
+        }
 
         /**
          * Description of the command.
@@ -197,16 +199,18 @@ class Command extends AkairoModule {
         this.split = options.split || ArgumentSplits.PLAIN;
 
         /**
-         * The regex trigger.
-         * @type {?RegExp}
-         */
-        this.trigger = options.trigger;
-
-        /**
          * Custom options for the command.
          * @type {Object}
          */
         this.options = options.custom || options.options || {};
+
+        /**
+         * Gets the regex trigger, if specified.
+         * @method
+         * @param {Message} message - Message being handled.
+         * @returns {RegExp}
+         */
+        this.trigger = typeof options.trigger === 'function' ? options.trigger : () => options.trigger;
 
         /**
          * The ID of this command.
@@ -254,7 +258,7 @@ class Command extends AkairoModule {
             [ArgumentSplits.STICKY]: () => content.match(/[^\s"]*?".*?"|[^\s"]+|"/g)
         };
 
-        const words = splitFunc[this.split] ? splitFunc[this.split]() || [] : [];
+        const words = splitFunc[this.split] ? splitFunc[this.split]() || [] : content.split(this.split);
         const args = {};
 
         const wordArgs = this.args.filter(arg => arg.match === ArgumentMatches.WORD || arg.match === ArgumentMatches.REST);
@@ -264,9 +268,9 @@ class Command extends AkairoModule {
         const contentArgs = this.args.filter(arg => arg.match === ArgumentMatches.CONTENT);
 
         const prefixes = [];
-        [...prefixArgs, ...flagArgs].forEach(arg => {
+        for (const arg of [...prefixArgs, ...flagArgs]){
             Array.isArray(arg.prefix) ? prefixes.push(...arg.prefix) : prefixes.push(arg.prefix);
-        });
+        }
 
         const noPrefixWords = words.filter(w => !prefixes.some(p => w.startsWith(p)));
 
@@ -358,49 +362,49 @@ class Command extends AkairoModule {
             return word || def;
         };
 
-        wordArgs.forEach((arg, i) => {
+        for (const [i, arg] of wordArgs.entries()){
             let word;
 
             if (arg.match === ArgumentMatches.REST){
-                word = noPrefixWords.slice(arg.index == null ? arg.index : i).join(' ') || '';
+                word = noPrefixWords.slice(arg.index != null ? arg.index : i).join(' ') || '';
             } else {
-                word = noPrefixWords[arg.index == null ? arg.index : i] || '';
+                word = noPrefixWords[arg.index != null ? arg.index : i] || '';
             }
 
             if ((this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY) &amp;&amp; /^".*"$/.test(word)) word = word.slice(1, -1);
 
             args[arg.id] = processType(arg, word);
-        });
+        }
 
         if (prefixArgs.length || flagArgs.length) words.reverse();
 
-        prefixArgs.forEach(arg => {
+        for (const arg of prefixArgs){
             let word = words.find(w => Array.isArray(arg.prefix) ? arg.prefix.some(p => w.startsWith(p)) : w.startsWith(arg.prefix)) || '';
             word = word.replace(prefixes.find(p => word.startsWith(p)), '');
             
             if (this.split === ArgumentSplits.STICKY &amp;&amp; /^".*"$/.test(word)) word = word.slice(1, -1);
 
             args[arg.id] = processType(arg, word);
-        });
+        }
 
-        flagArgs.forEach(arg => {
+        for (const arg of flagArgs){
             const word = words.find(w => Array.isArray(arg.prefix) ? arg.prefix.some(p => w === p) : w === arg.prefix);
             return args[arg.id] = !!word;
-        });
+        }
 
-        textArgs.forEach(arg => {
+        for (const arg of textArgs){
             const def = typeof arg.defaultValue === 'function' ? arg.defaultValue(message) : arg.defaultValue;
             const w = noPrefixWords.slice(arg.index).join(' ') || def;
 
             args[arg.id] = processType(arg, w);
-        });
+        }
 
-        contentArgs.forEach(arg => {
+        for (const arg of contentArgs){
             const def = typeof arg.defaultValue === 'function' ? arg.defaultValue(message) : arg.defaultValue;
             const w = content.split(' ').slice(arg.index).join(' ') || def;
 
             args[arg.id] = processType(arg, w);
-        });
+        }
 
         return args;
     }

@@ -39,7 +39,7 @@
         <article>
             <pre class="prettyprint source linenums"><code>const AkairoHandler = require('./AkairoHandler');
 const Command = require('./Command');
-const { CommandHandlerEvents, BuiltInReasons } = require('../utils/Constants');
+const { CommandHandlerEvents, BuiltInReasons } = require('../util/Constants');
 
 /** @extends AkairoHandler */
 class CommandHandler extends AkairoHandler {
@@ -66,6 +66,7 @@ class CommandHandler extends AkairoHandler {
         /**
          * Gets the prefix.
          * @method
+         * @param {Message} message - Message being handled.
          * @returns {string}
          */
         this.prefix = typeof options.prefix === 'function' ? options.prefix : () => options.prefix;
@@ -73,6 +74,7 @@ class CommandHandler extends AkairoHandler {
         /**
          * Gets if mentions are allowed for prefixing.
          * @method
+         * @param {Message} message - Message being handled.
          * @returns {boolean}
          */
         this.allowMention = typeof options.allowMention === 'function' ? options.allowMention : () => options.allowMention;
@@ -152,24 +154,38 @@ class CommandHandler extends AkairoHandler {
             let start;
 
             const notCommand = () => {
-                const commands = this.commands.filter(c => c.trigger);
+                const commands = this.commands.filter(c => c.trigger(message));
                 const triggered = [];
 
-                commands.forEach(c => {
-                    const match = message.content.match(c.trigger);
-                    if (match) triggered.push([c, match]);
-                });
+                for (const c of commands.values()){
+                    const regex = c.trigger(message);
+                    const match = message.content.match(regex);
+
+                    if (match){
+                        const groups = [];
+
+                        if (regex.global){
+                            let group;
+                            
+                            while((group = regex.exec(message.content)) != null){
+                                groups.push(group);
+                            }
+                        }
+                        
+                        triggered.push([c, match, groups]);
+                    }
+                }
 
                 if (!triggered.length) return void this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
 
-                triggered.forEach(c => {
+                for (const c of triggered){
                     this.emit(CommandHandlerEvents.COMMAND_STARTED, message, c[0]);
-                    const end = Promise.resolve(c[0].exec(message, c[1]));
+                    const end = Promise.resolve(c[0].exec(message, c[1], c[2]));
 
                     return end.then(() => void this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, c[0])).catch(err => {
                         return errored(err, message, c[0]);
                     });
-                });
+                }
             };
 
             if (Array.isArray(prefix)){

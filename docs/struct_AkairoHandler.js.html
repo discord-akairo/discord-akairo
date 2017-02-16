@@ -41,8 +41,8 @@
 const EventEmitter = require('events');
 const rread = require('readdir-recursive');
 const AkairoModule = require('./AkairoModule');
-const Category = require('../utils/Category');
-const { AkairoHandlerEvents } = require('../utils/Constants');
+const Category = require('../util/Category');
+const { AkairoHandlerEvents } = require('../util/Constants');
 const { Collection } = require('discord.js');
 
 /** @extends EventEmitter */
@@ -96,9 +96,9 @@ class AkairoHandler extends EventEmitter {
         this.categories = new Collection();
 
         const filepaths = rread.fileSync(this.directory);
-        filepaths.forEach(filepath => {
+        for (const filepath of filepaths){
             this.load(filepath);
-        });
+        }
     }
 
     /**
@@ -150,7 +150,7 @@ class AkairoHandler extends EventEmitter {
      * @returns {AkairoModule}
      */
     remove(id){
-        const mod = this.modules.get(id);
+        const mod = this.modules.get(id.toString());
         if (!mod) throw new Error(`${this.classToHandle.name} ${id} does not exist.`);
 
         delete require.cache[require.resolve(mod.filepath)];
@@ -168,7 +168,7 @@ class AkairoHandler extends EventEmitter {
      * @returns {AkairoModule}
      */
     reload(id){
-        const mod = this.modules.get(id);
+        const mod = this.modules.get(id.toString());
         if (!mod) throw new Error(`${this.classToHandle.name} ${id} does not exist.`);
 
         const filepath = mod.filepath;
@@ -187,7 +187,7 @@ class AkairoHandler extends EventEmitter {
      * Reloads all modules.
      */
     reloadAll(){
-        this.modules.forEach(c => c.reload());
+        for (const m of this.modules.values()) m.reload();
     }
 
     /**

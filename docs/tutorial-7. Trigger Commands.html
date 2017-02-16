@@ -44,15 +44,28 @@ function exec(message){
 module.exports = new Command('lewd', exec, {
     trigger: /lewd/i
 });</code></pre><p>There is only one command option!<br>The <code>trigger</code> option is a regular expression used to match message contents.<br>Aliases and arguments are not used (restrictions and inhibitors still work, obviously).  </p>
-<h2>Lewder</h2><pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
+<h2>Lewder</h2><p>You can also use the <code>match</code> exec parameter to get the matched content.<br>Here, a number is matched after &quot;lewd&quot; to get different pictures.  </p>
+<pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
 
-function exec(message, args){
-    return message.channel.sendFile('REDACTED ' + args[1] || '0');
+function exec(message, match){
+    return message.channel.sendFile('REDACTED ' + match[1] || '0');
 }
 
 module.exports = new Command('lewd', exec, {
     trigger: /lewd(\d?)/i
-});</code></pre><p>You can also use the <code>args</code> parameter to get the matched content.<br>Here, a number is matched after &quot;lewd&quot; to get different pictures.  </p>
+});</code></pre><h2>Lewdest</h2><p>A global regex will pass a third parameter, <code>groups</code>.<br>These are all the groups matched by the regex.  </p>
+<pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
+
+function exec(message, match, groups){
+    for (const [, digit] of groups){
+        // Don't actually spam something like this!
+        message.channel.sendFile('REDACTED ' + digit || '0');
+    }
+}
+
+module.exports = new Command('lewd', exec, {
+    trigger: /lewd(\d?)/gi
+});</code></pre>
 </article>
 
 </section>

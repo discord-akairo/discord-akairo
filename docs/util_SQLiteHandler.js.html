@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>struct/SQLiteHandler.js - Documentation</title>
+    <title>util/SQLiteHandler.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">struct/SQLiteHandler.js</h1>
+    <h1 class="page-title">util/SQLiteHandler.js</h1>
     
 
     
@@ -40,7 +40,7 @@
             <pre class="prettyprint source linenums"><code>const path = require('path');
 const EventEmitter = require('events');
 const { Collection } = require('discord.js');
-const { SQLiteHandlerEvents } = require('../utils/Constants');
+const { SQLiteHandlerEvents } = require('../util/Constants');
 
 let sql;
 
@@ -182,16 +182,16 @@ class SQLiteHandler extends EventEmitter {
     load(ids){
         return this.open().then(db => {
             return db.all(`SELECT * FROM "${this.tableName}"`).then(rows => {
-                rows.forEach(row => {
+                for (const row of rows){
                     this.memory.set(row.id, row);
-                });
+                }
 
                 const promises = [];
 
-                ids.forEach(id => {
+                for (let id of ids){
                     id = this.sanitize(id);
                     if (!this.has(id)) promises.push(this.add(id));
-                });
+                }
                 
                 return Promise.all(promises).then(() => {
                     this.emit(SQLiteHandlerEvents.INIT);
@@ -295,10 +295,10 @@ class SQLiteHandler extends EventEmitter {
         const config = this.memory.get(id);
         const copy = {};
 
-        Object.keys(config).forEach(key => {
+        for (const key of Object.keys(config)){
             if (config[key] == null) return copy[key] = this.defaultConfig[key];
             copy[key] = this.desanitize(config[key], this.json.includes(key));
-        });
+        }
 
         return copy;
     }
@@ -376,7 +376,7 @@ class SQLiteHandler extends EventEmitter {
         const config = this.memory.get(id);
         const sets = [];
 
-        Object.keys(config).forEach(key => {
+        for (const key of Object.keys(config)){
             let value = config[key];
 
             if (isNaN(value)){
@@ -384,7 +384,7 @@ class SQLiteHandler extends EventEmitter {
             }
 
             sets.push(`${key} = ${value}`);
-        });
+        }
 
         return this.db.get(`SELECT count(1) FROM "${this.tableName}" WHERE id = '${id}'`).then(count => {
             let promise;

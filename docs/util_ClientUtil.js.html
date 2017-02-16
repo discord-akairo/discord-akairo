@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>utils/ClientUtil.js - Documentation</title>
+    <title>util/ClientUtil.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">utils/ClientUtil.js</h1>
+    <h1 class="page-title">util/ClientUtil.js</h1>
     
 
     
@@ -268,11 +268,9 @@ class ClientUtil {
      * @returns {Role}
      */
     displayRole(member){
-        const roles = member.roles.filter(r => r.color !== 0);
-        if (!roles.size) return null;
-
-        const highest = roles.array().sort((a, b) => b.comparePositionTo(a))[0];
-        return highest;
+        const coloredRoles = member.roles.filter(role => role.color);
+        if (!coloredRoles.size) return null;
+        return coloredRoles.reduce((prev, role) => !prev || role.comparePositionTo(prev) > 0 ? role : prev);
     }
 
     /**
@@ -282,7 +280,7 @@ class ClientUtil {
      */
     displayColor(member){
         const role = this.displayRole(member);
-        return role &amp;&amp; role.color;
+        return role &amp;&amp; role.color || 0;
     }
 
     /**
@@ -292,7 +290,7 @@ class ClientUtil {
      */
     displayHexColor(member){
         const role = this.displayRole(member);
-        return role &amp;&amp; role.hexColor;
+        return role &amp;&amp; role.hexColor || '#000000';
     }
 
     /**
@@ -301,11 +299,9 @@ class ClientUtil {
      * @returns {Role}
      */
     hoistedRole(member){
-        const roles = member.roles.filter(r => r.hoist);
-        if (!roles.size) return null;
-
-        const highest = roles.array().sort((a, b) => b.comparePositionTo(a))[0];
-        return highest;
+        const hoistedRoles = member.roles.filter(role => role.hoist);
+        if (!hoistedRoles.size) return null;
+        return hoistedRoles.reduce((prev, role) => !prev || role.comparePositionTo(prev) > 0 ? role : prev);
     }
 
     /**
@@ -324,9 +320,9 @@ class ClientUtil {
     resolvePermissionNumber(number){
         const resolved = [];
 
-        Object.keys(Constants.PermissionFlags).forEach(key => {
+        for (const key of Object.keys(Constants.PermissionFlags)){
             if (number &amp; Constants.PermissionFlags[key]) resolved.push(key);
-        });
+        }
 
         return resolved;
     }

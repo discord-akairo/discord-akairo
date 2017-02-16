@@ -1092,7 +1092,7 @@
 
 
 <div class="description">
-    The method to split text into words.<br/>Possible strings are:<br/><br/><code>'plain'</code> Splits word separated by whitespace.<br/>Extra whitespace is ignored.<br/><br/><code>'split'</code> Splits word separated by whitespace.<br/><br/><code>'quoted'</code> This is like plain, but counts text inside double quotes as one word.<br/><br/><code>'sticky'</code> This is like quoted, but makes it so that quoted text must have a whitespace/another double quote before it to count as another word.<br/>It will still span multiple words.
+    The method to split text into words.<br/>Possible strings are:<br/><br/><code>'plain'</code> Splits word separated by whitespace.<br/>Extra whitespace is ignored.<br/><br/><code>'split'</code> Splits word separated by whitespace.<br/><br/><code>'quoted'</code> This is like plain, but counts text inside double quotes as one word.<br/><br/><code>'sticky'</code> This is like quoted, but makes it so that quoted text must have a whitespace/another double quote before it to count as another word.<br/>It will still span multiple words.<br/><br/>A regex or a character can be used instead (for example, a comma) to split the message by that regex or character.
 </div>
 
 
@@ -1537,6 +1537,9 @@
             
                 
 <span class="param-type">RegExp</span>
+ || 
+
+<span class="param-type">function</span>
 
 
             
@@ -1558,7 +1561,7 @@
                 </td>
             
 
-            <td class="description last">A regex to match in messages that are NOT commands.<br/>Arguments will be the matched text.</td>
+            <td class="description last">A regex or function <code>(message => {})</code> returning regex to match in messages that are NOT commands.<br/>The exec function is now <code>((message, match) => {})</code> if non-global.<br/>Or, <code>((message, match, groups) => {})</code> if global.</td>
         </tr>
 
     
@@ -2258,7 +2261,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_SQLiteHandler.js.html">struct/SQLiteHandler.js</a>, <a href="struct_SQLiteHandler.js.html#line8">line 8</a>
+        <a href="util_SQLiteHandler.js.html">util/SQLiteHandler.js</a>, <a href="util_SQLiteHandler.js.html#line8">line 8</a>
     </li></ul></dd>
     
 
