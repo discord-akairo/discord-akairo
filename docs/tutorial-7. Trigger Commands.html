@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Tutorial: 5. Creating a Listener - Documentation</title>
+    <title>Tutorial: 7. Trigger Commands - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,27 +27,32 @@
 
 <div id="main">
     
-    <h1 class="page-title">Tutorial: 5. Creating a Listener</h1>
+    <h1 class="page-title">Tutorial: 7. Trigger Commands</h1>
     
 
     <section>
 
 <article>
-    <p>This tutorial is for creating a listener.<br>We will make a listener for the user blocks from the previous tutorial.  </p>
-<h2>Blocked</h2><p>First, go to your listener directory.<br>Create a new .js file and call it whatever you like.<br>Then, require and export a new <code>Listener</code> from discord-akairo.<br>The parameters of the Listener constructor are the ID, the execution function, then the options.  </p>
-<pre class="prettyprint source lang-js"><code>const { Listener } = require('discord-akairo');
+    <p>This tutorial is for commands that are triggered with regex.<br>We will make a command that replies with an image when someone says &quot;lewd&quot;.  </p>
+<h2>Lewd</h2><p>Create a new command.<br>There will be some differences.  </p>
+<pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
 
-function exec(message, command, reason){
-    if (reason === 'guild') return message.reply('Guild only command!');
-    if (reason === 'blocked') return message.reply('I don\'t like you >:c');
+function exec(message){
+    return message.channel.sendFile('REDACTED');
 }
 
-module.exports = new Listener('blocked', exec, {
-    emitter: 'commandHandler',
-    eventName: 'commandBlocked',
-    type: 'on'
-});</code></pre><p>The listener now listens to the command handler for when a command is blocked.<br>The emitter name <code>commandHandler</code> comes from <code>client.listenerHandler.emitters</code>.<br>You can add more to that by setting the <code>emitters</code> option in your client.  </p>
-<p>(By the way, inhibitors with type <code>pre</code> goes to the event <code>messageBlocked</code>.)  </p>
+module.exports = new Command('lewd', exec, {
+    trigger: /lewd/i
+});</code></pre><p>There is only one command option!<br>The <code>trigger</code> option is a regular expression used to match message contents.<br>Aliases and arguments are not used (restrictions and inhibitors still work, obviously).  </p>
+<h2>Lewder</h2><pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
+
+function exec(message, args){
+    return message.channel.sendFile('REDACTED ' + args[1] || '0');
+}
+
+module.exports = new Command('lewd', exec, {
+    trigger: /lewd(\d?)/i
+});</code></pre><p>You can also use the <code>args</code> parameter to get the matched content.<br>Here, a number is matched after &quot;lewd&quot; to get different pictures.  </p>
 </article>
 
 </section>
