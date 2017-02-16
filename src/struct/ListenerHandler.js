@@ -68,6 +68,7 @@ class ListenerHandler extends AkairoHandler {
      * @returns {Listener}
      */
     remove(id){
+        id = id.toString();
         this.deregister(id);
         return super.remove(id);
     }
@@ -78,6 +79,7 @@ class ListenerHandler extends AkairoHandler {
      * @returns {Listener}
      */
     reload(id){
+        id = id.toString();
         this.deregister(id);
 
         const listener = super.reload(id);
@@ -91,7 +93,7 @@ class ListenerHandler extends AkairoHandler {
      * @param {string} id - ID of the listener.
      */
     register(id){
-        const listener = this.listeners.get(id);
+        const listener = this.listeners.get(id.toString());
         if (!listener) throw new Error(`Listener ${id} does not exist.`);
 
         const emitter = listener.emitter instanceof EventEmitter ? listener.emitter : this.emitters.get(listener.emitter);
@@ -109,7 +111,7 @@ class ListenerHandler extends AkairoHandler {
      * @param {string} id - ID of the listener.
      */
     deregister(id){
-        const listener = this.listeners.get(id);
+        const listener = this.listeners.get(id.toString());
         if (!listener) throw new Error(`Listener ${id} does not exist.`);
 
         const emitter = listener.emitter instanceof EventEmitter ? listener.emitter : this.emitters.get(listener.emitter);
