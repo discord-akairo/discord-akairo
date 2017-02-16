@@ -16,13 +16,13 @@ class CommandHandler extends AkairoHandler {
          * Whether or not the built-in pre-message inhibitors are enabled.
          * @type {boolean}
          */
-        this.preInhibitors = !!options.preInhibitors;
+        this.preInhibitors = !options.preInhibitors;
 
         /**
          * Whether or not the built-in post-message inhibitors are enabled.
          * @type {boolean}
          */
-        this.postInhibitors = !!options.postInhibitors;
+        this.postInhibitors = !options.postInhibitors;
 
         /**
          * Gets the prefix.
