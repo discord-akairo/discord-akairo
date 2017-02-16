@@ -34,7 +34,7 @@
 
 <article>
     <p>This tutorial is for creating a listener.<br>We will make listeners for the user blocks from the previous tutorial.<br>We will also make a listener for the word &quot;lewd&quot;.  </p>
-<h2>Blocked</h2><p>First, go to your listener directory.<br>Create a new .js file and call it whatever you like.<br>Then, require and export a new Listener from discord-akairo.<br>The parameters of the Listener constructor are the ID, the execution function, then the options.  </p>
+<h2>Blocked</h2><p>First, go to your listener directory.<br>Create a new .js file and call it whatever you like.<br>Then, require and export a new <code>Listener</code> from discord-akairo.<br>The parameters of the Listener constructor are the ID, the execution function, then the options.  </p>
 <pre class="prettyprint source lang-js"><code>const { Listener } = require('discord-akairo');
 
 function exec(message, command, reason){
@@ -46,8 +46,8 @@ module.exports = new Listener('blocked', exec, {
     emitter: 'commandHandler',
     eventName: 'commandBlocked',
     type: 'on'
-});</code></pre><p>The listener now listens to the command handler for when a command is blocked.<br>The emitter name &quot;commandHandler&quot; comes from client.listenerHandler.emitters.<br>You can add more to that by setting the emitters option in your client.  </p>
-<p>(By the way, inhibitors with type &quot;pre&quot; goes to the event &quot;messageBlocked&quot;.)  </p>
+});</code></pre><p>The listener now listens to the command handler for when a command is blocked.<br>The emitter name <code>commandHandler</code> comes from <code>client.listenerHandler.emitters</code>.<br>You can add more to that by setting the <code>emitters</code> option in your client.  </p>
+<p>(By the way, inhibitors with type <code>pre</code> goes to the event <code>messageBlocked</code>.)  </p>
 <h2>Word Listener</h2><p>Let's make a listener that listens for messages containing the word &quot;lewd&quot; and reply with a picture.  </p>
 <pre class="prettyprint source lang-js"><code>const { Listener } = require('discord-akairo');
 
@@ -59,8 +59,8 @@ module.exports = new Listener('blocked', exec, {
     emitter: 'commandHandler',
     eventName: 'messageInvalid',
     type: 'on'
-});</code></pre><p>The event here is &quot;messageInvalid&quot; which is emitted when a message is not a command.  </p>
-<p>It's simple as that!<br>More emitters available to you by default are: &quot;client&quot;, &quot;inhibitorHandler&quot;, and &quot;listenerHandler&quot;.<br>See the docs (and Discord JS docs) for their events.  </p>
+});</code></pre><p>The event here is <code>messageInvalid</code> which is emitted when a message is not a command.  </p>
+<p>It's simple as that!<br>More emitters available to you by default are: <code>client</code>, <code>inhibitorHandler</code>, and <code>listenerHandler</code>.<br>See the docs (and Discord JS docs) for their events.  </p>
 </article>
 
 </section>

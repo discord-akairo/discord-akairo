@@ -34,7 +34,7 @@
 
 <article>
     <p>This tutorial is for creating an inhibitor.<br>Here, we will make inhibitors that prevents blocked entities from using the bot.  </p>
-<h2>Blocking Users</h2><p>First, go to your inhibitor directory.<br>Create a new .js file and call it whatever you like.<br>Then, require and export a new Inhibitor from discord-akairo.<br>The parameters of the Inhibitor constructor are the ID, the execution function, then the options.  </p>
+<h2>Blocking Users</h2><p>First, go to your inhibitor directory.<br>Create a new .js file and call it whatever you like.<br>Then, require and export a new <code>Inhibitor</code> from discord-akairo.<br>The parameters of the Inhibitor constructor are the ID, the execution function, then the options.  </p>
 <pre class="prettyprint source lang-js"><code>const { Inhibitor } = require('discord-akairo');
 
 const blocked = [
@@ -47,7 +47,7 @@ function exec(message, command){
 
 module.exports = new Inhibitor('blocked', exec, {
     reason: 'blocked'
-});</code></pre><p>That's it, pretty simple.<br>This inhibitor prevents those with a certain id from using the command.<br>The reason option is emitted in the command handler (more on that later).  </p>
+});</code></pre><p>That's it, pretty simple.<br>This inhibitor prevents those with a certain ID from using the command.<br>The reason option is emitted in the command handler (more on that later).  </p>
 <h2>Blocking Guilds</h2><p>Let's create another inhibitor that prevents a guild from using your bot.  </p>
 <pre class="prettyprint source lang-js"><code>const { Inhibitor } = require('discord-akairo');
 
@@ -62,7 +62,7 @@ function exec(message, command){
 
 module.exports = new Inhibitor('blacklist', exec, {
     reason: 'blacklist'
-});</code></pre><p>Here, the guild with that ID cannot use your bot.<br>If you notice, the command parameter is not used at all.<br>In fact, there's no reason to even care about the command here!  </p>
+});</code></pre><p>Here, the guild with that ID cannot use your bot.<br>If you notice, the command parameter is not used at all.<br>In fact, there's no reason to even care about the command here!<br>Setting the inhibitor type to <code>pre</code> makes it so that it runs on all messages instead.  </p>
 <pre class="prettyprint source lang-js"><code>const { Inhibitor } = require('discord-akairo');
 
 const blacklist = [
@@ -77,7 +77,15 @@ function exec(message){
 module.exports = new Inhibitor('blacklist', exec, {
     reason: 'blacklist',
     type: 'pre'
-});</code></pre><p>Setting the inhibitor type to &quot;pre&quot; makes it so that it runs on all messages that starts with the prefix instead.<br>It's a small change, but is useful if you want to differentiate.<br>Plus, it's insignificantly a little faster.  </p>
+});</code></pre><h2>Built-In Inhibitors</h2><p>Don't worry about creating inhibitors for things like ignoring bots or ignoring yourself.<br>Here are the built-in inhibitors, by order of testing:  </p>
+<ul>
+<li><code>notSelf</code> Blocks messages that are not made by you, if selfbot.</li>
+<li><code>client</code> Blocks messages made by the client.</li>
+<li><code>bot</code> Blocks messages made by a bot.</li>
+<li><code>owner</code> Blocks a command if the ownerOnly option is true and the user is not the owner.</li>
+<li><code>guild</code> Blocks a command if it is restricted to guild and not used in a guild.</li>
+<li><code>dm</code> Blocks a command if it is restricted to DM and not used in a DM.</li>
+</ul>
 </article>
 
 </section>

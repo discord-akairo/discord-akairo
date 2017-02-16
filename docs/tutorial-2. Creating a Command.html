@@ -34,7 +34,7 @@
 
 <article>
     <p>This tutorial is for how to create a command.<br>Two commands will be made, a ping command, and a roll command.  </p>
-<h2>Ping Command</h2><p>First, go to your command directory.<br>Create a new .js file and call it whatever you like.<br>Then, require and export a new Command from discord-akairo.<br>The parameters of the Command constructor are the ID, the execution function, then the options.  </p>
+<h2>Ping Command</h2><p>First, go to your command directory.<br>Create a new .js file and call it whatever you like.<br>Then, require and export a new <code>Command</code> from discord-akairo.<br>The parameters of the Command constructor are the ID, the execution function, then the options.  </p>
 <pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
 
 function exec(message){
@@ -44,7 +44,7 @@ function exec(message){
 
 module.exports = new Command('ping', exec, {
     aliases: ['ping', 'hello'] // You can call the command with these names.
-});</code></pre><p>Now, doing ping or hello with your prefix will have the bot reply with the client's ping.<br>Note that the function keyword is used here instead of an arrow function.<br>This is why:  </p>
+});</code></pre><p>Now, doing ping or hello with your prefix will have the bot reply with the client's ping.<br>Note that the <code>function</code> keyword is used here instead of an arrow function.<br>This is why:  </p>
 <pre class="prettyprint source lang-js"><code>const exec = message => {
     // The client is undefined here due to how this works.
     // Just an annoying intricacy of JS!
@@ -76,7 +76,7 @@ module.exports = new Command('roll', exec, {
             defaultValue: 100
         }
     ]
-});</code></pre><p>Here, a new argument is made inside the command's options.<br>It is called &quot;maximum&quot;, is of type &quot;integer&quot;, and has a default value of 100.<br>So now, whatever the user enters, it will be parsed as an integer, and if it isn't an integer, 100 will be used.  </p>
+});</code></pre><p>Here, a new argument is made inside the command's options.<br>It is called <code>maximum</code>, is of type <code>integer</code>, and has a default value of <code>100</code>.<br>So now, whatever the user enters, it will be parsed as an integer, and if it isn't an integer, <code>100</code> will be used.  </p>
 <p>Access the args parameter in the exec function and you can use your argument.<br>The property will be the same as the argument's ID.  </p>
 <pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
 

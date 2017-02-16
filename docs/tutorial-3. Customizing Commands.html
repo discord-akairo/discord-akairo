@@ -45,7 +45,7 @@ module.exports = new Command('userinfo', exec, {
     aliases: ['userinfo', 'user', 'whois'], // More aliases!
     args: []
 });</code></pre><p>We want our command to give information on a guild member.<br>The idea is that the user will enter something like a username or a mention, and information will be returned.  </p>
-<p>This is simple with Akairo!<br>Create a new argument with the type &quot;member&quot;.</p>
+<p>This is simple with Akairo!<br>Create a new argument with the type <code>member</code>.  </p>
 <pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
 
 function exec(message, args){
@@ -81,11 +81,11 @@ module.exports = new Command('userinfo', exec, {
     ],
     channelRestriction: 'guild'
 });</code></pre><p>Three new things were added.  </p>
-<p>First is the channelRestriction.<br>This just makes it so that the command can only be used in channels belonging to a guild.  </p>
-<p>Second is the defaultValue.<br>Unlike in the first tutorial, this is a function.<br>This lets you create dynamic default values, such as here where the message author is used.  </p>
-<p>Last is the match option of &quot;text&quot;.<br>What this does is that it makes the argument match the entire user input instead of one word.  </p>
+<p>First is the <code>channelRestriction</code>.<br>This just makes it so that the command can only be used in channels belonging to a guild.  </p>
+<p>Second is the <code>defaultValue</code>.<br>Unlike in the first tutorial, this is a function.<br>This lets you create dynamic default values, such as here where the message author is used.  </p>
+<p>Last is the match option of <code>text</code>.<br>What this does is that it makes the argument match the entire user input instead of one word.  </p>
 <h2>Even More Stuff!</h2><p>Let's add more functionality.<br>If the user types --owner, we should give info of the guild owner, regardless of where it is in the input.<br>And just for fun, let's make this command quoted, and if two members are inputted, we should output both of them.  </p>
-<p>The first requires the match option &quot;flag&quot;.  </p>
+<p>The first requires the match option <code>flag</code>.  </p>
 <pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
 
 function exec(message, args){
@@ -112,7 +112,7 @@ module.exports = new Command('userinfo', exec, {
         }
     ],
     channelRestriction: 'guild'
-});</code></pre><p>args.owner is a boolean that tells you if --owner was inside the input text.<br>Now let's make this command quoted:  </p>
+});</code></pre><p><code>args.owner</code> is a boolean that tells you if --owner was inside the input text.<br>Now let's make this command quoted:  </p>
 <pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
 
 function exec(message, args){
@@ -149,7 +149,7 @@ module.exports = new Command('userinfo', exec, {
     ],
     channelRestriction: 'guild',
     split: 'quoted'
-});</code></pre><p>As you can see, the command split is now &quot;quoted&quot;.<br>To use this command with two members, one could do something like:  </p>
+});</code></pre><p>As you can see, the command split is now <code>quoted</code>.<br>To use this command with two members, one could do something like:  </p>
 <p>!userinfo 1Computer &quot;someone with a long name&quot;  </p>
 <p>That's all to it!<br>See the docs for more ways to customize.  </p>
 </article>

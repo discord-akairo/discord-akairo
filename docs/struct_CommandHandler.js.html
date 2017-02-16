@@ -52,13 +52,13 @@ class CommandHandler extends AkairoHandler {
         super(client, options.commandDirectory, Command);
 
         /**
-         * Whether or not the built-in pre-message inhibitors are disabled.
+         * Whether or not the built-in pre-message inhibitors are enabled.
          * @type {boolean}
          */
         this.preInhibitors = !!options.preInhibitors;
 
         /**
-         * Whether or not the built-in post-message inhibitors are disabled.
+         * Whether or not the built-in post-message inhibitors are enabled.
          * @type {boolean}
          */
         this.postInhibitors = !!options.postInhibitors;
@@ -116,7 +116,7 @@ class CommandHandler extends AkairoHandler {
      * @returns {Promise}
      */
     handle(message){
-        if (!this.preInhibitors){
+        if (this.preInhibitors){
             if (message.author.id !== this.client.user.id &amp;&amp; this.client.selfbot){
                 this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.NOT_SELF);
                 return Promise.resolve();
@@ -179,7 +179,7 @@ class CommandHandler extends AkairoHandler {
             if (!command) return this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
             if (!command.enabled) return this.emit(CommandHandlerEvents.COMMAND_DISABLED, message, command);
 
-            if (!this.postInhibitors){
+            if (this.postInhibitors){
                 const notOwner = Array.isArray(this.client.ownerID)
                 ? !this.client.ownerID.includes(message.author.id)
                 : message.author.id !== this.client.ownerID;
@@ -211,16 +211,15 @@ class CommandHandler extends AkairoHandler {
                 this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command);
                 const end = Promise.resolve(command.exec(message, args));
 
-                return end.then(() => this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command)).catch(err => {
-                    this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command);
-                    throw err;
+                return end.then(() => void this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command)).catch(err => {
+                    return void this.emit(CommandHandlerEvents.ERROR, err, message, command);
                 });
             }).catch(reason => {
-                if (reason instanceof Error) throw reason;
+                if (reason instanceof Error) return void this.emit(CommandHandlerEvents.ERROR, reason, message, command);
                 this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
             });
         }).catch(reason => {
-            if (reason instanceof Error) throw reason;
+            if (reason instanceof Error) return void this.emit(CommandHandlerEvents.ERROR, reason, message);
             this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, reason);
         });
     }

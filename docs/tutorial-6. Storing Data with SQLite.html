@@ -34,9 +34,9 @@
 
 <article>
     <p>Databases are fun.<br>This is a tutorial on setting up a simple database with Akairo.<br>Here, we will store prefixes for each guild.<br>We will also store tags for a command.  </p>
-<h2>Setting Up a Database</h2><p>First, create a .sqlite file in your folder.<br>Programatically setting up it is a pain, so use a DB browser (Google it!) of some kind.  </p>
+<h2>Setting Up a Database</h2><p>First, create a .sqlite file in your folder.<br>Programatically setting up it is kind of a pain, so use a DB browser (Google it!) of some kind.  </p>
 <p>Create a table, call it what you want, like configs.<br>Then, add a row called id, this is required.<br>Then, add a row called prefix, this is where we will store prefixes.  </p>
-<h2>SQLiteHandler</h2><p>In your main file, require SQLiteHandler from discord-akairo.<br>Then, use client.addDatabase.  </p>
+<h2>SQLiteHandler</h2><p>In your main file, require <code>SQLiteHandler</code> from discord-akairo.<br>Then, use <code>client.addDatabase</code>.  </p>
 <pre class="prettyprint source lang-js"><code>const { AkairoClient, SQLiteHandler } = require('discord-akairo');
 const client = new AkairoClient({
     ownerID: '123992700587343872',
@@ -56,10 +56,10 @@ client.addDatabase('guilds', new SQLiteHandler('./guilds.sqlite', {
 
 client.login('token').then(() => {
     console.log('Ready!');
-});</code></pre><p>Let's take a look at what the addDatabase line does.<br>We first create a new SQLiteHandler which points to our guilds.sqlite file.  </p>
-<p>The init option is what we want to have the database be filled with.<br>The tableName is the name of our table that we set up.<br>The defaultConfig are the values used when the corresponding row from the database is null.  </p>
-<p>The SQLiteHandler is added under the name &quot;guilds&quot; which we can now access with client.databases.guilds.  </p>
-<p>Note: If you would like to use the SQLiteHandler in listeners, create it as a separate variable.<br>Then, add it inside the emitters property in your client options.  </p>
+});</code></pre><p>Let's take a look at what the <code>addDatabase</code> line does.<br>We first create a new <code>SQLiteHandler</code> which points to our guilds.sqlite file.  </p>
+<p>The <code>init</code> option is what we want to have the database be filled with.<br>The <code>tableName</code> is the name of our table that we set up.<br>The <code>defaultConfig</code> are the values used when the corresponding row from the database is null.  </p>
+<p>The <code>SQLiteHandler</code> is added under the name <code>guilds</code> which we can now access with <code>client.databases.guilds</code>.  </p>
+<p>Note: If you would like to use the <code>SQLiteHandler</code> in listeners, create it as a separate variable.<br>Then, add it inside the <code>emitters</code> property in your client options.  </p>
 <p>Let's implement per-guild prefix now:  </p>
 <pre class="prettyprint source lang-js"><code>const { AkairoClient, SQLiteHandler } = require('discord-akairo');
 const client = new AkairoClient({
@@ -83,7 +83,7 @@ client.addDatabase('guilds', new SQLiteHandler('./guilds.sqlite', {
 
 client.login('token').then(() => {
     console.log('Ready!');
-});</code></pre><p>As you can see, the prefix option can also take a function.<br>It gets the prefix from our database according to the ID.<br>Simple as that!  </p>
+});</code></pre><p>As you can see, the <code>prefix</code> option can also take a function.<br>It gets the prefix from our database according to the ID.<br>Simple as that!  </p>
 <h2>Changing the Prefix</h2><p>Now let's make a command that changes the prefix.  </p>
 <pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
 
@@ -105,7 +105,7 @@ module.exports = new Command('prefix', exec, {
     ],
     channelRestriction: 'guild'
 });</code></pre><p>It should be obvious how the options in the command works.<br>The command can only be used in guilds, and if no characters are provided, we use the default one from the database.  </p>
-<p>The set method returns a Promise, so you can then it to do something after the result as well.<br>Don't worry about injection, Akairo handles it for you by replacing quotes.  </p>
+<p>The set method returns a <code>Promise</code>, so you can then it to do something after the result as well.<br>Don't worry about injection, Akairo handles it for you by replacing quotes.  </p>
 <h2>Tags Command</h2><p>A tag command is one where tags can be stored and the bot will respond with the tag's text.<br>We will store tags per-guild by making a row in our .sqlite file called tags.  </p>
 <pre class="prettyprint source lang-js"><code>client.addDatabase('guilds', new SQLiteHandler('./guilds.sqlite', {
     init: () => client.guilds.keyArray(),
@@ -143,8 +143,8 @@ module.exports = new Command('addtag', exec, {
     ],
     channelRestriction: 'guild',
     split: 'split'
-});</code></pre><p>In the command args, we have the tag name and the tag content.<br>The content arg has the match of &quot;rest&quot; which makes it match the rest of the input.<br>We also use the split of &quot;split&quot; because it preserves whitespaces.  </p>
-<p>The workings of adding a tag should be self-explanatory.<br>Notice that we do not have to stringify args to set it, since it is already marked in our SQLiteHandler as a JSON key.  </p>
+});</code></pre><p>In the command arguments, we have the tag name and the tag content.<br>The content argument has the match of <code>rest</code> which makes it match the rest of the input.<br>We also use the split of <code>split</code> because it preserves whitespaces.  </p>
+<p>The workings of adding a tag should be self-explanatory.<br>Notice that we do not have to stringify <code>tags</code> to set it, since it is already marked in our <code>SQLiteHandler</code> as a JSON key.  </p>
 <p>That's all the tutorials for now.<br>Have fun developing your bot with Akairo!  </p>
 </article>
 
