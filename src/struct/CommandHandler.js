@@ -143,7 +143,7 @@ class CommandHandler extends AkairoHandler {
                     this.emit(CommandHandlerEvents.COMMAND_STARTED, message, c[0]);
                     const end = Promise.resolve(c[0].exec(message, c[1], c[2]));
 
-                    return end.then(() => void this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, c[0])).catch(err => {
+                    end.then(() => void this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, c[0])).catch(err => {
                         return errored(err, message, c[0]);
                     });
                 }

@@ -350,7 +350,7 @@ class Command extends AkairoModule {
 
         for (const arg of flagArgs){
             const word = words.find(w => Array.isArray(arg.prefix) ? arg.prefix.some(p => w === p) : w === arg.prefix);
-            return args[arg.id] = !!word;
+            args[arg.id] = !!word;
         }
 
         for (const arg of textArgs){
