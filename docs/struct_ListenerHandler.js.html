@@ -63,7 +63,7 @@ class ListenerHandler extends AkairoHandler {
         this.emitters.set('listenerHandler', this.client.listenerHandler);
 
         if (options.emitters) for (const key of Object.keys(options.emitters)){
-            if (this.emitters.has(key)) return;
+            if (this.emitters.has(key)) continue;
             this.emitters.set(key, options.emitters[key]);
         }
 

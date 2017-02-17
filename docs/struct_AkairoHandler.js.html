@@ -187,7 +187,7 @@ class AkairoHandler extends EventEmitter {
      * Reloads all modules.
      */
     reloadAll(){
-        for (const m of this.modules.values()) m.reload();
+        for (const m of Array.from(this.modules.values())) m.reload();
     }
 
     /**
