@@ -236,7 +236,7 @@ class Command extends AkairoModule {
         const noPrefixWords = words.filter(w => !prefixes.some(p => w.startsWith(p)));
 
         const processType = (arg, word) => {
-            const def = typeof arg.defaultValue === 'function' ? arg.defaultValue(message) : arg.defaultValue;
+            const def = typeof arg.defaultValue === 'function' ? arg.defaultValue.call(this, message) : arg.defaultValue;
 
             const typeFunc = {
                 [ArgumentTypes.STRING]: () => word || def,
@@ -312,7 +312,7 @@ class Command extends AkairoModule {
             }
 
             if (typeof arg.type === 'function'){
-                const res = arg.type(word, message);
+                const res = arg.type.call(this, word, message);
                 if (res === true) return word;
                 if (!res) return def;
 
