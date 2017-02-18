@@ -112,10 +112,10 @@ module.exports = new Command('prefix', exec, {
     tableName: 'configs',
     defaultConfig: {
         prefix: '$',
-        tags: '{}'
+        tags: {}
     },
     json: ['tags']
-}));</code></pre><p>The tags default is a string rather than an object here.<br>This is because SQLite can't store objects.<br>Instead, we parse it as JSON by marking it as a JSON key in the json option.  </p>
+}));</code></pre><p>Because SQLite cannot store objects, we mark it as a JSON key in the json option.<br>This means you can get and set it without having to parse or stringify it.  </p>
 <pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
 
 function exec(message, args){
