@@ -12,6 +12,7 @@ const ClientUtil = require('../util/ClientUtil');
  * @prop {string} [commandDirectory] - Directory to commands.
  * @prop {string|string[]|function} [prefix='!'] - Default command prefix(es) or function <code>(message => {})</code> returning prefix(es).
  * @prop {boolean|function} [allowMention=true] - Whether or not to allow mentions to the client user as a prefix.<br/> Can be function <code>(message => {})</code> that returns true or false.
+ * @prop {number} [defaultCooldown=0] - The default cooldown for commands.
  * @prop {string} [inhibitorDirectory] - Directory to inhibitors.
  * @prop {boolean} [preInhibitors=true] - Whether or not to enable the built-in pre-message inhibitors.
  * @prop {boolean} [postInhibitors=true] - Whether or not to enable the built-in post-message inhibitors.

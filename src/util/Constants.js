@@ -41,6 +41,7 @@ module.exports = {
         COMMAND_BLOCKED: 'commandBlocked',
         COMMAND_STARTED: 'commandStarted',
         COMMAND_FINISHED: 'commandFinished',
+        COMMAND_COOLDOWN: 'commandCooldown',
         ERROR: 'error'
     },
     InhibitorHandlerEvents: {},

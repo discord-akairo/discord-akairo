@@ -1,6 +1,7 @@
 const AkairoHandler = require('./AkairoHandler');
 const Command = require('./Command');
 const { CommandHandlerEvents, BuiltInReasons } = require('../util/Constants');
+const { Collection } = require('discord.js');
 
 /** @extends AkairoHandler */
 class CommandHandler extends AkairoHandler {
@@ -23,6 +24,18 @@ class CommandHandler extends AkairoHandler {
          * @type {boolean}
          */
         this.postInhibitors = !(options.postInhibitors === false);
+
+        /**
+         * Collection of cooldowns.
+         * @type {Collection}
+         */
+        this.cooldowns = new Collection();
+
+        /**
+         * Default cooldown for commands.
+         * @type {number}
+         */
+        this.defaultCooldown = options.defaultCooldown || 0;
 
         /**
          * Gets the prefix.
@@ -164,6 +177,9 @@ class CommandHandler extends AkairoHandler {
             : () => Promise.resolve();
 
             return test(message, command).then(() => {
+                const onCooldown = this._handleCooldowns(message, command);
+                if (onCooldown) return;
+
                 const content = message.content.slice(message.content.indexOf(name) + name.length + 1);
                 const args = command.parse(content, message);
 
@@ -180,6 +196,37 @@ class CommandHandler extends AkairoHandler {
             if (reason instanceof Error) return this._handleError(reason, message);
             this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, reason);
         });
+    }
+
+    _handleCooldowns(message, command){
+        const id = message.author.id;
+
+        const entry = this.cooldowns.get(id);
+        if (!entry) this.cooldowns.set(id, {});
+        
+        const cmdEntry = this.cooldowns.get(id)[command.id];
+
+        if (!cmdEntry){
+            const time = command.cooldown || this.defaultCooldown;
+            const endTime = message.createdTimestamp + time;
+
+            this.cooldowns.get(id)[command.id] = {
+                timer: this.client.setTimeout(() => {
+                    this.client.clearTimeout(this.cooldowns.get(id)[command.id].timer);
+                    delete this.cooldowns.get(id)[command.id];
+                }, time),
+                end: endTime
+            };
+        }
+
+        if (cmdEntry){
+            const end = this.cooldowns.get(message.author.id)[command.id].end;
+            const diff = end - message.createdTimestamp;
+            this.emit(CommandHandlerEvents.COMMAND_COOLDOWN, message, command, diff);
+            return true;
+        }
+
+        return false;
     }
 
     _handleError(err, message, command){
@@ -215,6 +262,9 @@ class CommandHandler extends AkairoHandler {
         }
 
         return Promise.all(triggered.map(c => {
+            const onCooldown = this._handleCooldowns(message, c[0]);
+            if (onCooldown) return;
+
             this.emit(CommandHandlerEvents.COMMAND_STARTED, message, c[0]);
             const end = Promise.resolve(c[0].exec(message, c[1], c[2]));
 
@@ -227,6 +277,9 @@ class CommandHandler extends AkairoHandler {
             if (!trueCommands.size) return void this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
 
             return Promise.all(trueCommands.map(c => {
+                const onCooldown = this._handleCooldowns(message, c);
+                if (onCooldown) return;
+                
                 this.emit(CommandHandlerEvents.COMMAND_STARTED, message, c);
                 const end = Promise.resolve(c.exec(message));
 
@@ -304,6 +357,14 @@ module.exports = CommandHandler;
  * @param {Message} message - Message sent.
  * @param {Command} command - Command blocked.
  * @param {string} reason - Reason for the block.
+ */
+
+/**
+ * Emitted when a command is found on cooldown.
+ * @event CommandHandler#commandCooldown
+ * @param {Message} message - Message sent.
+ * @param {Command} command - Command blocked.
+ * @param {string} remaning - Remaining time in ms for cooldown.
  */
 
 /**
