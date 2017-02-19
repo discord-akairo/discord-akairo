@@ -100,62 +100,17 @@ class CommandHandler extends AkairoHandler {
         ? m => this.client.inhibitorHandler.testMessage(m)
         : () => Promise.resolve();
 
-        const errored = (err, msg, cmd) => {
-            if (this.listenerCount(CommandHandlerEvents.ERROR)){
-                this.emit(CommandHandlerEvents.ERROR, err, msg, cmd);
-                return;
-            }
-
-            throw err;
-        };
-
         return pretest(message).then(() => {
             const prefix = this.prefix(message);
             const allowMention = this.allowMention(message);
             let start;
-
-            const notCommand = () => {
-                const commands = this.commands.filter(c => c.trigger(message));
-                const triggered = [];
-
-                for (const c of commands.values()){
-                    const regex = c.trigger(message);
-                    const match = message.content.match(regex);
-
-                    if (match){
-                        const groups = [];
-
-                        if (regex.global){
-                            let group;
-                            
-                            while((group = regex.exec(message.content)) != null){
-                                groups.push(group);
-                            }
-                        }
-                        
-                        triggered.push([c, match, groups]);
-                    }
-                }
-
-                if (!triggered.length) return void this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
-
-                for (const c of triggered){
-                    this.emit(CommandHandlerEvents.COMMAND_STARTED, message, c[0]);
-                    const end = Promise.resolve(c[0].exec(message, c[1], c[2]));
-
-                    end.then(() => void this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, c[0])).catch(err => {
-                        return errored(err, message, c[0]);
-                    });
-                }
-            };
 
             if (Array.isArray(prefix)){
                 const match = prefix.find(p => {
                     return message.content.toLowerCase().startsWith(p.toLowerCase());
                 });
 
-                if (!match) return notCommand();
-
+                if (!match) return this._handleTriggers(message);
                 start = match;
             } else
             if (message.content.toLowerCase().startsWith(prefix.toLowerCase())){
@@ -168,27 +123,29 @@ class CommandHandler extends AkairoHandler {
                 if (mentioned){
                     start = mentioned[0];
                 } else {
-                    return notCommand();
+                    return this._handleTriggers(message);
                 }
             } else {
-                return notCommand();
+                return this._handleTriggers(message);
             }
 
             const firstWord = message.content.replace(start, '').search(/\S/) + start.length;
             const name = message.content.slice(firstWord).split(' ')[0];
             const command = this.findCommand(name);
 
-            if (!command) return notCommand();
+            if (!command) return this._handleTriggers(message);
             if (!command.enabled) return void this.emit(CommandHandlerEvents.COMMAND_DISABLED, message, command);
 
             if (this.postInhibitors){
-                const notOwner = Array.isArray(this.client.ownerID)
-                ? !this.client.ownerID.includes(message.author.id)
-                : message.author.id !== this.client.ownerID;
+                if (command.ownerOnly){
+                    const notOwner = Array.isArray(this.client.ownerID)
+                    ? !this.client.ownerID.includes(message.author.id)
+                    : message.author.id !== this.client.ownerID;
 
-                if (command.ownerOnly && notOwner){
-                    this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.OWNER);
-                    return;
+                    if (notOwner){
+                        this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.OWNER);
+                        return;
+                    }
                 }
 
                 if (command.channelRestriction === 'guild' && !message.guild){
@@ -213,17 +170,60 @@ class CommandHandler extends AkairoHandler {
                 this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command);
                 const end = Promise.resolve(command.exec(message, args));
 
-                return end.then(() => void this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command)).catch(err => {
-                    return errored(err, message, command);
-                });
+                return end.then(() => void this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command))
+                .catch(err => this._handleError(err, message, command));
             }).catch(reason => {
-                if (reason instanceof Error) return errored(reason, message, command);
+                if (reason instanceof Error) return this._handleError(reason, message, command);
                 this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
             });
         }).catch(reason => {
-            if (reason instanceof Error) return errored(reason, message);
+            if (reason instanceof Error) return this._handleError(reason, message);
             this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, reason);
         });
+    }
+
+    _handleError(err, message, command){
+        if (this.listenerCount(CommandHandlerEvents.ERROR)){
+            this.emit(CommandHandlerEvents.ERROR, err, message, command);
+            return;
+        }
+
+        throw err;
+    }
+
+    _handleTriggers(message){
+        const commands = this.commands.filter(c => c.trigger(message));
+        const triggered = [];
+
+        for (const c of commands.values()){
+            const regex = c.trigger(message);
+            const match = message.content.match(regex);
+
+            if (match){
+                const groups = [];
+
+                if (regex.global){
+                    let group;
+                    
+                    while((group = regex.exec(message.content)) != null){
+                        groups.push(group);
+                    }
+                }
+                
+                triggered.push([c, match, groups]);
+            }
+        }
+
+        if (!triggered.length) return void this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
+
+        return Promise.all(triggered.map(c => {
+            this.emit(CommandHandlerEvents.COMMAND_STARTED, message, c[0]);
+            const end = Promise.resolve(c[0].exec(message, c[1], c[2]));
+
+            end.then(() => void this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, c[0])).catch(err => {
+                return this._handleError(err, message, c[0]);
+            });
+        })).then(() => {});
     }
 
     /**

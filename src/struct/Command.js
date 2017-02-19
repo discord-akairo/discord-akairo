@@ -235,106 +235,18 @@ class Command extends AkairoModule {
 
         const noPrefixWords = words.filter(w => !prefixes.some(p => w.startsWith(p)));
 
-        const processType = (arg, word) => {
-            const def = typeof arg.defaultValue === 'function' ? arg.defaultValue.call(this, message) : arg.defaultValue;
-
-            const typeFunc = {
-                [ArgumentTypes.STRING]: () => word || def,
-                [ArgumentTypes.NUMBER]: () => {
-                    if (isNaN(word) || !word) return def;
-                    return parseFloat(word);
-                },
-                [ArgumentTypes.INTEGER]: () => {
-                    if (isNaN(word) || !word) return def;
-                    return parseInt(word);
-                },
-                [ArgumentTypes.DYNAMIC]: () => {
-                    if (!word) return def;
-                    if (isNaN(word)) return word;
-                    return parseFloat(word);
-                },
-                [ArgumentTypes.DYNAMIC_INT]: () => {
-                    if (!word) return def;
-                    if (isNaN(word)) return word;
-                    return parseInt(word);
-                },
-                [ArgumentTypes.USER]: () => {
-                    const res = val => this.client.util.resolveUser(val, false, true);
-                    if (!word) return res(def);
-                    return res(word) || res(def);
-                },
-                [ArgumentTypes.MEMBER]: () => {
-                    const res = val => this.client.util.resolveMember(val, message.guild, false, true);
-                    if (!word) return res(def);
-                    return res(word) || res(def);
-                },
-                [ArgumentTypes.CHANNEL]: () => {
-                    const res = val => this.client.util.resolveChannel(val, message.guild, false, true);
-                    if (!word) return res(def);
-                    return res(word) || res(def);
-                },
-                [ArgumentTypes.TEXT_CHANNEL]: () => {
-                    const res = val => this.client.util.resolveChannel(val, message.guild, false, true);
-                    if (!word) return res(def);
-
-                    const channel = res(word);
-                    if (!channel || channel.type !== 'text') return res(def);
-
-                    return channel;
-                },
-                [ArgumentTypes.VOICE_CHANNEL]: () => {
-                    const res = val => this.client.util.resolveChannel(val, message.guild, false, true);
-                    if (!word) return res(def);
-
-                    const channel = res(word);
-                    if (!channel || channel.type !== 'voice') return res(def);
-
-                    return channel;
-                },
-                [ArgumentTypes.ROLE]: () => {
-                    const res = val => this.client.util.resolveRole(val, message.guild, false, true);
-                    if (!word) return res(def);
-                    return res(word) || res(def);
-                },
-                [ArgumentTypes.EMOJI]: () => {
-                    const res = val => this.client.util.resolveEmoji(val, message.guild, false, true);
-                    if (!word) return res(def);
-                    return res(word) || res(def);
-                }
-            };
-
-            if (Array.isArray(arg.type)){
-                if (!arg.type.some(t => t.toLowerCase() === word.toLowerCase())){
-                    return def;
-                }
-                
-                return word.toLowerCase();
-            }
-
-            if (typeof arg.type === 'function'){
-                const res = arg.type.call(this, word, message);
-                if (res === true) return word;
-                if (!res) return def;
-
-                return res;
-            }
-
-            if (typeFunc[arg.type]) return typeFunc[arg.type]();
-            return word || def;
-        };
-
         for (const [i, arg] of wordArgs.entries()){
-            let word;
-
             if (arg.match === ArgumentMatches.REST){
-                word = noPrefixWords.slice(arg.index != null ? arg.index : i).join(' ') || '';
-            } else {
-                word = noPrefixWords[arg.index != null ? arg.index : i] || '';
+                const word = noPrefixWords.slice(arg.index != null ? arg.index : i).join(' ') || '';
+                args[arg.id] = this._processType(arg, word, message);
+                continue;
             }
+
+            let word = noPrefixWords[arg.index != null ? arg.index : i] || '';
 
             if ((this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY) && /^".*"$/.test(word)) word = word.slice(1, -1);
 
-            args[arg.id] = processType(arg, word);
+            args[arg.id] = this._processType(arg, word, message);
         }
 
         if (prefixArgs.length || flagArgs.length) words.reverse();
@@ -345,7 +257,7 @@ class Command extends AkairoModule {
             
             if (this.split === ArgumentSplits.STICKY && /^".*"$/.test(word)) word = word.slice(1, -1);
 
-            args[arg.id] = processType(arg, word);
+            args[arg.id] = this._processType(arg, word, message);
         }
 
         for (const arg of flagArgs){
@@ -355,19 +267,107 @@ class Command extends AkairoModule {
 
         for (const arg of textArgs){
             const def = typeof arg.defaultValue === 'function' ? arg.defaultValue(message) : arg.defaultValue;
-            const w = noPrefixWords.slice(arg.index).join(' ') || def;
+            const word = noPrefixWords.slice(arg.index).join(' ') || def;
 
-            args[arg.id] = processType(arg, w);
+            args[arg.id] = this._processType(arg, word, message);
         }
 
         for (const arg of contentArgs){
             const def = typeof arg.defaultValue === 'function' ? arg.defaultValue(message) : arg.defaultValue;
-            const w = content.split(' ').slice(arg.index).join(' ') || def;
+            const word = content.split(' ').slice(arg.index).join(' ') || def;
 
-            args[arg.id] = processType(arg, w);
+            args[arg.id] = this._processType(arg, word, message);
         }
 
         return args;
+    }
+
+    _processType(arg, word, message){
+        const def = typeof arg.defaultValue === 'function' ? arg.defaultValue.call(this, message) : arg.defaultValue;
+
+        const typeFunc = {
+            [ArgumentTypes.STRING]: () => word || def,
+            [ArgumentTypes.NUMBER]: () => {
+                if (isNaN(word) || !word) return def;
+                return parseFloat(word);
+            },
+            [ArgumentTypes.INTEGER]: () => {
+                if (isNaN(word) || !word) return def;
+                return parseInt(word);
+            },
+            [ArgumentTypes.DYNAMIC]: () => {
+                if (!word) return def;
+                if (isNaN(word)) return word;
+                return parseFloat(word);
+            },
+            [ArgumentTypes.DYNAMIC_INT]: () => {
+                if (!word) return def;
+                if (isNaN(word)) return word;
+                return parseInt(word);
+            },
+            [ArgumentTypes.USER]: () => {
+                const res = val => this.client.util.resolveUser(val, false, true);
+                if (!word) return res(def);
+                return res(word) || res(def);
+            },
+            [ArgumentTypes.MEMBER]: () => {
+                const res = val => this.client.util.resolveMember(val, message.guild, false, true);
+                if (!word) return res(def);
+                return res(word) || res(def);
+            },
+            [ArgumentTypes.CHANNEL]: () => {
+                const res = val => this.client.util.resolveChannel(val, message.guild, false, true);
+                if (!word) return res(def);
+                return res(word) || res(def);
+            },
+            [ArgumentTypes.TEXT_CHANNEL]: () => {
+                const res = val => this.client.util.resolveChannel(val, message.guild, false, true);
+                if (!word) return res(def);
+
+                const channel = res(word);
+                if (!channel || channel.type !== 'text') return res(def);
+
+                return channel;
+            },
+            [ArgumentTypes.VOICE_CHANNEL]: () => {
+                const res = val => this.client.util.resolveChannel(val, message.guild, false, true);
+                if (!word) return res(def);
+
+                const channel = res(word);
+                if (!channel || channel.type !== 'voice') return res(def);
+
+                return channel;
+            },
+            [ArgumentTypes.ROLE]: () => {
+                const res = val => this.client.util.resolveRole(val, message.guild, false, true);
+                if (!word) return res(def);
+                return res(word) || res(def);
+            },
+            [ArgumentTypes.EMOJI]: () => {
+                const res = val => this.client.util.resolveEmoji(val, message.guild, false, true);
+                if (!word) return res(def);
+                return res(word) || res(def);
+            }
+        };
+
+        if (Array.isArray(arg.type)){
+            if (!arg.type.some(t => t.toLowerCase() === word.toLowerCase())){
+                return def;
+            }
+            
+            return word.toLowerCase();
+        }
+
+        if (typeof arg.type === 'function'){
+            const res = arg.type.call(this, word, message);
+            if (res === true) return word;
+            if (!res) return def;
+
+            return res;
+        }
+
+        if (typeFunc[arg.type]) return typeFunc[arg.type]();
+        return word || def;
     }
 
     /**
