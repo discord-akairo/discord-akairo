@@ -42,6 +42,15 @@ class AkairoClient extends Client {
         this.selfbot = !!options.selfbot;
 
         /**
+         * An empty object.<br/>Do whatever you want to it.
+         * @name AkairoClient#mem
+         * @type {Object}
+         */
+        Object.defineProperty(this, 'mem', {
+            value: {}
+        });
+
+        /**
          * Utility methods.
          * @name AkairoClient#util
          * @type {ClientUtil}
