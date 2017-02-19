@@ -364,7 +364,7 @@ module.exports = CommandHandler;
  * @event CommandHandler#commandCooldown
  * @param {Message} message - Message sent.
  * @param {Command} command - Command blocked.
- * @param {string} remaning - Remaining time in ms for cooldown.
+ * @param {number} remaining - Remaining time in ms for cooldown.
  */
 
 /**

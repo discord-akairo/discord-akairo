@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Trigger Commands.html">7. Trigger Commands</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. No Prefix Commands.html">7. No Prefix Commands</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -122,8 +122,10 @@ const { ArgumentMatches, ArgumentTypes, ArgumentSplits } = require('../util/Cons
  * @prop {string|string[]} [description=''] - Description of the command.
  * @prop {boolean} [ownerOnly=false] - Whether or not to allow client owner(s) only.
  * @prop {string} [channelRestriction='none'] - Restricts channel: 'guild' or 'dm'.
+ * @prop {number} [cooldown] - The command cooldown in ms.
  * @prop {ArgumentSplit} [split='plain'] - Method to split text into words.
  * @prop {RegExp|function} [trigger] - A regex or function &lt;code>(message => {})&lt;/code> returning regex to match in messages that are NOT commands.&lt;br/>The exec function is now &lt;code>((message, match) => {})&lt;/code> if non-global.&lt;br/>Or, &lt;code>((message, match, groups) => {})&lt;/code> if global.
+ * @prop {function} [condition] - A function &lt;code>(message => {})&lt;/code> that returns true or false on messages that are NOT commands. &lt;br/>The exec function is now &lt;code>(message => {})&lt;/code>.
  * @prop {Object} [options={}] - An object for custom options.&lt;br/>Accessible with Command#options.
  */
 
@@ -193,6 +195,12 @@ class Command extends AkairoModule {
         this.channelRestriction = options.channelRestriction || 'none';
 
         /**
+         * Cooldown in milliseconds.
+         * @type {number}
+         */
+        this.cooldown = options.cooldown;
+
+        /**
          * The command split method.
          * @type {ArgumentSplit}
          */
@@ -211,6 +219,14 @@ class Command extends AkairoModule {
          * @returns {RegExp}
          */
         this.trigger = typeof options.trigger === 'function' ? options.trigger : () => options.trigger;
+
+        /**
+         * Gets the condition trigger, if specified.
+         * @method
+         * @param {Message} message - Message being handled.
+         * @returns {boolean}
+         */
+        this.condition = options.condition || (() => false);
 
         /**
          * The ID of this command.
@@ -274,106 +290,18 @@ class Command extends AkairoModule {
 
         const noPrefixWords = words.filter(w => !prefixes.some(p => w.startsWith(p)));
 
-        const processType = (arg, word) => {
-            const def = typeof arg.defaultValue === 'function' ? arg.defaultValue.call(this, message) : arg.defaultValue;
-
-            const typeFunc = {
-                [ArgumentTypes.STRING]: () => word || def,
-                [ArgumentTypes.NUMBER]: () => {
-                    if (isNaN(word) || !word) return def;
-                    return parseFloat(word);
-                },
-                [ArgumentTypes.INTEGER]: () => {
-                    if (isNaN(word) || !word) return def;
-                    return parseInt(word);
-                },
-                [ArgumentTypes.DYNAMIC]: () => {
-                    if (!word) return def;
-                    if (isNaN(word)) return word;
-                    return parseFloat(word);
-                },
-                [ArgumentTypes.DYNAMIC_INT]: () => {
-                    if (!word) return def;
-                    if (isNaN(word)) return word;
-                    return parseInt(word);
-                },
-                [ArgumentTypes.USER]: () => {
-                    const res = val => this.client.util.resolveUser(val, false, true);
-                    if (!word) return res(def);
-                    return res(word) || res(def);
-                },
-                [ArgumentTypes.MEMBER]: () => {
-                    const res = val => this.client.util.resolveMember(val, message.guild, false, true);
-                    if (!word) return res(def);
-                    return res(word) || res(def);
-                },
-                [ArgumentTypes.CHANNEL]: () => {
-                    const res = val => this.client.util.resolveChannel(val, message.guild, false, true);
-                    if (!word) return res(def);
-                    return res(word) || res(def);
-                },
-                [ArgumentTypes.TEXT_CHANNEL]: () => {
-                    const res = val => this.client.util.resolveChannel(val, message.guild, false, true);
-                    if (!word) return res(def);
-
-                    const channel = res(word);
-                    if (!channel || channel.type !== 'text') return res(def);
-
-                    return channel;
-                },
-                [ArgumentTypes.VOICE_CHANNEL]: () => {
-                    const res = val => this.client.util.resolveChannel(val, message.guild, false, true);
-                    if (!word) return res(def);
-
-                    const channel = res(word);
-                    if (!channel || channel.type !== 'voice') return res(def);
-
-                    return channel;
-                },
-                [ArgumentTypes.ROLE]: () => {
-                    const res = val => this.client.util.resolveRole(val, message.guild, false, true);
-                    if (!word) return res(def);
-                    return res(word) || res(def);
-                },
-                [ArgumentTypes.EMOJI]: () => {
-                    const res = val => this.client.util.resolveEmoji(val, message.guild, false, true);
-                    if (!word) return res(def);
-                    return res(word) || res(def);
-                }
-            };
-
-            if (Array.isArray(arg.type)){
-                if (!arg.type.some(t => t.toLowerCase() === word.toLowerCase())){
-                    return def;
-                }
-                
-                return word.toLowerCase();
-            }
-
-            if (typeof arg.type === 'function'){
-                const res = arg.type.call(this, word, message);
-                if (res === true) return word;
-                if (!res) return def;
-
-                return res;
-            }
-
-            if (typeFunc[arg.type]) return typeFunc[arg.type]();
-            return word || def;
-        };
-
         for (const [i, arg] of wordArgs.entries()){
-            let word;
-
             if (arg.match === ArgumentMatches.REST){
-                word = noPrefixWords.slice(arg.index != null ? arg.index : i).join(' ') || '';
-            } else {
-                word = noPrefixWords[arg.index != null ? arg.index : i] || '';
+                const word = noPrefixWords.slice(arg.index != null ? arg.index : i).join(' ') || '';
+                args[arg.id] = this._processType(arg, word, message);
+                continue;
             }
+
+            let word = noPrefixWords[arg.index != null ? arg.index : i] || '';
 
             if ((this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY) &amp;&amp; /^".*"$/.test(word)) word = word.slice(1, -1);
 
-            args[arg.id] = processType(arg, word);
+            args[arg.id] = this._processType(arg, word, message);
         }
 
         if (prefixArgs.length || flagArgs.length) words.reverse();
@@ -384,7 +312,7 @@ class Command extends AkairoModule {
             
             if (this.split === ArgumentSplits.STICKY &amp;&amp; /^".*"$/.test(word)) word = word.slice(1, -1);
 
-            args[arg.id] = processType(arg, word);
+            args[arg.id] = this._processType(arg, word, message);
         }
 
         for (const arg of flagArgs){
@@ -394,19 +322,107 @@ class Command extends AkairoModule {
 
         for (const arg of textArgs){
             const def = typeof arg.defaultValue === 'function' ? arg.defaultValue(message) : arg.defaultValue;
-            const w = noPrefixWords.slice(arg.index).join(' ') || def;
+            const word = noPrefixWords.slice(arg.index).join(' ') || def;
 
-            args[arg.id] = processType(arg, w);
+            args[arg.id] = this._processType(arg, word, message);
         }
 
         for (const arg of contentArgs){
             const def = typeof arg.defaultValue === 'function' ? arg.defaultValue(message) : arg.defaultValue;
-            const w = content.split(' ').slice(arg.index).join(' ') || def;
+            const word = content.split(' ').slice(arg.index).join(' ') || def;
 
-            args[arg.id] = processType(arg, w);
+            args[arg.id] = this._processType(arg, word, message);
         }
 
         return args;
+    }
+
+    _processType(arg, word, message){
+        const def = typeof arg.defaultValue === 'function' ? arg.defaultValue.call(this, message) : arg.defaultValue;
+
+        const typeFunc = {
+            [ArgumentTypes.STRING]: () => word || def,
+            [ArgumentTypes.NUMBER]: () => {
+                if (isNaN(word) || !word) return def;
+                return parseFloat(word);
+            },
+            [ArgumentTypes.INTEGER]: () => {
+                if (isNaN(word) || !word) return def;
+                return parseInt(word);
+            },
+            [ArgumentTypes.DYNAMIC]: () => {
+                if (!word) return def;
+                if (isNaN(word)) return word;
+                return parseFloat(word);
+            },
+            [ArgumentTypes.DYNAMIC_INT]: () => {
+                if (!word) return def;
+                if (isNaN(word)) return word;
+                return parseInt(word);
+            },
+            [ArgumentTypes.USER]: () => {
+                const res = val => this.client.util.resolveUser(val, false, true);
+                if (!word) return res(def);
+                return res(word) || res(def);
+            },
+            [ArgumentTypes.MEMBER]: () => {
+                const res = val => this.client.util.resolveMember(val, message.guild, false, true);
+                if (!word) return res(def);
+                return res(word) || res(def);
+            },
+            [ArgumentTypes.CHANNEL]: () => {
+                const res = val => this.client.util.resolveChannel(val, message.guild, false, true);
+                if (!word) return res(def);
+                return res(word) || res(def);
+            },
+            [ArgumentTypes.TEXT_CHANNEL]: () => {
+                const res = val => this.client.util.resolveChannel(val, message.guild, false, true);
+                if (!word) return res(def);
+
+                const channel = res(word);
+                if (!channel || channel.type !== 'text') return res(def);
+
+                return channel;
+            },
+            [ArgumentTypes.VOICE_CHANNEL]: () => {
+                const res = val => this.client.util.resolveChannel(val, message.guild, false, true);
+                if (!word) return res(def);
+
+                const channel = res(word);
+                if (!channel || channel.type !== 'voice') return res(def);
+
+                return channel;
+            },
+            [ArgumentTypes.ROLE]: () => {
+                const res = val => this.client.util.resolveRole(val, message.guild, false, true);
+                if (!word) return res(def);
+                return res(word) || res(def);
+            },
+            [ArgumentTypes.EMOJI]: () => {
+                const res = val => this.client.util.resolveEmoji(val, message.guild, false, true);
+                if (!word) return res(def);
+                return res(word) || res(def);
+            }
+        };
+
+        if (Array.isArray(arg.type)){
+            if (!arg.type.some(t => t.toLowerCase() === word.toLowerCase())){
+                return def;
+            }
+            
+            return word.toLowerCase();
+        }
+
+        if (typeof arg.type === 'function'){
+            const res = arg.type.call(this, word, message);
+            if (res === true) return word;
+            if (!res) return def;
+
+            return res;
+        }
+
+        if (typeFunc[arg.type]) return typeFunc[arg.type]();
+        return word || def;
     }
 
     /**

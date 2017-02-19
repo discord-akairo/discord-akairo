@@ -48,4 +48,4 @@ If you need more help, message me on Discord: 1Computer#7952.
 4. [Creating an Inhibitor](https://1computer1.github.io/discord-akairo/tutorial-4.%20Creating%20an%20Inhibitor.html)
 5. [Creating a Listener](https://1computer1.github.io/discord-akairo/tutorial-5.%20Creating%20a%20Listener.html)
 6. [Storing Data with SQLite](https://1computer1.github.io/discord-akairo/tutorial-6.%20Storing%20Data%20with%20SQLite.html)
-7. [Trigger Commands](https://1computer1.github.io/discord-akairo/tutorial-7.%20Trigger%20Commands.html)
+7. [No Prefix Commands](https://1computer1.github.io/discord-akairo/tutorial-7.%20No%20Prefix%20Commands.html)

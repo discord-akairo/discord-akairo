@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>util/Category.js - Documentation</title>
+    <title>Tutorial: 7. No Prefix Commands - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,86 +27,48 @@
 
 <div id="main">
     
-    <h1 class="page-title">util/Category.js</h1>
+    <h1 class="page-title">Tutorial: 7. No Prefix Commands</h1>
     
 
-    
-
-
-
-    
     <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>const { Collection } = require('discord.js');
 
-/** @extends Collection */
-class Category extends Collection {
-    /**
-     * A group of modules.
-     * @param {string} id - ID of the category.
-     */
-    constructor(id){
-        super();
+<article>
+    <p>This tutorial is for commands that are triggered with regex or a simple check.<br>We will make a command that replies with an image when someone says &quot;lewd&quot;.<br>We will also make a command that harasses someone (I'm kidding).  </p>
+<h2>Regex Trigger</h2><p>Create a new command.<br>There will be some differences.  </p>
+<pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
 
-        /**
-         * ID of the category.
-         * @type {string}
-         */
-        this.id = id;
-    }
+function exec(message){
+    return message.channel.sendFile('REDACTED');
+}
 
-    /**
-     * Calls reload() on all items in this category.
-     * @returns {Category}
-     */
-    reloadAll(){
-        for (const m of Array.from(this.values())) m.reload();
-        return this;
-    }
+module.exports = new Command('lewd', exec, {
+    trigger: /lewd/i
+});</code></pre><p>There is only one command option!<br>The <code>trigger</code> option is a regular expression used to match message contents.<br>Aliases and arguments are not used (restrictions and inhibitors still work, obviously).  </p>
+<p>All regex triggers will have the second parameter of <code>match</code> for matched content.<br>A global regex will also pass a third parameter, <code>groups</code>.<br>These are all the groups matched by the regex.  </p>
+<pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
 
-    /**
-     * Calls remove() on all items in this category.
-     * @returns {Category}
-     */
-    removeAll(){
-        for (const m of Array.from(this.values())) m.remove();
-        return this;
-    }
-
-    /**
-     * Calls enable() on all items in this category.
-     * @returns {Category}
-     */
-    enableAll(){
-        for (const m of this.values()) m.enable();
-        return this;
-    }
-
-    /**
-     * Calls disable() on all items in this category.
-     * @returns {Category}
-     */
-    disableAll(){
-        for (const m of this.values()) m.disable();
-        return this;
-    }
-
-    /**
-     * Returns the ID.
-     * @returns {string}
-     */
-    toString(){
-        return this.id;
+function exec(message, match, groups){
+    for (const [, digit] of groups){
+        // Don't actually spam something like this!
+        message.channel.sendFile('REDACTED ' + digit || '0');
     }
 }
 
-module.exports = Category;
-</code></pre>
-        </article>
-    </section>
+module.exports = new Command('lewd', exec, {
+    trigger: /lewd(\d?)/gi
+});</code></pre><h2>Condition Trigger</h2><p>A condition trigger is like a regex one, but lets you do things not related to the content.  </p>
+<pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
 
+function exec(message){
+    return message.reply('Hi friend!');
+}
 
+module.exports = new Command('lewd', exec, {
+    condition: message => message.author.id === '172002275412279296'
+});</code></pre><p>This command will run whenever that specific person sends a message.<br>Like regex commands, arguments are not parsed.  </p>
+</article>
 
+</section>
 
 </div>
 

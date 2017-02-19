@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Trigger Commands.html">7. Trigger Commands</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. No Prefix Commands.html">7. No Prefix Commands</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -84,7 +84,7 @@ module.exports = new Command('userinfo', exec, {
 <p>First is the <code>channelRestriction</code>.<br>This just makes it so that the command can only be used in channels belonging to a guild.  </p>
 <p>Second is the <code>defaultValue</code>.<br>Unlike in the first tutorial, this is a function.<br>This lets you create dynamic default values, such as here where the message author is used.  </p>
 <p>Last is the match option of <code>text</code>.<br>What this does is that it makes the argument match the entire user input instead of one word.  </p>
-<h2>Even More Stuff!</h2><p>Let's add more functionality.<br>If the user types --owner, we should give info of the guild owner, regardless of where it is in the input.<br>And just for fun, let's make this command quoted, and if two members are inputted, we should output both of them.  </p>
+<h2>Even More Stuff!</h2><p>Let's add more functionality.<br>If the user types --owner, we should give info of the guild owner, regardless of where it is in the input.<br>And just for fun, let's make this command quoted, and if two members are inputted, we should output both of them.<br>Also, let's add a cooldown so that the command can't be spammed.  </p>
 <p>The first requires the match option <code>flag</code>.  </p>
 <pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
 
@@ -148,9 +148,11 @@ module.exports = new Command('userinfo', exec, {
         }
     ],
     channelRestriction: 'guild',
-    split: 'quoted'
+    split: 'quoted',
+    cooldown: 10000
 });</code></pre><p>As you can see, the command split is now <code>quoted</code>.<br>To use this command with two members, one could do something like:  </p>
 <p>!userinfo 1Computer &quot;someone with a long name&quot;  </p>
+<p>I've also added the <code>cooldown</code> option, for 10000 milliseconds (10 seconds).<br>This means the command can be used once every 10 seconds, per person.  </p>
 <p>That's all to it!<br>See the docs for more ways to customize.  </p>
 </article>
 
