@@ -214,16 +214,27 @@ class CommandHandler extends AkairoHandler {
             }
         }
 
-        if (!triggered.length) return void this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
-
         return Promise.all(triggered.map(c => {
             this.emit(CommandHandlerEvents.COMMAND_STARTED, message, c[0]);
             const end = Promise.resolve(c[0].exec(message, c[1], c[2]));
 
-            end.then(() => void this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, c[0])).catch(err => {
+            return end.then(() => void this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, c[0])).catch(err => {
                 return this._handleError(err, message, c[0]);
             });
-        })).then(() => {});
+        })).then(() => {
+            const trueCommands = this.commands.filter(c => c.condition(message));
+            
+            if (!trueCommands.size) return void this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
+
+            return Promise.all(trueCommands.map(c => {
+                this.emit(CommandHandlerEvents.COMMAND_STARTED, message, c);
+                const end = Promise.resolve(c.exec(message));
+
+                return end.then(() => void this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, c)).catch(err => {
+                    return this._handleError(err, message, c);
+                });
+            }));
+        }).then(() => {});
     }
 
     /**
