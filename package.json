@@ -1,6 +1,6 @@
 {
   "name": "discord-akairo",
-  "version": "5.2.0",
+  "version": "5.2.1",
   "description": "A highly customizable bot framework for Discord.js.",
   "main": "./src/index.js",
   "author": "1Computer",

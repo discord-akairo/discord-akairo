@@ -199,6 +199,8 @@ class CommandHandler extends AkairoHandler {
     }
 
     _handleCooldowns(message, command){
+        if (!command.cooldown) return false;
+        
         const id = message.author.id;
 
         const entry = this.cooldowns.get(id);
@@ -214,6 +216,10 @@ class CommandHandler extends AkairoHandler {
                 timer: this.client.setTimeout(() => {
                     this.client.clearTimeout(this.cooldowns.get(id)[command.id].timer);
                     delete this.cooldowns.get(id)[command.id];
+                    
+                    if (!Object.keys(this.cooldowns.get(id)).length){
+                        this.cooldowns.delete(id);
+                    }
                 }, time),
                 end: endTime
             };
