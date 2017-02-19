@@ -258,6 +258,11 @@ class SQLiteHandler extends EventEmitter {
 
         for (const key of Object.keys(config)){
             if (config[key] == null){
+                if (this.json.includes(key) && typeof this.defaultConfig[key] === 'string'){
+                    copy[key] = JSON.parse(this.defaultConfig[key]);
+                    continue;
+                }
+
                 copy[key] = this.defaultConfig[key];
                 continue;
             }
