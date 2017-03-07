@@ -209,14 +209,14 @@ class Command extends AkairoModule {
         }
 
         for (const arg of textArgs){
-            const def = typeof arg.defaultValue === 'function' ? arg.defaultValue(message) : arg.defaultValue;
+            const def = arg.default.call(this, message);
             const word = noPrefixWords.slice(arg.index).join(' ') || def;
 
             args[arg.id] = arg.processType(word, message);
         }
 
         for (const arg of contentArgs){
-            const def = typeof arg.defaultValue === 'function' ? arg.defaultValue(message) : arg.defaultValue;
+            const def = arg.default.call(this, message);
             const word = content.split(' ').slice(arg.index).join(' ') || def;
 
             args[arg.id] = arg.processType(word, message);

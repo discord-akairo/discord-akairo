@@ -10,7 +10,10 @@ module.exports = new Command('test', exec, {
     args: [
         {
             id: 'user',
-            type: 'relevants'
+            match: 'content',
+            default: function(){
+                console.log(this);
+            }
         }
     ]
 });
