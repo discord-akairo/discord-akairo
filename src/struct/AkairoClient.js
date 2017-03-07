@@ -46,60 +46,21 @@ class AkairoClient extends Client {
          * @name AkairoClient#mem
          * @type {Object}
          */
-        Object.defineProperty(this, 'mem', {
-            value: {}
-        });
+        this.mem = {};
 
         /**
          * Utility methods.
-         * @name AkairoClient#util
          * @type {ClientUtil}
          */
-        Object.defineProperty(this, 'util', {
-            value: new ClientUtil(this)
-        });
-
-        if (options.commandDirectory){
-            /**
-             * The command handler.
-             * @readonly
-             * @name AkairoClient#commandHandler
-             * @type {CommandHandler}
-             */
-            Object.defineProperty(this, 'commandHandler', {
-                value: new CommandHandler(this, options)
-            });
-        }
-
-        if (options.inhibitorDirectory){
-            /**
-             * The inhibitor handler.
-             * @readonly
-             * @name AkairoClient#inhibitorHandler
-             * @type {InhibitorHandler}
-             */
-            Object.defineProperty(this, 'inhibitorHandler', {
-                value: new InhibitorHandler(this, options)
-            });
-        }
-
-        if (options.listenerDirectory){
-            /**
-             * The listener handler.
-             * @readonly
-             * @name AkairoClient#listenerHandler
-             * @type {ListenerHandler}
-             */
-            Object.defineProperty(this, 'listenerHandler', {
-                value: new ListenerHandler(this, options)
-            });
-        }
+        this.util = new ClientUtil(this);
 
         /**
          * Databases added.
          * @type {Object}
          */
         this.databases = {};
+
+        this._options = options;
     }
 
     /**
@@ -121,7 +82,9 @@ class AkairoClient extends Client {
      */
     login(token){
         return new Promise((resolve, reject) => {
+            this._build();
             super.login(token).catch(reject);
+
             this.once('ready', () => {
                 const promises = Object.keys(this.databases).map(key => {
                     const ids = this.databases[key].init(this);
@@ -133,6 +96,32 @@ class AkairoClient extends Client {
 
             if (this.commandHandler) this.on('message', m => { this.commandHandler.handle(m); });
         });
+    }
+
+    _build(){
+        if (this._options.commandDirectory && !this.commandHandler){
+            /**
+             * The command handler.
+             * @type {CommandHandler}
+             */
+            this.commandHandler = new CommandHandler(this, this._options);
+        }
+
+        if (this._options.inhibitorDirectory && !this.inhibitorHandler){
+            /**
+             * The inhibitor handler.
+             * @type {InhibitorHandler}
+             */
+            this.inhibitorHandler = new InhibitorHandler(this, this._options);
+        }
+
+        if (this._options.listenerDirectory && !this.listenerHandler){
+            /**
+             * The listener handler.
+             * @type {ListenerHandler}
+             */
+            this.listenerHandler = new ListenerHandler(this, this._options);
+        }
     }
 }
 
