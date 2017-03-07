@@ -1,5 +1,6 @@
 const AkairoHandler = require('./AkairoHandler');
 const Command = require('./Command');
+const TypeResolver = require('../util/TypeResolver');
 const { CommandHandlerEvents, BuiltInReasons } = require('../util/Constants');
 const { Collection } = require('discord.js');
 
@@ -12,6 +13,12 @@ class CommandHandler extends AkairoHandler {
      */
     constructor(client, options = {}){
         super(client, options.commandDirectory, Command);
+
+        /**
+         * The type resolver.
+         * @type {TypeResolver}
+         */
+        this.resolver = new TypeResolver(client);
 
         /**
          * Whether or not the built-in pre-message inhibitors are enabled.

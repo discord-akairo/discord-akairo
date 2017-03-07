@@ -11,3 +11,5 @@ const client = new AkairoClient({
 client.login(require('./auth.json').token).then(() => {
     console.log('Ready!');
 });
+
+process.on('unhandledRejection', err => console.error(err));

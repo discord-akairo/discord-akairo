@@ -1,83 +1,11 @@
 const AkairoModule = require('./AkairoModule');
-const { ArgumentMatches, ArgumentTypes, ArgumentSplits } = require('../util/Constants');
-
-/**
- * An argument in a command.
- * @typedef {Object} Argument
- * @prop {string} id - ID of the argument.
- * @prop {ArgumentMatch} [match='word'] - Method to match argument.
- * @prop {ArgumentType|string[]|function} [type='string'] - Attempts to cast argument to this type.<br/>An array or a function can be used (more details in ArgumentType).
- * @prop {string|string[]} [prefix] - Ignores word order and uses a word that starts with/matches this prefix (or multiple prefixes if array).<br/>Applicable to 'prefix' and 'flag' only.
- * @prop {number} [index] - Word to start from.<br/>Applicable to 'word', 'text', or 'content' only.<br/>When using with word, this will offset all word arguments after it by 1 unless the index property is also specified for them.
- * @prop {string|number} [defaultValue=''] - Default value if a word is not inputted or a type could not be casted to.<br/>Can also be a function <code>(message => {})</code>.
- * @prop {string|string[]} [description=''] - A description of the argument.
- */
-
-/**
- * The method to match arguments from text.
- * <br/>Possible strings are:
- * <br/>
- * <br/><code>'word'</code> Matches by the order of the words inputted.<br/>Ignores words that matches prefix or flag.
- * <br/>
- * <br/><code>'rest'</code> Matches the rest of the words in order.<br/>Ignores words that matches prefix or flag.
- * <br/>
- * <br/><code>'prefix'</code> Matches words that starts with the prefix.<br/>The word after the prefix is the evaluated argument.
- * <br/>
- * <br/><code>'flag'</code> Matches words that equal this prefix.<br/>The evaluated argument is true or false.
- * <br/>
- * <br/><code>'text'</code> Matches the entire text, except for the command, ignoring words that matches prefix or flag.
- * <br/>
- * <br/><code>'content'</code> Matches the entire text as it was inputted, except for the command.
- * @typedef {string} ArgumentMatch
- */
-
-/**
- * The type that the argument should be cast to.
- * <br/>Possible strings are:
- * <br/>
- * <br/><code>'string'</code> Does not cast to any type.
- * <br/>
- * <br/><code>'number'</code> Casts to an number with parseFloat(), default value if not a number.
- * <br/>
- * <br/><code>'integer'</code> Casts to an integer with parseInt(), default value if not a number.
- * <br/>
- * <br/><code>'dynamic'</code> Casts to a number with parseFloat() or a string if the argument is not a number.
- * <br/>
- * <br/><code>'dynamicInt'</code> Casts to an integer with parseInt() or a string if the argument is not a number.
- * <br/>
- * <br/>Possible Discord-related strings:
- * <br/>
- * <br/><code>'user'</code> Tries to resolve to a user.
- * <br/>
- * <br/><code>'member'</code> Tries to resolve to a member.
- * <br/>
- * <br/><code>'channel'</code> Tries to resolve to a channel.
- * <br/>
- * <br/><code>'textChannel'</code> Tries to resolve to a text channel.
- * <br/>
- * <br/><code>'voiceChannel'</code> Tries to resolve to a voice channel.
- * <br/>
- * <br/><code>'role'</code> Tries to resolve to a role.
- * <br/>
- * <br/><code>'emoji'</code> Tries to resolve to a custom emoji.
- * <br/>
- * <br/>Many of these types can only be used in a guild.
- * <br/>If any of the above are invalid, the default value will be resolved (recommended to use an ID).
- * <br/>
- * <br/>An array of strings can be used to restrict input to only those strings, case insensitive.
- * <br/>The evaluated argument will be all lowercase.
- * <br/>If the input is not in the array, the default value is used.
- * <br/>
- * <br/>A function <code>((word, message) => {})</code> can also be used to filter or modify arguments.
- * <br/>A return value of true will let the word pass, a falsey return value will use the default value for the argument.
- * <br/>Any other truthy return value will be used as the argument.
- * @typedef {string|string[]} ArgumentType
- */
+const Argument = require('./Argument');
+const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
 
 /**
  * Options to use for command execution behavior.
  * @typedef {Object} CommandOptions
- * @prop {Argument[]} [args=[]] - Arguments to parse.
+ * @prop {ArgumentOptions[]} [args=[]] - Arguments to parse.
  * @prop {string} [aliases=[]] - Command names.
  * @prop {string} [category='default'] - Category ID for organization purposes.
  * @prop {string|string[]} [description=''] - Description of the command.
@@ -128,15 +56,7 @@ class Command extends AkairoModule {
          * Arguments for the command.
          * @type {Argument[]}
          */
-        this.args = options.args || [];
-        for (const arg of this.args){
-            if (!arg.match) arg.match = ArgumentMatches.WORD;
-            if (!arg.type) arg.type = ArgumentTypes.STRING;
-            if (!arg.defaultValue) arg.defaultValue = '';
-
-            if (Array.isArray(arg.description)) arg.description = arg.description.join('\n');
-            if (!arg.description) arg.description = '';
-        }
+        this.args = (options.args || []).map(a => new Argument(this, a));
 
         /**
          * Description of the command.
@@ -233,7 +153,7 @@ class Command extends AkairoModule {
      * @returns {Object}
      */
     parse(content, message){
-        if (this.args.length === 0) return {};
+        if (!this.args.length) return {};
 
         const splitFunc = {
             [ArgumentSplits.PLAIN]: () => content.match(/[^\s]+/g),
@@ -261,7 +181,7 @@ class Command extends AkairoModule {
         for (const [i, arg] of wordArgs.entries()){
             if (arg.match === ArgumentMatches.REST){
                 const word = noPrefixWords.slice(arg.index != null ? arg.index : i).join(' ') || '';
-                args[arg.id] = this._processType(arg, word, message);
+                args[arg.id] = arg.processType(word, message);
                 continue;
             }
 
@@ -269,7 +189,7 @@ class Command extends AkairoModule {
 
             if ((this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY) && /^".*"$/.test(word)) word = word.slice(1, -1);
 
-            args[arg.id] = this._processType(arg, word, message);
+            args[arg.id] = arg.processType(word, message);
         }
 
         if (prefixArgs.length || flagArgs.length) words.reverse();
@@ -280,7 +200,7 @@ class Command extends AkairoModule {
             
             if (this.split === ArgumentSplits.STICKY && /^".*"$/.test(word)) word = word.slice(1, -1);
 
-            args[arg.id] = this._processType(arg, word, message);
+            args[arg.id] = arg.processType(word, message);
         }
 
         for (const arg of flagArgs){
@@ -292,105 +212,17 @@ class Command extends AkairoModule {
             const def = typeof arg.defaultValue === 'function' ? arg.defaultValue(message) : arg.defaultValue;
             const word = noPrefixWords.slice(arg.index).join(' ') || def;
 
-            args[arg.id] = this._processType(arg, word, message);
+            args[arg.id] = arg.processType(word, message);
         }
 
         for (const arg of contentArgs){
             const def = typeof arg.defaultValue === 'function' ? arg.defaultValue(message) : arg.defaultValue;
             const word = content.split(' ').slice(arg.index).join(' ') || def;
 
-            args[arg.id] = this._processType(arg, word, message);
+            args[arg.id] = arg.processType(word, message);
         }
 
         return args;
-    }
-
-    _processType(arg, word, message){
-        const def = typeof arg.defaultValue === 'function' ? arg.defaultValue.call(this, message) : arg.defaultValue;
-
-        const typeFunc = {
-            [ArgumentTypes.STRING]: () => word || def,
-            [ArgumentTypes.NUMBER]: () => {
-                if (isNaN(word) || !word) return def;
-                return parseFloat(word);
-            },
-            [ArgumentTypes.INTEGER]: () => {
-                if (isNaN(word) || !word) return def;
-                return parseInt(word);
-            },
-            [ArgumentTypes.DYNAMIC]: () => {
-                if (!word) return def;
-                if (isNaN(word)) return word;
-                return parseFloat(word);
-            },
-            [ArgumentTypes.DYNAMIC_INT]: () => {
-                if (!word) return def;
-                if (isNaN(word)) return word;
-                return parseInt(word);
-            },
-            [ArgumentTypes.USER]: () => {
-                const res = val => this.client.util.resolveUser(val, false, true);
-                if (!word) return res(def);
-                return res(word) || res(def);
-            },
-            [ArgumentTypes.MEMBER]: () => {
-                const res = val => this.client.util.resolveMember(val, message.guild, false, true);
-                if (!word) return res(def);
-                return res(word) || res(def);
-            },
-            [ArgumentTypes.CHANNEL]: () => {
-                const res = val => this.client.util.resolveChannel(val, message.guild, false, true);
-                if (!word) return res(def);
-                return res(word) || res(def);
-            },
-            [ArgumentTypes.TEXT_CHANNEL]: () => {
-                const res = val => this.client.util.resolveChannel(val, message.guild, false, true);
-                if (!word) return res(def);
-
-                const channel = res(word);
-                if (!channel || channel.type !== 'text') return res(def);
-
-                return channel;
-            },
-            [ArgumentTypes.VOICE_CHANNEL]: () => {
-                const res = val => this.client.util.resolveChannel(val, message.guild, false, true);
-                if (!word) return res(def);
-
-                const channel = res(word);
-                if (!channel || channel.type !== 'voice') return res(def);
-
-                return channel;
-            },
-            [ArgumentTypes.ROLE]: () => {
-                const res = val => this.client.util.resolveRole(val, message.guild, false, true);
-                if (!word) return res(def);
-                return res(word) || res(def);
-            },
-            [ArgumentTypes.EMOJI]: () => {
-                const res = val => this.client.util.resolveEmoji(val, message.guild, false, true);
-                if (!word) return res(def);
-                return res(word) || res(def);
-            }
-        };
-
-        if (Array.isArray(arg.type)){
-            if (!arg.type.some(t => t.toLowerCase() === word.toLowerCase())){
-                return def;
-            }
-            
-            return word.toLowerCase();
-        }
-
-        if (typeof arg.type === 'function'){
-            const res = arg.type.call(this, word, message);
-            if (res === true) return word;
-            if (!res) return def;
-
-            return res;
-        }
-
-        if (typeFunc[arg.type]) return typeFunc[arg.type]();
-        return word || def;
     }
 
     /**
