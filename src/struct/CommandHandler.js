@@ -123,7 +123,7 @@ class CommandHandler extends AkairoHandler {
                     return message.content.toLowerCase().startsWith(p.toLowerCase());
                 });
 
-                if (!match) return this._handleTriggers(message);
+                if (match == null) return this._handleTriggers(message);
                 start = match;
             } else
             if (message.content.toLowerCase().startsWith(prefix.toLowerCase())){
