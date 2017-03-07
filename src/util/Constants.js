@@ -53,6 +53,7 @@ module.exports = {
         COMMAND_STARTED: 'commandStarted',
         COMMAND_FINISHED: 'commandFinished',
         COMMAND_COOLDOWN: 'commandCooldown',
+        IN_PROMPT: 'inPrompt',
         ERROR: 'error'
     },
     InhibitorHandlerEvents: {},

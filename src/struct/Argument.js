@@ -45,6 +45,26 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  */
 
 /**
+ * A prompt to run if the user did not input the argument correctly.
+ * <br>Can only be used if there is not a default value.
+ * @prop {PromptFunctions} on - Functions called in prompts.
+ * @prop {number} [retries=1] - Amount of times to retries.
+ * @prop {number} [time=30000] - Time to wait for input.
+ * @typedef {Object} PromptOptions
+ */
+
+/**
+ * Functions <code>(message => {})</code> called at various stages in a prompt to use as the text.
+ * <br>Defaults can be set at AkairoOptions in defaultPrompts.
+ * @typedef {Object} PromptFunctions
+ * @prop {function} [start] - Called on start.
+ * @prop {function} [retry] - Called on a retry.
+ * @prop {function} [time] - Called on collector time out.
+ * @prop {function} [end] - Called on no retries left.
+ * @prop {function} [cancel] - Called on cancel.
+ */
+
+/**
  * Options for how an argument parses text.
  * @typedef ArgumentOptions
  * @prop {string} id - ID of the argument for use in the args object.
@@ -54,6 +74,7 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  * @prop {number} [index] - Index/word of text to start from.<br>Applicable to word, text, or content match only.
  * @prop {any} [default=''] - Default value if text does not parse/cast correctly.<br>Can be a function <code>(message => {})</code>.
  * @prop {string|string[]} [description=''] - A description of the argument.
+ * @prop {PromptOptions} [prompt] - Prompt options for if argument is not provided.
  */
 
 class Argument {
@@ -106,6 +127,12 @@ class Argument {
         this.description = Array.isArray(options.description) ? options.description.join('\n') : options.description || '';
 
         /**
+         * The prompt options.
+         * @type {PromptOptions}
+         */
+        this.prompt = options.prompt;
+
+        /**
          * The default value.
          * @method
          * @name Argument#default
@@ -116,16 +143,21 @@ class Argument {
     }
 
     /**
-     * Process types of this argument from a word.
+     * Casts the type of this argument onto a word.
      * @param {string} word - The word to cast.
      * @param {Message} message - The message that called the command.
+     * @returns {Promise.<any>}
      */
-    processType(word, message){
-        const def = this.default.call(this.command, message);
+    cast(word, message){
+        const res = this._processType(word, message);
+        return res != null ? Promise.resolve(res) : this.prompt ? this._promptArgument(message) : Promise.resolve(null);
+    }
 
+    _processType(word, message){
         if (Array.isArray(this.type)){
             if (!this.type.some(t => t.toLowerCase() === word.toLowerCase())){
-                return def;
+                const def = this.default.call(this.command, message);
+                return def != null ? def : null;
             }
             
             return word.toLowerCase();
@@ -134,16 +166,67 @@ class Argument {
         if (typeof this.type === 'function'){
             const res = this.type.call(this.command, word, message);
             if (res === true) return word;
-            if (!res) return def;
+            if (res != null) return res;
 
-            return res;
+            const def = this.default.call(this.command, message);
+            return def != null ? def : null;
         }
 
         if (this.command.handler.resolver[this.type]){
-            return this.command.handler.resolver[this.type](word, def, message);
+            const res = this.command.handler.resolver[this.type](word, message);
+            if (res != null) return res;
+
+            const def = this.default.call(this.command, message);
+            return def != null ? def : null;
         }
 
-        return word || def;
+        if (word) return word;
+
+        const def = this.default.call(this.command, message);
+        return def != null ? def : null;
+    }
+
+    _promptArgument(message){
+        const prompt = Object.assign({}, this.prompt || {});
+        prompt.on = {};
+        
+        Object.assign(prompt.on, this.command.handler.defaultPrompts);
+        Object.assign(prompt.on, this.prompt && this.prompt.on || {});
+
+        const retry = i => {
+            this.command.handler.prompts.add(message.author.id + message.channel.id);
+            const text = i === 1 ? prompt.on.start.call(this, message) : prompt.on.retry.call(this, message);
+
+            return this.command.client.util.prompt(message, text, m => {
+                if (m.content.toLowerCase() === 'cancel') throw 'cancel';
+                return this._processType(m.content, m);
+            }, this.prompt && this.prompt.time || 30000).catch(reason => {
+                if (reason instanceof Error){
+                    this.command.handler.prompts.delete(message.author.id + message.channel.id);
+                    throw reason;
+                }
+
+                if (reason === 'time') return message.channel.send(prompt.on.time.call(this, message)).then(() => {
+                    this.command.handler.prompts.delete(message.author.id + message.channel.id);
+                    throw 'time';
+                });
+
+                if (reason === 'cancel') return message.channel.send(prompt.on.cancel.call(this, message)).then(() => {
+                    this.command.handler.prompts.delete(message.author.id + message.channel.id);
+                    throw 'cancel';
+                });
+                
+                return i >= this.prompt && this.prompt.retries || 1 ? message.channel.send(prompt.on.end.call(this, message)).then(() => {
+                    this.command.handler.prompts.delete(message.author.id + message.channel.id);
+                    throw 'end';
+                }) : retry(i + 1);
+            });
+        };
+
+        return retry(1).then(m => {
+            this.command.handler.prompts.delete(message.author.id + message.channel.id);
+            return m && m.content;
+        });
     }
 }
 

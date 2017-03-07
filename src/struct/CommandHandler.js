@@ -39,6 +39,26 @@ class CommandHandler extends AkairoHandler {
         this.cooldowns = new Collection();
 
         /**
+         * Set of ongoing argument prompts.
+         * @type {Set.<string>}
+         */
+        this.prompts = new Set();
+
+        /**
+         * Default prompt functions.
+         * @type {PromptFunctions}
+         */
+        this.defaultPrompts = {
+            start: function(m){ return `${m.author}, you need to input a valid ${this.type}!`; },
+            retry: function(m){ return `${m.author}, you need to input a valid ${this.type}!`; },
+            time: function(m){ return `${m.author}, time ran out for command.`; },
+            end: function(m){ return `${m.author}, retries limit reached for command.`; },
+            cancel: function(m){ return `${m.author}, command cancelled.`; }
+        };
+
+        Object.assign(this.defaultPrompts, options.defaultPrompts || {});
+
+        /**
          * Default cooldown for commands.
          * @type {number}
          */
@@ -121,6 +141,11 @@ class CommandHandler extends AkairoHandler {
         : () => Promise.resolve();
 
         return pretest(message).then(() => {
+            if (this.prompts.has(message.author.id + message.channel.id)){
+                this.emit(CommandHandlerEvents.IN_PROMPT, message);
+                return Promise.resolve();
+            }
+            
             const prefix = this.prefix(message);
             const allowMention = this.allowMention(message);
             let start;
@@ -188,13 +213,16 @@ class CommandHandler extends AkairoHandler {
                 if (onCooldown) return;
 
                 const content = message.content.slice(message.content.indexOf(name) + name.length + 1);
-                const args = command.parse(content, message);
 
-                this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command);
-                const end = Promise.resolve(command.exec(message, args));
+                return command.parse(content, message).then(args => {
+                    this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command);
+                    const end = Promise.resolve(command.exec(message, args));
 
-                return end.then(() => void this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command))
-                .catch(err => this._handleError(err, message, command));
+                    return end.then(() => void this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command))
+                    .catch(err => this._handleError(err, message, command));
+                }).catch(err => {
+                    if (err instanceof Error) throw err;
+                });
             }).catch(reason => {
                 if (reason instanceof Error) return this._handleError(reason, message, command);
                 this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
@@ -391,6 +419,12 @@ module.exports = CommandHandler;
  * @event CommandHandler#commandFinished
  * @param {Message} message - Message sent.
  * @param {Command} command - Command executed.
+ */
+
+/**
+ * Emitted when a user is in a command prompt.
+ * @event CommandHandler#inPrompt
+ * @param {Message} message - Message sent.
  */
 
 /**

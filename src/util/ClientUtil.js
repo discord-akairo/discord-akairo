@@ -446,6 +446,37 @@ class ClientUtil {
     collection(iterable){
         return new Collection(iterable);
     }
+
+    /**
+     * Prompts a user for input, returning the message that passes.
+     * @param {Message} message - Message to prompt.
+     * @param {string} text - Text to send.
+     * @param {RegExp|function} [check] - Regex or function <code>(message => {})</code> to check if message should pass.
+     * @param {number} [time=30000] - Time in milliseconds to wait.
+     * @returns {Promise.<Message>}
+     */
+    prompt(message, text, check = () => true, time = 30000){
+        return message.channel.send(text).then(() => new Promise((resolve, reject) => {
+            const collector = message.channel.createCollector(m => {
+                try {
+                    if (m.author.id !== message.author.id) return;
+                    const passed = typeof check === 'function' ? check(m) : check.test(m.content);
+
+                    if (!passed) return collector.stop('failed');
+                    return true;
+                } catch (err) {
+                    return collector.stop(err);
+                }
+            }, { time });
+
+            collector.on('message', () => collector.stop('passed'));
+
+            collector.on('end', (collected, reason) => {
+                if (reason !== 'passed') return reject(reason);
+                return resolve(collected.first());
+            });
+        }));
+    }
 }
 
 module.exports = ClientUtil;

@@ -145,10 +145,10 @@ class Command extends AkairoModule {
      * Parses text based on this command's args.
      * @param {string} content - String to parse.
      * @param {Message} [message] - Message to use.
-     * @returns {Object}
+     * @returns {Promise.<Object>}
      */
     parse(content, message){
-        if (!this.args.length) return {};
+        if (!this.args.length) return Promise.resolve({});
 
         const splitFunc = {
             [ArgumentSplits.PLAIN]: () => content.match(/[^\s]+/g),
@@ -176,7 +176,7 @@ class Command extends AkairoModule {
         for (const [i, arg] of wordArgs.entries()){
             if (arg.match === ArgumentMatches.REST){
                 const word = noPrefixWords.slice(arg.index != null ? arg.index : i).join(' ') || '';
-                args[arg.id] = arg.processType(word, message);
+                args[arg.id] = arg.cast.bind(arg, word, message);
                 continue;
             }
 
@@ -184,7 +184,7 @@ class Command extends AkairoModule {
 
             if ((this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY) && /^".*"$/.test(word)) word = word.slice(1, -1);
 
-            args[arg.id] = arg.processType(word, message);
+            args[arg.id] = arg.cast.bind(arg, word, message);
         }
 
         if (prefixArgs.length || flagArgs.length) words.reverse();
@@ -195,7 +195,7 @@ class Command extends AkairoModule {
             
             if (this.split === ArgumentSplits.STICKY && /^".*"$/.test(word)) word = word.slice(1, -1);
 
-            args[arg.id] = arg.processType(word, message);
+            args[arg.id] = arg.cast.bind(arg, word, message);
         }
 
         for (const arg of flagArgs){
@@ -207,17 +207,35 @@ class Command extends AkairoModule {
             const def = arg.default.call(this, message);
             const word = noPrefixWords.slice(arg.index).join(' ') || def;
 
-            args[arg.id] = arg.processType(word, message);
+            args[arg.id] = arg.cast.bind(arg, word, message);
         }
 
         for (const arg of contentArgs){
             const def = arg.default.call(this, message);
             const word = content.split(' ').slice(arg.index).join(' ') || def;
 
-            args[arg.id] = arg.processType(word, message);
+            args[arg.id] = arg.cast.bind(arg, word, message);
         }
 
-        return args;
+        const props = [];
+        const keys = Object.keys(args);
+
+        const process = i => {
+            if (i === keys.length) return props;
+
+            const key = keys[i];
+            return args[key]().then(res => {
+                props.push(res);
+                return process(i + 1);
+            });
+        };
+
+        return process(0).then(values => {
+            return values.reduce((res, prop, i) => {
+                res[keys[i]] = prop;
+                return res;
+            }, args);
+        });
     }
 
     /**

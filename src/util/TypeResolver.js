@@ -19,59 +19,61 @@ class TypeResolver {
         });
     }
 
-    [ArgumentTypes.STRING](word, def){
-        return word || def;
+    [ArgumentTypes.STRING](word){
+        return word || null;
     }
 
-    [ArgumentTypes.NUMBER](word, def){
-        if (isNaN(word) || !word) return def;
+    [ArgumentTypes.NUMBER](word){
+        if (isNaN(word) || !word) return null;
         return parseFloat(word);
     }
 
-    [ArgumentTypes.INTEGER](word, def){
-        if (isNaN(word) || !word) return def;
+    [ArgumentTypes.INTEGER](word){
+        if (isNaN(word) || !word) return null;
         return parseInt(word);
     }
 
-    [ArgumentTypes.DYNAMIC](word, def){
-        if (!word) return def;
+    [ArgumentTypes.DYNAMIC](word){
+        if (!word) return null;
         if (isNaN(word)) return word;
         return parseFloat(word);
     }
 
-    [ArgumentTypes.DYNAMIC_INT](word, def){
-        if (!word) return def;
+    [ArgumentTypes.DYNAMIC_INT](word){
+        if (!word) return null;
         if (isNaN(word)) return word;
         return parseInt(word);
     }
 
-    [ArgumentTypes.USER](word, def){
+    [ArgumentTypes.USER](word){
         const res = val => this.client.util.resolveUser(val, this.client.users);
-        if (!word) return res(def);
-        return res(word) || res(def);
+        if (!word) return null;
+        return res(word);
     }
 
-    [ArgumentTypes.USERS](word, def){
+    [ArgumentTypes.USERS](word){
         const res = val => this.client.util.resolveUsers(val, this.client.users);
-        if (!word) return res(def);
+        if (!word) return null;
         const users = res(word);
-        return users.size ? users : res(def);
+        return users.size ? users : null;
     }
 
-    [ArgumentTypes.MEMBER](word, def, message){
+    [ArgumentTypes.MEMBER](word, message){
         const res = val => this.client.util.resolveMember(val, message.guild.members);
-        if (!word) return res(def);
-        return res(word) || res(def);
+        if (!word) return null;
+        return res(word);
     }
 
-    [ArgumentTypes.MEMBERS](word, def, message){
+    [ArgumentTypes.MEMBERS](word, message){
         const res = val => this.client.util.resolveMembers(val, message.guild.members);
-        if (!word) return res(def);
+        if (!word) return null;
         const members = res(word);
-        return members.size ? members : res(def);
+        return members.size ? members : null;
     }
 
-    [ArgumentTypes.RELEVANT](word, def, message){
+    [ArgumentTypes.RELEVANT](word, message){
+        if (!word) return null;
+
         const res = message.channel.type === 'text'
         ? val => this.client.util.resolveMember(val, message.guild.members)
         : message.channel.type === 'dm'
@@ -83,20 +85,16 @@ class TypeResolver {
             [this.client.user.id, this.client.user]
         ]).concat(message.channel.recipients));
 
-        let person;
-
-        if (!word){
-            person = res(def);
-        } else {
-            person = res(word) || res(def);
-        }
+        const person = res(word);
 
         if (!person) return null;
         if (message.channel.type === 'text') return person.user;
         return person;
     }
 
-    [ArgumentTypes.RELEVANTS](word, def, message){
+    [ArgumentTypes.RELEVANTS](word, message){
+        if (!word) return null;
+
         const res = message.channel.type === 'text'
         ? val => this.client.util.resolveMembers(val, message.guild.members)
         : message.channel.type === 'dm'
@@ -108,109 +106,103 @@ class TypeResolver {
             [this.client.user.id, this.client.user]
         ]).concat(message.channel.recipients));
 
-        let persons;
-
-        if (!word){
-            persons = res(def);
-        } else {
-            persons = res(word) || res(def);
-        }
+        const persons = res(word);
 
         if (!persons.size) return null;
         if (message.channel.type === 'text') return new Collection(persons.map(m => [m.id, m.user]));
         return persons;
     }
 
-    [ArgumentTypes.CHANNEL](word, def, message){
+    [ArgumentTypes.CHANNEL](word, message){
         const res = val => this.client.util.resolveChannel(val, message.guild.channels);
-        if (!word) return res(def);
-        return res(word) || res(def);
+        if (!word) return null;
+        return res(word);
     }
 
-    [ArgumentTypes.CHANNELS](word, def, message){
+    [ArgumentTypes.CHANNELS](word, message){
         const res = val => this.client.util.resolveChannels(val, message.guild.channels);
-        if (!word) return res(def);
+        if (!word) return null;
         const channels = res(word);
-        return channels.size ? channels : res(def);
+        return channels.size ? channels : null;
     }
 
-    [ArgumentTypes.TEXT_CHANNEL](word, def, message){
+    [ArgumentTypes.TEXT_CHANNEL](word, message){
         const res = val => this.client.util.resolveChannel(val, message.guild.channels);
-        if (!word) return res(def);
+        if (!word) return null;
 
         const channel = res(word);
-        if (!channel || channel.type !== 'text') return res(def);
+        if (!channel || channel.type !== 'text') return null;
 
         return channel;
     }
 
-    [ArgumentTypes.TEXT_CHANNELS](word, def, message){
+    [ArgumentTypes.TEXT_CHANNELS](word, message){
         const res = val => this.client.util.resolveChannels(val, message.guild.channels);
-        if (!word) return res(def);
+        if (!word) return null;
 
         const channels = res(word);
-        if (!channels.size || channels.every(c => c.type !== 'text')) return res(def);
+        if (!channels.size || channels.every(c => c.type !== 'text')) return null;
 
         return channels.filter(c => c.type === 'text');
     }
 
-    [ArgumentTypes.VOICE_CHANNEL](word, def, message){
+    [ArgumentTypes.VOICE_CHANNEL](word, message){
         const res = val => this.client.util.resolveChannel(val, message.guild.channels);
-        if (!word) return res(def);
+        if (!word) return null;
 
         const channel = res(word);
-        if (!channel || channel.type !== 'voice') return res(def);
+        if (!channel || channel.type !== 'voice') return null;
 
         return channel;
     }
 
-    [ArgumentTypes.VOICE_CHANNELS](word, def, message){
+    [ArgumentTypes.VOICE_CHANNELS](word, message){
         const res = val => this.client.util.resolveChannels(val, message.guild.channels);
-        if (!word) return res(def);
+        if (!word) return null;
 
         const channels = res(word);
-        if (!channels.size || channels.every(c => c.type !== 'voice')) return res(def);
+        if (!channels.size || channels.every(c => c.type !== 'voice')) return null;
 
         return channels.filter(c => c.type === 'voice');
     }
 
-    [ArgumentTypes.ROLE](word, def, message){
+    [ArgumentTypes.ROLE](word, message){
         const res = val => this.client.util.resolveRole(val, message.guild.roles);
-        if (!word) return res(def);
-        return res(word) || res(def);
+        if (!word) return null;
+        return res(word);
     }
 
-    [ArgumentTypes.ROLES](word, def, message){
+    [ArgumentTypes.ROLES](word, message){
         const res = val => this.client.util.resolveRoles(val, message.guild.roles);
-        if (!word) return res(def);
+        if (!word) return null;
         const roles = res(word);
-        return roles.size ? roles : res(def);
+        return roles.size ? roles : null;
     }
 
-    [ArgumentTypes.EMOJI](word, def, message){
+    [ArgumentTypes.EMOJI](word, message){
         const res = val => this.client.util.resolveEmoji(val, message.guild.emojis);
-        if (!word) return res(def);
-        return res(word) || res(def);
+        if (!word) return null;
+        return res(word);
     }
 
-    [ArgumentTypes.EMOJIS](word, def, message){
+    [ArgumentTypes.EMOJIS](word, message){
         const res = val => this.client.util.resolveEmojis(val, message.guild.emojis);
-        if (!word) return res(def);
+        if (!word) return null;
         const emojis = res(word);
-        return emojis.size ? emojis : res(def);
+        return emojis.size ? emojis : null;
     }
 
-    [ArgumentTypes.GUILD](word, def){
+    [ArgumentTypes.GUILD](word){
         const res = val => this.client.util.resolveGuild(val, this.client.guilds);
-        if (!word) return res(def);
-        return res(word) || res(def);
+        if (!word) return null;
+        return res(word);
     }
 
-    [ArgumentTypes.GUILDS](word, def){
+    [ArgumentTypes.GUILDS](word){
         const res = val => this.client.util.resolveGuilds(val, this.client.guilds);
-        if (!word) return res(def);
+        if (!word) return null;
         const guilds = res(word);
-        return guilds.size ? guilds : res(def);
+        return guilds.size ? guilds : null;
     }
 }
 
