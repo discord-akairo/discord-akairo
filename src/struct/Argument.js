@@ -14,7 +14,7 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
 
 /**
  * The type that the argument should be cast to.
- * Possible types are:
+ * Possible basic types are:
  * string: Does not cast to any type.
  * number: Casts to an number with parseFloat(), default value if not a number.
  * integer: Casts to an integer with parseInt(), default value if not a number.
@@ -23,13 +23,16 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  * Possible Discord-related types:
  * user: Tries to resolve to a user.
  * member: Tries to resolve to a member.
+ * relevant: Tries to resolve to a relevant user. Works in both guilds and DMs.
  * channel: Tries to resolve to a channel.
  * textChannel: Tries to resolve to a text channel.
  * voiceChannel: Tries to resolve to a voice channel.
  * role: Tries to resolve to a role.
  * emoji: Tries to resolve to a custom emoji.
+ * guild: Tries to resolve to a guild.
  * Many of these types can only be used in a guild.
- * If any of the above are invalid, the default value will be resolved.
+ * You can also pluralize the type to get a Collection of resolved objects instead.
+ * If any (except relevant) of the above are invalid, the default value will be resolved.
  * An array of strings can be used to restrict input to only those strings, case insensitive.
  * The evaluated argument will be all lowercase.
  * If the input is not in the array, the default value is used.

@@ -95,7 +95,7 @@ class ClientUtil {
         if (match && member.id === match[1]) return true;
 
         text = caseSensitive ? text : text.toLowerCase();
-        const username = caseSensitive ? member.username : member.username.toLowerCase();
+        const username = caseSensitive ? member.user.username : member.user.username.toLowerCase();
         const displayName = caseSensitive ? member.displayName : member.displayName.toLowerCase();
         const discrim = member.user.discriminator;
 
