@@ -84,6 +84,7 @@ const { ArgumentMatches, ArgumentTypes, ArgumentSplits } = require('../util/Cons
  * @prop {boolean} [ownerOnly=false] - Whether or not to allow client owner(s) only.
  * @prop {string} [channelRestriction='none'] - Restricts channel: 'guild' or 'dm'.
  * @prop {number} [cooldown] - The command cooldown in ms.
+ * @prop {number} [ratelimit=1] - Amount of command uses allowed until cooldown.
  * @prop {ArgumentSplit} [split='plain'] - Method to split text into words.
  * @prop {RegExp|function} [trigger] - A regex or function <code>(message => {})</code> returning regex to match in messages that are NOT commands.<br/>The exec function is now <code>((message, match) => {})</code> if non-global.<br/>Or, <code>((message, match, groups) => {})</code> if global.
  * @prop {function} [condition] - A function <code>(message => {})</code> that returns true or false on messages that are NOT commands. <br/>The exec function is now <code>(message => {})</code>.
@@ -160,6 +161,12 @@ class Command extends AkairoModule {
          * @type {number}
          */
         this.cooldown = options.cooldown;
+
+        /**
+         * Uses allowed before cooldown.
+         * @type {number}
+         */
+        this.ratelimit = options.ratelimit || 1;
 
         /**
          * The command split method.

@@ -202,46 +202,36 @@ class CommandHandler extends AkairoHandler {
         if (!command.cooldown) return false;
         
         const id = message.author.id;
+        if (!this.cooldowns.has(id)) this.cooldowns.set(id, {});
 
-        const entry = this.cooldowns.get(id);
-        if (!entry) this.cooldowns.set(id, {});
-        
-        const cmdEntry = this.cooldowns.get(id)[command.id];
+        const time = command.cooldown || this.defaultCooldown;
+        const endTime = message.createdTimestamp + time;
 
-        if (!cmdEntry){
-            const time = command.cooldown || this.defaultCooldown;
-            const endTime = message.createdTimestamp + time;
+        if (!this.cooldowns.get(id)[command.id]) this.cooldowns.get(id)[command.id] = {
+            timer: this.client.setTimeout(() => {
+                this.client.clearTimeout(this.cooldowns.get(id)[command.id].timer);
+                delete this.cooldowns.get(id)[command.id];
+                
+                if (!Object.keys(this.cooldowns.get(id)).length){
+                    this.cooldowns.delete(id);
+                }
+            }, time),
+            end: endTime,
+            uses: 0
+        };
 
-            this.cooldowns.get(id)[command.id] = {
-                timer: this.client.setTimeout(() => {
-                    this.client.clearTimeout(this.cooldowns.get(id)[command.id].timer);
-                    delete this.cooldowns.get(id)[command.id];
-                    
-                    if (!Object.keys(this.cooldowns.get(id)).length){
-                        this.cooldowns.delete(id);
-                    }
-                }, time),
-                end: endTime
-            };
-        }
+        const entry = this.cooldowns.get(id)[command.id];
 
-        if (cmdEntry){
+        if (entry.uses >= command.ratelimit){
             const end = this.cooldowns.get(message.author.id)[command.id].end;
             const diff = end - message.createdTimestamp;
+
             this.emit(CommandHandlerEvents.COMMAND_COOLDOWN, message, command, diff);
             return true;
         }
 
+        entry.uses++;
         return false;
-    }
-
-    _handleError(err, message, command){
-        if (this.listenerCount(CommandHandlerEvents.ERROR)){
-            this.emit(CommandHandlerEvents.ERROR, err, message, command);
-            return;
-        }
-
-        throw err;
     }
 
     _handleTriggers(message){
@@ -294,6 +284,15 @@ class CommandHandler extends AkairoHandler {
                 });
             }));
         }).then(() => {});
+    }
+
+    _handleError(err, message, command){
+        if (this.listenerCount(CommandHandlerEvents.ERROR)){
+            this.emit(CommandHandlerEvents.ERROR, err, message, command);
+            return;
+        }
+
+        throw err;
     }
 
     /**
