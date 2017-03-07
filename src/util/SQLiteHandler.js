@@ -11,13 +11,13 @@ let sql;
  * @prop {string} [tablename='configs'] - Name of the table.
  * @prop {Object} [defaultConfig={}] - Default configuration.
  * @prop {string[]} [json=[]] - Array of keys to parse and stringify as JSON.
- * @prop {function} [init=[]] - Array or function <code>(client => {})</code> that returns an array of IDs.<br/>If you want to load the database before login, use SQLiteHandler#load.
+ * @prop {function} [init=[]] - Array or function <code>(client => {})</code> that returns an array of IDs.<br>If you want to load the database before login, use SQLiteHandler#load.
  */
 
 /** @extends EventEmitter */
 class SQLiteHandler extends EventEmitter {
     /**
-     * Creates an SQLiteHandler.<br/>Tables must have an 'id' column.
+     * Creates an SQLiteHandler.<br>Tables must have an 'id' column.
      * @param {string} filepath - Path to .sqlite file.
      * @param {SQLiteOptions} [options={}] - Options for the handler.
      */
@@ -84,7 +84,7 @@ class SQLiteHandler extends EventEmitter {
     }
 
     /**
-     * Array of IDs.<br/>Note that this calls the Collection's keyArray().
+     * Array of IDs.<br>Note that this calls the Collection's keyArray().
      * @type {string[]}
      */
     get ids(){
@@ -92,7 +92,7 @@ class SQLiteHandler extends EventEmitter {
     }
 
     /**
-     * Array of configs.<br/>Note that this calls the Collection's array().<br/>Values from here should be desanitized.
+     * Array of configs.<br>Note that this calls the Collection's array().<br>Values from here should be desanitized.
      * @type {string[]}
      */
     get configs(){
@@ -135,7 +135,7 @@ class SQLiteHandler extends EventEmitter {
     }
 
     /**
-     * Loads handler and database with IDs.<br/>
+     * Loads handler and database with IDs.<br>
      * Use manually if you want to load database before client is ready.
      * @param {string[]} ids - Array of IDs.
      * @returns {Promise.<SQLiteHandler>}

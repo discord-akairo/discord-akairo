@@ -34,7 +34,7 @@ class CommandHandler extends AkairoHandler {
 
         /**
          * Collection of cooldowns.
-         * @type {Collection}
+         * @type {Collection<string, Object>}
          */
         this.cooldowns = new Collection();
 
@@ -70,13 +70,13 @@ class CommandHandler extends AkairoHandler {
         /**
          * Commands loaded, mapped by ID to Command.
          * @name CommandHandler#modules
-         * @type {Collection.<string, Command>}
+         * @type {Collection<string, Command>}
          */
     }
 
     /**
-     * Collection of commands.<br/>Alias to this.modules.
-     * @type {Collection.<string, Command>}
+     * Collection of commands.<br>Alias to this.modules.
+     * @type {Collection<string, Command>}
      */
     get commands(){
         return this.modules;
@@ -313,7 +313,7 @@ class CommandHandler extends AkairoHandler {
     /**
      * Adds a command.
      * @method
-     * @param {string} filename - Filename to lookup in the directory.<br/>A .js extension is assumed.
+     * @param {string} filename - Filename to lookup in the directory.<br>A .js extension is assumed.
      * @name CommandHandler#add
      * @returns {Command}
      */
@@ -344,7 +344,7 @@ class CommandHandler extends AkairoHandler {
 module.exports = CommandHandler;
 
 /**
- * Emitted when a message is blocked by a pre-message inhibitor.<br/>The built-in inhibitors are 'notSelf' (for selfbots), 'client', and 'bot'.
+ * Emitted when a message is blocked by a pre-message inhibitor.<br>The built-in inhibitors are 'notSelf' (for selfbots), 'client', and 'bot'.
  * @event CommandHandler#messageBlocked
  * @param {Message} message - Message sent.
  * @param {string} reason - Reason for the block.
@@ -364,7 +364,7 @@ module.exports = CommandHandler;
  */
 
 /**
- * Emitted when a command is blocked by a post-message inhibitor.<br/>The built-in inhibitors are 'owner', 'guild', and 'dm'.
+ * Emitted when a command is blocked by a post-message inhibitor.<br>The built-in inhibitors are 'owner', 'guild', and 'dm'.
  * @event CommandHandler#commandBlocked
  * @param {Message} message - Message sent.
  * @param {Command} command - Command blocked.
@@ -376,7 +376,7 @@ module.exports = CommandHandler;
  * @event CommandHandler#commandCooldown
  * @param {Message} message - Message sent.
  * @param {Command} command - Command blocked.
- * @param {number} remaining - Remaining time in ms for cooldown.
+ * @param {number} remaining - Remaining time in milliseconds for cooldown.
  */
 
 /**

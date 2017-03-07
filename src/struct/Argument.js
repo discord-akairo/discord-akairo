@@ -2,43 +2,45 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
 
 /**
  * The method to match arguments from text.
- * Possible matches are:
- * word: Matches by the order of the words inputted. Ignores words that matches prefix or flag.
- * rest: Matches the rest of the words in order. Ignores words that matches prefix or flag.
- * prefix: Matches words that starts with the prefix. The word after the prefix is the evaluated argument.
- * flag: Matches words that equal this prefix. The evaluated argument is true or false.
- * text: Matches the entire text, except for the command, ignoring words that matches prefix or flag.
- * content: Matches the entire text as it was inputted, except for the command.
+ * <br><code>word</code> matches by the order of the words inputted, ignoring words that matches prefix or flag.
+ * <br><code>rest</code> matches the rest of the words in order, ignoring words that matches prefix or flag.
+ * <br><code>prefix</code> matches words that starts with the prefix. The word after the prefix is the evaluated argument.
+ * <br><code>flag</code> matches words that equal this prefix. The evaluated argument is true or false.
+ * <br><code>text</code> matches the entire text, except for the command, ignoring words that matches prefix or flag.
+ * <br><code>content</code> matches the entire text as it was inputted, except for the command.
  * @typedef {string} ArgumentMatch
  */
 
 /**
  * The type that the argument should be cast to.
- * Possible basic types are:
- * string: Does not cast to any type.
- * number: Casts to an number with parseFloat(), default value if not a number.
- * integer: Casts to an integer with parseInt(), default value if not a number.
- * dynamic: Casts to a number with parseFloat() or a string if the argument is not a number.
- * dynamicInt: Casts to an integer with parseInt() or a string if the argument is not a number.
- * Possible Discord-related types:
- * user: Tries to resolve to a user.
- * member: Tries to resolve to a member.
- * relevant: Tries to resolve to a relevant user. Works in both guilds and DMs.
- * channel: Tries to resolve to a channel.
- * textChannel: Tries to resolve to a text channel.
- * voiceChannel: Tries to resolve to a voice channel.
- * role: Tries to resolve to a role.
- * emoji: Tries to resolve to a custom emoji.
- * guild: Tries to resolve to a guild.
- * Many of these types can only be used in a guild.
- * You can also pluralize the type to get a Collection of resolved objects instead.
- * If any (except relevant) of the above are invalid, the default value will be resolved.
- * An array of strings can be used to restrict input to only those strings, case insensitive.
- * The evaluated argument will be all lowercase.
- * If the input is not in the array, the default value is used.
- * A function ((word, message) => {}) can also be used to filter or modify arguments.
- * A return value of true will let the word pass, a falsey return value will use the default value for the argument.
- * Any other truthy return value will be used as the argument.
+ * <br><code>string</code> does not cast to any type.
+ * <br><code>number</code> casts to an number with parseFloat(), default value if not a number.
+ * <br><code>integer</code> casts to an integer with parseInt(), default value if not a number.
+ * <br><code>dynamic</code> casts to a number with parseFloat() or a string if the argument is not a number.
+ * <br><code>dynamicInt</code> casts to an integer with parseInt() or a string if the argument is not a number.
+ * <br>
+ * <br>Possible Discord-related types:
+ * <br><code>user</code> tries to resolve to a user.
+ * <br><code>member</code> tries to resolve to a member.
+ * <br><code>relevant</code> tries to resolve to a relevant user. Works in both guilds and DMs.
+ * <br><code>channel</code> tries to resolve to a channel.
+ * <br><code>textChannel</code> tries to resolve to a text channel.
+ * <br><code>voiceChannel</code> tries to resolve to a voice channel.
+ * <br><code>role</code> tries to resolve to a role.
+ * <br><code>emoji</code> tries to resolve to a custom emoji.
+ * <br><code>guild</code> tries to resolve to a guild.
+ * <br>
+ * <br>Many of these types can only be used in a guild.
+ * <br>You can also pluralize the type to get a Collection of resolved objects instead.
+ * <br>If any (except relevant) of the above are invalid, the default value will be resolved.
+ * <br>
+ * <br>An array of strings can be used to restrict input to only those strings, case insensitive.
+ * <br>The evaluated argument will be all lowercase.
+ * <br>If the input is not in the array, the default value is used.
+ * <br>
+ * <br>A function <code>((word, message) => {})</code> can also be used to filter or modify arguments.
+ * <br>A return value of true will let the word pass, a falsey return value will use the default value for the argument.
+ * <br>Any other truthy return value will be used as the argument.
  * @typedef {string|string[]} ArgumentType
  */
 
@@ -49,8 +51,8 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  * @prop {ArgumentMatch} [match='word'] - Method to match text.
  * @prop {ArgumentType} [type='string'] - Type to cast to.
  * @prop {string|string[]} [prefix] - The string(s) to use as the flag for prefix and flag args.
- * @prop {number} [index] - Index/word of text to start from. Applicable to word, text, or content match only.
- * @prop {*} [default=''] - Default value if text does not parse/cast correctly. Can be a function (message => {}).
+ * @prop {number} [index] - Index/word of text to start from.<br>Applicable to word, text, or content match only.
+ * @prop {any} [default=''] - Default value if text does not parse/cast correctly.<br>Can be a function <code>(message => {})</code>.
  * @prop {string|string[]} [description=''] - A description of the argument.
  */
 
@@ -108,7 +110,7 @@ class Argument {
          * @method
          * @name Argument#default
          * @param {Message} - The message that called the command.
-         * @returns {*}
+         * @returns {any}
          */
         this.default = typeof options.default === 'function' ? options.default : () => options.default;
     }

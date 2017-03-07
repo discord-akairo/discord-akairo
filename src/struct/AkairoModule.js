@@ -56,7 +56,7 @@ class AkairoModule {
         /**
          * Executes the module.
          * @method
-         * @returns {*}
+         * @returns {any}
          */
         this.exec = exec;
     }

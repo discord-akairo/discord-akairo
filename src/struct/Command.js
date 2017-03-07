@@ -11,27 +11,22 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * @prop {string|string[]} [description=''] - Description of the command.
  * @prop {boolean} [ownerOnly=false] - Whether or not to allow client owner(s) only.
  * @prop {string} [channelRestriction='none'] - Restricts channel: 'guild' or 'dm'.
- * @prop {number} [cooldown] - The command cooldown in ms.
+ * @prop {number} [cooldown] - The command cooldown in milliseconds.
  * @prop {number} [ratelimit=1] - Amount of command uses allowed until cooldown.
  * @prop {ArgumentSplit} [split='plain'] - Method to split text into words.
- * @prop {RegExp|function} [trigger] - A regex or function <code>(message => {})</code> returning regex to match in messages that are NOT commands.<br/>The exec function is now <code>((message, match) => {})</code> if non-global.<br/>Or, <code>((message, match, groups) => {})</code> if global.
- * @prop {function} [condition] - A function <code>(message => {})</code> that returns true or false on messages that are NOT commands. <br/>The exec function is now <code>(message => {})</code>.
- * @prop {Object} [options={}] - An object for custom options.<br/>Accessible with Command#options.
+ * @prop {RegExp|function} [trigger] - A regex or function <code>(message => {})</code> returning regex to match in messages that are NOT commands.<br>The exec function is <code>((message, match) => {})</code> if non-global.<br>If global, it is <code>((message, match, groups) => {})</code>.
+ * @prop {function} [condition] - A function <code>(message => {})</code> that returns true or false on messages that are NOT commands. <br>The exec function is now <code>(message => {})</code>.
+ * @prop {Object} [options={}] - An object for custom options.<br>Accessible with Command#options.
  */
 
 /**
  * The method to split text into words.
- * <br/>Possible strings are:
- * <br/>
- * <br/><code>'plain'</code> Splits word separated by whitespace.<br/>Extra whitespace is ignored.
- * <br/>
- * <br/><code>'split'</code> Splits word separated by whitespace.
- * <br/>
- * <br/><code>'quoted'</code> This is like plain, but counts text inside double quotes as one word.
- * <br/>
- * <br/><code>'sticky'</code> This is like quoted, but makes it so that quoted text must have a whitespace/another double quote before it to count as another word.<br/>It will still span multiple words.
- * <br/>
- * <br/>A regex or a character can be used instead (for example, a comma) to split the message by that regex or character.
+ * <br><code>plain</code> splits word separated by whitespace. Extra whitespace is ignored.
+ * <br><code>split</code> splits word separated by whitespace.
+ * <br><code>quoted</code> is similar to plain, but counts text inside double quotes as one word.
+ * <br><code>sticky</code> is similar to quoted, but makes it so that quoted text must have a whitespace/another double quote before it to count as another word.
+ * <br>
+ * <br>A regex or a character can be used instead (for example, a comma) to split the message by that regex or character.
  * @typedef {string} ArgumentSplit
  */
 
@@ -126,7 +121,7 @@ class Command extends AkairoModule {
          * Executes the command.
          * @method
          * @name Command#exec
-         * @returns {*}
+         * @returns {any}
          */
 
         /**
@@ -138,7 +133,7 @@ class Command extends AkairoModule {
     }
 
     /**
-     * The command handler.<br/>Alias to this.handler.
+     * The command handler.<br>Alias to this.handler.
      * @readonly
      * @type {CommandHandler}
      */

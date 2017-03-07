@@ -42,7 +42,7 @@ class Listener extends AkairoModule {
          * Executes the listener.
          * @method
          * @name Listener#exec
-         * @returns {*}
+         * @returns {any}
          */
         this.exec = this.exec.bind(this);
 
@@ -61,7 +61,7 @@ class Listener extends AkairoModule {
     }
 
     /**
-     * The listener handler.<br/>Alias to this.handler.
+     * The listener handler.<br>Alias to this.handler.
      * @readonly
      * @type {ListenerHandler}
      */

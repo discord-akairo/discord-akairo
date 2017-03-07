@@ -36,9 +36,9 @@ discord.js: `npm install discord.js --save`
 sqlite (optional): `npm install sqlite --save`  
 
 ## Links
-Github page is available on [https://github.com/1Computer1/discord-akairo](https://github.com/1Computer1/discord-akairo).  
-Changelog is available on [https://github.com/1Computer1/discord-akairo/releases](https://github.com/1Computer1/discord-akairo/releases).  
-Documentation is available on [https://1computer1.github.io/discord-akairo](https://1computer1.github.io/discord-akairo/).  
+Repository is available at [https://github.com/1Computer1/discord-akairo](https://github.com/1Computer1/discord-akairo).  
+Changelog is available at [https://github.com/1Computer1/discord-akairo/releases](https://github.com/1Computer1/discord-akairo/releases).  
+Documentation is available at [https://1computer1.github.io/discord-akairo](https://1computer1.github.io/discord-akairo/).  
 If you need more help, message me on Discord: 1Computer#7952.  
 
 ## Tutorials

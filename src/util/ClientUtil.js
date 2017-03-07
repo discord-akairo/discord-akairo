@@ -63,7 +63,7 @@ class ClientUtil {
     /**
      * Resolves a member from a string, such as an ID, a name, or a mention.
      * @param {string} text - Text to resolve.
-     * @param {Guild} [guild] - Guild to find member in. If not specified, will resolve a user instead.
+     * @param {Guild} [guild] - Guild to find member in.<br>If not specified, will resolve a user instead.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
      * @returns {GuildMember|User}
@@ -76,7 +76,7 @@ class ClientUtil {
     /**
      * Resolves multiple members from a string, such as an ID, a name, or a mention.
      * @param {string} text - Text to resolve.
-     * @param {Guild} [guild] - Guild to find members in. If not specified, will resolve user instead.
+     * @param {Guild} [guild] - Guild to find members in.<br>If not specified, will resolve users instead.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
      * @returns {Collection.<string, GuildMember|User>}
@@ -346,7 +346,7 @@ class ClientUtil {
     }
 
     /**
-     * Resolves a channel permission overwrite.<br/>Returns an object with the allow and deny arrays of permission names.
+     * Resolves a channel permission overwrite.<br>Returns an object with the allow and deny arrays of permission names.
      * @param {PermissionOverwrites} overwrite - Permissions overwrite.
      * @returns {Object}
      */
@@ -358,7 +358,7 @@ class ClientUtil {
     }
 
     /**
-     * Compares two member objects presences and checks if they stopped/started a stream or not.<br/>Returns 0, 1, or 2 for no change, stopped, or started.
+     * Compares two member objects presences and checks if they stopped/started a stream or not.<br>Returns 0, 1, or 2 for no change, stopped, or started.
      * @param {GuildMember} oldMember - The old member.
      * @param {GuildMember} newMember - The new member.
      * @returns {number}

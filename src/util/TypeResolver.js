@@ -4,6 +4,7 @@ const { Collection } = require('discord.js');
 class TypeResolver {
     /**
      * Type resolver for command arguments.
+     * <br>The types are documented under ArgumentType.
      * @param {AkairoClient} client - The client.
      */
     constructor(client){

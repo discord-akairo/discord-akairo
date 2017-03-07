@@ -14,7 +14,7 @@ class ListenerHandler extends AkairoHandler {
         super(client, options.listenerDirectory, Listener);
 
         /**
-         * EventEmitters for use, mapped by name to EventEmitter.<br/>'client', 'commandHandler', 'inhibitorHandler', 'listenerHandler' are set by default.
+         * EventEmitters for use, mapped by name to EventEmitter.<br>'client', 'commandHandler', 'inhibitorHandler', 'listenerHandler' are set by default.
          * @type {Collection.<string, EventEmitter>}
          */
         this.emitters = new Collection();
@@ -45,7 +45,7 @@ class ListenerHandler extends AkairoHandler {
     }
 
     /**
-     * Collection of listeners.<br/>Alias to this.modules.
+     * Collection of listeners.<br>Alias to this.modules.
      * @type {Collection.<string, Listener>}
      */
     get listeners(){
@@ -123,7 +123,7 @@ class ListenerHandler extends AkairoHandler {
     /**
      * Adds a listener.
      * @method
-     * @param {string} filename - Filename to lookup in the directory.<br/>A .js extension is assumed.
+     * @param {string} filename - Filename to lookup in the directory.<br>A .js extension is assumed.
      * @name ListenerHandler#add
      * @returns {Listener}
      */
