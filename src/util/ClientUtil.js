@@ -20,26 +20,36 @@ class ClientUtil {
     /**
      * Resolves a user from a string, such as an ID, a name, or a mention.
      * @param {string} text - Text to resolve.
+     * @param {Collection} users - Collection of users to find in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
      * @returns {User}
      */
-    resolveUser(text, caseSensitive = false, wholeWord = false){
-        return this.client.users.find(user => this._checkUser(user, text, caseSensitive, wholeWord));
+    resolveUser(text, users, caseSensitive = false, wholeWord = false){
+        return users.find(user => this.checkUser(text, user, caseSensitive, wholeWord));
     }
 
     /**
      * Resolves multiple users from a string, such as an ID, a name, or a mention.
      * @param {string} text - Text to resolve.
+     * @param {Collection} users - Collection of users to find in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
      * @returns {Collection.<string, User>}
      */
-    resolveUsers(text, caseSensitive = false, wholeWord = false){
-        return this.client.users.filter(user => this._checkUser(user, text, caseSensitive, wholeWord));
+    resolveUsers(text, users, caseSensitive = false, wholeWord = false){
+        return users.filter(user => this.checkUser(text, user, caseSensitive, wholeWord));
     }
 
-    _checkUser(user, text, caseSensitive, wholeWord){
+    /**
+     * Checks if a string could be referring to a user.
+     * @param {string} text - Text to check.
+     * @param {User} user - User to check.
+     * @param {boolean} [caseSensitive=false] - Makes checking by name case sensitive.
+     * @param {boolean} [wholeWord=false] - Makes checking by name match full word only.
+     * @returns {boolean}
+     */
+    checkUser(text, user, caseSensitive = false, wholeWord = false){
         if (user.id === text) return true;
 
         const reg = /<@!?(\d+)>/;
@@ -63,30 +73,36 @@ class ClientUtil {
     /**
      * Resolves a member from a string, such as an ID, a name, or a mention.
      * @param {string} text - Text to resolve.
-     * @param {Guild} [guild] - Guild to find member in.<br>If not specified, will resolve a user instead.
+     * @param {Collection} members - Collection of members to find in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
-     * @returns {GuildMember|User}
+     * @returns {GuildMember}
      */
-    resolveMember(text, guild, caseSensitive = false, wholeWord = false){
-        if (!guild) return this.resolveUser(text, caseSensitive, wholeWord);
-        return guild.members.find(member => this._checkMember(member, text, caseSensitive, wholeWord));
+    resolveMember(text, members, caseSensitive = false, wholeWord = false){
+        return members.find(member => this.checkMember(text, member, caseSensitive, wholeWord));
     }
 
     /**
      * Resolves multiple members from a string, such as an ID, a name, or a mention.
      * @param {string} text - Text to resolve.
-     * @param {Guild} [guild] - Guild to find members in.<br>If not specified, will resolve users instead.
+     * @param {Collection} members - Collection of members to find in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
-     * @returns {Collection.<string, GuildMember|User>}
+     * @returns {Collection.<string, GuildMember>}
      */
-    resolveMembers(text, guild, caseSensitive = false, wholeWord = false){
-        if (!guild) return this.resolveUsers(text, caseSensitive, wholeWord);
-        return guild.members.filter(member => this._checkMember(member, text, caseSensitive, wholeWord));
+    resolveMembers(text, members, caseSensitive = false, wholeWord = false){
+        return members.filter(member => this.checkMember(text, member, caseSensitive, wholeWord));
     }
 
-    _checkMember(member, text, caseSensitive, wholeWord){
+    /**
+     * Checks if a string could be referring to a member.
+     * @param {string} text - Text to check.
+     * @param {GuildMember} member - Member to check.
+     * @param {boolean} [caseSensitive=false] - Makes checking by name case sensitive.
+     * @param {boolean} [wholeWord=false] - Makes checking by name match full word only.
+     * @returns {boolean}
+     */
+    checkMember(text, member, caseSensitive = false, wholeWord = false){
         if (member.id === text) return true;
 
         const reg = /<@!?(\d+)>/;
@@ -113,30 +129,36 @@ class ClientUtil {
     /**
      * Resolves a guild channel from a string, such as an ID, a name, or a mention.
      * @param {string} text - Text to resolve.
-     * @param {Guild} guild - Guild to find channel in.
+     * @param {Collection} channels - Collection of channels to find in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
      * @returns {GuildChannel}
      */
-    resolveChannel(text, guild, caseSensitive = false, wholeWord = false){
-        if (!guild) throw new Error('Guild must be specified.');
-        return guild.channels.find(channel => this._checkChannel(channel, text, caseSensitive, wholeWord));
+    resolveChannel(text, channels, caseSensitive = false, wholeWord = false){
+        return channels.find(channel => this.checkChannel(text, channel, caseSensitive, wholeWord));
     }
 
     /**
      * Resolves multiple guild channels from a string, such as an ID, a name, or a mention.
      * @param {string} text - Text to resolve.
-     * @param {Guild} guild - Guild to find channels in.
+     * @param {Collection} channels - Collection of channels to find in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
      * @returns {Collection.<string, GuildChannel>}
      */
-    resolveChannels(text, guild, caseSensitive = false, wholeWord = false){
-        if (!guild) throw new Error('Guild must be specified.');
-        return guild.channels.filter(channel => this._checkChannel(channel, text, caseSensitive, wholeWord));
+    resolveChannels(text, channels, caseSensitive = false, wholeWord = false){
+        return channels.filter(channel => this.checkChannel(text, channel, caseSensitive, wholeWord));
     }
 
-    _checkChannel(channel, text, caseSensitive, wholeWord){
+    /**
+     * Checks if a string could be referring to a channel.
+     * @param {string} text - Text to check.
+     * @param {Channel} channel - Channel to check.
+     * @param {boolean} [caseSensitive=false] - Makes checking by name case sensitive.
+     * @param {boolean} [wholeWord=false] - Makes checking by name match full word only.
+     * @returns {boolean}
+     */
+    checkChannel(text, channel, caseSensitive = false, wholeWord = false){
         if (channel.id === text) return true;
 
         const reg = /<#(\d+)>/;
@@ -159,30 +181,36 @@ class ClientUtil {
     /**
      * Resolves a role from a string, such as an ID, a name, or a mention.
      * @param {string} text - Text to resolve.
-     * @param {Guild} guild - Guild to find roles in.
+     * @param {Collection} roles - Collection of roles to find in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
      * @returns {Role}
      */
-    resolveRole(text, guild, caseSensitive = false, wholeWord = false){
-        if (!guild) throw new Error('Guild must be specified.');
-        return guild.roles.find(role => this._checkRole(role, text, caseSensitive, wholeWord));
+    resolveRole(text, roles, caseSensitive = false, wholeWord = false){
+        return roles.find(role => this.checkRole(text, role, caseSensitive, wholeWord));
     }
 
     /**
      * Resolves multiple roles from a string, such as an ID, a name, or a mention.
      * @param {string} text - Text to resolve.
-     * @param {Guild} guild - Guild to find roles in.
+     * @param {Collection} roles - Collection of roles to find in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
      * @returns {Collection.<string, Role>}
      */
-    resolveRoles(text, guild, caseSensitive = false, wholeWord = false){
-        if (!guild) throw new Error('Guild must be specified.');
-        return guild.roles.filter(role => this._checkRole(role, text, caseSensitive, wholeWord));
+    resolveRoles(text, roles, caseSensitive = false, wholeWord = false){
+        return roles.filter(role => this.checkRole(text, role, caseSensitive, wholeWord));
     }
 
-    _checkRole(role, text, caseSensitive, wholeWord){
+    /**
+     * Checks if a string could be referring to a role.
+     * @param {string} text - Text to check.
+     * @param {Role} role - Role to check.
+     * @param {boolean} [caseSensitive=false] - Makes checking by name case sensitive.
+     * @param {boolean} [wholeWord=false] - Makes checking by name match full word only.
+     * @returns {boolean}
+     */
+    checkRole(text, role, caseSensitive = false, wholeWord = false){
         if (role.id === text) return true;
 
         const reg = /<@&(\d+)>/;
@@ -205,30 +233,36 @@ class ClientUtil {
     /**
      * Resolves a custom emoji from a string, such as a name or a mention.
      * @param {string} text - Text to resolve.
-     * @param {Guild} guild - Guild to find emoji in.
+     * @param {Collection} emojis - Collection of emojis to find in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
      * @returns {Emoji}
      */
-    resolveEmoji(text, guild, caseSensitive = false, wholeWord = false){
-        if (!guild) throw new Error('Guild must be specified.');
-        return guild.emojis.find(emoji => this._checkEmoji(emoji, text, caseSensitive, wholeWord));
+    resolveEmoji(text, emojis, caseSensitive = false, wholeWord = false){
+        return emojis.find(emoji => this.checkEmoji(text, emoji, caseSensitive, wholeWord));
     }
 
     /**
      * Resolves multiple custom emojis from a string, such as a name or a mention.
      * @param {string} text - Text to resolve.
-     * @param {Guild} guild - Guild to find emojis in.
+     * @param {Collection} emojis - Collection of emojis to find in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
      * @returns {Collection.<string, Emoji>}
      */
-    resolveEmojis(text, guild, caseSensitive = false, wholeWord = false){
-        if (!guild) throw new Error('Guild must be specified.');
-        return guild.emojis.filter(emoji => this._checkEmoji(emoji, text, caseSensitive, wholeWord));
+    resolveEmojis(text, emojis, caseSensitive = false, wholeWord = false){
+        return emojis.filter(emoji => this.checkEmoji(text, emoji, caseSensitive, wholeWord));
     }
 
-    _checkEmoji(emoji, text, caseSensitive, wholeWord){
+    /**
+     * Checks if a string could be referring to a emoji.
+     * @param {string} text - Text to check.
+     * @param {Emoji} emoji - Emoji to check.
+     * @param {boolean} [caseSensitive=false] - Makes checking by name case sensitive.
+     * @param {boolean} [wholeWord=false] - Makes checking by name match full word only.
+     * @returns {boolean}
+     */
+    checkEmoji(text, emoji, caseSensitive = false, wholeWord = false){
         if (emoji.id === text) return true;
 
         const reg = /<:[a-zA-Z0-9_]+:(\d+)>/;
@@ -251,26 +285,36 @@ class ClientUtil {
     /**
      * Resolves a guild from a string, such as an ID or a name.
      * @param {string} text - Text to resolve.
+     * @param {Collection} guilds - Collection of guilds to find in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
      * @returns {Guild}
      */
-    resolveGuild(text, caseSensitive = false, wholeWord = false){
-        return this.client.guilds.find(guild => this._checkGuild(guild, text, caseSensitive, wholeWord));
+    resolveGuild(text, guilds, caseSensitive = false, wholeWord = false){
+        return guilds.find(guild => this.checkGuild(text, guild, caseSensitive, wholeWord));
     }
 
     /**
      * Resolves multiple guilds from a string, such as an ID or a name.
      * @param {string} text - Text to resolve.
+     * @param {Collection} guilds - Collection of guilds to find in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
      * @returns {Collection.<string, Guild>}
      */
-    resolveGuilds(text, caseSensitive = false, wholeWord = false){
-        return this.client.guilds.filter(guild => this._checkGuild(guild, text, caseSensitive, wholeWord));
+    resolveGuilds(text, guilds, caseSensitive = false, wholeWord = false){
+        return guilds.filter(guild => this.checkGuild(text, guild, caseSensitive, wholeWord));
     }
 
-    _checkGuild(guild, text, caseSensitive, wholeWord){
+    /**
+     * Checks if a string could be referring to a guild.
+     * @param {string} text - Text to check.
+     * @param {Guild} guild - Guild to check.
+     * @param {boolean} [caseSensitive=false] - Makes checking by name case sensitive.
+     * @param {boolean} [wholeWord=false] - Makes checking by name match full word only.
+     * @returns {boolean}
+     */
+    checkGuild(guild, text, caseSensitive, wholeWord){
         if (guild.id === text) return true;
 
         text = caseSensitive ? text : text.toLowerCase();

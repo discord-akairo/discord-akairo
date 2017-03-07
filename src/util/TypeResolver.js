@@ -46,26 +46,26 @@ class TypeResolver {
     }
 
     [ArgumentTypes.USER](word, def){
-        const res = val => this.client.util.resolveUser(val);
+        const res = val => this.client.util.resolveUser(val, this.client.users);
         if (!word) return res(def);
         return res(word) || res(def);
     }
 
     [ArgumentTypes.USERS](word, def){
-        const res = val => this.client.util.resolveUsers(val);
+        const res = val => this.client.util.resolveUsers(val, this.client.users);
         if (!word) return res(def);
         const users = res(word);
         return users.size ? users : res(def);
     }
 
     [ArgumentTypes.MEMBER](word, def, message){
-        const res = val => this.client.util.resolveMember(val, message.guild);
+        const res = val => this.client.util.resolveMember(val, message.guild.members);
         if (!word) return res(def);
         return res(word) || res(def);
     }
 
     [ArgumentTypes.MEMBERS](word, def, message){
-        const res = val => this.client.util.resolveMembers(val, message.guild);
+        const res = val => this.client.util.resolveMembers(val, message.guild.members);
         if (!word) return res(def);
         const members = res(word);
         return members.size ? members : res(def);
@@ -73,8 +73,15 @@ class TypeResolver {
 
     [ArgumentTypes.RELEVANT](word, def, message){
         const res = message.channel.type === 'text'
-        ? val => this.client.util.resolveMember(val, message.guild)
-        : val => this.client.util.resolveUser(val);
+        ? val => this.client.util.resolveMember(val, message.guild.members)
+        : message.channel.type === 'dm'
+        ? val => this.client.util.resolveUser(val, new Collection([
+            [message.channel.recipient.id, message.channel.recipient],
+            [this.client.user.id, this.client.user]
+        ]))
+        : val => this.client.util.resolveUser(val, new Collection([
+            [this.client.user.id, this.client.user]
+        ]).concat(message.channel.recipients));
 
         let person;
 
@@ -86,20 +93,20 @@ class TypeResolver {
 
         if (!person) return null;
         if (message.channel.type === 'text') return person.user;
-
-        if (message.channel.type === 'dm'){
-            if (message.channel.recipient.id === person.id || this.client.user.id === person.id) return person;
-        }
-
-        if (message.channel.type === 'group'){
-            if (message.channel.recipients.has(person.id) || this.client.user.id === person.id) return person;
-        }
+        return person;
     }
 
     [ArgumentTypes.RELEVANTS](word, def, message){
         const res = message.channel.type === 'text'
-        ? val => this.client.util.resolveMembers(val, message.guild)
-        : val => this.client.util.resolveUsers(val);
+        ? val => this.client.util.resolveMembers(val, message.guild.members)
+        : message.channel.type === 'dm'
+        ? val => this.client.util.resolveUsers(val, new Collection([
+            [message.channel.recipient.id, message.channel.recipient],
+            [this.client.user.id, this.client.user]
+        ]))
+        : val => this.client.util.resolveUsers(val, new Collection([
+            [this.client.user.id, this.client.user]
+        ]).concat(message.channel.recipients));
 
         let persons;
 
@@ -111,31 +118,24 @@ class TypeResolver {
 
         if (!persons.size) return null;
         if (message.channel.type === 'text') return new Collection(persons.map(m => [m.id, m.user]));
-
-        if (message.channel.type === 'dm'){
-            return persons.filter(p => message.channel.recipient.id === p.id || this.client.user.id === p.id);
-        }
-
-        if (message.channel.type === 'group'){
-            return persons.filter(p => message.channel.recipients.has(p.id) || this.client.user.id === p.id);
-        }
+        return persons;
     }
 
     [ArgumentTypes.CHANNEL](word, def, message){
-        const res = val => this.client.util.resolveChannel(val, message.guild);
+        const res = val => this.client.util.resolveChannel(val, message.guild.channels);
         if (!word) return res(def);
         return res(word) || res(def);
     }
 
     [ArgumentTypes.CHANNELS](word, def, message){
-        const res = val => this.client.util.resolveChannels(val, message.guild);
+        const res = val => this.client.util.resolveChannels(val, message.guild.channels);
         if (!word) return res(def);
         const channels = res(word);
         return channels.size ? channels : res(def);
     }
 
     [ArgumentTypes.TEXT_CHANNEL](word, def, message){
-        const res = val => this.client.util.resolveChannel(val, message.guild);
+        const res = val => this.client.util.resolveChannel(val, message.guild.channels);
         if (!word) return res(def);
 
         const channel = res(word);
@@ -145,7 +145,7 @@ class TypeResolver {
     }
 
     [ArgumentTypes.TEXT_CHANNELS](word, def, message){
-        const res = val => this.client.util.resolveChannels(val, message.guild);
+        const res = val => this.client.util.resolveChannels(val, message.guild.channels);
         if (!word) return res(def);
 
         const channels = res(word);
@@ -155,7 +155,7 @@ class TypeResolver {
     }
 
     [ArgumentTypes.VOICE_CHANNEL](word, def, message){
-        const res = val => this.client.util.resolveChannel(val, message.guild);
+        const res = val => this.client.util.resolveChannel(val, message.guild.channels);
         if (!word) return res(def);
 
         const channel = res(word);
@@ -165,7 +165,7 @@ class TypeResolver {
     }
 
     [ArgumentTypes.VOICE_CHANNELS](word, def, message){
-        const res = val => this.client.util.resolveChannels(val, message.guild);
+        const res = val => this.client.util.resolveChannels(val, message.guild.channels);
         if (!word) return res(def);
 
         const channels = res(word);
@@ -175,39 +175,39 @@ class TypeResolver {
     }
 
     [ArgumentTypes.ROLE](word, def, message){
-        const res = val => this.client.util.resolveRole(val, message.guild);
+        const res = val => this.client.util.resolveRole(val, message.guild.roles);
         if (!word) return res(def);
         return res(word) || res(def);
     }
 
     [ArgumentTypes.ROLES](word, def, message){
-        const res = val => this.client.util.resolveRoles(val, message.guild);
+        const res = val => this.client.util.resolveRoles(val, message.guild.roles);
         if (!word) return res(def);
         const roles = res(word);
         return roles.size ? roles : res(def);
     }
 
     [ArgumentTypes.EMOJI](word, def, message){
-        const res = val => this.client.util.resolveEmoji(val, message.guild);
+        const res = val => this.client.util.resolveEmoji(val, message.guild.emojis);
         if (!word) return res(def);
         return res(word) || res(def);
     }
 
     [ArgumentTypes.EMOJIS](word, def, message){
-        const res = val => this.client.util.resolveEmojis(val, message.guild);
+        const res = val => this.client.util.resolveEmojis(val, message.guild.emojis);
         if (!word) return res(def);
         const emojis = res(word);
         return emojis.size ? emojis : res(def);
     }
 
-    [ArgumentTypes.GUILD](word, def, message){
-        const res = val => this.client.util.resolveGuild(val, message.guild);
+    [ArgumentTypes.GUILD](word, def){
+        const res = val => this.client.util.resolveGuild(val, this.client.guilds);
         if (!word) return res(def);
         return res(word) || res(def);
     }
 
-    [ArgumentTypes.GUILDS](word, def, message){
-        const res = val => this.client.util.resolveGuilds(val, message.guild);
+    [ArgumentTypes.GUILDS](word, def){
+        const res = val => this.client.util.resolveGuilds(val, this.client.guilds);
         if (!word) return res(def);
         const guilds = res(word);
         return guilds.size ? guilds : res(def);
