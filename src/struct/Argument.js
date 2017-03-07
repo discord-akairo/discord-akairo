@@ -191,6 +191,7 @@ class Argument {
         prompt.on = {};
         
         Object.assign(prompt.on, this.command.handler.defaultPrompts);
+        Object.assign(prompt.on, this.command.defaultPrompts);
         Object.assign(prompt.on, this.prompt && this.prompt.on || {});
 
         const retry = i => {
@@ -216,7 +217,7 @@ class Argument {
                     throw 'cancel';
                 });
                 
-                return i >= this.prompt && this.prompt.retries || 1 ? message.channel.send(prompt.on.end.call(this, message)).then(() => {
+                return i > (this.prompt && this.prompt.retries || 1) ? message.channel.send(prompt.on.end.call(this, message)).then(() => {
                     this.command.handler.prompts.delete(message.author.id + message.channel.id);
                     throw 'end';
                 }) : retry(i + 1);

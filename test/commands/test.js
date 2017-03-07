@@ -13,7 +13,7 @@ module.exports = new Command('test', exec, {
             type: 'number',
             prompt: {
                 on: {
-                    start: () => 'type a number'
+                    start: () => 'this is from arg'
                 },
                 retries: 2
             }
@@ -24,6 +24,19 @@ module.exports = new Command('test', exec, {
             prompt: {
                 retries: 1
             }
+        },
+        {
+            id: 'thing5',
+            type: 'number',
+            prompt: {
+                on: {
+                    retry: () => 'retry from arg'
+                },
+                retries: 3
+            }
         }
-    ]
+    ],
+    defaultPrompts: {
+        start: () => 'this is from command'
+    }
 });
