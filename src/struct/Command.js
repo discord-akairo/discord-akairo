@@ -10,7 +10,7 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * @prop {string} [category='default'] - Category ID for organization purposes.
  * @prop {string|string[]} [description=''] - Description of the command.
  * @prop {boolean} [ownerOnly=false] - Whether or not to allow client owner(s) only.
- * @prop {string} [channelRestriction='none'] - Restricts channel: 'guild' or 'dm'.
+ * @prop {string} [channelRestriction] - Restricts channel: 'guild' or 'dm'.
  * @prop {number} [cooldown] - The command cooldown in milliseconds.
  * @prop {number} [ratelimit=1] - Amount of command uses allowed until cooldown.
  * @prop {ArgumentSplit} [split='plain'] - Method to split text into words.
@@ -69,7 +69,7 @@ class Command extends AkairoModule {
          * Usable only in this channel type.
          * @type {string}
          */
-        this.channelRestriction = options.channelRestriction || 'none';
+        this.channelRestriction = options.channelRestriction;
 
         /**
          * Cooldown in milliseconds.
