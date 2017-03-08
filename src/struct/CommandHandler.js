@@ -55,7 +55,8 @@ class CommandHandler extends AkairoHandler {
             ended: function(m){ return `${m.author}, retries limit reached for command.`; },
             cancel: function(m){ return `${m.author}, command cancelled.`; },
             retries: 1,
-            time: 30000
+            time: 30000,
+            cancelWord: 'cancel'
         };
 
         Object.assign(this.defaultPrompt, options.defaultPrompt || {});
