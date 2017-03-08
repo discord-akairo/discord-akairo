@@ -46,6 +46,7 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
 /**
  * A prompt to run if the user did not input the argument correctly.
  * <br>Can only be used if there is not a default value (unless optional is true).
+ * @typedef {Object} PromptOptions
  * <br>The functions are <code>(message => {})</code> and are used to determine the reply.
  * @prop {number} [retries=1] - Amount of times allowed to retries.
  * @prop {number} [time=30000] - Time to wait for input.
@@ -56,12 +57,11 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  * @prop {function} [timeout] - Function called on collector time out.
  * @prop {function} [ended] - Function called on no retries left.
  * @prop {function} [cancel] - Function called on cancel.
- * @typedef {Object} PromptOptions
  */
 
 /**
  * Options for how an argument parses text.
- * @typedef ArgumentOptions
+ * @typedef {Object} ArgumentOptions
  * @prop {string} id - ID of the argument for use in the args object.
  * @prop {ArgumentMatch} [match='word'] - Method to match text.
  * @prop {ArgumentType} [type='string'] - Type to cast to.
