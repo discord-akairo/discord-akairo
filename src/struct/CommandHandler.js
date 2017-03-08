@@ -381,7 +381,8 @@ class CommandHandler extends AkairoHandler {
 module.exports = CommandHandler;
 
 /**
- * Emitted when a message is blocked by a pre-message inhibitor.<br>The built-in inhibitors are 'notSelf' (for selfbots), 'client', and 'bot'.
+ * Emitted when a message is blocked by a pre-message inhibitor.
+ * <br>The built-in inhibitors are 'notSelf' (for selfbots), 'client', and 'bot'.
  * @event CommandHandler#messageBlocked
  * @param {Message} message - Message sent.
  * @param {string} reason - Reason for the block.
@@ -401,7 +402,8 @@ module.exports = CommandHandler;
  */
 
 /**
- * Emitted when a command is blocked by a post-message inhibitor.<br>The built-in inhibitors are 'owner', 'guild', and 'dm'.
+ * Emitted when a command is blocked by a post-message inhibitor.
+ * <br>The built-in inhibitors are 'owner', 'guild', and 'dm'.
  * @event CommandHandler#commandBlocked
  * @param {Message} message - Message sent.
  * @param {Command} command - Command blocked.
@@ -431,7 +433,8 @@ module.exports = CommandHandler;
  */
 
 /**
- * Emitted when a user is in a command prompt.
+ * Emitted when a user is in a command argument prompt.
+ * <br>Used to prevent usage of commands during a prompt.
  * @event CommandHandler#inPrompt
  * @param {Message} message - Message sent.
  */
