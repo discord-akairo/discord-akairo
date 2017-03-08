@@ -1,5 +1,4 @@
 const { Command } = require('../../src/index.js');
-const util = require('util');
 
 function exec(message, args){
     return console.log(args);

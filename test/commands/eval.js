@@ -30,7 +30,7 @@ function exec(message, args){
         return evaled.message.edit(`📥\u2000**Input**${cb}js\n${args.code}\n${cb}\n${title}${cb}js\n${evaled.output}\n${cb}`);
     };
 
-    const result = new Promise(resolve => resolve(eval(`(async () => { ${args.code} })()`)));
+    const result = new Promise(resolve => resolve(eval(args.code)));
     const cb = '```';
 
     return result.then(output => {
