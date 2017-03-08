@@ -30,6 +30,16 @@ client.login('TOKEN').then(() => {
 });
 ```
 
+## Features
+- Modules for commands, inhibitors, and listeners.
+- Extremely flexible command options and behavior.
+- Many types of arguments, including flag arguments.
+- Prompting for arguments.
+- Resolvers for Discord objects.
+- Lots of utilities.
+- Easy way to use SQLite.
+- Easily extendable module loading.
+
 ## Installation
 discord-akairo: `npm install discord-akairo --save`  
 discord.js: `npm install discord.js --save`  

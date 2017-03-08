@@ -32,7 +32,6 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  * <br>
  * <br>Many of these types can only be used in a guild.
  * <br>You can also pluralize the type to get a Collection of resolved objects instead.
- * <br>If any (except relevant) of the above are invalid, the default value will be resolved.
  * <br>
  * <br>An array of strings can be used to restrict input to only those strings, case insensitive.
  * <br>The evaluated argument will be all lowercase.
