@@ -72,12 +72,6 @@ class CommandHandler extends AkairoHandler {
         Object.assign(this.defaultPrompt, options.defaultPrompt || {});
 
         /**
-         * Word used to cancel a prompt.
-         * @type {string}
-         */
-        this.cancelWord = options.cancelWord || 'cancel';
-
-        /**
          * Default cooldown for commands.
          * @type {number}
          */
