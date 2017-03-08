@@ -45,24 +45,20 @@ class CommandHandler extends AkairoHandler {
         this.prompts = new Set();
 
         /**
-         * Default prompt functions.
-         * @type {PromptFunctions}
+         * Default prompt options.
+         * @type {PromptOptions}
          */
-        this.defaultPrompts = {
+        this.defaultPrompt = {
             start: function(m){ return `${m.author}, you need to input a valid ${this.type}!`; },
             retry: function(m){ return `${m.author}, you need to input a valid ${this.type}!`; },
-            time: function(m){ return `${m.author}, time ran out for command.`; },
-            end: function(m){ return `${m.author}, retries limit reached for command.`; },
-            cancel: function(m){ return `${m.author}, command cancelled.`; }
+            timeout: function(m){ return `${m.author}, time ran out for command.`; },
+            ended: function(m){ return `${m.author}, retries limit reached for command.`; },
+            cancel: function(m){ return `${m.author}, command cancelled.`; },
+            retries: 1,
+            time: 30000
         };
 
-        Object.assign(this.defaultPrompts, options.defaultPrompts || {});
-
-        /**
-         * Default amount of retries for a prompt.
-         * @type {number}
-         */
-        this.defaultRetries = options.defaultRetries || 1;
+        Object.assign(this.defaultPrompt, options.defaultPrompt || {});
 
         /**
          * Word used to cancel a prompt.

@@ -47,21 +47,15 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
 /**
  * A prompt to run if the user did not input the argument correctly.
  * <br>Can only be used if there is not a default value.
- * @prop {PromptFunctions} on - Functions called in prompts.
+ * <br>The functions are <code>(message => {})</code> and are used to determine the reply.
  * @prop {number} [retries=1] - Amount of times to retries.
  * @prop {number} [time=30000] - Time to wait for input.
+ * @prop {function} [start] - Function called on start.
+ * @prop {function} [retry] - Function called on a retry.
+ * @prop {function} [timeout] - Function called on collector time out.
+ * @prop {function} [ended] - Function called on no retries left.
+ * @prop {function} [cancel] - Function called on cancel.
  * @typedef {Object} PromptOptions
- */
-
-/**
- * Functions <code>(message => {})</code> called at various stages in a prompt to use as the text.
- * <br>Defaults can be set at AkairoOptions in defaultPrompts.
- * @typedef {Object} PromptFunctions
- * @prop {function} [start] - Called on start.
- * @prop {function} [retry] - Called on a retry.
- * @prop {function} [time] - Called on collector time out.
- * @prop {function} [end] - Called on no retries left.
- * @prop {function} [cancel] - Called on cancel.
  */
 
 /**
@@ -188,41 +182,40 @@ class Argument {
 
     _promptArgument(message){
         const prompt = Object.assign({}, this.prompt || {});
-        prompt.on = {};
         
-        Object.assign(prompt.on, this.command.handler.defaultPrompts);
-        Object.assign(prompt.on, this.command.defaultPrompts);
-        Object.assign(prompt.on, this.prompt && this.prompt.on || {});
+        Object.assign(prompt, this.command.handler.defaultPrompt);
+        Object.assign(prompt, this.command.defaultPrompt);
+        Object.assign(prompt, this.prompt || {});
 
         const retry = i => {
             this.command.handler.prompts.add(message.author.id + message.channel.id);
-            const text = i === 1 ? prompt.on.start.call(this, message) : prompt.on.retry.call(this, message);
+            const text = i === 1 ? prompt.start.call(this, message) : prompt.retry.call(this, message);
 
             let value;
 
             return this.command.client.util.prompt(message, text, m => {
-                if (m.content.toLowerCase() === this.command.handler.cancelWord.toLowerCase()) throw 'cancel';
+                if (m.content.toLowerCase() === (prompt.cancelWord || 'cancel')) throw 'cancel';
 
                 const res = this._processType(m.content, m);
                 value = res;
                 return res;
-            }, this.prompt && this.prompt.time || 30000).then(() => value).catch(reason => {
+            }, prompt.time).then(() => value).catch(reason => {
                 if (reason instanceof Error){
                     this.command.handler.prompts.delete(message.author.id + message.channel.id);
                     throw reason;
                 }
 
-                if (reason === 'time') return message.channel.send(prompt.on.time.call(this, message)).then(() => {
+                if (reason === 'time') return message.channel.send(prompt.timeout.call(this, message)).then(() => {
                     this.command.handler.prompts.delete(message.author.id + message.channel.id);
                     throw 'time';
                 });
 
-                if (reason === 'cancel') return message.channel.send(prompt.on.cancel.call(this, message)).then(() => {
+                if (reason === 'cancel') return message.channel.send(prompt.cancel.call(this, message)).then(() => {
                     this.command.handler.prompts.delete(message.author.id + message.channel.id);
                     throw 'cancel';
                 });
                 
-                return i > (this.prompt && this.prompt.retries || this.command.handler.defaultRetries) ? message.channel.send(prompt.on.end.call(this, message)).then(() => {
+                return i > prompt.retries ? message.channel.send(prompt.ended.call(this, message)).then(() => {
                     this.command.handler.prompts.delete(message.author.id + message.channel.id);
                     throw 'end';
                 }) : retry(i + 1);

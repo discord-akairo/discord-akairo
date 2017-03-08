@@ -11,17 +11,25 @@ module.exports = new Command('test', exec, {
         {
             id: 'thing',
             type: 'number',
-            prompt: true
+            prompt: {
+                start: () => 'text from argument'
+            }
         },
         {
             id: 'thing2',
             type: 'number',
-            prompt: true
+            prompt: {
+                retries: 1
+            }
         },
         {
             id: 'thing3',
             type: 'member',
             prompt: true
         }
-    ]
+    ],
+    defaultPrompt: {
+        start: () => 'text from command',
+        retries: 5
+    }
 });
