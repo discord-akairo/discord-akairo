@@ -22,7 +22,7 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  * <br>Possible Discord-related types:
  * <br><code>user</code> tries to resolve to a user.
  * <br><code>member</code> tries to resolve to a member.
- * <br><code>relevant</code> tries to resolve to a relevant user. Works in both guilds and DMs.
+ * <br><code>relevant</code> tries to resolve to a relevant user in both guilds and DMs.
  * <br><code>channel</code> tries to resolve to a channel.
  * <br><code>textChannel</code> tries to resolve to a text channel.
  * <br><code>voiceChannel</code> tries to resolve to a voice channel.
@@ -74,7 +74,7 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  * @prop {number} [index] - Index/word of text to start from.<br>Applicable to word, text, or content match only.
  * @prop {any} [default=''] - Default value if text does not parse/cast correctly.<br>Can be a function <code>(message => {})</code>.
  * @prop {string|string[]} [description=''] - A description of the argument.
- * @prop {PromptOptions} [prompt] - Prompt options for if argument is not provided.
+ * @prop {PromptOptions} [prompt] - Prompt options for when user does not provide input.<br>Must not have a default value for this to work.
  */
 
 class Argument {
@@ -222,7 +222,7 @@ class Argument {
                     throw 'cancel';
                 });
                 
-                return i > (this.prompt && this.prompt.retries || 1) ? message.channel.send(prompt.on.end.call(this, message)).then(() => {
+                return i > (this.prompt && this.prompt.retries || this.command.handler.defaultRetries) ? message.channel.send(prompt.on.end.call(this, message)).then(() => {
                     this.command.handler.prompts.delete(message.author.id + message.channel.id);
                     throw 'end';
                 }) : retry(i + 1);

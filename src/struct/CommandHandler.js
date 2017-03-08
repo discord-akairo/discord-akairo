@@ -59,6 +59,12 @@ class CommandHandler extends AkairoHandler {
         Object.assign(this.defaultPrompts, options.defaultPrompts || {});
 
         /**
+         * Default amount of retries for a prompt.
+         * @type {number}
+         */
+        this.defaultRetries = options.defaultRetries || 1;
+
+        /**
          * Word used to cancel a prompt.
          * @type {string}
          */
