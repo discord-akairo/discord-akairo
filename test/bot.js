@@ -4,8 +4,12 @@ const client = new AkairoClient({
     prefix: '.',
     ownerID: '123992700587343872',
     commandDirectory: './test/commands/',
-    listenerDirectory: './test/listeners/'
+    listenerDirectory: './test/listeners/',
+    handleEdits: true
 });
+
+const { Collection } = require('discord.js');
+client.mem.edits = new Collection();
 
 client.login(require('./auth.json').token).then(() => {
     console.log('Ready!');

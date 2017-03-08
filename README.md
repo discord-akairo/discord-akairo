@@ -35,10 +35,11 @@ client.login('TOKEN').then(() => {
 - Extremely flexible command options and behavior.
 - Many types of arguments, including flag arguments.
 - Prompting for arguments.
+- Handling edited messages.
 - Resolvers for Discord objects.
 - Lots of utilities.
 - Easy way to use SQLite.
-- Easily extendable module loading.
+- Easily extendable classes.
 
 ## Installation
 discord-akairo: `npm install discord-akairo --save`  
@@ -60,3 +61,4 @@ If you need more help, message me on Discord: 1Computer#7952.
 6. [Storing Data with SQLite](https://1computer1.github.io/discord-akairo/tutorial-6.%20Storing%20Data%20with%20SQLite.html)
 7. [Regex and Conditionals](https://1computer1.github.io/discord-akairo/tutorial-7.%20Regex%20and%20Conditionals.html)
 8. [Argument Prompting](https://1computer1.github.io/discord-akairo/tutorial-8.%20Argument%20Prompting.html)
+9. [Handling Edits](https://1computer1.github.io/discord-akairo/tutorial-9.%20Handling%20Edits.html)

@@ -13,6 +13,7 @@ const ClientUtil = require('../util/ClientUtil');
  * @prop {string|string[]|function} [prefix='!'] - Default command prefix(es) or function <code>(message => {})</code> returning prefix(es).
  * @prop {boolean|function} [allowMention=true] - Whether or not to allow mentions to the client user as a prefix.
  * <br>Can be function <code>(message => {})</code> that returns true or false.
+ * @prop {boolean} [handleEdits=false] - Whether or not to handle edited messages.
  * @prop {number} [defaultCooldown=0] - The default cooldown for commands.
  * @prop {PromptOptions} [defaultPrompt] - The default prompt options.
  * @prop {string} [inhibitorDirectory] - Directory to inhibitors.
@@ -103,7 +104,15 @@ class AkairoClient extends Client {
                 Promise.all(promises).then(() => resolve()).catch(reject);
             });
 
-            if (this.commandHandler) this.on('message', m => { this.commandHandler.handle(m); });
+            if (this.commandHandler){
+                this.on('message', m => {
+                    this.commandHandler.handle(m, false);
+                });
+
+                if (this._options.handleEdits) this.on('messageUpdate', (o, m) => {
+                    this.commandHandler.handle(m, true);
+                });
+            }
         });
     }
 

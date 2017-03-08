@@ -130,9 +130,10 @@ class CommandHandler extends AkairoHandler {
     /**
      * Handles a message.
      * @param {Message} message - Message to handle.
+     * @param {boolean} edited - Whether or not the message was edited.
      * @returns {Promise}
      */
-    handle(message){
+    handle(message, edited){
         if (this.preInhibitors){
             if (message.author.id !== this.client.user.id && this.client.selfbot){
                 this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.NOT_SELF);
@@ -182,18 +183,19 @@ class CommandHandler extends AkairoHandler {
                 if (mentioned){
                     start = mentioned[0];
                 } else {
-                    return this._handleTriggers(message);
+                    return this._handleTriggers(message, edited);
                 }
             } else {
-                return this._handleTriggers(message);
+                return this._handleTriggers(message, edited);
             }
 
             const firstWord = message.content.replace(start, '').search(/\S/) + start.length;
             const name = message.content.slice(firstWord).split(' ')[0];
             const command = this.findCommand(name);
 
-            if (!command) return this._handleTriggers(message);
+            if (!command) return this._handleTriggers(message, edited);
             if (!command.enabled) return void this.emit(CommandHandlerEvents.COMMAND_DISABLED, message, command);
+            if (edited && !command.editable) return;
 
             if (this.postInhibitors){
                 if (command.ownerOnly){
@@ -229,10 +231,10 @@ class CommandHandler extends AkairoHandler {
                 const content = message.content.slice(message.content.indexOf(name) + name.length + 1);
 
                 return command.parse(content, message).then(args => {
-                    this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command);
-                    const end = Promise.resolve(command.exec(message, args));
+                    this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, edited);
+                    const end = Promise.resolve(command.exec(message, args, edited));
 
-                    return end.then(() => void this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command))
+                    return end.then(() => void this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, edited))
                     .catch(err => this._handleError(err, message, command));
                 }).catch(err => {
                     if (err instanceof Error) throw err;
@@ -283,8 +285,8 @@ class CommandHandler extends AkairoHandler {
         return false;
     }
 
-    _handleTriggers(message){
-        const matchedCommands = this.commands.filter(c => c.enabled && c.trigger(message));
+    _handleTriggers(message, edited){
+        const matchedCommands = this.commands.filter(c => (!c.editable || edited && c.editable) && c.enabled && c.trigger(message));
         const triggered = [];
 
         for (const c of matchedCommands.values()){
@@ -311,13 +313,13 @@ class CommandHandler extends AkairoHandler {
             if (onCooldown) return;
 
             this.emit(CommandHandlerEvents.COMMAND_STARTED, message, c[0]);
-            const end = Promise.resolve(c[0].exec(message, c[1], c[2]));
+            const end = Promise.resolve(c[0].exec(message, c[1], c[2], edited));
 
             return end.then(() => void this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, c[0])).catch(err => {
                 return this._handleError(err, message, c[0]);
             });
         })).then(() => {
-            const trueCommands = this.commands.filter(c => c.enabled && c.condition(message));
+            const trueCommands = this.commands.filter(c => (!c.editable || edited && c.editable) && c.enabled && c.condition(message));
             
             if (!trueCommands.size) return void this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
 
@@ -326,7 +328,7 @@ class CommandHandler extends AkairoHandler {
                 if (onCooldown) return;
                 
                 this.emit(CommandHandlerEvents.COMMAND_STARTED, message, c);
-                const end = Promise.resolve(c.exec(message));
+                const end = Promise.resolve(c.exec(message, edited));
 
                 return end.then(() => void this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, c)).catch(err => {
                     return this._handleError(err, message, c);
@@ -429,6 +431,7 @@ module.exports = CommandHandler;
  * @event CommandHandler#commandStarted
  * @param {Message} message - Message sent.
  * @param {Command} command - Command executed.
+ * @param {boolean} edited - Whether or not the command came from an edited message.
  */
 
 /**
@@ -436,6 +439,7 @@ module.exports = CommandHandler;
  * @event CommandHandler#commandFinished
  * @param {Message} message - Message sent.
  * @param {Command} command - Command executed.
+ * @param {boolean} edited - Whether or not the command came from an edited message.
  */
 
 /**

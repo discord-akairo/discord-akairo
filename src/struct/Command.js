@@ -12,13 +12,14 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * @prop {string} [category='default'] - Category ID for organization purposes.
  * @prop {boolean} [ownerOnly=false] - Whether or not to allow client owner(s) only.
  * @prop {boolean} [protected=false] - Whether or not this command cannot be disabled.
+ * @prop {boolean} [editable=false] - Whether or not message edits will run this command.
+ * <br>On an edited message, the exec function edited param will be true.
  * @prop {number} [cooldown] - The command cooldown in milliseconds.
  * @prop {number} [ratelimit=1] - Amount of command uses allowed until cooldown.
  * @prop {RegExp|function} [trigger] - A regex or function <code>(message => {})</code> returning regex to match in messages that are NOT commands.
- * <br>The exec function is <code>((message, match) => {})</code> if non-global.
- * <br>If global, it is <code>((message, match, groups) => {})</code>.
- * @prop {function} [condition] - A function <code>(message => {})</code> that returns true or false on messages that are NOT commands.
- * <br>The exec function is <code>(message => {})</code>.
+ * <br>The exec function is <code>((message, match, groups, edited) => {})</code>.
+ * @prop {function} [condition] - A function <code>((message, edited) => {})</code> that returns true or false on messages that are NOT commands.
+ * <br>The exec function is <code>((message, edited) => {})</code>.
  * @prop {PromptOptions} [defaultPrompt={}] - The default prompt options.
  * @prop {Object} [options={}] - An object for custom options.
  * @prop {string|string[]} [description=''] - Description of the command.
@@ -41,7 +42,7 @@ class Command extends AkairoModule {
     /**
      * Creates a new command.
      * @param {string} id - Command ID.
-     * @param {function} exec - Function <code>((message, args) => {})</code> called when command is ran.
+     * @param {function} exec - Function <code>((message, args, edited) => {})</code> called when command is ran.
      * @param {CommandOptions} [options={}] - Options for the command.
      */
     constructor(id, exec, options = {}){
@@ -82,6 +83,12 @@ class Command extends AkairoModule {
          * @type {boolean}
          */
         this.protected = !!options.protected;
+
+        /**
+         * Whether or not this command can be ran by an edit.
+         * @type {boolean}
+         */
+        this.editable = !!options.editable;
 
         /**
          * Cooldown in milliseconds.

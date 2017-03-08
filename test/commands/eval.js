@@ -68,5 +68,6 @@ module.exports = new Command('async', exec, {
             match: 'content'
         }
     ],
-    ownerOnly: true
+    ownerOnly: true,
+    editable: true
 });
