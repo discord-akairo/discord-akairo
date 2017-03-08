@@ -464,7 +464,7 @@ class ClientUtil {
 
                     if (typeof check === 'function'){
                         const checked = check(m);
-                        passed = checked != null || checked !== false;
+                        passed = checked != null && checked !== false;
                     } else {
                         passed = check.test(m.content);
                     }
