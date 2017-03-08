@@ -14,6 +14,7 @@ const ClientUtil = require('../util/ClientUtil');
  * @prop {boolean|function} [allowMention=true] - Whether or not to allow mentions to the client user as a prefix.<br>Can be function <code>(message => {})</code> that returns true or false.
  * @prop {number} [defaultCooldown=0] - The default cooldown for commands.
  * @prop {PromptFunctions} [defaultPrompts] - The default prompt functions.
+ * @prop {string} [cancelWord='cancel'] - Word to use to cancel a prompt.
  * @prop {string} [inhibitorDirectory] - Directory to inhibitors.
  * @prop {boolean} [preInhibitors=true] - Whether or not to enable the built-in pre-message inhibitors.
  * @prop {boolean} [postInhibitors=true] - Whether or not to enable the built-in post-message inhibitors.

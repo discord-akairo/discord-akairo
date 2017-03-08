@@ -201,7 +201,7 @@ class Argument {
             let value;
 
             return this.command.client.util.prompt(message, text, m => {
-                if (m.content.toLowerCase() === 'cancel') throw 'cancel';
+                if (m.content.toLowerCase() === this.command.handler.cancelWord.toLowerCase()) throw 'cancel';
 
                 const res = this._processType(m.content, m);
                 value = res;
