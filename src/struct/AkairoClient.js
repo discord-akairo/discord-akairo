@@ -76,6 +76,9 @@ class AkairoClient extends Client {
             value: database,
             enumerable: true
         });
+
+        if (!this._options.emitters) this._options.emitters = {};
+        this._options.emitters[name] = database;
     }
 
     /**
