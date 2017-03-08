@@ -5,15 +5,15 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
 /**
  * Options to use for command execution behavior.
  * @typedef {Object} CommandOptions
+ * @prop {string[]} [aliases=[]] - Command names.
  * @prop {ArgumentOptions[]} [args=[]] - Arguments to parse.
- * @prop {string} [aliases=[]] - Command names.
- * @prop {string} [category='default'] - Category ID for organization purposes.
- * @prop {string|string[]} [description=''] - Description of the command.
- * @prop {boolean} [ownerOnly=false] - Whether or not to allow client owner(s) only.
+ * @prop {ArgumentSplit} [split='plain'] - Method to split text into words.
  * @prop {string} [channelRestriction] - Restricts channel: 'guild' or 'dm'.
+ * @prop {string} [category='default'] - Category ID for organization purposes.
+ * @prop {boolean} [ownerOnly=false] - Whether or not to allow client owner(s) only.
+ * @prop {boolean} [protected=false] - Whether or not this command cannot be disabled.
  * @prop {number} [cooldown] - The command cooldown in milliseconds.
  * @prop {number} [ratelimit=1] - Amount of command uses allowed until cooldown.
- * @prop {ArgumentSplit} [split='plain'] - Method to split text into words.
  * @prop {RegExp|function} [trigger] - A regex or function <code>(message => {})</code> returning regex to match in messages that are NOT commands.
  * <br>The exec function is <code>((message, match) => {})</code> if non-global.
  * <br>If global, it is <code>((message, match, groups) => {})</code>.
@@ -21,6 +21,7 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * <br>The exec function is <code>(message => {})</code>.
  * @prop {PromptOptions} [defaultPrompt={}] - The default prompt options.
  * @prop {Object} [options={}] - An object for custom options.
+ * @prop {string|string[]} [description=''] - Description of the command.
  * <br>Accessible with Command#options.
  */
 
@@ -59,10 +60,16 @@ class Command extends AkairoModule {
         this.args = (options.args || []).map(a => new Argument(this, a));
 
         /**
-         * Description of the command.
+         * The command split method.
+         * @type {ArgumentSplit}
+         */
+        this.split = options.split || ArgumentSplits.PLAIN;
+
+        /**
+         * Usable only in this channel type.
          * @type {string}
          */
-        this.description = (Array.isArray(options.description) ? options.description.join('\n') : options.description) || '';
+        this.channelRestriction = options.channelRestriction;
 
         /**
          * Usable only by the client owner.
@@ -71,10 +78,10 @@ class Command extends AkairoModule {
         this.ownerOnly = !!options.ownerOnly;
 
         /**
-         * Usable only in this channel type.
-         * @type {string}
+         * Whether or not this command cannot be disabled.
+         * @type {boolean}
          */
-        this.channelRestriction = options.channelRestriction;
+        this.protected = !!options.protected;
 
         /**
          * Cooldown in milliseconds.
@@ -89,12 +96,6 @@ class Command extends AkairoModule {
         this.ratelimit = options.ratelimit || 1;
 
         /**
-         * The command split method.
-         * @type {ArgumentSplit}
-         */
-        this.split = options.split || ArgumentSplits.PLAIN;
-
-        /**
          * Default prompt options.
          * @type {PromptOptions}
          */
@@ -105,6 +106,12 @@ class Command extends AkairoModule {
          * @type {Object}
          */
         this.options = options.custom || options.options || {};
+
+        /**
+         * Description of the command.
+         * @type {string}
+         */
+        this.description = (Array.isArray(options.description) ? options.description.join('\n') : options.description) || '';
 
         /**
          * Gets the regex trigger, if specified.
@@ -247,6 +254,15 @@ class Command extends AkairoModule {
     }
 
     /**
+     * Disables the command.
+     * @returns {boolean}
+     */
+    disable(){
+        if (this.protected) return false;
+        return super.disable();
+    }
+
+    /**
      * Reloads the command.
      * @method
      * @name Command#reload
@@ -264,13 +280,6 @@ class Command extends AkairoModule {
      * Enables the command.
      * @method
      * @name Command#enable
-     * @returns {boolean}
-     */
-
-    /**
-     * Disables the command.
-     * @method
-     * @name Command#disable
      * @returns {boolean}
      */
 }

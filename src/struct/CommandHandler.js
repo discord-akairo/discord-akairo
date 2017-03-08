@@ -284,10 +284,10 @@ class CommandHandler extends AkairoHandler {
     }
 
     _handleTriggers(message){
-        const commands = this.commands.filter(c => c.trigger(message));
+        const matchedCommands = this.commands.filter(c => c.enabled && c.trigger(message));
         const triggered = [];
 
-        for (const c of commands.values()){
+        for (const c of matchedCommands.values()){
             const regex = c.trigger(message);
             const match = message.content.match(regex);
 
@@ -317,7 +317,7 @@ class CommandHandler extends AkairoHandler {
                 return this._handleError(err, message, c[0]);
             });
         })).then(() => {
-            const trueCommands = this.commands.filter(c => c.condition(message));
+            const trueCommands = this.commands.filter(c => c.enabled && c.condition(message));
             
             if (!trueCommands.size) return void this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
 
