@@ -34,15 +34,13 @@
 
 <article>
     <p>This tutorial is for explaining how to handle edits.<br>Here, we will make a command that can be ran when a message is edited.  </p>
-<h3>Setup</h3><p>There are some prerequisites to make a command run on an edit.<br>First, the client should have <code>handleEdits</code> set to true.<br>The command must also have <code>editable</code> set to true.  </p>
+<h3>Setup</h3><p>There are some prerequisites to make a command run on an edit.<br>First, the client should have <code>handleEdits</code> set to true.  </p>
 <pre class="prettyprint source lang-js"><code>// Client.
 const client = new AkairoClient({
     handleEdits: true
-});
-
-// Command.
-module.exports = new Command('id', exec, {
-    editable: true
+});</code></pre><p>To disable a command from being ran on edit, simply set <code>editable</code> to <code>false</code>.  </p>
+<pre class="prettyprint source lang-js"><code>module.exports = new Command('id', exec, {
+    editable: false
 });</code></pre><h3>Actual Stuffs</h3><p>And now, the command can be used when a message is edited.<br>You can differentiate between a normal command use and an edited use with the <code>edited</code> param.  </p>
 <pre class="prettyprint source lang-js"><code>// Normal command:
 function exec(message, args, edited)
@@ -77,8 +75,7 @@ module.exports = new Command('say', exec, {
             id: 'content',
             match: 'content'
         }
-    ],
-    editable: true
+    ]
 });</code></pre><p>There are probably better ways to do that, but it works for simple things.  </p>
 </article>
 

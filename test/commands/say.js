@@ -18,6 +18,5 @@ module.exports = new Command('say', exec, {
             id: 'content',
             match: 'content'
         }
-    ],
-    editable: true
+    ]
 });
