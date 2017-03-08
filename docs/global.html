@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -387,6 +387,43 @@
 
         <tr>
             
+                <td class="name"><code>handleEdits</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Whether or not to handle edited messages.</td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>defaultCooldown</code></td>
             
 
@@ -453,43 +490,6 @@
             
 
             <td class="description last">The default prompt options.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>cancelWord</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    <code>'cancel'</code>
-                
-                </td>
-            
-
-            <td class="description last">Word to use to cancel a prompt.</td>
         </tr>
 
     
@@ -789,7 +789,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line61">line 61</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line62">line 62</a>
     </li></ul></dd>
     
 
@@ -1177,7 +1177,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line27">line 27</a>
+        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line29">line 29</a>
     </li></ul></dd>
     
 
@@ -1393,6 +1393,43 @@
 
         <tr>
             
+                <td class="name"><code>aliases</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>[]</code>
+                
+                </td>
+            
+
+            <td class="description last">Command names.</td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>args</code></td>
             
 
@@ -1430,7 +1467,44 @@
 
         <tr>
             
-                <td class="name"><code>aliases</code></td>
+                <td class="name"><code>split</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#ArgumentSplit">ArgumentSplit</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>'plain'</code>
+                
+                </td>
+            
+
+            <td class="description last">Method to split text into words.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>channelRestriction</code></td>
             
 
             <td class="type">
@@ -1455,12 +1529,10 @@
             
                 <td class="default">
                 
-                    <code>[]</code>
-                
                 </td>
             
 
-            <td class="description last">Command names.</td>
+            <td class="description last">Restricts channel: 'guild' or 'dm'.</td>
         </tr>
 
     
@@ -1504,46 +1576,6 @@
 
         <tr>
             
-                <td class="name"><code>description</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
- || 
-
-<span class="param-type">Array.&lt;string></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    <code>''</code>
-                
-                </td>
-            
-
-            <td class="description last">Description of the command.</td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>ownerOnly</code></td>
             
 
@@ -1581,13 +1613,13 @@
 
         <tr>
             
-                <td class="name"><code>channelRestriction</code></td>
+                <td class="name"><code>protected</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">boolean</span>
 
 
             
@@ -1606,10 +1638,49 @@
             
                 <td class="default">
                 
+                    <code>false</code>
+                
                 </td>
             
 
-            <td class="description last">Restricts channel: 'guild' or 'dm'.</td>
+            <td class="description last">Whether or not this command cannot be disabled.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>editable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Whether or not message edits will run this command.<br>On an edited message, the exec function edited param will be true.</td>
         </tr>
 
     
@@ -1688,43 +1759,6 @@
 
         <tr>
             
-                <td class="name"><code>split</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#ArgumentSplit">ArgumentSplit</a></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    <code>'plain'</code>
-                
-                </td>
-            
-
-            <td class="description last">Method to split text into words.</td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>trigger</code></td>
             
 
@@ -1756,7 +1790,7 @@
                 </td>
             
 
-            <td class="description last">A regex or function <code>(message => {})</code> returning regex to match in messages that are NOT commands.<br>The exec function is <code>((message, match) => {})</code> if non-global.<br>If global, it is <code>((message, match, groups) => {})</code>.</td>
+            <td class="description last">A regex or function <code>(message => {})</code> returning regex to match in messages that are NOT commands.<br>The exec function is <code>((message, match, groups, edited) => {})</code>.</td>
         </tr>
 
     
@@ -1791,7 +1825,7 @@
                 </td>
             
 
-            <td class="description last">A function <code>(message => {})</code> that returns true or false on messages that are NOT commands.<br>The exec function is <code>(message => {})</code>.</td>
+            <td class="description last">A function <code>((message, edited) => {})</code> that returns true or false on messages that are NOT commands.<br>The exec function is <code>((message, edited) => {})</code>.</td>
         </tr>
 
     
@@ -1865,7 +1899,47 @@
                 </td>
             
 
-            <td class="description last">An object for custom options.<br>Accessible with Command#options.</td>
+            <td class="description last">An object for custom options.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>description</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+ || 
+
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>''</code>
+                
+                </td>
+            
+
+            <td class="description last">Description of the command.<br>Accessible with Command#options.</td>
         </tr>
 
     
@@ -2706,6 +2780,43 @@
 
         <tr>
             
+                <td class="name"><code>optional</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Prompts only when argument is provided but was not of the right type.</td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>start</code></td>
             
 
@@ -2887,7 +2998,7 @@
 
 
 <div class="description">
-    A prompt to run if the user did not input the argument correctly.<br>Can only be used if there is not a default value.<br>The functions are <code>(message => {})</code> and are used to determine the reply.
+    A prompt to run if the user did not input the argument correctly.<br>Can only be used if there is not a default value (unless optional is true).<br>The functions are <code>(message => {})</code> and are used to determine the reply.
 </div>
 
 

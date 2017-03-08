@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -72,6 +72,12 @@ class CommandHandler extends AkairoHandler {
         this.postInhibitors = !(options.postInhibitors === false);
 
         /**
+         * Whether or not edits are handled.
+         * @type {boolean}
+         */
+        this.handleEdits = !!options.handleEdits;
+
+        /**
          * Collection of cooldowns.
          * @type {Collection&lt;string, Object>}
          */
@@ -109,12 +115,6 @@ class CommandHandler extends AkairoHandler {
         };
 
         Object.assign(this.defaultPrompt, options.defaultPrompt || {});
-
-        /**
-         * Word used to cancel a prompt.
-         * @type {string}
-         */
-        this.cancelWord = options.cancelWord || 'cancel';
 
         /**
          * Default cooldown for commands.
@@ -175,9 +175,10 @@ class CommandHandler extends AkairoHandler {
     /**
      * Handles a message.
      * @param {Message} message - Message to handle.
+     * @param {boolean} edited - Whether or not the message was edited.
      * @returns {Promise}
      */
-    handle(message){
+    handle(message, edited){
         if (this.preInhibitors){
             if (message.author.id !== this.client.user.id &amp;&amp; this.client.selfbot){
                 this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.NOT_SELF);
@@ -200,7 +201,7 @@ class CommandHandler extends AkairoHandler {
         : () => Promise.resolve();
 
         return pretest(message).then(() => {
-            if (this.prompts.has(message.author.id + message.channel.id)){
+            if (this.prompts.has(`${message.author.id}-${message.channel.id}`)){
                 this.emit(CommandHandlerEvents.IN_PROMPT, message);
                 return Promise.resolve();
             }
@@ -227,18 +228,19 @@ class CommandHandler extends AkairoHandler {
                 if (mentioned){
                     start = mentioned[0];
                 } else {
-                    return this._handleTriggers(message);
+                    return this._handleTriggers(message, edited);
                 }
             } else {
-                return this._handleTriggers(message);
+                return this._handleTriggers(message, edited);
             }
 
             const firstWord = message.content.replace(start, '').search(/\S/) + start.length;
             const name = message.content.slice(firstWord).split(' ')[0];
             const command = this.findCommand(name);
 
-            if (!command) return this._handleTriggers(message);
+            if (!command) return this._handleTriggers(message, edited);
             if (!command.enabled) return void this.emit(CommandHandlerEvents.COMMAND_DISABLED, message, command);
+            if (edited &amp;&amp; !command.editable) return;
 
             if (this.postInhibitors){
                 if (command.ownerOnly){
@@ -274,10 +276,10 @@ class CommandHandler extends AkairoHandler {
                 const content = message.content.slice(message.content.indexOf(name) + name.length + 1);
 
                 return command.parse(content, message).then(args => {
-                    this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command);
-                    const end = Promise.resolve(command.exec(message, args));
+                    this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, edited);
+                    const end = Promise.resolve(command.exec(message, args, edited));
 
-                    return end.then(() => void this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command))
+                    return end.then(() => void this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, edited))
                     .catch(err => this._handleError(err, message, command));
                 }).catch(err => {
                     if (err instanceof Error) throw err;
@@ -328,11 +330,11 @@ class CommandHandler extends AkairoHandler {
         return false;
     }
 
-    _handleTriggers(message){
-        const commands = this.commands.filter(c => c.trigger(message));
+    _handleTriggers(message, edited){
+        const matchedCommands = this.commands.filter(c => (!c.editable || edited &amp;&amp; c.editable) &amp;&amp; c.enabled &amp;&amp; c.trigger(message));
         const triggered = [];
 
-        for (const c of commands.values()){
+        for (const c of matchedCommands.values()){
             const regex = c.trigger(message);
             const match = message.content.match(regex);
 
@@ -356,13 +358,13 @@ class CommandHandler extends AkairoHandler {
             if (onCooldown) return;
 
             this.emit(CommandHandlerEvents.COMMAND_STARTED, message, c[0]);
-            const end = Promise.resolve(c[0].exec(message, c[1], c[2]));
+            const end = Promise.resolve(c[0].exec(message, c[1], c[2], edited));
 
             return end.then(() => void this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, c[0])).catch(err => {
                 return this._handleError(err, message, c[0]);
             });
         })).then(() => {
-            const trueCommands = this.commands.filter(c => c.condition(message));
+            const trueCommands = this.commands.filter(c => (!c.editable || edited &amp;&amp; c.editable) &amp;&amp; c.enabled &amp;&amp; c.condition(message));
             
             if (!trueCommands.size) return void this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
 
@@ -371,7 +373,7 @@ class CommandHandler extends AkairoHandler {
                 if (onCooldown) return;
                 
                 this.emit(CommandHandlerEvents.COMMAND_STARTED, message, c);
-                const end = Promise.resolve(c.exec(message));
+                const end = Promise.resolve(c.exec(message, edited));
 
                 return end.then(() => void this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, c)).catch(err => {
                     return this._handleError(err, message, c);
@@ -474,6 +476,7 @@ module.exports = CommandHandler;
  * @event CommandHandler#commandStarted
  * @param {Message} message - Message sent.
  * @param {Command} command - Command executed.
+ * @param {boolean} edited - Whether or not the command came from an edited message.
  */
 
 /**
@@ -481,6 +484,7 @@ module.exports = CommandHandler;
  * @event CommandHandler#commandFinished
  * @param {Message} message - Message sent.
  * @param {Command} command - Command executed.
+ * @param {boolean} edited - Whether or not the command came from an edited message.
  */
 
 /**

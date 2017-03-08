@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -84,11 +84,12 @@
 
 /**
  * A prompt to run if the user did not input the argument correctly.
- * &lt;br>Can only be used if there is not a default value.
+ * &lt;br>Can only be used if there is not a default value (unless optional is true).
  * &lt;br>The functions are &lt;code>(message => {})&lt;/code> and are used to determine the reply.
  * @prop {number} [retries=1] - Amount of times allowed to retries.
  * @prop {number} [time=30000] - Time to wait for input.
  * @prop {string} [cancelWord='cancel'] - Word to use for cancelling prompts.
+ * @prop {boolean} [optional=false] - Prompts only when argument is provided but was not of the right type.
  * @prop {function} [start] - Function called on start.
  * @prop {function} [retry] - Function called on a retry.
  * @prop {function} [timeout] - Function called on collector time out.
@@ -213,6 +214,11 @@ class Argument {
      * @returns {Promise.&lt;any>}
      */
     cast(word, message){
+        if (!word &amp;&amp; this.prompt &amp;&amp; this.prompt.optional){
+            const def = this.default.call(this.command, message);
+            return Promise.resolve(def != null ? def : null);
+        }
+
         const res = this._processType(word, message);
         return res != null ? Promise.resolve(res) : this.prompt ? this._promptArgument(message) : Promise.resolve(null);
     }
@@ -251,6 +257,7 @@ class Argument {
     }
 
     _promptArgument(message){
+        const id = `${message.author.id}-${message.channel.id}`;
         const prompt = {};
         
         Object.assign(prompt, this.handler.defaultPrompt);
@@ -258,7 +265,7 @@ class Argument {
         Object.assign(prompt, this.prompt || {});
 
         const retry = i => {
-            this.handler.prompts.add(message.author.id + message.channel.id);
+            this.handler.prompts.add(id);
             let text = i === 1 ? prompt.start.call(this, message) : prompt.retry.call(this, message);
             text = Array.isArray(text) ? text.join('\n') : text;
 
@@ -272,7 +279,7 @@ class Argument {
                 return res;
             }, prompt.time).then(() => value).catch(reason => {
                 if (reason instanceof Error){
-                    this.handler.prompts.delete(message.author.id + message.channel.id);
+                    this.handler.prompts.delete(id);
                     throw reason;
                 }
 
@@ -281,7 +288,7 @@ class Argument {
                     response = Array.isArray(response) ? response.join('\n') : response;
 
                     return message.channel.send(response).then(() => {
-                        this.handler.prompts.delete(message.author.id + message.channel.id);
+                        this.handler.prompts.delete(id);
                         throw 'time';
                     });
                 }
@@ -291,7 +298,7 @@ class Argument {
                     response = Array.isArray(response) ? response.join('\n') : response;
 
                     return message.channel.send(response).then(() => {
-                        this.handler.prompts.delete(message.author.id + message.channel.id);
+                        this.handler.prompts.delete(id);
                         throw 'cancel';
                     });
                 }
@@ -301,7 +308,7 @@ class Argument {
                     response = Array.isArray(response) ? response.join('\n') : response;
 
                     return message.channel.send(response).then(() => {
-                        this.handler.prompts.delete(message.author.id + message.channel.id);
+                        this.handler.prompts.delete(id);
                         throw 'end';
                     });
                 }
@@ -311,7 +318,7 @@ class Argument {
         };
 
         return retry(1).then(value => {
-            this.handler.prompts.delete(message.author.id + message.channel.id);
+            this.handler.prompts.delete(id);
             return value;
         });
     }

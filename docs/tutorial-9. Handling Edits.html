@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Tutorial: 7. Regex and Conditionals - Documentation</title>
+    <title>Tutorial: 9. Handling Edits - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,45 +27,59 @@
 
 <div id="main">
     
-    <h1 class="page-title">Tutorial: 7. Regex and Conditionals</h1>
+    <h1 class="page-title">Tutorial: 9. Handling Edits</h1>
     
 
     <section>
 
 <article>
-    <p>This tutorial is for commands that are triggered with regex or a simple check.<br>We will make a command that replies with an image when someone says &quot;lewd&quot;.<br>We will also make a command that harasses someone (I'm kidding).  </p>
-<h2>Regex Trigger</h2><p>Create a new command.<br>There will be some differences.  </p>
-<pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
+    <p>This tutorial is for explaining how to handle edits.<br>Here, we will make a command that can be ran when a message is edited.  </p>
+<h3>Setup</h3><p>There are some prerequisites to make a command run on an edit.<br>First, the client should have <code>handleEdits</code> set to true.<br>The command must also have <code>editable</code> set to true.  </p>
+<pre class="prettyprint source lang-js"><code>// Client.
+const client = new AkairoClient({
+    handleEdits: true
+});
 
-function exec(message){
-    return message.channel.sendFile('REDACTED');
-}
+// Command.
+module.exports = new Command('id', exec, {
+    editable: true
+});</code></pre><h3>Actual Stuffs</h3><p>And now, the command can be used when a message is edited.<br>You can differentiate between a normal command use and an edited use with the <code>edited</code> param.  </p>
+<pre class="prettyprint source lang-js"><code>// Normal command:
+function exec(message, args, edited)
 
-module.exports = new Command('lewd', exec, {
-    trigger: /lewd/i
-});</code></pre><p>There is only one command option!<br>The <code>trigger</code> option is a regular expression used to match message contents.<br>Aliases and arguments are not used (restrictions and inhibitors still work, obviously).  </p>
-<p>All regex triggers will have the second parameter of <code>match</code> for matched content.<br>A global regex will also pass a third parameter, <code>groups</code>.<br>These are all the groups matched by the regex.  </p>
-<pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
+// Regex command:
+function exec(message, match, groups, edited)
 
-function exec(message, match, groups){
-    for (const [, digit] of groups){
-        // Don't actually spam something like this!
-        message.channel.sendFile('REDACTED ' + digit || '0');
+// Condition command:
+function exec(message, edited)</code></pre><h3>Editing a Reply</h3><p>Of course, replying from an edit continuously may be a little annoying.<br>One way of editing the original reply would be to store it.  </p>
+<pre class="prettyprint source lang-js"><code>// At your client creation.
+const { Collection } = require('discord.js');
+client.mem.edits = new Collection();
+
+// At your command.
+const { Command } = require('discord-akairo');
+
+function exec(message, args, edited){
+    if (edited && this.client.mem.edits.has(message.id)){
+        const oldReply = this.client.mem.edits.get(message.id);
+        return oldReply.edit(args.content);
     }
+
+    return message.channel.send(args.content).then(sent => {
+        this.client.mem.edits.set(message.id, sent);
+    });
 }
 
-module.exports = new Command('lewd', exec, {
-    trigger: /lewd(\d?)/gi
-});</code></pre><h2>Condition Trigger</h2><p>A condition trigger is like a regex one, but lets you do things not related to the content.  </p>
-<pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
-
-function exec(message){
-    return message.reply('Hi friend!');
-}
-
-module.exports = new Command('lewd', exec, {
-    condition: message => message.author.id === '172002275412279296'
-});</code></pre><p>This command will run whenever that specific person sends a message.<br>Like regex commands, arguments are not parsed.  </p>
+module.exports = new Command('say', exec, {
+    aliases: ['say'],
+    args: [
+        {
+            id: 'content',
+            match: 'content'
+        }
+    ],
+    editable: true
+});</code></pre><p>There are probably better ways to do that, but it works for simple things.  </p>
 </article>
 
 </section>
