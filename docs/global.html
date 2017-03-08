@@ -424,13 +424,13 @@
 
         <tr>
             
-                <td class="name"><code>defaultPrompts</code></td>
+                <td class="name"><code>defaultPrompt</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="global.html#PromptFunctions">PromptFunctions</a></span>
+<span class="param-type"><a href="global.html#PromptOptions">PromptOptions</a></span>
 
 
             
@@ -452,44 +452,7 @@
                 </td>
             
 
-            <td class="description last">The default prompt functions.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>defaultRetries</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    <code>1</code>
-                
-                </td>
-            
-
-            <td class="description last">The default amount of retries for prompts.</td>
+            <td class="description last">The default prompt options.</td>
         </tr>
 
     
@@ -826,7 +789,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line67">line 67</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line62">line 62</a>
     </li></ul></dd>
     
 
@@ -1835,13 +1798,13 @@
 
         <tr>
             
-                <td class="name"><code>defaultPrompts</code></td>
+                <td class="name"><code>defaultPrompt</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="global.html#PromptFunctions">PromptFunctions</a></span>
+<span class="param-type"><a href="global.html#PromptOptions">PromptOptions</a></span>
 
 
             
@@ -1865,7 +1828,7 @@
                 </td>
             
 
-            <td class="description last">The default prompt functions.</td>
+            <td class="description last">The default prompt options.</td>
         </tr>
 
     
@@ -2554,265 +2517,6 @@
 
             
                 
-<h4 class="name" id="PromptFunctions">PromptFunctions</h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line56">line 56</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>start</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Called on start.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>retry</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Called on a retry.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>time</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Called on collector time out.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>end</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Called on no retries left.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>cancel</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Called on cancel.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<div class="description">
-    Functions <code>(message => {})</code> called at various stages in a prompt to use as the text.<br>Defaults can be set at AkairoOptions in defaultPrompts.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Object</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-            
-                
 <h4 class="name" id="PromptOptions">PromptOptions</h4>
 
 
@@ -2891,39 +2595,6 @@
 
         <tr>
             
-                <td class="name"><code>on</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#PromptFunctions">PromptFunctions</a></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">Functions called in prompts.</td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>retries</code></td>
             
 
@@ -2954,7 +2625,7 @@
                 </td>
             
 
-            <td class="description last">Amount of times to retries.</td>
+            <td class="description last">Amount of times allowed to retries.</td>
         </tr>
 
     
@@ -2995,6 +2666,218 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>cancelWord</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>'cancel'</code>
+                
+                </td>
+            
+
+            <td class="description last">Word to use for cancelling prompts.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>start</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Function called on start.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>retry</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Function called on a retry.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>timeout</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Function called on collector time out.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ended</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Function called on no retries left.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cancel</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Function called on cancel.</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -3004,7 +2887,7 @@
 
 
 <div class="description">
-    A prompt to run if the user did not input the argument correctly.<br>Can only be used if there is not a default value.
+    A prompt to run if the user did not input the argument correctly.<br>Can only be used if there is not a default value.<br>The functions are <code>(message => {})</code> and are used to determine the reply.
 </div>
 
 

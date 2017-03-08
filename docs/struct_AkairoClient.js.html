@@ -52,8 +52,7 @@ const ClientUtil = require('../util/ClientUtil');
  * @prop {string|string[]|function} [prefix='!'] - Default command prefix(es) or function &lt;code>(message => {})&lt;/code> returning prefix(es).
  * @prop {boolean|function} [allowMention=true] - Whether or not to allow mentions to the client user as a prefix.&lt;br>Can be function &lt;code>(message => {})&lt;/code> that returns true or false.
  * @prop {number} [defaultCooldown=0] - The default cooldown for commands.
- * @prop {PromptFunctions} [defaultPrompts] - The default prompt functions.
- * @prop {number} [defaultRetries=1] - The default amount of retries for prompts.
+ * @prop {PromptOptions} [defaultPrompt] - The default prompt options.
  * @prop {string} [cancelWord='cancel'] - Word to use to cancel a prompt.
  * @prop {string} [inhibitorDirectory] - Directory to inhibitors.
  * @prop {boolean} [preInhibitors=true] - Whether or not to enable the built-in pre-message inhibitors.
@@ -115,6 +114,9 @@ class AkairoClient extends Client {
             value: database,
             enumerable: true
         });
+
+        if (!this._options.emitters) this._options.emitters = {};
+        this._options.emitters[name] = database;
     }
 
     /**

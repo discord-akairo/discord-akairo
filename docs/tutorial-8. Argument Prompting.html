@@ -92,15 +92,13 @@ module.exports = new Command('sum', exec, {
             id: 'a',
             type: 'number',
             prompt: {
-                on: {
-                    start: () => 'Please input a number!',
-                    retry: () => 'Please, please input a number!',
-                    time: () => 'You did not input a number in time!',
-                    end: function(){
-                        return `You ran out of your ${this.prompt.retries} retries!`;
-                    },
-                    cancel: m => `Why cancel the command, ${m.author}?`
+                start: () => 'Please input a number!',
+                retry: () => 'Please, please input a number!',
+                timeout: () => 'You did not input a number in time!',
+                ended: function(){
+                    return `You ran out of your ${this.prompt.retries} retries!`;
                 },
+                cancel: m => `Why cancel the command, ${m.author}?`,
                 retries: 5,
                 time: 60000
             }
@@ -121,26 +119,24 @@ module.exports = new Command('sum', exec, {
             id: 'a',
             type: 'number',
             prompt: {
-                on: {
-                    end: function(){
-                        return `You ran out of your ${this.prompt.retries} retries!`;
-                    }
+                ended: function(){
+                    return `You ran out of your ${this.prompt.retries} retries!`;
                 },
                 retries: 5,
                 time: 60000
             }
         }
     ],
-    defaultPrompts: {
+    defaultPrompt: {
         start: () => 'Please input a number!',
         retry: () => 'Please, please input a number!',
-        time: () => 'You did not input a number in time!'
+        timeout: () => 'You did not input a number in time!'
     }
 });
 
 // At your client creation:
 const client = new AkairoClient({
-    defaultPrompts: {
+    defaultPrompt: {
         cancel: m => `Why cancel the command, ${m.author}?`
     }
 });</code></pre><p>As you can see, the prompts from the argument will be merged with the prompts from the command, which will be merged with the prompts from the client.<br>The most specific prompt will take priority if there are conflicts.  </p>
