@@ -499,7 +499,14 @@ class ClientUtil {
             const collector = message.channel.createCollector(m => {
                 try {
                     if (m.author.id !== message.author.id) return;
-                    const passed = typeof check === 'function' ? check(m) : check.test(m.content);
+                    let passed;
+
+                    if (typeof check === 'function'){
+                        const checked = check(m);
+                        passed = checked != null &amp;&amp; checked !== false;
+                    } else {
+                        passed = check.test(m.content);
+                    }
 
                     if (!passed) return collector.stop('failed');
                     return true;

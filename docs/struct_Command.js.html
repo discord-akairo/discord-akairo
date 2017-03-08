@@ -250,16 +250,12 @@ class Command extends AkairoModule {
         }
 
         for (const arg of textArgs){
-            const def = arg.default.call(this, message);
-            const word = noPrefixWords.slice(arg.index).join(' ') || def;
-
+            const word = noPrefixWords.slice(arg.index).join(' ');
             args[arg.id] = arg.cast.bind(arg, word, message);
         }
 
         for (const arg of contentArgs){
-            const def = arg.default.call(this, message);
-            const word = content.split(' ').slice(arg.index).join(' ') || def;
-
+            const word = content.split(' ').slice(arg.index).join(' ');
             args[arg.id] = arg.cast.bind(arg, word, message);
         }
 
