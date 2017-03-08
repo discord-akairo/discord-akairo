@@ -11,7 +11,7 @@ module.exports = new Command('test', exec, {
             id: 'thing',
             type: 'number',
             prompt: {
-                start: () => 'text from argument'
+                start: () => ({ embed: { title: 'text from argument' } })
             }
         },
         {
