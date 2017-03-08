@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>struct/Argument.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">struct/Argument.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
+
+/**
+ * The method to match arguments from text.
+ * &lt;br>&lt;code>word&lt;/code> matches by the order of the words inputted, ignoring words that matches prefix or flag.
+ * &lt;br>&lt;code>rest&lt;/code> matches the rest of the words in order, ignoring words that matches prefix or flag.
+ * &lt;br>&lt;code>prefix&lt;/code> matches words that starts with the prefix. The word after the prefix is the evaluated argument.
+ * &lt;br>&lt;code>flag&lt;/code> matches words that equal this prefix. The evaluated argument is true or false.
+ * &lt;br>&lt;code>text&lt;/code> matches the entire text, except for the command, ignoring words that matches prefix or flag.
+ * &lt;br>&lt;code>content&lt;/code> matches the entire text as it was inputted, except for the command.
+ * @typedef {string} ArgumentMatch
+ */
+
+/**
+ * The type that the argument should be cast to.
+ * &lt;br>&lt;code>string&lt;/code> does not cast to any type.
+ * &lt;br>&lt;code>number&lt;/code> casts to an number with parseFloat(), default value if not a number.
+ * &lt;br>&lt;code>integer&lt;/code> casts to an integer with parseInt(), default value if not a number.
+ * &lt;br>&lt;code>dynamic&lt;/code> casts to a number with parseFloat() or a string if the argument is not a number.
+ * &lt;br>&lt;code>dynamicInt&lt;/code> casts to an integer with parseInt() or a string if the argument is not a number.
+ * &lt;br>
+ * &lt;br>Possible Discord-related types:
+ * &lt;br>&lt;code>user&lt;/code> tries to resolve to a user.
+ * &lt;br>&lt;code>member&lt;/code> tries to resolve to a member.
+ * &lt;br>&lt;code>relevant&lt;/code> tries to resolve to a relevant user in both guilds and DMs.
+ * &lt;br>&lt;code>channel&lt;/code> tries to resolve to a channel.
+ * &lt;br>&lt;code>textChannel&lt;/code> tries to resolve to a text channel.
+ * &lt;br>&lt;code>voiceChannel&lt;/code> tries to resolve to a voice channel.
+ * &lt;br>&lt;code>role&lt;/code> tries to resolve to a role.
+ * &lt;br>&lt;code>emoji&lt;/code> tries to resolve to a custom emoji.
+ * &lt;br>&lt;code>guild&lt;/code> tries to resolve to a guild.
+ * &lt;br>
+ * &lt;br>Many of these types can only be used in a guild.
+ * &lt;br>You can also pluralize the type to get a Collection of resolved objects instead.
+ * &lt;br>If any (except relevant) of the above are invalid, the default value will be resolved.
+ * &lt;br>
+ * &lt;br>An array of strings can be used to restrict input to only those strings, case insensitive.
+ * &lt;br>The evaluated argument will be all lowercase.
+ * &lt;br>If the input is not in the array, the default value is used.
+ * &lt;br>
+ * &lt;br>A function &lt;code>((word, message) => {})&lt;/code> can also be used to filter or modify arguments.
+ * &lt;br>A return value of true will let the word pass, a falsey return value will use the default value for the argument.
+ * &lt;br>Any other truthy return value will be used as the argument.
+ * @typedef {string|string[]} ArgumentType
+ */
+
+/**
+ * A prompt to run if the user did not input the argument correctly.
+ * &lt;br>Can only be used if there is not a default value.
+ * @prop {PromptFunctions} on - Functions called in prompts.
+ * @prop {number} [retries=1] - Amount of times to retries.
+ * @prop {number} [time=30000] - Time to wait for input.
+ * @typedef {Object} PromptOptions
+ */
+
+/**
+ * Functions &lt;code>(message => {})&lt;/code> called at various stages in a prompt to use as the text.
+ * &lt;br>Defaults can be set at AkairoOptions in defaultPrompts.
+ * @typedef {Object} PromptFunctions
+ * @prop {function} [start] - Called on start.
+ * @prop {function} [retry] - Called on a retry.
+ * @prop {function} [time] - Called on collector time out.
+ * @prop {function} [end] - Called on no retries left.
+ * @prop {function} [cancel] - Called on cancel.
+ */
+
+/**
+ * Options for how an argument parses text.
+ * @typedef ArgumentOptions
+ * @prop {string} id - ID of the argument for use in the args object.
+ * @prop {ArgumentMatch} [match='word'] - Method to match text.
+ * @prop {ArgumentType} [type='string'] - Type to cast to.
+ * @prop {string|string[]} [prefix] - The string(s) to use as the flag for prefix and flag args.
+ * @prop {number} [index] - Index/word of text to start from.&lt;br>Applicable to word, text, or content match only.
+ * @prop {any} [default=''] - Default value if text does not parse/cast correctly.&lt;br>Can be a function &lt;code>(message => {})&lt;/code>.
+ * @prop {string|string[]} [description=''] - A description of the argument.
+ * @prop {PromptOptions} [prompt] - Prompt options for when user does not provide input.&lt;br>Must not have a default value for this to work.
+ */
+
+class Argument {
+    /**
+     * An argument for a command.
+     * @param {Command} command - Command of the argument.
+     * @param {ArgumentOptions} options - Options for the argument.
+     */
+    constructor(command, options = {}){
+        /**
+         * The ID of the argument.
+         * @type {string}
+         */
+        this.id = options.id;
+
+        /**
+         * The command this argument belongs to.
+         * @type {Command}
+         */
+        this.command = command;
+
+        /**
+         * The method to match text.
+         * @type {ArgumentMatch}
+         */
+        this.match = options.match || ArgumentMatches.WORD;
+
+        /**
+         * The type to cast to.
+         * @type {ArgumentType}
+         */
+        this.type = options.type || ArgumentTypes.STRING;
+
+        /**
+         * The prefix to use for flag or prefix args.
+         * @type {?string}
+         */
+        this.prefix = options.prefix;
+
+        /**
+         * The index to skip to.
+         * @type {?number}
+         */
+        this.index = options.index;
+
+        /**
+         * The description.
+         * @type {string}
+         */
+        this.description = Array.isArray(options.description) ? options.description.join('\n') : options.description || '';
+
+        /**
+         * The prompt options.
+         * @type {PromptOptions}
+         */
+        this.prompt = options.prompt;
+
+        /**
+         * The default value.
+         * @method
+         * @name Argument#default
+         * @param {Message} - The message that called the command.
+         * @returns {any}
+         */
+        this.default = typeof options.default === 'function' ? options.default : () => options.default;
+    }
+
+    /**
+     * Casts the type of this argument onto a word.
+     * @param {string} word - The word to cast.
+     * @param {Message} message - The message that called the command.
+     * @returns {Promise.&lt;any>}
+     */
+    cast(word, message){
+        const res = this._processType(word, message);
+        return res != null ? Promise.resolve(res) : this.prompt ? this._promptArgument(message) : Promise.resolve(null);
+    }
+
+    _processType(word, message){
+        if (Array.isArray(this.type)){
+            if (!this.type.some(t => t.toLowerCase() === word.toLowerCase())){
+                const def = this.default.call(this.command, message);
+                return def != null ? def : null;
+            }
+            
+            return word.toLowerCase();
+        }
+
+        if (typeof this.type === 'function'){
+            const res = this.type.call(this.command, word, message);
+            if (res === true) return word;
+            if (res != null) return res;
+
+            const def = this.default.call(this.command, message);
+            return def != null ? def : null;
+        }
+
+        if (this.command.handler.resolver[this.type]){
+            const res = this.command.handler.resolver[this.type](word, message);
+            if (res != null) return res;
+
+            const def = this.default.call(this.command, message);
+            return def != null ? def : null;
+        }
+
+        if (word) return word;
+
+        const def = this.default.call(this.command, message);
+        return def != null ? def : null;
+    }
+
+    _promptArgument(message){
+        const prompt = Object.assign({}, this.prompt || {});
+        prompt.on = {};
+        
+        Object.assign(prompt.on, this.command.handler.defaultPrompts);
+        Object.assign(prompt.on, this.command.defaultPrompts);
+        Object.assign(prompt.on, this.prompt &amp;&amp; this.prompt.on || {});
+
+        const retry = i => {
+            this.command.handler.prompts.add(message.author.id + message.channel.id);
+            const text = i === 1 ? prompt.on.start.call(this, message) : prompt.on.retry.call(this, message);
+
+            let value;
+
+            return this.command.client.util.prompt(message, text, m => {
+                if (m.content.toLowerCase() === this.command.handler.cancelWord.toLowerCase()) throw 'cancel';
+
+                const res = this._processType(m.content, m);
+                value = res;
+                return res;
+            }, this.prompt &amp;&amp; this.prompt.time || 30000).then(() => value).catch(reason => {
+                if (reason instanceof Error){
+                    this.command.handler.prompts.delete(message.author.id + message.channel.id);
+                    throw reason;
+                }
+
+                if (reason === 'time') return message.channel.send(prompt.on.time.call(this, message)).then(() => {
+                    this.command.handler.prompts.delete(message.author.id + message.channel.id);
+                    throw 'time';
+                });
+
+                if (reason === 'cancel') return message.channel.send(prompt.on.cancel.call(this, message)).then(() => {
+                    this.command.handler.prompts.delete(message.author.id + message.channel.id);
+                    throw 'cancel';
+                });
+                
+                return i > (this.prompt &amp;&amp; this.prompt.retries || this.command.handler.defaultRetries) ? message.channel.send(prompt.on.end.call(this, message)).then(() => {
+                    this.command.handler.prompts.delete(message.author.id + message.channel.id);
+                    throw 'end';
+                }) : retry(i + 1);
+            });
+        };
+
+        return retry(1).then(value => {
+            this.command.handler.prompts.delete(message.author.id + message.channel.id);
+            return value;
+        });
+    }
+}
+
+module.exports = Argument;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

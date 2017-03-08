@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. No Prefix Commands.html">7. No Prefix Commands</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -380,7 +380,7 @@
                 </td>
             
 
-            <td class="description last">Whether or not to allow mentions to the client user as a prefix.<br/> Can be function <code>(message => {})</code> that returns true or false.</td>
+            <td class="description last">Whether or not to allow mentions to the client user as a prefix.<br>Can be function <code>(message => {})</code> that returns true or false.</td>
         </tr>
 
     
@@ -418,6 +418,115 @@
             
 
             <td class="description last">The default cooldown for commands.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>defaultPrompts</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#PromptFunctions">PromptFunctions</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The default prompt functions.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>defaultRetries</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>1</code>
+                
+                </td>
+            
+
+            <td class="description last">The default amount of retries for prompts.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cancelWord</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>'cancel'</code>
+                
+                </td>
+            
+
+            <td class="description last">Word to use to cancel a prompt.</td>
         </tr>
 
     
@@ -633,7 +742,7 @@
 
             
                 
-<h4 class="name" id="Argument">Argument</h4>
+<h4 class="name" id="ArgumentMatch">ArgumentMatch</h4>
 
 
 
@@ -644,7 +753,80 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line4">line 4</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line3">line 3</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    The method to match arguments from text.<br><code>word</code> matches by the order of the words inputted, ignoring words that matches prefix or flag.<br><code>rest</code> matches the rest of the words in order, ignoring words that matches prefix or flag.<br><code>prefix</code> matches words that starts with the prefix. The word after the prefix is the evaluated argument.<br><code>flag</code> matches words that equal this prefix. The evaluated argument is true or false.<br><code>text</code> matches the entire text, except for the command, ignoring words that matches prefix or flag.<br><code>content</code> matches the entire text as it was inputted, except for the command.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="ArgumentOptions">ArgumentOptions</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line67">line 67</a>
     </li></ul></dd>
     
 
@@ -737,7 +919,7 @@
                 </td>
             
 
-            <td class="description last">ID of the argument.</td>
+            <td class="description last">ID of the argument for use in the args object.</td>
         </tr>
 
     
@@ -774,7 +956,7 @@
                 </td>
             
 
-            <td class="description last">Method to match argument.</td>
+            <td class="description last">Method to match text.</td>
         </tr>
 
     
@@ -788,12 +970,6 @@
             
                 
 <span class="param-type"><a href="global.html#ArgumentType">ArgumentType</a></span>
- || 
-
-<span class="param-type">Array.&lt;string></span>
- || 
-
-<span class="param-type">function</span>
 
 
             
@@ -817,7 +993,7 @@
                 </td>
             
 
-            <td class="description last">Attempts to cast argument to this type.<br/>An array or a function can be used (more details in ArgumentType).</td>
+            <td class="description last">Type to cast to.</td>
         </tr>
 
     
@@ -855,7 +1031,7 @@
                 </td>
             
 
-            <td class="description last">Ignores word order and uses a word that starts with/matches this prefix (or multiple prefixes if array).<br/>Applicable to 'prefix' and 'flag' only.</td>
+            <td class="description last">The string(s) to use as the flag for prefix and flag args.</td>
         </tr>
 
     
@@ -890,23 +1066,20 @@
                 </td>
             
 
-            <td class="description last">Word to start from.<br/>Applicable to 'word', 'text', or 'content' only.<br/>When using with word, this will offset all word arguments after it by 1 unless the index property is also specified for them.</td>
+            <td class="description last">Index/word of text to start from.<br>Applicable to word, text, or content match only.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>defaultValue</code></td>
+                <td class="name"><code>default</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
- || 
-
-<span class="param-type">number</span>
+<span class="param-type">any</span>
 
 
             
@@ -930,7 +1103,7 @@
                 </td>
             
 
-            <td class="description last">Default value if a word is not inputted or a type could not be casted to.<br/>Can also be a function <code>(message => {})</code>.</td>
+            <td class="description last">Default value if text does not parse/cast correctly.<br>Can be a function <code>(message => {})</code>.</td>
         </tr>
 
     
@@ -974,6 +1147,41 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>prompt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#PromptOptions">PromptOptions</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Prompt options for when user does not provide input.<br>Must not have a default value for this to work.</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -983,93 +1191,10 @@
 
 
 <div class="description">
-    An argument in a command.
+    Options for how an argument parses text.
 </div>
 
 
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Object</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-            
-                
-<h4 class="name" id="ArgumentMatch">ArgumentMatch</h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line16">line 16</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    The method to match arguments from text.<br/>Possible strings are:<br/><br/><code>'word'</code> Matches by the order of the words inputted.<br/>Ignores words that matches prefix or flag.<br/><br/><code>'rest'</code> Matches the rest of the words in order.<br/>Ignores words that matches prefix or flag.<br/><br/><code>'prefix'</code> Matches words that starts with the prefix.<br/>The word after the prefix is the evaluated argument.<br/><br/><code>'flag'</code> Matches words that equal this prefix.<br/>The evaluated argument is true or false.<br/><br/><code>'text'</code> Matches the entire text, except for the command, ignoring words that matches prefix or flag.<br/><br/><code>'content'</code> Matches the entire text as it was inputted, except for the command.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">string</span>
-
-
-        </li>
-    </ul>
 
 
 
@@ -1089,7 +1214,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line93">line 93</a>
+        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line23">line 23</a>
     </li></ul></dd>
     
 
@@ -1129,7 +1254,7 @@
 
 
 <div class="description">
-    The method to split text into words.<br/>Possible strings are:<br/><br/><code>'plain'</code> Splits word separated by whitespace.<br/>Extra whitespace is ignored.<br/><br/><code>'split'</code> Splits word separated by whitespace.<br/><br/><code>'quoted'</code> This is like plain, but counts text inside double quotes as one word.<br/><br/><code>'sticky'</code> This is like quoted, but makes it so that quoted text must have a whitespace/another double quote before it to count as another word.<br/>It will still span multiple words.<br/><br/>A regex or a character can be used instead (for example, a comma) to split the message by that regex or character.
+    The method to split text into words.<br><code>plain</code> splits word separated by whitespace. Extra whitespace is ignored.<br><code>split</code> splits word separated by whitespace.<br><code>quoted</code> is similar to plain, but counts text inside double quotes as one word.<br><code>sticky</code> is similar to quoted, but makes it so that quoted text must have a whitespace/another double quote before it to count as another word.<br><br>A regex or a character can be used instead (for example, a comma) to split the message by that regex or character.
 </div>
 
 
@@ -1162,7 +1287,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line34">line 34</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line14">line 14</a>
     </li></ul></dd>
     
 
@@ -1202,7 +1327,7 @@
 
 
 <div class="description">
-    The type that the argument should be cast to.<br/>Possible strings are:<br/><br/><code>'string'</code> Does not cast to any type.<br/><br/><code>'number'</code> Casts to an number with parseFloat(), default value if not a number.<br/><br/><code>'integer'</code> Casts to an integer with parseInt(), default value if not a number.<br/><br/><code>'dynamic'</code> Casts to a number with parseFloat() or a string if the argument is not a number.<br/><br/><code>'dynamicInt'</code> Casts to an integer with parseInt() or a string if the argument is not a number.<br/><br/>Possible Discord-related strings:<br/><br/><code>'user'</code> Tries to resolve to a user.<br/><br/><code>'member'</code> Tries to resolve to a member.<br/><br/><code>'channel'</code> Tries to resolve to a channel.<br/><br/><code>'textChannel'</code> Tries to resolve to a text channel.<br/><br/><code>'voiceChannel'</code> Tries to resolve to a voice channel.<br/><br/><code>'role'</code> Tries to resolve to a role.<br/><br/><code>'emoji'</code> Tries to resolve to a custom emoji.<br/><br/>Many of these types can only be used in a guild.<br/>If any of the above are invalid, the default value will be resolved (recommended to use an ID).<br/><br/>An array of strings can be used to restrict input to only those strings, case insensitive.<br/>The evaluated argument will be all lowercase.<br/>If the input is not in the array, the default value is used.<br/><br/>A function <code>((word, message) => {})</code> can also be used to filter or modify arguments.<br/>A return value of true will let the word pass, a falsey return value will use the default value for the argument.<br/>Any other truthy return value will be used as the argument.
+    The type that the argument should be cast to.<br><code>string</code> does not cast to any type.<br><code>number</code> casts to an number with parseFloat(), default value if not a number.<br><code>integer</code> casts to an integer with parseInt(), default value if not a number.<br><code>dynamic</code> casts to a number with parseFloat() or a string if the argument is not a number.<br><code>dynamicInt</code> casts to an integer with parseInt() or a string if the argument is not a number.<br><br>Possible Discord-related types:<br><code>user</code> tries to resolve to a user.<br><code>member</code> tries to resolve to a member.<br><code>relevant</code> tries to resolve to a relevant user in both guilds and DMs.<br><code>channel</code> tries to resolve to a channel.<br><code>textChannel</code> tries to resolve to a text channel.<br><code>voiceChannel</code> tries to resolve to a voice channel.<br><code>role</code> tries to resolve to a role.<br><code>emoji</code> tries to resolve to a custom emoji.<br><code>guild</code> tries to resolve to a guild.<br><br>Many of these types can only be used in a guild.<br>You can also pluralize the type to get a Collection of resolved objects instead.<br>If any (except relevant) of the above are invalid, the default value will be resolved.<br><br>An array of strings can be used to restrict input to only those strings, case insensitive.<br>The evaluated argument will be all lowercase.<br>If the input is not in the array, the default value is used.<br><br>A function <code>((word, message) => {})</code> can also be used to filter or modify arguments.<br>A return value of true will let the word pass, a falsey return value will use the default value for the argument.<br>Any other truthy return value will be used as the argument.
 </div>
 
 
@@ -1238,7 +1363,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line77">line 77</a>
+        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line5">line 5</a>
     </li></ul></dd>
     
 
@@ -1311,7 +1436,7 @@
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;<a href="global.html#Argument">Argument</a>></span>
+<span class="param-type">Array.&lt;<a href="global.html#ArgumentOptions">ArgumentOptions</a>></span>
 
 
             
@@ -1518,8 +1643,6 @@
             
                 <td class="default">
                 
-                    <code>'none'</code>
-                
                 </td>
             
 
@@ -1558,7 +1681,44 @@
                 </td>
             
 
-            <td class="description last">The command cooldown in ms.</td>
+            <td class="description last">The command cooldown in milliseconds.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ratelimit</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>1</code>
+                
+                </td>
+            
+
+            <td class="description last">Amount of command uses allowed until cooldown.</td>
         </tr>
 
     
@@ -1633,7 +1793,7 @@
                 </td>
             
 
-            <td class="description last">A regex or function <code>(message => {})</code> returning regex to match in messages that are NOT commands.<br/>The exec function is now <code>((message, match) => {})</code> if non-global.<br/>Or, <code>((message, match, groups) => {})</code> if global.</td>
+            <td class="description last">A regex or function <code>(message => {})</code> returning regex to match in messages that are NOT commands.<br>The exec function is <code>((message, match) => {})</code> if non-global.<br>If global, it is <code>((message, match, groups) => {})</code>.</td>
         </tr>
 
     
@@ -1668,7 +1828,44 @@
                 </td>
             
 
-            <td class="description last">A function <code>(message => {})</code> that returns true or false on messages that are NOT commands. <br/>The exec function is now <code>(message => {})</code>.</td>
+            <td class="description last">A function <code>(message => {})</code> that returns true or false on messages that are NOT commands.<br>The exec function is now <code>(message => {})</code>.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>defaultPrompts</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#PromptFunctions">PromptFunctions</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>{}</code>
+                
+                </td>
+            
+
+            <td class="description last">The default prompt functions.</td>
         </tr>
 
     
@@ -1705,7 +1902,7 @@
                 </td>
             
 
-            <td class="description last">An object for custom options.<br/>Accessible with Command#options.</td>
+            <td class="description last">An object for custom options.<br>Accessible with Command#options.</td>
         </tr>
 
     
@@ -2357,6 +2554,478 @@
 
             
                 
+<h4 class="name" id="PromptFunctions">PromptFunctions</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line56">line 56</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>start</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Called on start.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>retry</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Called on a retry.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>time</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Called on collector time out.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>end</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Called on no retries left.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cancel</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Called on cancel.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<div class="description">
+    Functions <code>(message => {})</code> called at various stages in a prompt to use as the text.<br>Defaults can be set at AkairoOptions in defaultPrompts.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="PromptOptions">PromptOptions</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line47">line 47</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>on</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#PromptFunctions">PromptFunctions</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Functions called in prompts.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>retries</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>1</code>
+                
+                </td>
+            
+
+            <td class="description last">Amount of times to retries.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>time</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>30000</code>
+                
+                </td>
+            
+
+            <td class="description last">Time to wait for input.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<div class="description">
+    A prompt to run if the user did not input the argument correctly.<br>Can only be used if there is not a default value.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+                
 <h4 class="name" id="SQLiteOptions">SQLiteOptions</h4>
 
 
@@ -2576,7 +3245,7 @@
                 </td>
             
 
-            <td class="description last">Array or function <code>(client => {})</code> that returns an array of IDs.<br/>If you want to load the database before login, use SQLiteHandler#load.</td>
+            <td class="description last">Array or function <code>(client => {})</code> that returns an array of IDs.<br>If you want to load the database before login, use SQLiteHandler#load.</td>
         </tr>
 
     

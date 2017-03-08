@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>AkairoClient - Documentation</title>
+    <title>Argument - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">AkairoClient</h1>
+    <h1 class="page-title">Argument</h1>
     
 
     
@@ -40,7 +40,7 @@
 <header>
     
         <h2>
-        AkairoClient
+        Argument
         </h2>
         
     
@@ -53,7 +53,7 @@
 
     
 
-    <h4 class="name" id="AkairoClient"><span class="type-signature"></span>new AkairoClient<span class="signature">(options<span class="signature-attributes">opt</span>, clientOptions<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Argument"><span class="type-signature"></span>new Argument<span class="signature">(command, options)</span><span class="type-signature"></span></h4>
 
     
 
@@ -65,7 +65,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_AkairoClient.js.html">struct/AkairoClient.js</a>, <a href="struct_AkairoClient.js.html#line32">line 32</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line86">line 86</a>
     </li></ul></dd>
     
 
@@ -105,7 +105,7 @@
 
 
 <div class="description">
-    The Akairo framework client.<br>Creates the handlers and sets them up.
+    An argument for a command.
 </div>
 
 
@@ -131,11 +131,7 @@
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
-        
-        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -147,76 +143,46 @@
 
         <tr>
             
-                <td class="name"><code>options</code></td>
+                <td class="name"><code>command</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="global.html#AkairoOptions">AkairoOptions</a></span>
+<span class="param-type"><a href="Command.html">Command</a></span>
 
 
             
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
 
             
-                <td class="default">
-                
-                    <code>{}</code>
-                
-                </td>
-            
 
-            <td class="description last">Options to use for the framework.</td>
+            <td class="description last">Command of the argument.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>clientOptions</code></td>
+                <td class="name"><code>options</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">ClientOptions</span>
+<span class="param-type"><a href="global.html#ArgumentOptions">ArgumentOptions</a></span>
 
 
             
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
 
             
-                <td class="default">
-                
-                </td>
-            
 
-            <td class="description last">Options for Discord JS client.<br>If not specified, the previous options parameter is used instead.</td>
+            <td class="description last">Options for the argument.</td>
         </tr>
 
     
@@ -256,7 +222,7 @@
 
         
             
-<h4 class="name" id="commandHandler"><span class="type-signature"></span>commandHandler<span class="type-signature"> :<a href="CommandHandler.html">CommandHandler</a></span></h4>
+<h4 class="name" id="command"><span class="type-signature"></span>command<span class="type-signature"> :<a href="Command.html">Command</a></span></h4>
 
 
 
@@ -267,7 +233,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_AkairoClient.js.html">struct/AkairoClient.js</a>, <a href="struct_AkairoClient.js.html#line110">line 110</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line97">line 97</a>
     </li></ul></dd>
     
 
@@ -307,7 +273,7 @@
 
 
 <div class="description">
-    The command handler.
+    The command this argument belongs to.
 </div>
 
 
@@ -316,7 +282,7 @@
     <ul>
         <li>
             
-<span class="param-type"><a href="CommandHandler.html">CommandHandler</a></span>
+<span class="param-type"><a href="Command.html">Command</a></span>
 
 
         </li>
@@ -329,7 +295,7 @@
 
         
             
-<h4 class="name" id="databases"><span class="type-signature"></span>databases<span class="type-signature"> :Object</span></h4>
+<h4 class="name" id="description"><span class="type-signature"></span>description<span class="type-signature"> :string</span></h4>
 
 
 
@@ -340,7 +306,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_AkairoClient.js.html">struct/AkairoClient.js</a>, <a href="struct_AkairoClient.js.html#line64">line 64</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line127">line 127</a>
     </li></ul></dd>
     
 
@@ -380,299 +346,7 @@
 
 
 <div class="description">
-    Databases added.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Object</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="inhibitorHandler"><span class="type-signature"></span>inhibitorHandler<span class="type-signature"> :<a href="InhibitorHandler.html">InhibitorHandler</a></span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_AkairoClient.js.html">struct/AkairoClient.js</a>, <a href="struct_AkairoClient.js.html#line118">line 118</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    The inhibitor handler.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><a href="InhibitorHandler.html">InhibitorHandler</a></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="listenerHandler"><span class="type-signature"></span>listenerHandler<span class="type-signature"> :<a href="ListenerHandler.html">ListenerHandler</a></span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_AkairoClient.js.html">struct/AkairoClient.js</a>, <a href="struct_AkairoClient.js.html#line126">line 126</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    The listener handler.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><a href="ListenerHandler.html">ListenerHandler</a></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="mem"><span class="type-signature"></span>mem<span class="type-signature"> :Object</span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_AkairoClient.js.html">struct/AkairoClient.js</a>, <a href="struct_AkairoClient.js.html#line47">line 47</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    An empty object.<br>Do whatever you want to it.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Object</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="ownerID"><span class="type-signature"></span>ownerID<span class="type-signature"> :string</span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_AkairoClient.js.html">struct/AkairoClient.js</a>, <a href="struct_AkairoClient.js.html#line39">line 39</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    The ID of the owner.
+    The description.
 </div>
 
 
@@ -694,7 +368,7 @@
 
         
             
-<h4 class="name" id="selfbot"><span class="type-signature"></span>selfbot<span class="type-signature"> :boolean</span></h4>
+<h4 class="name" id="id"><span class="type-signature"></span>id<span class="type-signature"> :string</span></h4>
 
 
 
@@ -705,7 +379,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_AkairoClient.js.html">struct/AkairoClient.js</a>, <a href="struct_AkairoClient.js.html#line45">line 45</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line91">line 91</a>
     </li></ul></dd>
     
 
@@ -745,7 +419,7 @@
 
 
 <div class="description">
-    Whether or not this is a selfbot.
+    The ID of the argument.
 </div>
 
 
@@ -754,7 +428,7 @@
     <ul>
         <li>
             
-<span class="param-type">boolean</span>
+<span class="param-type">string</span>
 
 
         </li>
@@ -767,7 +441,7 @@
 
         
             
-<h4 class="name" id="util"><span class="type-signature"></span>util<span class="type-signature"> :<a href="ClientUtil.html">ClientUtil</a></span></h4>
+<h4 class="name" id="index"><span class="type-signature">(nullable) </span>index<span class="type-signature"> :number</span></h4>
 
 
 
@@ -778,7 +452,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_AkairoClient.js.html">struct/AkairoClient.js</a>, <a href="struct_AkairoClient.js.html#line58">line 58</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line121">line 121</a>
     </li></ul></dd>
     
 
@@ -818,7 +492,7 @@
 
 
 <div class="description">
-    Utility methods.
+    The index to skip to.
 </div>
 
 
@@ -827,7 +501,299 @@
     <ul>
         <li>
             
-<span class="param-type"><a href="ClientUtil.html">ClientUtil</a></span>
+<span class="param-type">number</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="match"><span class="type-signature"></span>match<span class="type-signature"> :<a href="global.html#ArgumentMatch">ArgumentMatch</a></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line103">line 103</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    The method to match text.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="global.html#ArgumentMatch">ArgumentMatch</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="prefix"><span class="type-signature">(nullable) </span>prefix<span class="type-signature"> :string</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line115">line 115</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    The prefix to use for flag or prefix args.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="prompt"><span class="type-signature"></span>prompt<span class="type-signature"> :<a href="global.html#PromptOptions">PromptOptions</a></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line133">line 133</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    The prompt options.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="global.html#PromptOptions">PromptOptions</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="type"><span class="type-signature"></span>type<span class="type-signature"> :<a href="global.html#ArgumentType">ArgumentType</a></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line109">line 109</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    The type to cast to.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="global.html#ArgumentType">ArgumentType</a></span>
 
 
         </li>
@@ -849,7 +815,7 @@
 
     
 
-    <h4 class="name" id="addDatabase"><span class="type-signature"></span>addDatabase<span class="signature">(name, database)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="cast"><span class="type-signature"></span>cast<span class="signature">(word, message)</span><span class="type-signature"> &rarr; {Promise.&lt;any>}</span></h4>
 
     
 
@@ -861,7 +827,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_AkairoClient.js.html">struct/AkairoClient.js</a>, <a href="struct_AkairoClient.js.html#line74">line 74</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line151">line 151</a>
     </li></ul></dd>
     
 
@@ -901,7 +867,7 @@
 
 
 <div class="description">
-    Adds a database that will be initialized once ready.
+    Casts the type of this argument onto a word.
 </div>
 
 
@@ -939,7 +905,7 @@
 
         <tr>
             
-                <td class="name"><code>name</code></td>
+                <td class="name"><code>word</code></td>
             
 
             <td class="type">
@@ -955,20 +921,20 @@
 
             
 
-            <td class="description last">Name of database.</td>
+            <td class="description last">The word to cast.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>database</code></td>
+                <td class="name"><code>message</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="SQLiteHandler.html">SQLiteHandler</a></span>
+<span class="param-type">Message</span>
 
 
             
@@ -978,140 +944,7 @@
 
             
 
-            <td class="description last">The database.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="login"><span class="type-signature"></span>login<span class="signature">(token)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_AkairoClient.js.html">struct/AkairoClient.js</a>, <a href="struct_AkairoClient.js.html#line86">line 86</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Logins the client, creates message listener, and init databases.<br>Resolves once client is ready.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>token</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Client token.</td>
+            <td class="description last">The message that called the command.</td>
         </tr>
 
     
@@ -1142,7 +975,154 @@
     </dt>
     <dd>
         
-<span class="param-type">Promise</span>
+<span class="param-type">Promise.&lt;any></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="default"><span class="type-signature"></span>default<span class="signature">()</span><span class="type-signature"> &rarr; {any}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line135">line 135</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    The default value.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Message</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The message that called the command.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">any</span>
 
 
     </dd>

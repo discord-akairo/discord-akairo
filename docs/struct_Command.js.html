@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. No Prefix Commands.html">7. No Prefix Commands</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -38,110 +38,35 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>const AkairoModule = require('./AkairoModule');
-const { ArgumentMatches, ArgumentTypes, ArgumentSplits } = require('../util/Constants');
-
-/**
- * An argument in a command.
- * @typedef {Object} Argument
- * @prop {string} id - ID of the argument.
- * @prop {ArgumentMatch} [match='word'] - Method to match argument.
- * @prop {ArgumentType|string[]|function} [type='string'] - Attempts to cast argument to this type.&lt;br/>An array or a function can be used (more details in ArgumentType).
- * @prop {string|string[]} [prefix] - Ignores word order and uses a word that starts with/matches this prefix (or multiple prefixes if array).&lt;br/>Applicable to 'prefix' and 'flag' only.
- * @prop {number} [index] - Word to start from.&lt;br/>Applicable to 'word', 'text', or 'content' only.&lt;br/>When using with word, this will offset all word arguments after it by 1 unless the index property is also specified for them.
- * @prop {string|number} [defaultValue=''] - Default value if a word is not inputted or a type could not be casted to.&lt;br/>Can also be a function &lt;code>(message => {})&lt;/code>.
- * @prop {string|string[]} [description=''] - A description of the argument.
- */
-
-/**
- * The method to match arguments from text.
- * &lt;br/>Possible strings are:
- * &lt;br/>
- * &lt;br/>&lt;code>'word'&lt;/code> Matches by the order of the words inputted.&lt;br/>Ignores words that matches prefix or flag.
- * &lt;br/>
- * &lt;br/>&lt;code>'rest'&lt;/code> Matches the rest of the words in order.&lt;br/>Ignores words that matches prefix or flag.
- * &lt;br/>
- * &lt;br/>&lt;code>'prefix'&lt;/code> Matches words that starts with the prefix.&lt;br/>The word after the prefix is the evaluated argument.
- * &lt;br/>
- * &lt;br/>&lt;code>'flag'&lt;/code> Matches words that equal this prefix.&lt;br/>The evaluated argument is true or false.
- * &lt;br/>
- * &lt;br/>&lt;code>'text'&lt;/code> Matches the entire text, except for the command, ignoring words that matches prefix or flag.
- * &lt;br/>
- * &lt;br/>&lt;code>'content'&lt;/code> Matches the entire text as it was inputted, except for the command.
- * @typedef {string} ArgumentMatch
- */
-
-/**
- * The type that the argument should be cast to.
- * &lt;br/>Possible strings are:
- * &lt;br/>
- * &lt;br/>&lt;code>'string'&lt;/code> Does not cast to any type.
- * &lt;br/>
- * &lt;br/>&lt;code>'number'&lt;/code> Casts to an number with parseFloat(), default value if not a number.
- * &lt;br/>
- * &lt;br/>&lt;code>'integer'&lt;/code> Casts to an integer with parseInt(), default value if not a number.
- * &lt;br/>
- * &lt;br/>&lt;code>'dynamic'&lt;/code> Casts to a number with parseFloat() or a string if the argument is not a number.
- * &lt;br/>
- * &lt;br/>&lt;code>'dynamicInt'&lt;/code> Casts to an integer with parseInt() or a string if the argument is not a number.
- * &lt;br/>
- * &lt;br/>Possible Discord-related strings:
- * &lt;br/>
- * &lt;br/>&lt;code>'user'&lt;/code> Tries to resolve to a user.
- * &lt;br/>
- * &lt;br/>&lt;code>'member'&lt;/code> Tries to resolve to a member.
- * &lt;br/>
- * &lt;br/>&lt;code>'channel'&lt;/code> Tries to resolve to a channel.
- * &lt;br/>
- * &lt;br/>&lt;code>'textChannel'&lt;/code> Tries to resolve to a text channel.
- * &lt;br/>
- * &lt;br/>&lt;code>'voiceChannel'&lt;/code> Tries to resolve to a voice channel.
- * &lt;br/>
- * &lt;br/>&lt;code>'role'&lt;/code> Tries to resolve to a role.
- * &lt;br/>
- * &lt;br/>&lt;code>'emoji'&lt;/code> Tries to resolve to a custom emoji.
- * &lt;br/>
- * &lt;br/>Many of these types can only be used in a guild.
- * &lt;br/>If any of the above are invalid, the default value will be resolved (recommended to use an ID).
- * &lt;br/>
- * &lt;br/>An array of strings can be used to restrict input to only those strings, case insensitive.
- * &lt;br/>The evaluated argument will be all lowercase.
- * &lt;br/>If the input is not in the array, the default value is used.
- * &lt;br/>
- * &lt;br/>A function &lt;code>((word, message) => {})&lt;/code> can also be used to filter or modify arguments.
- * &lt;br/>A return value of true will let the word pass, a falsey return value will use the default value for the argument.
- * &lt;br/>Any other truthy return value will be used as the argument.
- * @typedef {string|string[]} ArgumentType
- */
+const Argument = require('./Argument');
+const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
 
 /**
  * Options to use for command execution behavior.
  * @typedef {Object} CommandOptions
- * @prop {Argument[]} [args=[]] - Arguments to parse.
+ * @prop {ArgumentOptions[]} [args=[]] - Arguments to parse.
  * @prop {string} [aliases=[]] - Command names.
  * @prop {string} [category='default'] - Category ID for organization purposes.
  * @prop {string|string[]} [description=''] - Description of the command.
  * @prop {boolean} [ownerOnly=false] - Whether or not to allow client owner(s) only.
- * @prop {string} [channelRestriction='none'] - Restricts channel: 'guild' or 'dm'.
- * @prop {number} [cooldown] - The command cooldown in ms.
+ * @prop {string} [channelRestriction] - Restricts channel: 'guild' or 'dm'.
+ * @prop {number} [cooldown] - The command cooldown in milliseconds.
+ * @prop {number} [ratelimit=1] - Amount of command uses allowed until cooldown.
  * @prop {ArgumentSplit} [split='plain'] - Method to split text into words.
- * @prop {RegExp|function} [trigger] - A regex or function &lt;code>(message => {})&lt;/code> returning regex to match in messages that are NOT commands.&lt;br/>The exec function is now &lt;code>((message, match) => {})&lt;/code> if non-global.&lt;br/>Or, &lt;code>((message, match, groups) => {})&lt;/code> if global.
- * @prop {function} [condition] - A function &lt;code>(message => {})&lt;/code> that returns true or false on messages that are NOT commands. &lt;br/>The exec function is now &lt;code>(message => {})&lt;/code>.
- * @prop {Object} [options={}] - An object for custom options.&lt;br/>Accessible with Command#options.
+ * @prop {RegExp|function} [trigger] - A regex or function &lt;code>(message => {})&lt;/code> returning regex to match in messages that are NOT commands.&lt;br>The exec function is &lt;code>((message, match) => {})&lt;/code> if non-global.&lt;br>If global, it is &lt;code>((message, match, groups) => {})&lt;/code>.
+ * @prop {function} [condition] - A function &lt;code>(message => {})&lt;/code> that returns true or false on messages that are NOT commands.&lt;br>The exec function is now &lt;code>(message => {})&lt;/code>.
+ * @prop {PromptFunctions} [defaultPrompts={}] - The default prompt functions.
+ * @prop {Object} [options={}] - An object for custom options.&lt;br>Accessible with Command#options.
  */
 
 /**
  * The method to split text into words.
- * &lt;br/>Possible strings are:
- * &lt;br/>
- * &lt;br/>&lt;code>'plain'&lt;/code> Splits word separated by whitespace.&lt;br/>Extra whitespace is ignored.
- * &lt;br/>
- * &lt;br/>&lt;code>'split'&lt;/code> Splits word separated by whitespace.
- * &lt;br/>
- * &lt;br/>&lt;code>'quoted'&lt;/code> This is like plain, but counts text inside double quotes as one word.
- * &lt;br/>
- * &lt;br/>&lt;code>'sticky'&lt;/code> This is like quoted, but makes it so that quoted text must have a whitespace/another double quote before it to count as another word.&lt;br/>It will still span multiple words.
- * &lt;br/>
- * &lt;br/>A regex or a character can be used instead (for example, a comma) to split the message by that regex or character.
+ * &lt;br>&lt;code>plain&lt;/code> splits word separated by whitespace. Extra whitespace is ignored.
+ * &lt;br>&lt;code>split&lt;/code> splits word separated by whitespace.
+ * &lt;br>&lt;code>quoted&lt;/code> is similar to plain, but counts text inside double quotes as one word.
+ * &lt;br>&lt;code>sticky&lt;/code> is similar to quoted, but makes it so that quoted text must have a whitespace/another double quote before it to count as another word.
+ * &lt;br>
+ * &lt;br>A regex or a character can be used instead (for example, a comma) to split the message by that regex or character.
  * @typedef {string} ArgumentSplit
  */
 
@@ -166,15 +91,7 @@ class Command extends AkairoModule {
          * Arguments for the command.
          * @type {Argument[]}
          */
-        this.args = options.args || [];
-        for (const arg of this.args){
-            if (!arg.match) arg.match = ArgumentMatches.WORD;
-            if (!arg.type) arg.type = ArgumentTypes.STRING;
-            if (!arg.defaultValue) arg.defaultValue = '';
-
-            if (Array.isArray(arg.description)) arg.description = arg.description.join('\n');
-            if (!arg.description) arg.description = '';
-        }
+        this.args = (options.args || []).map(a => new Argument(this, a));
 
         /**
          * Description of the command.
@@ -192,7 +109,7 @@ class Command extends AkairoModule {
          * Usable only in this channel type.
          * @type {string}
          */
-        this.channelRestriction = options.channelRestriction || 'none';
+        this.channelRestriction = options.channelRestriction;
 
         /**
          * Cooldown in milliseconds.
@@ -201,10 +118,22 @@ class Command extends AkairoModule {
         this.cooldown = options.cooldown;
 
         /**
+         * Uses allowed before cooldown.
+         * @type {number}
+         */
+        this.ratelimit = options.ratelimit || 1;
+
+        /**
          * The command split method.
          * @type {ArgumentSplit}
          */
         this.split = options.split || ArgumentSplits.PLAIN;
+
+        /**
+         * Default prompt functions.
+         * @type {PromptFunctions}
+         */
+        this.defaultPrompts = options.defaultPrompts || {};
 
         /**
          * Custom options for the command.
@@ -238,7 +167,7 @@ class Command extends AkairoModule {
          * Executes the command.
          * @method
          * @name Command#exec
-         * @returns {*}
+         * @returns {any}
          */
 
         /**
@@ -250,7 +179,7 @@ class Command extends AkairoModule {
     }
 
     /**
-     * The command handler.&lt;br/>Alias to this.handler.
+     * The command handler.&lt;br>Alias to this.handler.
      * @readonly
      * @type {CommandHandler}
      */
@@ -262,10 +191,10 @@ class Command extends AkairoModule {
      * Parses text based on this command's args.
      * @param {string} content - String to parse.
      * @param {Message} [message] - Message to use.
-     * @returns {Object}
+     * @returns {Promise.&lt;Object>}
      */
     parse(content, message){
-        if (this.args.length === 0) return {};
+        if (!this.args.length) return Promise.resolve({});
 
         const splitFunc = {
             [ArgumentSplits.PLAIN]: () => content.match(/[^\s]+/g),
@@ -293,7 +222,7 @@ class Command extends AkairoModule {
         for (const [i, arg] of wordArgs.entries()){
             if (arg.match === ArgumentMatches.REST){
                 const word = noPrefixWords.slice(arg.index != null ? arg.index : i).join(' ') || '';
-                args[arg.id] = this._processType(arg, word, message);
+                args[arg.id] = arg.cast.bind(arg, word, message);
                 continue;
             }
 
@@ -301,7 +230,7 @@ class Command extends AkairoModule {
 
             if ((this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY) &amp;&amp; /^".*"$/.test(word)) word = word.slice(1, -1);
 
-            args[arg.id] = this._processType(arg, word, message);
+            args[arg.id] = arg.cast.bind(arg, word, message);
         }
 
         if (prefixArgs.length || flagArgs.length) words.reverse();
@@ -312,7 +241,7 @@ class Command extends AkairoModule {
             
             if (this.split === ArgumentSplits.STICKY &amp;&amp; /^".*"$/.test(word)) word = word.slice(1, -1);
 
-            args[arg.id] = this._processType(arg, word, message);
+            args[arg.id] = arg.cast.bind(arg, word, message);
         }
 
         for (const arg of flagArgs){
@@ -321,108 +250,38 @@ class Command extends AkairoModule {
         }
 
         for (const arg of textArgs){
-            const def = typeof arg.defaultValue === 'function' ? arg.defaultValue(message) : arg.defaultValue;
+            const def = arg.default.call(this, message);
             const word = noPrefixWords.slice(arg.index).join(' ') || def;
 
-            args[arg.id] = this._processType(arg, word, message);
+            args[arg.id] = arg.cast.bind(arg, word, message);
         }
 
         for (const arg of contentArgs){
-            const def = typeof arg.defaultValue === 'function' ? arg.defaultValue(message) : arg.defaultValue;
+            const def = arg.default.call(this, message);
             const word = content.split(' ').slice(arg.index).join(' ') || def;
 
-            args[arg.id] = this._processType(arg, word, message);
+            args[arg.id] = arg.cast.bind(arg, word, message);
         }
 
-        return args;
-    }
+        const props = [];
+        const keys = Object.keys(args);
 
-    _processType(arg, word, message){
-        const def = typeof arg.defaultValue === 'function' ? arg.defaultValue.call(this, message) : arg.defaultValue;
+        const process = i => {
+            if (i === keys.length) return props;
 
-        const typeFunc = {
-            [ArgumentTypes.STRING]: () => word || def,
-            [ArgumentTypes.NUMBER]: () => {
-                if (isNaN(word) || !word) return def;
-                return parseFloat(word);
-            },
-            [ArgumentTypes.INTEGER]: () => {
-                if (isNaN(word) || !word) return def;
-                return parseInt(word);
-            },
-            [ArgumentTypes.DYNAMIC]: () => {
-                if (!word) return def;
-                if (isNaN(word)) return word;
-                return parseFloat(word);
-            },
-            [ArgumentTypes.DYNAMIC_INT]: () => {
-                if (!word) return def;
-                if (isNaN(word)) return word;
-                return parseInt(word);
-            },
-            [ArgumentTypes.USER]: () => {
-                const res = val => this.client.util.resolveUser(val, false, true);
-                if (!word) return res(def);
-                return res(word) || res(def);
-            },
-            [ArgumentTypes.MEMBER]: () => {
-                const res = val => this.client.util.resolveMember(val, message.guild, false, true);
-                if (!word) return res(def);
-                return res(word) || res(def);
-            },
-            [ArgumentTypes.CHANNEL]: () => {
-                const res = val => this.client.util.resolveChannel(val, message.guild, false, true);
-                if (!word) return res(def);
-                return res(word) || res(def);
-            },
-            [ArgumentTypes.TEXT_CHANNEL]: () => {
-                const res = val => this.client.util.resolveChannel(val, message.guild, false, true);
-                if (!word) return res(def);
-
-                const channel = res(word);
-                if (!channel || channel.type !== 'text') return res(def);
-
-                return channel;
-            },
-            [ArgumentTypes.VOICE_CHANNEL]: () => {
-                const res = val => this.client.util.resolveChannel(val, message.guild, false, true);
-                if (!word) return res(def);
-
-                const channel = res(word);
-                if (!channel || channel.type !== 'voice') return res(def);
-
-                return channel;
-            },
-            [ArgumentTypes.ROLE]: () => {
-                const res = val => this.client.util.resolveRole(val, message.guild, false, true);
-                if (!word) return res(def);
-                return res(word) || res(def);
-            },
-            [ArgumentTypes.EMOJI]: () => {
-                const res = val => this.client.util.resolveEmoji(val, message.guild, false, true);
-                if (!word) return res(def);
-                return res(word) || res(def);
-            }
+            const key = keys[i];
+            return args[key]().then(res => {
+                props.push(res);
+                return process(i + 1);
+            });
         };
 
-        if (Array.isArray(arg.type)){
-            if (!arg.type.some(t => t.toLowerCase() === word.toLowerCase())){
-                return def;
-            }
-            
-            return word.toLowerCase();
-        }
-
-        if (typeof arg.type === 'function'){
-            const res = arg.type.call(this, word, message);
-            if (res === true) return word;
-            if (!res) return def;
-
-            return res;
-        }
-
-        if (typeFunc[arg.type]) return typeFunc[arg.type]();
-        return word || def;
+        return process(0).then(values => {
+            return values.reduce((res, prop, i) => {
+                res[keys[i]] = prop;
+                return res;
+            }, args);
+        });
     }
 
     /**

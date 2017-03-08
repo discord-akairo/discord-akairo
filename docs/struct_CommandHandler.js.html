@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. No Prefix Commands.html">7. No Prefix Commands</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -39,6 +39,7 @@
         <article>
             <pre class="prettyprint source linenums"><code>const AkairoHandler = require('./AkairoHandler');
 const Command = require('./Command');
+const TypeResolver = require('../util/TypeResolver');
 const { CommandHandlerEvents, BuiltInReasons } = require('../util/Constants');
 const { Collection } = require('discord.js');
 
@@ -51,6 +52,12 @@ class CommandHandler extends AkairoHandler {
      */
     constructor(client, options = {}){
         super(client, options.commandDirectory, Command);
+
+        /**
+         * The type resolver.
+         * @type {TypeResolver}
+         */
+        this.resolver = new TypeResolver(client);
 
         /**
          * Whether or not the built-in pre-message inhibitors are enabled.
@@ -66,9 +73,41 @@ class CommandHandler extends AkairoHandler {
 
         /**
          * Collection of cooldowns.
-         * @type {Collection}
+         * @type {Collection&lt;string, Object>}
          */
         this.cooldowns = new Collection();
+
+        /**
+         * Set of ongoing argument prompts.
+         * @type {Set.&lt;string>}
+         */
+        this.prompts = new Set();
+
+        /**
+         * Default prompt functions.
+         * @type {PromptFunctions}
+         */
+        this.defaultPrompts = {
+            start: function(m){ return `${m.author}, you need to input a valid ${this.type}!`; },
+            retry: function(m){ return `${m.author}, you need to input a valid ${this.type}!`; },
+            time: function(m){ return `${m.author}, time ran out for command.`; },
+            end: function(m){ return `${m.author}, retries limit reached for command.`; },
+            cancel: function(m){ return `${m.author}, command cancelled.`; }
+        };
+
+        Object.assign(this.defaultPrompts, options.defaultPrompts || {});
+
+        /**
+         * Default amount of retries for a prompt.
+         * @type {number}
+         */
+        this.defaultRetries = options.defaultRetries || 1;
+
+        /**
+         * Word used to cancel a prompt.
+         * @type {string}
+         */
+        this.cancelWord = options.cancelWord || 'cancel';
 
         /**
          * Default cooldown for commands.
@@ -102,13 +141,13 @@ class CommandHandler extends AkairoHandler {
         /**
          * Commands loaded, mapped by ID to Command.
          * @name CommandHandler#modules
-         * @type {Collection.&lt;string, Command>}
+         * @type {Collection&lt;string, Command>}
          */
     }
 
     /**
-     * Collection of commands.&lt;br/>Alias to this.modules.
-     * @type {Collection.&lt;string, Command>}
+     * Collection of commands.&lt;br>Alias to this.modules.
+     * @type {Collection&lt;string, Command>}
      */
     get commands(){
         return this.modules;
@@ -153,6 +192,11 @@ class CommandHandler extends AkairoHandler {
         : () => Promise.resolve();
 
         return pretest(message).then(() => {
+            if (this.prompts.has(message.author.id + message.channel.id)){
+                this.emit(CommandHandlerEvents.IN_PROMPT, message);
+                return Promise.resolve();
+            }
+            
             const prefix = this.prefix(message);
             const allowMention = this.allowMention(message);
             let start;
@@ -162,7 +206,7 @@ class CommandHandler extends AkairoHandler {
                     return message.content.toLowerCase().startsWith(p.toLowerCase());
                 });
 
-                if (!match) return this._handleTriggers(message);
+                if (match == null) return this._handleTriggers(message);
                 start = match;
             } else
             if (message.content.toLowerCase().startsWith(prefix.toLowerCase())){
@@ -220,13 +264,16 @@ class CommandHandler extends AkairoHandler {
                 if (onCooldown) return;
 
                 const content = message.content.slice(message.content.indexOf(name) + name.length + 1);
-                const args = command.parse(content, message);
 
-                this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command);
-                const end = Promise.resolve(command.exec(message, args));
+                return command.parse(content, message).then(args => {
+                    this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command);
+                    const end = Promise.resolve(command.exec(message, args));
 
-                return end.then(() => void this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command))
-                .catch(err => this._handleError(err, message, command));
+                    return end.then(() => void this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command))
+                    .catch(err => this._handleError(err, message, command));
+                }).catch(err => {
+                    if (err instanceof Error) throw err;
+                });
             }).catch(reason => {
                 if (reason instanceof Error) return this._handleError(reason, message, command);
                 this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
@@ -241,46 +288,36 @@ class CommandHandler extends AkairoHandler {
         if (!command.cooldown) return false;
         
         const id = message.author.id;
+        if (!this.cooldowns.has(id)) this.cooldowns.set(id, {});
 
-        const entry = this.cooldowns.get(id);
-        if (!entry) this.cooldowns.set(id, {});
-        
-        const cmdEntry = this.cooldowns.get(id)[command.id];
+        const time = command.cooldown || this.defaultCooldown;
+        const endTime = message.createdTimestamp + time;
 
-        if (!cmdEntry){
-            const time = command.cooldown || this.defaultCooldown;
-            const endTime = message.createdTimestamp + time;
+        if (!this.cooldowns.get(id)[command.id]) this.cooldowns.get(id)[command.id] = {
+            timer: this.client.setTimeout(() => {
+                this.client.clearTimeout(this.cooldowns.get(id)[command.id].timer);
+                delete this.cooldowns.get(id)[command.id];
+                
+                if (!Object.keys(this.cooldowns.get(id)).length){
+                    this.cooldowns.delete(id);
+                }
+            }, time),
+            end: endTime,
+            uses: 0
+        };
 
-            this.cooldowns.get(id)[command.id] = {
-                timer: this.client.setTimeout(() => {
-                    this.client.clearTimeout(this.cooldowns.get(id)[command.id].timer);
-                    delete this.cooldowns.get(id)[command.id];
-                    
-                    if (!Object.keys(this.cooldowns.get(id)).length){
-                        this.cooldowns.delete(id);
-                    }
-                }, time),
-                end: endTime
-            };
-        }
+        const entry = this.cooldowns.get(id)[command.id];
 
-        if (cmdEntry){
+        if (entry.uses >= command.ratelimit){
             const end = this.cooldowns.get(message.author.id)[command.id].end;
             const diff = end - message.createdTimestamp;
+
             this.emit(CommandHandlerEvents.COMMAND_COOLDOWN, message, command, diff);
             return true;
         }
 
+        entry.uses++;
         return false;
-    }
-
-    _handleError(err, message, command){
-        if (this.listenerCount(CommandHandlerEvents.ERROR)){
-            this.emit(CommandHandlerEvents.ERROR, err, message, command);
-            return;
-        }
-
-        throw err;
     }
 
     _handleTriggers(message){
@@ -335,6 +372,15 @@ class CommandHandler extends AkairoHandler {
         }).then(() => {});
     }
 
+    _handleError(err, message, command){
+        if (this.listenerCount(CommandHandlerEvents.ERROR)){
+            this.emit(CommandHandlerEvents.ERROR, err, message, command);
+            return;
+        }
+
+        throw err;
+    }
+
     /**
      * Loads a command.
      * @method
@@ -346,7 +392,7 @@ class CommandHandler extends AkairoHandler {
     /**
      * Adds a command.
      * @method
-     * @param {string} filename - Filename to lookup in the directory.&lt;br/>A .js extension is assumed.
+     * @param {string} filename - Filename to lookup in the directory.&lt;br>A .js extension is assumed.
      * @name CommandHandler#add
      * @returns {Command}
      */
@@ -377,7 +423,7 @@ class CommandHandler extends AkairoHandler {
 module.exports = CommandHandler;
 
 /**
- * Emitted when a message is blocked by a pre-message inhibitor.&lt;br/>The built-in inhibitors are 'notSelf' (for selfbots), 'client', and 'bot'.
+ * Emitted when a message is blocked by a pre-message inhibitor.&lt;br>The built-in inhibitors are 'notSelf' (for selfbots), 'client', and 'bot'.
  * @event CommandHandler#messageBlocked
  * @param {Message} message - Message sent.
  * @param {string} reason - Reason for the block.
@@ -397,7 +443,7 @@ module.exports = CommandHandler;
  */
 
 /**
- * Emitted when a command is blocked by a post-message inhibitor.&lt;br/>The built-in inhibitors are 'owner', 'guild', and 'dm'.
+ * Emitted when a command is blocked by a post-message inhibitor.&lt;br>The built-in inhibitors are 'owner', 'guild', and 'dm'.
  * @event CommandHandler#commandBlocked
  * @param {Message} message - Message sent.
  * @param {Command} command - Command blocked.
@@ -409,7 +455,7 @@ module.exports = CommandHandler;
  * @event CommandHandler#commandCooldown
  * @param {Message} message - Message sent.
  * @param {Command} command - Command blocked.
- * @param {number} remaining - Remaining time in ms for cooldown.
+ * @param {number} remaining - Remaining time in milliseconds for cooldown.
  */
 
 /**
@@ -424,6 +470,12 @@ module.exports = CommandHandler;
  * @event CommandHandler#commandFinished
  * @param {Message} message - Message sent.
  * @param {Command} command - Command executed.
+ */
+
+/**
+ * Emitted when a user is in a command prompt.
+ * @event CommandHandler#inPrompt
+ * @param {Message} message - Message sent.
  */
 
 /**

@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. No Prefix Commands.html">7. No Prefix Commands</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -271,19 +271,9 @@
 
 
         
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
             
+<h4 class="name" id="client"><span class="type-signature">(readonly) </span>client<span class="type-signature"> :<a href="AkairoClient.html">AkairoClient</a></span></h4>
 
-    
-
-    <h4 class="name" id="compareStreaming"><span class="type-signature"></span>compareStreaming<span class="signature">(oldMember, newMember)</span><span class="type-signature"> &rarr; {string|boolean}</span></h4>
-
-    
 
 
 
@@ -293,7 +283,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line309">line 309</a>
+        <a href="util_TypeResolver.js.html">util/TypeResolver.js</a>, <a href="util_TypeResolver.js.html#line11">line 11</a>
     </li></ul></dd>
     
 
@@ -333,7 +323,1933 @@
 
 
 <div class="description">
-    Compares two member objects presences and checks if they started/stopped a stream or not.<br/>Returns 'started', 'stopped', or false if no change.
+    The Akairo client.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="AkairoClient.html">AkairoClient</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="checkChannel"><span class="type-signature"></span>checkChannel<span class="signature">(text, channel, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line161">line 161</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Checks if a string could be referring to a channel.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Text to check.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>channel</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Channel</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Channel to check.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>caseSensitive</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Makes checking by name case sensitive.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>wholeWord</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Makes checking by name match full word only.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="checkEmoji"><span class="type-signature"></span>checkEmoji<span class="signature">(text, emoji, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line265">line 265</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Checks if a string could be referring to a emoji.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Text to check.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>emoji</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Emoji</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Emoji to check.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>caseSensitive</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Makes checking by name case sensitive.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>wholeWord</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Makes checking by name match full word only.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="checkGuild"><span class="type-signature"></span>checkGuild<span class="signature">(text, guild, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line317">line 317</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Checks if a string could be referring to a guild.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Text to check.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>guild</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Guild</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Guild to check.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>caseSensitive</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Makes checking by name case sensitive.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>wholeWord</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Makes checking by name match full word only.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="checkMember"><span class="type-signature"></span>checkMember<span class="signature">(text, member, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line105">line 105</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Checks if a string could be referring to a member.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Text to check.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>member</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">GuildMember</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Member to check.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>caseSensitive</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Makes checking by name case sensitive.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>wholeWord</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Makes checking by name match full word only.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="checkRole"><span class="type-signature"></span>checkRole<span class="signature">(text, role, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line213">line 213</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Checks if a string could be referring to a role.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Text to check.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>role</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Role</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Role to check.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>caseSensitive</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Makes checking by name case sensitive.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>wholeWord</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Makes checking by name match full word only.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="checkUser"><span class="type-signature"></span>checkUser<span class="signature">(text, user, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line52">line 52</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Checks if a string could be referring to a user.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Text to check.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>user</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">User</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">User to check.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>caseSensitive</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Makes checking by name case sensitive.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>wholeWord</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Makes checking by name match full word only.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="collection"><span class="type-signature"></span>collection<span class="signature">(iterable<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Collection}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line446">line 446</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Makes a Collection.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>iterable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Iterable</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Entries to fill with.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Collection</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="compareStreaming"><span class="type-signature"></span>compareStreaming<span class="signature">(oldMember, newMember)</span><span class="type-signature"> &rarr; {number}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line410">line 410</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Compares two member objects presences and checks if they stopped/started a stream or not.<br>Returns 0, 1, or 2 for no change, stopped, or started.
 </div>
 
 
@@ -441,10 +2357,7 @@
     </dt>
     <dd>
         
-<span class="param-type">string</span>
- || 
-
-<span class="param-type">boolean</span>
+<span class="param-type">number</span>
 
 
     </dd>
@@ -470,7 +2383,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line242">line 242</a>
+        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line343">line 343</a>
     </li></ul></dd>
     
 
@@ -621,7 +2534,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line252">line 252</a>
+        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line353">line 353</a>
     </li></ul></dd>
     
 
@@ -772,7 +2685,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line231">line 231</a>
+        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line332">line 332</a>
     </li></ul></dd>
     
 
@@ -911,7 +2824,7 @@
 
     
 
-    <h4 class="name" id="embed"><span class="type-signature"></span>embed<span class="signature">()</span><span class="type-signature"> &rarr; {RichEmbed}</span></h4>
+    <h4 class="name" id="embed"><span class="type-signature"></span>embed<span class="signature">(data<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {RichEmbed}</span></h4>
 
     
 
@@ -923,7 +2836,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line335">line 335</a>
+        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line437">line 437</a>
     </li></ul></dd>
     
 
@@ -976,6 +2889,67 @@
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Embed data.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 
@@ -1025,7 +2999,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line325">line 325</a>
+        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line426">line 426</a>
     </li></ul></dd>
     
 
@@ -1210,7 +3184,7 @@
 
     
 
-    <h4 class="name" id="hoistedRole"><span class="type-signature"></span>hoistedRole<span class="signature">(member)</span><span class="type-signature"> &rarr; {Role}</span></h4>
+    <h4 class="name" id="hoistRole"><span class="type-signature"></span>hoistRole<span class="signature">(member)</span><span class="type-signature"> &rarr; {Role}</span></h4>
 
     
 
@@ -1222,7 +3196,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line262">line 262</a>
+        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line363">line 363</a>
     </li></ul></dd>
     
 
@@ -1373,7 +3347,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line272">line 272</a>
+        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line373">line 373</a>
     </li></ul></dd>
     
 
@@ -1463,7 +3437,7 @@
 
     
 
-    <h4 class="name" id="resolveChannel"><span class="type-signature"></span>resolveChannel<span class="signature">(text, guild, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {GuildChannel}</span></h4>
+    <h4 class="name" id="prompt"><span class="type-signature"></span>prompt<span class="signature">(message, text, check<span class="signature-attributes">opt</span>, time<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Message>}</span></h4>
 
     
 
@@ -1475,7 +3449,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line99">line 99</a>
+        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line458">line 458</a>
     </li></ul></dd>
     
 
@@ -1515,7 +3489,288 @@
 
 
 <div class="description">
-    Resolves a GuildChannel from a string, such as an ID, a name, or a mention.
+    Prompts a user for input, returning the message that passes.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Message</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Message to prompt.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Text to send.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>check</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">RegExp</span>
+ || 
+
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Regex or function <code>(message => {})</code> to check if message should pass.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>time</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>30000</code>
+                
+                </td>
+            
+
+            <td class="description last">Time in milliseconds to wait.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Message></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="resolveChannel"><span class="type-signature"></span>resolveChannel<span class="signature">(text, channels, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {GuildChannel}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line137">line 137</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Resolves a guild channel from a string, such as an ID, a name, or a mention.
 </div>
 
 
@@ -1592,13 +3847,13 @@
 
         <tr>
             
-                <td class="name"><code>guild</code></td>
+                <td class="name"><code>channels</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Guild</span>
+<span class="param-type">Collection</span>
 
 
             
@@ -1620,7 +3875,7 @@
                 </td>
             
 
-            <td class="description last">Guild to find channel in.</td>
+            <td class="description last">Collection of channels to find in.</td>
         </tr>
 
     
@@ -1743,7 +3998,7 @@
 
     
 
-    <h4 class="name" id="resolveEmoji"><span class="type-signature"></span>resolveEmoji<span class="signature">(text, guild, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Emoji}</span></h4>
+    <h4 class="name" id="resolveChannels"><span class="type-signature"></span>resolveChannels<span class="signature">(text, channels, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Collection.&lt;string, GuildChannel>}</span></h4>
 
     
 
@@ -1755,7 +4010,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line171">line 171</a>
+        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line149">line 149</a>
     </li></ul></dd>
     
 
@@ -1795,7 +4050,7 @@
 
 
 <div class="description">
-    Resolves a custom Emoji from a string, such as a name or a mention.
+    Resolves multiple guild channels from a string, such as an ID, a name, or a mention.
 </div>
 
 
@@ -1872,13 +4127,13 @@
 
         <tr>
             
-                <td class="name"><code>guild</code></td>
+                <td class="name"><code>channels</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Guild</span>
+<span class="param-type">Collection</span>
 
 
             
@@ -1900,7 +4155,287 @@
                 </td>
             
 
-            <td class="description last">Guild to find emoji in.</td>
+            <td class="description last">Collection of channels to find in.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>caseSensitive</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Makes finding by name case sensitive.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>wholeWord</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Makes finding by name match full word only.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Collection.&lt;string, GuildChannel></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="resolveEmoji"><span class="type-signature"></span>resolveEmoji<span class="signature">(text, emojis, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Emoji}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line241">line 241</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Resolves a custom emoji from a string, such as a name or a mention.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Text to resolve.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>emojis</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Collection</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Collection of emojis to find in.</td>
         </tr>
 
     
@@ -2023,7 +4558,7 @@
 
     
 
-    <h4 class="name" id="resolveGuild"><span class="type-signature"></span>resolveGuild<span class="signature">(text, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Guild}</span></h4>
+    <h4 class="name" id="resolveEmojis"><span class="type-signature"></span>resolveEmojis<span class="signature">(text, emojis, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Collection.&lt;string, Emoji>}</span></h4>
 
     
 
@@ -2035,7 +4570,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line206">line 206</a>
+        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line253">line 253</a>
     </li></ul></dd>
     
 
@@ -2075,7 +4610,7 @@
 
 
 <div class="description">
-    Resolves a Guild from a string, such as an ID or a name.
+    Resolves multiple custom emojis from a string, such as a name or a mention.
 </div>
 
 
@@ -2146,6 +4681,321 @@
             
 
             <td class="description last">Text to resolve.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>emojis</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Collection</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Collection of emojis to find in.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>caseSensitive</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Makes finding by name case sensitive.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>wholeWord</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Makes finding by name match full word only.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Collection.&lt;string, Emoji></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="resolveGuild"><span class="type-signature"></span>resolveGuild<span class="signature">(text, guilds, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Guild}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line293">line 293</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Resolves a guild from a string, such as an ID or a name.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Text to resolve.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>guilds</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Collection</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Collection of guilds to find in.</td>
         </tr>
 
     
@@ -2268,7 +5118,7 @@
 
     
 
-    <h4 class="name" id="resolveMember"><span class="type-signature"></span>resolveMember<span class="signature">(text, guild<span class="signature-attributes">opt</span>, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {GuildMember|User}</span></h4>
+    <h4 class="name" id="resolveGuilds"><span class="type-signature"></span>resolveGuilds<span class="signature">(text, guilds, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Collection.&lt;string, Guild>}</span></h4>
 
     
 
@@ -2280,7 +5130,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line61">line 61</a>
+        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line305">line 305</a>
     </li></ul></dd>
     
 
@@ -2320,7 +5170,7 @@
 
 
 <div class="description">
-    Resolves a GuildMember from a string, such as an ID, a name, or a mention.
+    Resolves multiple guilds from a string, such as an ID or a name.
 </div>
 
 
@@ -2397,13 +5247,48 @@
 
         <tr>
             
-                <td class="name"><code>guild</code></td>
+                <td class="name"><code>guilds</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Guild</span>
+<span class="param-type">Collection</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Collection of guilds to find in.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>caseSensitive</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
 
 
             
@@ -2424,10 +5309,253 @@
             
                 <td class="default">
                 
+                    <code>false</code>
+                
                 </td>
             
 
-            <td class="description last">Guild to find member in.<br/>If not specified, will resolve a User instead.</td>
+            <td class="description last">Makes finding by name case sensitive.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>wholeWord</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Makes finding by name match full word only.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Collection.&lt;string, Guild></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="resolveMember"><span class="type-signature"></span>resolveMember<span class="signature">(text, members, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {GuildMember}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line81">line 81</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Resolves a member from a string, such as an ID, a name, or a mention.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Text to resolve.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>members</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Collection</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Collection of members to find in.</td>
         </tr>
 
     
@@ -2537,9 +5665,286 @@
     <dd>
         
 <span class="param-type">GuildMember</span>
- || 
 
-<span class="param-type">User</span>
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="resolveMembers"><span class="type-signature"></span>resolveMembers<span class="signature">(text, members, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Collection.&lt;string, GuildMember>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line93">line 93</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Resolves multiple members from a string, such as an ID, a name, or a mention.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Text to resolve.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>members</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Collection</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Collection of members to find in.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>caseSensitive</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Makes finding by name case sensitive.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>wholeWord</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Makes finding by name match full word only.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Collection.&lt;string, GuildMember></span>
 
 
     </dd>
@@ -2565,7 +5970,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line281">line 281</a>
+        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line382">line 382</a>
     </li></ul></dd>
     
 
@@ -2716,7 +6121,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line296">line 296</a>
+        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line397">line 397</a>
     </li></ul></dd>
     
 
@@ -2756,7 +6161,7 @@
 
 
 <div class="description">
-    Resolves a channel permission overwrite.<br/>Returns an object with the allowed and denied arrays of permission names.
+    Resolves a channel permission overwrite.<br>Returns an object with the allow and deny arrays of permission names.
 </div>
 
 
@@ -2855,7 +6260,7 @@
 
     
 
-    <h4 class="name" id="resolveRole"><span class="type-signature"></span>resolveRole<span class="signature">(text, guild, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Role}</span></h4>
+    <h4 class="name" id="resolveRole"><span class="type-signature"></span>resolveRole<span class="signature">(text, roles, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Role}</span></h4>
 
     
 
@@ -2867,7 +6272,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line135">line 135</a>
+        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line189">line 189</a>
     </li></ul></dd>
     
 
@@ -2907,7 +6312,7 @@
 
 
 <div class="description">
-    Resolves a Role from a string, such as an ID, a name, or a mention.
+    Resolves a role from a string, such as an ID, a name, or a mention.
 </div>
 
 
@@ -2984,13 +6389,13 @@
 
         <tr>
             
-                <td class="name"><code>guild</code></td>
+                <td class="name"><code>roles</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Guild</span>
+<span class="param-type">Collection</span>
 
 
             
@@ -3012,7 +6417,7 @@
                 </td>
             
 
-            <td class="description last">Guild to find channel in.</td>
+            <td class="description last">Collection of roles to find in.</td>
         </tr>
 
     
@@ -3135,7 +6540,7 @@
 
     
 
-    <h4 class="name" id="resolveUser"><span class="type-signature"></span>resolveUser<span class="signature">(text, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {User}</span></h4>
+    <h4 class="name" id="resolveRoles"><span class="type-signature"></span>resolveRoles<span class="signature">(text, roles, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Collection.&lt;string, Role>}</span></h4>
 
     
 
@@ -3147,7 +6552,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line27">line 27</a>
+        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line201">line 201</a>
     </li></ul></dd>
     
 
@@ -3187,7 +6592,7 @@
 
 
 <div class="description">
-    Resolves a User from a string, such as an ID, a name, or a mention.
+    Resolves multiple roles from a string, such as an ID, a name, or a mention.
 </div>
 
 
@@ -3258,6 +6663,321 @@
             
 
             <td class="description last">Text to resolve.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>roles</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Collection</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Collection of roles to find in.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>caseSensitive</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Makes finding by name case sensitive.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>wholeWord</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Makes finding by name match full word only.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Collection.&lt;string, Role></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="resolveUser"><span class="type-signature"></span>resolveUser<span class="signature">(text, users, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {User}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line28">line 28</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Resolves a user from a string, such as an ID, a name, or a mention.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Text to resolve.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>users</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Collection</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Collection of users to find in.</td>
         </tr>
 
     
@@ -3367,6 +7087,286 @@
     <dd>
         
 <span class="param-type">User</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="resolveUsers"><span class="type-signature"></span>resolveUsers<span class="signature">(text, users, caseSensitive<span class="signature-attributes">opt</span>, wholeWord<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Collection.&lt;string, User>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line40">line 40</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Resolves multiple users from a string, such as an ID, a name, or a mention.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Text to resolve.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>users</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Collection</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Collection of users to find in.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>caseSensitive</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Makes finding by name case sensitive.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>wholeWord</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Makes finding by name match full word only.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Collection.&lt;string, User></span>
 
 
     </dd>
