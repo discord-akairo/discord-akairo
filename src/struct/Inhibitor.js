@@ -13,7 +13,8 @@ class Inhibitor extends AkairoModule {
     /**
      * Creates a new Inhibitor.
      * @param {string} id - Inhibitor ID.
-     * @param {function} exec - Function <code>((message, command) => {})</code> called before a command is ran.<br>Return true or a rejecting Promise to block.
+     * @param {function} exec - Function <code>((message, command) => {})</code> called before a command is ran.
+     * <br>Return true or a rejecting Promise to block.
      * @param {InhibitorOptions} [options={}] - Options for the inhibitor.
      */
     constructor(id, exec, options = {}){
@@ -53,7 +54,8 @@ class Inhibitor extends AkairoModule {
     }
 
     /**
-     * The inhibitor handler.<br>Alias to this.handler.
+     * The inhibitor handler.
+     * <br>Alias to this.handler.
      * @readonly
      * @type {InhibitorHandler}
      */

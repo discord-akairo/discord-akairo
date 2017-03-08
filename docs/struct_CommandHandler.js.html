@@ -88,11 +88,21 @@ class CommandHandler extends AkairoHandler {
          * @type {PromptOptions}
          */
         this.defaultPrompt = {
-            start: function(m){ return `${m.author}, you need to input a valid ${this.type}!`; },
-            retry: function(m){ return `${m.author}, you need to input a valid ${this.type}!`; },
-            timeout: function(m){ return `${m.author}, time ran out for command.`; },
-            ended: function(m){ return `${m.author}, retries limit reached for command.`; },
-            cancel: function(m){ return `${m.author}, command cancelled.`; },
+            start: function(m){
+                return `${m.author}, what ${this.type} would you like to use?\n${this.description || ''}`;
+            },
+            retry: function(m){
+                return `${m.author}, you need to input a valid ${this.type}!`;
+            },
+            timeout: function(m){
+                return `${m.author}, time ran out for command.`;
+            },
+            ended: function(m){
+                return `${m.author}, retries limit reached for command.\nCommand has been cancelled.`;
+            },
+            cancel: function(m){
+                return `${m.author}, command has been cancelled.`;
+            },
             retries: 1,
             time: 30000,
             cancelWord: 'cancel'
@@ -143,7 +153,8 @@ class CommandHandler extends AkairoHandler {
     }
 
     /**
-     * Collection of commands.&lt;br>Alias to this.modules.
+     * Collection of commands.
+     * &lt;br>Alias to this.modules.
      * @type {Collection&lt;string, Command>}
      */
     get commands(){
@@ -389,7 +400,8 @@ class CommandHandler extends AkairoHandler {
     /**
      * Adds a command.
      * @method
-     * @param {string} filename - Filename to lookup in the directory.&lt;br>A .js extension is assumed.
+     * @param {string} filename - Filename to lookup in the directory.
+     * &lt;br>A .js extension is assumed.
      * @name CommandHandler#add
      * @returns {Command}
      */
@@ -420,7 +432,8 @@ class CommandHandler extends AkairoHandler {
 module.exports = CommandHandler;
 
 /**
- * Emitted when a message is blocked by a pre-message inhibitor.&lt;br>The built-in inhibitors are 'notSelf' (for selfbots), 'client', and 'bot'.
+ * Emitted when a message is blocked by a pre-message inhibitor.
+ * &lt;br>The built-in inhibitors are 'notSelf' (for selfbots), 'client', and 'bot'.
  * @event CommandHandler#messageBlocked
  * @param {Message} message - Message sent.
  * @param {string} reason - Reason for the block.
@@ -440,7 +453,8 @@ module.exports = CommandHandler;
  */
 
 /**
- * Emitted when a command is blocked by a post-message inhibitor.&lt;br>The built-in inhibitors are 'owner', 'guild', and 'dm'.
+ * Emitted when a command is blocked by a post-message inhibitor.
+ * &lt;br>The built-in inhibitors are 'owner', 'guild', and 'dm'.
  * @event CommandHandler#commandBlocked
  * @param {Message} message - Message sent.
  * @param {Command} command - Command blocked.
@@ -470,7 +484,8 @@ module.exports = CommandHandler;
  */
 
 /**
- * Emitted when a user is in a command prompt.
+ * Emitted when a user is in a command argument prompt.
+ * &lt;br>Used to prevent usage of commands during a prompt.
  * @event CommandHandler#inPrompt
  * @param {Message} message - Message sent.
  */

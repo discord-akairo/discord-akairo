@@ -61,7 +61,8 @@ class Listener extends AkairoModule {
     }
 
     /**
-     * The listener handler.<br>Alias to this.handler.
+     * The listener handler.
+     * <br>Alias to this.handler.
      * @readonly
      * @type {ListenerHandler}
      */

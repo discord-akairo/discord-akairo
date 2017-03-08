@@ -12,7 +12,8 @@ class AkairoHandler extends EventEmitter {
      * Handles modules.
      * @param {AkairoClient} client - The Akairo client.
      * @param {string} directory - Directory to modules.
-     * @param {class} classToHandle - Only instances of this can be handled.<br>Other classes are ignored.
+     * @param {class} classToHandle - Only instances of this can be handled.
+     * <br>Other classes are ignored.
      */
     constructor(client, directory, classToHandle){
         super();
@@ -89,7 +90,8 @@ class AkairoHandler extends EventEmitter {
 
     /**
      * Adds a module.
-     * @param {string} filename - Filename to lookup in the directory.<br>A .js extension is assumed.
+     * @param {string} filename - Filename to lookup in the directory.
+     * <br>A .js extension is assumed.
      * @returns {AkairoModule}
      */
     add(filename){

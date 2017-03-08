@@ -53,10 +53,14 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * @prop {number} [cooldown] - The command cooldown in milliseconds.
  * @prop {number} [ratelimit=1] - Amount of command uses allowed until cooldown.
  * @prop {ArgumentSplit} [split='plain'] - Method to split text into words.
- * @prop {RegExp|function} [trigger] - A regex or function &lt;code>(message => {})&lt;/code> returning regex to match in messages that are NOT commands.&lt;br>The exec function is &lt;code>((message, match) => {})&lt;/code> if non-global.&lt;br>If global, it is &lt;code>((message, match, groups) => {})&lt;/code>.
- * @prop {function} [condition] - A function &lt;code>(message => {})&lt;/code> that returns true or false on messages that are NOT commands.&lt;br>The exec function is now &lt;code>(message => {})&lt;/code>.
+ * @prop {RegExp|function} [trigger] - A regex or function &lt;code>(message => {})&lt;/code> returning regex to match in messages that are NOT commands.
+ * &lt;br>The exec function is &lt;code>((message, match) => {})&lt;/code> if non-global.
+ * &lt;br>If global, it is &lt;code>((message, match, groups) => {})&lt;/code>.
+ * @prop {function} [condition] - A function &lt;code>(message => {})&lt;/code> that returns true or false on messages that are NOT commands.
+ * &lt;br>The exec function is &lt;code>(message => {})&lt;/code>.
  * @prop {PromptOptions} [defaultPrompt={}] - The default prompt options.
- * @prop {Object} [options={}] - An object for custom options.&lt;br>Accessible with Command#options.
+ * @prop {Object} [options={}] - An object for custom options.
+ * &lt;br>Accessible with Command#options.
  */
 
 /**
@@ -179,7 +183,8 @@ class Command extends AkairoModule {
     }
 
     /**
-     * The command handler.&lt;br>Alias to this.handler.
+     * The command handler.
+     * &lt;br>Alias to this.handler.
      * @readonly
      * @type {CommandHandler}
      */

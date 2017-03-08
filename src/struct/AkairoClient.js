@@ -11,7 +11,8 @@ const ClientUtil = require('../util/ClientUtil');
  * @prop {boolean} [selfbot=false] - Whether or not this bot is a selfbot.
  * @prop {string} [commandDirectory] - Directory to commands.
  * @prop {string|string[]|function} [prefix='!'] - Default command prefix(es) or function <code>(message => {})</code> returning prefix(es).
- * @prop {boolean|function} [allowMention=true] - Whether or not to allow mentions to the client user as a prefix.<br>Can be function <code>(message => {})</code> that returns true or false.
+ * @prop {boolean|function} [allowMention=true] - Whether or not to allow mentions to the client user as a prefix.
+ * <br>Can be function <code>(message => {})</code> that returns true or false.
  * @prop {number} [defaultCooldown=0] - The default cooldown for commands.
  * @prop {PromptOptions} [defaultPrompt] - The default prompt options.
  * @prop {string} [cancelWord='cancel'] - Word to use to cancel a prompt.
@@ -24,9 +25,11 @@ const ClientUtil = require('../util/ClientUtil');
 
 class AkairoClient extends Client {
     /**
-     * The Akairo framework client.<br>Creates the handlers and sets them up.
+     * The Akairo framework client.
+     * <br>Creates the handlers and sets them up.
      * @param {AkairoOptions} [options={}] - Options to use for the framework.
-     * @param {ClientOptions} [clientOptions] - Options for Discord JS client.<br>If not specified, the previous options parameter is used instead.
+     * @param {ClientOptions} [clientOptions] - Options for Discord JS client.
+     * <br>If not specified, the previous options parameter is used instead.
      */
     constructor(options = {}, clientOptions){
         super(clientOptions || options);
@@ -44,7 +47,8 @@ class AkairoClient extends Client {
         this.selfbot = !!options.selfbot;
 
         /**
-         * An empty object.<br>Do whatever you want to it.
+         * An empty object.
+         * <br>Useful for storing things.
          * @name AkairoClient#mem
          * @type {Object}
          */
@@ -81,7 +85,8 @@ class AkairoClient extends Client {
     }
 
     /**
-     * Logins the client, creates message listener, and init databases.<br>Resolves once client is ready.
+     * Logins the client, creates message listener, and init databases.
+     * <br>Resolves once client is ready.
      * @param {string} token - Client token.
      * @returns {Promise}
      */

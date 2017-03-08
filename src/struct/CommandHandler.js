@@ -114,7 +114,8 @@ class CommandHandler extends AkairoHandler {
     }
 
     /**
-     * Collection of commands.<br>Alias to this.modules.
+     * Collection of commands.
+     * <br>Alias to this.modules.
      * @type {Collection<string, Command>}
      */
     get commands(){
@@ -360,7 +361,8 @@ class CommandHandler extends AkairoHandler {
     /**
      * Adds a command.
      * @method
-     * @param {string} filename - Filename to lookup in the directory.<br>A .js extension is assumed.
+     * @param {string} filename - Filename to lookup in the directory.
+     * <br>A .js extension is assumed.
      * @name CommandHandler#add
      * @returns {Command}
      */

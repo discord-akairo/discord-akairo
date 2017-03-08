@@ -65,10 +65,13 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  * @prop {ArgumentMatch} [match='word'] - Method to match text.
  * @prop {ArgumentType} [type='string'] - Type to cast to.
  * @prop {string|string[]} [prefix] - The string(s) to use as the flag for prefix and flag args.
- * @prop {number} [index] - Index/word of text to start from.<br>Applicable to word, text, or content match only.
- * @prop {any} [default=''] - Default value if text does not parse/cast correctly.<br>Can be a function <code>(message => {})</code>.
+ * @prop {number} [index] - Index/word of text to start from.
+ * <br>Applicable to word, text, or content match only.
+ * @prop {any} [default=''] - Default value if text does not parse/cast correctly.
+ * <br>Can be a function <code>(message => {})</code>.
  * @prop {string|string[]} [description=''] - A description of the argument.
- * @prop {PromptOptions} [prompt] - Prompt options for when user does not provide input.<br>Must not have a default value for this to work.
+ * @prop {PromptOptions} [prompt] - Prompt options for when user does not provide input.
+ * <br>Must not have a default value for this to work.
  */
 
 class Argument {
@@ -155,7 +158,8 @@ class Argument {
     }
 
     /**
-     * The command handler.<br>Alias to this.handler.
+     * The command handler.
+     * <br>Alias to this.handler.
      * @readonly
      * @type {CommandHandler}
      */

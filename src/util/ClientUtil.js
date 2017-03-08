@@ -390,7 +390,8 @@ class ClientUtil {
     }
 
     /**
-     * Resolves a channel permission overwrite.<br>Returns an object with the allow and deny arrays of permission names.
+     * Resolves a channel permission overwrite.
+     * <br>Returns an object with the allow and deny arrays of permission names.
      * @param {PermissionOverwrites} overwrite - Permissions overwrite.
      * @returns {Object}
      */
@@ -402,7 +403,8 @@ class ClientUtil {
     }
 
     /**
-     * Compares two member objects presences and checks if they stopped/started a stream or not.<br>Returns 0, 1, or 2 for no change, stopped, or started.
+     * Compares two member objects presences and checks if they stopped/started a stream or not.
+     * <br>Returns 0, 1, or 2 for no change, stopped, or started.
      * @param {GuildMember} oldMember - The old member.
      * @param {GuildMember} newMember - The new member.
      * @returns {number}
