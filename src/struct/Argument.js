@@ -216,7 +216,8 @@ class Argument {
 
         const retry = i => {
             this.handler.prompts.add(message.author.id + message.channel.id);
-            const text = i === 1 ? prompt.start.call(this, message) : prompt.retry.call(this, message);
+            let text = i === 1 ? prompt.start.call(this, message) : prompt.retry.call(this, message);
+            text = Array.isArray(text) ? text.join('\n') : text;
 
             let value;
 
@@ -232,20 +233,37 @@ class Argument {
                     throw reason;
                 }
 
-                if (reason === 'time') return message.channel.send(prompt.timeout.call(this, message)).then(() => {
-                    this.handler.prompts.delete(message.author.id + message.channel.id);
-                    throw 'time';
-                });
+                if (reason === 'time'){
+                    let response = prompt.timeout.call(this, message);
+                    response = Array.isArray(response) ? response.join('\n') : response;
 
-                if (reason === 'cancel') return message.channel.send(prompt.cancel.call(this, message)).then(() => {
-                    this.handler.prompts.delete(message.author.id + message.channel.id);
-                    throw 'cancel';
-                });
+                    return message.channel.send(response).then(() => {
+                        this.handler.prompts.delete(message.author.id + message.channel.id);
+                        throw 'time';
+                    });
+                }
+
+                if (reason === 'cancel'){
+                    let response = prompt.cancel.call(this, message);
+                    response = Array.isArray(response) ? response.join('\n') : response;
+
+                    return message.channel.send(response).then(() => {
+                        this.handler.prompts.delete(message.author.id + message.channel.id);
+                        throw 'cancel';
+                    });
+                }
                 
-                return i > prompt.retries ? message.channel.send(prompt.ended.call(this, message)).then(() => {
-                    this.handler.prompts.delete(message.author.id + message.channel.id);
-                    throw 'end';
-                }) : retry(i + 1);
+                if (i > prompt.retries){
+                    let response = prompt.ended.call(this, message);
+                    response = Array.isArray(response) ? response.join('\n') : response;
+
+                    return message.channel.send(response).then(() => {
+                        this.handler.prompts.delete(message.author.id + message.channel.id);
+                        throw 'end';
+                    });
+                }
+                
+                return retry(i + 1);
             });
         };
 

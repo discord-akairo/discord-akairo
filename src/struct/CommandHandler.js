@@ -49,11 +49,21 @@ class CommandHandler extends AkairoHandler {
          * @type {PromptOptions}
          */
         this.defaultPrompt = {
-            start: function(m){ return `${m.author}, you need to input a valid ${this.type}!`; },
-            retry: function(m){ return `${m.author}, you need to input a valid ${this.type}!`; },
-            timeout: function(m){ return `${m.author}, time ran out for command.`; },
-            ended: function(m){ return `${m.author}, retries limit reached for command.`; },
-            cancel: function(m){ return `${m.author}, command cancelled.`; },
+            start: function(m){
+                return `${m.author}, what ${this.type} would you like to use?\n${this.description || ''}`;
+            },
+            retry: function(m){
+                return `${m.author}, you need to input a valid ${this.type}!`;
+            },
+            timeout: function(m){
+                return `${m.author}, time ran out for command.`;
+            },
+            ended: function(m){
+                return `${m.author}, retries limit reached for command.\nCommand has been cancelled.`;
+            },
+            cancel: function(m){
+                return `${m.author}, command has been cancelled.`;
+            },
             retries: 1,
             time: 30000,
             cancelWord: 'cancel'
