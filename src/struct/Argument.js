@@ -137,6 +137,33 @@ class Argument {
     }
 
     /**
+     * The client.
+     * @readonly
+     * @type {AkairoClient}
+     */
+    get client(){
+        return this.command.client;
+    }
+
+    /**
+     * The command handler.
+     * @readonly
+     * @type {CommandHandler}
+     */
+    get handler(){
+        return this.command.handler;
+    }
+
+    /**
+     * The command handler.<br>Alias to this.handler.
+     * @readonly
+     * @type {CommandHandler}
+     */
+    get commandHandler(){
+        return this.command.handler;
+    }
+
+    /**
      * Casts the type of this argument onto a word.
      * @param {string} word - The word to cast.
      * @param {Message} message - The message that called the command.
@@ -166,8 +193,8 @@ class Argument {
             return def != null ? def : null;
         }
 
-        if (this.command.handler.resolver[this.type]){
-            const res = this.command.handler.resolver[this.type](word, message);
+        if (this.handler.resolver[this.type]){
+            const res = this.handler.resolver[this.type](word, message);
             if (res != null) return res;
 
             const def = this.default.call(this.command, message);
@@ -181,19 +208,19 @@ class Argument {
     }
 
     _promptArgument(message){
-        const prompt = Object.assign({}, this.prompt || {});
+        const prompt = {};
         
-        Object.assign(prompt, this.command.handler.defaultPrompt);
+        Object.assign(prompt, this.handler.defaultPrompt);
         Object.assign(prompt, this.command.defaultPrompt);
         Object.assign(prompt, this.prompt || {});
 
         const retry = i => {
-            this.command.handler.prompts.add(message.author.id + message.channel.id);
+            this.handler.prompts.add(message.author.id + message.channel.id);
             const text = i === 1 ? prompt.start.call(this, message) : prompt.retry.call(this, message);
 
             let value;
 
-            return this.command.client.util.prompt(message, text, m => {
+            return this.client.util.prompt(message, text, m => {
                 if (m.content.toLowerCase() === prompt.cancelWord) throw 'cancel';
 
                 const res = this._processType(m.content, m);
@@ -201,29 +228,29 @@ class Argument {
                 return res;
             }, prompt.time).then(() => value).catch(reason => {
                 if (reason instanceof Error){
-                    this.command.handler.prompts.delete(message.author.id + message.channel.id);
+                    this.handler.prompts.delete(message.author.id + message.channel.id);
                     throw reason;
                 }
 
                 if (reason === 'time') return message.channel.send(prompt.timeout.call(this, message)).then(() => {
-                    this.command.handler.prompts.delete(message.author.id + message.channel.id);
+                    this.handler.prompts.delete(message.author.id + message.channel.id);
                     throw 'time';
                 });
 
                 if (reason === 'cancel') return message.channel.send(prompt.cancel.call(this, message)).then(() => {
-                    this.command.handler.prompts.delete(message.author.id + message.channel.id);
+                    this.handler.prompts.delete(message.author.id + message.channel.id);
                     throw 'cancel';
                 });
                 
                 return i > prompt.retries ? message.channel.send(prompt.ended.call(this, message)).then(() => {
-                    this.command.handler.prompts.delete(message.author.id + message.channel.id);
+                    this.handler.prompts.delete(message.author.id + message.channel.id);
                     throw 'end';
                 }) : retry(i + 1);
             });
         };
 
         return retry(1).then(value => {
-            this.command.handler.prompts.delete(message.author.id + message.channel.id);
+            this.handler.prompts.delete(message.author.id + message.channel.id);
             return value;
         });
     }
