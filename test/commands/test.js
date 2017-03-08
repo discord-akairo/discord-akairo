@@ -11,32 +11,17 @@ module.exports = new Command('test', exec, {
         {
             id: 'thing',
             type: 'number',
-            prompt: {
-                on: {
-                    start: () => 'this is from arg'
-                },
-                retries: 2
-            }
+            prompt: true
         },
         {
             id: 'thing2',
             type: 'number',
-            prompt: {
-                retries: 1
-            }
+            prompt: true
         },
         {
-            id: 'thing5',
-            type: 'number',
-            prompt: {
-                on: {
-                    retry: () => 'retry from arg'
-                },
-                retries: 3
-            }
+            id: 'thing3',
+            type: 'member',
+            prompt: true
         }
-    ],
-    defaultPrompts: {
-        start: () => 'this is from command'
-    }
+    ]
 });

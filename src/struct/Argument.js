@@ -198,10 +198,15 @@ class Argument {
             this.command.handler.prompts.add(message.author.id + message.channel.id);
             const text = i === 1 ? prompt.on.start.call(this, message) : prompt.on.retry.call(this, message);
 
+            let value;
+
             return this.command.client.util.prompt(message, text, m => {
                 if (m.content.toLowerCase() === 'cancel') throw 'cancel';
-                return this._processType(m.content, m);
-            }, this.prompt && this.prompt.time || 30000).catch(reason => {
+
+                const res = this._processType(m.content, m);
+                value = res;
+                return res;
+            }, this.prompt && this.prompt.time || 30000).then(() => value).catch(reason => {
                 if (reason instanceof Error){
                     this.command.handler.prompts.delete(message.author.id + message.channel.id);
                     throw reason;
@@ -224,9 +229,9 @@ class Argument {
             });
         };
 
-        return retry(1).then(m => {
+        return retry(1).then(value => {
             this.command.handler.prompts.delete(message.author.id + message.channel.id);
-            return m && m.content;
+            return value;
         });
     }
 }
