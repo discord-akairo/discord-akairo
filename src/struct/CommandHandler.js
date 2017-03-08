@@ -155,7 +155,7 @@ class CommandHandler extends AkairoHandler {
         : () => Promise.resolve();
 
         return pretest(message).then(() => {
-            if (this.prompts.has(message.author.id + message.channel.id)){
+            if (this.prompts.has(`${message.author.id}-${message.channel.id}`)){
                 this.emit(CommandHandlerEvents.IN_PROMPT, message);
                 return Promise.resolve();
             }

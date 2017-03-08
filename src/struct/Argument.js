@@ -218,6 +218,7 @@ class Argument {
     }
 
     _promptArgument(message){
+        const id = `${message.author.id}-${message.channel.id}`;
         const prompt = {};
         
         Object.assign(prompt, this.handler.defaultPrompt);
@@ -225,7 +226,7 @@ class Argument {
         Object.assign(prompt, this.prompt || {});
 
         const retry = i => {
-            this.handler.prompts.add(message.author.id + message.channel.id);
+            this.handler.prompts.add(id);
             let text = i === 1 ? prompt.start.call(this, message) : prompt.retry.call(this, message);
             text = Array.isArray(text) ? text.join('\n') : text;
 
@@ -239,7 +240,7 @@ class Argument {
                 return res;
             }, prompt.time).then(() => value).catch(reason => {
                 if (reason instanceof Error){
-                    this.handler.prompts.delete(message.author.id + message.channel.id);
+                    this.handler.prompts.delete(id);
                     throw reason;
                 }
 
@@ -248,7 +249,7 @@ class Argument {
                     response = Array.isArray(response) ? response.join('\n') : response;
 
                     return message.channel.send(response).then(() => {
-                        this.handler.prompts.delete(message.author.id + message.channel.id);
+                        this.handler.prompts.delete(id);
                         throw 'time';
                     });
                 }
@@ -258,7 +259,7 @@ class Argument {
                     response = Array.isArray(response) ? response.join('\n') : response;
 
                     return message.channel.send(response).then(() => {
-                        this.handler.prompts.delete(message.author.id + message.channel.id);
+                        this.handler.prompts.delete(id);
                         throw 'cancel';
                     });
                 }
@@ -268,7 +269,7 @@ class Argument {
                     response = Array.isArray(response) ? response.join('\n') : response;
 
                     return message.channel.send(response).then(() => {
-                        this.handler.prompts.delete(message.author.id + message.channel.id);
+                        this.handler.prompts.delete(id);
                         throw 'end';
                     });
                 }
@@ -278,7 +279,7 @@ class Argument {
         };
 
         return retry(1).then(value => {
-            this.handler.prompts.delete(message.author.id + message.channel.id);
+            this.handler.prompts.delete(id);
             return value;
         });
     }
