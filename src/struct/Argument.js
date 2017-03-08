@@ -45,11 +45,12 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
 
 /**
  * A prompt to run if the user did not input the argument correctly.
- * <br>Can only be used if there is not a default value.
+ * <br>Can only be used if there is not a default value (unless optional is true).
  * <br>The functions are <code>(message => {})</code> and are used to determine the reply.
  * @prop {number} [retries=1] - Amount of times allowed to retries.
  * @prop {number} [time=30000] - Time to wait for input.
  * @prop {string} [cancelWord='cancel'] - Word to use for cancelling prompts.
+ * @prop {boolean} [optional=false] - Prompts only when argument is provided but was not of the right type.
  * @prop {function} [start] - Function called on start.
  * @prop {function} [retry] - Function called on a retry.
  * @prop {function} [timeout] - Function called on collector time out.
@@ -174,6 +175,11 @@ class Argument {
      * @returns {Promise.<any>}
      */
     cast(word, message){
+        if (!word && this.prompt && this.prompt.optional){
+            const def = this.default.call(this.command, message);
+            return Promise.resolve(def != null ? def : null);
+        }
+
         const res = this._processType(word, message);
         return res != null ? Promise.resolve(res) : this.prompt ? this._promptArgument(message) : Promise.resolve(null);
     }

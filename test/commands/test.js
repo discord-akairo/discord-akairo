@@ -24,7 +24,11 @@ module.exports = new Command('test', exec, {
         {
             id: 'thing3',
             type: 'member',
-            prompt: true
+            prompt: {
+                start: () => 'Optional member.',
+                optional: true
+            },
+            default: 123
         }
     ],
     defaultPrompt: {
