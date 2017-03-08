@@ -33,6 +33,12 @@ class CommandHandler extends AkairoHandler {
         this.postInhibitors = !(options.postInhibitors === false);
 
         /**
+         * Whether or not edits are handled.
+         * @type {boolean}
+         */
+        this.handleEdits = !!options.handleEdits;
+
+        /**
          * Collection of cooldowns.
          * @type {Collection<string, Object>}
          */
