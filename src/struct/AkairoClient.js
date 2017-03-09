@@ -110,6 +110,7 @@ class AkairoClient extends Client {
                 });
 
                 if (this._options.handleEdits) this.on('messageUpdate', (o, m) => {
+                    if (o.content === m.content) return;
                     this.commandHandler.handle(m, true);
                 });
             }
