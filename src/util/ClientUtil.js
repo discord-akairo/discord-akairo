@@ -314,7 +314,7 @@ class ClientUtil {
      * @param {boolean} [wholeWord=false] - Makes checking by name match full word only.
      * @returns {boolean}
      */
-    checkGuild(guild, text, caseSensitive, wholeWord){
+    checkGuild(text, guild, caseSensitive, wholeWord){
         if (guild.id === text) return true;
 
         text = caseSensitive ? text : text.toLowerCase();
