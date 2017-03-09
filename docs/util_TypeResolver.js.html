@@ -63,24 +63,24 @@ class TypeResolver {
     }
 
     [ArgumentTypes.NUMBER](word){
-        if (isNaN(word) || !word) return null;
+        if (!word || isNaN(word) || !/\S/.test(word)) return null;
         return parseFloat(word);
     }
 
     [ArgumentTypes.INTEGER](word){
-        if (isNaN(word) || !word) return null;
+        if (!word || isNaN(word) || !/\S/.test(word)) return null;
         return parseInt(word);
     }
 
     [ArgumentTypes.DYNAMIC](word){
         if (!word) return null;
-        if (isNaN(word)) return word;
+        if (isNaN(word) || !/\S/.test(word)) return word;
         return parseFloat(word);
     }
 
     [ArgumentTypes.DYNAMIC_INT](word){
         if (!word) return null;
-        if (isNaN(word)) return word;
+        if (isNaN(word) || !/\S/.test(word)) return word;
         return parseInt(word);
     }
 
