@@ -176,21 +176,21 @@ class Argument {
      */
     cast(word, message){
         if (!word && this.prompt && this.prompt.optional){
-            const def = this.default.call(this.command, message);
-            return Promise.resolve(def != null ? def : null);
+            return Promise.resolve(this.default.call(this.command, message));
         }
 
         const res = this._processType(word, message);
-        return res != null ? Promise.resolve(res) : this.prompt ? this._promptArgument(message) : Promise.resolve(null);
+        
+        return res != null
+        ? Promise.resolve(res)
+        : this.prompt
+        ? this._promptArgument(message)
+        : Promise.resolve(this.default.call(this.command, message));
     }
 
     _processType(word, message){
         if (Array.isArray(this.type)){
-            if (!this.type.some(t => t.toLowerCase() === word.toLowerCase())){
-                const def = this.default.call(this.command, message);
-                return def != null ? def : null;
-            }
-            
+            if (!this.type.some(t => t.toLowerCase() === word.toLowerCase())) return null;
             return word.toLowerCase();
         }
 
@@ -198,23 +198,18 @@ class Argument {
             const res = this.type.call(this.command, word, message);
             if (res === true) return word;
             if (res != null) return res;
-
-            const def = this.default.call(this.command, message);
-            return def != null ? def : null;
+            return null;
         }
 
         if (this.handler.resolver[this.type]){
             const res = this.handler.resolver[this.type](word, message);
             if (res != null) return res;
 
-            const def = this.default.call(this.command, message);
-            return def != null ? def : null;
+            return null;
         }
 
         if (word) return word;
-
-        const def = this.default.call(this.command, message);
-        return def != null ? def : null;
+        return null;
     }
 
     _promptArgument(message){
