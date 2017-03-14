@@ -83,6 +83,7 @@ class AkairoClient extends Client {
 
         if (!this._options.emitters) this._options.emitters = {};
         this._options.emitters[name] = database;
+        return this;
     }
 
     /**
@@ -98,23 +99,27 @@ class AkairoClient extends Client {
 
             this.once('ready', () => {
                 const promises = Object.keys(this.databases).map(key => {
-                    const ids = this.databases[key].init(this);
-                    return this.databases[key].load(ids);
+                    const db = this.databases[key];
+
+                    const ids = db.init ? db.init(this) || [] : [];
+                    return db.load ? db.load(ids) : Promise.resolve();
                 });
 
-                Promise.all(promises).then(() => resolve()).catch(reject);
+                Promise.all(promises).then(() => {
+                    if (this.commandHandler){
+                        this.on('message', m => {
+                            this.commandHandler.handle(m, false);
+                        });
+
+                        if (this._options.handleEdits) this.on('messageUpdate', (o, m) => {
+                            if (o.content === m.content) return;
+                            this.commandHandler.handle(m, true);
+                        });
+                    }
+
+                    return resolve();
+                }).catch(reject);
             });
-
-            if (this.commandHandler){
-                this.on('message', m => {
-                    this.commandHandler.handle(m, false);
-                });
-
-                if (this._options.handleEdits) this.on('messageUpdate', (o, m) => {
-                    if (o.content === m.content) return;
-                    this.commandHandler.handle(m, true);
-                });
-            }
         });
     }
 
