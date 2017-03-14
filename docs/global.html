@@ -531,7 +531,7 @@
 
         <tr>
             
-                <td class="name"><code>preInhibitors</code></td>
+                <td class="name"><code>blockNotSelf</code></td>
             
 
             <td class="type">
@@ -561,14 +561,14 @@
                 </td>
             
 
-            <td class="description last">Whether or not to enable the built-in pre-message inhibitors.</td>
+            <td class="description last">Whether or not to block others, if a selfbot.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>postInhibitors</code></td>
+                <td class="name"><code>blockClient</code></td>
             
 
             <td class="type">
@@ -598,7 +598,44 @@
                 </td>
             
 
-            <td class="description last">Whether or not to enable the built-in post-message inhibitors.</td>
+            <td class="description last">Whether or not to block self, if not a selfbot.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>blockBots</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>true</code>
+                
+                </td>
+            
+
+            <td class="description last">Whether or not to block bots.</td>
         </tr>
 
     
@@ -2129,7 +2166,7 @@
                 </td>
             
 
-            <td class="description last">Set to 'pre' to make this run before the message is handled rather than after.</td>
+            <td class="description last">Can be 'all' to run on all messages, 'pre' to run on messages not blocked by the built-in inhibitors, or 'post' to run on messages that are commands.</td>
         </tr>
 
     
@@ -3008,7 +3045,7 @@
 
 
 <div class="description">
-    A prompt to run if the user did not input the argument correctly.<br>Can only be used if there is not a default value (unless optional is true).
+    A prompt to run if the user did not input the argument correctly.<br>Can only be used if there is not a default value (unless optional is true).<br>The functions are <code>(message => {})</code> and are used to determine the reply.
 </div>
 
 

@@ -85,8 +85,8 @@
 /**
  * A prompt to run if the user did not input the argument correctly.
  * &lt;br>Can only be used if there is not a default value (unless optional is true).
- * @typedef {Object} PromptOptions
  * &lt;br>The functions are &lt;code>(message => {})&lt;/code> and are used to determine the reply.
+ * @typedef {Object} PromptOptions
  * @prop {number} [retries=1] - Amount of times allowed to retries.
  * @prop {number} [time=30000] - Time to wait for input.
  * @prop {string} [cancelWord='cancel'] - Word to use for cancelling prompts.
@@ -198,20 +198,10 @@ class Argument {
     }
 
     /**
-     * The command handler.
-     * &lt;br>Alias to this.handler.
-     * @readonly
-     * @type {CommandHandler}
-     */
-    get commandHandler(){
-        return this.command.handler;
-    }
-
-    /**
      * Casts the type of this argument onto a word.
      * @param {string} word - The word to cast.
      * @param {Message} message - The message that called the command.
-     * @returns {Promise.&lt;any>}
+     * @returns {Promise&lt;any>}
      */
     cast(word, message){
         if (!word &amp;&amp; this.prompt &amp;&amp; this.prompt.optional){
@@ -227,6 +217,13 @@ class Argument {
         : Promise.resolve(this.default.call(this.command, message));
     }
 
+    /**
+     * Processes the type casting.
+     * @private
+     * @param {string} word - Word to process.
+     * @param {Message} message - Message that called the command.
+     * @returns {any}
+     */
     _processType(word, message){
         if (Array.isArray(this.type)){
             if (!this.type.some(t => t.toLowerCase() === word.toLowerCase())) return null;
@@ -251,8 +248,13 @@ class Argument {
         return null;
     }
 
+    /**
+     * Prompts a message for a word and casts it.
+     * @private
+     * @param {Message} message - Message to prompt.
+     * @returns {Promise&lt;any>}
+     */
     _promptArgument(message){
-        const id = `${message.author.id}-${message.channel.id}`;
         const prompt = {};
         
         Object.assign(prompt, this.handler.defaultPrompt);
@@ -260,7 +262,7 @@ class Argument {
         Object.assign(prompt, this.prompt || {});
 
         const retry = i => {
-            this.handler.prompts.add(id);
+            this.handler.addPrompt(message);
             let text = i === 1 ? prompt.start.call(this, message) : prompt.retry.call(this, message);
             text = Array.isArray(text) ? text.join('\n') : text;
 
@@ -271,10 +273,11 @@ class Argument {
 
                 const res = this._processType(m.content, m);
                 value = res;
+                
                 return res;
             }, prompt.time).then(() => value).catch(reason => {
                 if (reason instanceof Error){
-                    this.handler.prompts.delete(id);
+                    this.handler.removePrompt(message);
                     throw reason;
                 }
 
@@ -283,7 +286,7 @@ class Argument {
                     response = Array.isArray(response) ? response.join('\n') : response;
 
                     return message.channel.send(response).then(() => {
-                        this.handler.prompts.delete(id);
+                        this.handler.removePrompt(message);
                         throw 'time';
                     });
                 }
@@ -293,7 +296,7 @@ class Argument {
                     response = Array.isArray(response) ? response.join('\n') : response;
 
                     return message.channel.send(response).then(() => {
-                        this.handler.prompts.delete(id);
+                        this.handler.removePrompt(message);
                         throw 'cancel';
                     });
                 }
@@ -303,7 +306,7 @@ class Argument {
                     response = Array.isArray(response) ? response.join('\n') : response;
 
                     return message.channel.send(response).then(() => {
-                        this.handler.prompts.delete(id);
+                        this.handler.removePrompt(message);
                         throw 'end';
                     });
                 }
@@ -313,7 +316,7 @@ class Argument {
         };
 
         return retry(1).then(value => {
-            this.handler.prompts.delete(id);
+            this.handler.removePrompt(message);
             return value;
         });
     }

@@ -60,50 +60,20 @@ class InhibitorHandler extends AkairoHandler {
         /**
          * Inhibitors loaded, mapped by ID to Inhibitor.
          * @name InhibitorHandler#modules
-         * @type {Collection.&lt;string, Inhibitor>}
+         * @type {Collection&lt;string, Inhibitor>}
          */
     }
 
     /**
-     * Collection of inhibitors.
-     * &lt;br>Alias to this.modules.
-     * @type {Collection.&lt;string, Inhibitor>}
-     */
-    get inhibitors(){
-        return this.modules;
-    }
-
-    /**
-     * Tests the pre-message inhibitors against the message.
+     * Tests inhibitors against the message.
      * &lt;br>Rejects with the reason if blocked.
+     * @param {string} type - Type of inhibitor, 'all', 'pre', or 'post'.
      * @param {Message} message - Message to test.
-     * @returns {Promise.&lt;string>}
+     * @param {Command} [command] - Command to use.
+     * @returns {Promise&lt;string>}
      */
-    testMessage(message){
-        const promises = this.inhibitors.filter(i => i.type === 'pre' &amp;&amp; i.enabled).map(inhibitor => {
-            const inhibited = inhibitor.exec(message);
-
-            if (inhibited instanceof Promise) return inhibited.catch(err => {
-                if (err instanceof Error) throw err;
-                return Promise.reject(inhibitor.reason);
-            });
-            
-            if (!inhibited) return Promise.resolve();
-            return Promise.reject(inhibitor.reason);
-        });
-
-        return Promise.all(promises);
-    }
-
-    /**
-     * Tests the post-message inhibitors against the message and command.
-     * &lt;br>Rejects with the reason if blocked.
-     * @param {Message} message - Message to test.
-     * @param {Command} command - Command to test.
-     * @returns {Promise.&lt;string>}
-     */
-    testCommand(message, command){
-        const promises = this.inhibitors.filter(i => i.type === 'post' &amp;&amp; i.enabled).map(inhibitor => {
+    test(type, message, command){
+        const promises = this.modules.filter(i => i.type === type &amp;&amp; i.enabled).map(inhibitor => {
             const inhibited = inhibitor.exec(message, command);
 
             if (inhibited instanceof Promise) return inhibited.catch(err => {

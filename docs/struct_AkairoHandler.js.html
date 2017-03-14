@@ -37,9 +37,9 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const path = require('path');
+            <pre class="prettyprint source linenums"><code>const fs = require('fs');
+const path = require('path');
 const EventEmitter = require('events');
-const rread = require('readdir-recursive');
 const AkairoModule = require('./AkairoModule');
 const Category = require('../util/Category');
 const { AkairoHandlerEvents } = require('../util/Constants');
@@ -75,7 +75,7 @@ class AkairoHandler extends EventEmitter {
          * Class to handle.
          * @readonly
          * @name AkairoHandler#classToHandle
-         * @type {class}
+         * @type {function}
          */
 
         Object.defineProperties(this, {
@@ -86,20 +86,18 @@ class AkairoHandler extends EventEmitter {
 
         /**
          * Modules loaded, mapped by ID to AkairoModule.
-         * @type {Collection.&lt;string, AkairoModule>}
+         * @type {Collection&lt;string, AkairoModule>}
          */
         this.modules = new Collection();
 
         /**
          * Categories, mapped by ID to Category.
-         * @type {Collection.&lt;string, Category>}
+         * @type {Collection&lt;string, Category>}
          */
         this.categories = new Collection();
 
-        const filepaths = rread.fileSync(this.directory);
-        for (const filepath of filepaths){
-            this.load(filepath);
-        }
+        const filepaths = this.constructor.readdirRecursive(this.directory);
+        for (const filepath of filepaths) this.load(filepath);
     }
 
     /**
@@ -134,13 +132,11 @@ class AkairoHandler extends EventEmitter {
      * @returns {AkairoModule}
      */
     add(filename){
-        const files = rread.fileSync(this.directory);
+        const files = this.constructor.readdirRecursive(this.directory);
         const filepath = files.find(file => file.endsWith(`${filename}.js`));
 
-        if (!filepath){
-            throw new Error(`File ${filename} not found.`);
-        }
-
+        if (!filepath) throw new Error(`File ${filename} not found.`);
+        
         const mod = this.load(filepath);
         this.emit(AkairoHandlerEvents.ADD, mod);
         return mod;
@@ -187,6 +183,7 @@ class AkairoHandler extends EventEmitter {
 
     /**
      * Reloads all modules.
+     * @returns {void}
      */
     reloadAll(){
         for (const m of Array.from(this.modules.values())) m.reload();
@@ -201,6 +198,31 @@ class AkairoHandler extends EventEmitter {
         return this.categories.find(category => {
             return category.id.toLowerCase() === name.toLowerCase();
         });
+    }
+
+    /**
+     * Reads files recursively from a directory.
+     * @param {string} directory - Directory to read.
+     * @returns {string[]}
+     */
+    static readdirRecursive(directory){
+        const result = [];
+
+        (function read(dir){
+            const files = fs.readdirSync(dir);
+
+            for (const file of files){
+                const filepath = path.join(dir, file);
+
+                if (fs.statSync(filepath).isDirectory()){
+                    read(filepath);
+                } else {
+                    result.push(filepath);
+                }
+            }
+        })(directory);
+
+        return result;
     }
 }
 

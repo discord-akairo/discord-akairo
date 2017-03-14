@@ -56,7 +56,7 @@ class ListenerHandler extends AkairoHandler {
          * EventEmitters for use, mapped by name to EventEmitter.
          * &lt;br>'client', 'commandHandler', 'inhibitorHandler', 'listenerHandler' are set by default.
          * &lt;br>Databases added through the client are also added here.
-         * @type {Collection.&lt;string, EventEmitter>}
+         * @type {Collection&lt;string, EventEmitter>}
          */
         this.emitters = new Collection();
         this.emitters.set('client', this.client);
@@ -81,17 +81,8 @@ class ListenerHandler extends AkairoHandler {
         /**
          * Listeners loaded, mapped by ID to Listener.
          * @name ListenerHandler#modules
-         * @type {Collection.&lt;string, Listener>}
+         * @type {Collection&lt;string, Listener>}
          */
-    }
-
-    /**
-     * Collection of listeners.
-     * &lt;br>Alias to this.modules.
-     * @type {Collection.&lt;string, Listener>}
-     */
-    get listeners(){
-        return this.modules;
     }
 
     /**
@@ -135,7 +126,7 @@ class ListenerHandler extends AkairoHandler {
      * @param {string} id - ID of the listener.
      */
     register(id){
-        const listener = this.listeners.get(id.toString());
+        const listener = this.modules.get(id.toString());
         if (!listener) throw new Error(`Listener ${id} does not exist.`);
 
         const emitter = listener.emitter instanceof EventEmitter ? listener.emitter : this.emitters.get(listener.emitter);
@@ -153,7 +144,7 @@ class ListenerHandler extends AkairoHandler {
      * @param {string} id - ID of the listener.
      */
     deregister(id){
-        const listener = this.listeners.get(id.toString());
+        const listener = this.modules.get(id.toString());
         if (!listener) throw new Error(`Listener ${id} does not exist.`);
 
         const emitter = listener.emitter instanceof EventEmitter ? listener.emitter : this.emitters.get(listener.emitter);
