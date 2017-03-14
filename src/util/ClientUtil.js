@@ -452,17 +452,19 @@ class ClientUtil {
     /**
      * Prompts a user for input, returning the message that passes.
      * @param {Message} message - Message to prompt.
-     * @param {string} text - Text to send.
+     * @param {string} content - Text to send.
      * @param {RegExp|function} [check] - Regex or function <code>(message => {})</code> to check if message should pass.
      * @param {number} [time=30000] - Time in milliseconds to wait.
      * @param {MessageOptions} [options] - Message options for message.
      * @returns {Promise.<Message>}
      */
-    prompt(message, text, check = () => true, time = 30000, options){
-        return message.channel.send(text, options).then(() => new Promise((resolve, reject) => {
+    prompt(message, content, check = () => true, time = 30000, options){
+        return message.channel.send(content, options).then(sent => new Promise((resolve, reject) => {
             const collector = message.channel.createCollector(m => {
                 try {
+                    if (m.id === sent.id) return;
                     if (m.author.id !== message.author.id) return;
+                    
                     let passed;
 
                     if (typeof check === 'function'){
