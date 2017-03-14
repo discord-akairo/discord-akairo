@@ -159,16 +159,6 @@ class Argument {
     }
 
     /**
-     * The command handler.
-     * <br>Alias to this.handler.
-     * @readonly
-     * @type {CommandHandler}
-     */
-    get commandHandler(){
-        return this.command.handler;
-    }
-
-    /**
      * Casts the type of this argument onto a word.
      * @param {string} word - The word to cast.
      * @param {Message} message - The message that called the command.

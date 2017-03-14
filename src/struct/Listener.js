@@ -61,22 +61,12 @@ class Listener extends AkairoModule {
     }
 
     /**
-     * The listener handler.
-     * <br>Alias to this.handler.
-     * @readonly
-     * @type {ListenerHandler}
-     */
-    get listenerHandler(){
-        return this.handler;
-    }
-
-    /**
      * Enables the listener.
      * @returns {boolean}
      */
     enable(){
         if (!super.enable()) return false;
-        this.listenerHandler.register(this.id);
+        this.handler.register(this.id);
         return true;
     }
 
@@ -86,7 +76,7 @@ class Listener extends AkairoModule {
      */
     disable(){
         if (!super.disable()) return false;
-        this.listenerHandler.deregister(this.id);
+        this.handler.deregister(this.id);
         return true;
     }
 

@@ -5,6 +5,7 @@ const client = new AkairoClient({
     ownerID: '123992700587343872',
     commandDirectory: './test/commands/',
     listenerDirectory: './test/listeners/',
+    inhibitorDirectory: './test/inhibitors/',
     handleEdits: true
 });
 

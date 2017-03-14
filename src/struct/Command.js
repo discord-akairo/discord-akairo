@@ -158,16 +158,6 @@ class Command extends AkairoModule {
     }
 
     /**
-     * The command handler.
-     * <br>Alias to this.handler.
-     * @readonly
-     * @type {CommandHandler}
-     */
-    get commandHandler(){
-        return this.handler;
-    }
-
-    /**
      * Parses text based on this command's args.
      * @param {string} content - String to parse.
      * @param {Message} [message] - Message to use.

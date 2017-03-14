@@ -114,21 +114,12 @@ class CommandHandler extends AkairoHandler {
     }
 
     /**
-     * Collection of commands.
-     * <br>Alias to this.modules.
-     * @type {Collection<string, Command>}
-     */
-    get commands(){
-        return this.modules;
-    }
-
-    /**
      * Finds a command by alias.
      * @param {string} name - Alias to find with.
      * @returns {Command}
      */
     findCommand(name){
-        return this.commands.find(command => {
+        return this.modules.find(command => {
             return command.aliases.some(a => a.toLowerCase() === name.toLowerCase());
         });
     }
@@ -329,7 +320,7 @@ class CommandHandler extends AkairoHandler {
     }
 
     _handleTriggers(message, edited){
-        const matchedCommands = this.commands.filter(c => (!c.editable || edited && c.editable) && c.enabled && c.trigger(message));
+        const matchedCommands = this.modules.filter(c => (!c.editable || edited && c.editable) && c.enabled && c.trigger(message));
         const triggered = [];
 
         for (const c of matchedCommands.values()){
@@ -362,7 +353,7 @@ class CommandHandler extends AkairoHandler {
                 return this._handleError(err, message, c[0]);
             });
         })).then(() => {
-            const trueCommands = this.commands.filter(c => (!c.editable || edited && c.editable) && c.enabled && c.condition(message));
+            const trueCommands = this.modules.filter(c => (!c.editable || edited && c.editable) && c.enabled && c.condition(message));
             
             if (!trueCommands.size) return void this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
 

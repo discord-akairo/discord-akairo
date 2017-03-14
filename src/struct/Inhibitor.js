@@ -54,16 +54,6 @@ class Inhibitor extends AkairoModule {
     }
 
     /**
-     * The inhibitor handler.
-     * <br>Alias to this.handler.
-     * @readonly
-     * @type {InhibitorHandler}
-     */
-    get inhibitorHandler(){
-        return this.handler;
-    }
-
-    /**
      * Reloads the inhibitor.
      * @method
      * @name Inhibitor#reload

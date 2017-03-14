@@ -47,15 +47,6 @@ class ListenerHandler extends AkairoHandler {
     }
 
     /**
-     * Collection of listeners.
-     * <br>Alias to this.modules.
-     * @type {Collection.<string, Listener>}
-     */
-    get listeners(){
-        return this.modules;
-    }
-
-    /**
      * Loads a listener.
      * @param {string} filepath - Path to file.
      * @returns {Listener}
@@ -96,7 +87,7 @@ class ListenerHandler extends AkairoHandler {
      * @param {string} id - ID of the listener.
      */
     register(id){
-        const listener = this.listeners.get(id.toString());
+        const listener = this.modules.get(id.toString());
         if (!listener) throw new Error(`Listener ${id} does not exist.`);
 
         const emitter = listener.emitter instanceof EventEmitter ? listener.emitter : this.emitters.get(listener.emitter);
@@ -114,7 +105,7 @@ class ListenerHandler extends AkairoHandler {
      * @param {string} id - ID of the listener.
      */
     deregister(id){
-        const listener = this.listeners.get(id.toString());
+        const listener = this.modules.get(id.toString());
         if (!listener) throw new Error(`Listener ${id} does not exist.`);
 
         const emitter = listener.emitter instanceof EventEmitter ? listener.emitter : this.emitters.get(listener.emitter);

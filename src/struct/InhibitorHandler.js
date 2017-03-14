@@ -26,22 +26,13 @@ class InhibitorHandler extends AkairoHandler {
     }
 
     /**
-     * Collection of inhibitors.
-     * <br>Alias to this.modules.
-     * @type {Collection.<string, Inhibitor>}
-     */
-    get inhibitors(){
-        return this.modules;
-    }
-
-    /**
      * Tests the pre-message inhibitors against the message.
      * <br>Rejects with the reason if blocked.
      * @param {Message} message - Message to test.
      * @returns {Promise.<string>}
      */
     testMessage(message){
-        const promises = this.inhibitors.filter(i => i.type === 'pre' && i.enabled).map(inhibitor => {
+        const promises = this.modules.filter(i => i.type === 'pre' && i.enabled).map(inhibitor => {
             const inhibited = inhibitor.exec(message);
 
             if (inhibited instanceof Promise) return inhibited.catch(err => {
@@ -64,7 +55,7 @@ class InhibitorHandler extends AkairoHandler {
      * @returns {Promise.<string>}
      */
     testCommand(message, command){
-        const promises = this.inhibitors.filter(i => i.type === 'post' && i.enabled).map(inhibitor => {
+        const promises = this.modules.filter(i => i.type === 'post' && i.enabled).map(inhibitor => {
             const inhibited = inhibitor.exec(message, command);
 
             if (inhibited instanceof Promise) return inhibited.catch(err => {
