@@ -204,6 +204,21 @@ class TypeResolver {
         const guilds = res(word);
         return guilds.size ? guilds : null;
     }
+
+    /**
+     * Adds a new type.
+     * @param {string} name - Name of the type.
+     * @param {function} resolver - Function <code>((word, message) => {})</code> that resolves the type.
+     * <br>Returning null means that the type could not be resolved.
+     */
+    addType(name, resolver){
+        if (name === 'client' || name === 'addType') throw new Error(`Argument type ${name} is reserved.`);
+        if (this[name]) throw new Error(`Argument type ${name} already exists.`);
+
+        Object.defineProperty(this, name, {
+            value: resolver.bind(this)
+        });
+    }
 }
 
 module.exports = TypeResolver;

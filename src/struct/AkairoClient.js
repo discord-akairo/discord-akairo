@@ -93,7 +93,7 @@ class AkairoClient extends Client {
      */
     login(token){
         return new Promise((resolve, reject) => {
-            this._build();
+            this.build();
             super.login(token).catch(reject);
 
             this.once('ready', () => {
@@ -118,7 +118,10 @@ class AkairoClient extends Client {
         });
     }
 
-    _build(){
+    /**
+     * Builds the client by creating the handlers.
+     */
+    build(){
         if (this._options.commandDirectory && !this.commandHandler){
             /**
              * The command handler.

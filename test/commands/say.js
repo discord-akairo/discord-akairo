@@ -16,7 +16,8 @@ module.exports = new Command('say', exec, {
     args: [
         {
             id: 'content',
-            match: 'content'
+            type: '1-10',
+            default: 1
         }
     ]
 });
