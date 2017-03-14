@@ -173,7 +173,7 @@ class CommandHandler extends AkairoHandler {
      * Handles a message.
      * @param {Message} message - Message to handle.
      * @param {boolean} edited - Whether or not the message was edited.
-     * @returns {Promise}
+     * @returns {Promise<void>}
      */
     handle(message, edited){
         const alltest = this.client.inhibitorHandler
@@ -293,6 +293,13 @@ class CommandHandler extends AkairoHandler {
         });
     }
 
+    /**
+     * Handles cooldowns and checks if a user is under cooldown.
+     * @private
+     * @param {Message} message - Message that called the command.
+     * @param {Command} command - Command to cooldown.
+     * @returns {boolean}
+     */
     _handleCooldowns(message, command){
         if (!command.cooldown) return false;
         
@@ -329,6 +336,13 @@ class CommandHandler extends AkairoHandler {
         return false;
     }
 
+    /**
+     * Handles regex and conditional commands.
+     * @private
+     * @param {Message} message - Message to handle.
+     * @param {boolean} edited - Whether or not the message was edited.
+     * @returns {Promise<void>}
+     */
     _handleTriggers(message, edited){
         const matchedCommands = this.modules.filter(c => (!c.editable || edited && c.editable) && c.enabled && c.trigger(message));
         const triggered = [];
@@ -381,6 +395,13 @@ class CommandHandler extends AkairoHandler {
         });
     }
 
+    /**
+     * Handles errors from the handling.
+     * @private
+     * @param {Error} err - The error.
+     * @param {Message} message - Message that called the command.
+     * @param {Command} [command] - Command that errored.
+     */
     _handleError(err, message, command){
         if (this.listenerCount(CommandHandlerEvents.ERROR)){
             this.emit(CommandHandlerEvents.ERROR, err, message, command);
