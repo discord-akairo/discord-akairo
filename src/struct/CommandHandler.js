@@ -40,15 +40,15 @@ class CommandHandler extends AkairoHandler {
 
         /**
          * Collection of cooldowns.
-         * @type {Collection<string, Object>}
+         * @type {Collection.<string, Object>}
          */
         this.cooldowns = new Collection();
 
         /**
-         * Set of ongoing argument prompts.
-         * @type {Set.<string>}
+         * Collection of sets of ongoing argument prompts.
+         * @type {Collection.<string, Set>}
          */
-        this.prompts = new Set();
+        this.prompts = new Collection();
 
         /**
          * Default prompt options.
@@ -134,6 +134,43 @@ class CommandHandler extends AkairoHandler {
     }
 
     /**
+     * Adds an ongoing prompt in order to prevent command usage in the channel.
+     * @param {Message} message - Message to use.
+     */
+    addPrompt(message){
+        let channels = this.prompts.get(message.author.id);
+        if (!channels) this.prompts.set(message.author.id, new Set());
+        channels = this.prompts.get(message.author.id);
+
+        channels.add(message.channel.id);
+    }
+
+    /**
+     * Removes an ongoing prompt.
+     * @param {Message} message - Message to use.
+     */
+    removePrompt(message){
+        const channels = this.prompts.get(message.author.id);
+        if (!channels) return;
+
+        channels.delete(message.channel.id);
+
+        if (!channels.size) this.prompts.delete(message.author.id);
+    }
+
+    /**
+     * Checks if there is an ongoing prompt.
+     * @param {Message} message - Message to use.
+     * @returns {boolean}
+     */
+    hasPrompt(message){
+        const channels = this.prompts.get(message.author.id);
+        if (!channels) return false;
+
+        return channels.has(message.channel.id);
+    }
+
+    /**
      * Handles a message.
      * @param {Message} message - Message to handle.
      * @param {boolean} edited - Whether or not the message was edited.
@@ -162,7 +199,7 @@ class CommandHandler extends AkairoHandler {
         : () => Promise.resolve();
 
         return pretest(message).then(() => {
-            if (this.prompts.has(`${message.author.id}-${message.channel.id}`)){
+            if (this.hasPrompt(message)){
                 this.emit(CommandHandlerEvents.IN_PROMPT, message);
                 return Promise.resolve();
             }
@@ -340,7 +377,7 @@ class CommandHandler extends AkairoHandler {
                     return this._handleError(err, message, c);
                 });
             }));
-        }).then(() => {});
+        });
     }
 
     _handleError(err, message, command){
