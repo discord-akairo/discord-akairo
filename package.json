@@ -13,9 +13,6 @@
     "client",
     "modular"
   ],
-  "dependencies": {
-    "readdir-recursive": "0.0.4"
-  },
   "peerDependencies": {
     "discord.js": "^11.0.0",
     "sqlite": "^2.2.4"
@@ -34,5 +31,6 @@
   "bugs": {
     "url": "https://github.com/1Computer1/discord-akairo/issues"
   },
-  "homepage": "https://github.com/1Computer1/discord-akairo"
+  "homepage": "https://github.com/1Computer1/discord-akairo",
+  "dependencies": {}
 }

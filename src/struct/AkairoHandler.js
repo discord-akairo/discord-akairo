@@ -1,6 +1,6 @@
+const fs = require('fs');
 const path = require('path');
 const EventEmitter = require('events');
-const rread = require('readdir-recursive');
 const AkairoModule = require('./AkairoModule');
 const Category = require('../util/Category');
 const { AkairoHandlerEvents } = require('../util/Constants');
@@ -57,7 +57,7 @@ class AkairoHandler extends EventEmitter {
          */
         this.categories = new Collection();
 
-        const filepaths = rread.fileSync(this.directory);
+        const filepaths = this.constructor.readdirRecursive(this.directory);
         for (const filepath of filepaths){
             this.load(filepath);
         }
@@ -162,6 +162,32 @@ class AkairoHandler extends EventEmitter {
         return this.categories.find(category => {
             return category.id.toLowerCase() === name.toLowerCase();
         });
+    }
+
+    /**
+     * Reads files recursively from a directory.
+     * @param {string} directory - Directory to read.
+     * @returns {string[]}
+     */
+    static readdirRecursive(directory){
+        const result = [];
+
+        (function read(dir){
+            const files = fs.readdirSync(dir);
+
+            for (const file of files){
+                const filepath = path.join(dir, file);
+                if (!file) read(filepath);
+
+                if (fs.statSync(filepath).isDirectory()){
+                    read(filepath);
+                } else {
+                    result.push(filepath);
+                }
+            }
+        })(directory);
+
+        return result;
     }
 }
 

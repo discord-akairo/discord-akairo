@@ -1,4 +1,4 @@
-const { Command } = require('../../src/index.js');
+const { Command } = require('../../../src/index.js');
 
 function exec(message){
     return message.reply('pong!').then(sent => {

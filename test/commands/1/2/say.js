@@ -1,4 +1,4 @@
-const { Command } = require('../../src/index.js');
+const { Command } = require('../../../../src/index.js');
 
 function exec(message, args, edited){
     if (edited && this.client.mem.edits.has(message.id)){
