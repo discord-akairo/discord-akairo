@@ -5,9 +5,10 @@ class Category extends Collection {
     /**
      * A group of modules.
      * @param {string} id - ID of the category.
+     * @param {Iterable} [iterable] - Entries to set.
      */
-    constructor(id){
-        super();
+    constructor(id, iterable){
+        super(iterable);
 
         /**
          * ID of the category.
