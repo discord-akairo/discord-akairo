@@ -12,6 +12,9 @@ declare module 'discord-akairo' {
         mem: Object;
         util: ClientUtil;
         databases: Object;
+        commandHandler: CommandHandler;
+        inhibitorHandler: InhibitorHandler;
+        listenerHandler: ListenerHandler;
 
         addDatabase(name: string, database: SQLiteHandler): void;
         login(token: string): Promise<string>;
@@ -71,7 +74,6 @@ declare module 'discord-akairo' {
         prompt: PromptOptions;
         client: AkairoClient;
         handler: CommandHandler;
-        commandHandler: CommandHandler;
 
         default(message: Message): any;
         cast(word: string, message: Message): Promise<any>;
@@ -93,7 +95,6 @@ declare module 'discord-akairo' {
         defaultPrompt: PromptOptions;
         options: Object;
         description: string;
-        commandHandler: CommandHandler;
 
         trigger(message: Message): RegExp;
         condition(message: Message): boolean;
@@ -114,10 +115,9 @@ declare module 'discord-akairo' {
         postInhibitors: boolean;
         handleEdits: boolean;
         cooldowns: Collection<string, Object>;
-        prompts: Set<string>;
+        prompts: Collection<string, Set<string>>;
         defaultPrompt: PromptOptions;
         defaultCooldown: number;
-        commands: Collection<string, Command>;
 
         load(filepath: string): Command;
         add(filename: string): Command;
@@ -150,7 +150,6 @@ declare module 'discord-akairo' {
         handler: InhibitorHandler;
         reason: string;
         type: string;
-        inhibitorHandler: InhibitorHandler;
 
         exec(message: Message, command: Command): boolean | Promise<any>;
         reload(): Inhibitor;
@@ -161,7 +160,6 @@ declare module 'discord-akairo' {
         constructor(client: AkairoClient, options: Object);
 
         modules: Collection<string, Inhibitor>;
-        inhibitors: Collection<string, Inhibitor>;
 
         testMessage(message: Message): Promise<void>;
         testCommand(message: Message, command: Command): Promise<void>;
@@ -184,7 +182,6 @@ declare module 'discord-akairo' {
         emitter: EventEmitter;
         eventName: string;
         type: string;
-        listenerHandler: InhibitorHandler;
 
         reload(): Listener;
         remove(): Listener;
@@ -195,7 +192,6 @@ declare module 'discord-akairo' {
 
         modules: Collection<string, Listener>;
         emitters: Collection<string, EventEmitter>;
-        listeners: Collection<string, Listener>;
 
         load(filepath: string): Listener;
         add(filename: string): Listener;
@@ -252,7 +248,7 @@ declare module 'discord-akairo' {
         fetchMemberFrom(guild: Guild, id: string, cache?: boolean): Promise<GuildMember>
         embed(data: Object): RichEmbed;
         collection(iterable: Iterable<any>): Collection<any, any>;
-        prompt(message: Message, text: string, check?: RegExp | ((message: Message) => boolean), time?: number, options?: MessageOptions): Promise<Message>;
+        prompt(message: Message, content: string, check?: RegExp | ((message: Message) => boolean), time?: number, options?: MessageOptions): Promise<Message>;
     }
 
     export class SQLiteHandler extends EventEmitter {
@@ -306,8 +302,9 @@ declare module 'discord-akairo' {
         defaultCooldown?: number;
         defaultPrompt?: PromptOptions;
         inhibitorDirectory?: string;
-        preInhibitors?: boolean;
-        postInhibitors?: boolean;
+        blockNotSelf?: boolean;
+        blockClient?: boolean;
+        blockBots?: boolean;
         listenerDirectory?: string;
         emitters?: Object;
     };
