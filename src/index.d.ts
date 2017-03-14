@@ -17,31 +17,34 @@ declare module 'discord-akairo' {
         listenerHandler: ListenerHandler;
 
         addDatabase(name: string, database: SQLiteHandler): void;
+        build(): void;
         login(token: string): Promise<string>;
     }
 
-    export class AkairoHandler extends EventEmitter {
+    export class AkairoHandler<T> extends EventEmitter {
         constructor(client: AkairoClient, directory: string, classToHandle?: Function);
 
         client: AkairoClient;
         directory: string;
         classToHandle: Function;
-        modules: Collection<string, AkairoModule>;
-        categories: Collection<string, Category<string, AkairoModule>>;
+        modules: Collection<string, T>;
+        categories: Collection<string, Category<string, T>>;
 
-        load(filepath: string): AkairoModule;
-        add(filename: string): AkairoModule;
-        remove(id: string): AkairoModule;
-        reload(id: string): AkairoModule;
+        load(filepath: string): T;
+        add(filename: string): T;
+        remove(id: string): T;
+        reload(id: string): T;
         reloadAll(): void;
-        findCategory(name: string): Category<string, AkairoModule>;
+        findCategory(name: string): Category<string, T>;
 
         on(event: string, listener: Function): this;
-        on(event: 'add', listener: (mod: AkairoModule) => void): this;
-        on(event: 'remove', listener: (mod: AkairoModule) => void): this;
-        on(event: 'reload', listener: (mod: AkairoModule) => void): this;
-        on(event: 'enable', listener: (mod: AkairoModule) => void): this;
-        on(event: 'disable', listener: (mod: AkairoModule) => void): this;
+        on(event: 'add', listener: (mod: T) => void): this;
+        on(event: 'remove', listener: (mod: T) => void): this;
+        on(event: 'reload', listener: (mod: T) => void): this;
+        on(event: 'enable', listener: (mod: T) => void): this;
+        on(event: 'disable', listener: (mod: T) => void): this;
+
+        static readdirRecursive(directory: string): string[];
     }
 
     export class AkairoModule {
@@ -52,7 +55,7 @@ declare module 'discord-akairo' {
         enabled: boolean;
         filepath: string;
         client: AkairoClient;
-        handler: AkairoHandler;
+        handler: AkairoHandler<AkairoModule>;
         
         exec(...args: any[]): any;
         reload(): AkairoModule;
@@ -73,7 +76,7 @@ declare module 'discord-akairo' {
         description: string;
         prompt: PromptOptions;
         client: AkairoClient;
-        handler: CommandHandler;
+        handler: CommandHandler<Command>;
 
         default(message: Message): any;
         cast(word: string, message: Message): Promise<any>;
@@ -82,7 +85,7 @@ declare module 'discord-akairo' {
     export class Command extends AkairoModule {
         constructor(id: string, exec: Function, options?: CommandOptions);
 
-        handler: CommandHandler;
+        handler: CommandHandler<Command>;
         aliases: string[];
         args: Argument[];
         split: ArgumentSplit;
@@ -106,10 +109,9 @@ declare module 'discord-akairo' {
         parse(content: string, message?: Message): Promise<Object>;
     }
 
-    export class CommandHandler extends AkairoHandler {
+    export class CommandHandler<Command> extends AkairoHandler<Command> {
         constructor(client: AkairoClient, options: Object);
 
-        modules: Collection<string, Command>;
         resolver: TypeResolver;
         preInhibitors: boolean;
         postInhibitors: boolean;
@@ -119,10 +121,6 @@ declare module 'discord-akairo' {
         defaultPrompt: PromptOptions;
         defaultCooldown: number;
 
-        load(filepath: string): Command;
-        add(filename: string): Command;
-        remove(id: string): Command;
-        reload(id: string): Command;
         prefix(message: Message): string | string[];
         allowMention(message: Message): boolean;
         findCommand(name: string): Command;
@@ -147,7 +145,7 @@ declare module 'discord-akairo' {
     export class Inhibitor extends AkairoModule {
         constructor(id: string, exec: Function, options?: InhibitorOptions);
 
-        handler: InhibitorHandler;
+        handler: InhibitorHandler<Inhibitor>;
         reason: string;
         type: string;
 
@@ -156,17 +154,11 @@ declare module 'discord-akairo' {
         remove(): Inhibitor;
     }
 
-    export class InhibitorHandler extends AkairoHandler {
+    export class InhibitorHandler<Inhibitor> extends AkairoHandler<Inhibitor> {
         constructor(client: AkairoClient, options: Object);
-
-        modules: Collection<string, Inhibitor>;
 
         testMessage(message: Message): Promise<void>;
         testCommand(message: Message, command: Command): Promise<void>;
-        load(filepath: string): Inhibitor;
-        add(filename: string): Inhibitor;
-        remove(id: string): Inhibitor;
-        reload(id: string): Inhibitor;
 
         on(event: 'add', listener: (command: Inhibitor) => void): this;
         on(event: 'remove', listener: (command: Inhibitor) => void): this;
@@ -178,7 +170,7 @@ declare module 'discord-akairo' {
     export class Listener extends AkairoModule {
         constructor(id: string, exec: Function, options?: ListenerOptions);
 
-        handler: ListenerHandler;
+        handler: ListenerHandler<Listener>;
         emitter: EventEmitter;
         eventName: string;
         type: string;
@@ -187,16 +179,11 @@ declare module 'discord-akairo' {
         remove(): Listener;
     }
 
-    export class ListenerHandler extends AkairoHandler {
+    export class ListenerHandler<Listener> extends AkairoHandler<Listener> {
         constructor(client: AkairoClient, options: Object);
 
-        modules: Collection<string, Listener>;
         emitters: Collection<string, EventEmitter>;
 
-        load(filepath: string): Listener;
-        add(filename: string): Listener;
-        remove(id: string): Listener;
-        reload(id: string): Listener;
         register(id: string): void;
         deregister(id: string): void;
 
@@ -208,7 +195,7 @@ declare module 'discord-akairo' {
     }
 
     export class Category<K, V> extends Collection<K, V> {
-        constructor(id: string);
+        constructor(id: string, iterable: Iterable<any>);
 
         reloadAll(): this;
         removeAll(): this;
@@ -290,6 +277,8 @@ declare module 'discord-akairo' {
 
     export class TypeResolver {
         constructor(client: AkairoClient);
+
+        addType(name: string, resolver: (word: string, message: Message) => any): void;
     }
 
     type AkairoOptions = {
