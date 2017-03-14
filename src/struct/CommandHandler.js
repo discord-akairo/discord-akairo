@@ -21,16 +21,22 @@ class CommandHandler extends AkairoHandler {
         this.resolver = new TypeResolver(client);
 
         /**
-         * Whether or not the built-in pre-message inhibitors are enabled.
+         * Whether or not to block others, if a selfbot.
          * @type {boolean}
          */
-        this.preInhibitors = !(options.preInhibitors === false);
+        this.blockNotSelf = !(options.blockNotSelf === false);
 
         /**
-         * Whether or not the built-in post-message inhibitors are enabled.
+         * Whether or not to block self, if not a selfbot.
          * @type {boolean}
          */
-        this.postInhibitors = !(options.postInhibitors === false);
+        this.blockClient = !(options.blockClient === false);
+
+        /**
+         * Whether or not to block bots.
+         * @type {boolean}
+         */
+        this.blockBots = !(options.blockBots === false);
 
         /**
          * Whether or not edits are handled.
@@ -168,70 +174,72 @@ class CommandHandler extends AkairoHandler {
      * @returns {Promise}
      */
     handle(message, edited){
-        if (this.preInhibitors){
-            if (message.author.id !== this.client.user.id && this.client.selfbot){
-                this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.NOT_SELF);
-                return Promise.resolve();
-            }
-
-            if (message.author.id === this.client.user.id && !this.client.selfbot){
-                this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.CLIENT);
-                return Promise.resolve();
-            }
-
-            if (message.author.bot){
-                this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.BOT);
-                return Promise.resolve();
-            }
-        }
-
-        const pretest = this.client.inhibitorHandler
-        ? m => this.client.inhibitorHandler.testMessage(m)
+        const alltest = this.client.inhibitorHandler
+        ? m => this.client.inhibitorHandler.test('all', m)
         : () => Promise.resolve();
 
-        return pretest(message).then(() => {
-            if (this.hasPrompt(message)){
-                this.emit(CommandHandlerEvents.IN_PROMPT, message);
-                return Promise.resolve();
+        return alltest(message).then(() => {
+            if (this.blockNotSelf && message.author.id !== this.client.user.id && this.client.selfbot){
+                this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.NOT_SELF);
+                return;
             }
-            
-            const prefix = this.prefix(message);
-            const allowMention = this.allowMention(message);
-            let start;
 
-            if (Array.isArray(prefix)){
-                const match = prefix.find(p => {
-                    return message.content.toLowerCase().startsWith(p.toLowerCase());
-                });
+            if (this.blockClient && message.author.id === this.client.user.id && !this.client.selfbot){
+                this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.CLIENT);
+                return;
+            }
 
-                if (match == null) return this._handleTriggers(message);
-                start = match;
-            } else
-            if (message.content.toLowerCase().startsWith(prefix.toLowerCase())){
-                start = prefix;
-            } else
-            if (allowMention){
-                const mentionRegex = new RegExp(`^<@!?${this.client.user.id}>`);
-                const mentioned = message.content.match(mentionRegex);
+            if (this.blockBots && message.author.bot){
+                this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.BOT);
+                return;
+            }
+
+            const pretest = this.client.inhibitorHandler
+            ? m => this.client.inhibitorHandler.test('pre', m)
+            : () => Promise.resolve();
+
+            return pretest(message).then(() => {
+                if (this.hasPrompt(message)){
+                    this.emit(CommandHandlerEvents.IN_PROMPT, message);
+                    return Promise.resolve();
+                }
                 
-                if (mentioned){
-                    start = mentioned[0];
+                const prefix = this.prefix(message);
+                const allowMention = this.allowMention(message);
+                let start;
+
+                if (Array.isArray(prefix)){
+                    const match = prefix.find(p => {
+                        return message.content.toLowerCase().startsWith(p.toLowerCase());
+                    });
+
+                    if (match == null) return this._handleTriggers(message);
+                    start = match;
+                } else
+                if (message.content.toLowerCase().startsWith(prefix.toLowerCase())){
+                    start = prefix;
+                } else
+                if (allowMention){
+                    const mentionRegex = new RegExp(`^<@!?${this.client.user.id}>`);
+                    const mentioned = message.content.match(mentionRegex);
+                    
+                    if (mentioned){
+                        start = mentioned[0];
+                    } else {
+                        return this._handleTriggers(message, edited);
+                    }
                 } else {
                     return this._handleTriggers(message, edited);
                 }
-            } else {
-                return this._handleTriggers(message, edited);
-            }
 
-            const firstWord = message.content.replace(start, '').search(/\S/) + start.length;
-            const name = message.content.slice(firstWord).split(' ')[0];
-            const command = this.findCommand(name);
+                const firstWord = message.content.replace(start, '').search(/\S/) + start.length;
+                const name = message.content.slice(firstWord).split(' ')[0];
+                const command = this.findCommand(name);
 
-            if (!command) return this._handleTriggers(message, edited);
-            if (!command.enabled) return void this.emit(CommandHandlerEvents.COMMAND_DISABLED, message, command);
-            if (edited && !command.editable) return;
+                if (!command) return this._handleTriggers(message, edited);
+                if (!command.enabled) return void this.emit(CommandHandlerEvents.COMMAND_DISABLED, message, command);
+                if (edited && !command.editable) return;
 
-            if (this.postInhibitors){
                 if (command.ownerOnly){
                     const notOwner = Array.isArray(this.client.ownerID)
                     ? !this.client.ownerID.includes(message.author.id)
@@ -252,30 +260,30 @@ class CommandHandler extends AkairoHandler {
                     this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.DM);
                     return;
                 }
-            }
 
-            const test = this.client.inhibitorHandler
-            ? (m, c) => this.client.inhibitorHandler.testCommand(m, c)
-            : () => Promise.resolve();
+                const test = this.client.inhibitorHandler
+                ? (m, c) => this.client.inhibitorHandler.test('post', m, c)
+                : () => Promise.resolve();
 
-            return test(message, command).then(() => {
-                const onCooldown = this._handleCooldowns(message, command);
-                if (onCooldown) return;
+                return test(message, command).then(() => {
+                    const onCooldown = this._handleCooldowns(message, command);
+                    if (onCooldown) return;
 
-                const content = message.content.slice(message.content.indexOf(name) + name.length + 1);
+                    const content = message.content.slice(message.content.indexOf(name) + name.length + 1);
 
-                return command.parse(content, message).then(args => {
-                    this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, edited);
-                    const end = Promise.resolve(command.exec(message, args, edited));
+                    return command.parse(content, message).then(args => {
+                        this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, edited);
+                        const end = Promise.resolve(command.exec(message, args, edited));
 
-                    return end.then(() => void this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, edited))
-                    .catch(err => this._handleError(err, message, command));
-                }).catch(err => {
-                    if (err instanceof Error) throw err;
+                        return end.then(() => void this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, edited))
+                        .catch(err => this._handleError(err, message, command));
+                    }).catch(err => {
+                        if (err instanceof Error) throw err;
+                    });
+                }).catch(reason => {
+                    if (reason instanceof Error) return this._handleError(reason, message, command);
+                    this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
                 });
-            }).catch(reason => {
-                if (reason instanceof Error) return this._handleError(reason, message, command);
-                this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
             });
         }).catch(reason => {
             if (reason instanceof Error) return this._handleError(reason, message);

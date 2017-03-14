@@ -26,36 +26,15 @@ class InhibitorHandler extends AkairoHandler {
     }
 
     /**
-     * Tests the pre-message inhibitors against the message.
+     * Tests inhibitors against the message.
      * <br>Rejects with the reason if blocked.
+     * @param {string} type - Type of inhibitor, 'all', 'pre', or 'post'.
      * @param {Message} message - Message to test.
+     * @param {Command} [command] - Command to use.
      * @returns {Promise.<string>}
      */
-    testMessage(message){
-        const promises = this.modules.filter(i => i.type === 'pre' && i.enabled).map(inhibitor => {
-            const inhibited = inhibitor.exec(message);
-
-            if (inhibited instanceof Promise) return inhibited.catch(err => {
-                if (err instanceof Error) throw err;
-                return Promise.reject(inhibitor.reason);
-            });
-            
-            if (!inhibited) return Promise.resolve();
-            return Promise.reject(inhibitor.reason);
-        });
-
-        return Promise.all(promises);
-    }
-
-    /**
-     * Tests the post-message inhibitors against the message and command.
-     * <br>Rejects with the reason if blocked.
-     * @param {Message} message - Message to test.
-     * @param {Command} command - Command to test.
-     * @returns {Promise.<string>}
-     */
-    testCommand(message, command){
-        const promises = this.modules.filter(i => i.type === 'post' && i.enabled).map(inhibitor => {
+    test(type, message, command){
+        const promises = this.modules.filter(i => i.type === type && i.enabled).map(inhibitor => {
             const inhibited = inhibitor.exec(message, command);
 
             if (inhibited instanceof Promise) return inhibited.catch(err => {

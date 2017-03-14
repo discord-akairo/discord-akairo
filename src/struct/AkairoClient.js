@@ -17,8 +17,9 @@ const ClientUtil = require('../util/ClientUtil');
  * @prop {number} [defaultCooldown=0] - The default cooldown for commands.
  * @prop {PromptOptions} [defaultPrompt] - The default prompt options.
  * @prop {string} [inhibitorDirectory] - Directory to inhibitors.
- * @prop {boolean} [preInhibitors=true] - Whether or not to enable the built-in pre-message inhibitors.
- * @prop {boolean} [postInhibitors=true] - Whether or not to enable the built-in post-message inhibitors.
+ * @prop {boolean} [blockNotSelf=true] - Whether or not to block others, if a selfbot.
+ * @prop {boolean} [blockClient=true] - Whether or not to block self, if not a selfbot.
+ * @prop {boolean} [blockBots=true] - Whether or not to block bots.
  * @prop {string} [listenerDirectory] - Directory to listeners.
  * @prop {Object} [emitters={}] - Emitters to load onto the listener handler.
  */

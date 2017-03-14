@@ -4,7 +4,7 @@ const AkairoModule = require('./AkairoModule');
  * Options to use for inhibitor execution behavior.
  * @typedef {Object} InhibitorOptions
  * @prop {string} [reason=''] - Reason emitted when command or message is blocked.
- * @prop {boolean} [type='post'] - Set to 'pre' to make this run before the message is handled rather than after.
+ * @prop {boolean} [type='post'] - Can be 'all' to run on all messages, 'pre' to run on messages not blocked by the built-in inhibitors, or 'post' to run on messages that are commands.
  * @prop {string} [category='default'] - Category ID for organization purposes.
  */
 
