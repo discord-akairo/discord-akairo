@@ -74,6 +74,7 @@ class AkairoClient extends Client {
      * Adds a database that will be initialized once ready.
      * @param {string} name - Name of database.
      * @param {SQLiteHandler} database - The database.
+     * @returns {AkairoClient}
      */
     addDatabase(name, database){
         Object.defineProperty(this.databases, name, {
@@ -90,7 +91,7 @@ class AkairoClient extends Client {
      * Logins the client, creates message listener, and init databases.
      * <br>Resolves once client is ready.
      * @param {string} token - Client token.
-     * @returns {Promise}
+     * @returns {Promise<void>}
      */
     login(token){
         return new Promise((resolve, reject) => {
@@ -111,7 +112,7 @@ class AkairoClient extends Client {
                             this.commandHandler.handle(m, false);
                         });
 
-                        if (this._options.handleEdits) this.on('messageUpdate', (o, m) => {
+                        if (this.commandHandler.handleEdits) this.on('messageUpdate', (o, m) => {
                             if (o.content === m.content) return;
                             this.commandHandler.handle(m, true);
                         });
@@ -125,6 +126,7 @@ class AkairoClient extends Client {
 
     /**
      * Builds the client by creating the handlers.
+     * @returns {void}
      */
     build(){
         if (this._options.commandDirectory && !this.commandHandler){

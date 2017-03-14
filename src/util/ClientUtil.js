@@ -35,7 +35,7 @@ class ClientUtil {
      * @param {Collection} users - Collection of users to find in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
-     * @returns {Collection.<string, User>}
+     * @returns {Collection<string, User>}
      */
     resolveUsers(text, users, caseSensitive = false, wholeWord = false){
         return users.filter(user => this.checkUser(text, user, caseSensitive, wholeWord));
@@ -88,7 +88,7 @@ class ClientUtil {
      * @param {Collection} members - Collection of members to find in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
-     * @returns {Collection.<string, GuildMember>}
+     * @returns {Collection<string, GuildMember>}
      */
     resolveMembers(text, members, caseSensitive = false, wholeWord = false){
         return members.filter(member => this.checkMember(text, member, caseSensitive, wholeWord));
@@ -144,7 +144,7 @@ class ClientUtil {
      * @param {Collection} channels - Collection of channels to find in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
-     * @returns {Collection.<string, GuildChannel>}
+     * @returns {Collection<string, GuildChannel>}
      */
     resolveChannels(text, channels, caseSensitive = false, wholeWord = false){
         return channels.filter(channel => this.checkChannel(text, channel, caseSensitive, wholeWord));
@@ -196,7 +196,7 @@ class ClientUtil {
      * @param {Collection} roles - Collection of roles to find in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
-     * @returns {Collection.<string, Role>}
+     * @returns {Collection<string, Role>}
      */
     resolveRoles(text, roles, caseSensitive = false, wholeWord = false){
         return roles.filter(role => this.checkRole(text, role, caseSensitive, wholeWord));
@@ -248,7 +248,7 @@ class ClientUtil {
      * @param {Collection} emojis - Collection of emojis to find in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
-     * @returns {Collection.<string, Emoji>}
+     * @returns {Collection<string, Emoji>}
      */
     resolveEmojis(text, emojis, caseSensitive = false, wholeWord = false){
         return emojis.filter(emoji => this.checkEmoji(text, emoji, caseSensitive, wholeWord));
@@ -300,7 +300,7 @@ class ClientUtil {
      * @param {Collection} guilds - Collection of guilds to find in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
-     * @returns {Collection.<string, Guild>}
+     * @returns {Collection<string, Guild>}
      */
     resolveGuilds(text, guilds, caseSensitive = false, wholeWord = false){
         return guilds.filter(guild => this.checkGuild(text, guild, caseSensitive, wholeWord));
@@ -423,7 +423,7 @@ class ClientUtil {
      * @param {Guild} guild - Guild to fetch in.
      * @param {string} id - ID of the user.
      * @param {boolean} cache - Whether or not to add to cache.
-     * @returns {Promise.<GuildMember>}
+     * @returns {Promise<GuildMember>}
      */
     fetchMemberFrom(guild, id, cache){
         return this.client.fetchUser(id, cache).then(fetched => {
@@ -456,7 +456,7 @@ class ClientUtil {
      * @param {RegExp|function} [check] - Regex or function <code>(message => {})</code> to check if message should pass.
      * @param {number} [time=30000] - Time in milliseconds to wait.
      * @param {MessageOptions} [options] - Message options for message.
-     * @returns {Promise.<Message>}
+     * @returns {Promise<Message>}
      */
     prompt(message, content, check = () => true, time = 30000, options){
         return message.channel.send(content, options).then(sent => new Promise((resolve, reject) => {

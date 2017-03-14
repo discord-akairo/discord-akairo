@@ -161,7 +161,7 @@ class Command extends AkairoModule {
      * Parses text based on this command's args.
      * @param {string} content - String to parse.
      * @param {Message} [message] - Message to use.
-     * @returns {Promise.<Object>}
+     * @returns {Promise<Object>}
      */
     parse(content, message){
         if (!this.args.length) return Promise.resolve({});
@@ -183,6 +183,7 @@ class Command extends AkairoModule {
         const contentArgs = this.args.filter(arg => arg.match === ArgumentMatches.CONTENT);
 
         const prefixes = [];
+
         for (const arg of [...prefixArgs, ...flagArgs]){
             Array.isArray(arg.prefix) ? prefixes.push(...arg.prefix) : prefixes.push(arg.prefix);
         }
@@ -192,7 +193,7 @@ class Command extends AkairoModule {
         for (const [i, arg] of wordArgs.entries()){
             if (arg.match === ArgumentMatches.REST){
                 const word = noPrefixWords.slice(arg.index != null ? arg.index : i).join(' ') || '';
-                args[arg.id] = arg.cast.bind(arg, word, message);
+                args[arg.id] = arg.cast.bind(arg, word);
                 continue;
             }
 
@@ -200,7 +201,7 @@ class Command extends AkairoModule {
 
             if ((this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY) && /^".*"$/.test(word)) word = word.slice(1, -1);
 
-            args[arg.id] = arg.cast.bind(arg, word, message);
+            args[arg.id] = arg.cast.bind(arg, word);
         }
 
         if (prefixArgs.length || flagArgs.length) words.reverse();
@@ -211,7 +212,7 @@ class Command extends AkairoModule {
             
             if (this.split === ArgumentSplits.STICKY && /^".*"$/.test(word)) word = word.slice(1, -1);
 
-            args[arg.id] = arg.cast.bind(arg, word, message);
+            args[arg.id] = arg.cast.bind(arg, word);
         }
 
         for (const arg of flagArgs){
@@ -221,12 +222,12 @@ class Command extends AkairoModule {
 
         for (const arg of textArgs){
             const word = noPrefixWords.slice(arg.index).join(' ');
-            args[arg.id] = arg.cast.bind(arg, word, message);
+            args[arg.id] = arg.cast.bind(arg, word);
         }
 
         for (const arg of contentArgs){
             const word = content.split(' ').slice(arg.index).join(' ');
-            args[arg.id] = arg.cast.bind(arg, word, message);
+            args[arg.id] = arg.cast.bind(arg, word);
         }
 
         const props = [];
@@ -236,7 +237,7 @@ class Command extends AkairoModule {
             if (i === keys.length) return props;
 
             const key = keys[i];
-            return args[key]().then(res => {
+            return args[key](message).then(res => {
                 props.push(res);
                 return process(i + 1);
             });

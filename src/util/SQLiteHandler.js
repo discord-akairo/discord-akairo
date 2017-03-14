@@ -72,7 +72,7 @@ class SQLiteHandler extends EventEmitter {
 
         /**
          * Configurations stored in memory, mapped by ID to configuration.
-         * @type {Collection.<string, Object>}
+         * @type {Collection<string, Object>}
          */
         this.memory = new Collection();
 
@@ -130,7 +130,7 @@ class SQLiteHandler extends EventEmitter {
 
     /**
      * Opens the database so that it can be used.
-     * @return {Promise.<Database>}
+     * @return {Promise<Database>}
      */
     open(){
         return sql.open(this.filepath).then(db => {
@@ -143,7 +143,7 @@ class SQLiteHandler extends EventEmitter {
      * Loads handler and database with IDs.
      * <br>Use manually if you want to load database before client is ready.
      * @param {string[]} ids - Array of IDs.
-     * @returns {Promise.<SQLiteHandler>}
+     * @returns {Promise<SQLiteHandler>}
      */
     load(ids){
         return this.open().then(db => {
@@ -170,7 +170,7 @@ class SQLiteHandler extends EventEmitter {
     /**
      * Adds into the database.
      * @param {string} id - ID of entry.
-     * @returns {Promise.<SQLiteHandler>}
+     * @returns {Promise<SQLiteHandler>}
      */
     add(id){
         if (!this.db) return Promise.reject(new Error(`Database with table ${this.tableName} not opened.`));
@@ -210,7 +210,7 @@ class SQLiteHandler extends EventEmitter {
     /**
      * Removes from the database.
      * @param {string} id - ID of entry.
-     * @returns {Promise.<SQLiteHandler>}
+     * @returns {Promise<SQLiteHandler>}
      */
     remove(id){
         if (!this.db) return Promise.reject(new Error(`Database with table ${this.tableName} not opened.`));
@@ -283,7 +283,7 @@ class SQLiteHandler extends EventEmitter {
      * @param {string} id - ID of entry.
      * @param {string} key - Key to set.
      * @param {string|number} value - Value to set.
-     * @returns {Promise.<SQLiteHandler>}
+     * @returns {Promise<SQLiteHandler>}
      */
     set(id, key, value){
         if (!this.db) return Promise.reject(new Error(`Database with table ${this.tableName} not opened.`));
@@ -340,7 +340,7 @@ class SQLiteHandler extends EventEmitter {
     /**
      * Saves an in-memory config to the database.
      * @param {string} id - ID to save.
-     * @returns {Promise.<SQLiteHandler>}
+     * @returns {Promise<SQLiteHandler>}
      */
     save(id){
         if (!this.db) return Promise.reject(new Error(`Database with table ${this.tableName} not opened.`));
@@ -384,7 +384,7 @@ class SQLiteHandler extends EventEmitter {
 
     /**
      * Saves all in-memory configs to the database.
-     * @returns {Promise.<SQLiteHandler>}
+     * @returns {Promise<SQLiteHandler>}
      */
     saveAll(){
         const promises = this.memory.map(config => this.save(config.id));

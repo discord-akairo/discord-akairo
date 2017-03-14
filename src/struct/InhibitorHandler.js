@@ -21,7 +21,7 @@ class InhibitorHandler extends AkairoHandler {
         /**
          * Inhibitors loaded, mapped by ID to Inhibitor.
          * @name InhibitorHandler#modules
-         * @type {Collection.<string, Inhibitor>}
+         * @type {Collection<string, Inhibitor>}
          */
     }
 
@@ -31,7 +31,7 @@ class InhibitorHandler extends AkairoHandler {
      * @param {string} type - Type of inhibitor, 'all', 'pre', or 'post'.
      * @param {Message} message - Message to test.
      * @param {Command} [command] - Command to use.
-     * @returns {Promise.<string>}
+     * @returns {Promise<string>}
      */
     test(type, message, command){
         const promises = this.modules.filter(i => i.type === type && i.enabled).map(inhibitor => {

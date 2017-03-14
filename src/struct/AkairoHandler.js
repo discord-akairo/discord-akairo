@@ -36,7 +36,7 @@ class AkairoHandler extends EventEmitter {
          * Class to handle.
          * @readonly
          * @name AkairoHandler#classToHandle
-         * @type {class}
+         * @type {function}
          */
 
         Object.defineProperties(this, {
@@ -47,20 +47,18 @@ class AkairoHandler extends EventEmitter {
 
         /**
          * Modules loaded, mapped by ID to AkairoModule.
-         * @type {Collection.<string, AkairoModule>}
+         * @type {Collection<string, AkairoModule>}
          */
         this.modules = new Collection();
 
         /**
          * Categories, mapped by ID to Category.
-         * @type {Collection.<string, Category>}
+         * @type {Collection<string, Category>}
          */
         this.categories = new Collection();
 
         const filepaths = this.constructor.readdirRecursive(this.directory);
-        for (const filepath of filepaths){
-            this.load(filepath);
-        }
+        for (const filepath of filepaths) this.load(filepath);
     }
 
     /**
@@ -95,13 +93,11 @@ class AkairoHandler extends EventEmitter {
      * @returns {AkairoModule}
      */
     add(filename){
-        const files = rread.fileSync(this.directory);
+        const files = this.constructor.readdirRecursive(this.directory);
         const filepath = files.find(file => file.endsWith(`${filename}.js`));
 
-        if (!filepath){
-            throw new Error(`File ${filename} not found.`);
-        }
-
+        if (!filepath) throw new Error(`File ${filename} not found.`);
+        
         const mod = this.load(filepath);
         this.emit(AkairoHandlerEvents.ADD, mod);
         return mod;
@@ -148,6 +144,7 @@ class AkairoHandler extends EventEmitter {
 
     /**
      * Reloads all modules.
+     * @returns {void}
      */
     reloadAll(){
         for (const m of Array.from(this.modules.values())) m.reload();
@@ -177,7 +174,6 @@ class AkairoHandler extends EventEmitter {
 
             for (const file of files){
                 const filepath = path.join(dir, file);
-                if (!file) read(filepath);
 
                 if (fs.statSync(filepath).isDirectory()){
                     read(filepath);

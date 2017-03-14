@@ -46,13 +46,13 @@ class CommandHandler extends AkairoHandler {
 
         /**
          * Collection of cooldowns.
-         * @type {Collection.<string, Object>}
+         * @type {Collection<string, Object>}
          */
         this.cooldowns = new Collection();
 
         /**
          * Collection of sets of ongoing argument prompts.
-         * @type {Collection.<string, Set>}
+         * @type {Collection<string, Set>}
          */
         this.prompts = new Collection();
 
@@ -133,6 +133,7 @@ class CommandHandler extends AkairoHandler {
     /**
      * Adds an ongoing prompt in order to prevent command usage in the channel.
      * @param {Message} message - Message to use.
+     * @returns {void}
      */
     addPrompt(message){
         let channels = this.prompts.get(message.author.id);
@@ -145,6 +146,7 @@ class CommandHandler extends AkairoHandler {
     /**
      * Removes an ongoing prompt.
      * @param {Message} message - Message to use.
+     * @returns {void}
      */
     removePrompt(message){
         const channels = this.prompts.get(message.author.id);

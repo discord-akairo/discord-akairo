@@ -46,8 +46,8 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
 /**
  * A prompt to run if the user did not input the argument correctly.
  * <br>Can only be used if there is not a default value (unless optional is true).
- * @typedef {Object} PromptOptions
  * <br>The functions are <code>(message => {})</code> and are used to determine the reply.
+ * @typedef {Object} PromptOptions
  * @prop {number} [retries=1] - Amount of times allowed to retries.
  * @prop {number} [time=30000] - Time to wait for input.
  * @prop {string} [cancelWord='cancel'] - Word to use for cancelling prompts.
@@ -162,7 +162,7 @@ class Argument {
      * Casts the type of this argument onto a word.
      * @param {string} word - The word to cast.
      * @param {Message} message - The message that called the command.
-     * @returns {Promise.<any>}
+     * @returns {Promise<any>}
      */
     cast(word, message){
         if (!word && this.prompt && this.prompt.optional){
@@ -174,6 +174,13 @@ class Argument {
         return res != null ? Promise.resolve(res) : this.prompt ? this._promptArgument(message) : Promise.resolve(null);
     }
 
+    /**
+     * Processes the type casting.
+     * @private
+     * @param {string} word - Word to process.
+     * @param {Message} message - Message that called the command.
+     * @returns {any}
+     */
     _processType(word, message){
         if (Array.isArray(this.type)){
             if (!this.type.some(t => t.toLowerCase() === word.toLowerCase())){
@@ -207,6 +214,12 @@ class Argument {
         return def != null ? def : null;
     }
 
+    /**
+     * Prompts a message for a word and casts it.
+     * @private
+     * @param {Message} message - Message to prompt.
+     * @returns {Promise<any>}
+     */
     _promptArgument(message){
         const prompt = {};
         
@@ -226,6 +239,7 @@ class Argument {
 
                 const res = this._processType(m.content, m);
                 value = res;
+                
                 return res;
             }, prompt.time).then(() => value).catch(reason => {
                 if (reason instanceof Error){

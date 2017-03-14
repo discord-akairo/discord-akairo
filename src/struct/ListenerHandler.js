@@ -17,7 +17,7 @@ class ListenerHandler extends AkairoHandler {
          * EventEmitters for use, mapped by name to EventEmitter.
          * <br>'client', 'commandHandler', 'inhibitorHandler', 'listenerHandler' are set by default.
          * <br>Databases added through the client are also added here.
-         * @type {Collection.<string, EventEmitter>}
+         * @type {Collection<string, EventEmitter>}
          */
         this.emitters = new Collection();
         this.emitters.set('client', this.client);
@@ -42,7 +42,7 @@ class ListenerHandler extends AkairoHandler {
         /**
          * Listeners loaded, mapped by ID to Listener.
          * @name ListenerHandler#modules
-         * @type {Collection.<string, Listener>}
+         * @type {Collection<string, Listener>}
          */
     }
 
