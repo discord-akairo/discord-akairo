@@ -171,11 +171,11 @@ class Argument {
 
         const res = this._processType(word, message);
         
-        return res != null
-        ? Promise.resolve(res)
-        : this.prompt
-        ? this._promptArgument(message)
-        : Promise.resolve(this.default.call(this.command, message));
+        return Promise.resolve(res != null ? res : this.prompt ? this._promptArgument(message) : this.default.call(this.command, message))
+        .catch(err => {
+            if (err instanceof Error) throw err;
+            return this.prompt ? this._promptArgument(message) : this.default.call(this.command, message);
+        });
     }
 
     /**
