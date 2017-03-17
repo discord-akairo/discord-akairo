@@ -209,12 +209,14 @@ class Argument {
         }
 
         const res = this._processType(word, message);
-        
-        return Promise.resolve(res != null ? res : this.prompt ? this._promptArgument(message) : this.default.call(this.command, message))
-        .catch(err => {
+
+        if (res != null) return Promise.resolve(res).catch(err => {
             if (err instanceof Error) throw err;
             return this.prompt ? this._promptArgument(message) : this.default.call(this.command, message);
         });
+
+        if (this.prompt) return this._promptArgument(message);
+        return Promise.resolve(this.default.call(this.command, message));
     }
 
     /**
