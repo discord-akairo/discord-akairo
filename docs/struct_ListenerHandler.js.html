@@ -87,11 +87,14 @@ class ListenerHandler extends AkairoHandler {
 
     /**
      * Loads a listener.
+     * @method
+     * @name ListenerHandler#load
      * @param {string} filepath - Path to file.
      * @returns {Listener}
      */
     load(filepath){
         const listener = super.load(filepath);
+        if (this.emitters) this.register(listener.id);
         return listener;
     }
 

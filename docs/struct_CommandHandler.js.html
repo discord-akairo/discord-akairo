@@ -54,6 +54,12 @@ class CommandHandler extends AkairoHandler {
         super(client, options.commandDirectory, Command);
 
         /**
+         * Collecion of command aliases.
+         * @type {Collection&lt;string, string>}
+         */
+        this.aliases = new Collection();
+
+        /**
          * The type resolver.
          * @type {TypeResolver}
          */
@@ -144,6 +150,8 @@ class CommandHandler extends AkairoHandler {
          */
         this.allowMention = typeof options.allowMention === 'function' ? options.allowMention : () => options.allowMention;
 
+        for (const [id] of this.modules) this._addAliases(id);
+
         /**
          * Directory to commands.
          * @readonly
@@ -159,14 +167,53 @@ class CommandHandler extends AkairoHandler {
     }
 
     /**
+     * Loads a command.
+     * @param {string} filepath - Path to file.
+     * @returns {Command}
+     */
+    load(filepath){
+        const command = super.load(filepath);
+        if (this.aliases) this._addAliases(command.id);
+        return command;
+    }
+
+    /**
+     * Removes a command.
+     * @param {string} id - ID of the command.
+     * @returns {Command}
+     */
+    remove(id){
+        id = id.toString();
+
+        const command = this.modules.get(id);
+        if (!command) throw new Error(`Command ${id} does not exist.`);
+        this._removeAliases(command.id);
+
+        return super.remove(id);
+    }
+
+    /**
+     * Reloads a command.
+     * @param {string} id - ID of the command.
+     * @returns {Command}
+     */
+    reload(id){
+        id = id.toString();
+
+        const command = this.modules.get(id);
+        if (!command) throw new Error(`Command ${id} does not exist.`);
+        this._removeAliases(command.id);
+        
+        return super.reload(id);
+    }
+
+    /**
      * Finds a command by alias.
      * @param {string} name - Alias to find with.
      * @returns {Command}
      */
     findCommand(name){
-        return this.modules.find(command => {
-            return command.aliases.some(a => a.toLowerCase() === name.toLowerCase());
-        });
+        return this.modules.get(this.aliases.get(name.toLowerCase()));
     }
 
     /**
@@ -451,12 +498,28 @@ class CommandHandler extends AkairoHandler {
     }
 
     /**
-     * Loads a command.
-     * @method
-     * @param {string} filepath - Path to file.
-     * @name CommandHandler#load
-     * @returns {Command}
+     * Adds aliases of a command.
+     * @private
+     * @param {string} id - ID of command.
      */
+    _addAliases(id){
+        const command = this.modules.get(id.toString());
+        if (!command) throw new Error(`Command ${id} does not exist.`);
+
+        for (const alias of command.aliases) this.aliases.set(alias.toLowerCase(), command.id);
+    }
+
+    /**
+     * Removes aliases of a command.
+     * @private
+     * @param {string} id - ID of command.
+     */
+    _removeAliases(id){
+        const command = this.modules.get(id.toString());
+        if (!command) throw new Error(`Command ${id} does not exist.`);
+
+        for (const alias of command.aliases) this.aliases.delete(alias.toLowerCase());
+    }
 
     /**
      * Adds a command.
@@ -464,22 +527,6 @@ class CommandHandler extends AkairoHandler {
      * @param {string} filename - Filename to lookup in the directory.
      * &lt;br>A .js extension is assumed.
      * @name CommandHandler#add
-     * @returns {Command}
-     */
-
-    /**
-     * Removes a command.
-     * @method
-     * @param {string} id - ID of the command.
-     * @name CommandHandler#remove
-     * @returns {Command}
-     */
-
-    /**
-     * Reloads a command.
-     * @method
-     * @param {string} id - ID of the command.
-     * @name CommandHandler#reload
      * @returns {Command}
      */
 
