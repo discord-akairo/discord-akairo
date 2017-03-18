@@ -1,5 +1,5 @@
 declare module 'discord-akairo' {
-    import { Client, ClientOptions, Collection, Message, MessageOptions, User, GuildMember, Channel, Role, Emoji, Guild, PermissionOverwrites, RichEmbed } from 'discord.js';
+    import { Client, ClientOptions, Collection, Message, MessageOptions, User, GuildMember, Channel, TextBasedChannel, Role, Emoji, Guild, PermissionOverwrites, RichEmbed } from 'discord.js';
     import EventEmitter from 'events';
 
     export const version: string;
@@ -30,7 +30,7 @@ declare module 'discord-akairo' {
         modules: Collection<string, T>;
         categories: Collection<string, Category<string, T>>;
 
-        load(filepath: string): T;
+        load(thing: string | T): T;
         add(filename: string): T;
         remove(id: string): T;
         reload(id: string): T;
@@ -236,6 +236,7 @@ declare module 'discord-akairo' {
         embed(data: Object): RichEmbed;
         collection(iterable: Iterable<any>): Collection<any, any>;
         prompt(message: Message, content: string, check?: RegExp | ((message: Message) => boolean), time?: number, options?: MessageOptions): Promise<Message>;
+        fetchMessage(channel: TextBasedChannel, id: string): Promise<Message>;
     }
 
     export class SQLiteHandler extends EventEmitter {
@@ -318,11 +319,11 @@ declare module 'discord-akairo' {
         time?: number;
         cancelWord?: string;
         optional?: boolean;
-        start: string | string[] | ((message: Message, prevArgs: Object, amountOfTries: number) => string | string[]);
-        retry: string | string[] | ((message: Message, prevArgs: Object, amountOfTries: number) => string | string[]);
-        timeout: string | string[] | ((message: Message, prevArgs: Object, amountOfTries: number) => string | string[]);
-        ended: string | string[] | ((message: Message, prevArgs: Object, amountOfTries: number) => string | string[]);
-        cancel: string | string[] | ((message: Message, prevArgs: Object, amountOfTries: number) => string | string[]);
+        start: string | string[] | ((message: Message, prevArgs: Object, amountOfTries: number) => string | string[] | MessageOptions);
+        retry: string | string[] | ((message: Message, prevArgs: Object, amountOfTries: number) => string | string[] | MessageOptions);
+        timeout: string | string[] | ((message: Message, prevArgs: Object, amountOfTries: number) => string | string[] | MessageOptions);
+        ended: string | string[] | ((message: Message, prevArgs: Object, amountOfTries: number) => string | string[] | MessageOptions);
+        cancel: string | string[] | ((message: Message, prevArgs: Object, amountOfTries: number) => string | string[] | MessageOptions);
     };
 
     type ArgumentType = string | string[] | ((word: string, message: Message, prevArgs: Object) => any);

@@ -129,11 +129,11 @@ class CommandHandler extends AkairoHandler {
 
     /**
      * Loads a command.
-     * @param {string} filepath - Path to file.
+     * @param {string|Command} thing - Module or path to module.
      * @returns {Command}
      */
-    load(filepath){
-        const command = super.load(filepath);
+    load(thing){
+        const command = super.load(thing);
         if (this.aliases) this._addAliases(command.id);
         return command;
     }

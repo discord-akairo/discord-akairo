@@ -50,11 +50,11 @@ class ListenerHandler extends AkairoHandler {
      * Loads a listener.
      * @method
      * @name ListenerHandler#load
-     * @param {string} filepath - Path to file.
+     * @param {string|Listener} thing - Module or path to module.
      * @returns {Listener}
      */
-    load(filepath){
-        const listener = super.load(filepath);
+    load(thing){
+        const listener = super.load(thing);
         if (this.emitters) this.register(listener.id);
         return listener;
     }

@@ -62,17 +62,18 @@ class AkairoHandler extends EventEmitter {
     }
 
     /**
-     * Loads a module.
-     * @param {string} filepath - Path to file.
+     * Loads a module, can be a filepath or an object.
+     * @param {string|AkairoModule} thing - Module or path to module.
      * @returns {AkairoModule}
      */
-    load(filepath){
-        const mod = require(filepath);
+    load(thing){
+        const isObj = typeof thing === 'object';
+        const mod = isObj ? thing : require(thing);
 
         if (!(mod instanceof this.classToHandle)) return;
         if (this.modules.has(mod.id)) throw new Error(`${this.classToHandle.name} ${mod.id} already loaded.`);
 
-        mod.filepath = filepath;
+        mod.filepath = isObj ? null : thing;
         mod.client = this.client;
         mod.handler = this;
 
