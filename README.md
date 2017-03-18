@@ -31,13 +31,14 @@ client.login('TOKEN').then(() => {
 ```
 
 ## Features
-- Modules for commands, inhibitors, and listeners.
+- Reloadable modules for commands, inhibitors, and listeners.
 - Extremely flexible command options and behavior.
-- Many types of arguments, including flag arguments.
+- Many different way to parse arguments.
+- Customizable argument type casting (even dynamic types).
 - Prompting for arguments.
 - Handling edited messages.
 - Resolvers for Discord objects.
-- Lots of utilities.
+- Lots of useful utilities.
 - Easy way to use SQLite.
 - Easily extendable classes.
 
