@@ -30,7 +30,8 @@ module.exports = {
         EMOJI: 'emoji',
         EMOJIS: 'emojis',
         GUILD: 'guild',
-        GUILDS: 'guilds'
+        GUILDS: 'guilds',
+        MESSAGE: 'message'
     },
     ArgumentSplits: {
         PLAIN: 'plain',

@@ -489,6 +489,20 @@ class ClientUtil {
             });
         }));
     }
+
+    /**
+     * Fetches a message, works for both bots and user accounts.
+     * @param {TextBasedChannel} channel - Channel to fetch in.
+     * @param {Snowflake} id - ID of the message.
+     * @returns {Promise<Message>}
+     */
+    fetchMessage(channel, id){
+        if (this.client.user.bot) return channel.fetchMessage(id);
+        
+        return channel.fetchMessages({ around: id, limit: 2 }).then(msgs => {
+            return msgs.get(id);
+        });
+    }
 }
 
 module.exports = ClientUtil;

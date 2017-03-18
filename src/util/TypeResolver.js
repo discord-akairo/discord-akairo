@@ -205,6 +205,11 @@ class TypeResolver {
         return guilds.size ? guilds : null;
     }
 
+    [ArgumentTypes.MESSAGE](word, message){
+        if (!word) return null;
+        return this.client.util.fetchMessage(message.channel, word).catch(() => { throw null; });
+    }
+
     /**
      * Adds a new type.
      * @param {string} name - Name of the type.

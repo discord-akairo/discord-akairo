@@ -17,7 +17,7 @@ module.exports = new Command('test', exec, {
         },
         {
             id: 'thing2',
-            type: 'number',
+            type: 'message',
             prompt: {
                 retries: 1
             }
@@ -25,7 +25,6 @@ module.exports = new Command('test', exec, {
         {
             id: 'thing3',
             type: (w, m, args) => {
-                console.log(args);
                 if (args.thing === 1) return w && parseInt(w) + 5 || null;
                 return w && parseInt(w) - 5 || null;
             },
