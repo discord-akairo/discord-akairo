@@ -73,15 +73,9 @@ class CommandHandler extends AkairoHandler {
             retry: function(m){
                 return `${m.author}, you need to input a valid ${this.type}!`;
             },
-            timeout: function(m){
-                return `${m.author}, time ran out for command.`;
-            },
-            ended: function(m){
-                return `${m.author}, retries limit reached for command.\nCommand has been cancelled.`;
-            },
-            cancel: function(m){
-                return `${m.author}, command has been cancelled.`;
-            },
+            timeout: 'time ran out for command.',
+            ended: 'retries limit reached for command.\nCommand has been cancelled.',
+            cancel: 'command has been cancelled.',
             retries: 1,
             time: 30000,
             cancelWord: 'cancel'
@@ -111,7 +105,7 @@ class CommandHandler extends AkairoHandler {
          */
         this.allowMention = typeof options.allowMention === 'function' ? options.allowMention : () => options.allowMention;
 
-        for (const [id] of this.modules) this._addAliases(id);
+        for (const id of this.modules.keys()) this._addAliases(id);
 
         /**
          * Directory to commands.
