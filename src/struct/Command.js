@@ -16,6 +16,7 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * <br>On an edited message, the exec function edited param will be true.
  * @prop {number} [cooldown] - The command cooldown in milliseconds.
  * @prop {number} [ratelimit=1] - Amount of command uses allowed until cooldown.
+ * @prop {string|string[]} [prefix] - A prefix to overwrite the global one for this command.
  * @prop {RegExp|function} [trigger] - A regex or function <code>(message => {})</code> returning regex to match in messages that are NOT commands.
  * <br>The exec function is <code>((message, match, groups, edited) => {})</code>.
  * @prop {function} [condition] - A function <code>((message, edited) => {})</code> that returns true or false on messages that are NOT commands.
@@ -119,6 +120,12 @@ class Command extends AkairoModule {
          * @type {string}
          */
         this.description = (Array.isArray(options.description) ? options.description.join('\n') : options.description) || '';
+
+        /**
+         * Command prefix overwrite.
+         * @type {?string|string[]}
+         */
+        this.prefix = options.prefix;
 
         /**
          * Gets the regex trigger, if specified.

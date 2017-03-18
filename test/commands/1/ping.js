@@ -10,5 +10,6 @@ function exec(message){
 
 module.exports = new Command('ping', exec, {
     aliases: ['ping', 'p'],
+    prefix: ['!', '.'],
     editable: false
 });

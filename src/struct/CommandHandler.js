@@ -21,6 +21,12 @@ class CommandHandler extends AkairoHandler {
         this.aliases = new Collection();
 
         /**
+         * Set of prefix overwrites.
+         * @type {Set<string>}
+         */
+        this.prefixes = new Set();
+
+        /**
          * The type resolver.
          * @type {TypeResolver}
          */
@@ -250,36 +256,64 @@ class CommandHandler extends AkairoHandler {
                 const prefix = this.prefix(message);
                 const allowMention = this.allowMention(message);
                 let start;
+                let overwrite;
 
                 if (Array.isArray(prefix)){
                     const match = prefix.find(p => {
                         return message.content.toLowerCase().startsWith(p.toLowerCase());
                     });
 
-                    if (match == null) return this._handleTriggers(message);
                     start = match;
                 } else
                 if (message.content.toLowerCase().startsWith(prefix.toLowerCase())){
-                    start = prefix;
+                    start = prefix.toLowerCase();
                 } else
                 if (allowMention){
                     const mentionRegex = new RegExp(`^<@!?${this.client.user.id}>`);
                     const mentioned = message.content.match(mentionRegex);
                     
-                    if (mentioned){
-                        start = mentioned[0];
-                    } else {
-                        return this._handleTriggers(message, edited);
-                    }
-                } else {
-                    return this._handleTriggers(message, edited);
+                    if (mentioned) start = mentioned[0];
                 }
+
+                for (const ovPrefix of this.prefixes.keys()){
+                    if (Array.isArray(ovPrefix)){
+                        const match = ovPrefix.find(p => {
+                            return message.content.toLowerCase().startsWith(p.toLowerCase());
+                        });
+
+                        if (match){
+                            overwrite = { ovPrefix, start };
+                            start = match;
+                        }
+
+                        break;
+                    }
+
+                    if (message.content.toLowerCase().startsWith(ovPrefix.toLowerCase())){
+                        overwrite = { ovPrefix: ovPrefix.toLowerCase(), start };
+                        start = ovPrefix.toLocaleLowerCase();
+                        break;
+                    }
+                }
+                
+                if (start == null) return this._handleTriggers(message, edited);
 
                 const firstWord = message.content.replace(start, '').search(/\S/) + start.length;
                 const name = message.content.slice(firstWord).split(' ')[0];
                 const command = this.findCommand(name);
 
                 if (!command) return this._handleTriggers(message, edited);
+                
+                if (overwrite == null && command.prefix != null) return this._handleTriggers(message, edited);
+
+                if (overwrite != null){
+                    if (command.prefix == null){
+                        if (overwrite.start !== start) return this._handleTriggers(message, edited);
+                    } else {
+                        if (overwrite.ovPrefix !== command.prefix) return this._handleTriggers(message, edited);
+                    }
+                }
+
                 if (!command.enabled) return void this.emit(CommandHandlerEvents.COMMAND_DISABLED, message, command);
                 if (edited && !command.editable) return;
 
@@ -462,6 +496,7 @@ class CommandHandler extends AkairoHandler {
         if (!command) throw new Error(`Command ${id} does not exist.`);
 
         for (const alias of command.aliases) this.aliases.set(alias.toLowerCase(), command.id);
+        if (command.prefix != null) this.prefixes.add(command.prefix);
     }
 
     /**
@@ -474,6 +509,7 @@ class CommandHandler extends AkairoHandler {
         if (!command) throw new Error(`Command ${id} does not exist.`);
 
         for (const alias of command.aliases) this.aliases.delete(alias.toLowerCase());
+        if (command.prefix != null) this.prefixes.delete(command.prefix);
     }
 
     /**
