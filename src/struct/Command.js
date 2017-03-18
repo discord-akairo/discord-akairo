@@ -230,25 +230,18 @@ class Command extends AkairoModule {
             args[arg.id] = arg.cast.bind(arg, word);
         }
 
-        const props = [];
+        const processed = {};
         const keys = Object.keys(args);
 
-        const process = i => {
-            if (i === keys.length) return props;
+        return (function process(i){
+            if (i === keys.length) return processed;
 
             const key = keys[i];
-            return args[key](message).then(res => {
-                props.push(res);
+            return args[key](message, processed).then(res => {
+                processed[key] = res;
                 return process(i + 1);
             });
-        };
-
-        return process(0).then(values => {
-            return values.reduce((res, prop, i) => {
-                res[keys[i]] = prop;
-                return res;
-            }, args);
-        });
+        })(0);
     }
 
     /**

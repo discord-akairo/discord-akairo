@@ -11,7 +11,8 @@ module.exports = new Command('test', exec, {
             id: 'thing',
             type: 'number',
             prompt: {
-                start: () => ({ embed: { title: 'text from argument' } })
+                start: 'a number pls',
+                retry: 'pls'
             }
         },
         {
@@ -23,12 +24,14 @@ module.exports = new Command('test', exec, {
         },
         {
             id: 'thing3',
-            type: 'member',
-            prompt: {
-                start: () => 'Optional member.',
-                optional: true
+            type: (w, m, args) => {
+                console.log(args);
+                if (args.thing === 1) return w && parseInt(w) + 5 || null;
+                return w && parseInt(w) - 5 || null;
             },
-            default: 123
+            prompt: {
+                start: 'this changes'
+            }
         }
     ],
     defaultPrompt: {

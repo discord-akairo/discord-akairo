@@ -37,7 +37,7 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  * <br>The evaluated argument will be all lowercase.
  * <br>If the input is not in the array, the default value is used.
  * <br>
- * <br>A function <code>((word, message) => {})</code> can also be used to filter or modify arguments.
+ * <br>A function <code>((word, message, prevArgs) => {})</code> can also be used to filter or modify arguments.
  * <br>A return value of true will let the word pass, a falsey return value will use the default value for the argument.
  * <br>Any other truthy return value will be used as the argument.
  * @typedef {string|string[]} ArgumentType
@@ -46,17 +46,18 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
 /**
  * A prompt to run if the user did not input the argument correctly.
  * <br>Can only be used if there is not a default value (unless optional is true).
- * <br>The functions are <code>(message => {})</code> and are used to determine the reply.
+ * <br>The functions are <code>((message, prevArgs, amountOfTries) => {})</code> and returns a string to determine the reply.
+ * <br>Can also be a string that will have a mention concatenated to it.
  * @typedef {Object} PromptOptions
  * @prop {number} [retries=1] - Amount of times allowed to retries.
  * @prop {number} [time=30000] - Time to wait for input.
  * @prop {string} [cancelWord='cancel'] - Word to use for cancelling prompts.
  * @prop {boolean} [optional=false] - Prompts only when argument is provided but was not of the right type.
- * @prop {function} [start] - Function called on start.
- * @prop {function} [retry] - Function called on a retry.
- * @prop {function} [timeout] - Function called on collector time out.
- * @prop {function} [ended] - Function called on no retries left.
- * @prop {function} [cancel] - Function called on cancel.
+ * @prop {string|string[]|function} [start] - Function called on start.
+ * @prop {string|string[]|function} [retry] - Function called on a retry.
+ * @prop {string|string[]|function} [timeout] - Function called on collector time out.
+ * @prop {string|string[]|function} [ended] - Function called on no retries left.
+ * @prop {string|string[]|function} [cancel] - Function called on cancel.
  */
 
 /**
@@ -69,7 +70,7 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  * @prop {number} [index] - Index/word of text to start from.
  * <br>Applicable to word, text, or content match only.
  * @prop {any} [default=''] - Default value if text does not parse/cast correctly.
- * <br>Can be a function <code>(message => {})</code>.
+ * <br>Can be a function <code>((message, prevArgs) => {})</code>.
  * @prop {string|string[]} [description=''] - A description of the argument.
  * @prop {PromptOptions} [prompt] - Prompt options for when user does not provide input.
  * <br>Must not have a default value for this to work.
@@ -162,22 +163,23 @@ class Argument {
      * Casts the type of this argument onto a word.
      * @param {string} word - The word to cast.
      * @param {Message} message - The message that called the command.
+     * @param {Object} args - Previous arguments from command.
      * @returns {Promise<any>}
      */
-    cast(word, message){
+    cast(word, message, args){
         if (!word && this.prompt && this.prompt.optional){
-            return Promise.resolve(this.default.call(this.command, message));
+            return Promise.resolve(this.default.call(this.command, message, args));
         }
 
-        const res = this._processType(word, message);
+        const res = this._processType(word, message, args);
 
         if (res != null) return Promise.resolve(res).catch(err => {
             if (err instanceof Error) throw err;
-            return this.prompt ? this._promptArgument(message) : this.default.call(this.command, message);
+            return this.prompt ? this._promptArgument(message, args) : this.default.call(this.command, message, args);
         });
 
-        if (this.prompt) return this._promptArgument(message);
-        return Promise.resolve(this.default.call(this.command, message));
+        if (this.prompt) return this._promptArgument(message, args);
+        return Promise.resolve(this.default.call(this.command, message, args));
     }
 
     /**
@@ -185,23 +187,24 @@ class Argument {
      * @private
      * @param {string} word - Word to process.
      * @param {Message} message - Message that called the command.
+     * @param {Object} args - Previous arguments from command.
      * @returns {any}
      */
-    _processType(word, message){
+    _processType(word, message, args){
         if (Array.isArray(this.type)){
             if (!this.type.some(t => t.toLowerCase() === word.toLowerCase())) return null;
             return word.toLowerCase();
         }
 
         if (typeof this.type === 'function'){
-            const res = this.type.call(this.command, word, message);
+            const res = this.type.call(this.command, word, message, args);
             if (res === true) return word;
             if (res != null) return res;
             return null;
         }
 
         if (this.handler.resolver[this.type]){
-            const res = this.handler.resolver[this.type](word, message);
+            const res = this.handler.resolver[this.type](word, message, args);
             if (res != null) return res;
 
             return null;
@@ -215,9 +218,10 @@ class Argument {
      * Prompts a message for a word and casts it.
      * @private
      * @param {Message} message - Message to prompt.
+     * @param {Object} args - Previous arguments from command.
      * @returns {Promise<any>}
      */
-    _promptArgument(message){
+    _promptArgument(message, args){
         const prompt = {};
         
         Object.assign(prompt, this.handler.defaultPrompt);
@@ -226,7 +230,8 @@ class Argument {
 
         const retry = i => {
             this.handler.addPrompt(message);
-            let text = i === 1 ? prompt.start.call(this, message) : prompt.retry.call(this, message);
+            let text = i === 1 ? prompt.start : prompt.retry;
+            text = typeof text === 'function' ? text.call(this, message, args, i) : `${message.author}, ${text}`;
             text = Array.isArray(text) ? text.join('\n') : text;
 
             let value;
@@ -234,7 +239,7 @@ class Argument {
             return this.client.util.prompt(message, text, m => {
                 if (m.content.toLowerCase() === prompt.cancelWord) throw 'cancel';
 
-                const res = this._processType(m.content, m);
+                const res = this._processType(m.content, m, args);
                 value = res;
                 
                 return res;
@@ -245,7 +250,7 @@ class Argument {
                 }
 
                 if (reason === 'time'){
-                    let response = prompt.timeout.call(this, message);
+                    let response = typeof prompt.timeout === 'function' ? prompt.timeout.call(this, message, args, i) : `${message.author}, ${prompt.timeout}`;
                     response = Array.isArray(response) ? response.join('\n') : response;
 
                     return message.channel.send(response).then(() => {
@@ -255,7 +260,7 @@ class Argument {
                 }
 
                 if (reason === 'cancel'){
-                    let response = prompt.cancel.call(this, message);
+                    let response = typeof prompt.cancel === 'function' ? prompt.cancel.call(this, message, args, i) : `${message.author}, ${prompt.cancel}`;
                     response = Array.isArray(response) ? response.join('\n') : response;
 
                     return message.channel.send(response).then(() => {
@@ -265,7 +270,7 @@ class Argument {
                 }
                 
                 if (i > prompt.retries){
-                    let response = prompt.ended.call(this, message);
+                    let response = typeof prompt.ended === 'function' ? prompt.ended.call(this, message, args, i) : `${message.author}, ${prompt.ended}`;
                     response = Array.isArray(response) ? response.join('\n') : response;
 
                     return message.channel.send(response).then(() => {
