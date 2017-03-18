@@ -308,7 +308,7 @@ declare module 'discord-akairo' {
         type?: ArgumentType;
         prefix?: string | string[];
         index?: number;
-        default?: any | ((message: Message) => any);
+        default?: any | ((message: Message, prevArgs: Object) => any);
         description?: string | string[];
         prompt?: PromptOptions;
     };
@@ -318,14 +318,14 @@ declare module 'discord-akairo' {
         time?: number;
         cancelWord?: string;
         optional?: boolean;
-        start: (message: Message) => string | string[];
-        retry: (message: Message) => string | string[];
-        timeout: (message: Message) => string | string[];
-        ended: (message: Message) => string | string[];
-        cancel: (message: Message) => string | string[];
+        start: string | string[] | ((message: Message, prevArgs: Object, amountOfTries: number) => string | string[]);
+        retry: string | string[] | ((message: Message, prevArgs: Object, amountOfTries: number) => string | string[]);
+        timeout: string | string[] | ((message: Message, prevArgs: Object, amountOfTries: number) => string | string[]);
+        ended: string | string[] | ((message: Message, prevArgs: Object, amountOfTries: number) => string | string[]);
+        cancel: string | string[] | ((message: Message, prevArgs: Object, amountOfTries: number) => string | string[]);
     };
 
-    type ArgumentType = string | string[] | ((word: string, message: Message) => any);
+    type ArgumentType = string | string[] | ((word: string, message: Message, prevArgs: Object) => any);
 
     type ArgumentMatch = string;
 
