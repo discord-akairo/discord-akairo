@@ -9,11 +9,8 @@ module.exports = new Command('test', exec, {
     args: [
         {
             id: 'thing',
-            type: 'number',
-            prompt: {
-                start: 'a number pls',
-                retry: 'pls'
-            }
+            type: /not ok/,
+            prompt: true
         },
         {
             id: 'thing2',
@@ -25,7 +22,7 @@ module.exports = new Command('test', exec, {
         {
             id: 'thing3',
             type: (w, m, args) => {
-                if (args.thing === 1) return w && parseInt(w) + 5 || null;
+                if (args.thing === 'ok') return w && parseInt(w) + 5 || null;
                 return w && parseInt(w) - 5 || null;
             },
             prompt: {

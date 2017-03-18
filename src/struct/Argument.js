@@ -37,9 +37,13 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  * <br>The evaluated argument will be all lowercase.
  * <br>If the input is not in the array, the default value is used.
  * <br>
+ * <br>A regular expression can also be used.
+ * <br>The evaluated argument will be an object containing the match and groups if global.
+ * <br>
  * <br>A function <code>((word, message, prevArgs) => {})</code> can also be used to filter or modify arguments.
- * <br>A return value of true will let the word pass, a falsey return value will use the default value for the argument.
+ * <br>A return value of true will let the word pass, a null/undefined return value will use the default value for the argument or start a prompt.
  * <br>Any other truthy return value will be used as the argument.
+ * <br>If returning a Promise, the value resolved will be the argument, and a rejection will use the default/start a prompt.
  * @typedef {string|string[]} ArgumentType
  */
 
@@ -203,10 +207,26 @@ class Argument {
             return null;
         }
 
+        if (this.type instanceof RegExp){
+            const match = word.match(this.type);
+            if (!match) return null;
+
+            const groups = [];
+
+            if (this.type.global){
+                let group;
+                
+                while((group = this.type.exec(word)) != null){
+                    groups.push(group);
+                }
+            }
+
+            return { match, groups };
+        }
+
         if (this.handler.resolver[this.type]){
             const res = this.handler.resolver[this.type](word, message, args);
             if (res != null) return res;
-
             return null;
         }
 
