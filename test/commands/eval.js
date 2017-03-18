@@ -69,5 +69,6 @@ module.exports = new Command('async', exec, {
         }
     ],
     ownerOnly: true,
-    editable: true
+    editable: true,
+    prefix: ['.', '?']
 });

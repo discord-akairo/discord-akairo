@@ -266,7 +266,7 @@ class CommandHandler extends AkairoHandler {
                     start = match;
                 } else
                 if (message.content.toLowerCase().startsWith(prefix.toLowerCase())){
-                    start = prefix.toLowerCase();
+                    start = prefix;
                 } else
                 if (allowMention){
                     const mentionRegex = new RegExp(`^<@!?${this.client.user.id}>`);
@@ -284,22 +284,23 @@ class CommandHandler extends AkairoHandler {
                         if (match){
                             overwrite = { ovPrefix, start };
                             start = match;
+                            break;
                         }
 
-                        break;
+                        continue;
                     }
 
                     if (message.content.toLowerCase().startsWith(ovPrefix.toLowerCase())){
-                        overwrite = { ovPrefix: ovPrefix.toLowerCase(), start };
-                        start = ovPrefix.toLocaleLowerCase();
+                        overwrite = { ovPrefix, start };
+                        start = ovPrefix;
                         break;
                     }
                 }
-                
+
                 if (start == null) return this._handleTriggers(message, edited);
 
-                const firstWord = message.content.replace(start, '').search(/\S/) + start.length;
-                const name = message.content.slice(firstWord).split(' ')[0];
+                const firstWord = message.content.replace(new RegExp(start.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&'), 'i'), '').search(/\S/) + start.length;
+                const name = message.content.slice(firstWord).split(/\s{1,}|\n{1,}/)[0];
                 const command = this.findCommand(name);
 
                 if (!command) return this._handleTriggers(message, edited);
@@ -310,7 +311,11 @@ class CommandHandler extends AkairoHandler {
                     if (command.prefix == null){
                         if (overwrite.start !== start) return this._handleTriggers(message, edited);
                     } else {
-                        if (overwrite.ovPrefix !== command.prefix) return this._handleTriggers(message, edited);
+                        if (Array.isArray(command.prefix)){
+                            if (!command.prefix.some(p => p.toLowerCase() === start.toLowerCase())) return this._handleTriggers(message, edited);
+                        } else {
+                            if (command.prefix.toLowerCase() !== start.toLowerCase()) return this._handleTriggers(message, edited);
+                        }
                     }
                 }
 
