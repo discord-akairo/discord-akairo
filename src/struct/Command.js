@@ -226,7 +226,11 @@ class Command extends AkairoModule {
                 return arg.cast.bind(arg, word);
             },
             [ArgumentMatches.PREFIX]: arg => {
-                let word = words.find(w => Array.isArray(arg.prefix) ? arg.prefix.some(p => w.toLowerCase().startsWith(p.toLowerCase())) : w.toLowerCase().startsWith(arg.prefix.toLowerCase())) || '';
+                let word = words.find(w => {
+                    return Array.isArray(arg.prefix)
+                    ? arg.prefix.some(p => w.toLowerCase().startsWith(p.toLowerCase()))
+                    : w.toLowerCase().startsWith(arg.prefix.toLowerCase());
+                }) || '';
 
                 const prefix = prefixes.find(p => {
                     if (!p.flag) return word.toLowerCase().startsWith(p.value);
@@ -241,7 +245,12 @@ class Command extends AkairoModule {
                 return arg.cast.bind(arg, word);
             },
             [ArgumentMatches.FLAG]: arg => {
-                const word = words.find(w => Array.isArray(arg.prefix) ? arg.prefix.some(p => w.toLowerCase() === p.toLowerCase()) : w.toLowerCase() === arg.prefix.toLowerCase()) || '';
+                const word = words.find(w => {
+                    return Array.isArray(arg.prefix)
+                    ? arg.prefix.some(p => w.toLowerCase() === p.toLowerCase())
+                    : w.toLowerCase() === arg.prefix.toLowerCase();
+                }) || '';
+
                 return () => Promise.resolve(!!word);
             },
             [ArgumentMatches.TEXT]: arg => {
