@@ -1,6 +1,6 @@
 const { Command } = require('../../src/index.js');
 
-function exec(message, args){
+function exec(message, args) {
     return console.log(args);
 }
 
@@ -22,8 +22,8 @@ module.exports = new Command('test', exec, {
         {
             id: 'thing3',
             type: (w, m, args) => {
-                if (args.thing === 'ok') return w && parseInt(w) + 5 || null;
-                return w && parseInt(w) - 5 || null;
+                if (args.thing === 'ok') return (w && parseInt(w) + 5) || null;
+                return (w && parseInt(w) - 5) || null;
             },
             prompt: {
                 start: 'this changes'
