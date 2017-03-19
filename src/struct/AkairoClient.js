@@ -32,7 +32,7 @@ class AkairoClient extends Client {
      * @param {ClientOptions} [clientOptions] - Options for Discord JS client.
      * <br>If not specified, the previous options parameter is used instead.
      */
-    constructor(options = {}, clientOptions){
+    constructor(options = {}, clientOptions) {
         super(clientOptions || options);
 
         /**
@@ -76,7 +76,7 @@ class AkairoClient extends Client {
      * @param {SQLiteHandler} database - The database.
      * @returns {AkairoClient}
      */
-    addDatabase(name, database){
+    addDatabase(name, database) {
         Object.defineProperty(this.databases, name, {
             value: database,
             enumerable: true
@@ -93,7 +93,7 @@ class AkairoClient extends Client {
      * @param {string} token - Client token.
      * @returns {Promise<void>}
      */
-    login(token){
+    login(token) {
         return new Promise((resolve, reject) => {
             this.build();
             super.login(token).catch(reject);
@@ -107,15 +107,17 @@ class AkairoClient extends Client {
                 });
 
                 Promise.all(promises).then(() => {
-                    if (this.commandHandler){
+                    if (this.commandHandler) {
                         this.on('message', m => {
                             this.commandHandler.handle(m, false);
                         });
 
-                        if (this.commandHandler.handleEdits) this.on('messageUpdate', (o, m) => {
-                            if (o.content === m.content) return;
-                            this.commandHandler.handle(m, true);
-                        });
+                        if (this.commandHandler.handleEdits) {
+                            this.on('messageUpdate', (o, m) => {
+                                if (o.content === m.content) return;
+                                this.commandHandler.handle(m, true);
+                            });
+                        }
                     }
 
                     return resolve();
@@ -128,8 +130,8 @@ class AkairoClient extends Client {
      * Builds the client by creating the handlers.
      * @returns {void}
      */
-    build(){
-        if (this._options.commandDirectory && !this.commandHandler){
+    build() {
+        if (this._options.commandDirectory && !this.commandHandler) {
             /**
              * The command handler.
              * @type {CommandHandler}
@@ -137,7 +139,7 @@ class AkairoClient extends Client {
             this.commandHandler = new CommandHandler(this, this._options);
         }
 
-        if (this._options.inhibitorDirectory && !this.inhibitorHandler){
+        if (this._options.inhibitorDirectory && !this.inhibitorHandler) {
             /**
              * The inhibitor handler.
              * @type {InhibitorHandler}
@@ -145,7 +147,7 @@ class AkairoClient extends Client {
             this.inhibitorHandler = new InhibitorHandler(this, this._options);
         }
 
-        if (this._options.listenerDirectory && !this.listenerHandler){
+        if (this._options.listenerDirectory && !this.listenerHandler) {
             /**
              * The listener handler.
              * @type {ListenerHandler}

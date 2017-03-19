@@ -7,7 +7,7 @@ class Category extends Collection {
      * @param {string} id - ID of the category.
      * @param {Iterable} [iterable] - Entries to set.
      */
-    constructor(id, iterable){
+    constructor(id, iterable) {
         super(iterable);
 
         /**
@@ -21,7 +21,7 @@ class Category extends Collection {
      * Calls reload() on all items in this category.
      * @returns {Category}
      */
-    reloadAll(){
+    reloadAll() {
         for (const m of Array.from(this.values())) m.reload();
         return this;
     }
@@ -30,7 +30,7 @@ class Category extends Collection {
      * Calls remove() on all items in this category.
      * @returns {Category}
      */
-    removeAll(){
+    removeAll() {
         for (const m of Array.from(this.values())) m.remove();
         return this;
     }
@@ -39,7 +39,7 @@ class Category extends Collection {
      * Calls enable() on all items in this category.
      * @returns {Category}
      */
-    enableAll(){
+    enableAll() {
         for (const m of this.values()) m.enable();
         return this;
     }
@@ -48,7 +48,7 @@ class Category extends Collection {
      * Calls disable() on all items in this category.
      * @returns {Category}
      */
-    disableAll(){
+    disableAll() {
         for (const m of this.values()) m.disable();
         return this;
     }
@@ -57,7 +57,7 @@ class Category extends Collection {
      * Returns the ID.
      * @returns {string}
      */
-    toString(){
+    toString() {
         return this.id;
     }
 }

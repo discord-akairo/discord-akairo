@@ -23,7 +23,7 @@ class SQLiteHandler extends EventEmitter {
      * @param {string} filepath - Path to .sqlite file.
      * @param {SQLiteOptions} [options={}] - Options for the handler.
      */
-    constructor(filepath, options = {}){
+    constructor(filepath, options = {}) {
         super();
 
         sql = require('sqlite');
@@ -90,7 +90,7 @@ class SQLiteHandler extends EventEmitter {
      * <br>Note that this calls the Collection's keyArray().
      * @type {string[]}
      */
-    get ids(){
+    get ids() {
         return this.memory.keyArray();
     }
 
@@ -100,7 +100,7 @@ class SQLiteHandler extends EventEmitter {
      * <br>Values from here should be desanitized.
      * @type {string[]}
      */
-    get configs(){
+    get configs() {
         return this.memory.array();
     }
 
@@ -108,9 +108,9 @@ class SQLiteHandler extends EventEmitter {
      * Sanitizes a string by replacing single quotes with two single quotes.
      * @param {string} input - Input text.
      * @param {boolean} json - Whether to stringify or not.
-     * @return {string}
+     * @returns {string}
      */
-    sanitize(input, json = false){
+    sanitize(input, json = false) {
         if (json && typeof input !== 'string') return JSON.stringify(input).replace(/'/g, '\'\'');
         if (typeof input !== 'string') return input;
         return input.replace(/'/g, '\'\'');
@@ -120,9 +120,9 @@ class SQLiteHandler extends EventEmitter {
      * Desanitizes a string for use by replacing two single quotes with a single quote.
      * @param {string} input - Input text.
      * @param {boolean} [json] - Whether to parse or not.
-     * @return {string}
+     * @returns {string}
      */
-    desanitize(input, json = false){
+    desanitize(input, json = false) {
         if (json && typeof input === 'string') return JSON.parse(input.replace(/''/g, '\''));
         if (typeof input !== 'string') return input;
         return input.replace(/''/g, '\'');
@@ -130,9 +130,9 @@ class SQLiteHandler extends EventEmitter {
 
     /**
      * Opens the database so that it can be used.
-     * @return {Promise<Database>}
+     * @returns {Promise<Database>}
      */
-    open(){
+    open() {
         return sql.open(this.filepath).then(db => {
             this.db = db;
             return this.db;
@@ -145,20 +145,20 @@ class SQLiteHandler extends EventEmitter {
      * @param {string[]} ids - Array of IDs.
      * @returns {Promise<SQLiteHandler>}
      */
-    load(ids){
+    load(ids) {
         return this.open().then(db => {
             return db.all(`SELECT * FROM "${this.tableName}"`).then(rows => {
-                for (const row of rows){
+                for (const row of rows) {
                     this.memory.set(row.id, row);
                 }
 
                 const promises = [];
 
-                for (let id of ids){
+                for (let id of ids) {
                     id = this.sanitize(id);
                     if (!this.has(id)) promises.push(this.add(id));
                 }
-                
+
                 return Promise.all(promises).then(() => {
                     this.emit(SQLiteHandlerEvents.INIT);
                     return this;
@@ -172,7 +172,7 @@ class SQLiteHandler extends EventEmitter {
      * @param {string} id - ID of entry.
      * @returns {Promise<SQLiteHandler>}
      */
-    add(id){
+    add(id) {
         if (!this.db) return Promise.reject(new Error(`Database with table ${this.tableName} not opened.`));
 
         id = this.sanitize(id);
@@ -194,7 +194,7 @@ class SQLiteHandler extends EventEmitter {
      * @param {string} id - ID of entry.
      * @returns {SQLiteHandler}
      */
-    addMemory(id){
+    addMemory(id) {
         id = this.sanitize(id);
         if (this.has(id)) throw new Error(`${id} already exists in ${this.tableName}.`);
 
@@ -212,12 +212,12 @@ class SQLiteHandler extends EventEmitter {
      * @param {string} id - ID of entry.
      * @returns {Promise<SQLiteHandler>}
      */
-    remove(id){
+    remove(id) {
         if (!this.db) return Promise.reject(new Error(`Database with table ${this.tableName} not opened.`));
-        
+
         id = this.sanitize(id);
         if (!this.has(id)) return Promise.reject(new Error(`${id} does not exist in ${this.tableName}.`));
-        
+
         return this.db.run(`DELETE FROM "${this.tableName}" WHERE id = '${id}'`).then(() => {
             this.memory.delete(id);
             this.emit(SQLiteHandlerEvents.REMOVE, id, false);
@@ -230,7 +230,7 @@ class SQLiteHandler extends EventEmitter {
      * @param {string} id - ID of entry.
      * @returns {SQLiteHandler}
      */
-    removeMemory(id){
+    removeMemory(id) {
         id = this.sanitize(id);
         if (!this.has(id)) throw new Error(`${id} does not exist in ${this.tableName}.`);
 
@@ -244,7 +244,7 @@ class SQLiteHandler extends EventEmitter {
      * @param {string} id ID of entry.
      * @returns {boolean}
      */
-    has(id){
+    has(id) {
         id = this.sanitize(id);
         return this.memory.has(id);
     }
@@ -254,16 +254,16 @@ class SQLiteHandler extends EventEmitter {
      * @param {string} id - ID of entry.
      * @returns {Object}
      */
-    get(id){
+    get(id) {
         id = this.sanitize(id);
         if (!this.has(id)) return Object.assign({}, this.defaultConfig);
-        
+
         const config = this.memory.get(id);
         const copy = {};
 
-        for (const key of Object.keys(config)){
-            if (config[key] == null){
-                if (this.json.includes(key) && typeof this.defaultConfig[key] === 'string'){
+        for (const key of Object.keys(config)) {
+            if (config[key] == null) {
+                if (this.json.includes(key) && typeof this.defaultConfig[key] === 'string') {
                     copy[key] = JSON.parse(this.defaultConfig[key]);
                     continue;
                 }
@@ -285,7 +285,7 @@ class SQLiteHandler extends EventEmitter {
      * @param {string|number} value - Value to set.
      * @returns {Promise<SQLiteHandler>}
      */
-    set(id, key, value){
+    set(id, key, value) {
         if (!this.db) return Promise.reject(new Error(`Database with table ${this.tableName} not opened.`));
 
         id = this.sanitize(id);
@@ -293,19 +293,19 @@ class SQLiteHandler extends EventEmitter {
         value = this.sanitize(value, this.json.includes(key));
 
         if (!this.has(id)) return Promise.reject(new Error(`${id} not found in ${this.tableName}.`));
-        
+
         const config = this.memory.get(id);
 
         if (!config.hasOwnProperty(key)) return Promise.reject(new Error(`Key ${key} was not found for ${id} in ${this.tableName}.`));
         if (key === 'id') return Promise.reject(new Error('The id key is read-only.'));
-        
+
         config[key] = value;
         this.memory.set(id, config);
 
-        if (isNaN(value)){
+        if (isNaN(value)) {
             value = `'${value}'`;
         }
-        
+
         return this.db.run(`UPDATE "${this.tableName}" SET ${key} = ${value} WHERE id = '${id}'`).then(() => {
             this.emit(SQLiteHandlerEvents.SET, config, true);
             return this;
@@ -319,18 +319,18 @@ class SQLiteHandler extends EventEmitter {
      * @param {string|number} value - Value to set.
      * @returns {SQLiteHandler}
      */
-    setMemory(id, key, value){
+    setMemory(id, key, value) {
         id = this.sanitize(id);
         key = this.sanitize(key);
         value = this.sanitize(value, this.json.includes(key));
 
         if (!this.has(id)) throw new Error(`${id} not found in ${this.tableName}.`);
-        
+
         const config = this.memory.get(id);
 
         if (!config.hasOwnProperty(key)) throw new Error(`Key ${key} was not found for ${id} in ${this.tableName}.`);
         if (key === 'id') throw new Error('The id key is read-only.');
-        
+
         config[key] = value;
         this.memory.set(id, config);
         this.emit(SQLiteHandlerEvents.SET, config, false);
@@ -342,7 +342,7 @@ class SQLiteHandler extends EventEmitter {
      * @param {string} id - ID to save.
      * @returns {Promise<SQLiteHandler>}
      */
-    save(id){
+    save(id) {
         if (!this.db) return Promise.reject(new Error(`Database with table ${this.tableName} not opened.`));
 
         id = this.sanitize(id);
@@ -351,10 +351,10 @@ class SQLiteHandler extends EventEmitter {
         const config = this.memory.get(id);
         const sets = [];
 
-        for (const key of Object.keys(config)){
+        for (const key of Object.keys(config)) {
             let value = config[key];
 
-            if (isNaN(value)){
+            if (isNaN(value)) {
                 value = `'${value}'`;
             }
 
@@ -365,13 +365,13 @@ class SQLiteHandler extends EventEmitter {
             let promise;
             let insert = false;
 
-            if (!count['count(1)']){
+            if (!count['count(1)']) {
                 promise = this.db.run(`INSERT INTO "${this.tableName}" (id) VALUES ('${id}')`);
                 insert = true;
             } else {
                 promise = Promise.resolve();
             }
-            
+
             return promise.then(() => {
                 this.db.run(`UPDATE "${this.tableName}" SET ${sets.join(', ')} WHERE id = '${id}'`);
                 return insert;
@@ -386,7 +386,7 @@ class SQLiteHandler extends EventEmitter {
      * Saves all in-memory configs to the database.
      * @returns {Promise<SQLiteHandler>}
      */
-    saveAll(){
+    saveAll() {
         const promises = this.memory.map(config => this.save(config.id));
         return Promise.all(promises).then(() => {
             this.emit(SQLiteHandlerEvents.SAVE_ALL);

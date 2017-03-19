@@ -10,10 +10,10 @@ class AkairoModule {
     /**
      * Creates a new module.
      * @param {string} id - ID of module.
-     * @param {function} exec - Function called when module is used.
+     * @param {Function} exec - Function called when module is used.
      * @param {ModuleOptions} [options={}] - Options.
      */
-    constructor(id, exec, options = {}){
+    constructor(id, exec, options = {}) {
         /**
          * ID of the module.
          * @type {string}
@@ -65,7 +65,7 @@ class AkairoModule {
      * Reloads the module.
      * @returns {AkairoModule}
      */
-    reload(){
+    reload() {
         return this.handler.reload(this.id);
     }
 
@@ -73,7 +73,7 @@ class AkairoModule {
      * Removes the module.
      * @returns {AkairoModule}
      */
-    remove(){
+    remove() {
         return this.handler.remove(this.id);
     }
 
@@ -81,7 +81,7 @@ class AkairoModule {
      * Enables the module.
      * @returns {boolean}
      */
-    enable(){
+    enable() {
         if (this.enabled) return false;
         this.enabled = true;
         this.handler.emit(AkairoHandlerEvents.ENABLE, this);
@@ -92,7 +92,7 @@ class AkairoModule {
      * Disables the module.
      * @returns {boolean}
      */
-    disable(){
+    disable() {
         if (!this.enabled) return false;
         this.enabled = false;
         this.handler.emit(AkairoHandlerEvents.DISABLE, this);
@@ -103,7 +103,7 @@ class AkairoModule {
      * Returns the ID.
      * @returns {string}
      */
-    toString(){
+    toString() {
         return this.id;
     }
 }

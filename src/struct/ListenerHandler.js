@@ -10,7 +10,7 @@ class ListenerHandler extends AkairoHandler {
      * @param {AkairoClient} client - The Akairo client.
      * @param {Object} options - Options from client.
      */
-    constructor(client, options){
+    constructor(client, options) {
         super(client, options.listenerDirectory, Listener);
 
         /**
@@ -25,9 +25,11 @@ class ListenerHandler extends AkairoHandler {
         this.emitters.set('inhibitorHandler', this.client.inhibitorHandler);
         this.emitters.set('listenerHandler', this.client.listenerHandler);
 
-        if (options.emitters) for (const key of Object.keys(options.emitters)){
-            if (this.emitters.has(key)) continue;
-            this.emitters.set(key, options.emitters[key]);
+        if (options.emitters) {
+            for (const key of Object.keys(options.emitters)) {
+                if (this.emitters.has(key)) continue;
+                this.emitters.set(key, options.emitters[key]);
+            }
         }
 
         for (const m of this.modules.values()) this.register(m.id);
@@ -53,7 +55,7 @@ class ListenerHandler extends AkairoHandler {
      * @param {string|Listener} thing - Module or path to module.
      * @returns {Listener}
      */
-    load(thing){
+    load(thing) {
         const listener = super.load(thing);
         if (this.emitters) this.register(listener.id);
         return listener;
@@ -64,7 +66,7 @@ class ListenerHandler extends AkairoHandler {
      * @param {string} id - ID of the listener.
      * @returns {Listener}
      */
-    remove(id){
+    remove(id) {
         id = id.toString();
         this.deregister(id);
         return super.remove(id);
@@ -75,29 +77,31 @@ class ListenerHandler extends AkairoHandler {
      * @param {string} id - ID of the listener.
      * @returns {Listener}
      */
-    reload(id){
+    reload(id) {
         id = id.toString();
         this.deregister(id);
 
         const listener = super.reload(id);
         this.register(listener.id);
-        
+
         return listener;
     }
-    
+
     /**
      * Registers a listener with the EventEmitter.
      * @param {string} id - ID of the listener.
+     * @returns {void}
      */
-    register(id){
+    register(id) {
         const listener = this.modules.get(id.toString());
         if (!listener) throw new Error(`Listener ${id} does not exist.`);
 
         const emitter = listener.emitter instanceof EventEmitter ? listener.emitter : this.emitters.get(listener.emitter);
         if (!(emitter instanceof EventEmitter)) throw new Error('Listener\'s emitter is not an EventEmitter');
 
-        if (listener.type === 'once'){
-            return emitter.once(listener.eventName, listener.exec);
+        if (listener.type === 'once') {
+            emitter.once(listener.eventName, listener.exec);
+            return;
         }
 
         emitter.on(listener.eventName, listener.exec);
@@ -106,8 +110,9 @@ class ListenerHandler extends AkairoHandler {
     /**
      * Removes a listener from the EventEmitter.
      * @param {string} id - ID of the listener.
+     * @returns {void}
      */
-    deregister(id){
+    deregister(id) {
         const listener = this.modules.get(id.toString());
         if (!listener) throw new Error(`Listener ${id} does not exist.`);
 

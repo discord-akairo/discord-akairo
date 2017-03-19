@@ -86,7 +86,7 @@ class Argument {
      * @param {Command} command - Command of the argument.
      * @param {ArgumentOptions} options - Options for the argument.
      */
-    constructor(command, options = {}){
+    constructor(command, options = {}) {
         /**
          * The ID of the argument.
          * @type {string}
@@ -139,7 +139,7 @@ class Argument {
          * The default value.
          * @method
          * @name Argument#default
-         * @param {Message} - The message that called the command.
+         * @param {Message} message - The message that called the command.
          * @returns {any}
          */
         this.default = typeof options.default === 'function' ? options.default : () => options.default;
@@ -150,7 +150,7 @@ class Argument {
      * @readonly
      * @type {AkairoClient}
      */
-    get client(){
+    get client() {
         return this.command.client;
     }
 
@@ -159,7 +159,7 @@ class Argument {
      * @readonly
      * @type {CommandHandler}
      */
-    get handler(){
+    get handler() {
         return this.command.handler;
     }
 
@@ -170,17 +170,19 @@ class Argument {
      * @param {Object} args - Previous arguments from command.
      * @returns {Promise<any>}
      */
-    cast(word, message, args){
-        if (!word && this.prompt && this.prompt.optional){
+    cast(word, message, args) {
+        if (!word && this.prompt && this.prompt.optional) {
             return Promise.resolve(this.default.call(this.command, message, args));
         }
 
         const res = this._processType(word, message, args);
 
-        if (res != null) return Promise.resolve(res).catch(err => {
-            if (err instanceof Error) throw err;
-            return this.prompt ? this._promptArgument(message, args) : this.default.call(this.command, message, args);
-        });
+        if (res != null) {
+            return Promise.resolve(res).catch(err => {
+                if (err instanceof Error) throw err;
+                return this.prompt ? this._promptArgument(message, args) : this.default.call(this.command, message, args);
+            });
+        }
 
         if (this.prompt) return this._promptArgument(message, args);
         return Promise.resolve(this.default.call(this.command, message, args));
@@ -194,29 +196,29 @@ class Argument {
      * @param {Object} args - Previous arguments from command.
      * @returns {any}
      */
-    _processType(word, message, args){
-        if (Array.isArray(this.type)){
+    _processType(word, message, args) {
+        if (Array.isArray(this.type)) {
             if (!this.type.some(t => t.toLowerCase() === word.toLowerCase())) return null;
             return word.toLowerCase();
         }
 
-        if (typeof this.type === 'function'){
+        if (typeof this.type === 'function') {
             const res = this.type.call(this.command, word, message, args);
             if (res === true) return word;
             if (res != null) return res;
             return null;
         }
 
-        if (this.type instanceof RegExp){
+        if (this.type instanceof RegExp) {
             const match = word.match(this.type);
             if (!match) return null;
 
             const groups = [];
 
-            if (this.type.global){
+            if (this.type.global) {
                 let group;
-                
-                while((group = this.type.exec(word)) != null){
+
+                while ((group = this.type.exec(word)) != null) {
                     groups.push(group);
                 }
             }
@@ -224,7 +226,7 @@ class Argument {
             return { match, groups };
         }
 
-        if (this.handler.resolver[this.type]){
+        if (this.handler.resolver[this.type]) {
             const res = this.handler.resolver[this.type](word, message, args);
             if (res != null) return res;
             return null;
@@ -241,15 +243,18 @@ class Argument {
      * @param {Object} args - Previous arguments from command.
      * @returns {Promise<any>}
      */
-    _promptArgument(message, args){
+    _promptArgument(message, args) {
         const prompt = {};
-        
+
         Object.assign(prompt, this.handler.defaultPrompt);
         Object.assign(prompt, this.command.defaultPrompt);
         Object.assign(prompt, this.prompt || {});
 
+        let exited = false;
+
         const retry = i => {
             this.handler.addPrompt(message);
+
             let text = i === 1 ? prompt.start : prompt.retry;
             text = typeof text === 'function' ? text.call(this, message, args, i) : `${message.author}, ${text}`;
             text = Array.isArray(text) ? text.join('\n') : text;
@@ -257,55 +262,43 @@ class Argument {
             let value;
 
             return this.client.util.prompt(message, text, m => {
-                if (m.content.toLowerCase() === prompt.cancelWord) throw 'cancel';
+                if (m.content.toLowerCase() === prompt.cancelWord.toLowerCase()) {
+                    exited = true;
+                    return false;
+                }
 
                 const res = this._processType(m.content, m, args);
                 value = res;
-                
+
                 return res;
             }, prompt.time).then(() => value).catch(reason => {
-                if (reason instanceof Error){
+                if (reason instanceof Error) {
                     this.handler.removePrompt(message);
                     throw reason;
                 }
 
-                if (reason === 'time'){
-                    let response = typeof prompt.timeout === 'function' ? prompt.timeout.call(this, message, args, i) : `${message.author}, ${prompt.timeout}`;
+                let response;
+
+                if (reason === 'time') response = prompt.timeout;
+                if (reason === 'failed' && exited) response = prompt.cancel;
+                if (i > prompt.retries) response = prompt.ended;
+
+                if (response) exited = true;
+
+                if (exited) {
+                    response = typeof response === 'function' ? response.call(this, message, args, i) : `${message.author}, ${response}`;
                     response = Array.isArray(response) ? response.join('\n') : response;
 
-                    return message.channel.send(response).then(() => {
-                        this.handler.removePrompt(message);
-                        throw 'time';
-                    });
+                    return message.channel.send(response);
                 }
 
-                if (reason === 'cancel'){
-                    let response = typeof prompt.cancel === 'function' ? prompt.cancel.call(this, message, args, i) : `${message.author}, ${prompt.cancel}`;
-                    response = Array.isArray(response) ? response.join('\n') : response;
-
-                    return message.channel.send(response).then(() => {
-                        this.handler.removePrompt(message);
-                        throw 'cancel';
-                    });
-                }
-                
-                if (i > prompt.retries){
-                    let response = typeof prompt.ended === 'function' ? prompt.ended.call(this, message, args, i) : `${message.author}, ${prompt.ended}`;
-                    response = Array.isArray(response) ? response.join('\n') : response;
-
-                    return message.channel.send(response).then(() => {
-                        this.handler.removePrompt(message);
-                        throw 'end';
-                    });
-                }
-                
                 return retry(i + 1);
             });
         };
 
         return retry(1).then(value => {
             this.handler.removePrompt(message);
-            return value;
+            return exited ? new Promise((resolve, reject) => reject()) : value;
         });
     }
 }

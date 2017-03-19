@@ -5,7 +5,7 @@ class ClientUtil {
      * Client utilities to help with common tasks.
      * @param {AkairoClient} client - The client.
      */
-    constructor(client){
+    constructor(client) {
         /**
          * The Akairo client.
          * @readonly
@@ -25,7 +25,7 @@ class ClientUtil {
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
      * @returns {User}
      */
-    resolveUser(text, users, caseSensitive = false, wholeWord = false){
+    resolveUser(text, users, caseSensitive = false, wholeWord = false) {
         return users.find(user => this.checkUser(text, user, caseSensitive, wholeWord));
     }
 
@@ -37,7 +37,7 @@ class ClientUtil {
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
      * @returns {Collection<string, User>}
      */
-    resolveUsers(text, users, caseSensitive = false, wholeWord = false){
+    resolveUsers(text, users, caseSensitive = false, wholeWord = false) {
         return users.filter(user => this.checkUser(text, user, caseSensitive, wholeWord));
     }
 
@@ -49,7 +49,7 @@ class ClientUtil {
      * @param {boolean} [wholeWord=false] - Makes checking by name match full word only.
      * @returns {boolean}
      */
-    checkUser(text, user, caseSensitive = false, wholeWord = false){
+    checkUser(text, user, caseSensitive = false, wholeWord = false) {
         if (user.id === text) return true;
 
         const reg = /<@!?(\d+)>/;
@@ -61,13 +61,13 @@ class ClientUtil {
         const username = caseSensitive ? user.username : user.username.toLowerCase();
         const discrim = user.discriminator;
 
-        if (!wholeWord){
+        if (!wholeWord) {
             return username.includes(text)
-            || username.includes(text.split('#')[0]) && discrim.includes(text.split('#')[1]);
+            || (username.includes(text.split('#')[0]) && discrim.includes(text.split('#')[1]));
         }
 
         return username === text
-        || username === text.split('#')[0] && discrim === text.split('#')[1];
+        || (username === text.split('#')[0] && discrim === text.split('#')[1]);
     }
 
     /**
@@ -78,7 +78,7 @@ class ClientUtil {
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
      * @returns {GuildMember}
      */
-    resolveMember(text, members, caseSensitive = false, wholeWord = false){
+    resolveMember(text, members, caseSensitive = false, wholeWord = false) {
         return members.find(member => this.checkMember(text, member, caseSensitive, wholeWord));
     }
 
@@ -90,7 +90,7 @@ class ClientUtil {
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
      * @returns {Collection<string, GuildMember>}
      */
-    resolveMembers(text, members, caseSensitive = false, wholeWord = false){
+    resolveMembers(text, members, caseSensitive = false, wholeWord = false) {
         return members.filter(member => this.checkMember(text, member, caseSensitive, wholeWord));
     }
 
@@ -102,7 +102,7 @@ class ClientUtil {
      * @param {boolean} [wholeWord=false] - Makes checking by name match full word only.
      * @returns {boolean}
      */
-    checkMember(text, member, caseSensitive = false, wholeWord = false){
+    checkMember(text, member, caseSensitive = false, wholeWord = false) {
         if (member.id === text) return true;
 
         const reg = /<@!?(\d+)>/;
@@ -115,15 +115,15 @@ class ClientUtil {
         const displayName = caseSensitive ? member.displayName : member.displayName.toLowerCase();
         const discrim = member.user.discriminator;
 
-        if (!wholeWord){
+        if (!wholeWord) {
             return displayName.includes(text)
             || username.includes(text)
-            || (username.includes(text.split('#')[0]) || displayName.includes(text.split('#')[0])) && discrim.includes(text.split('#')[1]);
+            || ((username.includes(text.split('#')[0]) || displayName.includes(text.split('#')[0])) && discrim.includes(text.split('#')[1]));
         }
 
         return displayName === text
         || username === text
-        || (username === text.split('#')[0] || displayName === text.split('#')[0]) && discrim === text.split('#')[1];
+        || ((username === text.split('#')[0] || displayName === text.split('#')[0]) && discrim === text.split('#')[1]);
     }
 
     /**
@@ -134,7 +134,7 @@ class ClientUtil {
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
      * @returns {GuildChannel}
      */
-    resolveChannel(text, channels, caseSensitive = false, wholeWord = false){
+    resolveChannel(text, channels, caseSensitive = false, wholeWord = false) {
         return channels.find(channel => this.checkChannel(text, channel, caseSensitive, wholeWord));
     }
 
@@ -146,7 +146,7 @@ class ClientUtil {
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
      * @returns {Collection<string, GuildChannel>}
      */
-    resolveChannels(text, channels, caseSensitive = false, wholeWord = false){
+    resolveChannels(text, channels, caseSensitive = false, wholeWord = false) {
         return channels.filter(channel => this.checkChannel(text, channel, caseSensitive, wholeWord));
     }
 
@@ -158,7 +158,7 @@ class ClientUtil {
      * @param {boolean} [wholeWord=false] - Makes checking by name match full word only.
      * @returns {boolean}
      */
-    checkChannel(text, channel, caseSensitive = false, wholeWord = false){
+    checkChannel(text, channel, caseSensitive = false, wholeWord = false) {
         if (channel.id === text) return true;
 
         const reg = /<#(\d+)>/;
@@ -169,7 +169,7 @@ class ClientUtil {
         text = caseSensitive ? text : text.toLowerCase();
         const name = caseSensitive ? channel.name : channel.name.toLowerCase();
 
-        if (!wholeWord){
+        if (!wholeWord) {
             return name.includes(text)
             || name.includes(text.replace(/^#/, ''));
         }
@@ -186,7 +186,7 @@ class ClientUtil {
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
      * @returns {Role}
      */
-    resolveRole(text, roles, caseSensitive = false, wholeWord = false){
+    resolveRole(text, roles, caseSensitive = false, wholeWord = false) {
         return roles.find(role => this.checkRole(text, role, caseSensitive, wholeWord));
     }
 
@@ -198,7 +198,7 @@ class ClientUtil {
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
      * @returns {Collection<string, Role>}
      */
-    resolveRoles(text, roles, caseSensitive = false, wholeWord = false){
+    resolveRoles(text, roles, caseSensitive = false, wholeWord = false) {
         return roles.filter(role => this.checkRole(text, role, caseSensitive, wholeWord));
     }
 
@@ -210,7 +210,7 @@ class ClientUtil {
      * @param {boolean} [wholeWord=false] - Makes checking by name match full word only.
      * @returns {boolean}
      */
-    checkRole(text, role, caseSensitive = false, wholeWord = false){
+    checkRole(text, role, caseSensitive = false, wholeWord = false) {
         if (role.id === text) return true;
 
         const reg = /<@&(\d+)>/;
@@ -221,7 +221,7 @@ class ClientUtil {
         text = caseSensitive ? text : text.toLowerCase();
         const name = caseSensitive ? role.name : role.name.toLowerCase();
 
-        if (!wholeWord){
+        if (!wholeWord) {
             return name.includes(text)
             || name.includes(text.replace(/^@/, ''));
         }
@@ -238,7 +238,7 @@ class ClientUtil {
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
      * @returns {Emoji}
      */
-    resolveEmoji(text, emojis, caseSensitive = false, wholeWord = false){
+    resolveEmoji(text, emojis, caseSensitive = false, wholeWord = false) {
         return emojis.find(emoji => this.checkEmoji(text, emoji, caseSensitive, wholeWord));
     }
 
@@ -250,7 +250,7 @@ class ClientUtil {
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
      * @returns {Collection<string, Emoji>}
      */
-    resolveEmojis(text, emojis, caseSensitive = false, wholeWord = false){
+    resolveEmojis(text, emojis, caseSensitive = false, wholeWord = false) {
         return emojis.filter(emoji => this.checkEmoji(text, emoji, caseSensitive, wholeWord));
     }
 
@@ -262,7 +262,7 @@ class ClientUtil {
      * @param {boolean} [wholeWord=false] - Makes checking by name match full word only.
      * @returns {boolean}
      */
-    checkEmoji(text, emoji, caseSensitive = false, wholeWord = false){
+    checkEmoji(text, emoji, caseSensitive = false, wholeWord = false) {
         if (emoji.id === text) return true;
 
         const reg = /<:[a-zA-Z0-9_]+:(\d+)>/;
@@ -273,7 +273,7 @@ class ClientUtil {
         text = caseSensitive ? text : text.toLowerCase();
         const name = caseSensitive ? emoji.name : emoji.name.toLowerCase();
 
-        if (!wholeWord){
+        if (!wholeWord) {
             return name.includes(text)
             || name.includes(text.replace(/:/, ''));
         }
@@ -290,7 +290,7 @@ class ClientUtil {
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
      * @returns {Guild}
      */
-    resolveGuild(text, guilds, caseSensitive = false, wholeWord = false){
+    resolveGuild(text, guilds, caseSensitive = false, wholeWord = false) {
         return guilds.find(guild => this.checkGuild(text, guild, caseSensitive, wholeWord));
     }
 
@@ -302,7 +302,7 @@ class ClientUtil {
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
      * @returns {Collection<string, Guild>}
      */
-    resolveGuilds(text, guilds, caseSensitive = false, wholeWord = false){
+    resolveGuilds(text, guilds, caseSensitive = false, wholeWord = false) {
         return guilds.filter(guild => this.checkGuild(text, guild, caseSensitive, wholeWord));
     }
 
@@ -314,7 +314,7 @@ class ClientUtil {
      * @param {boolean} [wholeWord=false] - Makes checking by name match full word only.
      * @returns {boolean}
      */
-    checkGuild(text, guild, caseSensitive, wholeWord){
+    checkGuild(text, guild, caseSensitive, wholeWord) {
         if (guild.id === text) return true;
 
         text = caseSensitive ? text : text.toLowerCase();
@@ -329,7 +329,7 @@ class ClientUtil {
      * @param {GuildMember} member - The member to find the role.
      * @returns {Role}
      */
-    displayRole(member){
+    displayRole(member) {
         const coloredRoles = member.roles.filter(role => role.color);
         if (!coloredRoles.size) return null;
         return coloredRoles.reduce((prev, role) => !prev || role.comparePositionTo(prev) > 0 ? role : prev);
@@ -340,9 +340,9 @@ class ClientUtil {
      * @param {GuildMember} member - The member to find color of.
      * @returns {number}
      */
-    displayColor(member){
+    displayColor(member) {
         const role = this.displayRole(member);
-        return role && role.color || 0;
+        return (role && role.color) || 0;
     }
 
     /**
@@ -350,9 +350,9 @@ class ClientUtil {
      * @param {GuildMember} member - The member to find color of.
      * @returns {string}
      */
-    displayHexColor(member){
+    displayHexColor(member) {
         const role = this.displayRole(member);
-        return role && role.hexColor || '#000000';
+        return (role && role.hexColor) || '#000000';
     }
 
     /**
@@ -360,7 +360,7 @@ class ClientUtil {
      * @param {GuildMember} member - The member to find the role.
      * @returns {Role}
      */
-    hoistRole(member){
+    hoistRole(member) {
         const hoistedRoles = member.roles.filter(role => role.hoist);
         if (!hoistedRoles.size) return null;
         return hoistedRoles.reduce((prev, role) => !prev || role.comparePositionTo(prev) > 0 ? role : prev);
@@ -370,7 +370,7 @@ class ClientUtil {
      * Array of permission names.
      * @returns {string[]}
      */
-    permissionNames(){
+    permissionNames() {
         return Object.keys(Constants.PermissionFlags);
     }
 
@@ -379,10 +379,10 @@ class ClientUtil {
      * @param {number} number - The permissions number.
      * @returns {string[]}
      */
-    resolvePermissionNumber(number){
+    resolvePermissionNumber(number) {
         const resolved = [];
 
-        for (const key of Object.keys(Constants.PermissionFlags)){
+        for (const key of Object.keys(Constants.PermissionFlags)) {
             if (number & Constants.PermissionFlags[key]) resolved.push(key);
         }
 
@@ -395,10 +395,10 @@ class ClientUtil {
      * @param {PermissionOverwrites} overwrite - Permissions overwrite.
      * @returns {Object}
      */
-    resolvePermissionOverwrite(overwrite){
+    resolvePermissionOverwrite(overwrite) {
         return {
             allow: this.resolvePermissionNumber(overwrite.allow),
-            deny: this.resolvePermissionNumber(overwrite.deny),
+            deny: this.resolvePermissionNumber(overwrite.deny)
         };
     }
 
@@ -409,13 +409,14 @@ class ClientUtil {
      * @param {GuildMember} newMember - The new member.
      * @returns {number}
      */
-    compareStreaming(oldMember, newMember){
+    compareStreaming(oldMember, newMember) {
         const s1 = oldMember.presence.game && oldMember.presence.game.streaming;
         const s2 = newMember.presence.game && newMember.presence.game.streaming;
 
         if (s1 === s2) return 0;
         if (s1) return 1;
         if (s2) return 2;
+        return 0;
     }
 
     /**
@@ -425,7 +426,7 @@ class ClientUtil {
      * @param {boolean} cache - Whether or not to add to cache.
      * @returns {Promise<GuildMember>}
      */
-    fetchMemberFrom(guild, id, cache){
+    fetchMemberFrom(guild, id, cache) {
         return this.client.fetchUser(id, cache).then(fetched => {
             return guild.fetchMember(fetched, cache);
         });
@@ -436,7 +437,7 @@ class ClientUtil {
      * @param {Object} [data] - Embed data.
      * @returns {RichEmbed}
      */
-    embed(data){
+    embed(data) {
         return new RichEmbed(data);
     }
 
@@ -445,7 +446,7 @@ class ClientUtil {
      * @param {Iterable} [iterable] - Entries to fill with.
      * @returns {Collection}
      */
-    collection(iterable){
+    collection(iterable) {
         return new Collection(iterable);
     }
 
@@ -458,16 +459,16 @@ class ClientUtil {
      * @param {MessageOptions} [options] - Message options for message.
      * @returns {Promise<Message>}
      */
-    prompt(message, content, check = () => true, time = 30000, options){
+    prompt(message, content, check = () => true, time = 30000, options) {
         return message.channel.send(content, options).then(sent => new Promise((resolve, reject) => {
             const collector = message.channel.createCollector(m => {
                 try {
-                    if (m.id === sent.id) return;
-                    if (m.author.id !== message.author.id) return;
-                    
+                    if (m.id === sent.id) return undefined;
+                    if (m.author.id !== message.author.id) return undefined;
+
                     let passed;
 
-                    if (typeof check === 'function'){
+                    if (typeof check === 'function') {
                         const checked = check(m);
                         passed = checked != null && checked !== false;
                     } else {
@@ -496,9 +497,9 @@ class ClientUtil {
      * @param {Snowflake} id - ID of the message.
      * @returns {Promise<Message>}
      */
-    fetchMessage(channel, id){
+    fetchMessage(channel, id) {
         if (this.client.user.bot) return channel.fetchMessage(id);
-        
+
         return channel.fetchMessages({ around: id, limit: 2 }).then(msgs => {
             return msgs.get(id);
         });

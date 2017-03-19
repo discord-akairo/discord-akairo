@@ -9,7 +9,7 @@ module.exports = new Command('test', exec, {
     args: [
         {
             id: 'thing',
-            type: /not ok/,
+            type: /ok|notok/,
             prompt: true
         },
         {
@@ -28,6 +28,16 @@ module.exports = new Command('test', exec, {
             prompt: {
                 start: 'this changes'
             }
+        },
+        {
+            id: 'aflag',
+            match: 'flag',
+            prefix: '--flag'
+        },
+        {
+            id: 'aprefix',
+            match: 'prefix',
+            prefix: '--prefix'
         }
     ],
     defaultPrompt: {

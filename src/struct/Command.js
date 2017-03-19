@@ -43,10 +43,10 @@ class Command extends AkairoModule {
     /**
      * Creates a new command.
      * @param {string} id - Command ID.
-     * @param {function} exec - Function <code>((message, args, edited) => {})</code> called when command is ran.
+     * @param {Function} exec - Function <code>((message, args, edited) => {})</code> called when command is ran.
      * @param {CommandOptions} [options={}] - Options for the command.
      */
-    constructor(id, exec, options = {}){
+    constructor(id, exec, options = {}) {
         super(id, exec, options);
 
         /**
@@ -170,77 +170,98 @@ class Command extends AkairoModule {
      * @param {Message} [message] - Message to use.
      * @returns {Promise<Object>}
      */
-    parse(content, message){
+    parse(content, message) {
         if (!this.args.length) return Promise.resolve({});
 
-        const splitFunc = {
+        const splitFuncs = {
             [ArgumentSplits.PLAIN]: () => content.match(/[^\s]+/g),
             [ArgumentSplits.SPLIT]: () => content.split(' '),
             [ArgumentSplits.QUOTED]: () => content.match(/".*?"|[^\s"]+|"/g),
             [ArgumentSplits.STICKY]: () => content.match(/[^\s"]*?".*?"|[^\s"]+|"/g)
         };
 
-        const words = splitFunc[this.split] ? splitFunc[this.split]() || [] : content.split(this.split);
+        const words = splitFuncs[this.split] ? splitFuncs[this.split]() || [] : content.split(this.split);
         const args = {};
 
-        const wordArgs = this.args.filter(arg => arg.match === ArgumentMatches.WORD || arg.match === ArgumentMatches.REST);
-        const prefixArgs = this.args.filter(arg => arg.match === ArgumentMatches.PREFIX);
-        const flagArgs = this.args.filter(arg => arg.match === ArgumentMatches.FLAG);
-        const textArgs = this.args.filter(arg => arg.match === ArgumentMatches.TEXT);
-        const contentArgs = this.args.filter(arg => arg.match === ArgumentMatches.CONTENT);
-
-        const prefixes = [];
-
-        for (const arg of [...prefixArgs, ...flagArgs]){
-            Array.isArray(arg.prefix) ? prefixes.push(...arg.prefix) : prefixes.push(arg.prefix);
-        }
-
-        const noPrefixWords = words.filter(w => !prefixes.some(p => w.startsWith(p)));
-
-        for (const [i, arg] of wordArgs.entries()){
-            if (arg.match === ArgumentMatches.REST){
-                const word = noPrefixWords.slice(arg.index != null ? arg.index : i).join(' ') || '';
-                args[arg.id] = arg.cast.bind(arg, word);
-                continue;
+        const prefixes = this.args.reduce((arr, arg) => {
+            if (arg.match === ArgumentMatches.PREFIX || arg.match === ArgumentMatches.FLAG) {
+                if (Array.isArray(arg.prefix)) {
+                    for (const p of arg.prefix) {
+                        arr.push({
+                            value: p.toLowerCase(),
+                            flag: arg.match === ArgumentMatches.FLAG
+                        });
+                    }
+                } else {
+                    arr.push({
+                        value: arg.prefix.toLowerCase(),
+                        flag: arg.match === ArgumentMatches.FLAG
+                    });
+                }
             }
 
-            let word = noPrefixWords[arg.index != null ? arg.index : i] || '';
+            return arr;
+        }, []);
 
-            if ((this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY) && /^".*"$/.test(word)) word = word.slice(1, -1);
+        const noPrefixWords = words.filter(w => {
+            return !prefixes.some(p => {
+                if (!p.flag) return w.toLowerCase().startsWith(p.value);
+                return w.toLowerCase() === p.value;
+            });
+        });
 
-            args[arg.id] = arg.cast.bind(arg, word);
-        }
+        console.log(prefixes, noPrefixWords);
 
-        if (prefixArgs.length || flagArgs.length) words.reverse();
+        let index = 0;
 
-        for (const arg of prefixArgs){
-            let word = words.find(w => Array.isArray(arg.prefix) ? arg.prefix.some(p => w.startsWith(p)) : w.startsWith(arg.prefix)) || '';
-            word = word.replace(prefixes.find(p => word.startsWith(p)), '');
-            
-            if (this.split === ArgumentSplits.STICKY && /^".*"$/.test(word)) word = word.slice(1, -1);
+        const parseFuncs = {
+            [ArgumentMatches.WORD]: arg => {
+                let word = noPrefixWords[arg.index != null ? arg.index : index] || '';
 
-            args[arg.id] = arg.cast.bind(arg, word);
-        }
+                const isQuoted = (this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY) && /^".*"$/.test(word);
+                if (isQuoted) word = word.slice(1, -1);
 
-        for (const arg of flagArgs){
-            const word = words.find(w => Array.isArray(arg.prefix) ? arg.prefix.some(p => w === p) : w === arg.prefix);
-            args[arg.id] = () => Promise.resolve(!!word);
-        }
+                return arg.cast.bind(arg, word);
+            },
+            [ArgumentMatches.REST]: arg => {
+                const word = noPrefixWords.slice(arg.index != null ? arg.index : index).join(' ') || '';
+                return arg.cast.bind(arg, word);
+            },
+            [ArgumentMatches.PREFIX]: arg => {
+                let word = words.find(w => Array.isArray(arg.prefix) ? arg.prefix.some(p => w.toLowerCase().startsWith(p.toLowerCase())) : w.toLowerCase().startsWith(arg.prefix.toLowerCase())) || '';
 
-        for (const arg of textArgs){
-            const word = noPrefixWords.slice(arg.index).join(' ');
-            args[arg.id] = arg.cast.bind(arg, word);
-        }
+                word = word.replace(prefixes.find(p => {
+                    if (!p.flag) return word.toLowerCase().startsWith(p.value);
+                    return word.toLowerCase() === p.value;
+                }).value, '');
 
-        for (const arg of contentArgs){
-            const word = content.split(' ').slice(arg.index).join(' ');
-            args[arg.id] = arg.cast.bind(arg, word);
+                if (this.split === ArgumentSplits.STICKY && /^".*"$/.test(word)) word = word.slice(1, -1);
+
+                return arg.cast.bind(arg, word);
+            },
+            [ArgumentMatches.FLAG]: arg => {
+                const word = words.find(w => Array.isArray(arg.prefix) ? arg.prefix.some(p => w.toLowerCase() === p.toLowerCase()) : w.toLowerCase() === arg.prefix.toLowerCase()) || '';
+                return () => Promise.resolve(!!word);
+            },
+            [ArgumentMatches.TEXT]: arg => {
+                const word = noPrefixWords.slice(arg.index).join(' ');
+                return arg.cast.bind(arg, word);
+            },
+            [ArgumentMatches.CONTENT]: arg => {
+                const word = content.split(' ').slice(arg.index).join(' ');
+                return arg.cast.bind(arg, word);
+            }
+        };
+
+        for (const arg of this.args) {
+            args[arg.id] = parseFuncs[arg.match](arg);
+            if (arg.match === ArgumentMatches.WORD || arg.match === ArgumentMatches.REST) index++;
         }
 
         const processed = {};
         const keys = Object.keys(args);
 
-        return (function process(i){
+        const process = i => {
             if (i === keys.length) return processed;
 
             const key = keys[i];
@@ -248,14 +269,16 @@ class Command extends AkairoModule {
                 processed[key] = res;
                 return process(i + 1);
             });
-        })(0);
+        };
+
+        return process(0);
     }
 
     /**
      * Disables the command.
      * @returns {boolean}
      */
-    disable(){
+    disable() {
         if (this.protected) return false;
         return super.disable();
     }

@@ -14,10 +14,10 @@ class Listener extends AkairoModule {
     /**
      * Creates a new Listener.
      * @param {string} id - Listener ID.
-     * @param {function} exec - The function <code>((...) => {})</code> called when event emitted.
+     * @param {Function} exec - The function <code>((...) => {})</code> called when event emitted.
      * @param {ListenerOptions} [options={}] - Options for the listener.
      */
-    constructor(id, exec, options = {}){
+    constructor(id, exec, options = {}) {
         super(id, exec, options);
 
         /**
@@ -64,7 +64,7 @@ class Listener extends AkairoModule {
      * Enables the listener.
      * @returns {boolean}
      */
-    enable(){
+    enable() {
         if (!super.enable()) return false;
         this.handler.register(this.id);
         return true;
@@ -74,7 +74,7 @@ class Listener extends AkairoModule {
      * Disables the listener.
      * @returns {boolean}
      */
-    disable(){
+    disable() {
         if (!super.disable()) return false;
         this.handler.deregister(this.id);
         return true;

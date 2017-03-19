@@ -15,7 +15,7 @@ class AkairoHandler extends EventEmitter {
      * @param {class} classToHandle - Only instances of this can be handled.
      * <br>Other classes are ignored.
      */
-    constructor(client, directory, classToHandle){
+    constructor(client, directory, classToHandle) {
         super();
 
         /**
@@ -66,11 +66,11 @@ class AkairoHandler extends EventEmitter {
      * @param {string|AkairoModule} thing - Module or path to module.
      * @returns {AkairoModule}
      */
-    load(thing){
+    load(thing) {
         const isObj = typeof thing === 'object';
         const mod = isObj ? thing : require(thing);
 
-        if (!(mod instanceof this.classToHandle)) return;
+        if (!(mod instanceof this.classToHandle)) return undefined;
         if (this.modules.has(mod.id)) throw new Error(`${this.classToHandle.name} ${mod.id} already loaded.`);
 
         mod.filepath = isObj ? null : thing;
@@ -93,12 +93,12 @@ class AkairoHandler extends EventEmitter {
      * <br>A .js extension is assumed.
      * @returns {AkairoModule}
      */
-    add(filename){
+    add(filename) {
         const files = this.constructor.readdirRecursive(this.directory);
         const filepath = files.find(file => file.endsWith(`${filename}.js`));
 
         if (!filepath) throw new Error(`File ${filename} not found.`);
-        
+
         const mod = this.load(filepath);
         this.emit(AkairoHandlerEvents.ADD, mod);
         return mod;
@@ -109,13 +109,13 @@ class AkairoHandler extends EventEmitter {
      * @param {string} id - ID of the module.
      * @returns {AkairoModule}
      */
-    remove(id){
+    remove(id) {
         const mod = this.modules.get(id.toString());
         if (!mod) throw new Error(`${this.classToHandle.name} ${id} does not exist.`);
 
         delete require.cache[require.resolve(mod.filepath)];
         this.modules.delete(mod.id);
-        
+
         mod.category.delete(mod.id);
 
         this.emit(AkairoHandlerEvents.REMOVE, mod);
@@ -127,7 +127,7 @@ class AkairoHandler extends EventEmitter {
      * @param {string} id - ID of the module.
      * @returns {AkairoModule}
      */
-    reload(id){
+    reload(id) {
         const mod = this.modules.get(id.toString());
         if (!mod) throw new Error(`${this.classToHandle.name} ${id} does not exist.`);
 
@@ -137,7 +137,7 @@ class AkairoHandler extends EventEmitter {
         this.modules.delete(mod.id);
 
         mod.category.delete(mod.id);
-        
+
         const newMod = this.load(filepath);
         this.emit(AkairoHandlerEvents.RELOAD, newMod);
         return newMod;
@@ -147,7 +147,7 @@ class AkairoHandler extends EventEmitter {
      * Reloads all modules.
      * @returns {void}
      */
-    reloadAll(){
+    reloadAll() {
         for (const m of Array.from(this.modules.values())) m.reload();
     }
 
@@ -156,7 +156,7 @@ class AkairoHandler extends EventEmitter {
      * @param {string} name - Name to find with.
      * @returns {Category}
      */
-    findCategory(name){
+    findCategory(name) {
         return this.categories.find(category => {
             return category.id.toLowerCase() === name.toLowerCase();
         });
@@ -167,22 +167,22 @@ class AkairoHandler extends EventEmitter {
      * @param {string} directory - Directory to read.
      * @returns {string[]}
      */
-    static readdirRecursive(directory){
+    static readdirRecursive(directory) {
         const result = [];
 
-        (function read(dir){
+        (function read(dir) {
             const files = fs.readdirSync(dir);
 
-            for (const file of files){
+            for (const file of files) {
                 const filepath = path.join(dir, file);
 
-                if (fs.statSync(filepath).isDirectory()){
+                if (fs.statSync(filepath).isDirectory()) {
                     read(filepath);
                 } else {
                     result.push(filepath);
                 }
             }
-        })(directory);
+        }(directory));
 
         return result;
     }

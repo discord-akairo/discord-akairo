@@ -8,7 +8,7 @@ class InhibitorHandler extends AkairoHandler {
      * @param {AkairoClient} client - The Akairo client.
      * @param {Object} options - Options from client.
      */
-    constructor(client, options = {}){
+    constructor(client, options = {}) {
         super(client, options.inhibitorDirectory, Inhibitor);
 
         /**
@@ -33,15 +33,17 @@ class InhibitorHandler extends AkairoHandler {
      * @param {Command} [command] - Command to use.
      * @returns {Promise<string>}
      */
-    test(type, message, command){
+    test(type, message, command) {
         const promises = this.modules.filter(i => i.type === type && i.enabled).map(inhibitor => {
             const inhibited = inhibitor.exec(message, command);
 
-            if (inhibited instanceof Promise) return inhibited.catch(err => {
-                if (err instanceof Error) throw err;
-                return Promise.reject(inhibitor.reason);
-            });
-            
+            if (inhibited instanceof Promise) {
+                return inhibited.catch(err => {
+                    if (err instanceof Error) throw err;
+                    return Promise.reject(inhibitor.reason);
+                });
+            }
+
             if (!inhibited) return Promise.resolve();
             return Promise.reject(inhibitor.reason);
         });

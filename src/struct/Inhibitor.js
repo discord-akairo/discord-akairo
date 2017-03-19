@@ -13,11 +13,11 @@ class Inhibitor extends AkairoModule {
     /**
      * Creates a new Inhibitor.
      * @param {string} id - Inhibitor ID.
-     * @param {function} exec - Function <code>((message, command) => {})</code> called before a command is ran.
+     * @param {Function} exec - Function <code>((message, command) => {})</code> called before a command is ran.
      * <br>Return true or a rejecting Promise to block.
      * @param {InhibitorOptions} [options={}] - Options for the inhibitor.
      */
-    constructor(id, exec, options = {}){
+    constructor(id, exec, options = {}) {
         super(id, exec, options);
 
         /**

@@ -3,4 +3,5 @@ out
 .git
 .gitattributes
 .vscode
+.eslintrc-old.json
 test/auth.json
