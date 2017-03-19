@@ -227,9 +227,7 @@ class TypeResolver {
 
     [ArgumentTypes.MESSAGE](word, message) {
         if (!word) return null;
-        return this.client.util.fetchMessage(message.channel, word).catch(() => {
-            return new Promise((resolve, reject) => reject());
-        });
+        return this.client.util.fetchMessage(message.channel, word).catch(() => Promise.reject());
     }
 
     [ArgumentTypes.INVITE](word) {

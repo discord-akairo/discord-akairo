@@ -148,7 +148,7 @@ class Argument {
          * @param {Message} message - The message that called the command.
          * @returns {any}
          */
-        this.default = typeof options.default === 'function' ? options.default : () => options.default;
+        this.default = typeof options.default === 'function' ? options.default : () => options.default != null ? options.default : '';
     }
 
     /**
@@ -304,7 +304,7 @@ class Argument {
 
         return retry(1).then(value => {
             this.handler.removePrompt(message);
-            return exited ? new Promise((resolve, reject) => reject()) : value;
+            return exited ? Promise.reject() : value;
         });
     }
 }

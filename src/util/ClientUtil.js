@@ -500,7 +500,7 @@ class ClientUtil {
     fetchMessage(channel, id) {
         if (this.client.user.bot) return channel.fetchMessage(id);
 
-        return channel.fetchMessages({ around: id, limit: 2 }).then(msgs => {
+        return channel.fetchMessages({ around: id, limit: 1 }).then(msgs => {
             return msgs.get(id);
         });
     }
