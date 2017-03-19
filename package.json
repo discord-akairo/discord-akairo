@@ -1,6 +1,6 @@
 {
   "name": "discord-akairo",
-  "version": "7.0.2",
+  "version": "7.1.0",
   "description": "A highly customizable bot framework for Discord.js.",
   "main": "./src/index.js",
   "author": "1Computer",
@@ -13,6 +13,7 @@
     "client",
     "modular"
   ],
+  "dependencies": {},
   "peerDependencies": {
     "discord.js": "^11.0.0",
     "sqlite": "^2.2.4"
@@ -31,6 +32,5 @@
   "bugs": {
     "url": "https://github.com/1Computer1/discord-akairo/issues"
   },
-  "homepage": "https://github.com/1Computer1/discord-akairo",
-  "dependencies": {}
+  "homepage": "https://github.com/1Computer1/discord-akairo"
 }
