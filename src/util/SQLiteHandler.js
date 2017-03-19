@@ -106,9 +106,10 @@ class SQLiteHandler extends EventEmitter {
 
     /**
      * Sanitizes a string by replacing single quotes with two single quotes.
+     * <br>Can return a non-string if json is set to false.
      * @param {string} input - Input text.
      * @param {boolean} json - Whether to stringify or not.
-     * @returns {string}
+     * @returns {any}
      */
     sanitize(input, json = false) {
         if (json && typeof input !== 'string') return JSON.stringify(input).replace(/'/g, '\'\'');
@@ -118,9 +119,10 @@ class SQLiteHandler extends EventEmitter {
 
     /**
      * Desanitizes a string for use by replacing two single quotes with a single quote.
+     * <br>Can return a non-string if json is set to true.
      * @param {string} input - Input text.
      * @param {boolean} [json] - Whether to parse or not.
-     * @returns {string}
+     * @returns {any}
      */
     desanitize(input, json = false) {
         if (json && typeof input === 'string') return JSON.parse(input.replace(/''/g, '\''));

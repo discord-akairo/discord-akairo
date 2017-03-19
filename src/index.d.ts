@@ -252,7 +252,7 @@ declare module 'discord-akairo' {
         configs: Object[];
 
         init(client: AkairoClient): string[];
-        sanitize(input: any, json?: boolean): string;
+        sanitize(input: any, json?: boolean): any;
         desanitize(input: any, json?: boolean): any;
         open(): Promise<Object>
         load(ids: string[]): Promise<this>;
