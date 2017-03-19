@@ -82,6 +82,7 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  * <br>Applicable to word, text, or content match only.
  * @prop {any} [default=''] - Default value if text does not parse/cast correctly.
  * <br>Can be a function <code>((message, prevArgs) => {})</code>.
+ * <br>If using a flag arg, setting the default value inverses the result.
  * @prop {string|string[]} [description=''] - A description of the argument.
  * @prop {PromptOptions} [prompt] - Prompt options for when user does not provide input.
  * <br>Must not have a default value for this to work.

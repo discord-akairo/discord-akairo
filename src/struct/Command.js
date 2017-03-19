@@ -252,7 +252,7 @@ class Command extends AkairoModule {
                     : w.toLowerCase() === arg.prefix.toLowerCase();
                 }) || '';
 
-                return () => Promise.resolve(!!word);
+                return () => Promise.resolve(arg.default() ? !word : !!word);
             },
             [ArgumentMatches.TEXT]: arg => {
                 const word = noPrefixWords.slice(arg.index).join(' ');
