@@ -279,7 +279,10 @@ declare module 'discord-akairo' {
     export class TypeResolver {
         constructor(client: AkairoClient);
 
-        addType(name: string, resolver: (word: string, message: Message) => any): void;
+        client: AkairoClient;
+
+        addType(name: string, resolver: (word: string, message: Message) => any): this;
+        addTypes(types: Object): this;
     }
 
     type AkairoOptions = {

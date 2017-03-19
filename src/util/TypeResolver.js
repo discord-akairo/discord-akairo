@@ -240,14 +240,29 @@ class TypeResolver {
      * @param {string} name - Name of the type.
      * @param {Function} resolver - Function <code>((word, message) => {})</code> that resolves the type.
      * <br>Returning null means that the type could not be resolved.
-     * @returns {void}
+     * @returns {TypeResolver}
      */
     addType(name, resolver) {
-        if (name === 'client' || name === 'addType') throw new Error(`Argument type ${name} is reserved.`);
+        if (['client', 'addType', 'addTypes'].includes(name)) throw new Error(`Argument type ${name} is reserved.`);
 
         Object.defineProperty(this, name, {
             value: resolver.bind(this)
         });
+
+        return this;
+    }
+
+    /**
+     * Adds multiple new types.
+     * @param {Object} types  - Object with keys as the type name and value as the resolver function.
+     * @returns {TypeResolver}
+     */
+    addTypes(types) {
+        for (const key of Object.keys(types)) {
+            this.addType(key, types[key]);
+        }
+
+        return this;
     }
 }
 
