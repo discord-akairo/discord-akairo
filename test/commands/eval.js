@@ -5,7 +5,7 @@ const { Command } = require('../../src/index.js');
 const util = require('util');
 const data = {};
 
-function exec(message, args){
+function exec(message, args) {
     if (!args.code) return message.reply('No code provided!');
 
     const evaled = {};

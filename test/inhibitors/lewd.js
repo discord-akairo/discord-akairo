@@ -1,6 +1,6 @@
 const { Inhibitor } = require('../../src/index.js');
 
-function exec(message){
+function exec(message) {
     return message.content.includes('lewd');
 }
 

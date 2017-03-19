@@ -6,7 +6,8 @@ const client = new AkairoClient({
     commandDirectory: './test/commands/',
     listenerDirectory: './test/listeners/',
     inhibitorDirectory: './test/inhibitors/',
-    handleEdits: true
+    handleEdits: true,
+    allowMention: true
 });
 
 const { Collection } = require('discord.js');
@@ -14,7 +15,7 @@ client.mem.edits = new Collection();
 
 client.build();
 
-client.commandHandler.resolver.addType('1-10', function(word){
+client.commandHandler.resolver.addType('1-10', function type(word) {
     const num = this[Constants.ArgumentTypes.INTEGER](word);
     if (num == null) return null;
     if (num < 1 || num > 10) return null;

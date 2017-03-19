@@ -1,6 +1,6 @@
 const { Listener } = require('../../src/index.js');
 
-function exec(message, command){
+function exec(message, command) {
     return console.log(command.id);
 }
 

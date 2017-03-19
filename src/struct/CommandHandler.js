@@ -372,7 +372,8 @@ class CommandHandler extends AkairoHandler {
 
         if (start == null) return null;
 
-        const firstWord = message.content.replace(new RegExp(start.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&'), 'i'), '').search(/\S/) + start.length; // eslint-disable-line no-useless-escape
+        const startRegex = new RegExp(start.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&'), 'i'); // eslint-disable-line no-useless-escape
+        const firstWord = message.content.replace(startRegex, '').search(/\S/) + start.length;
         const name = message.content.slice(firstWord).split(/\s{1,}|\n{1,}/)[0];
         const command = this.findCommand(name);
 
