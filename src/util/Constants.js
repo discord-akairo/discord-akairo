@@ -15,6 +15,7 @@ module.exports = {
         DYNAMIC_INT: 'dynamicInt',
         URL: 'url',
         DATE: 'date',
+        COLOR: 'color',
         USER: 'user',
         USERS: 'users',
         MEMBER: 'member',
