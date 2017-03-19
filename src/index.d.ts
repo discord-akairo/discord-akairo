@@ -1,5 +1,5 @@
 declare module 'discord-akairo' {
-    import { Client, ClientOptions, Collection, Message, MessageOptions, User, GuildMember, Channel, TextBasedChannel, Role, Emoji, Guild, PermissionOverwrites, RichEmbed } from 'discord.js';
+    import { Client, ClientOptions, Collection, Message, MessageOptions, User, GuildMember, Channel, TextChannel, DMChannel, GroupDMChannel, Role, Emoji, Guild, PermissionOverwrites, RichEmbed } from 'discord.js';
     import EventEmitter from 'events';
 
     export const version: string;
@@ -12,9 +12,9 @@ declare module 'discord-akairo' {
         mem: Object;
         util: ClientUtil;
         databases: Object;
-        commandHandler: CommandHandler;
-        inhibitorHandler: InhibitorHandler;
-        listenerHandler: ListenerHandler;
+        commandHandler: CommandHandler<Command>;
+        inhibitorHandler: InhibitorHandler<Inhibitor>;
+        listenerHandler: ListenerHandler<Listener>;
 
         addDatabase(name: string, database: SQLiteHandler): void;
         build(): void;
@@ -236,7 +236,7 @@ declare module 'discord-akairo' {
         embed(data: Object): RichEmbed;
         collection(iterable: Iterable<any>): Collection<any, any>;
         prompt(message: Message, content: string, check?: RegExp | ((message: Message) => boolean), time?: number, options?: MessageOptions): Promise<Message>;
-        fetchMessage(channel: TextBasedChannel, id: string): Promise<Message>;
+        fetchMessage(channel: TextChannel | DMChannel | GroupDMChannel, id: string): Promise<Message>;
     }
 
     export class SQLiteHandler extends EventEmitter {
