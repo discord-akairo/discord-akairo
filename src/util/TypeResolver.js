@@ -1,5 +1,6 @@
 const { ArgumentTypes } = require('./Constants');
 const { Collection } = require('discord.js');
+const { URL } = require('url');
 
 class TypeResolver {
     /**
@@ -20,7 +21,7 @@ class TypeResolver {
     }
 
     [ArgumentTypes.STRING](word) {
-        return word || null;
+        return (word && word.trim()) || null;
     }
 
     [ArgumentTypes.NUMBER](word) {
@@ -43,6 +44,25 @@ class TypeResolver {
         if (!word) return null;
         if (isNaN(word) || !/\S/.test(word)) return word;
         return parseInt(word);
+    }
+
+    [ArgumentTypes.URL](word) {
+        if (!word) return null;
+
+        try {
+            return new URL(word);
+        } catch (err) {
+            return null;
+        }
+    }
+
+    [ArgumentTypes.DATE](word) {
+        if (!word) return null;
+
+        const timestamp = Date.parse(word);
+        if (isNaN(timestamp)) return null;
+
+        return new Date(timestamp);
     }
 
     [ArgumentTypes.USER](word) {
@@ -212,6 +232,11 @@ class TypeResolver {
         });
     }
 
+    [ArgumentTypes.INVITE](word) {
+        if (!word) return null;
+        return this.client.resolver.resolveInviteCode(word);
+    }
+
     /**
      * Adds a new type.
      * @param {string} name - Name of the type.
@@ -221,7 +246,6 @@ class TypeResolver {
      */
     addType(name, resolver) {
         if (name === 'client' || name === 'addType') throw new Error(`Argument type ${name} is reserved.`);
-        if (this[name]) throw new Error(`Argument type ${name} already exists.`);
 
         Object.defineProperty(this, name, {
             value: resolver.bind(this)

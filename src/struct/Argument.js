@@ -13,13 +13,15 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
 
 /**
  * The type that the argument should be cast to.
- * <br><code>string</code> does not cast to any type.
+ * <br><code>string</code> does not cast to any type and trims the word.
  * <br><code>number</code> casts to an number with parseFloat(), default value if not a number.
  * <br><code>integer</code> casts to an integer with parseInt(), default value if not a number.
  * <br><code>dynamic</code> casts to a number with parseFloat() or a string if the argument is not a number.
  * <br><code>dynamicInt</code> casts to an integer with parseInt() or a string if the argument is not a number.
+ * <br><code>url</code> casts to an URL object, default value if new URL() does not work.
+ * <br><code>date</code> casts to a Date object, default value if Date.parse() does not work.
  * <br>
- * <br>Possible Discord-related types:
+ * <br>Possible Discord-related (pluralizable) types:
  * <br><code>user</code> tries to resolve to a user.
  * <br><code>member</code> tries to resolve to a member.
  * <br><code>relevant</code> tries to resolve to a relevant user in both guilds and DMs.
@@ -30,8 +32,12 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  * <br><code>emoji</code> tries to resolve to a custom emoji.
  * <br><code>guild</code> tries to resolve to a guild.
  * <br>
+ * <br>Possible Discord-related types:
+ * <br><code>message</code> tries to fetch a message from an ID.
+ * <br><code>invite</code> tries to resolve an invite code from a link.
+ * <br>
  * <br>Many of these types can only be used in a guild.
- * <br>You can also pluralize the type to get a Collection of resolved objects instead.
+ * <br>You can pluralize some of the types to get a Collection of resolved objects instead.
  * <br>
  * <br>An array of strings can be used to restrict input to only those strings, case insensitive.
  * <br>The evaluated argument will be all lowercase.

@@ -13,6 +13,8 @@ module.exports = {
         INTEGER: 'integer',
         DYNAMIC: 'dynamic',
         DYNAMIC_INT: 'dynamicInt',
+        URL: 'url',
+        DATE: 'date',
         USER: 'user',
         USERS: 'users',
         MEMBER: 'member',
@@ -31,7 +33,8 @@ module.exports = {
         EMOJIS: 'emojis',
         GUILD: 'guild',
         GUILDS: 'guilds',
-        MESSAGE: 'message'
+        MESSAGE: 'message',
+        INVITE: 'invite'
     },
     ArgumentSplits: {
         PLAIN: 'plain',
