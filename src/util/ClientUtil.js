@@ -396,10 +396,10 @@ class ClientUtil {
      * @returns {Object}
      */
     resolvePermissionOverwrite(overwrite) {
-        return {
-            allow: this.resolvePermissionNumber(overwrite.allow),
-            deny: this.resolvePermissionNumber(overwrite.deny)
-        };
+        const copy = Object.assign({}, overwrite);
+        copy.allow = this.resolvePermissionNumber(overwrite.allow);
+        copy.deny = this.resolvePermissionNumber(overwrite.deny);
+        return copy;
     }
 
     /**
