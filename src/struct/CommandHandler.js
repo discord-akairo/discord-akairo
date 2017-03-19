@@ -253,7 +253,10 @@ class CommandHandler extends AkairoHandler {
                     return Promise.resolve();
                 }
 
-                const { command, content } = this._parseCommand(message, edited);
+                const parsed = this._parseCommand(message, edited);
+                if (!parsed) return this._handleTriggers(message, edited);
+
+                const { command, content } = parsed;
 
                 if (!command.enabled) {
                     this.emit(CommandHandlerEvents.COMMAND_DISABLED, message, command);
@@ -320,10 +323,9 @@ class CommandHandler extends AkairoHandler {
      * Parses the command and its argument list.
      * @private
      * @param {Message} message - Message that called the command.
-     * @param {boolean} edited - Whether or not the message was edited.
      * @returns {Object}
      */
-    _parseCommand(message, edited) {
+    _parseCommand(message) {
         const prefix = this.prefix(message);
         const allowMention = this.allowMention(message);
         let start;
@@ -368,32 +370,30 @@ class CommandHandler extends AkairoHandler {
             }
         }
 
-        if (start == null) return this._handleTriggers(message, edited);
+        if (start == null) return null;
 
         const firstWord = message.content.replace(new RegExp(start.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&'), 'i'), '').search(/\S/) + start.length; // eslint-disable-line no-useless-escape
         const name = message.content.slice(firstWord).split(/\s{1,}|\n{1,}/)[0];
         const command = this.findCommand(name);
 
-        if (!command) return this._handleTriggers(message, edited);
-
-        if (overwrite == null && command.prefix != null) return this._handleTriggers(message, edited);
+        if (!command) return null;
+        if (overwrite == null && command.prefix != null) return null;
 
         if (overwrite != null) {
             if (command.prefix == null) {
-                if (overwrite.start !== start) return this._handleTriggers(message, edited);
+                if (overwrite.start !== start) return null;
             } else
             if (Array.isArray(command.prefix)) {
                 if (!command.prefix.some(p => p.toLowerCase() === start.toLowerCase())) {
-                    return this._handleTriggers(message, edited);
+                    return null;
                 }
             } else
             if (command.prefix.toLowerCase() !== start.toLowerCase()) {
-                return this._handleTriggers(message, edited);
+                return null;
             }
         }
 
         const content = message.content.slice(message.content.indexOf(name) + name.length + 1);
-
         return { command, content };
     }
 
