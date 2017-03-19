@@ -57,6 +57,12 @@ class CommandHandler extends AkairoHandler {
         this.handleEdits = !!options.handleEdits;
 
         /**
+         * Whether or not fetchMember is used on each message author from a guild.
+         * @type {boolean}
+         */
+        this.fetchMembers = !!options.fetchMember;
+
+        /**
          * Collection of cooldowns.
          * @type {Collection<string, Object>}
          */
@@ -295,15 +301,22 @@ class CommandHandler extends AkairoHandler {
                     if (onCooldown) return undefined;
 
                     return command.parse(content, message).then(args => {
-                        this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, edited);
-                        const end = Promise.resolve(command.exec(message, args, edited));
+                        const fetch = this.fetchMembers
+                        ? m => m.guild ? m.guild.fetchMember(m.author) : Promise.resolve()
+                        : () => Promise.resolve();
 
-                        return end.then(() => {
-                            this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, edited);
-                        }).catch(err => {
-                            this._handleError(err, message, command);
+                        return fetch(message).then(member => {
+                            if (member) message.member = member;
+
+                            this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, edited);
+                            const end = Promise.resolve(command.exec(message, args, edited));
+
+                            return end.then(() => {
+                                this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, edited);
+                            });
                         });
                     }).catch(err => {
+                        if (!err) return;
                         if (err instanceof Error) this._handleError(err, message, command);
                     });
                 }).catch(reason => {
