@@ -228,12 +228,15 @@ class Command extends AkairoModule {
             [ArgumentMatches.PREFIX]: arg => {
                 let word = words.find(w => Array.isArray(arg.prefix) ? arg.prefix.some(p => w.toLowerCase().startsWith(p.toLowerCase())) : w.toLowerCase().startsWith(arg.prefix.toLowerCase())) || '';
 
-                word = word.replace(prefixes.find(p => {
+                const prefix = prefixes.find(p => {
                     if (!p.flag) return word.toLowerCase().startsWith(p.value);
                     return word.toLowerCase() === p.value;
-                }).value, '');
+                });
 
-                if (this.split === ArgumentSplits.STICKY && /^".*"$/.test(word)) word = word.slice(1, -1);
+                if (prefix) {
+                    word = word.replace(prefix.value, '');
+                    if (this.split === ArgumentSplits.STICKY && /^".*"$/.test(word)) word = word.slice(1, -1);
+                }
 
                 return arg.cast.bind(arg, word);
             },
