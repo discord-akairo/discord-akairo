@@ -315,20 +315,25 @@ class CommandHandler extends AkairoHandler {
                                 this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, edited);
                             });
                         });
-                    }).catch(err => {
-                        if (!err) return;
-                        if (err instanceof Error) this._handleError(err, message, command);
                     });
                 }).catch(reason => {
-                    if (reason instanceof Error) return this._handleError(reason, message, command);
+                    if (reason == null) return;
+                    if (reason instanceof Error) {
+                        this._handleError(reason, message, command);
+                        return;
+                    }
+
                     this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
-                    return undefined;
                 });
             });
         }).catch(reason => {
-            if (reason instanceof Error) return this._handleError(reason, message);
+            if (reason == null) return;
+            if (reason instanceof Error) {
+                this._handleError(reason, message);
+                return;
+            }
+
             this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, reason);
-            return undefined;
         });
     }
 
