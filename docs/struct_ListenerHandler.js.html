@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li><li><a href="tutorial-10. Customizing Types.html">10. Customizing Types</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -49,7 +49,7 @@ class ListenerHandler extends AkairoHandler {
      * @param {AkairoClient} client - The Akairo client.
      * @param {Object} options - Options from client.
      */
-    constructor(client, options){
+    constructor(client, options) {
         super(client, options.listenerDirectory, Listener);
 
         /**
@@ -64,9 +64,11 @@ class ListenerHandler extends AkairoHandler {
         this.emitters.set('inhibitorHandler', this.client.inhibitorHandler);
         this.emitters.set('listenerHandler', this.client.listenerHandler);
 
-        if (options.emitters) for (const key of Object.keys(options.emitters)){
-            if (this.emitters.has(key)) continue;
-            this.emitters.set(key, options.emitters[key]);
+        if (options.emitters) {
+            for (const key of Object.keys(options.emitters)) {
+                if (this.emitters.has(key)) continue;
+                this.emitters.set(key, options.emitters[key]);
+            }
         }
 
         for (const m of this.modules.values()) this.register(m.id);
@@ -89,11 +91,11 @@ class ListenerHandler extends AkairoHandler {
      * Loads a listener.
      * @method
      * @name ListenerHandler#load
-     * @param {string} filepath - Path to file.
+     * @param {string|Listener} thing - Module or path to module.
      * @returns {Listener}
      */
-    load(filepath){
-        const listener = super.load(filepath);
+    load(thing) {
+        const listener = super.load(thing);
         if (this.emitters) this.register(listener.id);
         return listener;
     }
@@ -103,7 +105,7 @@ class ListenerHandler extends AkairoHandler {
      * @param {string} id - ID of the listener.
      * @returns {Listener}
      */
-    remove(id){
+    remove(id) {
         id = id.toString();
         this.deregister(id);
         return super.remove(id);
@@ -114,29 +116,31 @@ class ListenerHandler extends AkairoHandler {
      * @param {string} id - ID of the listener.
      * @returns {Listener}
      */
-    reload(id){
+    reload(id) {
         id = id.toString();
         this.deregister(id);
 
         const listener = super.reload(id);
         this.register(listener.id);
-        
+
         return listener;
     }
-    
+
     /**
      * Registers a listener with the EventEmitter.
      * @param {string} id - ID of the listener.
+     * @returns {void}
      */
-    register(id){
+    register(id) {
         const listener = this.modules.get(id.toString());
         if (!listener) throw new Error(`Listener ${id} does not exist.`);
 
         const emitter = listener.emitter instanceof EventEmitter ? listener.emitter : this.emitters.get(listener.emitter);
         if (!(emitter instanceof EventEmitter)) throw new Error('Listener\'s emitter is not an EventEmitter');
 
-        if (listener.type === 'once'){
-            return emitter.once(listener.eventName, listener.exec);
+        if (listener.type === 'once') {
+            emitter.once(listener.eventName, listener.exec);
+            return;
         }
 
         emitter.on(listener.eventName, listener.exec);
@@ -145,8 +149,9 @@ class ListenerHandler extends AkairoHandler {
     /**
      * Removes a listener from the EventEmitter.
      * @param {string} id - ID of the listener.
+     * @returns {void}
      */
-    deregister(id){
+    deregister(id) {
         const listener = this.modules.get(id.toString());
         if (!listener) throw new Error(`Listener ${id} does not exist.`);
 

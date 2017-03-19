@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li><li><a href="tutorial-10. Customizing Types.html">10. Customizing Types</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -826,7 +826,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line62">line 62</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line67">line 67</a>
     </li></ul></dd>
     
 
@@ -1103,7 +1103,7 @@
                 </td>
             
 
-            <td class="description last">Default value if text does not parse/cast correctly.<br>Can be a function <code>(message => {})</code>.</td>
+            <td class="description last">Default value if text does not parse/cast correctly.<br>Can be a function <code>((message, prevArgs) => {})</code>.</td>
         </tr>
 
     
@@ -1224,7 +1224,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line29">line 29</a>
+        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line30">line 30</a>
     </li></ul></dd>
     
 
@@ -1337,7 +1337,7 @@
 
 
 <div class="description">
-    The type that the argument should be cast to.<br><code>string</code> does not cast to any type.<br><code>number</code> casts to an number with parseFloat(), default value if not a number.<br><code>integer</code> casts to an integer with parseInt(), default value if not a number.<br><code>dynamic</code> casts to a number with parseFloat() or a string if the argument is not a number.<br><code>dynamicInt</code> casts to an integer with parseInt() or a string if the argument is not a number.<br><br>Possible Discord-related types:<br><code>user</code> tries to resolve to a user.<br><code>member</code> tries to resolve to a member.<br><code>relevant</code> tries to resolve to a relevant user in both guilds and DMs.<br><code>channel</code> tries to resolve to a channel.<br><code>textChannel</code> tries to resolve to a text channel.<br><code>voiceChannel</code> tries to resolve to a voice channel.<br><code>role</code> tries to resolve to a role.<br><code>emoji</code> tries to resolve to a custom emoji.<br><code>guild</code> tries to resolve to a guild.<br><br>Many of these types can only be used in a guild.<br>You can also pluralize the type to get a Collection of resolved objects instead.<br><br>An array of strings can be used to restrict input to only those strings, case insensitive.<br>The evaluated argument will be all lowercase.<br>If the input is not in the array, the default value is used.<br><br>A function <code>((word, message) => {})</code> can also be used to filter or modify arguments.<br>A return value of true will let the word pass, a falsey return value will use the default value for the argument.<br>Any other truthy return value will be used as the argument.
+    The type that the argument should be cast to.<br><code>string</code> does not cast to any type.<br><code>number</code> casts to an number with parseFloat(), default value if not a number.<br><code>integer</code> casts to an integer with parseInt(), default value if not a number.<br><code>dynamic</code> casts to a number with parseFloat() or a string if the argument is not a number.<br><code>dynamicInt</code> casts to an integer with parseInt() or a string if the argument is not a number.<br><br>Possible Discord-related types:<br><code>user</code> tries to resolve to a user.<br><code>member</code> tries to resolve to a member.<br><code>relevant</code> tries to resolve to a relevant user in both guilds and DMs.<br><code>channel</code> tries to resolve to a channel.<br><code>textChannel</code> tries to resolve to a text channel.<br><code>voiceChannel</code> tries to resolve to a voice channel.<br><code>role</code> tries to resolve to a role.<br><code>emoji</code> tries to resolve to a custom emoji.<br><code>guild</code> tries to resolve to a guild.<br><br>Many of these types can only be used in a guild.<br>You can also pluralize the type to get a Collection of resolved objects instead.<br><br>An array of strings can be used to restrict input to only those strings, case insensitive.<br>The evaluated argument will be all lowercase.<br>If the input is not in the array, the default value is used.<br><br>A regular expression can also be used.<br>The evaluated argument will be an object containing the match and groups if global.<br><br>A function <code>((word, message, prevArgs) => {})</code> can also be used to filter or modify arguments.<br>A return value of true will let the word pass, a null/undefined return value will use the default value for the argument or start a prompt.<br>Any other truthy return value will be used as the argument.<br>If returning a Promise, the value resolved will be the argument, and a rejection will use the default/start a prompt.
 </div>
 
 
@@ -1800,6 +1800,44 @@
             
 
             <td class="description last">Amount of command uses allowed until cooldown.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>prefix</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+ || 
+
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">A prefix to overwrite the global one for this command.</td>
         </tr>
 
     
@@ -2649,7 +2687,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line46">line 46</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line50">line 50</a>
     </li></ul></dd>
     
 
@@ -2870,6 +2908,12 @@
             <td class="type">
             
                 
+<span class="param-type">string</span>
+ || 
+
+<span class="param-type">Array.&lt;string></span>
+ || 
+
 <span class="param-type">function</span>
 
 
@@ -2905,6 +2949,12 @@
             <td class="type">
             
                 
+<span class="param-type">string</span>
+ || 
+
+<span class="param-type">Array.&lt;string></span>
+ || 
+
 <span class="param-type">function</span>
 
 
@@ -2940,6 +2990,12 @@
             <td class="type">
             
                 
+<span class="param-type">string</span>
+ || 
+
+<span class="param-type">Array.&lt;string></span>
+ || 
+
 <span class="param-type">function</span>
 
 
@@ -2975,6 +3031,12 @@
             <td class="type">
             
                 
+<span class="param-type">string</span>
+ || 
+
+<span class="param-type">Array.&lt;string></span>
+ || 
+
 <span class="param-type">function</span>
 
 
@@ -3010,6 +3072,12 @@
             <td class="type">
             
                 
+<span class="param-type">string</span>
+ || 
+
+<span class="param-type">Array.&lt;string></span>
+ || 
+
 <span class="param-type">function</span>
 
 
@@ -3045,7 +3113,7 @@
 
 
 <div class="description">
-    A prompt to run if the user did not input the argument correctly.<br>Can only be used if there is not a default value (unless optional is true).<br>The functions are <code>(message => {})</code> and are used to determine the reply.
+    A prompt to run if the user did not input the argument correctly.<br>Can only be used if there is not a default value (unless optional is true).<br>The functions are <code>((message, prevArgs, amountOfTries) => {})</code> and returns a string to determine the reply.<br>Can also be a string that will have a mention concatenated to it.
 </div>
 
 

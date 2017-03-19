@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li><li><a href="tutorial-10. Customizing Types.html">10. Customizing Types</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -76,26 +76,31 @@
  * &lt;br>The evaluated argument will be all lowercase.
  * &lt;br>If the input is not in the array, the default value is used.
  * &lt;br>
- * &lt;br>A function &lt;code>((word, message) => {})&lt;/code> can also be used to filter or modify arguments.
- * &lt;br>A return value of true will let the word pass, a falsey return value will use the default value for the argument.
+ * &lt;br>A regular expression can also be used.
+ * &lt;br>The evaluated argument will be an object containing the match and groups if global.
+ * &lt;br>
+ * &lt;br>A function &lt;code>((word, message, prevArgs) => {})&lt;/code> can also be used to filter or modify arguments.
+ * &lt;br>A return value of true will let the word pass, a null/undefined return value will use the default value for the argument or start a prompt.
  * &lt;br>Any other truthy return value will be used as the argument.
+ * &lt;br>If returning a Promise, the value resolved will be the argument, and a rejection will use the default/start a prompt.
  * @typedef {string|string[]} ArgumentType
  */
 
 /**
  * A prompt to run if the user did not input the argument correctly.
  * &lt;br>Can only be used if there is not a default value (unless optional is true).
- * &lt;br>The functions are &lt;code>(message => {})&lt;/code> and are used to determine the reply.
+ * &lt;br>The functions are &lt;code>((message, prevArgs, amountOfTries) => {})&lt;/code> and returns a string to determine the reply.
+ * &lt;br>Can also be a string that will have a mention concatenated to it.
  * @typedef {Object} PromptOptions
  * @prop {number} [retries=1] - Amount of times allowed to retries.
  * @prop {number} [time=30000] - Time to wait for input.
  * @prop {string} [cancelWord='cancel'] - Word to use for cancelling prompts.
  * @prop {boolean} [optional=false] - Prompts only when argument is provided but was not of the right type.
- * @prop {function} [start] - Function called on start.
- * @prop {function} [retry] - Function called on a retry.
- * @prop {function} [timeout] - Function called on collector time out.
- * @prop {function} [ended] - Function called on no retries left.
- * @prop {function} [cancel] - Function called on cancel.
+ * @prop {string|string[]|function} [start] - Function called on start.
+ * @prop {string|string[]|function} [retry] - Function called on a retry.
+ * @prop {string|string[]|function} [timeout] - Function called on collector time out.
+ * @prop {string|string[]|function} [ended] - Function called on no retries left.
+ * @prop {string|string[]|function} [cancel] - Function called on cancel.
  */
 
 /**
@@ -108,7 +113,7 @@
  * @prop {number} [index] - Index/word of text to start from.
  * &lt;br>Applicable to word, text, or content match only.
  * @prop {any} [default=''] - Default value if text does not parse/cast correctly.
- * &lt;br>Can be a function &lt;code>(message => {})&lt;/code>.
+ * &lt;br>Can be a function &lt;code>((message, prevArgs) => {})&lt;/code>.
  * @prop {string|string[]} [description=''] - A description of the argument.
  * @prop {PromptOptions} [prompt] - Prompt options for when user does not provide input.
  * &lt;br>Must not have a default value for this to work.
@@ -120,7 +125,7 @@ class Argument {
      * @param {Command} command - Command of the argument.
      * @param {ArgumentOptions} options - Options for the argument.
      */
-    constructor(command, options = {}){
+    constructor(command, options = {}) {
         /**
          * The ID of the argument.
          * @type {string}
@@ -173,7 +178,7 @@ class Argument {
          * The default value.
          * @method
          * @name Argument#default
-         * @param {Message} - The message that called the command.
+         * @param {Message} message - The message that called the command.
          * @returns {any}
          */
         this.default = typeof options.default === 'function' ? options.default : () => options.default;
@@ -184,7 +189,7 @@ class Argument {
      * @readonly
      * @type {AkairoClient}
      */
-    get client(){
+    get client() {
         return this.command.client;
     }
 
@@ -193,7 +198,7 @@ class Argument {
      * @readonly
      * @type {CommandHandler}
      */
-    get handler(){
+    get handler() {
         return this.command.handler;
     }
 
@@ -201,22 +206,25 @@ class Argument {
      * Casts the type of this argument onto a word.
      * @param {string} word - The word to cast.
      * @param {Message} message - The message that called the command.
+     * @param {Object} args - Previous arguments from command.
      * @returns {Promise&lt;any>}
      */
-    cast(word, message){
-        if (!word &amp;&amp; this.prompt &amp;&amp; this.prompt.optional){
-            return Promise.resolve(this.default.call(this.command, message));
+    cast(word, message, args) {
+        if (!word &amp;&amp; this.prompt &amp;&amp; this.prompt.optional) {
+            return Promise.resolve(this.default.call(this.command, message, args));
         }
 
-        const res = this._processType(word, message);
+        const res = this._processType(word, message, args);
 
-        if (res != null) return Promise.resolve(res).catch(err => {
-            if (err instanceof Error) throw err;
-            return this.prompt ? this._promptArgument(message) : this.default.call(this.command, message);
-        });
+        if (res != null) {
+            return Promise.resolve(res).catch(err => {
+                if (err instanceof Error) throw err;
+                return this.prompt ? this._promptArgument(message, args) : this.default.call(this.command, message, args);
+            });
+        }
 
-        if (this.prompt) return this._promptArgument(message);
-        return Promise.resolve(this.default.call(this.command, message));
+        if (this.prompt) return this._promptArgument(message, args);
+        return Promise.resolve(this.default.call(this.command, message, args));
     }
 
     /**
@@ -224,25 +232,42 @@ class Argument {
      * @private
      * @param {string} word - Word to process.
      * @param {Message} message - Message that called the command.
+     * @param {Object} args - Previous arguments from command.
      * @returns {any}
      */
-    _processType(word, message){
-        if (Array.isArray(this.type)){
+    _processType(word, message, args) {
+        if (Array.isArray(this.type)) {
             if (!this.type.some(t => t.toLowerCase() === word.toLowerCase())) return null;
             return word.toLowerCase();
         }
 
-        if (typeof this.type === 'function'){
-            const res = this.type.call(this.command, word, message);
+        if (typeof this.type === 'function') {
+            const res = this.type.call(this.command, word, message, args);
             if (res === true) return word;
             if (res != null) return res;
             return null;
         }
 
-        if (this.handler.resolver[this.type]){
-            const res = this.handler.resolver[this.type](word, message);
-            if (res != null) return res;
+        if (this.type instanceof RegExp) {
+            const match = word.match(this.type);
+            if (!match) return null;
 
+            const groups = [];
+
+            if (this.type.global) {
+                let group;
+
+                while ((group = this.type.exec(word)) != null) {
+                    groups.push(group);
+                }
+            }
+
+            return { match, groups };
+        }
+
+        if (this.handler.resolver[this.type]) {
+            const res = this.handler.resolver[this.type](word, message, args);
+            if (res != null) return res;
             return null;
         }
 
@@ -254,72 +279,65 @@ class Argument {
      * Prompts a message for a word and casts it.
      * @private
      * @param {Message} message - Message to prompt.
+     * @param {Object} args - Previous arguments from command.
      * @returns {Promise&lt;any>}
      */
-    _promptArgument(message){
+    _promptArgument(message, args) {
         const prompt = {};
-        
+
         Object.assign(prompt, this.handler.defaultPrompt);
         Object.assign(prompt, this.command.defaultPrompt);
         Object.assign(prompt, this.prompt || {});
 
+        let exited = false;
+
         const retry = i => {
             this.handler.addPrompt(message);
-            let text = i === 1 ? prompt.start.call(this, message) : prompt.retry.call(this, message);
+
+            let text = i === 1 ? prompt.start : prompt.retry;
+            text = typeof text === 'function' ? text.call(this, message, args, i) : `${message.author}, ${text}`;
             text = Array.isArray(text) ? text.join('\n') : text;
 
             let value;
 
             return this.client.util.prompt(message, text, m => {
-                if (m.content.toLowerCase() === prompt.cancelWord) throw 'cancel';
+                if (m.content.toLowerCase() === prompt.cancelWord.toLowerCase()) {
+                    exited = true;
+                    return false;
+                }
 
-                const res = this._processType(m.content, m);
+                const res = this._processType(m.content, m, args);
                 value = res;
-                
+
                 return res;
             }, prompt.time).then(() => value).catch(reason => {
-                if (reason instanceof Error){
+                if (reason instanceof Error) {
                     this.handler.removePrompt(message);
                     throw reason;
                 }
 
-                if (reason === 'time'){
-                    let response = prompt.timeout.call(this, message);
+                let response;
+
+                if (reason === 'time') response = prompt.timeout;
+                if (reason === 'failed' &amp;&amp; exited) response = prompt.cancel;
+                if (i > prompt.retries) response = prompt.ended;
+
+                if (response) exited = true;
+
+                if (exited) {
+                    response = typeof response === 'function' ? response.call(this, message, args, i) : `${message.author}, ${response}`;
                     response = Array.isArray(response) ? response.join('\n') : response;
 
-                    return message.channel.send(response).then(() => {
-                        this.handler.removePrompt(message);
-                        throw 'time';
-                    });
+                    return message.channel.send(response);
                 }
 
-                if (reason === 'cancel'){
-                    let response = prompt.cancel.call(this, message);
-                    response = Array.isArray(response) ? response.join('\n') : response;
-
-                    return message.channel.send(response).then(() => {
-                        this.handler.removePrompt(message);
-                        throw 'cancel';
-                    });
-                }
-                
-                if (i > prompt.retries){
-                    let response = prompt.ended.call(this, message);
-                    response = Array.isArray(response) ? response.join('\n') : response;
-
-                    return message.channel.send(response).then(() => {
-                        this.handler.removePrompt(message);
-                        throw 'end';
-                    });
-                }
-                
                 return retry(i + 1);
             });
         };
 
         return retry(1).then(value => {
             this.handler.removePrompt(message);
-            return value;
+            return exited ? new Promise((resolve, reject) => reject()) : value;
         });
     }
 }
