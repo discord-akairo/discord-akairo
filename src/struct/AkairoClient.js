@@ -132,7 +132,7 @@ class AkairoClient extends Client {
 
     /**
      * Builds the client by creating the handlers.
-     * @returns {void}
+     * @returns {AkairoClient}
      */
     build() {
         if (this.akairoOptions.commandDirectory && !this.commandHandler) {
@@ -158,6 +158,8 @@ class AkairoClient extends Client {
              */
             this.listenerHandler = new ListenerHandler(this, this.akairoOptions);
         }
+
+        return this;
     }
 }
 

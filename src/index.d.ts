@@ -16,8 +16,8 @@ declare module 'discord-akairo' {
         inhibitorHandler: InhibitorHandler<Inhibitor>;
         listenerHandler: ListenerHandler<Listener>;
 
-        addDatabase(name: string, database: SQLiteHandler): void;
-        build(): void;
+        addDatabase(name: string, database: SQLiteHandler): this;
+        build(): this;
         login(token: string): Promise<string>;
     }
 
