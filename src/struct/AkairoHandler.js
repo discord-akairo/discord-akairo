@@ -145,10 +145,11 @@ class AkairoHandler extends EventEmitter {
 
     /**
      * Reloads all modules.
-     * @returns {void}
+     * @returns {AkairoHandler}
      */
     reloadAll() {
         for (const m of Array.from(this.modules.values())) m.reload();
+        return this;
     }
 
     /**

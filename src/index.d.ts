@@ -34,7 +34,7 @@ declare module 'discord-akairo' {
         add(filename: string): T;
         remove(id: string): T;
         reload(id: string): T;
-        reloadAll(): void;
+        reloadAll(): this;
         findCategory(name: string): Category<string, T>;
 
         on(event: string, listener: Function): this;
@@ -184,8 +184,8 @@ declare module 'discord-akairo' {
 
         emitters: Collection<string, EventEmitter>;
 
-        register(id: string): void;
-        deregister(id: string): void;
+        register(id: string): Listener;
+        deregister(id: string): Listener;
 
         on(event: 'add', listener: (command: Listener) => void): this;
         on(event: 'remove', listener: (command: Listener) => void): this;
@@ -331,7 +331,7 @@ declare module 'discord-akairo' {
 
     type ArgumentType = string | string[] | ((word: string, message: Message, prevArgs: Object) => any);
 
-    type ArgumentMatch = string;
+    type ArgumentMatch = string | ((message: Message, prevArgs: Object) => string);
 
     type ArgumentSplit = string | RegExp;
 

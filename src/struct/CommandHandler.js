@@ -569,6 +569,7 @@ class CommandHandler extends AkairoHandler {
      * Reloads all commands.
      * @method
      * @name CommandHandler#reloadAll
+     * @returns {CommandHandler}
      */
 }
 

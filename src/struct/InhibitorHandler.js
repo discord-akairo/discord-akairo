@@ -88,6 +88,7 @@ class InhibitorHandler extends AkairoHandler {
      * Reloads all inhibitors.
      * @method
      * @name InhibitorHandler#reloadAll
+     * @returns {InhibitorHandler}
      */
 }
 

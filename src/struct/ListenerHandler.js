@@ -90,7 +90,7 @@ class ListenerHandler extends AkairoHandler {
     /**
      * Registers a listener with the EventEmitter.
      * @param {string} id - ID of the listener.
-     * @returns {void}
+     * @returns {Listener}
      */
     register(id) {
         const listener = this.modules.get(id.toString());
@@ -101,16 +101,17 @@ class ListenerHandler extends AkairoHandler {
 
         if (listener.type === 'once') {
             emitter.once(listener.eventName, listener.exec);
-            return;
+            return listener;
         }
 
         emitter.on(listener.eventName, listener.exec);
+        return listener;
     }
 
     /**
      * Removes a listener from the EventEmitter.
      * @param {string} id - ID of the listener.
-     * @returns {void}
+     * @returns {Listener}
      */
     deregister(id) {
         const listener = this.modules.get(id.toString());
@@ -120,6 +121,7 @@ class ListenerHandler extends AkairoHandler {
         if (!(emitter instanceof EventEmitter)) throw new Error('Listener\'s emitter is not an EventEmitter');
 
         emitter.removeListener(listener.eventName, listener.exec);
+        return listener;
     }
 
     /**
@@ -135,6 +137,7 @@ class ListenerHandler extends AkairoHandler {
      * Reloads all listeners.
      * @method
      * @name ListenerHandler#reloadAll
+     * @returns {ListenerHandler}
      */
 }
 

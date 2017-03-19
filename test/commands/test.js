@@ -10,7 +10,12 @@ module.exports = new Command('test', exec, {
         {
             id: 'thing',
             type: /ok|notok/,
-            prompt: true
+            prompt: {
+                retry: function retry() {
+                    console.log(this.constructor.name);
+                    return 'ok?';
+                }
+            }
         },
         {
             id: 'thing2',
