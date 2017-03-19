@@ -23,8 +23,8 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * <br>The exec function is <code>((message, edited) => {})</code>.
  * @prop {PromptOptions} [defaultPrompt={}] - The default prompt options.
  * @prop {Object} [options={}] - An object for custom options.
- * @prop {string|string[]} [description=''] - Description of the command.
  * <br>Accessible with Command#options.
+ * @prop {string|string[]} [description=''] - Description of the command.
  */
 
 /**
