@@ -75,7 +75,7 @@ class AkairoHandler extends EventEmitter {
          * Class to handle.
          * @readonly
          * @name AkairoHandler#classToHandle
-         * @type {function}
+         * @type {Function}
          */
 
         Object.defineProperties(this, {
@@ -184,10 +184,11 @@ class AkairoHandler extends EventEmitter {
 
     /**
      * Reloads all modules.
-     * @returns {void}
+     * @returns {AkairoHandler}
      */
     reloadAll() {
         for (const m of Array.from(this.modules.values())) m.reload();
+        return this;
     }
 
     /**

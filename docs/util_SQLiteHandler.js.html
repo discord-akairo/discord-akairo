@@ -50,7 +50,7 @@ let sql;
  * @prop {string} [tablename='configs'] - Name of the table.
  * @prop {Object} [defaultConfig={}] - Default configuration.
  * @prop {string[]} [json=[]] - Array of keys to parse and stringify as JSON.
- * @prop {function} [init=[]] - Array or function &lt;code>(client => {})&lt;/code> that returns an array of IDs.
+ * @prop {Function} [init=[]] - Array or function &lt;code>(client => {})&lt;/code> that returns an array of IDs.
  * &lt;br>If you want to load the database before login, use SQLiteHandler#load.
  */
 
@@ -145,9 +145,10 @@ class SQLiteHandler extends EventEmitter {
 
     /**
      * Sanitizes a string by replacing single quotes with two single quotes.
+     * &lt;br>Can return a non-string if json is set to false.
      * @param {string} input - Input text.
      * @param {boolean} json - Whether to stringify or not.
-     * @returns {string}
+     * @returns {any}
      */
     sanitize(input, json = false) {
         if (json &amp;&amp; typeof input !== 'string') return JSON.stringify(input).replace(/'/g, '\'\'');
@@ -157,9 +158,10 @@ class SQLiteHandler extends EventEmitter {
 
     /**
      * Desanitizes a string for use by replacing two single quotes with a single quote.
+     * &lt;br>Can return a non-string if json is set to true.
      * @param {string} input - Input text.
      * @param {boolean} [json] - Whether to parse or not.
-     * @returns {string}
+     * @returns {any}
      */
     desanitize(input, json = false) {
         if (json &amp;&amp; typeof input === 'string') return JSON.parse(input.replace(/''/g, '\''));

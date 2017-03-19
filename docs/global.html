@@ -793,7 +793,7 @@
 
 
 <div class="description">
-    The method to match arguments from text.<br><code>word</code> matches by the order of the words inputted, ignoring words that matches prefix or flag.<br><code>rest</code> matches the rest of the words in order, ignoring words that matches prefix or flag.<br><code>prefix</code> matches words that starts with the prefix. The word after the prefix is the evaluated argument.<br><code>flag</code> matches words that equal this prefix. The evaluated argument is true or false.<br><code>text</code> matches the entire text, except for the command, ignoring words that matches prefix or flag.<br><code>content</code> matches the entire text as it was inputted, except for the command.
+    The method to match arguments from text.<br><code>word</code> matches by the order of the words inputted, ignoring words that matches prefix or flag.<br><code>rest</code> matches the rest of the words in order, ignoring words that matches prefix or flag.<br><code>prefix</code> matches words that starts with the prefix. The word after the prefix is the evaluated argument.<br><code>flag</code> matches words that equal this prefix. The evaluated argument is true or false.<br><code>text</code> matches the entire text, except for the command, ignoring words that matches prefix or flag.<br><code>content</code> matches the entire text as it was inputted, except for the command.<br><br>A function <code>((message, prevArgs) => {})</code> can also be used to return one of the above.
 </div>
 
 
@@ -826,7 +826,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line67">line 67</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line76">line 76</a>
     </li></ul></dd>
     
 
@@ -1103,7 +1103,7 @@
                 </td>
             
 
-            <td class="description last">Default value if text does not parse/cast correctly.<br>Can be a function <code>((message, prevArgs) => {})</code>.</td>
+            <td class="description last">Default value if text does not parse/cast correctly.<br>Can be a function <code>((message, prevArgs) => {})</code>.<br>If using a flag arg, setting the default value inverses the result.</td>
         </tr>
 
     
@@ -1224,7 +1224,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line30">line 30</a>
+        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line31">line 31</a>
     </li></ul></dd>
     
 
@@ -1297,7 +1297,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line14">line 14</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line16">line 16</a>
     </li></ul></dd>
     
 
@@ -1337,7 +1337,7 @@
 
 
 <div class="description">
-    The type that the argument should be cast to.<br><code>string</code> does not cast to any type.<br><code>number</code> casts to an number with parseFloat(), default value if not a number.<br><code>integer</code> casts to an integer with parseInt(), default value if not a number.<br><code>dynamic</code> casts to a number with parseFloat() or a string if the argument is not a number.<br><code>dynamicInt</code> casts to an integer with parseInt() or a string if the argument is not a number.<br><br>Possible Discord-related types:<br><code>user</code> tries to resolve to a user.<br><code>member</code> tries to resolve to a member.<br><code>relevant</code> tries to resolve to a relevant user in both guilds and DMs.<br><code>channel</code> tries to resolve to a channel.<br><code>textChannel</code> tries to resolve to a text channel.<br><code>voiceChannel</code> tries to resolve to a voice channel.<br><code>role</code> tries to resolve to a role.<br><code>emoji</code> tries to resolve to a custom emoji.<br><code>guild</code> tries to resolve to a guild.<br><br>Many of these types can only be used in a guild.<br>You can also pluralize the type to get a Collection of resolved objects instead.<br><br>An array of strings can be used to restrict input to only those strings, case insensitive.<br>The evaluated argument will be all lowercase.<br>If the input is not in the array, the default value is used.<br><br>A regular expression can also be used.<br>The evaluated argument will be an object containing the match and groups if global.<br><br>A function <code>((word, message, prevArgs) => {})</code> can also be used to filter or modify arguments.<br>A return value of true will let the word pass, a null/undefined return value will use the default value for the argument or start a prompt.<br>Any other truthy return value will be used as the argument.<br>If returning a Promise, the value resolved will be the argument, and a rejection will use the default/start a prompt.
+    The type that the argument should be cast to.<br><code>string</code> does not cast to any type and trims the word.<br><code>number</code> casts to an number with parseFloat(), default value if not a number.<br><code>integer</code> casts to an integer with parseInt(), default value if not a number.<br><code>dynamic</code> casts to a number with parseFloat() or a string if the argument is not a number.<br><code>dynamicInt</code> casts to an integer with parseInt() or a string if the argument is not a number.<br><code>url</code> casts to an URL object, default value if new URL() does not work.<br><code>date</code> casts to a Date object, default value if Date.parse() does not work.<br><br>Possible Discord-related (pluralizable) types:<br><code>user</code> tries to resolve to a user.<br><code>member</code> tries to resolve to a member.<br><code>relevant</code> tries to resolve to a relevant user in both guilds and DMs.<br><code>channel</code> tries to resolve to a channel.<br><code>textChannel</code> tries to resolve to a text channel.<br><code>voiceChannel</code> tries to resolve to a voice channel.<br><code>role</code> tries to resolve to a role.<br><code>emoji</code> tries to resolve to a custom emoji.<br><code>guild</code> tries to resolve to a guild.<br><br>Possible Discord-related types:<br><code>message</code> tries to fetch a message from an ID.<br><code>invite</code> tries to resolve an invite code from a link.<br><br>Many of these types can only be used in a guild.<br>You can pluralize some of the types to get a Collection of resolved objects instead.<br><br>An array of strings can be used to restrict input to only those strings, case insensitive.<br>The evaluated argument will be all lowercase.<br>If the input is not in the array, the default value is used.<br><br>A regular expression can also be used.<br>The evaluated argument will be an object containing the match and groups if global.<br><br>A function <code>((word, message, prevArgs) => {})</code> can also be used to filter or modify arguments.<br>A return value of true will let the word pass, a null/undefined return value will use the default value for the argument or start a prompt.<br>Any other truthy return value will be used as the argument.<br>If returning a Promise, the value resolved will be the argument, and a rejection will use the default/start a prompt.
 </div>
 
 
@@ -1816,6 +1816,9 @@
  || 
 
 <span class="param-type">Array.&lt;string></span>
+ || 
+
+<span class="param-type">function</span>
 
 
             
@@ -1837,7 +1840,7 @@
                 </td>
             
 
-            <td class="description last">A prefix to overwrite the global one for this command.</td>
+            <td class="description last">A prefix to overwrite the global one for this command.<br>Can be a function <code>(message => {})</code>.</td>
         </tr>
 
     
@@ -1984,7 +1987,7 @@
                 </td>
             
 
-            <td class="description last">An object for custom options.</td>
+            <td class="description last">An object for custom options.<br>Accessible with Command#options.</td>
         </tr>
 
     
@@ -2024,7 +2027,7 @@
                 </td>
             
 
-            <td class="description last">Description of the command.<br>Accessible with Command#options.</td>
+            <td class="description last">Description of the command.</td>
         </tr>
 
     
@@ -2687,7 +2690,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line50">line 50</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line58">line 58</a>
     </li></ul></dd>
     
 
@@ -3113,7 +3116,7 @@
 
 
 <div class="description">
-    A prompt to run if the user did not input the argument correctly.<br>Can only be used if there is not a default value (unless optional is true).<br>The functions are <code>((message, prevArgs, amountOfTries) => {})</code> and returns a string to determine the reply.<br>Can also be a string that will have a mention concatenated to it.
+    A prompt to run if the user did not input the argument correctly.<br>Can only be used if there is not a default value (unless optional is true).<br>The functions are <code>((message, prevArgs, amountOfTries) => {})</code> and returns a string or object to determine the reply.<br>The object should be equivalent to a MessageOptions, with an extra optional property called content for message content.<br>Can also be a string literal that will have a mention concatenated to it.
 </div>
 
 

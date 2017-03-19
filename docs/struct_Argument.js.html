@@ -47,18 +47,22 @@
  * &lt;br>&lt;code>flag&lt;/code> matches words that equal this prefix. The evaluated argument is true or false.
  * &lt;br>&lt;code>text&lt;/code> matches the entire text, except for the command, ignoring words that matches prefix or flag.
  * &lt;br>&lt;code>content&lt;/code> matches the entire text as it was inputted, except for the command.
+ * &lt;br>
+ * &lt;br>A function &lt;code>((message, prevArgs) => {})&lt;/code> can also be used to return one of the above.
  * @typedef {string} ArgumentMatch
  */
 
 /**
  * The type that the argument should be cast to.
- * &lt;br>&lt;code>string&lt;/code> does not cast to any type.
+ * &lt;br>&lt;code>string&lt;/code> does not cast to any type and trims the word.
  * &lt;br>&lt;code>number&lt;/code> casts to an number with parseFloat(), default value if not a number.
  * &lt;br>&lt;code>integer&lt;/code> casts to an integer with parseInt(), default value if not a number.
  * &lt;br>&lt;code>dynamic&lt;/code> casts to a number with parseFloat() or a string if the argument is not a number.
  * &lt;br>&lt;code>dynamicInt&lt;/code> casts to an integer with parseInt() or a string if the argument is not a number.
+ * &lt;br>&lt;code>url&lt;/code> casts to an URL object, default value if new URL() does not work.
+ * &lt;br>&lt;code>date&lt;/code> casts to a Date object, default value if Date.parse() does not work.
  * &lt;br>
- * &lt;br>Possible Discord-related types:
+ * &lt;br>Possible Discord-related (pluralizable) types:
  * &lt;br>&lt;code>user&lt;/code> tries to resolve to a user.
  * &lt;br>&lt;code>member&lt;/code> tries to resolve to a member.
  * &lt;br>&lt;code>relevant&lt;/code> tries to resolve to a relevant user in both guilds and DMs.
@@ -69,8 +73,12 @@
  * &lt;br>&lt;code>emoji&lt;/code> tries to resolve to a custom emoji.
  * &lt;br>&lt;code>guild&lt;/code> tries to resolve to a guild.
  * &lt;br>
+ * &lt;br>Possible Discord-related types:
+ * &lt;br>&lt;code>message&lt;/code> tries to fetch a message from an ID.
+ * &lt;br>&lt;code>invite&lt;/code> tries to resolve an invite code from a link.
+ * &lt;br>
  * &lt;br>Many of these types can only be used in a guild.
- * &lt;br>You can also pluralize the type to get a Collection of resolved objects instead.
+ * &lt;br>You can pluralize some of the types to get a Collection of resolved objects instead.
  * &lt;br>
  * &lt;br>An array of strings can be used to restrict input to only those strings, case insensitive.
  * &lt;br>The evaluated argument will be all lowercase.
@@ -89,8 +97,9 @@
 /**
  * A prompt to run if the user did not input the argument correctly.
  * &lt;br>Can only be used if there is not a default value (unless optional is true).
- * &lt;br>The functions are &lt;code>((message, prevArgs, amountOfTries) => {})&lt;/code> and returns a string to determine the reply.
- * &lt;br>Can also be a string that will have a mention concatenated to it.
+ * &lt;br>The functions are &lt;code>((message, prevArgs, amountOfTries) => {})&lt;/code> and returns a string or object to determine the reply.
+ * &lt;br>The object should be equivalent to a MessageOptions, with an extra optional property called content for message content.
+ * &lt;br>Can also be a string literal that will have a mention concatenated to it.
  * @typedef {Object} PromptOptions
  * @prop {number} [retries=1] - Amount of times allowed to retries.
  * @prop {number} [time=30000] - Time to wait for input.
@@ -114,6 +123,7 @@
  * &lt;br>Applicable to word, text, or content match only.
  * @prop {any} [default=''] - Default value if text does not parse/cast correctly.
  * &lt;br>Can be a function &lt;code>((message, prevArgs) => {})&lt;/code>.
+ * &lt;br>If using a flag arg, setting the default value inverses the result.
  * @prop {string|string[]} [description=''] - A description of the argument.
  * @prop {PromptOptions} [prompt] - Prompt options for when user does not provide input.
  * &lt;br>Must not have a default value for this to work.
@@ -181,7 +191,7 @@ class Argument {
          * @param {Message} message - The message that called the command.
          * @returns {any}
          */
-        this.default = typeof options.default === 'function' ? options.default : () => options.default;
+        this.default = typeof options.default === 'function' ? options.default : () => options.default != null ? options.default : '';
     }
 
     /**
@@ -297,6 +307,12 @@ class Argument {
             let text = i === 1 ? prompt.start : prompt.retry;
             text = typeof text === 'function' ? text.call(this, message, args, i) : `${message.author}, ${text}`;
             text = Array.isArray(text) ? text.join('\n') : text;
+            let opts;
+
+            if (typeof text === 'object' &amp;&amp; text.content) {
+                opts = text;
+                text = text.content;
+            }
 
             let value;
 
@@ -310,7 +326,7 @@ class Argument {
                 value = res;
 
                 return res;
-            }, prompt.time).then(() => value).catch(reason => {
+            }, prompt.time, opts).then(() => value).catch(reason => {
                 if (reason instanceof Error) {
                     this.handler.removePrompt(message);
                     throw reason;
@@ -328,6 +344,10 @@ class Argument {
                     response = typeof response === 'function' ? response.call(this, message, args, i) : `${message.author}, ${response}`;
                     response = Array.isArray(response) ? response.join('\n') : response;
 
+                    if (typeof response === 'object' &amp;&amp; response.content) {
+                        return message.channel.send(response.content, response);
+                    }
+
                     return message.channel.send(response);
                 }
 
@@ -337,7 +357,7 @@ class Argument {
 
         return retry(1).then(value => {
             this.handler.removePrompt(message);
-            return exited ? new Promise((resolve, reject) => reject()) : value;
+            return exited ? Promise.reject() : value;
         });
     }
 }

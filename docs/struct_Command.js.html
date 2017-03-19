@@ -55,15 +55,16 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * &lt;br>On an edited message, the exec function edited param will be true.
  * @prop {number} [cooldown] - The command cooldown in milliseconds.
  * @prop {number} [ratelimit=1] - Amount of command uses allowed until cooldown.
- * @prop {string|string[]} [prefix] - A prefix to overwrite the global one for this command.
- * @prop {RegExp|function} [trigger] - A regex or function &lt;code>(message => {})&lt;/code> returning regex to match in messages that are NOT commands.
+ * @prop {string|string[]|Function} [prefix] - A prefix to overwrite the global one for this command.
+ * &lt;br>Can be a function &lt;code>(message => {})&lt;/code>.
+ * @prop {RegExp|Function} [trigger] - A regex or function &lt;code>(message => {})&lt;/code> returning regex to match in messages that are NOT commands.
  * &lt;br>The exec function is &lt;code>((message, match, groups, edited) => {})&lt;/code>.
- * @prop {function} [condition] - A function &lt;code>((message, edited) => {})&lt;/code> that returns true or false on messages that are NOT commands.
+ * @prop {Function} [condition] - A function &lt;code>((message, edited) => {})&lt;/code> that returns true or false on messages that are NOT commands.
  * &lt;br>The exec function is &lt;code>((message, edited) => {})&lt;/code>.
  * @prop {PromptOptions} [defaultPrompt={}] - The default prompt options.
  * @prop {Object} [options={}] - An object for custom options.
- * @prop {string|string[]} [description=''] - Description of the command.
  * &lt;br>Accessible with Command#options.
+ * @prop {string|string[]} [description=''] - Description of the command.
  */
 
 /**
@@ -162,7 +163,7 @@ class Command extends AkairoModule {
 
         /**
          * Command prefix overwrite.
-         * @type {?string|string[]}
+         * @type {?string|string[]|Function}
          */
         this.prefix = options.prefix;
 
@@ -220,7 +221,6 @@ class Command extends AkairoModule {
         };
 
         const words = splitFuncs[this.split] ? splitFuncs[this.split]() || [] : content.split(this.split);
-        const args = {};
 
         const prefixes = this.args.reduce((arr, arg) => {
             if (arg.match === ArgumentMatches.PREFIX || arg.match === ArgumentMatches.FLAG) {
@@ -249,10 +249,8 @@ class Command extends AkairoModule {
             });
         });
 
-        let index = 0;
-
         const parseFuncs = {
-            [ArgumentMatches.WORD]: arg => {
+            [ArgumentMatches.WORD]: (arg, index) => {
                 let word = noPrefixWords[arg.index != null ? arg.index : index] || '';
 
                 const isQuoted = (this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY) &amp;&amp; /^".*"$/.test(word);
@@ -260,25 +258,37 @@ class Command extends AkairoModule {
 
                 return arg.cast.bind(arg, word);
             },
-            [ArgumentMatches.REST]: arg => {
+            [ArgumentMatches.REST]: (arg, index) => {
                 const word = noPrefixWords.slice(arg.index != null ? arg.index : index).join(' ') || '';
                 return arg.cast.bind(arg, word);
             },
             [ArgumentMatches.PREFIX]: arg => {
-                let word = words.find(w => Array.isArray(arg.prefix) ? arg.prefix.some(p => w.toLowerCase().startsWith(p.toLowerCase())) : w.toLowerCase().startsWith(arg.prefix.toLowerCase())) || '';
+                let word = words.find(w => {
+                    return Array.isArray(arg.prefix)
+                    ? arg.prefix.some(p => w.toLowerCase().startsWith(p.toLowerCase()))
+                    : w.toLowerCase().startsWith(arg.prefix.toLowerCase());
+                }) || '';
 
-                word = word.replace(prefixes.find(p => {
+                const prefix = prefixes.find(p => {
                     if (!p.flag) return word.toLowerCase().startsWith(p.value);
                     return word.toLowerCase() === p.value;
-                }).value, '');
+                });
 
-                if (this.split === ArgumentSplits.STICKY &amp;&amp; /^".*"$/.test(word)) word = word.slice(1, -1);
+                if (prefix) {
+                    word = word.replace(prefix.value, '');
+                    if (this.split === ArgumentSplits.STICKY &amp;&amp; /^".*"$/.test(word)) word = word.slice(1, -1);
+                }
 
                 return arg.cast.bind(arg, word);
             },
             [ArgumentMatches.FLAG]: arg => {
-                const word = words.find(w => Array.isArray(arg.prefix) ? arg.prefix.some(p => w.toLowerCase() === p.toLowerCase()) : w.toLowerCase() === arg.prefix.toLowerCase()) || '';
-                return () => Promise.resolve(!!word);
+                const word = words.find(w => {
+                    return Array.isArray(arg.prefix)
+                    ? arg.prefix.some(p => w.toLowerCase() === p.toLowerCase())
+                    : w.toLowerCase() === arg.prefix.toLowerCase();
+                }) || '';
+
+                return () => Promise.resolve(arg.default() ? !word : !!word);
             },
             [ArgumentMatches.TEXT]: arg => {
                 const word = noPrefixWords.slice(arg.index).join(' ');
@@ -290,20 +300,20 @@ class Command extends AkairoModule {
             }
         };
 
-        for (const arg of this.args) {
-            args[arg.id] = parseFuncs[arg.match](arg);
-            if (arg.match === ArgumentMatches.WORD || arg.match === ArgumentMatches.REST) index++;
-        }
-
         const processed = {};
-        const keys = Object.keys(args);
+        let wordIndex = 0;
 
         const process = i => {
-            if (i === keys.length) return processed;
+            if (i === this.args.length) return processed;
 
-            const key = keys[i];
-            return args[key](message, processed).then(res => {
-                processed[key] = res;
+            const arg = this.args[i];
+            const matchType = typeof arg.match === 'function' ? arg.match.call(this, message, processed) : arg.match;
+            const castFunc = parseFuncs[matchType](arg, wordIndex);
+
+            if (matchType === ArgumentMatches.WORD || matchType === ArgumentMatches.REST) wordIndex++;
+
+            return castFunc(message, processed).then(res => {
+                processed[arg.id] = res;
                 return process(i + 1);
             });
         };

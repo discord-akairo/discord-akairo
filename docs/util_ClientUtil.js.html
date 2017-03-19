@@ -435,10 +435,10 @@ class ClientUtil {
      * @returns {Object}
      */
     resolvePermissionOverwrite(overwrite) {
-        return {
-            allow: this.resolvePermissionNumber(overwrite.allow),
-            deny: this.resolvePermissionNumber(overwrite.deny)
-        };
+        const copy = Object.assign({}, overwrite);
+        copy.allow = this.resolvePermissionNumber(overwrite.allow);
+        copy.deny = this.resolvePermissionNumber(overwrite.deny);
+        return copy;
     }
 
     /**
@@ -493,7 +493,7 @@ class ClientUtil {
      * Prompts a user for input, returning the message that passes.
      * @param {Message} message - Message to prompt.
      * @param {string} content - Text to send.
-     * @param {RegExp|function} [check] - Regex or function &lt;code>(message => {})&lt;/code> to check if message should pass.
+     * @param {RegExp|Function} [check] - Regex or function &lt;code>(message => {})&lt;/code> to check if message should pass.
      * @param {number} [time=30000] - Time in milliseconds to wait.
      * @param {MessageOptions} [options] - Message options for message.
      * @returns {Promise&lt;Message>}
@@ -539,7 +539,7 @@ class ClientUtil {
     fetchMessage(channel, id) {
         if (this.client.user.bot) return channel.fetchMessage(id);
 
-        return channel.fetchMessages({ around: id, limit: 2 }).then(msgs => {
+        return channel.fetchMessages({ around: id, limit: 1 }).then(msgs => {
             return msgs.get(id);
         });
     }

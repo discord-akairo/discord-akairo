@@ -49,8 +49,8 @@ const ClientUtil = require('../util/ClientUtil');
  * @prop {string|string[]} [ownerID=''] - Discord ID of the client owner(s).
  * @prop {boolean} [selfbot=false] - Whether or not this bot is a selfbot.
  * @prop {string} [commandDirectory] - Directory to commands.
- * @prop {string|string[]|function} [prefix='!'] - Default command prefix(es) or function &lt;code>(message => {})&lt;/code> returning prefix(es).
- * @prop {boolean|function} [allowMention=true] - Whether or not to allow mentions to the client user as a prefix.
+ * @prop {string|string[]|Function} [prefix='!'] - Default command prefix(es) or function &lt;code>(message => {})&lt;/code> returning prefix(es).
+ * @prop {boolean|Function} [allowMention=true] - Whether or not to allow mentions to the client user as a prefix.
  * &lt;br>Can be function &lt;code>(message => {})&lt;/code> that returns true or false.
  * @prop {boolean} [handleEdits=false] - Whether or not to handle edited messages.
  * @prop {number} [defaultCooldown=0] - The default cooldown for commands.
@@ -106,7 +106,11 @@ class AkairoClient extends Client {
          */
         this.databases = {};
 
-        this._options = options;
+        /**
+         * Options for the framework.
+         * @type {AkairoOptions}
+         */
+        this.akairoOptions = options;
     }
 
     /**
@@ -121,8 +125,8 @@ class AkairoClient extends Client {
             enumerable: true
         });
 
-        if (!this._options.emitters) this._options.emitters = {};
-        this._options.emitters[name] = database;
+        if (!this.akairoOptions.emitters) this.akairoOptions.emitters = {};
+        this.akairoOptions.emitters[name] = database;
         return this;
     }
 
@@ -154,7 +158,7 @@ class AkairoClient extends Client {
                         if (this.commandHandler.handleEdits) {
                             this.on('messageUpdate', (o, m) => {
                                 if (o.content === m.content) return;
-                                this.commandHandler.handle(m, true);
+                                if (this.commandHandler.handleEdits) this.commandHandler.handle(m, true);
                             });
                         }
                     }
@@ -167,32 +171,34 @@ class AkairoClient extends Client {
 
     /**
      * Builds the client by creating the handlers.
-     * @returns {void}
+     * @returns {AkairoClient}
      */
     build() {
-        if (this._options.commandDirectory &amp;&amp; !this.commandHandler) {
+        if (this.akairoOptions.commandDirectory &amp;&amp; !this.commandHandler) {
             /**
              * The command handler.
              * @type {CommandHandler}
              */
-            this.commandHandler = new CommandHandler(this, this._options);
+            this.commandHandler = new CommandHandler(this, this.akairoOptions);
         }
 
-        if (this._options.inhibitorDirectory &amp;&amp; !this.inhibitorHandler) {
+        if (this.akairoOptions.inhibitorDirectory &amp;&amp; !this.inhibitorHandler) {
             /**
              * The inhibitor handler.
              * @type {InhibitorHandler}
              */
-            this.inhibitorHandler = new InhibitorHandler(this, this._options);
+            this.inhibitorHandler = new InhibitorHandler(this, this.akairoOptions);
         }
 
-        if (this._options.listenerDirectory &amp;&amp; !this.listenerHandler) {
+        if (this.akairoOptions.listenerDirectory &amp;&amp; !this.listenerHandler) {
             /**
              * The listener handler.
              * @type {ListenerHandler}
              */
-            this.listenerHandler = new ListenerHandler(this, this._options);
+            this.listenerHandler = new ListenerHandler(this, this.akairoOptions);
         }
+
+        return this;
     }
 }
 
