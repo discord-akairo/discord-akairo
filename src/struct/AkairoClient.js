@@ -67,7 +67,11 @@ class AkairoClient extends Client {
          */
         this.databases = {};
 
-        this._options = options;
+        /**
+         * Options for the framework.
+         * @type {AkairoOptions}
+         */
+        this.akairoOptions = options;
     }
 
     /**
@@ -82,8 +86,8 @@ class AkairoClient extends Client {
             enumerable: true
         });
 
-        if (!this._options.emitters) this._options.emitters = {};
-        this._options.emitters[name] = database;
+        if (!this.akairoOptions.emitters) this.akairoOptions.emitters = {};
+        this.akairoOptions.emitters[name] = database;
         return this;
     }
 
@@ -131,28 +135,28 @@ class AkairoClient extends Client {
      * @returns {void}
      */
     build() {
-        if (this._options.commandDirectory && !this.commandHandler) {
+        if (this.akairoOptions.commandDirectory && !this.commandHandler) {
             /**
              * The command handler.
              * @type {CommandHandler}
              */
-            this.commandHandler = new CommandHandler(this, this._options);
+            this.commandHandler = new CommandHandler(this, this.akairoOptions);
         }
 
-        if (this._options.inhibitorDirectory && !this.inhibitorHandler) {
+        if (this.akairoOptions.inhibitorDirectory && !this.inhibitorHandler) {
             /**
              * The inhibitor handler.
              * @type {InhibitorHandler}
              */
-            this.inhibitorHandler = new InhibitorHandler(this, this._options);
+            this.inhibitorHandler = new InhibitorHandler(this, this.akairoOptions);
         }
 
-        if (this._options.listenerDirectory && !this.listenerHandler) {
+        if (this.akairoOptions.listenerDirectory && !this.listenerHandler) {
             /**
              * The listener handler.
              * @type {ListenerHandler}
              */
-            this.listenerHandler = new ListenerHandler(this, this._options);
+            this.listenerHandler = new ListenerHandler(this, this.akairoOptions);
         }
     }
 }
