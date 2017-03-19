@@ -329,7 +329,7 @@ class CommandHandler extends AkairoHandler {
         const prefix = this.prefix(message);
         const allowMention = this.allowMention(message);
         let start;
-        let overwrite;
+        let overwrote;
 
         if (Array.isArray(prefix)) {
             const match = prefix.find(p => {
@@ -349,13 +349,15 @@ class CommandHandler extends AkairoHandler {
         }
 
         for (const ovPrefix of this.prefixes.keys()) {
-            if (Array.isArray(ovPrefix)) {
-                const match = ovPrefix.find(p => {
+            const commandPrefix = typeof ovPrefix === 'function' ? ovPrefix.call(this, message) : ovPrefix;
+
+            if (Array.isArray(commandPrefix)) {
+                const match = commandPrefix.find(p => {
                     return message.content.toLowerCase().startsWith(p.toLowerCase());
                 });
 
                 if (match) {
-                    overwrite = { ovPrefix, start };
+                    overwrote = { start };
                     start = match;
                     break;
                 }
@@ -363,9 +365,9 @@ class CommandHandler extends AkairoHandler {
                 continue;
             }
 
-            if (message.content.toLowerCase().startsWith(ovPrefix.toLowerCase())) {
-                overwrite = { ovPrefix, start };
-                start = ovPrefix;
+            if (message.content.toLowerCase().startsWith(commandPrefix.toLowerCase())) {
+                overwrote = { start };
+                start = commandPrefix;
                 break;
             }
         }
@@ -378,19 +380,22 @@ class CommandHandler extends AkairoHandler {
         const command = this.findCommand(name);
 
         if (!command) return null;
-        if (overwrite == null && command.prefix != null) return null;
+        if (overwrote == null && command.prefix != null) return null;
 
-        if (overwrite != null) {
+        if (overwrote != null) {
             if (command.prefix == null) {
-                if (overwrite.start !== start) return null;
-            } else
-            if (Array.isArray(command.prefix)) {
-                if (!command.prefix.some(p => p.toLowerCase() === start.toLowerCase())) {
+                if (overwrote.start !== start) return null;
+            } else {
+                const commandPrefix = typeof command.prefix === 'function' ? command.prefix.call(this, message) : command.prefix;
+
+                if (Array.isArray(commandPrefix)) {
+                    if (!commandPrefix.some(p => p.toLowerCase() === start.toLowerCase())) {
+                        return null;
+                    }
+                } else
+                if (commandPrefix.toLowerCase() !== start.toLowerCase()) {
                     return null;
                 }
-            } else
-            if (command.prefix.toLowerCase() !== start.toLowerCase()) {
-                return null;
             }
         }
 
