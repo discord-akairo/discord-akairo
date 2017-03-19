@@ -8,6 +8,8 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  * <br><code>flag</code> matches words that equal this prefix. The evaluated argument is true or false.
  * <br><code>text</code> matches the entire text, except for the command, ignoring words that matches prefix or flag.
  * <br><code>content</code> matches the entire text as it was inputted, except for the command.
+ * <br>
+ * <br>A function <code>((message, prevArgs) => {})</code> can also be used to return one of the above.
  * @typedef {string} ArgumentMatch
  */
 

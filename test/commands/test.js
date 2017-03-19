@@ -1,7 +1,7 @@
 const { Command } = require('../../src/index.js');
 
 function exec(message, args) {
-    return console.log(args);
+    return console.dir(args, { depth: 0 });
 }
 
 module.exports = new Command('test', exec, {
@@ -14,6 +14,10 @@ module.exports = new Command('test', exec, {
         },
         {
             id: 'thing2',
+            match: function match() {
+                console.log(this.constructor.name);
+                return 'word';
+            },
             type: 'message',
             prompt: {
                 retries: 1
@@ -21,7 +25,8 @@ module.exports = new Command('test', exec, {
         },
         {
             id: 'thing3',
-            type: (w, m, args) => {
+            type: function type(w, m, args) {
+                console.log(this.constructor.name);
                 if (args.thing === 'ok') return (w && parseInt(w) + 5) || null;
                 return (w && parseInt(w) - 5) || null;
             },

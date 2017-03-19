@@ -182,7 +182,6 @@ class Command extends AkairoModule {
         };
 
         const words = splitFuncs[this.split] ? splitFuncs[this.split]() || [] : content.split(this.split);
-        const args = {};
 
         const prefixes = this.args.reduce((arr, arg) => {
             if (arg.match === ArgumentMatches.PREFIX || arg.match === ArgumentMatches.FLAG) {
@@ -211,10 +210,8 @@ class Command extends AkairoModule {
             });
         });
 
-        let index = 0;
-
         const parseFuncs = {
-            [ArgumentMatches.WORD]: arg => {
+            [ArgumentMatches.WORD]: (arg, index) => {
                 let word = noPrefixWords[arg.index != null ? arg.index : index] || '';
 
                 const isQuoted = (this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY) && /^".*"$/.test(word);
@@ -222,7 +219,7 @@ class Command extends AkairoModule {
 
                 return arg.cast.bind(arg, word);
             },
-            [ArgumentMatches.REST]: arg => {
+            [ArgumentMatches.REST]: (arg, index) => {
                 const word = noPrefixWords.slice(arg.index != null ? arg.index : index).join(' ') || '';
                 return arg.cast.bind(arg, word);
             },
@@ -264,20 +261,20 @@ class Command extends AkairoModule {
             }
         };
 
-        for (const arg of this.args) {
-            args[arg.id] = parseFuncs[arg.match](arg);
-            if (arg.match === ArgumentMatches.WORD || arg.match === ArgumentMatches.REST) index++;
-        }
-
         const processed = {};
-        const keys = Object.keys(args);
+        let wordIndex = 0;
 
         const process = i => {
-            if (i === keys.length) return processed;
+            if (i === this.args.length) return processed;
 
-            const key = keys[i];
-            return args[key](message, processed).then(res => {
-                processed[key] = res;
+            const arg = this.args[i];
+            const matchType = typeof arg.match === 'function' ? arg.match.call(this, message, processed) : arg.match;
+            const castFunc = parseFuncs[matchType](arg, wordIndex);
+
+            if (matchType === ArgumentMatches.WORD || matchType === ArgumentMatches.REST) wordIndex++;
+
+            return castFunc(message, processed).then(res => {
+                processed[arg.id] = res;
                 return process(i + 1);
             });
         };
