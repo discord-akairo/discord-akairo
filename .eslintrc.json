@@ -42,7 +42,7 @@
     "dot-location": ["error", "property"],
     "dot-notation": "error",
     "eqeqeq": ["error", "smart"],
-    "no-console": "off",
+    "no-console": "warn",
     "no-empty-function": "error",
     "no-floating-decimal": "error",
     "no-implied-eval": "error",

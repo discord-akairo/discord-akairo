@@ -210,8 +210,6 @@ class Command extends AkairoModule {
             });
         });
 
-        console.log(prefixes, noPrefixWords);
-
         let index = 0;
 
         const parseFuncs = {
