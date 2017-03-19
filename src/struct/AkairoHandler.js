@@ -36,7 +36,7 @@ class AkairoHandler extends EventEmitter {
          * Class to handle.
          * @readonly
          * @name AkairoHandler#classToHandle
-         * @type {function}
+         * @type {Function}
          */
 
         Object.defineProperties(this, {

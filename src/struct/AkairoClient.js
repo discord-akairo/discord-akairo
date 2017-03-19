@@ -10,8 +10,8 @@ const ClientUtil = require('../util/ClientUtil');
  * @prop {string|string[]} [ownerID=''] - Discord ID of the client owner(s).
  * @prop {boolean} [selfbot=false] - Whether or not this bot is a selfbot.
  * @prop {string} [commandDirectory] - Directory to commands.
- * @prop {string|string[]|function} [prefix='!'] - Default command prefix(es) or function <code>(message => {})</code> returning prefix(es).
- * @prop {boolean|function} [allowMention=true] - Whether or not to allow mentions to the client user as a prefix.
+ * @prop {string|string[]|Function} [prefix='!'] - Default command prefix(es) or function <code>(message => {})</code> returning prefix(es).
+ * @prop {boolean|Function} [allowMention=true] - Whether or not to allow mentions to the client user as a prefix.
  * <br>Can be function <code>(message => {})</code> that returns true or false.
  * @prop {boolean} [handleEdits=false] - Whether or not to handle edited messages.
  * @prop {number} [defaultCooldown=0] - The default cooldown for commands.

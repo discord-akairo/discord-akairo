@@ -16,10 +16,11 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * <br>On an edited message, the exec function edited param will be true.
  * @prop {number} [cooldown] - The command cooldown in milliseconds.
  * @prop {number} [ratelimit=1] - Amount of command uses allowed until cooldown.
- * @prop {string|string[]} [prefix] - A prefix to overwrite the global one for this command.
- * @prop {RegExp|function} [trigger] - A regex or function <code>(message => {})</code> returning regex to match in messages that are NOT commands.
+ * @prop {string|string[]|Function} [prefix] - A prefix to overwrite the global one for this command.
+ * <br>Can be a function <code>(message => {})</code>.
+ * @prop {RegExp|Function} [trigger] - A regex or function <code>(message => {})</code> returning regex to match in messages that are NOT commands.
  * <br>The exec function is <code>((message, match, groups, edited) => {})</code>.
- * @prop {function} [condition] - A function <code>((message, edited) => {})</code> that returns true or false on messages that are NOT commands.
+ * @prop {Function} [condition] - A function <code>((message, edited) => {})</code> that returns true or false on messages that are NOT commands.
  * <br>The exec function is <code>((message, edited) => {})</code>.
  * @prop {PromptOptions} [defaultPrompt={}] - The default prompt options.
  * @prop {Object} [options={}] - An object for custom options.
@@ -123,7 +124,7 @@ class Command extends AkairoModule {
 
         /**
          * Command prefix overwrite.
-         * @type {?string|string[]}
+         * @type {?string|string[]|Function}
          */
         this.prefix = options.prefix;
 
