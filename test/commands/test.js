@@ -26,7 +26,7 @@ module.exports = new Command('test', exec, {
                 return (w && parseInt(w) - 5) || null;
             },
             prompt: {
-                start: 'this changes'
+                start: () => ({ content: 'aaa', embed: { description: 'hi' } })
             }
         },
         {

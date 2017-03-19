@@ -56,8 +56,9 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
 /**
  * A prompt to run if the user did not input the argument correctly.
  * <br>Can only be used if there is not a default value (unless optional is true).
- * <br>The functions are <code>((message, prevArgs, amountOfTries) => {})</code> and returns a string to determine the reply.
- * <br>Can also be a string that will have a mention concatenated to it.
+ * <br>The functions are <code>((message, prevArgs, amountOfTries) => {})</code> and returns a string or object to determine the reply.
+ * <br>The object should be equivalent to a MessageOptions, with an extra optional property called content for message content.
+ * <br>Can also be a string literal that will have a mention concatenated to it.
  * @typedef {Object} PromptOptions
  * @prop {number} [retries=1] - Amount of times allowed to retries.
  * @prop {number} [time=30000] - Time to wait for input.
@@ -264,6 +265,12 @@ class Argument {
             let text = i === 1 ? prompt.start : prompt.retry;
             text = typeof text === 'function' ? text.call(this, message, args, i) : `${message.author}, ${text}`;
             text = Array.isArray(text) ? text.join('\n') : text;
+            let opts;
+
+            if (typeof text === 'object' && text.content) {
+                opts = text;
+                text = text.content;
+            }
 
             let value;
 
@@ -277,7 +284,7 @@ class Argument {
                 value = res;
 
                 return res;
-            }, prompt.time).then(() => value).catch(reason => {
+            }, prompt.time, opts).then(() => value).catch(reason => {
                 if (reason instanceof Error) {
                     this.handler.removePrompt(message);
                     throw reason;
@@ -294,6 +301,10 @@ class Argument {
                 if (exited) {
                     response = typeof response === 'function' ? response.call(this, message, args, i) : `${message.author}, ${response}`;
                     response = Array.isArray(response) ? response.join('\n') : response;
+
+                    if (typeof response === 'object' && response.content) {
+                        return message.channel.send(response.content, response);
+                    }
 
                     return message.channel.send(response);
                 }
