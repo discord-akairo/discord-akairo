@@ -58,12 +58,10 @@ client.commandHandler.addType('presidents', (word, message) => {
 <h3>Promise Types</h3><p>Here's a type that returns a Promise.  </p>
 <pre class="prettyprint source lang-js"><code>client.commandHandler.addType('pokemon', (word, message) => {
     if (!word) return null;
-    return new Promise((resolve, reject) => {
-        fs.readFile('./pokemon.json', 'utf-8', (err, data) => {
-            if (err) return reject(err);
-            if (!data[word]) return reject();
-            return resolve(word);
-        });
+    return request.get('https://www.example.com').then(res => {
+        // Do something here...
+        if (isGood) return someValue;
+        if (isBad) return Promise.reject();
     });
 });</code></pre><p>Instead of returning <code>null</code> to signify that the casting failed, simply reject with anything (other than an error).<br>The resolved value is the value that will be used in the final arguments.  </p>
 <h3>Changing Types</h3><p>Sometimes you want an argument to change its type depending on something.<br>The following is inside a <code>CommandOptions</code>.  </p>

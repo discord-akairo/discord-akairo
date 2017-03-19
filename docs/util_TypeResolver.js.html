@@ -104,6 +104,15 @@ class TypeResolver {
         return new Date(timestamp);
     }
 
+    [ArgumentTypes.COLOR](word) {
+        if (!word) return null;
+
+        const color = this.client.util.embed().setColor(word).color;
+        if (isNaN(color)) return null;
+
+        return color;
+    }
+
     [ArgumentTypes.USER](word) {
         const res = val => this.client.util.resolveUser(val, this.client.users);
         if (!word) return null;

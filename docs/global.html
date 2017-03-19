@@ -424,6 +424,43 @@
 
         <tr>
             
+                <td class="name"><code>fetchMembers</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Whether or not to fetch member on each message from a guild.</td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>defaultCooldown</code></td>
             
 
@@ -1264,7 +1301,7 @@
 
 
 <div class="description">
-    The method to split text into words.<br><code>plain</code> splits word separated by whitespace. Extra whitespace is ignored.<br><code>split</code> splits word separated by whitespace.<br><code>quoted</code> is similar to plain, but counts text inside double quotes as one word.<br><code>sticky</code> is similar to quoted, but makes it so that quoted text must have a whitespace/another double quote before it to count as another word.<br><br>A regex or a character can be used instead (for example, a comma) to split the message by that regex or character.
+    The method to split text into words.<br><code>plain</code> splits word separated by whitespace. Extra whitespace is ignored.<br><code>split</code> splits word separated by whitespace. Should not be used due to possible inconsistent whitespace.<br><code>quoted</code> is similar to plain, but counts text inside double quotes as one word.<br><code>sticky</code> is similar to quoted, but makes it so that quoted text must have a whitespace/another double quote before it to count as another word.<br><br>A regex or a character can be used instead (for example, a comma) to split the message by that regex or character.
 </div>
 
 

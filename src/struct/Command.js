@@ -31,7 +31,7 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
 /**
  * The method to split text into words.
  * <br><code>plain</code> splits word separated by whitespace. Extra whitespace is ignored.
- * <br><code>split</code> splits word separated by whitespace.
+ * <br><code>split</code> splits word separated by whitespace. Should not be used due to possible inconsistent whitespace.
  * <br><code>quoted</code> is similar to plain, but counts text inside double quotes as one word.
  * <br><code>sticky</code> is similar to quoted, but makes it so that quoted text must have a whitespace/another double quote before it to count as another word.
  * <br>

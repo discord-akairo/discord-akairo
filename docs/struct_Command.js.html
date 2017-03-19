@@ -70,7 +70,7 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
 /**
  * The method to split text into words.
  * &lt;br>&lt;code>plain&lt;/code> splits word separated by whitespace. Extra whitespace is ignored.
- * &lt;br>&lt;code>split&lt;/code> splits word separated by whitespace.
+ * &lt;br>&lt;code>split&lt;/code> splits word separated by whitespace. Should not be used due to possible inconsistent whitespace.
  * &lt;br>&lt;code>quoted&lt;/code> is similar to plain, but counts text inside double quotes as one word.
  * &lt;br>&lt;code>sticky&lt;/code> is similar to quoted, but makes it so that quoted text must have a whitespace/another double quote before it to count as another word.
  * &lt;br>
@@ -254,7 +254,7 @@ class Command extends AkairoModule {
                 let word = noPrefixWords[arg.index != null ? arg.index : index] || '';
 
                 const isQuoted = (this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY) &amp;&amp; /^".*"$/.test(word);
-                if (isQuoted) word = word.slice(1, -1);
+                if (isQuoted) word = word.slice(1, -1).trim();
 
                 return arg.cast.bind(arg, word);
             },
@@ -276,7 +276,7 @@ class Command extends AkairoModule {
 
                 if (prefix) {
                     word = word.replace(prefix.value, '');
-                    if (this.split === ArgumentSplits.STICKY &amp;&amp; /^".*"$/.test(word)) word = word.slice(1, -1);
+                    if (this.split === ArgumentSplits.STICKY &amp;&amp; /^".*"$/.test(word)) word = word.slice(1, -1).trim();
                 }
 
                 return arg.cast.bind(arg, word);
