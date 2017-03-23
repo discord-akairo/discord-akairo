@@ -32,7 +32,7 @@ client.login('TOKEN').then(() => {
 
 ## Features
 - Completely modular commands, inhibitors, and listeners.
-  - Reads all files from directories.
+  - Reading files recursively from directories.
   - Adding, removing, and loading modules.
   - Categorization for modules.
 
@@ -71,9 +71,14 @@ client.login('TOKEN').then(() => {
   - Parsing or stringifying as JSON.
 
 ## Installation
-discord-akairo: `npm install discord-akairo --save`  
-discord.js: `npm install discord.js --save`  
-sqlite (optional): `npm install sqlite --save`  
+*discord-akairo*  
+`npm install discord-akairo --save`
+
+*discord.js*  
+`npm install discord.js --save`
+
+*sqlite (optional)*  
+`npm install sqlite --save`
 
 ## Links
 Repository is available at [https://github.com/1Computer1/discord-akairo](https://github.com/1Computer1/discord-akairo).  
