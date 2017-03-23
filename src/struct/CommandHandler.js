@@ -348,11 +348,9 @@ class CommandHandler extends AkairoHandler {
         let prefix = this.prefix(message);
 
         if (this.allowMention(message)) {
-            if (Array.isArray(prefix)) {
-                prefix = prefix.concat([`<@${this.client.user.id}>`, `<@!${this.client.user.id}>`]);
-            } else {
-                prefix = [prefix, `<@${this.client.user.id}>`, `<@!${this.client.user.id}>`];
-            }
+            prefix = Array.isArray(prefix)
+            ? [`<@${this.client.user.id}>`, `<@!${this.client.user.id}>`, ...prefix]
+            : [`<@${this.client.user.id}>`, `<@!${this.client.user.id}>`, prefix];
         }
 
         let start;
