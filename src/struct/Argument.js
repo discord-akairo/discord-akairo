@@ -295,7 +295,7 @@ class Argument {
                     return false;
                 }
 
-                if (m.content.toLowerCase() === prompt.stopWord.toLowerCase()) {
+                if (prompt.infinite && m.content.toLowerCase() === prompt.stopWord.toLowerCase()) {
                     stopped = true;
                     return false;
                 }
