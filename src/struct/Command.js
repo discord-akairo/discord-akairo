@@ -220,7 +220,7 @@ class Command extends AkairoModule {
                 let word = noPrefixWords[arg.index != null ? arg.index : index] || '';
 
                 const isQuoted = (this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY) && /^".*"$/.test(word);
-                if (isQuoted) word = word.slice(1, -1).trim();
+                if (isQuoted) word = word.slice(1, -1);
 
                 return arg.cast.bind(arg, word);
             },
@@ -242,7 +242,7 @@ class Command extends AkairoModule {
 
                 if (prefix) {
                     word = word.replace(prefix.value, '');
-                    if (this.split === ArgumentSplits.STICKY && /^".*"$/.test(word)) word = word.slice(1, -1).trim();
+                    if (this.split === ArgumentSplits.STICKY && /^".*"$/.test(word)) word = word.slice(1, -1);
                 }
 
                 return arg.cast.bind(arg, word);

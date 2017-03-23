@@ -182,6 +182,8 @@ class Argument {
      * @returns {Promise<any>}
      */
     cast(word, message, args) {
+        word = word.trim();
+
         if (!word && this.prompt && this.prompt.optional) {
             return Promise.resolve(this.default.call(this.command, message, args));
         }
