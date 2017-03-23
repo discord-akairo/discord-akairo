@@ -10,8 +10,9 @@
     </a>
 </p>  
 
-## About
-A modular and customizable bot framework for Discord.js v11.  
+<p align="center">A modular and highly customizable bot framework for Discord.js v11.</p>
+
+## Example
 
 ```js
 const { AkairoClient } = require('discord-akairo');
