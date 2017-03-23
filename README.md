@@ -12,7 +12,6 @@
 
 ## About
 A modular and customizable bot framework for Discord.js v11.  
-Everything is reloadable, commands are easy to make, and argument parsing is very flexible.  
 
 ```js
 const { AkairoClient } = require('discord-akairo');
@@ -31,16 +30,44 @@ client.login('TOKEN').then(() => {
 ```
 
 ## Features
-- Reloadable modules for commands, inhibitors, and listeners.
-- Extremely flexible command options and behavior.
-- Many different way to parse arguments.
-- Customizable argument type casting (even dynamic types).
-- Prompting for arguments.
-- Handling edited messages.
-- Resolvers for Discord objects.
-- Lots of useful utilities.
-- Easy way to use SQLite.
-- Easily extendable classes.
+- Completely modular commands, inhibitors, and listeners.
+  - Reads all files from directories.
+  - Adding, removing, and loading modules.
+  - Categorization for modules.
+
+- Flexible command handling and creation.
+  - Command aliases.
+  - Command cooldowns.
+  - Running commands on edits.
+  - A rich command prefixing system.
+    - Multiple prefixes and prefix overwrites.
+    - Using mentions as a prefix.
+  - Different ways to trigger a command.
+    - Regular expression triggers.
+    - Conditional triggers.
+
+- Complex and highly customizable arguments.
+  - Support for quoted arguments.
+  - Arguments based on previous arguments.
+  - Several ways to match arguments: by word, by flag, etc.
+  - Casting input into certain types.
+    - Simple types such as string, integer, float, url, date, etc.
+    - Discord-related types such as user, member, message, etc.
+    - Including plural forms: users, members, etc.
+    - Types that you can add yourself.
+  - Argument prompting.
+    - Customizable prompts with embeds, files, etc.
+    - Infinite argument prompting.
+
+- Useful utility methods available.
+  - Resolvers for members, users, and others that can filter by name.
+  - Shortcut methods for making embeds, collection, and prompting.
+
+- Support for SQLite.
+  - Default values for keys.
+  - In-memory caching for stored data.
+  - Santizing inputs and desanitizing outputs.
+  - Parsing or stringifying as JSON.
 
 ## Installation
 discord-akairo: `npm install discord-akairo --save`  
