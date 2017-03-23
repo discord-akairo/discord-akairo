@@ -275,8 +275,13 @@ class Argument {
             this.handler.addPrompt(message);
 
             let text = i === 1 ? prompt.start : prompt.retry;
-            text = typeof text === 'function' ? text.call(this, message, args, i) : `${message.author}, ${text}`;
+
+            text = typeof text === 'function'
+            ? text.call(this, message, args, i)
+            : `${message.author}, ${Array.isArray(text) ? text.join('\n') : text}`;
+
             text = Array.isArray(text) ? text.join('\n') : text;
+
             let opts;
 
             if (typeof text === 'object' && text.content) {
@@ -324,7 +329,10 @@ class Argument {
                 if (response) exited = true;
 
                 if (exited) {
-                    response = typeof response === 'function' ? response.call(this, message, args, i) : `${message.author}, ${response}`;
+                    response = typeof response === 'function'
+                    ? response.call(this, message, args, i)
+                    : `${message.author}, ${Array.isArray(response) ? response.join('\n') : response}`;
+
                     response = Array.isArray(response) ? response.join('\n') : response;
 
                     if (typeof response === 'object' && response.content) {
