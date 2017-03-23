@@ -501,7 +501,9 @@ class ClientUtil {
         if (this.client.user.bot) return channel.fetchMessage(id);
 
         return channel.fetchMessages({ around: id, limit: 1 }).then(msgs => {
-            return msgs.get(id);
+            const msg = msgs.get(id);
+            if (!msg) throw new Error('Message was not found.');
+            return msg;
         });
     }
 }
