@@ -36,6 +36,7 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * <br><code>sticky</code> is similar to quoted, but makes it so that quoted text must have a whitespace/another double quote before it to count as another word.
  * <br>
  * <br>A regex or a character can be used instead (for example, a comma) to split the message by that regex or character.
+ * <br> A function <code>((content, message) => {})</code> returning an array of strings can be also used.
  * @typedef {string} ArgumentSplit
  */
 
@@ -175,13 +176,17 @@ class Command extends AkairoModule {
         if (!this.args.length) return Promise.resolve({});
 
         const splitFuncs = {
-            [ArgumentSplits.PLAIN]: () => content.match(/[^\s]+/g),
-            [ArgumentSplits.SPLIT]: () => content.split(' '),
-            [ArgumentSplits.QUOTED]: () => content.match(/".*?"|[^\s"]+|"/g),
-            [ArgumentSplits.STICKY]: () => content.match(/[^\s"]*?".*?"|[^\s"]+|"/g)
+            [ArgumentSplits.PLAIN]: c => c.match(/[^\s]+/g),
+            [ArgumentSplits.SPLIT]: c => c.split(' '),
+            [ArgumentSplits.QUOTED]: c => c.match(/".*?"|[^\s"]+|"/g),
+            [ArgumentSplits.STICKY]: c => c.match(/[^\s"]*?".*?"|[^\s"]+|"/g)
         };
 
-        const words = splitFuncs[this.split] ? splitFuncs[this.split]() || [] : content.split(this.split);
+        const words = typeof this.split === 'function'
+        ? this.split(content, message) || []
+        : splitFuncs[this.split]
+        ? splitFuncs[this.split](content) || []
+        : content.split(this.split);
 
         const prefixes = this.args.reduce((arr, arg) => {
             if (arg.match === ArgumentMatches.PREFIX || arg.match === ArgumentMatches.FLAG) {
