@@ -4,11 +4,11 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  * The method to match arguments from text.
  * <br><code>word</code> matches by the order of the words inputted, ignoring words that matches prefix or flag.
  * <br><code>rest</code> matches the rest of the words in order, ignoring words that matches prefix or flag.
- * <br><code>prefix</code> matches words that starts with the prefix. The word after the prefix is the evaluated argument.
- * <br><code>flag</code> matches words that equal this prefix. The evaluated argument is true or false.
+ * <br><code>prefix</code> matches words that starts with the prefix and the word after the prefix is the evaluated argument.
+ * <br><code>flag</code> matches words that equal this prefix and casts to true or false.
  * <br><code>text</code> matches the entire text, except for the command, ignoring words that matches prefix or flag.
  * <br><code>content</code> matches the entire text as it was inputted, except for the command.
- * <br><code>none</code> matches nothing at all.
+ * <br><code>none</code> matches nothing at all and an empty string will be used for type operations.
  * <br>
  * <br>A function <code>((message, prevArgs) => {})</code> can also be used to return one of the above.
  * @typedef {string} ArgumentMatch
@@ -65,8 +65,12 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  * @typedef {Object} PromptOptions
  * @prop {number} [retries=1] - Amount of times allowed to retries.
  * @prop {number} [time=30000] - Time to wait for input.
- * @prop {string} [cancelWord='cancel'] - Word to use for cancelling prompts.
+ * @prop {string} [cancelWord='cancel'] - Word to use for cancelling the command.
+ * @prop {string} [stopWord='stop'] - Word to use for ending infinite prompts.
  * @prop {boolean} [optional=false] - Prompts only when argument is provided but was not of the right type.
+ * @prop {boolean} [infinite=false] - Prompts forever until the stop word, cancel word, time limit, or retry limit.
+ * <br>Note that the retry count resets back to one every valid entry.
+ * <br>The final evaluated argument will be an array of the inputs.
  * @prop {string|string[]|function} [start] - Function called on start.
  * @prop {string|string[]|function} [retry] - Function called on a retry.
  * @prop {string|string[]|function} [timeout] - Function called on collector time out.
@@ -264,6 +268,8 @@ class Argument {
         Object.assign(prompt, this.prompt || {});
 
         let exited = false;
+        let stopped = false;
+        let value = prompt.infinite ? [] : null;
 
         const retry = i => {
             this.handler.addPrompt(message);
@@ -278,23 +284,36 @@ class Argument {
                 text = text.content;
             }
 
-            let value;
-
-            return this.client.util.prompt(message, text, m => {
+            return this.client.util.prompt(message, prompt.infinite && value.length && i === 1 ? '' : text, m => {
                 if (m.content.toLowerCase() === prompt.cancelWord.toLowerCase()) {
                     exited = true;
                     return false;
                 }
 
+                if (m.content.toLowerCase() === prompt.stopWord.toLowerCase()) {
+                    stopped = true;
+                    return false;
+                }
+
                 const res = this._processType(m.content, m, args);
-                value = res;
+
+                if (prompt.infinite) {
+                    if (res != null) value.push(res);
+                } else {
+                    value = res;
+                }
 
                 return res;
-            }, prompt.time, opts).then(() => value).catch(reason => {
+            }, prompt.time, opts).then(() => {
+                if (prompt.infinite && !stopped) return retry(1);
+                return value;
+            }).catch(reason => {
                 if (reason instanceof Error) {
                     this.handler.removePrompt(message);
                     throw reason;
                 }
+
+                if (stopped) return value;
 
                 let response;
 
@@ -319,9 +338,9 @@ class Argument {
             });
         };
 
-        return retry(1).then(value => {
+        return retry(1).then(v => {
             this.handler.removePrompt(message);
-            return exited ? Promise.reject() : value;
+            return exited ? Promise.reject() : v;
         });
     }
 }

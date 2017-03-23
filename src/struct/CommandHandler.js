@@ -90,7 +90,10 @@ class CommandHandler extends AkairoHandler {
             cancel: 'command has been cancelled.',
             retries: 1,
             time: 30000,
-            cancelWord: 'cancel'
+            cancelWord: 'cancel',
+            stopWord: 'stop',
+            optional: false,
+            infinite: false
         };
 
         Object.assign(this.defaultPrompt, options.defaultPrompt || {});
