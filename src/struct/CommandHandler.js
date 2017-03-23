@@ -562,7 +562,9 @@ class CommandHandler extends AkairoHandler {
         if (!command) throw new Error(`Command ${id} does not exist.`);
 
         for (const alias of command.aliases) {
-            if (this.aliases.has(alias.toLowerCase())) throw new Error(`Alias ${alias} already exists.`);
+            const conflict = this.aliases.get(alias.toLowerCase());
+            if (conflict) throw new Error(`Alias ${alias} of ${command.id} already exists on ${conflict}.`);
+
             this.aliases.set(alias.toLowerCase(), command.id);
         }
 
