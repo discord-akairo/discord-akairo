@@ -8,6 +8,7 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  * <br><code>flag</code> matches words that equal this prefix. The evaluated argument is true or false.
  * <br><code>text</code> matches the entire text, except for the command, ignoring words that matches prefix or flag.
  * <br><code>content</code> matches the entire text as it was inputted, except for the command.
+ * <br><code>none</code> matches nothing and skips straight to prompt or default. If the optional option is true, the type cast will be called first, then the prompt/default if it failed.
  * <br>
  * <br>A function <code>((message, prevArgs) => {})</code> can also be used to return one of the above.
  * @typedef {string} ArgumentMatch
@@ -182,16 +183,15 @@ class Argument {
      * @returns {Promise<any>}
      */
     cast(word, message, args, none = false) {
-        if (none) {
-            if (this.prompt) return this._promptArgument(message, args);
+        if (!none && !word && this.prompt && this.prompt.optional) {
             return Promise.resolve(this.default.call(this.command, message, args));
         }
 
-        if (!word && this.prompt && this.prompt.optional) {
-            return Promise.resolve(this.default.call(this.command, message, args));
-        }
+        let res = null;
 
-        const res = this._processType(word, message, args);
+        if (!none || (none && this.optional)) {
+            res = this._processType(word, message, args);
+        }
 
         if (res != null) {
             return Promise.resolve(res).catch(err => {
