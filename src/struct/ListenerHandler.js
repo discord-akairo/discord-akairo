@@ -79,9 +79,13 @@ class ListenerHandler extends AkairoHandler {
      */
     reload(id) {
         id = id.toString();
-        this.deregister(id);
 
-        const listener = super.reload(id);
+        let listener = this.modules.get(id);
+        if (!listener) throw new Error(`Listener ${id} does not exist.`);
+        if (!listener.filepath) throw new Error(`Listener ${id} is not reloadable.`);
+
+        this.deregister(id);
+        listener = super.reload(id);
         this.register(listener.id);
 
         return listener;

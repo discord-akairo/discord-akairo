@@ -169,6 +169,7 @@ class CommandHandler extends AkairoHandler {
 
         const command = this.modules.get(id);
         if (!command) throw new Error(`Command ${id} does not exist.`);
+        if (!command.filepath) throw new Error(`Command ${id} is not reloadable.`);
         this._removeAliases(command.id);
 
         return super.reload(id);
