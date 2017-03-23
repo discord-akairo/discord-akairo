@@ -265,7 +265,7 @@ class Command extends AkairoModule {
                 return arg.cast.bind(arg, word);
             },
             [ArgumentMatches.NONE]: arg => {
-                return arg.cast.bind(arg, null);
+                return arg.cast.bind(arg, '');
             }
         };
 
@@ -281,7 +281,7 @@ class Command extends AkairoModule {
 
             if (matchType === ArgumentMatches.WORD || matchType === ArgumentMatches.REST) wordIndex++;
 
-            return castFunc(message, processed, matchType === ArgumentMatches.NONE).then(res => {
+            return castFunc(message, processed).then(res => {
                 processed[arg.id] = res;
                 return process(i + 1);
             });
