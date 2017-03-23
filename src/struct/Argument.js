@@ -178,9 +178,15 @@ class Argument {
      * @param {string} word - The word to cast.
      * @param {Message} message - The message that called the command.
      * @param {Object} args - Previous arguments from command.
+     * @param {boolean} [none=false] - Whether or not to skip straight to the prompt/default.
      * @returns {Promise<any>}
      */
-    cast(word, message, args) {
+    cast(word, message, args, none = false) {
+        if (none) {
+            if (this.prompt) return this._promptArgument(message, args);
+            return Promise.resolve(this.default.call(this.command, message, args));
+        }
+
         if (!word && this.prompt && this.prompt.optional) {
             return Promise.resolve(this.default.call(this.command, message, args));
         }

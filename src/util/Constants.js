@@ -5,7 +5,8 @@ module.exports = {
         FLAG: 'flag',
         TEXT: 'text',
         CONTENT: 'content',
-        REST: 'rest'
+        REST: 'rest',
+        NONE: 'none'
     },
     ArgumentTypes: {
         STRING: 'string',
