@@ -345,8 +345,16 @@ class CommandHandler extends AkairoHandler {
      * @returns {Object}
      */
     _parseCommand(message) {
-        const prefix = this.prefix(message);
-        const allowMention = this.allowMention(message);
+        let prefix = this.prefix(message);
+
+        if (this.allowMention(message)) {
+            if (Array.isArray(prefix)) {
+                prefix = prefix.concat([`<@${this.client.user.id}>`, `<@!${this.client.user.id}>`]);
+            } else {
+                prefix = [prefix, `<@${this.client.user.id}>`, `<@!${this.client.user.id}>`];
+            }
+        }
+
         let start;
         let overwrote;
 
@@ -359,12 +367,6 @@ class CommandHandler extends AkairoHandler {
         } else
         if (message.content.toLowerCase().startsWith(prefix.toLowerCase())) {
             start = prefix;
-        } else
-        if (allowMention) {
-            const mentionRegex = new RegExp(`^<@!?${this.client.user.id}>`);
-            const mentioned = message.content.match(mentionRegex);
-
-            if (mentioned) start = mentioned[0];
         }
 
         for (const ovPrefix of this.prefixes.keys()) {
