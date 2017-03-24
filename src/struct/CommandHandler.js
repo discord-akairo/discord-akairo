@@ -310,15 +310,15 @@ class CommandHandler extends AkairoHandler {
                     : Promise.resolve()
                     : Promise.resolve();
 
-                    return fetch;
-                }).then(member => {
-                    if (member) message.member = member;
-                    return command.parse(content, message);
-                }).then(args => {
-                    this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, edited);
-                    return Promise.resolve(command.exec(message, args, edited));
-                }).then(() => {
-                    this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, edited);
+                    return fetch.then(member => {
+                        if (member) message.member = member;
+                        return command.parse(content, message);
+                    }).then(args => {
+                        this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, edited);
+                        return Promise.resolve(command.exec(message, args, edited));
+                    }).then(() => {
+                        this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, edited);
+                    });
                 }).catch(reason => {
                     if (reason == null) return;
                     if (reason instanceof Error) {
@@ -506,16 +506,35 @@ class CommandHandler extends AkairoHandler {
         }
 
         return Promise.all(triggered.map(entry => {
-            const onCooldown = this._handleCooldowns(message, entry.command);
-            if (onCooldown) return undefined;
+            const postTest = this.client.inhibitorHandler
+            ? this.client.inhibitorHandler.test('post', message, entry.command)
+            : Promise.resolve();
 
-            this.emit(CommandHandlerEvents.COMMAND_STARTED, message, entry.command);
-            const end = Promise.resolve(entry.command.exec(message, entry.match, entry.groups, edited));
+            return postTest.then(() => {
+                const onCooldown = this._handleCooldowns(message, entry.command);
+                if (onCooldown) return undefined;
 
-            return end.then(() => {
-                this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, entry.command);
-            }).catch(err => {
-                this._handleError(err, message, entry.command);
+                const fetch = this.fetchMembers
+                ? message.guild
+                ? message.guild.fetchMember(message.author)
+                : Promise.resolve()
+                : Promise.resolve();
+
+                return fetch.then(member => {
+                    if (member) message.member = member;
+                    this.emit(CommandHandlerEvents.COMMAND_STARTED, message, entry.command);
+                    return Promise.resolve(entry.command.exec(message, entry.match, entry.groups, edited));
+                }).then(() => {
+                    this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, entry.command);
+                });
+            }).catch(reason => {
+                if (reason == null) return;
+                if (reason instanceof Error) {
+                    this._handleError(reason, message, entry.command);
+                    return;
+                }
+
+                this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, entry.command, reason);
             });
         })).then(() => {
             const trueCommands = this.modules.filter(command => (edited ? command.editable : true) && command.enabled && command.condition(message));
@@ -526,16 +545,35 @@ class CommandHandler extends AkairoHandler {
             }
 
             return Promise.all(trueCommands.map(command => {
-                const onCooldown = this._handleCooldowns(message, command);
-                if (onCooldown) return undefined;
+                const postTest = this.client.inhibitorHandler
+                ? this.client.inhibitorHandler.test('post', message, command)
+                : Promise.resolve();
 
-                this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command);
-                const end = Promise.resolve(command.exec(message, edited));
+                return postTest.then(() => {
+                    const onCooldown = this._handleCooldowns(message, command);
+                    if (onCooldown) return undefined;
 
-                return end.then(() => {
-                    this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command);
-                }).catch(err => {
-                    this._handleError(err, message, command);
+                    const fetch = this.fetchMembers
+                    ? message.guild
+                    ? message.guild.fetchMember(message.author)
+                    : Promise.resolve()
+                    : Promise.resolve();
+
+                    return fetch.then(member => {
+                        if (member) message.member = member;
+                        this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command);
+                        return Promise.resolve(command.exec(message, edited));
+                    }).then(() => {
+                        this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command);
+                    });
+                }).catch(reason => {
+                    if (reason == null) return;
+                    if (reason instanceof Error) {
+                        this._handleError(reason, message, command);
+                        return;
+                    }
+
+                    this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
                 });
             }));
         });
