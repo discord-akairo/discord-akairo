@@ -69,13 +69,13 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  * @prop {string} [stopWord='stop'] - Word to use for ending infinite prompts.
  * @prop {boolean} [optional=false] - Prompts only when argument is provided but was not of the right type.
  * @prop {boolean} [infinite=false] - Prompts forever until the stop word, cancel word, time limit, or retry limit.
- * <br>Note that the retry count resets back to one every valid entry.
+ * <br>Note that the retry count resets back to one on each valid entry.
  * <br>The final evaluated argument will be an array of the inputs.
- * @prop {string|string[]|function} [start] - Function called on start.
- * @prop {string|string[]|function} [retry] - Function called on a retry.
- * @prop {string|string[]|function} [timeout] - Function called on collector time out.
- * @prop {string|string[]|function} [ended] - Function called on no retries left.
- * @prop {string|string[]|function} [cancel] - Function called on cancel.
+ * @prop {string|string[]|Function} [start] - Function called on start of prompt.
+ * @prop {string|string[]|Function} [retry] - Function called on a retry (failure to cast type).
+ * @prop {string|string[]|Function} [timeout] - Function called on collector time out.
+ * @prop {string|string[]|Function} [ended] - Function called on amount of tries reaching the max.
+ * @prop {string|string[]|Function} [cancel] - Function called on cancellation of command.
  */
 
 /**
