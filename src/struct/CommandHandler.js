@@ -233,11 +233,11 @@ class CommandHandler extends AkairoHandler {
      * @returns {Promise<void>}
      */
     handle(message, edited) {
-        const alltest = this.client.inhibitorHandler
-        ? m => this.client.inhibitorHandler.test('all', m)
-        : () => Promise.resolve();
+        const allTest = this.client.inhibitorHandler
+        ? this.client.inhibitorHandler.test('all', message)
+        : Promise.resolve();
 
-        return alltest(message).then(() => {
+        return allTest.then(() => {
             if (this.blockNotSelf && message.author.id !== this.client.user.id && this.client.selfbot) {
                 this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.NOT_SELF);
                 return undefined;
@@ -253,14 +253,14 @@ class CommandHandler extends AkairoHandler {
                 return undefined;
             }
 
-            const pretest = this.client.inhibitorHandler
-            ? m => this.client.inhibitorHandler.test('pre', m)
-            : () => Promise.resolve();
+            const preTest = this.client.inhibitorHandler
+            ? this.client.inhibitorHandler.test('pre', message)
+            : Promise.resolve();
 
-            return pretest(message).then(() => {
+            return preTest.then(() => {
                 if (this.hasPrompt(message)) {
                     this.emit(CommandHandlerEvents.IN_PROMPT, message);
-                    return Promise.resolve();
+                    return undefined;
                 }
 
                 const parsed = this._parseCommand(message, edited);
@@ -296,30 +296,29 @@ class CommandHandler extends AkairoHandler {
                     return undefined;
                 }
 
-                const test = this.client.inhibitorHandler
-                ? (m, c) => this.client.inhibitorHandler.test('post', m, c)
-                : () => Promise.resolve();
+                const postTest = this.client.inhibitorHandler
+                ? this.client.inhibitorHandler.test('post', message, command)
+                : Promise.resolve();
 
-                return test(message, command).then(() => {
+                return postTest.then(() => {
                     const onCooldown = this._handleCooldowns(message, command);
                     if (onCooldown) return undefined;
 
-                    return command.parse(content, message).then(args => {
-                        const fetch = this.fetchMembers
-                        ? m => m.guild ? m.guild.fetchMember(m.author) : Promise.resolve()
-                        : () => Promise.resolve();
+                    const fetch = this.fetchMembers
+                    ? message.guild
+                    ? message.guild.fetchMember(message.author)
+                    : Promise.resolve()
+                    : Promise.resolve();
 
-                        return fetch(message).then(member => {
-                            if (member) message.member = member;
-
-                            this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, edited);
-                            const end = Promise.resolve(command.exec(message, args, edited));
-
-                            return end.then(() => {
-                                this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, edited);
-                            });
-                        });
-                    });
+                    return fetch;
+                }).then(member => {
+                    if (member) message.member = member;
+                    return command.parse(content, message);
+                }).then(args => {
+                    this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, edited);
+                    return Promise.resolve(command.exec(message, args, edited));
+                }).then(() => {
+                    this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, edited);
                 }).catch(reason => {
                     if (reason == null) return;
                     if (reason instanceof Error) {
