@@ -514,9 +514,12 @@ class ClientUtil {
             : Promise.resolve();
 
             return promise.then(msg => {
+                const dm = msg.channel || user.dmChannel;
+                if (!dm) throw new Error('A DM channel could not be found to prompt in.');
+
                 return this.prompt({
                     author: channel,
-                    channel: msg.channel || user.dmChannel
+                    channel: dm
                 }, null, check, time, null);
             });
         }
