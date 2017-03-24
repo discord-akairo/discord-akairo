@@ -34,6 +34,8 @@ class InhibitorHandler extends AkairoHandler {
      * @returns {Promise<string>}
      */
     test(type, message, command) {
+        if (!this.modules.size) return Promise.resolve();
+
         const promises = this.modules.filter(i => i.type === type && i.enabled).map(inhibitor => {
             const inhibited = inhibitor.exec(message, command);
 
@@ -49,7 +51,7 @@ class InhibitorHandler extends AkairoHandler {
         });
 
         if (!promises.length) return Promise.resolve();
-        return Promise.race(promises);
+        return Promise.all(promises);
     }
 
     /**
