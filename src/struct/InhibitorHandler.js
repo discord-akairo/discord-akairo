@@ -48,6 +48,7 @@ class InhibitorHandler extends AkairoHandler {
             return Promise.reject(inhibitor.reason);
         });
 
+        if (!promises.length) return Promise.resolve();
         return Promise.race(promises);
     }
 
