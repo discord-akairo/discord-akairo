@@ -1,4 +1,4 @@
-const { Constants, RichEmbed, Collection } = require('discord.js');
+const { Constants, RichEmbed, Collection, User } = require('discord.js');
 
 class ClientUtil {
     /**
@@ -493,6 +493,38 @@ class ClientUtil {
                 return resolve(collected.first());
             });
         }));
+    }
+
+    /**
+     * Prompts a user for input in a specific channel, returning the message that passes.
+     * @param {TextBasedChannel|User} channel - Channel to prompt in or a user to prompt in DM.
+     * @param {User} [user] - User to prompt, if not a user object in the channel param.
+     * @param {string} [content] - Text to send.
+     * @param {RegExp|Function} [check] - Regex or function <code>(message => {})</code> to check if message should pass.
+     * @param {number} [time=30000] - Time in milliseconds to wait.
+     * @param {MessageOptions} [options] - Message options for message.
+     * @returns {Promise<Message>}
+     */
+    promptIn(channel, user, content, check, time, options) {
+        if (channel instanceof User) {
+            const user = channel; // eslint-disable-line no-shadow
+
+            const promise = content || options
+            ? user.send(content, options)
+            : Promise.resolve();
+
+            return promise.then(msg => {
+                return this.prompt({
+                    author: channel,
+                    channel: msg.channel || user.dmChannel
+                }, null, check, time, null);
+            });
+        }
+
+        return this.prompt({
+            channel,
+            author: user
+        }, content, check, time, options);
     }
 
     /**

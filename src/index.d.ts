@@ -240,6 +240,7 @@ declare module 'discord-akairo' {
         embed(data: Object): RichEmbed;
         collection(iterable: Iterable<any>): Collection<any, any>;
         prompt(message: Message, content?: string, check?: RegExp | ((message: Message) => boolean), time?: number, options?: MessageOptions): Promise<Message>;
+        promptIn(channel: TextChannel | DMChannel | GroupDMChannel | User, user?: User, content?: string, check?: RegExp | ((message: Message) => boolean), time?: number, options?: MessageOptions): Promise<Message>;
         fetchMessage(channel: TextChannel | DMChannel | GroupDMChannel, id: string): Promise<Message>;
     }
 

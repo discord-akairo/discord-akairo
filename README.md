@@ -33,15 +33,17 @@ client.login('TOKEN').then(() => {
 ## Features
 - Completely modular commands, inhibitors, and listeners.
   - Reading files recursively from directories.
-  - Adding, removing, and loading modules.
+  - Adding, removing, and reloading modules.
   - Categorization for modules.
 
 - Flexible command handling and creation.
   - Command aliases.
   - Command cooldowns.
   - Running commands on edits.
-  - A rich command prefixing system.
-    - Multiple prefixes and prefix overwrites.
+  - A dynamic command prefixing system.
+    - Multiple prefixes.
+    - Variable prefixes per message.
+    - Overwriting prefixes for commands.
     - Using mentions as a prefix.
   - Different ways to trigger a command.
     - Regular expression triggers.
@@ -57,12 +59,14 @@ client.login('TOKEN').then(() => {
     - Including plural forms: users, members, etc.
     - Types that you can add yourself.
   - Argument prompting.
+    - Can also be based on previous arguments.
     - Customizable prompts with embeds, files, etc.
     - Infinite argument prompting.
 
 - Useful utility methods available.
   - Resolvers for members, users, and others that can filter by name.
-  - Shortcut methods for making embeds, collection, and prompting.
+  - Shortcut methods for making embeds and collections.
+  - Helper methods for prompting users for input.
 
 - Support for SQLite.
   - Default values for keys.
