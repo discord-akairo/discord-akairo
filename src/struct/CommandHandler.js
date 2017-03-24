@@ -478,59 +478,65 @@ class CommandHandler extends AkairoHandler {
      * @returns {Promise<void>}
      */
     _handleTriggers(message, edited) {
-        const matchedCommands = this.modules.filter(c => (edited ? c.editable : true) && c.enabled && c.trigger(message));
-        const triggered = [];
+        const matchedCommands = [];
 
-        for (const c of matchedCommands.values()) {
-            const regex = c.trigger(message);
-            const match = message.content.match(regex);
-
-            if (match) {
-                const groups = [];
-
-                if (regex.global) {
-                    let group;
-
-                    while ((group = regex.exec(message.content)) != null) {
-                        groups.push(group);
-                    }
-                }
-
-                triggered.push([c, match, groups]);
+        for (const command of this.modules.values()) {
+            if ((edited ? command.editable : true) && command.enabled) {
+                const regex = command.trigger(message);
+                if (regex) matchedCommands.push({ command, regex });
             }
         }
 
-        return Promise.all(triggered.map(c => {
-            const onCooldown = this._handleCooldowns(message, c[0]);
+        const triggered = [];
+
+        for (const entry of matchedCommands) {
+            const match = message.content.match(entry.regex);
+            if (!match) continue;
+
+            const groups = [];
+
+            if (entry.regex.global) {
+                let group;
+
+                while ((group = entry.regex.exec(message.content)) != null) {
+                    groups.push(group);
+                }
+            }
+
+            triggered.push({ command: entry.command, match, groups });
+        }
+
+        return Promise.all(triggered.map(entry => {
+            const onCooldown = this._handleCooldowns(message, entry.command);
             if (onCooldown) return undefined;
 
-            this.emit(CommandHandlerEvents.COMMAND_STARTED, message, c[0]);
-            const end = Promise.resolve(c[0].exec(message, c[1], c[2], edited));
+            this.emit(CommandHandlerEvents.COMMAND_STARTED, message, entry.command);
+            const end = Promise.resolve(entry.command.exec(message, entry.match, entry.groups, edited));
 
             return end.then(() => {
-                this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, c[0]);
+                this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, entry.command);
             }).catch(err => {
-                this._handleError(err, message, c[0]);
+                this._handleError(err, message, entry.command);
             });
         })).then(() => {
-            const trueCommands = this.modules.filter(c => (edited ? c.editable : true) && c.enabled && c.condition(message));
+            const trueCommands = this.modules.filter(command => (edited ? command.editable : true) && command.enabled && command.condition(message));
 
             if (!trueCommands.size) {
                 this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
                 return undefined;
             }
 
-            return Promise.all(trueCommands.map(c => {
-                const onCooldown = this._handleCooldowns(message, c);
+            return Promise.all(trueCommands.map(command => {
+                const onCooldown = this._handleCooldowns(message, command);
                 if (onCooldown) return undefined;
 
-                this.emit(CommandHandlerEvents.COMMAND_STARTED, message, c);
-                const end = Promise.resolve(c.exec(message, edited));
+                this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command);
+                const end = Promise.resolve(command.exec(message, edited));
 
                 return end.then(() => {
-                    this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, c);
+                    this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command);
                 }).catch(err => {
-                    this._handleError(err, message, c);
+                    this._handleError(err, message, command);
                 });
             }));
         });
