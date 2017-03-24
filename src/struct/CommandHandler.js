@@ -445,7 +445,7 @@ class CommandHandler extends AkairoHandler {
             this.cooldowns.get(id)[command.id] = {
                 timer: this.client.setTimeout(() => {
                     this.client.clearTimeout(this.cooldowns.get(id)[command.id].timer);
-                    delete this.cooldowns.get(id)[command.id];
+                    this.cooldowns.get(id)[command.id] = null;
 
                     if (!Object.keys(this.cooldowns.get(id)).length) {
                         this.cooldowns.delete(id);
