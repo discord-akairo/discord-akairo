@@ -98,6 +98,7 @@ declare module 'discord-akairo' {
         defaultPrompt: PromptOptions;
         options: Object;
         description: string;
+        prefix: string | string[] | ((message: Message) => string | string[]);
 
         trigger(message: Message): RegExp;
         condition(message: Message): boolean;
@@ -112,10 +113,13 @@ declare module 'discord-akairo' {
     export class CommandHandler<Command> extends AkairoHandler<Command> {
         constructor(client: AkairoClient, options: Object);
 
+        aliases: Collection<string, string>;
+        prefixes: Set<string | string[] | Function>;
         resolver: TypeResolver;
         preInhibitors: boolean;
         postInhibitors: boolean;
         handleEdits: boolean;
+        fetchMembers: boolean;
         cooldowns: Collection<string, Object>;
         prompts: Collection<string, Set<string>>;
         defaultPrompt: PromptOptions;
@@ -235,7 +239,7 @@ declare module 'discord-akairo' {
         fetchMemberFrom(guild: Guild, id: string, cache?: boolean): Promise<GuildMember>
         embed(data: Object): RichEmbed;
         collection(iterable: Iterable<any>): Collection<any, any>;
-        prompt(message: Message, content: string, check?: RegExp | ((message: Message) => boolean), time?: number, options?: MessageOptions): Promise<Message>;
+        prompt(message: Message, content?: string, check?: RegExp | ((message: Message) => boolean), time?: number, options?: MessageOptions): Promise<Message>;
         fetchMessage(channel: TextChannel | DMChannel | GroupDMChannel, id: string): Promise<Message>;
     }
 
@@ -292,6 +296,7 @@ declare module 'discord-akairo' {
         prefix?: string | string[] | ((message: Message) => string | string[]);
         allowMention?: boolean | ((message: Message) => boolean);
         handleEdits?: boolean;
+        fetchMembers?: boolean;
         defaultCooldown?: number;
         defaultPrompt?: PromptOptions;
         inhibitorDirectory?: string;
@@ -321,7 +326,9 @@ declare module 'discord-akairo' {
         retries?: number;
         time?: number;
         cancelWord?: string;
+        stopWord?: string;
         optional?: boolean;
+        infinite?: boolean;
         start: string | string[] | ((message: Message, prevArgs: Object, amountOfTries: number) => string | string[] | MessageOptions);
         retry: string | string[] | ((message: Message, prevArgs: Object, amountOfTries: number) => string | string[] | MessageOptions);
         timeout: string | string[] | ((message: Message, prevArgs: Object, amountOfTries: number) => string | string[] | MessageOptions);
@@ -329,11 +336,11 @@ declare module 'discord-akairo' {
         cancel: string | string[] | ((message: Message, prevArgs: Object, amountOfTries: number) => string | string[] | MessageOptions);
     };
 
-    type ArgumentType = string | string[] | ((word: string, message: Message, prevArgs: Object) => any);
+    type ArgumentType = string | string[] | RegExp | ((word: string, message: Message, prevArgs: Object) => any);
 
     type ArgumentMatch = string | ((message: Message, prevArgs: Object) => string);
 
-    type ArgumentSplit = string | RegExp;
+    type ArgumentSplit = string | RegExp | ((content: string, message: Message) => string[]);
 
     type CommandOptions = {
         aliases?: string[];
@@ -346,6 +353,7 @@ declare module 'discord-akairo' {
         editable?: boolean;
         cooldown?: number;
         ratelimit?: number;
+        prefix?: string | string[] | Function;
         trigger?: RegExp | ((message: Message, edited: boolean) => RegExp);
         condition?: (message: Message, edited: boolean) => boolean;
         defaultPrompt?: PromptOptions;
