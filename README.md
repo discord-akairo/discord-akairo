@@ -101,3 +101,4 @@ If you need more help, message me on Discord: 1Computer#7952.
 8. [Argument Prompting](https://1computer1.github.io/discord-akairo/tutorial-8.%20Argument%20Prompting.html)
 9. [Handling Edits](https://1computer1.github.io/discord-akairo/tutorial-9.%20Handling%20Edits.html)
 10. [Customizing Types](https://1computer1.github.io/discord-akairo/tutorial-10.%20Customizing%Types.html)
+11. [Advanced Args and Prompts](https://1computer1.github.io/discord-akairo/tutorial-11.%20Advanced%20Args%20and%20Prompts.html)

@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li><li><a href="tutorial-10. Customizing Types.html">10. Customizing Types</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li><li><a href="tutorial-10. Customizing Types.html">10. Customizing Types</a></li><li><a href="tutorial-11. Advanced Args and Prompts.html">11. Advanced Args and Prompts</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -51,6 +51,7 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * @prop {string} [category='default'] - Category ID for organization purposes.
  * @prop {boolean} [ownerOnly=false] - Whether or not to allow client owner(s) only.
  * @prop {boolean} [protected=false] - Whether or not this command cannot be disabled.
+ * @prop {boolean} [typing=false] - Whether or not to type in channel during execution.
  * @prop {boolean} [editable=true] - Whether or not message edits will run this command.
  * &lt;br>On an edited message, the exec function edited param will be true.
  * @prop {number} [cooldown] - The command cooldown in milliseconds.
@@ -75,6 +76,7 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * &lt;br>&lt;code>sticky&lt;/code> is similar to quoted, but makes it so that quoted text must have a whitespace/another double quote before it to count as another word.
  * &lt;br>
  * &lt;br>A regex or a character can be used instead (for example, a comma) to split the message by that regex or character.
+ * &lt;br> A function &lt;code>((content, message) => {})&lt;/code> returning an array of strings can be also used.
  * @typedef {string} ArgumentSplit
  */
 
@@ -130,6 +132,12 @@ class Command extends AkairoModule {
          * @type {boolean}
          */
         this.editable = !(options.editable === false);
+
+        /**
+         * Whether or not to type during command execution.
+         * @type {boolean}
+         */
+        this.typing = !!options.typing;
 
         /**
          * Cooldown in milliseconds.
@@ -214,13 +222,17 @@ class Command extends AkairoModule {
         if (!this.args.length) return Promise.resolve({});
 
         const splitFuncs = {
-            [ArgumentSplits.PLAIN]: () => content.match(/[^\s]+/g),
-            [ArgumentSplits.SPLIT]: () => content.split(' '),
-            [ArgumentSplits.QUOTED]: () => content.match(/".*?"|[^\s"]+|"/g),
-            [ArgumentSplits.STICKY]: () => content.match(/[^\s"]*?".*?"|[^\s"]+|"/g)
+            [ArgumentSplits.PLAIN]: c => c.match(/[^\s]+/g),
+            [ArgumentSplits.SPLIT]: c => c.split(' '),
+            [ArgumentSplits.QUOTED]: c => c.match(/".*?"|[^\s"]+|"/g),
+            [ArgumentSplits.STICKY]: c => c.match(/[^\s"]*?".*?"|[^\s"]+|"/g)
         };
 
-        const words = splitFuncs[this.split] ? splitFuncs[this.split]() || [] : content.split(this.split);
+        const words = typeof this.split === 'function'
+        ? this.split(content, message) || []
+        : splitFuncs[this.split]
+        ? splitFuncs[this.split](content) || []
+        : content.split(this.split);
 
         const prefixes = this.args.reduce((arr, arg) => {
             if (arg.match === ArgumentMatches.PREFIX || arg.match === ArgumentMatches.FLAG) {
@@ -254,7 +266,7 @@ class Command extends AkairoModule {
                 let word = noPrefixWords[arg.index != null ? arg.index : index] || '';
 
                 const isQuoted = (this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY) &amp;&amp; /^".*"$/.test(word);
-                if (isQuoted) word = word.slice(1, -1).trim();
+                if (isQuoted) word = word.slice(1, -1);
 
                 return arg.cast.bind(arg, word);
             },
@@ -276,7 +288,7 @@ class Command extends AkairoModule {
 
                 if (prefix) {
                     word = word.replace(prefix.value, '');
-                    if (this.split === ArgumentSplits.STICKY &amp;&amp; /^".*"$/.test(word)) word = word.slice(1, -1).trim();
+                    if (this.split === ArgumentSplits.STICKY &amp;&amp; /^".*"$/.test(word)) word = word.slice(1, -1);
                 }
 
                 return arg.cast.bind(arg, word);
@@ -297,6 +309,9 @@ class Command extends AkairoModule {
             [ArgumentMatches.CONTENT]: arg => {
                 const word = content.split(' ').slice(arg.index).join(' ');
                 return arg.cast.bind(arg, word);
+            },
+            [ArgumentMatches.NONE]: arg => {
+                return arg.cast.bind(arg, '');
             }
         };
 

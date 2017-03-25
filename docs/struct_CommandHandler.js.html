@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li><li><a href="tutorial-10. Customizing Types.html">10. Customizing Types</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li><li><a href="tutorial-10. Customizing Types.html">10. Customizing Types</a></li><li><a href="tutorial-11. Advanced Args and Prompts.html">11. Advanced Args and Prompts</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -61,7 +61,7 @@ class CommandHandler extends AkairoHandler {
 
         /**
          * Set of prefix overwrites.
-         * @type {Set&lt;string>}
+         * @type {Set&lt;string|string[]|Function>}
          */
         this.prefixes = new Set();
 
@@ -129,7 +129,10 @@ class CommandHandler extends AkairoHandler {
             cancel: 'command has been cancelled.',
             retries: 1,
             time: 30000,
-            cancelWord: 'cancel'
+            cancelWord: 'cancel',
+            stopWord: 'stop',
+            optional: false,
+            infinite: false
         };
 
         Object.assign(this.defaultPrompt, options.defaultPrompt || {});
@@ -208,6 +211,7 @@ class CommandHandler extends AkairoHandler {
 
         const command = this.modules.get(id);
         if (!command) throw new Error(`Command ${id} does not exist.`);
+        if (!command.filepath) throw new Error(`Command ${id} is not reloadable.`);
         this._removeAliases(command.id);
 
         return super.reload(id);
@@ -268,11 +272,11 @@ class CommandHandler extends AkairoHandler {
      * @returns {Promise&lt;void>}
      */
     handle(message, edited) {
-        const alltest = this.client.inhibitorHandler
-        ? m => this.client.inhibitorHandler.test('all', m)
-        : () => Promise.resolve();
+        const allTest = this.client.inhibitorHandler
+        ? this.client.inhibitorHandler.test('all', message)
+        : Promise.resolve();
 
-        return alltest(message).then(() => {
+        return allTest.then(() => {
             if (this.blockNotSelf &amp;&amp; message.author.id !== this.client.user.id &amp;&amp; this.client.selfbot) {
                 this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.NOT_SELF);
                 return undefined;
@@ -288,14 +292,14 @@ class CommandHandler extends AkairoHandler {
                 return undefined;
             }
 
-            const pretest = this.client.inhibitorHandler
-            ? m => this.client.inhibitorHandler.test('pre', m)
-            : () => Promise.resolve();
+            const preTest = this.client.inhibitorHandler
+            ? this.client.inhibitorHandler.test('pre', message)
+            : Promise.resolve();
 
-            return pretest(message).then(() => {
+            return preTest.then(() => {
                 if (this.hasPrompt(message)) {
                     this.emit(CommandHandlerEvents.IN_PROMPT, message);
-                    return Promise.resolve();
+                    return undefined;
                 }
 
                 const parsed = this._parseCommand(message, edited);
@@ -331,31 +335,34 @@ class CommandHandler extends AkairoHandler {
                     return undefined;
                 }
 
-                const test = this.client.inhibitorHandler
-                ? (m, c) => this.client.inhibitorHandler.test('post', m, c)
-                : () => Promise.resolve();
+                const postTest = this.client.inhibitorHandler
+                ? this.client.inhibitorHandler.test('post', message, command)
+                : Promise.resolve();
 
-                return test(message, command).then(() => {
+                return postTest.then(() => {
                     const onCooldown = this._handleCooldowns(message, command);
                     if (onCooldown) return undefined;
 
-                    return command.parse(content, message).then(args => {
-                        const fetch = this.fetchMembers
-                        ? m => m.guild ? m.guild.fetchMember(m.author) : Promise.resolve()
-                        : () => Promise.resolve();
+                    const fetch = this.fetchMembers
+                    ? message.guild
+                    ? message.guild.fetchMember(message.author)
+                    : Promise.resolve()
+                    : Promise.resolve();
 
-                        return fetch(message).then(member => {
-                            if (member) message.member = member;
-
-                            this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, edited);
-                            const end = Promise.resolve(command.exec(message, args, edited));
-
-                            return end.then(() => {
-                                this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, edited);
-                            });
-                        });
+                    return fetch.then(member => {
+                        if (member) message.member = member;
+                        return command.parse(content, message);
+                    }).then(args => {
+                        if (command.typing) message.channel.startTyping();
+                        this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, edited);
+                        return Promise.resolve(command.exec(message, args, edited));
+                    }).then(() => {
+                        this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, edited);
+                        if (command.typing) message.channel.stopTyping();
                     });
                 }).catch(reason => {
+                    if (command.typing) message.channel.stopTyping();
+
                     if (reason == null) return;
                     if (reason instanceof Error) {
                         this._handleError(reason, message, command);
@@ -383,8 +390,14 @@ class CommandHandler extends AkairoHandler {
      * @returns {Object}
      */
     _parseCommand(message) {
-        const prefix = this.prefix(message);
-        const allowMention = this.allowMention(message);
+        let prefix = this.prefix(message);
+
+        if (this.allowMention(message)) {
+            prefix = Array.isArray(prefix)
+            ? [`&lt;@${this.client.user.id}>`, `&lt;@!${this.client.user.id}>`, ...prefix]
+            : [`&lt;@${this.client.user.id}>`, `&lt;@!${this.client.user.id}>`, prefix];
+        }
+
         let start;
         let overwrote;
 
@@ -397,12 +410,6 @@ class CommandHandler extends AkairoHandler {
         } else
         if (message.content.toLowerCase().startsWith(prefix.toLowerCase())) {
             start = prefix;
-        } else
-        if (allowMention) {
-            const mentionRegex = new RegExp(`^&lt;@!?${this.client.user.id}>`);
-            const mentioned = message.content.match(mentionRegex);
-
-            if (mentioned) start = mentioned[0];
         }
 
         for (const ovPrefix of this.prefixes.keys()) {
@@ -480,7 +487,7 @@ class CommandHandler extends AkairoHandler {
             this.cooldowns.get(id)[command.id] = {
                 timer: this.client.setTimeout(() => {
                     this.client.clearTimeout(this.cooldowns.get(id)[command.id].timer);
-                    delete this.cooldowns.get(id)[command.id];
+                    this.cooldowns.get(id)[command.id] = null;
 
                     if (!Object.keys(this.cooldowns.get(id)).length) {
                         this.cooldowns.delete(id);
@@ -513,59 +520,113 @@ class CommandHandler extends AkairoHandler {
      * @returns {Promise&lt;void>}
      */
     _handleTriggers(message, edited) {
-        const matchedCommands = this.modules.filter(c => (edited ? c.editable : true) &amp;&amp; c.enabled &amp;&amp; c.trigger(message));
-        const triggered = [];
+        const matchedCommands = [];
 
-        for (const c of matchedCommands.values()) {
-            const regex = c.trigger(message);
-            const match = message.content.match(regex);
-
-            if (match) {
-                const groups = [];
-
-                if (regex.global) {
-                    let group;
-
-                    while ((group = regex.exec(message.content)) != null) {
-                        groups.push(group);
-                    }
-                }
-
-                triggered.push([c, match, groups]);
+        for (const command of this.modules.values()) {
+            if ((edited ? command.editable : true) &amp;&amp; command.enabled) {
+                const regex = command.trigger(message);
+                if (regex) matchedCommands.push({ command, regex });
             }
         }
 
-        return Promise.all(triggered.map(c => {
-            const onCooldown = this._handleCooldowns(message, c[0]);
-            if (onCooldown) return undefined;
+        const triggered = [];
 
-            this.emit(CommandHandlerEvents.COMMAND_STARTED, message, c[0]);
-            const end = Promise.resolve(c[0].exec(message, c[1], c[2], edited));
+        for (const entry of matchedCommands) {
+            const match = message.content.match(entry.regex);
+            if (!match) continue;
 
-            return end.then(() => {
-                this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, c[0]);
-            }).catch(err => {
-                this._handleError(err, message, c[0]);
+            const groups = [];
+
+            if (entry.regex.global) {
+                let group;
+
+                while ((group = entry.regex.exec(message.content)) != null) {
+                    groups.push(group);
+                }
+            }
+
+            triggered.push({ command: entry.command, match, groups });
+        }
+
+        return Promise.all(triggered.map(entry => {
+            const postTest = this.client.inhibitorHandler
+            ? this.client.inhibitorHandler.test('post', message, entry.command)
+            : Promise.resolve();
+
+            return postTest.then(() => {
+                const onCooldown = this._handleCooldowns(message, entry.command);
+                if (onCooldown) return undefined;
+
+                const fetch = this.fetchMembers
+                ? message.guild
+                ? message.guild.fetchMember(message.author)
+                : Promise.resolve()
+                : Promise.resolve();
+
+                return fetch.then(member => {
+                    if (member) message.member = member;
+                    if (entry.command.typing) message.channel.startTyping();
+
+                    this.emit(CommandHandlerEvents.COMMAND_STARTED, message, entry.command);
+                    return Promise.resolve(entry.command.exec(message, entry.match, entry.groups, edited));
+                }).then(() => {
+                    this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, entry.command);
+                    if (entry.command.typing) message.channel.stopTyping();
+                });
+            }).catch(reason => {
+                if (entry.command.typing) message.channel.stopTyping();
+
+                if (reason == null) return;
+                if (reason instanceof Error) {
+                    this._handleError(reason, message, entry.command);
+                    return;
+                }
+
+                this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, entry.command, reason);
             });
         })).then(() => {
-            const trueCommands = this.modules.filter(c => (edited ? c.editable : true) &amp;&amp; c.enabled &amp;&amp; c.condition(message));
+            const trueCommands = this.modules.filter(command => (edited ? command.editable : true) &amp;&amp; command.enabled &amp;&amp; command.condition(message));
 
             if (!trueCommands.size) {
                 this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
                 return undefined;
             }
 
-            return Promise.all(trueCommands.map(c => {
-                const onCooldown = this._handleCooldowns(message, c);
-                if (onCooldown) return undefined;
+            return Promise.all(trueCommands.map(command => {
+                const postTest = this.client.inhibitorHandler
+                ? this.client.inhibitorHandler.test('post', message, command)
+                : Promise.resolve();
 
-                this.emit(CommandHandlerEvents.COMMAND_STARTED, message, c);
-                const end = Promise.resolve(c.exec(message, edited));
+                return postTest.then(() => {
+                    const onCooldown = this._handleCooldowns(message, command);
+                    if (onCooldown) return undefined;
 
-                return end.then(() => {
-                    this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, c);
-                }).catch(err => {
-                    this._handleError(err, message, c);
+                    const fetch = this.fetchMembers
+                    ? message.guild
+                    ? message.guild.fetchMember(message.author)
+                    : Promise.resolve()
+                    : Promise.resolve();
+
+                    return fetch.then(member => {
+                        if (member) message.member = member;
+                        if (command.typing) message.channel.startTyping();
+
+                        this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command);
+                        return Promise.resolve(command.exec(message, edited));
+                    }).then(() => {
+                        this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command);
+                        if (command.typing) message.channel.stopTyping();
+                    });
+                }).catch(reason => {
+                    if (command.typing) message.channel.stopTyping();
+
+                    if (reason == null) return;
+                    if (reason instanceof Error) {
+                        this._handleError(reason, message, command);
+                        return;
+                    }
+
+                    this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
                 });
             }));
         });
@@ -596,7 +657,13 @@ class CommandHandler extends AkairoHandler {
         const command = this.modules.get(id.toString());
         if (!command) throw new Error(`Command ${id} does not exist.`);
 
-        for (const alias of command.aliases) this.aliases.set(alias.toLowerCase(), command.id);
+        for (const alias of command.aliases) {
+            const conflict = this.aliases.get(alias.toLowerCase());
+            if (conflict) throw new Error(`Alias ${alias} of ${command.id} already exists on ${conflict}.`);
+
+            this.aliases.set(alias.toLowerCase(), command.id);
+        }
+
         if (command.prefix != null) this.prefixes.add(command.prefix);
     }
 

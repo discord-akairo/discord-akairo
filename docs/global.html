@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li><li><a href="tutorial-10. Customizing Types.html">10. Customizing Types</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li><li><a href="tutorial-10. Customizing Types.html">10. Customizing Types</a></li><li><a href="tutorial-11. Advanced Args and Prompts.html">11. Advanced Args and Prompts</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -763,14 +763,10 @@
 
 
     <h5>Type:</h5>
-    <ul>
-        <li>
-            
+    
 <span class="param-type">Object</span>
 
 
-        </li>
-    </ul>
 
 
 
@@ -830,20 +826,16 @@
 
 
 <div class="description">
-    The method to match arguments from text.<br><code>word</code> matches by the order of the words inputted, ignoring words that matches prefix or flag.<br><code>rest</code> matches the rest of the words in order, ignoring words that matches prefix or flag.<br><code>prefix</code> matches words that starts with the prefix. The word after the prefix is the evaluated argument.<br><code>flag</code> matches words that equal this prefix. The evaluated argument is true or false.<br><code>text</code> matches the entire text, except for the command, ignoring words that matches prefix or flag.<br><code>content</code> matches the entire text as it was inputted, except for the command.<br><br>A function <code>((message, prevArgs) => {})</code> can also be used to return one of the above.
+    The method to match arguments from text.<br><code>word</code> matches by the order of the words inputted, ignoring words that matches prefix or flag.<br><code>rest</code> matches the rest of the words in order, ignoring words that matches prefix or flag.<br><code>prefix</code> matches words that starts with the prefix and the word after the prefix is the evaluated argument.<br><code>flag</code> matches words that equal this prefix and casts to true or false.<br><code>text</code> matches the entire text, except for the command, ignoring words that matches prefix or flag.<br><code>content</code> matches the entire text as it was inputted, except for the command.<br><code>none</code> matches nothing at all and an empty string will be used for type operations.<br><br>A function <code>((message, prevArgs) => {})</code> can also be used to return one of the above.
 </div>
 
 
 
     <h5>Type:</h5>
-    <ul>
-        <li>
-            
+    
 <span class="param-type">string</span>
 
 
-        </li>
-    </ul>
 
 
 
@@ -863,7 +855,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line76">line 76</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line81">line 81</a>
     </li></ul></dd>
     
 
@@ -1234,14 +1226,10 @@
 
 
     <h5>Type:</h5>
-    <ul>
-        <li>
-            
+    
 <span class="param-type">Object</span>
 
 
-        </li>
-    </ul>
 
 
 
@@ -1261,7 +1249,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line31">line 31</a>
+        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line32">line 32</a>
     </li></ul></dd>
     
 
@@ -1301,20 +1289,16 @@
 
 
 <div class="description">
-    The method to split text into words.<br><code>plain</code> splits word separated by whitespace. Extra whitespace is ignored.<br><code>split</code> splits word separated by whitespace. Should not be used due to possible inconsistent whitespace.<br><code>quoted</code> is similar to plain, but counts text inside double quotes as one word.<br><code>sticky</code> is similar to quoted, but makes it so that quoted text must have a whitespace/another double quote before it to count as another word.<br><br>A regex or a character can be used instead (for example, a comma) to split the message by that regex or character.
+    The method to split text into words.<br><code>plain</code> splits word separated by whitespace. Extra whitespace is ignored.<br><code>split</code> splits word separated by whitespace. Should not be used due to possible inconsistent whitespace.<br><code>quoted</code> is similar to plain, but counts text inside double quotes as one word.<br><code>sticky</code> is similar to quoted, but makes it so that quoted text must have a whitespace/another double quote before it to count as another word.<br><br>A regex or a character can be used instead (for example, a comma) to split the message by that regex or character.<br> A function <code>((content, message) => {})</code> returning an array of strings can be also used.
 </div>
 
 
 
     <h5>Type:</h5>
-    <ul>
-        <li>
-            
+    
 <span class="param-type">string</span>
 
 
-        </li>
-    </ul>
 
 
 
@@ -1334,7 +1318,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line16">line 16</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line17">line 17</a>
     </li></ul></dd>
     
 
@@ -1380,17 +1364,13 @@
 
 
     <h5>Type:</h5>
-    <ul>
-        <li>
-            
+    
 <span class="param-type">string</span>
  || 
 
 <span class="param-type">Array.&lt;string></span>
 
 
-        </li>
-    </ul>
 
 
 
@@ -1728,6 +1708,43 @@
             
 
             <td class="description last">Whether or not this command cannot be disabled.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>typing</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Whether or not to type in channel during execution.</td>
         </tr>
 
     
@@ -2083,14 +2100,10 @@
 
 
     <h5>Type:</h5>
-    <ul>
-        <li>
-            
+    
 <span class="param-type">Object</span>
 
 
-        </li>
-    </ul>
 
 
 
@@ -2300,14 +2313,10 @@
 
 
     <h5>Type:</h5>
-    <ul>
-        <li>
-            
+    
 <span class="param-type">Object</span>
 
 
-        </li>
-    </ul>
 
 
 
@@ -2557,14 +2566,10 @@
 
 
     <h5>Type:</h5>
-    <ul>
-        <li>
-            
+    
 <span class="param-type">Object</span>
 
 
-        </li>
-    </ul>
 
 
 
@@ -2700,14 +2705,10 @@
 
 
     <h5>Type:</h5>
-    <ul>
-        <li>
-            
+    
 <span class="param-type">Object</span>
 
 
-        </li>
-    </ul>
 
 
 
@@ -2727,7 +2728,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line58">line 58</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line59">line 59</a>
     </li></ul></dd>
     
 
@@ -2898,7 +2899,44 @@
                 </td>
             
 
-            <td class="description last">Word to use for cancelling prompts.</td>
+            <td class="description last">Word to use for cancelling the command.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>stopWord</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>'stop'</code>
+                
+                </td>
+            
+
+            <td class="description last">Word to use for ending infinite prompts.</td>
         </tr>
 
     
@@ -2942,6 +2980,43 @@
 
         <tr>
             
+                <td class="name"><code>infinite</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last">Prompts forever until the stop word, cancel word, time limit, or retry limit.<br>Note that the retry count resets back to one on each valid entry.<br>The final evaluated argument will be an array of the inputs.</td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>start</code></td>
             
 
@@ -2976,7 +3051,7 @@
                 </td>
             
 
-            <td class="description last">Function called on start.</td>
+            <td class="description last">Function called on start of prompt.</td>
         </tr>
 
     
@@ -3017,7 +3092,7 @@
                 </td>
             
 
-            <td class="description last">Function called on a retry.</td>
+            <td class="description last">Function called on a retry (failure to cast type).</td>
         </tr>
 
     
@@ -3099,7 +3174,7 @@
                 </td>
             
 
-            <td class="description last">Function called on no retries left.</td>
+            <td class="description last">Function called on amount of tries reaching the max.</td>
         </tr>
 
     
@@ -3140,7 +3215,7 @@
                 </td>
             
 
-            <td class="description last">Function called on cancel.</td>
+            <td class="description last">Function called on cancellation of command.</td>
         </tr>
 
     
@@ -3159,14 +3234,10 @@
 
 
     <h5>Type:</h5>
-    <ul>
-        <li>
-            
+    
 <span class="param-type">Object</span>
 
 
-        </li>
-    </ul>
 
 
 
@@ -3413,14 +3484,10 @@
 
 
     <h5>Type:</h5>
-    <ul>
-        <li>
-            
+    
 <span class="param-type">Object</span>
 
 
-        </li>
-    </ul>
 
 
 

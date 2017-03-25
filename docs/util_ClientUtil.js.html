@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li><li><a href="tutorial-10. Customizing Types.html">10. Customizing Types</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li><li><a href="tutorial-10. Customizing Types.html">10. Customizing Types</a></li><li><a href="tutorial-11. Advanced Args and Prompts.html">11. Advanced Args and Prompts</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -37,7 +37,7 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const { Constants, RichEmbed, Collection } = require('discord.js');
+            <pre class="prettyprint source linenums"><code>const { Constants, RichEmbed, Collection, User } = require('discord.js');
 
 class ClientUtil {
     /**
@@ -491,18 +491,22 @@ class ClientUtil {
 
     /**
      * Prompts a user for input, returning the message that passes.
-     * @param {Message} message - Message to prompt.
-     * @param {string} content - Text to send.
+     * @param {Message} [message] - Message to prompt.
+     * @param {string} [content] - Text to send.
      * @param {RegExp|Function} [check] - Regex or function &lt;code>(message => {})&lt;/code> to check if message should pass.
      * @param {number} [time=30000] - Time in milliseconds to wait.
      * @param {MessageOptions} [options] - Message options for message.
      * @returns {Promise&lt;Message>}
      */
     prompt(message, content, check = () => true, time = 30000, options) {
-        return message.channel.send(content, options).then(sent => new Promise((resolve, reject) => {
+        const promise = content || options
+        ? message.channel.send(content, options)
+        : Promise.resolve();
+
+        return promise.then(sent => new Promise((resolve, reject) => {
             const collector = message.channel.createCollector(m => {
                 try {
-                    if (m.id === sent.id) return undefined;
+                    if (sent &amp;&amp; m.id === sent.id) return undefined;
                     if (m.author.id !== message.author.id) return undefined;
 
                     let passed;
@@ -531,6 +535,41 @@ class ClientUtil {
     }
 
     /**
+     * Prompts a user for input in a specific channel, returning the message that passes.
+     * @param {TextBasedChannel|User} channel - Channel to prompt in or a user to prompt in DM.
+     * @param {User} [user] - User to prompt, if not a user object in the channel param.
+     * @param {string} [content] - Text to send.
+     * @param {RegExp|Function} [check] - Regex or function &lt;code>(message => {})&lt;/code> to check if message should pass.
+     * @param {number} [time=30000] - Time in milliseconds to wait.
+     * @param {MessageOptions} [options] - Message options for message.
+     * @returns {Promise&lt;Message>}
+     */
+    promptIn(channel, user, content, check, time, options) {
+        if (channel instanceof User) {
+            const user = channel; // eslint-disable-line no-shadow
+
+            const promise = content || options
+            ? user.send(content, options)
+            : Promise.resolve();
+
+            return promise.then(msg => {
+                const dm = msg.channel || user.dmChannel;
+                if (!dm) throw new Error('A DM channel could not be found to prompt in.');
+
+                return this.prompt({
+                    author: channel,
+                    channel: dm
+                }, null, check, time, null);
+            });
+        }
+
+        return this.prompt({
+            channel,
+            author: user
+        }, content, check, time, options);
+    }
+
+    /**
      * Fetches a message, works for both bots and user accounts.
      * @param {TextBasedChannel} channel - Channel to fetch in.
      * @param {Snowflake} id - ID of the message.
@@ -540,7 +579,9 @@ class ClientUtil {
         if (this.client.user.bot) return channel.fetchMessage(id);
 
         return channel.fetchMessages({ around: id, limit: 1 }).then(msgs => {
-            return msgs.get(id);
+            const msg = msgs.get(id);
+            if (!msg) throw new Error('Message was not found.');
+            return msg;
         });
     }
 }

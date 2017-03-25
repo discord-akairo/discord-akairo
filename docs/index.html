@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li><li><a href="tutorial-10. Customizing Types.html">10. Customizing Types</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li><li><a href="tutorial-10. Customizing Types.html">10. Customizing Types</a></li><li><a href="tutorial-11. Advanced Args and Prompts.html">11. Advanced Args and Prompts</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -58,8 +58,9 @@
     </a>
 </p>  
 
-<h2>About</h2><p>A modular and customizable bot framework for Discord.js v11.<br>Everything is reloadable, commands are easy to make, and argument parsing is very flexible.  </p>
-<pre class="prettyprint source lang-js"><code>const { AkairoClient } = require('discord-akairo');
+<p align="center">A modular and highly customizable bot framework for Discord.js v11.</p>
+
+<h2>Example</h2><pre class="prettyprint source lang-js"><code>const { AkairoClient } = require('discord-akairo');
 
 const client = new AkairoClient({
     ownerID: '9876543210',
@@ -72,18 +73,71 @@ const client = new AkairoClient({
 client.login('TOKEN').then(() => {
     console.log('Started up!');
 });</code></pre><h2>Features</h2><ul>
-<li>Reloadable modules for commands, inhibitors, and listeners.</li>
-<li>Extremely flexible command options and behavior.</li>
-<li>Many different way to parse arguments.</li>
-<li>Customizable argument type casting (even dynamic types).</li>
-<li>Prompting for arguments.</li>
-<li>Handling edited messages.</li>
-<li>Resolvers for Discord objects.</li>
-<li>Lots of useful utilities.</li>
-<li>Easy way to use SQLite.</li>
-<li>Easily extendable classes.</li>
+<li><p>Completely modular commands, inhibitors, and listeners.</p>
+<ul>
+<li>Reading files recursively from directories.</li>
+<li>Adding, removing, and reloading modules.</li>
+<li>Categorization for modules.</li>
 </ul>
-<h2>Installation</h2><p>discord-akairo: <code>npm install discord-akairo --save</code><br>discord.js: <code>npm install discord.js --save</code><br>sqlite (optional): <code>npm install sqlite --save</code>  </p>
+</li>
+<li><p>Flexible command handling and creation.</p>
+<ul>
+<li>Command aliases.</li>
+<li>Command cooldowns.</li>
+<li>Running commands on edits.</li>
+<li>A dynamic command prefixing system.<ul>
+<li>Multiple prefixes.</li>
+<li>Variable prefixes per message.</li>
+<li>Overwriting prefixes for commands.</li>
+<li>Using mentions as a prefix.</li>
+</ul>
+</li>
+<li>Different ways to trigger a command.<ul>
+<li>Regular expression triggers.</li>
+<li>Conditional triggers.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Complex and highly customizable arguments.</p>
+<ul>
+<li>Support for quoted arguments.</li>
+<li>Arguments based on previous arguments.</li>
+<li>Several ways to match arguments: by word, by flag, etc.</li>
+<li>Casting input into certain types.<ul>
+<li>Simple types such as string, integer, float, url, date, etc.</li>
+<li>Discord-related types such as user, member, message, etc.</li>
+<li>Including plural forms: users, members, etc.</li>
+<li>Types that you can add yourself.</li>
+</ul>
+</li>
+<li>Argument prompting.<ul>
+<li>Can also be based on previous arguments.</li>
+<li>Customizable prompts with embeds, files, etc.</li>
+<li>Infinite argument prompting.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Useful utility methods available.</p>
+<ul>
+<li>Resolvers for members, users, and others that can filter by name.</li>
+<li>Shortcut methods for making embeds and collections.</li>
+<li>Helper methods for prompting users for input.</li>
+</ul>
+</li>
+<li><p>Support for SQLite.</p>
+<ul>
+<li>Default values for keys.</li>
+<li>In-memory caching for stored data.</li>
+<li>Santizing inputs and desanitizing outputs.</li>
+<li>Parsing or stringifying as JSON.</li>
+</ul>
+</li>
+</ul>
+<h2>Installation</h2><p><em>discord-akairo</em><br><code>npm install discord-akairo --save</code></p>
+<p><em>discord.js</em><br><code>npm install discord.js --save</code></p>
+<p><em>sqlite (optional)</em><br><code>npm install sqlite --save</code></p>
 <h2>Links</h2><p>Repository is available at <a href="https://github.com/1Computer1/discord-akairo">https://github.com/1Computer1/discord-akairo</a>.<br>Changelog is available at <a href="https://github.com/1Computer1/discord-akairo/releases">https://github.com/1Computer1/discord-akairo/releases</a>.<br>Documentation is available at <a href="https://1computer1.github.io/discord-akairo/">https://1computer1.github.io/discord-akairo</a>.<br>If you need more help, message me on Discord: 1Computer#7952.  </p>
 <h2>Tutorials</h2><ol>
 <li><a href="https://1computer1.github.io/discord-akairo/tutorial-1.%20Setting%20Up%20a%20Bot.html">Setting Up a Bot</a></li>
@@ -96,6 +150,7 @@ client.login('TOKEN').then(() => {
 <li><a href="https://1computer1.github.io/discord-akairo/tutorial-8.%20Argument%20Prompting.html">Argument Prompting</a></li>
 <li><a href="https://1computer1.github.io/discord-akairo/tutorial-9.%20Handling%20Edits.html">Handling Edits</a></li>
 <li><a href="https://1computer1.github.io/discord-akairo/tutorial-10.%20Customizing%Types.html">Customizing Types</a></li>
+<li><a href="https://1computer1.github.io/discord-akairo/tutorial-11.%20Advanced%20Args%20and%20Prompts.html">Advanced Args and Prompts</a></li>
 </ol></article>
     </section>
 

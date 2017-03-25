@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li><li><a href="tutorial-10. Customizing Types.html">10. Customizing Types</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li><li><a href="tutorial-10. Customizing Types.html">10. Customizing Types</a></li><li><a href="tutorial-11. Advanced Args and Prompts.html">11. Advanced Args and Prompts</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -37,7 +37,7 @@
 <h2>Ping Command</h2><p>First, go to your command directory.<br>Create a new .js file and call it whatever you like.<br>Then, require and export a new <code>Command</code> from discord-akairo.<br>The parameters of the Command constructor are the ID, the execution function, then the options.  </p>
 <pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
 
-function exec(message){
+function exec(message) {
     // client.ping is the heartbeat ping.
     return message.reply('Pong! ' + this.client.ping);
 }
@@ -52,7 +52,7 @@ module.exports = new Command('ping', exec, {
 };</code></pre><h2>Roll Command</h2><p>Create another .js file.<br>We will now make a roll command.  </p>
 <pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
 
-function exec(message){
+function exec(message) {
     const rand = Math.floor(Math.random() * 100) + 1;
     return message.reply(rand);
 }
@@ -62,7 +62,7 @@ module.exports = new Command('roll', exec, {
 });</code></pre><p>This command will reply with a random number from 1 to 100.<br>What if we want to let the user specify the maximum number?<br>Let's use arguments:  </p>
 <pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
 
-function exec(message){
+function exec(message) {
     const rand = Math.floor(Math.random() * 100) + 1;
     return message.reply(rand);
 }
@@ -80,7 +80,7 @@ module.exports = new Command('roll', exec, {
 <p>Access the args parameter in the exec function and you can use your argument.<br>The property will be the same as the argument's ID.  </p>
 <pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
 
-function exec(message, args){
+function exec(message, args) {
     const rand = Math.floor(Math.random() * args.maximum) + 1;
     return message.reply(rand);
 }
