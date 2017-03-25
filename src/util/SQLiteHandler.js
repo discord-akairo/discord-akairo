@@ -32,7 +32,7 @@ class SQLiteHandler extends EventEmitter {
          * Path to the database file.
          * @type {string}
          */
-        this.filepath = filepath;
+        this.filepath = path.resolve(filepath);
 
         /**
          * Name of the table.
