@@ -314,12 +314,16 @@ class CommandHandler extends AkairoHandler {
                         if (member) message.member = member;
                         return command.parse(content, message);
                     }).then(args => {
+                        if (command.typing) message.channel.startTyping();
                         this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, edited);
                         return Promise.resolve(command.exec(message, args, edited));
                     }).then(() => {
                         this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, edited);
+                        if (command.typing) message.channel.stopTyping();
                     });
                 }).catch(reason => {
+                    if (command.typing) message.channel.stopTyping();
+
                     if (reason == null) return;
                     if (reason instanceof Error) {
                         this._handleError(reason, message, command);
@@ -522,12 +526,17 @@ class CommandHandler extends AkairoHandler {
 
                 return fetch.then(member => {
                     if (member) message.member = member;
+                    if (entry.command.typing) message.channel.startTyping();
+
                     this.emit(CommandHandlerEvents.COMMAND_STARTED, message, entry.command);
                     return Promise.resolve(entry.command.exec(message, entry.match, entry.groups, edited));
                 }).then(() => {
                     this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, entry.command);
+                    if (entry.command.typing) message.channel.stopTyping();
                 });
             }).catch(reason => {
+                if (entry.command.typing) message.channel.stopTyping();
+
                 if (reason == null) return;
                 if (reason instanceof Error) {
                     this._handleError(reason, message, entry.command);
@@ -561,12 +570,17 @@ class CommandHandler extends AkairoHandler {
 
                     return fetch.then(member => {
                         if (member) message.member = member;
+                        if (command.typing) message.channel.startTyping();
+
                         this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command);
                         return Promise.resolve(command.exec(message, edited));
                     }).then(() => {
                         this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command);
+                        if (command.typing) message.channel.stopTyping();
                     });
                 }).catch(reason => {
+                    if (command.typing) message.channel.stopTyping();
+
                     if (reason == null) return;
                     if (reason instanceof Error) {
                         this._handleError(reason, message, command);

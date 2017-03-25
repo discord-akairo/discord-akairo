@@ -12,6 +12,7 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * @prop {string} [category='default'] - Category ID for organization purposes.
  * @prop {boolean} [ownerOnly=false] - Whether or not to allow client owner(s) only.
  * @prop {boolean} [protected=false] - Whether or not this command cannot be disabled.
+ * @prop {boolean} [typing=false] - Whether or not to type in channel during execution.
  * @prop {boolean} [editable=true] - Whether or not message edits will run this command.
  * <br>On an edited message, the exec function edited param will be true.
  * @prop {number} [cooldown] - The command cooldown in milliseconds.
@@ -92,6 +93,12 @@ class Command extends AkairoModule {
          * @type {boolean}
          */
         this.editable = !(options.editable === false);
+
+        /**
+         * Whether or not to type during command execution.
+         * @type {boolean}
+         */
+        this.typing = !!options.typing;
 
         /**
          * Cooldown in milliseconds.
