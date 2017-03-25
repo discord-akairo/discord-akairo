@@ -92,6 +92,7 @@ declare module 'discord-akairo' {
         channelRestriction: string;
         ownerOnly: boolean;
         protected: boolean;
+        typing: boolean;
         editable: boolean;
         cooldown?: number;
         ratelimit: number;
@@ -351,6 +352,7 @@ declare module 'discord-akairo' {
         category?: string;
         ownerOnly?: boolean;
         protected?: boolean;
+        typing?: boolean;
         editable?: boolean;
         cooldown?: number;
         ratelimit?: number;
