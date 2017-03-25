@@ -21,9 +21,9 @@ module.exports = new Command('test', exec, {
             prefix: '--flag'
         },
         {
-            id: 'aprefix',
+            id: 'aPrefix',
             match: 'prefix',
-            prefix: '--prefix'
+            prefix: '--prefix='
         }
     ]
 });
