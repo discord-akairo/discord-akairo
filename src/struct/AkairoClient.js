@@ -82,13 +82,11 @@ class AkairoClient extends Client {
      * @returns {AkairoClient}
      */
     addDatabase(name, database) {
-        Object.defineProperty(this.databases, name, {
-            value: database,
-            enumerable: true
-        });
+        this.databases[name] = database;
 
         if (!this.akairoOptions.emitters) this.akairoOptions.emitters = {};
         this.akairoOptions.emitters[name] = database;
+
         return this;
     }
 

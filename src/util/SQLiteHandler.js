@@ -30,42 +30,30 @@ class SQLiteHandler extends EventEmitter {
 
         /**
          * Path to the database file.
-         * @readonly
-         * @name SQLiteHandler#filepath
          * @type {string}
          */
+        this.filepath = filepath;
 
         /**
          * Name of the table.
-         * @readonly
-         * @name SQLiteHandler#tableName
          * @type {string}
          */
+        this.tableName = options.tableName || 'configs';
 
         /**
          * Default configuration.
-         * @readonly
-         * @name SQLiteHandler#defaultConfig
          * @type {Object}
          */
+        this.defaultConfig = options.defaultConfig || {};
 
         /**
          * Keys to parse and stringify as JSON.
-         * @readonly
-         * @name SQLiteHandler#json
          * @type {string[]}
          */
-
-        Object.defineProperties(this, {
-            filepath: { value: path.resolve(filepath) },
-            tableName: { value: options.tableName || 'configs' },
-            defaultConfig: { value: options.defaultConfig || {} },
-            json: { value: options.json || [] }
-        });
+        this.json = options.json || [];
 
         /**
          * The database.
-         * @readonly
          * @type {Object}
          */
         this.db = null;

@@ -40,9 +40,15 @@ class AkairoHandler extends EventEmitter {
          */
 
         Object.defineProperties(this, {
-            client: { value: client },
-            directory: { value: path.resolve(directory) },
-            classToHandle: { value: classToHandle || AkairoModule }
+            client: {
+                value: client
+            },
+            directory: {
+                value: path.resolve(directory)
+            },
+            classToHandle: {
+                value: classToHandle || AkairoModule
+            }
         });
 
         /**
@@ -73,9 +79,17 @@ class AkairoHandler extends EventEmitter {
         if (!(mod instanceof this.classToHandle)) return undefined;
         if (this.modules.has(mod.id)) throw new Error(`${this.classToHandle.name} ${mod.id} already loaded.`);
 
-        mod.filepath = isObj ? null : thing;
-        mod.client = this.client;
-        mod.handler = this;
+        Object.defineProperties(mod, {
+            filepath: {
+                value: isObj ? null : thing
+            },
+            client: {
+                value: this.client
+            },
+            handler: {
+                value: this
+            }
+        });
 
         this.modules.set(mod.id, mod);
 
