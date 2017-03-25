@@ -51,7 +51,6 @@ class AkairoClient extends Client {
         /**
          * An empty object.
          * <br>Useful for storing things.
-         * @name AkairoClient#mem
          * @type {Object}
          */
         this.mem = {};
