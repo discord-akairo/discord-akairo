@@ -30,7 +30,7 @@ declare module 'discord-akairo' {
         modules: Collection<string, T>;
         categories: Collection<string, Category<string, T>>;
 
-        load(thing: string | T): T;
+        load(thing: string | T, isReload?: boolean): T;
         add(filename: string): T;
         remove(id: string): T;
         reload(id: string): T;
@@ -43,6 +43,10 @@ declare module 'discord-akairo' {
         on(event: 'reload', listener: (mod: T) => void): this;
         on(event: 'enable', listener: (mod: T) => void): this;
         on(event: 'disable', listener: (mod: T) => void): this;
+
+        _read(): void;
+        _apply(mod: T, filepath?: string): void;
+        _unapply(mod: T): void;
 
         static readdirRecursive(directory: string): string[];
     }
@@ -80,6 +84,9 @@ declare module 'discord-akairo' {
 
         default(message: Message): any;
         cast(word: string, message: Message): Promise<any>;
+
+        _processType(word: string, message: Message, args: Object): any;
+        _promptArgument(message: Message, args: Object): Promise<any>;
     }
 
     export class Command extends AkairoModule {
@@ -131,11 +138,7 @@ declare module 'discord-akairo' {
         findCommand(name: string): Command;
         handle(message: Message, edited: boolean): Promise<void>;
 
-        on(event: 'add', listener: (command: Command) => void): this;
-        on(event: 'remove', listener: (command: Command) => void): this;
-        on(event: 'reload', listener: (command: Command) => void): this;
-        on(event: 'enable', listener: (command: Command) => void): this;
-        on(event: 'disable', listener: (command: Command) => void): this;
+        on(event: string, listener: Function): this;
         on(event: 'messageBlocked', listener: (message: Message, reason: string) => void): this;
         on(event: 'messageInvalid', listener: (message: Message) => void): this;
         on(event: 'commandDisabled', listener: (message: Message, command: Command) => void): this;
@@ -145,6 +148,13 @@ declare module 'discord-akairo' {
         on(event: 'commandFinished', listener: (message: Message, command: Command, edited: boolean) => void): this;
         on(event: 'inPrompt', listener: (message: Message) => void): this;
         on(event: 'error', listener: (error: Error, message: Message, command: Command) => void): this;
+
+        _addAliases(command: Command): void;
+        _removeAliases(command: Command): void;
+        _parseCommand(message: Message): Object;
+        _handleCooldowns(message: Message, command: Command): boolean;
+        _handleTriggers(message: Message, edited: boolean): Promise<void>;
+        _handleError(err: Error, message: Message, command: Command): void;
     }
 
     export class Inhibitor extends AkairoModule {
@@ -164,12 +174,6 @@ declare module 'discord-akairo' {
 
         testMessage(message: Message): Promise<void>;
         testCommand(message: Message, command: Command): Promise<void>;
-
-        on(event: 'add', listener: (command: Inhibitor) => void): this;
-        on(event: 'remove', listener: (command: Inhibitor) => void): this;
-        on(event: 'reload', listener: (command: Inhibitor) => void): this;
-        on(event: 'enable', listener: (command: Inhibitor) => void): this;
-        on(event: 'disable', listener: (command: Inhibitor) => void): this;
     }
 
     export class Listener extends AkairoModule {
@@ -191,12 +195,6 @@ declare module 'discord-akairo' {
 
         register(id: string): Listener;
         deregister(id: string): Listener;
-
-        on(event: 'add', listener: (command: Listener) => void): this;
-        on(event: 'remove', listener: (command: Listener) => void): this;
-        on(event: 'reload', listener: (command: Listener) => void): this;
-        on(event: 'enable', listener: (command: Listener) => void): this;
-        on(event: 'disable', listener: (command: Listener) => void): this;
     }
 
     export class Category<K, V> extends Collection<K, V> {

@@ -15,18 +15,6 @@ class CommandHandler extends AkairoHandler {
         super(client, options.commandDirectory, Command);
 
         /**
-         * Collecion of command aliases.
-         * @type {Collection<string, string>}
-         */
-        this.aliases = new Collection();
-
-        /**
-         * Set of prefix overwrites.
-         * @type {Set<string|string[]|Function>}
-         */
-        this.prefixes = new Set();
-
-        /**
          * The type resolver.
          * @type {TypeResolver}
          */
@@ -78,7 +66,7 @@ class CommandHandler extends AkairoHandler {
          * Default prompt options.
          * @type {PromptOptions}
          */
-        this.defaultPrompt = {
+        this.defaultPrompt = Object.assign({
             start: function start(m) {
                 return `${m.author}, what ${this.type} would you like to use?\n${this.description || ''}`;
             },
@@ -94,9 +82,7 @@ class CommandHandler extends AkairoHandler {
             stopWord: 'stop',
             optional: false,
             infinite: false
-        };
-
-        Object.assign(this.defaultPrompt, options.defaultPrompt || {});
+        }, options.defaultPrompt || {});
 
         /**
          * Default cooldown for commands.
@@ -120,8 +106,6 @@ class CommandHandler extends AkairoHandler {
          */
         this.allowMention = typeof options.allowMention === 'function' ? options.allowMention : () => options.allowMention;
 
-        for (const id of this.modules.keys()) this._addAliases(id);
-
         /**
          * Directory to commands.
          * @readonly
@@ -137,45 +121,75 @@ class CommandHandler extends AkairoHandler {
     }
 
     /**
-     * Loads a command.
-     * @param {string|Command} thing - Module or path to module.
-     * @returns {Command}
+     * Reads modules and loads them.
+     * @private
+     * @returns {void}
      */
-    load(thing) {
-        const command = super.load(thing);
-        if (this.aliases) this._addAliases(command.id);
-        return command;
+    _read() {
+        /**
+         * Collecion of command aliases.
+         * @type {Collection<string, string>}
+         */
+        this.aliases = new Collection();
+
+        /**
+         * Set of prefix overwrites.
+         * @type {Set<string|string[]|Function>}
+         */
+        this.prefixes = new Set();
+
+        super._read();
     }
 
     /**
-     * Removes a command.
-     * @param {string} id - ID of the command.
-     * @returns {Command}
+     * Registers a module.
+     * @private
+     * @param {Command} command - Module to use.
+     * @param {string} [filepath] - Filepath of module.
+     * @returns {void}
      */
-    remove(id) {
-        id = id.toString();
-
-        const command = this.modules.get(id);
-        if (!command) throw new Error(`Command ${id} does not exist.`);
-        this._removeAliases(command.id);
-
-        return super.remove(id);
+    _apply(command, filepath) {
+        super._apply(command, filepath);
+        this._addAliases(command);
     }
 
     /**
-     * Reloads a command.
-     * @param {string} id - ID of the command.
-     * @returns {Command}
+     * Deregisters a module.
+     * @private
+     * @param {Command} command - Module to use.
+     * @returns {void}
      */
-    reload(id) {
-        id = id.toString();
+    _unapply(command) {
+        this._removeAliases(command);
+        super._unapply(command);
+    }
 
-        const command = this.modules.get(id);
-        if (!command) throw new Error(`Command ${id} does not exist.`);
-        if (!command.filepath) throw new Error(`Command ${id} is not reloadable.`);
-        this._removeAliases(command.id);
+    /**
+     * Adds aliases of a command.
+     * @private
+     * @param {Command} command - Command to use.
+     * @returns {void}
+     */
+    _addAliases(command) {
+        for (const alias of command.aliases) {
+            const conflict = this.aliases.get(alias.toLowerCase());
+            if (conflict) throw new Error(`Alias ${alias} of ${command.id} already exists on ${conflict}.`);
 
-        return super.reload(id);
+            this.aliases.set(alias.toLowerCase(), command.id);
+        }
+
+        if (command.prefix != null) this.prefixes.add(command.prefix);
+    }
+
+    /**
+     * Removes aliases of a command.
+     * @private
+     * @param {Command} command - Command to use.
+     * @returns {void}
+     */
+    _removeAliases(command) {
+        for (const alias of command.aliases) this.aliases.delete(alias.toLowerCase());
+        if (command.prefix != null) this.prefixes.delete(command.prefix);
     }
 
     /**
@@ -599,6 +613,7 @@ class CommandHandler extends AkairoHandler {
      * @param {Error} err - The error.
      * @param {Message} message - Message that called the command.
      * @param {Command} [command] - Command that errored.
+     * @returns {void}
      */
     _handleError(err, message, command) {
         if (this.listenerCount(CommandHandlerEvents.ERROR)) {
@@ -610,43 +625,35 @@ class CommandHandler extends AkairoHandler {
     }
 
     /**
-     * Adds aliases of a command.
-     * @private
-     * @param {string} id - ID of command.
+     * Loads a command.
+     * @method
+     * @name CommandHandler#load
+     * @param {string|Command} thing - Module or path to module.
+     * @returns {Command}
      */
-    _addAliases(id) {
-        const command = this.modules.get(id.toString());
-        if (!command) throw new Error(`Command ${id} does not exist.`);
-
-        for (const alias of command.aliases) {
-            const conflict = this.aliases.get(alias.toLowerCase());
-            if (conflict) throw new Error(`Alias ${alias} of ${command.id} already exists on ${conflict}.`);
-
-            this.aliases.set(alias.toLowerCase(), command.id);
-        }
-
-        if (command.prefix != null) this.prefixes.add(command.prefix);
-    }
-
-    /**
-     * Removes aliases of a command.
-     * @private
-     * @param {string} id - ID of command.
-     */
-    _removeAliases(id) {
-        const command = this.modules.get(id.toString());
-        if (!command) throw new Error(`Command ${id} does not exist.`);
-
-        for (const alias of command.aliases) this.aliases.delete(alias.toLowerCase());
-        if (command.prefix != null) this.prefixes.delete(command.prefix);
-    }
 
     /**
      * Adds a command.
      * @method
+     * @name CommandHandler#add
      * @param {string} filename - Filename to lookup in the directory.
      * <br>A .js extension is assumed.
-     * @name CommandHandler#add
+     * @returns {Command}
+     */
+
+    /**
+     * Removes a command.
+     * @method
+     * @name CommandHandler#remove
+     * @param {string} id - ID of the command.
+     * @returns {Command}
+     */
+
+    /**
+     * Reloads a command.
+     * @method
+     * @name CommandHandler#reload
+     * @param {string} id - ID of the command.
      * @returns {Command}
      */
 
@@ -727,6 +734,12 @@ module.exports = CommandHandler;
  * @param {Error} error - The error.
  * @param {Message} message - Message sent.
  * @param {?Command} command - Command executed.
+ */
+
+/**
+ * Emitted when a command is loaded.
+ * @event CommandHandler#load
+ * @param {Command} command - Module loaded.
  */
 
 /**

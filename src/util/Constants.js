@@ -45,6 +45,7 @@ module.exports = {
         STICKY: 'sticky'
     },
     AkairoHandlerEvents: {
+        LOAD: 'load',
         ADD: 'add',
         REMOVE: 'remove',
         RELOAD: 'reload',

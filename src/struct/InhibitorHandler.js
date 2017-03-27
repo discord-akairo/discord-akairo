@@ -55,6 +55,25 @@ class InhibitorHandler extends AkairoHandler {
     }
 
     /**
+     * Deregisters a module.
+     * @private
+     * @method
+     * @name InhibitorHandler#_unapply
+     * @param {Inhibitor} inhibitor - Module to use.
+     * @returns {void}
+     */
+
+    /**
+     * Registers a module.
+     * @private
+     * @method
+     * @name InhibitorHandler#_apply
+     * @param {Inhibitor} inhibitor - Module to use.
+     * @param {string} [filepath] - Filepath of module.
+     * @returns {void}
+     */
+
+    /**
      * Loads an inhibitor.
      * @method
      * @param {string|Inhibitor} thing - Module or path to module.
@@ -65,25 +84,25 @@ class InhibitorHandler extends AkairoHandler {
     /**
      * Adds an inhibitor.
      * @method
+     * @name InhibitorHandler#add
      * @param {string} filename - Filename to lookup in the directory.
      * <br>A .js extension is assumed.
-     * @name InhibitorHandler#add
      * @returns {Inhibitor}
      */
 
     /**
      * Removes an inhibitor.
      * @method
-     * @param {string} id - ID of the inhibitor.
      * @name InhibitorHandler#remove
+     * @param {string} id - ID of the inhibitor.
      * @returns {Inhibitor}
      */
 
     /**
      * Reloads an inhibitor.
      * @method
-     * @param {string} id - ID of the inhibitor.
      * @name InhibitorHandler#reload
+     * @param {string} id - ID of the inhibitor.
      * @returns {Inhibitor}
      */
 
@@ -96,6 +115,12 @@ class InhibitorHandler extends AkairoHandler {
 }
 
 module.exports = InhibitorHandler;
+
+/**
+ * Emitted when an inhibitor is loaded.
+ * @event InhibitorHandler#load
+ * @param {Inhibitor} inhibitor - Inhibitor loaded.
+ */
 
 /**
  * Emitted when an inhibitor is added.

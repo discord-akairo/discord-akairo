@@ -32,7 +32,7 @@ class ListenerHandler extends AkairoHandler {
             }
         }
 
-        for (const m of this.modules.values()) this.register(m.id);
+        for (const listener of this.modules.values()) this.register(listener.id);
 
         /**
          * Directory to listeners.
@@ -49,50 +49,31 @@ class ListenerHandler extends AkairoHandler {
     }
 
     /**
-     * Loads a listener.
-     * @method
-     * @name ListenerHandler#load
-     * @param {string|Listener} thing - Module or path to module.
-     * @returns {Listener}
+     * Registers a module.
+     * @private
+     * @param {Listener} listener - Module to use.
+     * @param {string} [filepath] - Filepath of module.
+     * @returns {void}
      */
-    load(thing) {
-        const listener = super.load(thing);
+    _apply(listener, filepath) {
+        super._apply(listener, filepath);
         if (this.emitters) this.register(listener.id);
         return listener;
     }
 
     /**
-     * Removes a listener.
-     * @param {string} id - ID of the listener.
-     * @returns {Listener}
+     * Deregisters a module.
+     * @private
+     * @param {Listener} listener - Module to use.
+     * @returns {void}
      */
-    remove(id) {
-        id = id.toString();
-        this.deregister(id);
-        return super.remove(id);
+    _unapply(listener) {
+        this.deregister(listener.id);
+        super._unapply(listener);
     }
 
     /**
-     * Reloads a listener.
-     * @param {string} id - ID of the listener.
-     * @returns {Listener}
-     */
-    reload(id) {
-        id = id.toString();
-
-        let listener = this.modules.get(id);
-        if (!listener) throw new Error(`Listener ${id} does not exist.`);
-        if (!listener.filepath) throw new Error(`Listener ${id} is not reloadable.`);
-
-        this.deregister(id);
-        listener = super.reload(id);
-        this.register(listener.id);
-
-        return listener;
-    }
-
-    /**
-     * Registers a listener with the EventEmitter.
+     * Adds a listener to the EventEmitter.
      * @param {string} id - ID of the listener.
      * @returns {Listener}
      */
@@ -129,11 +110,35 @@ class ListenerHandler extends AkairoHandler {
     }
 
     /**
+     * Loads a listener.
+     * @method
+     * @name ListenerHandler#load
+     * @param {string|Listener} thing - Module or path to module.
+     * @returns {Listener}
+     */
+
+    /**
      * Adds a listener.
      * @method
+     * @name ListenerHandler#add
      * @param {string} filename - Filename to lookup in the directory.
      * <br>A .js extension is assumed.
-     * @name ListenerHandler#add
+     * @returns {Listener}
+     */
+
+    /**
+     * Removes a listener.
+     * @method
+     * @name ListenerHandler#remove
+     * @param {string} id - ID of the listener.
+     * @returns {Listener}
+     */
+
+    /**
+     * Reloads a listener.
+     * @method
+     * @name ListenerHandler#reload
+     * @param {string} id - ID of the listener.
      * @returns {Listener}
      */
 
@@ -146,6 +151,12 @@ class ListenerHandler extends AkairoHandler {
 }
 
 module.exports = ListenerHandler;
+
+/**
+ * Emitted when a listener is loaded.
+ * @event ListenerHandler#load
+ * @param {Listener} listener - Listener loaded.
+ */
 
 /**
  * Emitted when a listener is added.

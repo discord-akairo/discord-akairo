@@ -63,25 +63,30 @@ class AkairoHandler extends EventEmitter {
          */
         this.categories = new Collection();
 
+        this._read();
+    }
+
+    /**
+     * Reads modules and loads them.
+     * @private
+     * @returns {void}
+     */
+    _read() {
         const filepaths = this.constructor.readdirRecursive(this.directory);
         for (const filepath of filepaths) this.load(filepath);
     }
 
     /**
-     * Loads a module, can be a filepath or an object.
-     * @param {string|AkairoModule} thing - Module or path to module.
-     * @returns {AkairoModule}
+     * Registers a module.
+     * @private
+     * @param {AkairoModule} mod - Module to use.
+     * @param {string} [filepath] - Filepath of module.
+     * @returns {void}
      */
-    load(thing) {
-        const isObj = typeof thing === 'object';
-        const mod = isObj ? thing : require(thing);
-
-        if (!(mod instanceof this.classToHandle)) return undefined;
-        if (this.modules.has(mod.id)) throw new Error(`${this.classToHandle.name} ${mod.id} already loaded.`);
-
+    _apply(mod, filepath) {
         Object.defineProperties(mod, {
             filepath: {
-                value: isObj ? null : thing
+                value: filepath
             },
             client: {
                 value: this.client
@@ -97,7 +102,35 @@ class AkairoHandler extends EventEmitter {
         const category = this.categories.get(mod.category);
         mod.category = category;
         category.set(mod.id, mod);
+    }
 
+    /**
+     * Deregisters a module.
+     * @private
+     * @param {AkairoModule} mod - Module to use.
+     * @returns {void}
+     */
+    _unapply(mod) {
+        if (mod.filepath) delete require.cache[require.resolve(mod.filepath)];
+        this.modules.delete(mod.id);
+        mod.category.delete(mod.id);
+    }
+
+    /**
+     * Loads a module, can be a filepath or an object.
+     * @param {string|AkairoModule} thing - Module or path to module.
+     * @param {boolean} [isReload=false] - Whether this is a reload or not.
+     * @returns {AkairoModule}
+     */
+    load(thing, isReload = false) {
+        const isObj = typeof thing === 'object';
+        const mod = isObj ? thing : require(thing);
+
+        if (!(mod instanceof this.classToHandle)) return undefined;
+        if (this.modules.has(mod.id)) throw new Error(`${this.classToHandle.name} ${mod.id} already loaded.`);
+
+        this._apply(mod, isObj ? null : thing);
+        if (!isReload) this.emit(AkairoHandlerEvents.LOAD, mod);
         return mod;
     }
 
@@ -127,10 +160,7 @@ class AkairoHandler extends EventEmitter {
         const mod = this.modules.get(id.toString());
         if (!mod) throw new Error(`${this.classToHandle.name} ${id} does not exist.`);
 
-        if (mod.filepath) delete require.cache[require.resolve(mod.filepath)];
-        this.modules.delete(mod.id);
-
-        mod.category.delete(mod.id);
+        this._unapply(mod);
 
         this.emit(AkairoHandlerEvents.REMOVE, mod);
         return mod;
@@ -146,14 +176,11 @@ class AkairoHandler extends EventEmitter {
         if (!mod) throw new Error(`${this.classToHandle.name} ${id} does not exist.`);
         if (!mod.filepath) throw new Error(`${this.classToHandle.name} ${id} is not reloadable.`);
 
+        this._unapply(mod);
+
         const filepath = mod.filepath;
+        const newMod = this.load(filepath, true);
 
-        delete require.cache[require.resolve(mod.filepath)];
-        this.modules.delete(mod.id);
-
-        mod.category.delete(mod.id);
-
-        const newMod = this.load(filepath);
         this.emit(AkairoHandlerEvents.RELOAD, newMod);
         return newMod;
     }
@@ -205,6 +232,12 @@ class AkairoHandler extends EventEmitter {
 }
 
 module.exports = AkairoHandler;
+
+/**
+ * Emitted when a module is loaded.
+ * @event AkairoHandler#load
+ * @param {AkairoModule} mod - Module loaded.
+ */
 
 /**
  * Emitted when a module is added.

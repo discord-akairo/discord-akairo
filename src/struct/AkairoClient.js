@@ -90,7 +90,7 @@ class AkairoClient extends Client {
     }
 
     /**
-     * Logins the client, creates message listener, and init databases.
+     * Logins the client, creates message listener, and initialize databases.
      * <br>Resolves once client is ready.
      * @param {string} token - Client token.
      * @returns {Promise<void>}
