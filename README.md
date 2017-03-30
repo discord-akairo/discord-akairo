@@ -47,7 +47,6 @@ client.login('TOKEN').then(() => {
   - Reading files recursively from directories.
   - Adding, removing, and reloading modules.
   - Categorization for modules.
-
 - Flexible command handling and creation.
   - Command aliases.
   - Command cooldowns.
@@ -60,7 +59,6 @@ client.login('TOKEN').then(() => {
   - Different ways to trigger a command.
     - Regular expression triggers.
     - Conditional triggers.
-
 - Complex and highly customizable arguments.
   - Support for quoted arguments.
   - Arguments based on previous arguments.
@@ -74,12 +72,10 @@ client.login('TOKEN').then(() => {
     - Can also be based on previous arguments.
     - Customizable prompts with embeds, files, etc.
     - Infinite argument prompting.
-
 - Useful utility methods available.
   - Resolvers for members, users, and others that can filter by name.
   - Shortcut methods for making embeds and collections.
   - Helper methods for prompting users for input.
-
 - Support for SQLite.
   - Default values for keys.
   - In-memory caching for stored data.
