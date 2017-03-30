@@ -124,8 +124,9 @@ class AkairoHandler extends EventEmitter {
      */
     load(thing, isReload = false) {
         const isObj = typeof thing === 'object';
-        const mod = isObj ? thing : require(thing);
+        if (!isObj && !thing.endsWith('.js')) return undefined;
 
+        const mod = isObj ? thing : require(thing);
         if (!(mod instanceof this.classToHandle)) return undefined;
         if (this.modules.has(mod.id)) throw new Error(`${this.classToHandle.name} ${mod.id} already loaded.`);
 
