@@ -1,24 +1,24 @@
 <p align="center">
   <a href=https://github.com/1Computer1/discord-akairo>
-      <img src=https://u.nya.is/fweoqf.png/>
+      <img src="https://a.safe.moe/PwUgW.png"/>
   </a>
 </p>  
 
 <p align="center">
   <a href=https://www.npmjs.com/package/discord-akairo>
-      <img src=https://img.shields.io/npm/v/discord-akairo.svg?maxAge=3600/>
+      <img src="https://img.shields.io/npm/v/discord-akairo.svg?maxAge=3600"/>
   </a>
   <a href=https://david-dm.org/1computer1/discord-akairo>
-      <img src=https://david-dm.org/1computer1/discord-akairo.svg/>
+      <img src="https://david-dm.org/1computer1/discord-akairo.svg"/>
   </a>
   <a href=https://travis-ci.org/1Computer1/discord-akairo>
-      <img src=https://travis-ci.org/1Computer1/discord-akairo.png?branch=indev/>
+      <img src="https://travis-ci.org/1Computer1/discord-akairo.svg?branch=indev"/>
   </a>
 </p>  
 
 <p align="center">
   <a href=https://nodei.co/npm/discord-akairo>
-      <img src=https://nodei.co/npm/discord-akairo.png?downloads=true/>
+      <img src="https://nodei.co/npm/discord-akairo.png?downloads=true"/>
   </a>
 </p>  
 
