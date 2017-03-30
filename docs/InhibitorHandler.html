@@ -612,6 +612,450 @@
 
     
 
+    <h4 class="name" id="_apply"><span class="type-signature">(private) </span>_apply<span class="signature">(inhibitor, filepath<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {void}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_InhibitorHandler.js.html">struct/InhibitorHandler.js</a>, <a href="struct_InhibitorHandler.js.html#line66">line 66</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#_apply">AkairoHandler#_apply</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Registers a module.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>inhibitor</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Inhibitor.html">Inhibitor</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Module to use.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>filepath</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Filepath of module.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+<div class="param-desc">
+    
+<span class="param-type">void</span>
+
+
+</div>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_read"><span class="type-signature">(private) </span>_read<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_AkairoHandler.js.html">struct/AkairoHandler.js</a>, <a href="struct_AkairoHandler.js.html#line74">line 74</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#_read">AkairoHandler#_read</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Reads modules and loads them.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+<div class="param-desc">
+    
+<span class="param-type">void</span>
+
+
+</div>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_unapply"><span class="type-signature">(private) </span>_unapply<span class="signature">(inhibitor)</span><span class="type-signature"> &rarr; {void}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_InhibitorHandler.js.html">struct/InhibitorHandler.js</a>, <a href="struct_InhibitorHandler.js.html#line57">line 57</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#_unapply">AkairoHandler#_unapply</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Deregisters a module.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>inhibitor</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Inhibitor.html">Inhibitor</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Module to use.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+<div class="param-desc">
+    
+<span class="param-type">void</span>
+
+
+</div>
+
+    
+
+
+        
+            
+
+    
+
     <h4 class="name" id="add"><span class="type-signature"></span>add<span class="signature">(filename)</span><span class="type-signature"> &rarr; {<a href="Inhibitor.html">Inhibitor</a>}</span></h4>
 
     
@@ -624,7 +1068,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_InhibitorHandler.js.html">struct/InhibitorHandler.js</a>, <a href="struct_InhibitorHandler.js.html#line65">line 65</a>
+        <a href="struct_InhibitorHandler.js.html">struct/InhibitorHandler.js</a>, <a href="struct_InhibitorHandler.js.html#line84">line 84</a>
     </li></ul></dd>
     
 
@@ -774,7 +1218,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_AkairoHandler.js.html">struct/AkairoHandler.js</a>, <a href="struct_AkairoHandler.js.html#line175">line 175</a>
+        <a href="struct_AkairoHandler.js.html">struct/AkairoHandler.js</a>, <a href="struct_AkairoHandler.js.html#line203">line 203</a>
     </li></ul></dd>
     
 
@@ -924,7 +1368,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_InhibitorHandler.js.html">struct/InhibitorHandler.js</a>, <a href="struct_InhibitorHandler.js.html#line57">line 57</a>
+        <a href="struct_InhibitorHandler.js.html">struct/InhibitorHandler.js</a>, <a href="struct_InhibitorHandler.js.html#line76">line 76</a>
     </li></ul></dd>
     
 
@@ -1077,7 +1521,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_InhibitorHandler.js.html">struct/InhibitorHandler.js</a>, <a href="struct_InhibitorHandler.js.html#line82">line 82</a>
+        <a href="struct_InhibitorHandler.js.html">struct/InhibitorHandler.js</a>, <a href="struct_InhibitorHandler.js.html#line101">line 101</a>
     </li></ul></dd>
     
 
@@ -1227,7 +1671,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_InhibitorHandler.js.html">struct/InhibitorHandler.js</a>, <a href="struct_InhibitorHandler.js.html#line90">line 90</a>
+        <a href="struct_InhibitorHandler.js.html">struct/InhibitorHandler.js</a>, <a href="struct_InhibitorHandler.js.html#line109">line 109</a>
     </li></ul></dd>
     
 
@@ -1328,7 +1772,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_InhibitorHandler.js.html">struct/InhibitorHandler.js</a>, <a href="struct_InhibitorHandler.js.html#line74">line 74</a>
+        <a href="struct_InhibitorHandler.js.html">struct/InhibitorHandler.js</a>, <a href="struct_InhibitorHandler.js.html#line93">line 93</a>
     </li></ul></dd>
     
 
@@ -1705,7 +2149,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_InhibitorHandler.js.html">struct/InhibitorHandler.js</a>, <a href="struct_InhibitorHandler.js.html#line100">line 100</a>
+        <a href="struct_InhibitorHandler.js.html">struct/InhibitorHandler.js</a>, <a href="struct_InhibitorHandler.js.html#line125">line 125</a>
     </li></ul></dd>
     
 
@@ -1843,7 +2287,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_InhibitorHandler.js.html">struct/InhibitorHandler.js</a>, <a href="struct_InhibitorHandler.js.html#line124">line 124</a>
+        <a href="struct_InhibitorHandler.js.html">struct/InhibitorHandler.js</a>, <a href="struct_InhibitorHandler.js.html#line149">line 149</a>
     </li></ul></dd>
     
 
@@ -1981,7 +2425,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_InhibitorHandler.js.html">struct/InhibitorHandler.js</a>, <a href="struct_InhibitorHandler.js.html#line118">line 118</a>
+        <a href="struct_InhibitorHandler.js.html">struct/InhibitorHandler.js</a>, <a href="struct_InhibitorHandler.js.html#line143">line 143</a>
     </li></ul></dd>
     
 
@@ -2107,6 +2551,144 @@
 
     
 
+    <h4 class="name" id="event:load">load</h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_InhibitorHandler.js.html">struct/InhibitorHandler.js</a>, <a href="struct_InhibitorHandler.js.html#line119">line 119</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#event:load">AkairoHandler#event:load</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Emitted when an inhibitor is loaded.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>inhibitor</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Inhibitor.html">Inhibitor</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Inhibitor loaded.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
     <h4 class="name" id="event:reload">reload</h4>
 
     
@@ -2119,7 +2701,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_InhibitorHandler.js.html">struct/InhibitorHandler.js</a>, <a href="struct_InhibitorHandler.js.html#line112">line 112</a>
+        <a href="struct_InhibitorHandler.js.html">struct/InhibitorHandler.js</a>, <a href="struct_InhibitorHandler.js.html#line137">line 137</a>
     </li></ul></dd>
     
 
@@ -2257,7 +2839,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_InhibitorHandler.js.html">struct/InhibitorHandler.js</a>, <a href="struct_InhibitorHandler.js.html#line106">line 106</a>
+        <a href="struct_InhibitorHandler.js.html">struct/InhibitorHandler.js</a>, <a href="struct_InhibitorHandler.js.html#line131">line 131</a>
     </li></ul></dd>
     
 
