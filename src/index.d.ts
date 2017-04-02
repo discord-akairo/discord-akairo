@@ -38,12 +38,12 @@ declare module 'discord-akairo' {
         reloadAll(): this;
         findCategory(name: string): Category<string, T>;
 
-        on(event: string, listener: Function): this;
-        on(event: 'add', listener: (this: this, mod: T) => void): this;
-        on(event: 'remove', listener: (this: this, mod: T) => void): this;
-        on(event: 'reload', listener: (this: this, mod: T) => void): this;
-        on(event: 'enable', listener: (this: this, mod: T) => void): this;
-        on(event: 'disable', listener: (this: this, mod: T) => void): this;
+        on(event: string, listener: (this: this) => any): this;
+        on(event: 'add', listener: (this: this, mod: T) => any): this;
+        on(event: 'remove', listener: (this: this, mod: T) => any): this;
+        on(event: 'reload', listener: (this: this, mod: T) => any): this;
+        on(event: 'enable', listener: (this: this, mod: T) => any): this;
+        on(event: 'disable', listener: (this: this, mod: T) => any): this;
 
         _apply(mod: T, filepath?: string): void;
         _unapply(mod: T): void;
@@ -52,7 +52,7 @@ declare module 'discord-akairo' {
     }
 
     export class AkairoModule {
-        constructor(id: string, exec: Function, options?: ModuleOptions);
+        constructor(id: string, exec: (this: AkairoModule, ...args: any[]) => any, options?: ModuleOptions);
 
         id: string;
         category: Category<string, AkairoModule>;
@@ -138,16 +138,16 @@ declare module 'discord-akairo' {
         findCommand(name: string): Command;
         handle(message: Message, edited: boolean): Promise<void>;
 
-        on(event: string, listener: Function): this;
-        on(event: 'messageBlocked', listener: (this: this, message: Message, reason: string) => void): this;
-        on(event: 'messageInvalid', listener: (this: this, message: Message) => void): this;
-        on(event: 'commandDisabled', listener: (this: this, message: Message, command: Command) => void): this;
-        on(event: 'commandBlocked', listener: (this: this, message: Message, command: Command, reason: string) => void): this;
-        on(event: 'commandCooldown', listener: (this: this, message: Message, command: Command, remaining: number) => void): this;
-        on(event: 'commandStarted', listener: (this: this, message: Message, command: Command, edited: boolean) => void): this;
-        on(event: 'commandFinished', listener: (this: this, message: Message, command: Command, edited: boolean) => void): this;
-        on(event: 'inPrompt', listener: (this: this, message: Message) => void): this;
-        on(event: 'error', listener: (this: this, error: Error, message: Message, command: Command) => void): this;
+        on(event: string, listener: (this: this) => any): this;
+        on(event: 'messageBlocked', listener: (this: this, message: Message, reason: string) => any): this;
+        on(event: 'messageInvalid', listener: (this: this, message: Message) => any): this;
+        on(event: 'commandDisabled', listener: (this: this, message: Message, command: Command) => any): this;
+        on(event: 'commandBlocked', listener: (this: this, message: Message, command: Command, reason: string) => any): this;
+        on(event: 'commandCooldown', listener: (this: this, message: Message, command: Command, remaining: number) => any): this;
+        on(event: 'commandStarted', listener: (this: this, message: Message, command: Command, edited: boolean) => any): this;
+        on(event: 'commandFinished', listener: (this: this, message: Message, command: Command, edited: boolean) => any): this;
+        on(event: 'inPrompt', listener: (this: this, message: Message) => any): this;
+        on(event: 'error', listener: (this: this, error: Error, message: Message, command: Command) => any): this;
 
         _addAliases(command: Command): void;
         _removeAliases(command: Command): void;
