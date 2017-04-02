@@ -39,11 +39,11 @@ declare module 'discord-akairo' {
         findCategory(name: string): Category<string, T>;
 
         on(event: string, listener: Function): this;
-        on(event: 'add', listener: (this: AkairoHandler, mod: T) => void): this;
-        on(event: 'remove', listener: (this: AkairoHandler, mod: T) => void): this;
-        on(event: 'reload', listener: (this: AkairoHandler, mod: T) => void): this;
-        on(event: 'enable', listener: (this: AkairoHandler, mod: T) => void): this;
-        on(event: 'disable', listener: (this: AkairoHandler, mod: T) => void): this;
+        on(event: 'add', listener: (this: this, mod: T) => void): this;
+        on(event: 'remove', listener: (this: this, mod: T) => void): this;
+        on(event: 'reload', listener: (this: this, mod: T) => void): this;
+        on(event: 'enable', listener: (this: this, mod: T) => void): this;
+        on(event: 'disable', listener: (this: this, mod: T) => void): this;
 
         _apply(mod: T, filepath?: string): void;
         _unapply(mod: T): void;
@@ -90,7 +90,7 @@ declare module 'discord-akairo' {
     }
 
     export class Command extends AkairoModule {
-        constructor(id: string, exec: (this: Command, message: Message) => any, options?: CommandOptions);
+        constructor(id: string, exec: ((this: Command, message: Message, args: Object, edited: boolean) => any) | ((this: Command, message: Message, match: string[], groups: string[] | null, edited: boolean) => any) | ((this: Command, message: Message, edited: boolean) => any), options?: CommandOptions);
 
         handler: CommandHandler<Command>;
         aliases: string[];
@@ -106,7 +106,7 @@ declare module 'discord-akairo' {
         defaultPrompt: PromptOptions;
         options: Object;
         description: string;
-        prefix: string | string[] | ((this: CommandHandler, message: Message) => string | string[]);
+        prefix: string | string[] | ((this: CommandHandler<Command>, message: Message) => string | string[]);
 
         trigger(message: Message): RegExp;
         condition(message: Message): boolean;
@@ -139,15 +139,15 @@ declare module 'discord-akairo' {
         handle(message: Message, edited: boolean): Promise<void>;
 
         on(event: string, listener: Function): this;
-        on(event: 'messageBlocked', listener: (this: CommandHandler, message: Message, reason: string) => void): this;
-        on(event: 'messageInvalid', listener: (this: CommandHandler, message: Message) => void): this;
-        on(event: 'commandDisabled', listener: (this: CommandHandler, message: Message, command: Command) => void): this;
-        on(event: 'commandBlocked', listener: (this: CommandHandler, message: Message, command: Command, reason: string) => void): this;
-        on(event: 'commandCooldown', listener: (this: CommandHandler, message: Message, command: Command, remaining: number) => void): this;
-        on(event: 'commandStarted', listener: (this: CommandHandler, message: Message, command: Command, edited: boolean) => void): this;
-        on(event: 'commandFinished', listener: (this: CommandHandler, message: Message, command: Command, edited: boolean) => void): this;
-        on(event: 'inPrompt', listener: (this: CommandHandler, message: Message) => void): this;
-        on(event: 'error', listener: (this: CommandHandler, error: Error, message: Message, command: Command) => void): this;
+        on(event: 'messageBlocked', listener: (this: this, message: Message, reason: string) => void): this;
+        on(event: 'messageInvalid', listener: (this: this, message: Message) => void): this;
+        on(event: 'commandDisabled', listener: (this: this, message: Message, command: Command) => void): this;
+        on(event: 'commandBlocked', listener: (this: this, message: Message, command: Command, reason: string) => void): this;
+        on(event: 'commandCooldown', listener: (this: this, message: Message, command: Command, remaining: number) => void): this;
+        on(event: 'commandStarted', listener: (this: this, message: Message, command: Command, edited: boolean) => void): this;
+        on(event: 'commandFinished', listener: (this: this, message: Message, command: Command, edited: boolean) => void): this;
+        on(event: 'inPrompt', listener: (this: this, message: Message) => void): this;
+        on(event: 'error', listener: (this: this, error: Error, message: Message, command: Command) => void): this;
 
         _addAliases(command: Command): void;
         _removeAliases(command: Command): void;
@@ -177,7 +177,7 @@ declare module 'discord-akairo' {
     }
 
     export class Listener extends AkairoModule {
-        constructor(id: string, exec: (this: Listener) => any, options?: ListenerOptions);
+        constructor(id: string, exec: (this: Listener, ...args: any[]) => any, options?: ListenerOptions);
 
         handler: ListenerHandler<Listener>;
         emitter: EventEmitter;
@@ -293,8 +293,8 @@ declare module 'discord-akairo' {
         ownerID?: string | string[];
         selfbot?: boolean;
         commandDirectory?: string;
-        prefix?: string | string[] | ((this: CommandHandler, message: Message) => string | string[]);
-        allowMention?: boolean | ((this: CommandHandler, message: Message) => boolean);
+        prefix?: string | string[] | ((this: CommandHandler<Command>, message: Message) => string | string[]);
+        allowMention?: boolean | ((this: CommandHandler<Command>, message: Message) => boolean);
         handleEdits?: boolean;
         fetchMembers?: boolean;
         defaultCooldown?: number;
