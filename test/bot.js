@@ -23,7 +23,7 @@ client.commandHandler.resolver.addType('1-10', function type(word) {
 });
 
 client.login(require('./auth.json').token).then(() => {
-    console.log('Ready!');
+    console.log('Ready!'); // eslint-disable-line no-console
 });
 
-process.on('unhandledRejection', err => console.error(err));
+process.on('unhandledRejection', err => console.error(err)); // eslint-disable-line no-console
