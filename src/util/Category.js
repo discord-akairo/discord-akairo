@@ -18,7 +18,7 @@ class Category extends Collection {
     }
 
     /**
-     * Calls reload() on all items in this category.
+     * Calls `reload()` on all items in this category.
      * @returns {Category}
      */
     reloadAll() {
@@ -27,7 +27,7 @@ class Category extends Collection {
     }
 
     /**
-     * Calls remove() on all items in this category.
+     * Calls `remove()` on all items in this category.
      * @returns {Category}
      */
     removeAll() {
@@ -36,7 +36,7 @@ class Category extends Collection {
     }
 
     /**
-     * Calls enable() on all items in this category.
+     * Calls `enable()` on all items in this category.
      * @returns {Category}
      */
     enableAll() {
@@ -45,7 +45,7 @@ class Category extends Collection {
     }
 
     /**
-     * Calls disable() on all items in this category.
+     * Calls `disable()` on all items in this category.
      * @returns {Category}
      */
     disableAll() {

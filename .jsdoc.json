@@ -27,5 +27,9 @@
             "static": false,
             "sort": false
         }
+    },
+    "plugins": ["plugins/markdown"],
+    "markdown": {
+        "hardwrap": true
     }
 }

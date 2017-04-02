@@ -2,66 +2,68 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
 
 /**
  * The method to match arguments from text.
- * <br><code>word</code> matches by the order of the words inputted, ignoring words that matches prefix or flag.
- * <br><code>rest</code> matches the rest of the words in order, ignoring words that matches prefix or flag.
- * <br><code>prefix</code> matches words that starts with the prefix and the word after the prefix is the evaluated argument.
- * <br><code>flag</code> matches words that equal this prefix and casts to true or false.
- * <br><code>text</code> matches the entire text, except for the command, ignoring words that matches prefix or flag.
- * <br><code>content</code> matches the entire text as it was inputted, except for the command.
- * <br><code>none</code> matches nothing at all and an empty string will be used for type operations.
- * <br>
- * <br>A function <code>((message, prevArgs) => {})</code> can also be used to return one of the above.
+ * - `word` matches by the order of the words inputted.
+ * It ignores words that matches a prefix or a flag.
+ * - `rest` matches the rest of the words in order.
+ * It ignores words that matches a prefix or a flag.
+ * - `prefix` matches words that starts with the prefix.
+ * The word after the prefix is the evaluated argument.
+ * - `flag` matches words that are the same as its prefix.
+ * The evaluated argument is either true or false.
+ * - `text` matches the entire text, except for the command.
+ * It ignores words that matches a prefix or a flag.
+ * - `content` matches the entire text as it was inputted, except for the command.
+ * - `none` matches nothing at all and an empty string will be used for type operations.
+ *
+ * A function `((message, prevArgs) => string)` can also be used to return one of the above.
  * @typedef {string} ArgumentMatch
  */
 
 /**
  * The type that the argument should be cast to.
- * <br><code>string</code> does not cast to any type and trims the word.
- * <br><code>number</code> casts to an number with parseFloat(), default value if not a number.
- * <br><code>integer</code> casts to an integer with parseInt(), default value if not a number.
- * <br><code>dynamic</code> casts to a number with parseFloat() or a string if the argument is not a number.
- * <br><code>dynamicInt</code> casts to an integer with parseInt() or a string if the argument is not a number.
- * <br><code>url</code> casts to an URL object, default value if new URL() does not work.
- * <br><code>date</code> casts to a Date object, default value if Date.parse() does not work.
- * <br>
- * <br>Possible Discord-related (pluralizable) types:
- * <br><code>user</code> tries to resolve to a user.
- * <br><code>member</code> tries to resolve to a member.
- * <br><code>relevant</code> tries to resolve to a relevant user in both guilds and DMs.
- * <br><code>channel</code> tries to resolve to a channel.
- * <br><code>textChannel</code> tries to resolve to a text channel.
- * <br><code>voiceChannel</code> tries to resolve to a voice channel.
- * <br><code>role</code> tries to resolve to a role.
- * <br><code>emoji</code> tries to resolve to a custom emoji.
- * <br><code>guild</code> tries to resolve to a guild.
- * <br>
- * <br>Possible Discord-related types:
- * <br><code>message</code> tries to fetch a message from an ID.
- * <br><code>invite</code> tries to resolve an invite code from a link.
- * <br>
- * <br>Many of these types can only be used in a guild.
- * <br>You can pluralize some of the types to get a Collection of resolved objects instead.
- * <br>
- * <br>An array of strings can be used to restrict input to only those strings, case insensitive.
- * <br>The evaluated argument will be all lowercase.
- * <br>If the input is not in the array, the default value is used.
- * <br>
- * <br>A regular expression can also be used.
- * <br>The evaluated argument will be an object containing the match and groups if global.
- * <br>
- * <br>A function <code>((word, message, prevArgs) => {})</code> can also be used to filter or modify arguments.
- * <br>A return value of true will let the word pass, a null/undefined return value will use the default value for the argument or start a prompt.
- * <br>Any other truthy return value will be used as the argument.
- * <br>If returning a Promise, the value resolved will be the argument, and a rejection will use the default/start a prompt.
+ * - `string` does not cast to any type.
+ * - `number` casts to an number with `parseFloat()`.
+ * - `integer` casts to an integer with `parseInt()`.
+ * - `dynamic` casts to a number with `parseFloat()` or a trimmed input if not a number.
+ * - `dynamicInt` casts to an integer with `parseInt()` or a trimmed input if not a number.
+ * - `url` casts to an `URL` object.
+ * - `date` casts to a `Date` object.
+ *
+ * Possible Discord-related types.
+ * These types can be plural (add an 's' to the end) and a collection of matching objects will be used.
+ * - `user` tries to resolve to a user.
+ * - `member` tries to resolve to a member.
+ * - `relevant` tries to resolve to a relevant user, works in both guilds and DMs.
+ * - `channel` tries to resolve to a channel.
+ * - `textChannel` tries to resolve to a text channel.
+ * - `voiceChannel` tries to resolve to a voice channel.
+ * - `role` tries to resolve to a role.
+ * - `emoji` tries to resolve to a custom emoji.
+ * - `guild` tries to resolve to a guild.
+ *
+ * Other Discord-related types:
+ * - `message` tries to fetch a message from an ID.
+ * - `invite` tries to resolve an invite code from a link.
+ *
+ * An array of strings can be used to restrict input to only those strings, case insensitive.
+ * The evaluated argument will be all lowercase.
+ *
+ * A regular expression can also be used.
+ * The evaluated argument will be an object containing the `match` and `groups` if global.
+ *
+ * A function `((word, message, prevArgs) => any)` can also be used to filter or modify arguments.
+ * A return value of `true` will let the word pass, a `null` or `undefined` return value will use the default value for the argument or start a prompt.
+ * Any other truthy return value will be used as the evaluated argument.
+ * If returning a Promise, the value resolved will be the argument, and a rejection will use the default value or start a prompt.
  * @typedef {string|string[]} ArgumentType
  */
 
 /**
  * A prompt to run if the user did not input the argument correctly.
- * <br>Can only be used if there is not a default value (unless optional is true).
- * <br>The functions are <code>((message, prevArgs, amountOfTries) => {})</code> and returns a string or object to determine the reply.
- * <br>The object should be equivalent to a MessageOptions, with an extra optional property called content for message content.
- * <br>Can also be a string literal that will have a mention concatenated to it.
+ * Can only be used if there is not a default value (unless optional is true).
+ * The functions are `((message, prevArgs, amountOfTries) => string|string[]|MessageOptions)` returning the reply.
+ * The object should be equivalent to a `MessageOptions`, with an extra optional property called `content` for message content.
+ * Can also be a string literal that will have a mention concatenated to the start.
  * @typedef {Object} PromptOptions
  * @prop {number} [retries=1] - Amount of times allowed to retries.
  * @prop {number} [time=30000] - Time to wait for input.
@@ -69,8 +71,8 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  * @prop {string} [stopWord='stop'] - Word to use for ending infinite prompts.
  * @prop {boolean} [optional=false] - Prompts only when argument is provided but was not of the right type.
  * @prop {boolean} [infinite=false] - Prompts forever until the stop word, cancel word, time limit, or retry limit.
- * <br>Note that the retry count resets back to one on each valid entry.
- * <br>The final evaluated argument will be an array of the inputs.
+ * Note that the retry count resets back to one on each valid entry.
+ * The final evaluated argument will be an array of the inputs.
  * @prop {string|string[]|Function} [start] - Function called on start of prompt.
  * @prop {string|string[]|Function} [retry] - Function called on a retry (failure to cast type).
  * @prop {string|string[]|Function} [timeout] - Function called on collector time out.
@@ -86,13 +88,13 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  * @prop {ArgumentType} [type='string'] - Type to cast to.
  * @prop {string|string[]} [prefix] - The string(s) to use as the flag for prefix and flag args.
  * @prop {number} [index] - Index/word of text to start from.
- * <br>Applicable to word, text, or content match only.
- * @prop {any} [default=''] - Default value if text does not parse/cast correctly.
- * <br>Can be a function <code>((message, prevArgs) => {})</code>.
- * <br>If using a flag arg, setting the default value inverses the result.
+ * Applicable to word, text, or content match only.
+ * @prop {any} [default=''] - Default value if text does not parse or cast correctly.
+ * Can be a function `((message, prevArgs) => any)`.
+ * If using a flag arg, setting the default value inverses the result.
  * @prop {string|string[]} [description=''] - A description of the argument.
  * @prop {PromptOptions} [prompt] - Prompt options for when user does not provide input.
- * <br>Must not have a default value for this to work.
+ * Must not have a default value for this to work.
  */
 
 class Argument {

@@ -14,30 +14,32 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * @prop {boolean} [protected=false] - Whether or not this command cannot be disabled.
  * @prop {boolean} [typing=false] - Whether or not to type in channel during execution.
  * @prop {boolean} [editable=true] - Whether or not message edits will run this command.
- * <br>On an edited message, the exec function edited param will be true.
+ * On an edited message, the exec function edited param will be true.
  * @prop {number} [cooldown] - The command cooldown in milliseconds.
  * @prop {number} [ratelimit=1] - Amount of command uses allowed until cooldown.
  * @prop {string|string[]|Function} [prefix] - A prefix to overwrite the global one for this command.
- * <br>Can be a function <code>(message => {})</code>.
- * @prop {RegExp|Function} [trigger] - A regex or function <code>(message => {})</code> returning regex to match in messages that are NOT commands.
- * <br>The exec function is <code>((message, match, groups, edited) => {})</code>.
- * @prop {Function} [condition] - A function <code>((message, edited) => {})</code> that returns true or false on messages that are NOT commands.
- * <br>The exec function is <code>((message, edited) => {})</code>.
+ * Can be a function `(message => string|string[])`.
+ * @prop {RegExp|Function} [trigger] - A regex or function `(message => RegExp)` returning regex to match in messages that are NOT commands.
+ * The exec function becomes `((message, match, groups, edited) => any)`.
+ * @prop {Function} [condition] - A function `((message, edited) => {})` that returns true or false on messages that are NOT commands.
+ * The exec function becomes `((message, edited) => any)`.
  * @prop {PromptOptions} [defaultPrompt={}] - The default prompt options.
  * @prop {Object} [options={}] - An object for custom options.
- * <br>Accessible with Command#options.
+ * Accessible with `Command#options`.
  * @prop {string|string[]} [description=''] - Description of the command.
  */
 
 /**
  * The method to split text into words.
- * <br><code>plain</code> splits word separated by whitespace. Extra whitespace is ignored.
- * <br><code>split</code> splits word separated by whitespace. Should not be used due to possible inconsistent whitespace.
- * <br><code>quoted</code> is similar to plain, but counts text inside double quotes as one word.
- * <br><code>sticky</code> is similar to quoted, but makes it so that quoted text must have a whitespace/another double quote before it to count as another word.
- * <br>
- * <br>A regex or a character can be used instead (for example, a comma) to split the message by that regex or character.
- * <br> A function <code>((content, message) => {})</code> returning an array of strings can be also used.
+ * - `plain` splits word separated by whitespace.
+ * Extra whitespace between words are ignored.
+ * - `split` splits word separated by whitespace.
+ * Should not be used due to possible inconsistent whitespace.
+ * - `quoted` is similar to plain, but counts text inside double quotes as one word.
+ * - `sticky` is similar to quoted, but makes it so that quoted text must have a whitespace or another double quote before it to count as another word.
+ *
+ * A regex or a character can be used instead (for example, a comma) to split the message by that regex or character.
+ * A function `((content, message) => string[])` returning an array of strings can be also used.
  * @typedef {string} ArgumentSplit
  */
 
@@ -46,7 +48,7 @@ class Command extends AkairoModule {
     /**
      * Creates a new command.
      * @param {string} id - Command ID.
-     * @param {Function} exec - Function <code>((message, args, edited) => {})</code> called when command is ran.
+     * @param {Function} exec - Function `((message, args, edited) => any)` called when command is ran.
      * @param {CommandOptions} [options={}] - Options for the command.
      */
     constructor(id, exec, options = {}) {

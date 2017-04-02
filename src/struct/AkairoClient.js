@@ -10,9 +10,9 @@ const ClientUtil = require('../util/ClientUtil');
  * @prop {string|string[]} [ownerID=''] - Discord ID of the client owner(s).
  * @prop {boolean} [selfbot=false] - Whether or not this bot is a selfbot.
  * @prop {string} [commandDirectory] - Directory to commands.
- * @prop {string|string[]|Function} [prefix='!'] - Default command prefix(es) or function <code>(message => {})</code> returning prefix(es).
+ * @prop {string|string[]|Function} [prefix='!'] - Default command prefix(es) or function `(message => string|string[])` returning prefix(es).
  * @prop {boolean|Function} [allowMention=true] - Whether or not to allow mentions to the client user as a prefix.
- * <br>Can be function <code>(message => {})</code> that returns true or false.
+ * Can be function `(message => boolean)` that returns true or false.
  * @prop {boolean} [handleEdits=false] - Whether or not to handle edited messages.
  * @prop {boolean} [fetchMembers=false] - Whether or not to fetch member on each message from a guild.
  * @prop {number} [defaultCooldown=0] - The default cooldown for commands.
@@ -28,10 +28,10 @@ const ClientUtil = require('../util/ClientUtil');
 class AkairoClient extends Client {
     /**
      * The Akairo framework client.
-     * <br>Creates the handlers and sets them up.
+     * Creates the handlers and sets them up.
      * @param {AkairoOptions} [options={}] - Options to use for the framework.
      * @param {ClientOptions} [clientOptions] - Options for Discord JS client.
-     * <br>If not specified, the previous options parameter is used instead.
+     * If not specified, the previous options parameter is used instead.
      */
     constructor(options = {}, clientOptions) {
         super(clientOptions || options);
@@ -50,7 +50,7 @@ class AkairoClient extends Client {
 
         /**
          * An empty object.
-         * <br>Useful for storing things.
+         * Useful for storing things.
          * @type {Object}
          */
         this.mem = {};
@@ -91,7 +91,7 @@ class AkairoClient extends Client {
 
     /**
      * Logins the client, creates message listener, and initialize databases.
-     * <br>Resolves once client is ready.
+     * Resolves once client is ready.
      * @param {string} token - Client token.
      * @returns {Promise<void>}
      */

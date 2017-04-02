@@ -9,11 +9,11 @@ const { Collection } = require('discord.js');
 /** @extends EventEmitter */
 class AkairoHandler extends EventEmitter {
     /**
-     * Handles modules.
+     * Handles module loading.
      * @param {AkairoClient} client - The Akairo client.
      * @param {string} directory - Directory to modules.
      * @param {class} classToHandle - Only instances of this can be handled.
-     * <br>Other classes are ignored.
+     * Exports not instance of this class are ignored.
      */
     constructor(client, directory, classToHandle) {
         super();
@@ -67,7 +67,7 @@ class AkairoHandler extends EventEmitter {
     }
 
     /**
-     * Reads modules and loads them.
+     * Reads modules from directory and loads them.
      * @private
      * @returns {void}
      */
@@ -138,7 +138,7 @@ class AkairoHandler extends EventEmitter {
     /**
      * Adds a module.
      * @param {string} filename - Filename to lookup in the directory.
-     * <br>A .js extension is assumed.
+     * A .js extension is assumed.
      * @returns {AkairoModule}
      */
     add(filename) {

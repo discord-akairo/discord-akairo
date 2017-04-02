@@ -5,7 +5,7 @@ const { URL } = require('url');
 class TypeResolver {
     /**
      * Type resolver for command arguments.
-     * <br>The types are documented under ArgumentType.
+     * The types are documented under ArgumentType.
      * @param {AkairoClient} client - The client.
      */
     constructor(client) {
@@ -229,8 +229,8 @@ class TypeResolver {
     /**
      * Adds a new type.
      * @param {string} name - Name of the type.
-     * @param {Function} resolver - Function <code>((word, message) => {})</code> that resolves the type.
-     * <br>Returning null means that the type could not be resolved.
+     * @param {Function} resolver - Function `((word, message) => any)` that resolves the type.
+     * Returning `null` or `undefined` means that the type could not be resolved.
      * @returns {TypeResolver}
      */
     addType(name, resolver) {
@@ -245,7 +245,7 @@ class TypeResolver {
 
     /**
      * Adds multiple new types.
-     * @param {Object} types  - Object with keys as the type name and value as the resolver function.
+     * @param {Object} types  - Object with keys as the type name and values as the resolver function.
      * @returns {TypeResolver}
      */
     addTypes(types) {

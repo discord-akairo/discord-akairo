@@ -11,15 +11,15 @@ let sql;
  * @prop {string} [tablename='configs'] - Name of the table.
  * @prop {Object} [defaultConfig={}] - Default configuration.
  * @prop {string[]} [json=[]] - Array of keys to parse and stringify as JSON.
- * @prop {Function} [init=[]] - Array or function <code>(client => {})</code> that returns an array of IDs.
- * <br>If you want to load the database before login, use SQLiteHandler#load.
+ * @prop {Function} [init=[]] - Array or function `(client => string[])` that returns an array of IDs.
+ * If you want to load the database before login, use `SQLiteHandler#load`.
  */
 
 /** @extends EventEmitter */
 class SQLiteHandler extends EventEmitter {
     /**
      * Creates an SQLiteHandler.
-     * <br>Tables must have an 'id' column.
+     * Tables must have an 'id' column.
      * @param {string} filepath - Path to .sqlite file.
      * @param {SQLiteOptions} [options={}] - Options for the handler.
      */
@@ -75,7 +75,7 @@ class SQLiteHandler extends EventEmitter {
 
     /**
      * Array of IDs.
-     * <br>Note that this calls the Collection's keyArray().
+     * Note that this calls the Collection's `keyArray()`.
      * @type {string[]}
      */
     get ids() {
@@ -84,8 +84,8 @@ class SQLiteHandler extends EventEmitter {
 
     /**
      * Array of configs.
-     * <br>Note that this calls the Collection's array().
-     * <br>Values from here should be desanitized.
+     * Note that this calls the Collection's `array()`.
+     * Values from here should be desanitized.
      * @type {string[]}
      */
     get configs() {
@@ -94,7 +94,7 @@ class SQLiteHandler extends EventEmitter {
 
     /**
      * Sanitizes a string by replacing single quotes with two single quotes.
-     * <br>Can return a non-string if json is set to false.
+     * Can return a non-string if `json` is set to false.
      * @param {string} input - Input text.
      * @param {boolean} json - Whether to stringify or not.
      * @returns {any}
@@ -107,7 +107,7 @@ class SQLiteHandler extends EventEmitter {
 
     /**
      * Desanitizes a string for use by replacing two single quotes with a single quote.
-     * <br>Can return a non-string if json is set to true.
+     * Can return a non-string if `json` is set to true.
      * @param {string} input - Input text.
      * @param {boolean} [json] - Whether to parse or not.
      * @returns {any}
@@ -131,7 +131,7 @@ class SQLiteHandler extends EventEmitter {
 
     /**
      * Loads handler and database with IDs.
-     * <br>Use manually if you want to load database before client is ready.
+     * Use manually if you want to load database before client is ready.
      * @param {string[]} ids - Array of IDs.
      * @returns {Promise<SQLiteHandler>}
      */

@@ -391,7 +391,7 @@ class ClientUtil {
 
     /**
      * Resolves a channel permission overwrite.
-     * <br>Returns an object with the allow and deny arrays of permission names.
+     * Returns an object with the `allow` and `deny` arrays of permission names.
      * @param {PermissionOverwrites} overwrite - Permissions overwrite.
      * @returns {Object}
      */
@@ -403,8 +403,8 @@ class ClientUtil {
     }
 
     /**
-     * Compares two member objects presences and checks if they stopped/started a stream or not.
-     * <br>Returns 0, 1, or 2 for no change, stopped, or started.
+     * Compares two member objects presences and checks if they stopped or started a stream or not.
+     * Returns `0`, `1`, or `2` for no change, stopped, or started.
      * @param {GuildMember} oldMember - The old member.
      * @param {GuildMember} newMember - The new member.
      * @returns {number}
@@ -420,7 +420,7 @@ class ClientUtil {
     }
 
     /**
-     * Combination of client.fetchUser() and guild.fetchMember().
+     * Combination of `<Client>.fetchUser()` and `<Guild>.fetchMember()`.
      * @param {Guild} guild - Guild to fetch in.
      * @param {string} id - ID of the user.
      * @param {boolean} cache - Whether or not to add to cache.
@@ -454,7 +454,7 @@ class ClientUtil {
      * Prompts a user for input, returning the message that passes.
      * @param {Message} [message] - Message to prompt.
      * @param {string} [content] - Text to send.
-     * @param {RegExp|Function} [check] - Regex or function <code>(message => {})</code> to check if message should pass.
+     * @param {RegExp|Function} [check] - Regex or function `(message => boolean)` to check if message should pass.
      * @param {number} [time=30000] - Time in milliseconds to wait.
      * @param {MessageOptions} [options] - Message options for message.
      * @returns {Promise<Message>}
@@ -500,7 +500,7 @@ class ClientUtil {
      * @param {TextBasedChannel|User} channel - Channel to prompt in or a user to prompt in DM.
      * @param {User} [user] - User to prompt, if not a user object in the channel param.
      * @param {string} [content] - Text to send.
-     * @param {RegExp|Function} [check] - Regex or function <code>(message => {})</code> to check if message should pass.
+     * @param {RegExp|Function} [check] - Regex or function `(message => boolean)` to check if message should pass.
      * @param {number} [time=30000] - Time in milliseconds to wait.
      * @param {MessageOptions} [options] - Message options for message.
      * @returns {Promise<Message>}

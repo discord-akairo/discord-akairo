@@ -27,7 +27,7 @@ class InhibitorHandler extends AkairoHandler {
 
     /**
      * Tests inhibitors against the message.
-     * <br>Rejects with the reason if blocked.
+     * Rejects with the reason if blocked.
      * @param {string} type - Type of inhibitor, 'all', 'pre', or 'post'.
      * @param {Message} message - Message to test.
      * @param {Command} [command] - Command to use.
@@ -86,7 +86,7 @@ class InhibitorHandler extends AkairoHandler {
      * @method
      * @name InhibitorHandler#add
      * @param {string} filename - Filename to lookup in the directory.
-     * <br>A .js extension is assumed.
+     * A .js extension is assumed.
      * @returns {Inhibitor}
      */
 
