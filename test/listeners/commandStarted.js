@@ -1,7 +1,7 @@
 const { Listener } = require('../../src/index.js');
 
 function exec(message, command) {
-    console.log(command.id);
+    console.log(`Used ${command.id}`);
 }
 
 module.exports = new Listener('commandStarted', exec, {

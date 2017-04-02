@@ -32,8 +32,6 @@ class ListenerHandler extends AkairoHandler {
             }
         }
 
-        for (const listener of this.modules.values()) this.register(listener.id);
-
         /**
          * Directory to listeners.
          * @readonly
@@ -57,7 +55,7 @@ class ListenerHandler extends AkairoHandler {
      */
     _apply(listener, filepath) {
         super._apply(listener, filepath);
-        if (this.emitters) this.register(listener.id);
+        this.register(listener.id);
         return listener;
     }
 

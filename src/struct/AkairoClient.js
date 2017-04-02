@@ -72,6 +72,8 @@ class AkairoClient extends Client {
          * @type {AkairoOptions}
          */
         this.akairoOptions = options;
+
+        this._built = false;
     }
 
     /**
@@ -157,6 +159,13 @@ class AkairoClient extends Client {
             this.listenerHandler = new ListenerHandler(this, this.akairoOptions);
         }
 
+        if (!this._built) {
+            if (this.listenerHandler) this.listenerHandler.loadAll();
+            if (this.commandHandler) this.commandHandler.loadAll();
+            if (this.inhibitorHandler) this.inhibitorHandler.loadAll();
+        }
+
+        this._built = true;
         return this;
     }
 }

@@ -30,6 +30,7 @@ declare module 'discord-akairo' {
         modules: Collection<string, T>;
         categories: Collection<string, Category<string, T>>;
 
+        loadAll(): void;
         load(thing: string | T, isReload?: boolean): T;
         add(filename: string): T;
         remove(id: string): T;
@@ -44,7 +45,6 @@ declare module 'discord-akairo' {
         on(event: 'enable', listener: (mod: T) => void): this;
         on(event: 'disable', listener: (mod: T) => void): this;
 
-        _read(): void;
         _apply(mod: T, filepath?: string): void;
         _unapply(mod: T): void;
 

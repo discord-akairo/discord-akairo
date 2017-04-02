@@ -62,16 +62,13 @@ class AkairoHandler extends EventEmitter {
          * @type {Collection<string, Category>}
          */
         this.categories = new Collection();
-
-        this._read();
     }
 
     /**
-     * Reads modules from directory and loads them.
-     * @private
+     * Reads all modules from the directory and loads them.
      * @returns {void}
      */
-    _read() {
+    loadAll() {
         const filepaths = this.constructor.readdirRecursive(this.directory);
         for (const filepath of filepaths) this.load(filepath);
     }

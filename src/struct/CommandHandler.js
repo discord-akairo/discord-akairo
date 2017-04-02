@@ -21,6 +21,18 @@ class CommandHandler extends AkairoHandler {
         this.resolver = new TypeResolver(client);
 
         /**
+         * Collecion of command aliases.
+         * @type {Collection<string, string>}
+         */
+        this.aliases = new Collection();
+
+        /**
+         * Set of prefix overwrites.
+         * @type {Set<string|string[]|Function>}
+         */
+        this.prefixes = new Set();
+
+        /**
          * Whether or not to block others, if a selfbot.
          * @type {boolean}
          */
@@ -118,27 +130,6 @@ class CommandHandler extends AkairoHandler {
          * @name CommandHandler#modules
          * @type {Collection<string, Command>}
          */
-    }
-
-    /**
-     * Reads modules and loads them.
-     * @private
-     * @returns {void}
-     */
-    _read() {
-        /**
-         * Collecion of command aliases.
-         * @type {Collection<string, string>}
-         */
-        this.aliases = new Collection();
-
-        /**
-         * Set of prefix overwrites.
-         * @type {Set<string|string[]|Function>}
-         */
-        this.prefixes = new Set();
-
-        super._read();
     }
 
     /**
