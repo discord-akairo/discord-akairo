@@ -1,28 +1,4 @@
-<p align="center">
-  <a href=https://github.com/1Computer1/discord-akairo>
-      <img src="https://a.safe.moe/PwUgW.png"/>
-  </a>
-</p>  
-
-<p align="center">
-  <a href=https://www.npmjs.com/package/discord-akairo>
-      <img src="https://img.shields.io/npm/v/discord-akairo.svg?maxAge=3600"/>
-  </a>
-  <a href=https://david-dm.org/1computer1/discord-akairo>
-      <img src="https://david-dm.org/1computer1/discord-akairo.svg"/>
-  </a>
-  <a href=https://travis-ci.org/1Computer1/discord-akairo>
-      <img src="https://travis-ci.org/1Computer1/discord-akairo.svg?branch=indev"/>
-  </a>
-</p>  
-
-<p align="center">
-  <a href=https://nodei.co/npm/discord-akairo>
-      <img src="https://nodei.co/npm/discord-akairo.png?downloads=true"/>
-  </a>
-</p>  
-
-<p align="center">A modular and highly customizable bot framework for Discord.js v11.</p>
+<p align="center"><a href=https://github.com/1Computer1/discord-akairo><img src="https://a.safe.moe/PwUgW.png"/></a></p><p align="center"><a href=https://www.npmjs.com/package/discord-akairo><img src="https://img.shields.io/npm/v/discord-akairo.svg?maxAge=3600"/></a> <a href=https://david-dm.org/1computer1/discord-akairo><img src="https://david-dm.org/1computer1/discord-akairo.svg"/></a> <a href=https://travis-ci.org/1Computer1/discord-akairo><img src="https://travis-ci.org/1Computer1/discord-akairo.svg?branch=indev"/></a></p><p align="center"><a href=https://nodei.co/npm/discord-akairo><img src="https://nodei.co/npm/discord-akairo.png?downloads=true"/></a></p><p align="center">A modular and highly customizable bot framework for Discord.js v11.</p>
 
 ## Example
 
@@ -110,3 +86,8 @@ If you need more help, message me on Discord: 1Computer#7952.
 9. [Handling Edits](https://1computer1.github.io/discord-akairo/tutorial-9.%20Handling%20Edits.html)
 10. [Customizing Types](https://1computer1.github.io/discord-akairo/tutorial-10.%20Customizing%Types.html)
 11. [Advanced Args and Prompts](https://1computer1.github.io/discord-akairo/tutorial-11.%20Advanced%20Args%20and%20Prompts.html)
+
+## Contributing
+Open an issue or a pull request!  
+Everyone is welcome to do so.  
+Make sure to run `npm run lint` before committing.  
