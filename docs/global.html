@@ -225,7 +225,7 @@
                 </td>
             
 
-            <td class="description last">Discord ID of the client owner(s).</td>
+            <td class="description last"><p>Discord ID of the client owner(s).</p></td>
         </tr>
 
     
@@ -262,7 +262,7 @@
                 </td>
             
 
-            <td class="description last">Whether or not this bot is a selfbot.</td>
+            <td class="description last"><p>Whether or not this bot is a selfbot.</p></td>
         </tr>
 
     
@@ -297,7 +297,7 @@
                 </td>
             
 
-            <td class="description last">Directory to commands.</td>
+            <td class="description last"><p>Directory to commands.</p></td>
         </tr>
 
     
@@ -340,7 +340,7 @@
                 </td>
             
 
-            <td class="description last">Default command prefix(es) or function <code>(message => {})</code> returning prefix(es).</td>
+            <td class="description last"><p>Default command prefix(es) or function <code>(message =&gt; string|string[])</code> returning prefix(es).</p></td>
         </tr>
 
     
@@ -380,7 +380,7 @@
                 </td>
             
 
-            <td class="description last">Whether or not to allow mentions to the client user as a prefix.<br>Can be function <code>(message => {})</code> that returns true or false.</td>
+            <td class="description last"><p>Whether or not to allow mentions to the client user as a prefix.<br>Can be function <code>(message =&gt; boolean)</code> that returns true or false.</p></td>
         </tr>
 
     
@@ -417,7 +417,7 @@
                 </td>
             
 
-            <td class="description last">Whether or not to handle edited messages.</td>
+            <td class="description last"><p>Whether or not to handle edited messages.</p></td>
         </tr>
 
     
@@ -454,7 +454,7 @@
                 </td>
             
 
-            <td class="description last">Whether or not to fetch member on each message from a guild.</td>
+            <td class="description last"><p>Whether or not to fetch member on each message from a guild.</p></td>
         </tr>
 
     
@@ -491,7 +491,7 @@
                 </td>
             
 
-            <td class="description last">The default cooldown for commands.</td>
+            <td class="description last"><p>The default cooldown for commands.</p></td>
         </tr>
 
     
@@ -526,7 +526,7 @@
                 </td>
             
 
-            <td class="description last">The default prompt options.</td>
+            <td class="description last"><p>The default prompt options.</p></td>
         </tr>
 
     
@@ -561,7 +561,7 @@
                 </td>
             
 
-            <td class="description last">Directory to inhibitors.</td>
+            <td class="description last"><p>Directory to inhibitors.</p></td>
         </tr>
 
     
@@ -598,7 +598,7 @@
                 </td>
             
 
-            <td class="description last">Whether or not to block others, if a selfbot.</td>
+            <td class="description last"><p>Whether or not to block others, if a selfbot.</p></td>
         </tr>
 
     
@@ -635,7 +635,7 @@
                 </td>
             
 
-            <td class="description last">Whether or not to block self, if not a selfbot.</td>
+            <td class="description last"><p>Whether or not to block self, if not a selfbot.</p></td>
         </tr>
 
     
@@ -672,7 +672,7 @@
                 </td>
             
 
-            <td class="description last">Whether or not to block bots.</td>
+            <td class="description last"><p>Whether or not to block bots.</p></td>
         </tr>
 
     
@@ -707,7 +707,7 @@
                 </td>
             
 
-            <td class="description last">Directory to listeners.</td>
+            <td class="description last"><p>Directory to listeners.</p></td>
         </tr>
 
     
@@ -744,7 +744,7 @@
                 </td>
             
 
-            <td class="description last">Emitters to load onto the listener handler.</td>
+            <td class="description last"><p>Emitters to load onto the listener handler.</p></td>
         </tr>
 
     
@@ -757,7 +757,7 @@
 
 
 <div class="description">
-    Options used to determine how the framework behaves.
+    <p>Options used to determine how the framework behaves.</p>
 </div>
 
 
@@ -826,7 +826,17 @@
 
 
 <div class="description">
-    The method to match arguments from text.<br><code>word</code> matches by the order of the words inputted, ignoring words that matches prefix or flag.<br><code>rest</code> matches the rest of the words in order, ignoring words that matches prefix or flag.<br><code>prefix</code> matches words that starts with the prefix and the word after the prefix is the evaluated argument.<br><code>flag</code> matches words that equal this prefix and casts to true or false.<br><code>text</code> matches the entire text, except for the command, ignoring words that matches prefix or flag.<br><code>content</code> matches the entire text as it was inputted, except for the command.<br><code>none</code> matches nothing at all and an empty string will be used for type operations.<br><br>A function <code>((message, prevArgs) => {})</code> can also be used to return one of the above.
+    <p>The method to match arguments from text.</p>
+<ul>
+<li><code>word</code> matches by the order of the words inputted.<br>It ignores words that matches a prefix or a flag.</li>
+<li><code>rest</code> matches the rest of the words in order.<br>It ignores words that matches a prefix or a flag.</li>
+<li><code>prefix</code> matches words that starts with the prefix.<br>The word after the prefix is the evaluated argument.</li>
+<li><code>flag</code> matches words that are the same as its prefix.<br>The evaluated argument is either true or false.</li>
+<li><code>text</code> matches the entire text, except for the command.<br>It ignores words that matches a prefix or a flag.</li>
+<li><code>content</code> matches the entire text as it was inputted, except for the command.</li>
+<li><code>none</code> matches nothing at all and an empty string will be used for type operations.</li>
+</ul>
+<p>A function <code>((message, prevArgs) =&gt; string)</code> can also be used to return one of the above.</p>
 </div>
 
 
@@ -855,7 +865,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line81">line 81</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line83">line 83</a>
     </li></ul></dd>
     
 
@@ -948,7 +958,7 @@
                 </td>
             
 
-            <td class="description last">ID of the argument for use in the args object.</td>
+            <td class="description last"><p>ID of the argument for use in the args object.</p></td>
         </tr>
 
     
@@ -985,7 +995,7 @@
                 </td>
             
 
-            <td class="description last">Method to match text.</td>
+            <td class="description last"><p>Method to match text.</p></td>
         </tr>
 
     
@@ -1022,7 +1032,7 @@
                 </td>
             
 
-            <td class="description last">Type to cast to.</td>
+            <td class="description last"><p>Type to cast to.</p></td>
         </tr>
 
     
@@ -1060,7 +1070,7 @@
                 </td>
             
 
-            <td class="description last">The string(s) to use as the flag for prefix and flag args.</td>
+            <td class="description last"><p>The string(s) to use as the flag for prefix and flag args.</p></td>
         </tr>
 
     
@@ -1095,7 +1105,7 @@
                 </td>
             
 
-            <td class="description last">Index/word of text to start from.<br>Applicable to word, text, or content match only.</td>
+            <td class="description last"><p>Index/word of text to start from.<br>Applicable to word, text, or content match only.</p></td>
         </tr>
 
     
@@ -1132,7 +1142,7 @@
                 </td>
             
 
-            <td class="description last">Default value if text does not parse/cast correctly.<br>Can be a function <code>((message, prevArgs) => {})</code>.<br>If using a flag arg, setting the default value inverses the result.</td>
+            <td class="description last"><p>Default value if text does not parse or cast correctly.<br>Can be a function <code>((message, prevArgs) =&gt; any)</code>.<br>If using a flag arg, setting the default value inverses the result.</p></td>
         </tr>
 
     
@@ -1172,7 +1182,7 @@
                 </td>
             
 
-            <td class="description last">A description of the argument.</td>
+            <td class="description last"><p>A description of the argument.</p></td>
         </tr>
 
     
@@ -1207,7 +1217,7 @@
                 </td>
             
 
-            <td class="description last">Prompt options for when user does not provide input.<br>Must not have a default value for this to work.</td>
+            <td class="description last"><p>Prompt options for when user does not provide input.<br>Must not have a default value for this to work.</p></td>
         </tr>
 
     
@@ -1220,7 +1230,7 @@
 
 
 <div class="description">
-    Options for how an argument parses text.
+    <p>Options for how an argument parses text.</p>
 </div>
 
 
@@ -1289,7 +1299,14 @@
 
 
 <div class="description">
-    The method to split text into words.<br><code>plain</code> splits word separated by whitespace. Extra whitespace is ignored.<br><code>split</code> splits word separated by whitespace. Should not be used due to possible inconsistent whitespace.<br><code>quoted</code> is similar to plain, but counts text inside double quotes as one word.<br><code>sticky</code> is similar to quoted, but makes it so that quoted text must have a whitespace/another double quote before it to count as another word.<br><br>A regex or a character can be used instead (for example, a comma) to split the message by that regex or character.<br> A function <code>((content, message) => {})</code> returning an array of strings can be also used.
+    <p>The method to split text into words.</p>
+<ul>
+<li><code>plain</code> splits word separated by whitespace.<br>Extra whitespace between words are ignored.</li>
+<li><code>split</code> splits word separated by whitespace.<br>Should not be used due to possible inconsistent whitespace.</li>
+<li><code>quoted</code> is similar to plain, but counts text inside double quotes as one word.</li>
+<li><code>sticky</code> is similar to quoted, but makes it so that quoted text must have a whitespace or another double quote before it to count as another word.</li>
+</ul>
+<p>A regex or a character can be used instead (for example, a comma) to split the message by that regex or character.<br>A function <code>((content, message) =&gt; string[])</code> returning an array of strings can be also used.</p>
 </div>
 
 
@@ -1318,7 +1335,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line17">line 17</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line22">line 22</a>
     </li></ul></dd>
     
 
@@ -1358,7 +1375,36 @@
 
 
 <div class="description">
-    The type that the argument should be cast to.<br><code>string</code> does not cast to any type and trims the word.<br><code>number</code> casts to an number with parseFloat(), default value if not a number.<br><code>integer</code> casts to an integer with parseInt(), default value if not a number.<br><code>dynamic</code> casts to a number with parseFloat() or a string if the argument is not a number.<br><code>dynamicInt</code> casts to an integer with parseInt() or a string if the argument is not a number.<br><code>url</code> casts to an URL object, default value if new URL() does not work.<br><code>date</code> casts to a Date object, default value if Date.parse() does not work.<br><br>Possible Discord-related (pluralizable) types:<br><code>user</code> tries to resolve to a user.<br><code>member</code> tries to resolve to a member.<br><code>relevant</code> tries to resolve to a relevant user in both guilds and DMs.<br><code>channel</code> tries to resolve to a channel.<br><code>textChannel</code> tries to resolve to a text channel.<br><code>voiceChannel</code> tries to resolve to a voice channel.<br><code>role</code> tries to resolve to a role.<br><code>emoji</code> tries to resolve to a custom emoji.<br><code>guild</code> tries to resolve to a guild.<br><br>Possible Discord-related types:<br><code>message</code> tries to fetch a message from an ID.<br><code>invite</code> tries to resolve an invite code from a link.<br><br>Many of these types can only be used in a guild.<br>You can pluralize some of the types to get a Collection of resolved objects instead.<br><br>An array of strings can be used to restrict input to only those strings, case insensitive.<br>The evaluated argument will be all lowercase.<br>If the input is not in the array, the default value is used.<br><br>A regular expression can also be used.<br>The evaluated argument will be an object containing the match and groups if global.<br><br>A function <code>((word, message, prevArgs) => {})</code> can also be used to filter or modify arguments.<br>A return value of true will let the word pass, a null/undefined return value will use the default value for the argument or start a prompt.<br>Any other truthy return value will be used as the argument.<br>If returning a Promise, the value resolved will be the argument, and a rejection will use the default/start a prompt.
+    <p>The type that the argument should be cast to.</p>
+<ul>
+<li><code>string</code> does not cast to any type.</li>
+<li><code>number</code> casts to an number with <code>parseFloat()</code>.</li>
+<li><code>integer</code> casts to an integer with <code>parseInt()</code>.</li>
+<li><code>dynamic</code> casts to a number with <code>parseFloat()</code> or a trimmed input if not a number.</li>
+<li><code>dynamicInt</code> casts to an integer with <code>parseInt()</code> or a trimmed input if not a number.</li>
+<li><code>url</code> casts to an <code>URL</code> object.</li>
+<li><code>date</code> casts to a <code>Date</code> object.</li>
+</ul>
+<p>Possible Discord-related types.<br>These types can be plural (add an 's' to the end) and a collection of matching objects will be used.</p>
+<ul>
+<li><code>user</code> tries to resolve to a user.</li>
+<li><code>member</code> tries to resolve to a member.</li>
+<li><code>relevant</code> tries to resolve to a relevant user, works in both guilds and DMs.</li>
+<li><code>channel</code> tries to resolve to a channel.</li>
+<li><code>textChannel</code> tries to resolve to a text channel.</li>
+<li><code>voiceChannel</code> tries to resolve to a voice channel.</li>
+<li><code>role</code> tries to resolve to a role.</li>
+<li><code>emoji</code> tries to resolve to a custom emoji.</li>
+<li><code>guild</code> tries to resolve to a guild.</li>
+</ul>
+<p>Other Discord-related types:</p>
+<ul>
+<li><code>message</code> tries to fetch a message from an ID.</li>
+<li><code>invite</code> tries to resolve an invite code from a link.</li>
+</ul>
+<p>An array of strings can be used to restrict input to only those strings, case insensitive.<br>The evaluated argument will be all lowercase.</p>
+<p>A regular expression can also be used.<br>The evaluated argument will be an object containing the <code>match</code> and <code>groups</code> if global.</p>
+<p>A function <code>((word, message, prevArgs) =&gt; any)</code> can also be used to filter or modify arguments.<br>A return value of <code>true</code> will let the word pass, a <code>null</code> or <code>undefined</code> return value will use the default value for the argument or start a prompt.<br>Any other truthy return value will be used as the evaluated argument.<br>If returning a Promise, the value resolved will be the argument, and a rejection will use the default value or start a prompt.</p>
 </div>
 
 
@@ -1487,7 +1533,7 @@
                 </td>
             
 
-            <td class="description last">Command names.</td>
+            <td class="description last"><p>Command names.</p></td>
         </tr>
 
     
@@ -1524,7 +1570,7 @@
                 </td>
             
 
-            <td class="description last">Arguments to parse.</td>
+            <td class="description last"><p>Arguments to parse.</p></td>
         </tr>
 
     
@@ -1561,7 +1607,7 @@
                 </td>
             
 
-            <td class="description last">Method to split text into words.</td>
+            <td class="description last"><p>Method to split text into words.</p></td>
         </tr>
 
     
@@ -1596,7 +1642,7 @@
                 </td>
             
 
-            <td class="description last">Restricts channel: 'guild' or 'dm'.</td>
+            <td class="description last"><p>Restricts channel: 'guild' or 'dm'.</p></td>
         </tr>
 
     
@@ -1633,7 +1679,7 @@
                 </td>
             
 
-            <td class="description last">Category ID for organization purposes.</td>
+            <td class="description last"><p>Category ID for organization purposes.</p></td>
         </tr>
 
     
@@ -1670,7 +1716,7 @@
                 </td>
             
 
-            <td class="description last">Whether or not to allow client owner(s) only.</td>
+            <td class="description last"><p>Whether or not to allow client owner(s) only.</p></td>
         </tr>
 
     
@@ -1707,7 +1753,7 @@
                 </td>
             
 
-            <td class="description last">Whether or not this command cannot be disabled.</td>
+            <td class="description last"><p>Whether or not this command cannot be disabled.</p></td>
         </tr>
 
     
@@ -1744,7 +1790,7 @@
                 </td>
             
 
-            <td class="description last">Whether or not to type in channel during execution.</td>
+            <td class="description last"><p>Whether or not to type in channel during execution.</p></td>
         </tr>
 
     
@@ -1781,7 +1827,7 @@
                 </td>
             
 
-            <td class="description last">Whether or not message edits will run this command.<br>On an edited message, the exec function edited param will be true.</td>
+            <td class="description last"><p>Whether or not message edits will run this command.<br>On an edited message, the exec function edited param will be true.</p></td>
         </tr>
 
     
@@ -1816,7 +1862,7 @@
                 </td>
             
 
-            <td class="description last">The command cooldown in milliseconds.</td>
+            <td class="description last"><p>The command cooldown in milliseconds.</p></td>
         </tr>
 
     
@@ -1853,7 +1899,7 @@
                 </td>
             
 
-            <td class="description last">Amount of command uses allowed until cooldown.</td>
+            <td class="description last"><p>Amount of command uses allowed until cooldown.</p></td>
         </tr>
 
     
@@ -1894,7 +1940,7 @@
                 </td>
             
 
-            <td class="description last">A prefix to overwrite the global one for this command.<br>Can be a function <code>(message => {})</code>.</td>
+            <td class="description last"><p>A prefix to overwrite the global one for this command.<br>Can be a function <code>(message =&gt; string|string[])</code>.</p></td>
         </tr>
 
     
@@ -1932,7 +1978,7 @@
                 </td>
             
 
-            <td class="description last">A regex or function <code>(message => {})</code> returning regex to match in messages that are NOT commands.<br>The exec function is <code>((message, match, groups, edited) => {})</code>.</td>
+            <td class="description last"><p>A regex or function <code>(message =&gt; RegExp)</code> returning regex to match in messages that are NOT commands.<br>The exec function becomes <code>((message, match, groups, edited) =&gt; any)</code>.</p></td>
         </tr>
 
     
@@ -1967,7 +2013,7 @@
                 </td>
             
 
-            <td class="description last">A function <code>((message, edited) => {})</code> that returns true or false on messages that are NOT commands.<br>The exec function is <code>((message, edited) => {})</code>.</td>
+            <td class="description last"><p>A function <code>((message, edited) =&gt; {})</code> that returns true or false on messages that are NOT commands.<br>The exec function becomes <code>((message, edited) =&gt; any)</code>.</p></td>
         </tr>
 
     
@@ -2004,7 +2050,7 @@
                 </td>
             
 
-            <td class="description last">The default prompt options.</td>
+            <td class="description last"><p>The default prompt options.</p></td>
         </tr>
 
     
@@ -2041,7 +2087,7 @@
                 </td>
             
 
-            <td class="description last">An object for custom options.<br>Accessible with Command#options.</td>
+            <td class="description last"><p>An object for custom options.<br>Accessible with <code>Command#options</code>.</p></td>
         </tr>
 
     
@@ -2081,7 +2127,7 @@
                 </td>
             
 
-            <td class="description last">Description of the command.</td>
+            <td class="description last"><p>Description of the command.</p></td>
         </tr>
 
     
@@ -2094,7 +2140,7 @@
 
 
 <div class="description">
-    Options to use for command execution behavior.
+    <p>Options to use for command execution behavior.</p>
 </div>
 
 
@@ -2220,7 +2266,7 @@
                 </td>
             
 
-            <td class="description last">Reason emitted when command or message is blocked.</td>
+            <td class="description last"><p>Reason emitted when command or message is blocked.</p></td>
         </tr>
 
     
@@ -2257,7 +2303,7 @@
                 </td>
             
 
-            <td class="description last">Can be 'all' to run on all messages, 'pre' to run on messages not blocked by the built-in inhibitors, or 'post' to run on messages that are commands.</td>
+            <td class="description last"><p>Can be 'all' to run on all messages, 'pre' to run on messages not blocked by the built-in inhibitors, or 'post' to run on messages that are commands.</p></td>
         </tr>
 
     
@@ -2294,7 +2340,7 @@
                 </td>
             
 
-            <td class="description last">Category ID for organization purposes.</td>
+            <td class="description last"><p>Category ID for organization purposes.</p></td>
         </tr>
 
     
@@ -2307,7 +2353,7 @@
 
 
 <div class="description">
-    Options to use for inhibitor execution behavior.
+    <p>Options to use for inhibitor execution behavior.</p>
 </div>
 
 
@@ -2436,7 +2482,7 @@
                 </td>
             
 
-            <td class="description last">The event emitter, either a key from ListenerHandler#emitters or an EventEmitter.</td>
+            <td class="description last"><p>The event emitter, either a key from <code>ListenerHandler#emitters</code> or an EventEmitter.</p></td>
         </tr>
 
     
@@ -2473,7 +2519,7 @@
                 </td>
             
 
-            <td class="description last">Event name to listen to.</td>
+            <td class="description last"><p>Event name to listen to.</p></td>
         </tr>
 
     
@@ -2510,7 +2556,7 @@
                 </td>
             
 
-            <td class="description last">Type of listener: 'on' or 'once'.</td>
+            <td class="description last"><p>Type of listener, either 'on' or 'once'.</p></td>
         </tr>
 
     
@@ -2547,7 +2593,7 @@
                 </td>
             
 
-            <td class="description last">Category ID for organization purposes.</td>
+            <td class="description last"><p>Category ID for organization purposes.</p></td>
         </tr>
 
     
@@ -2560,7 +2606,7 @@
 
 
 <div class="description">
-    Options to use for listener execution behavior.
+    <p>Options to use for listener execution behavior.</p>
 </div>
 
 
@@ -2686,7 +2732,7 @@
                 </td>
             
 
-            <td class="description last">Category ID for organization purposes.</td>
+            <td class="description last"><p>Category ID for organization purposes.</p></td>
         </tr>
 
     
@@ -2699,7 +2745,7 @@
 
 
 <div class="description">
-    Options for module.
+    <p>Options for module.</p>
 </div>
 
 
@@ -2728,7 +2774,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line59">line 59</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line61">line 61</a>
     </li></ul></dd>
     
 
@@ -2825,7 +2871,7 @@
                 </td>
             
 
-            <td class="description last">Amount of times allowed to retries.</td>
+            <td class="description last"><p>Amount of times allowed to retries.</p></td>
         </tr>
 
     
@@ -2862,7 +2908,7 @@
                 </td>
             
 
-            <td class="description last">Time to wait for input.</td>
+            <td class="description last"><p>Time to wait for input.</p></td>
         </tr>
 
     
@@ -2899,7 +2945,7 @@
                 </td>
             
 
-            <td class="description last">Word to use for cancelling the command.</td>
+            <td class="description last"><p>Word to use for cancelling the command.</p></td>
         </tr>
 
     
@@ -2936,7 +2982,7 @@
                 </td>
             
 
-            <td class="description last">Word to use for ending infinite prompts.</td>
+            <td class="description last"><p>Word to use for ending infinite prompts.</p></td>
         </tr>
 
     
@@ -2973,7 +3019,7 @@
                 </td>
             
 
-            <td class="description last">Prompts only when argument is provided but was not of the right type.</td>
+            <td class="description last"><p>Prompts only when argument is provided but was not of the right type.</p></td>
         </tr>
 
     
@@ -3010,7 +3056,7 @@
                 </td>
             
 
-            <td class="description last">Prompts forever until the stop word, cancel word, time limit, or retry limit.<br>Note that the retry count resets back to one on each valid entry.<br>The final evaluated argument will be an array of the inputs.</td>
+            <td class="description last"><p>Prompts forever until the stop word, cancel word, time limit, or retry limit.<br>Note that the retry count resets back to one on each valid entry.<br>The final evaluated argument will be an array of the inputs.</p></td>
         </tr>
 
     
@@ -3051,7 +3097,7 @@
                 </td>
             
 
-            <td class="description last">Function called on start of prompt.</td>
+            <td class="description last"><p>Function called on start of prompt.</p></td>
         </tr>
 
     
@@ -3092,7 +3138,7 @@
                 </td>
             
 
-            <td class="description last">Function called on a retry (failure to cast type).</td>
+            <td class="description last"><p>Function called on a retry (failure to cast type).</p></td>
         </tr>
 
     
@@ -3133,7 +3179,7 @@
                 </td>
             
 
-            <td class="description last">Function called on collector time out.</td>
+            <td class="description last"><p>Function called on collector time out.</p></td>
         </tr>
 
     
@@ -3174,7 +3220,7 @@
                 </td>
             
 
-            <td class="description last">Function called on amount of tries reaching the max.</td>
+            <td class="description last"><p>Function called on amount of tries reaching the max.</p></td>
         </tr>
 
     
@@ -3215,7 +3261,7 @@
                 </td>
             
 
-            <td class="description last">Function called on cancellation of command.</td>
+            <td class="description last"><p>Function called on cancellation of command.</p></td>
         </tr>
 
     
@@ -3228,7 +3274,7 @@
 
 
 <div class="description">
-    A prompt to run if the user did not input the argument correctly.<br>Can only be used if there is not a default value (unless optional is true).<br>The functions are <code>((message, prevArgs, amountOfTries) => {})</code> and returns a string or object to determine the reply.<br>The object should be equivalent to a MessageOptions, with an extra optional property called content for message content.<br>Can also be a string literal that will have a mention concatenated to it.
+    <p>A prompt to run if the user did not input the argument correctly.<br>Can only be used if there is not a default value (unless optional is true).<br>The functions are <code>((message, prevArgs, amountOfTries) =&gt; string|string[]|MessageOptions)</code> returning the reply.<br>The object should be equivalent to a <code>MessageOptions</code>, with an extra optional property called <code>content</code> for message content.<br>Can also be a string literal that will have a mention concatenated to the start.</p>
 </div>
 
 
@@ -3354,7 +3400,7 @@
                 </td>
             
 
-            <td class="description last">Name of the table.</td>
+            <td class="description last"><p>Name of the table.</p></td>
         </tr>
 
     
@@ -3391,7 +3437,7 @@
                 </td>
             
 
-            <td class="description last">Default configuration.</td>
+            <td class="description last"><p>Default configuration.</p></td>
         </tr>
 
     
@@ -3428,7 +3474,7 @@
                 </td>
             
 
-            <td class="description last">Array of keys to parse and stringify as JSON.</td>
+            <td class="description last"><p>Array of keys to parse and stringify as JSON.</p></td>
         </tr>
 
     
@@ -3465,7 +3511,7 @@
                 </td>
             
 
-            <td class="description last">Array or function <code>(client => {})</code> that returns an array of IDs.<br>If you want to load the database before login, use SQLiteHandler#load.</td>
+            <td class="description last"><p>Array or function <code>(client =&gt; string[])</code> that returns an array of IDs.<br>If you want to load the database before login, use <code>SQLiteHandler#load</code>.</p></td>
         </tr>
 
     
@@ -3478,7 +3524,7 @@
 
 
 <div class="description">
-    Options to use for the SQLiteHandler.
+    <p>Options to use for the SQLiteHandler.</p>
 </div>
 
 

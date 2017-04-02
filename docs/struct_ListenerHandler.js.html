@@ -54,8 +54,8 @@ class ListenerHandler extends AkairoHandler {
 
         /**
          * EventEmitters for use, mapped by name to EventEmitter.
-         * &lt;br>'client', 'commandHandler', 'inhibitorHandler', 'listenerHandler' are set by default.
-         * &lt;br>Databases added through the client are also added here.
+         * By default, 'client', 'commandHandler', 'inhibitorHandler', 'listenerHandler' are set.
+         * Databases added through the client are also added here.
          * @type {Collection&lt;string, EventEmitter>}
          */
         this.emitters = new Collection();
@@ -70,8 +70,6 @@ class ListenerHandler extends AkairoHandler {
                 this.emitters.set(key, options.emitters[key]);
             }
         }
-
-        for (const listener of this.modules.values()) this.register(listener.id);
 
         /**
          * Directory to listeners.
@@ -96,7 +94,7 @@ class ListenerHandler extends AkairoHandler {
      */
     _apply(listener, filepath) {
         super._apply(listener, filepath);
-        if (this.emitters) this.register(listener.id);
+        this.register(listener.id);
         return listener;
     }
 
@@ -161,7 +159,7 @@ class ListenerHandler extends AkairoHandler {
      * @method
      * @name ListenerHandler#add
      * @param {string} filename - Filename to lookup in the directory.
-     * &lt;br>A .js extension is assumed.
+     * A .js extension is assumed.
      * @returns {Listener}
      */
 
