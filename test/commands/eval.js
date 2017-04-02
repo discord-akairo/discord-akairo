@@ -49,7 +49,7 @@ function exec(message, args) {
             evaled.output = output;
         });
     }).catch(err => {
-        console.error(err);
+        console.error(err); // eslint-disable-line no-console
 
         err = err.toString();
         err = `${logs.join('\n')}\n${logs.length && err === 'undefined' ? '' : err}`;
