@@ -3,7 +3,7 @@ declare module 'discord-akairo' {
     import EventEmitter from 'events';
 
     interface Message {
-        command?: CommandUtil;
+        util?: CommandUtil;
     };
 
     interface MessageOptions {

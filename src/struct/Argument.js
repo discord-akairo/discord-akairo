@@ -349,10 +349,10 @@ class Argument {
                     response = Array.isArray(response) ? response.join('\n') : response;
 
                     if (typeof response === 'object' && response.content) {
-                        return message.command.send(response.content, response);
+                        return message.util.send(response.content, response);
                     }
 
-                    return message.command.send(response);
+                    return message.util.send(response);
                 }
 
                 return retry(i + 1);

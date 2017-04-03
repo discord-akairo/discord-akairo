@@ -279,10 +279,10 @@ class CommandHandler extends AkairoHandler {
                 const { command, content, prefix, alias } = parsed;
 
                 if (this.commandUtils.has(message.id)) {
-                    message.command = this.commandUtils.get(message.id);
+                    message.util = this.commandUtils.get(message.id);
                 } else {
-                    message.command = new CommandUtil(this.client, message, command, prefix, alias);
-                    this.commandUtils.set(message.id, message.command);
+                    message.util = new CommandUtil(this.client, message, command, prefix, alias);
+                    this.commandUtils.set(message.id, message.util);
                 }
 
                 if (!parsed.command) return this._handleTriggers(message, edited);

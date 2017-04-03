@@ -1,10 +1,10 @@
 const { Command } = require('../../../src/index.js');
 
 function exec(message) {
-    return message.command.send('Pong!').then(sent => {
+    return message.util.send('Pong!').then(sent => {
         const timeDiff = (sent.editedAt || sent.createdAt) - (message.editedAt || message.createdAt);
         const text = `🔂\u2000**RTT**: ${timeDiff} ms\n💟\u2000**Heartbeat**: ${Math.round(this.client.ping)} ms`;
-        return message.command.send(`Pong!\n${text}`);
+        return message.util.send(`Pong!\n${text}`);
     });
 }
 

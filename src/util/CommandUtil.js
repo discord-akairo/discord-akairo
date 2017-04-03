@@ -1,7 +1,7 @@
 /**
  * Extra properties applied to the Discord.js message object.
  * @typedef {Object} Message
- * @prop {?CommandUtil} command - Utilities for command responding.
+ * @prop {?CommandUtil} util - Utilities for command responding.
  * Only available in command-related functions as a parameter.
  * Not available in regex/conditional commands as those can be ran at the same time.
  */
@@ -82,7 +82,7 @@ class CommandUtil {
      */
     send(content, options) {
         [content, options] = this.constructor.swapOptions(content, options);
-        if (this.command.editable && this.base && (!options.file || this.lastResponse.attachments.size)) return this.lastResponse.edit(content, options);
+        if ((this.command ? this.command.editable : true) && this.base && (!options.file || this.lastResponse.attachments.size)) return this.lastResponse.edit(content, options);
 
         return this.message.channel.send(content, options).then(sent => {
             if (options.file) return sent;
