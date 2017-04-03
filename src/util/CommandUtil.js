@@ -2,7 +2,8 @@
  * Extra properties applied to the Discord.js message object.
  * @typedef {Object} Message
  * @prop {?CommandUtil} command - Utilities for command responding.
- * Only available as a parameter in a command execution function.
+ * Only available in command-related functions as a parameter.
+ * Not available in regex/conditional commands as those can be ran at the same time.
  */
 
 class CommandUtil {
