@@ -79,6 +79,7 @@ module.exports = {
         BOT: 'bot',
         OWNER: 'owner',
         GUILD: 'guild',
-        DM: 'dm'
+        DM: 'dm',
+        PERMISSIONS: 'permissions'
     }
 };

@@ -1,5 +1,5 @@
 declare module 'discord-akairo' {
-    import { Client, ClientOptions, Collection, Message, MessageOptions, User, GuildMember, Channel, TextChannel, DMChannel, GroupDMChannel, Role, Emoji, Guild, PermissionOverwrites, RichEmbed } from 'discord.js';
+    import { Client, ClientOptions, Collection, Message, MessageOptions, User, GuildMember, Channel, TextChannel, DMChannel, GroupDMChannel, Role, Emoji, Guild, PermissionsResolvable, PermissionOverwrites, RichEmbed } from 'discord.js';
     import EventEmitter from 'events';
 
     interface Message {
@@ -111,6 +111,7 @@ declare module 'discord-akairo' {
         editable: boolean;
         cooldown?: number;
         ratelimit: number;
+        permissions?: PermissionResolvable[] | ((message: Message) => boolean);
         defaultPrompt: PromptOptions;
         options: Object;
         description: string;
@@ -380,6 +381,7 @@ declare module 'discord-akairo' {
         editable?: boolean;
         cooldown?: number;
         ratelimit?: number;
+        permissions?: PermissionResolvable[] | ((this: Command, message: Message) => boolean);
         prefix?: string | string[] | Function;
         trigger?: RegExp | ((this: Command, message: Message, edited: boolean) => RegExp);
         condition?: (this: Command, message: Message, edited: boolean) => boolean;

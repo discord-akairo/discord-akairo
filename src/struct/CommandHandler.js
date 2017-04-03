@@ -319,6 +319,21 @@ class CommandHandler extends AkairoHandler {
                     return undefined;
                 }
 
+                if (command.permissions) {
+                    if (typeof command.permissions === 'function') {
+                        if (!command.permissions(message)) {
+                            this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.PERMISSIONS);
+                            return undefined;
+                        }
+                    } else
+                    if (message.guild) {
+                        if (!message.channel.permissionsFor(message.author).hasPermissions(command.permissions)) {
+                            this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.PERMISSIONS);
+                            return undefined;
+                        }
+                    }
+                }
+
                 const postTest = this.client.inhibitorHandler
                 ? this.client.inhibitorHandler.test('post', message, command)
                 : Promise.resolve();
@@ -699,7 +714,7 @@ module.exports = CommandHandler;
 
 /**
  * Emitted when a command is blocked by a post-message inhibitor.
- * The built-in inhibitors are 'owner', 'guild', and 'dm'.
+ * The built-in inhibitors are 'owner', 'guild', 'dm', and 'permissions'.
  * @event CommandHandler#commandBlocked
  * @param {Message} message - Message sent.
  * @param {Command} command - Command blocked.

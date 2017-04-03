@@ -19,6 +19,8 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * @prop {number} [ratelimit=1] - Amount of command uses allowed until cooldown.
  * @prop {string|string[]|Function} [prefix] - A prefix to overwrite the global one for this command.
  * Can be a function `(message => string|string[])`.
+ * @prop {PermissionResolvable[]|Function} [permissions] - Permissions required to run this command.
+ * Can be either an array of permission name or a function returning `true or `false`.
  * @prop {RegExp|Function} [trigger] - A regex or function `(message => RegExp)` returning regex to match in messages that are NOT commands.
  * The exec function becomes `((message, match, groups, edited) => any)`.
  * @prop {Function} [condition] - A function `((message, edited) => {})` that returns true or false on messages that are NOT commands.
@@ -137,6 +139,12 @@ class Command extends AkairoModule {
          * @type {?string|string[]|Function}
          */
         this.prefix = options.prefix;
+
+        /**
+         * Permissions required to run command.
+         * @type {PermissionResolvable[]|Function}
+         */
+        this.permissions = options.permissions;
 
         /**
          * Gets the regex trigger, if specified.
