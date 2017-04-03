@@ -460,13 +460,6 @@ class ClientUtil {
      * @returns {Promise<Message>}
      */
     prompt(message, content, check = () => true, time = 30000, options) {
-        if (!options && typeof content === 'object' && !(content instanceof Array)) {
-            options = content;
-            content = '';
-        } else if (!options) {
-            options = {};
-        }
-
         const promise = content || options
         ? message.channel.send(content, options)
         : Promise.resolve();
