@@ -94,7 +94,7 @@ class Command extends AkairoModule {
          * Whether or not this command can be ran by an edit.
          * @type {boolean}
          */
-        this.editable = !(options.editable === false);
+        this.editable = options.editable === undefined ? true : !!options.editable;
 
         /**
          * Whether or not to type during command execution.

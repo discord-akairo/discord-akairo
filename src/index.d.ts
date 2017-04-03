@@ -259,8 +259,7 @@ declare module 'discord-akairo' {
         command: Command;
         prefix: string;
         alias: string;
-        base?: Message;
-        responses: Message[];
+        shouldEdit: boolean;
         lastResponse?: Message;
 
         send(content: string | MessageOptions, options?: MessageOptions): Promise<Message>;

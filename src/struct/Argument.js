@@ -299,8 +299,13 @@ class Argument {
             }
 
             return this.client.util.prompt(message, prompt.infinite && value.length && i === 1 ? '' : text, (m, s) => {
-                if (!Array.isArray(s)) s = [s];
-                this.handler.commandUtils.get(message.id).responses.unshift(...s.reverse());
+                if (s && this.handler.handleEdits && this.command.editable) {
+                    if (Array.isArray(s)) {
+                        this.handler.commandUtils.get(message.id).lastResponse = s.slice(-1)[0];
+                    } else {
+                        this.handler.commandUtils.get(message.id).lastResponse = s;
+                    }
+                }
 
                 if (m.content.toLowerCase() === prompt.cancelWord.toLowerCase()) {
                     exited = true;
@@ -323,7 +328,7 @@ class Argument {
                 return res;
             }, prompt.time, opts).then(() => {
                 if (prompt.infinite && !stopped) return retry(1);
-                this.handler.commandUtils.get(message.id).base = null;
+                this.handler.commandUtils.get(message.id).shouldEdit = false;
                 return value;
             }).catch(reason => {
                 if (reason instanceof Error) {

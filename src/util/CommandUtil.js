@@ -53,25 +53,16 @@ class CommandUtil {
         this.alias = alias;
 
         /**
-         * The response to base off.
-         * @type {?Message}
+         * Whether or not the last response should be edited.
+         * @type {boolean}
          */
-        this.base = null;
+        this.shouldEdit = false;
 
-        /**
-         * Responses sent, including prompts.
-         * @type {Message[]}
+         /**
+          * The last response sent.
+          * @type {?Message}
          */
-        this.responses = [];
-    }
-
-    /**
-     * The last response sent.
-     * @readonly
-     * @type {?Message}
-     */
-    get lastResponse() {
-        return this.responses[0];
+        this.lastResponse = null;
     }
 
     /**
@@ -82,18 +73,18 @@ class CommandUtil {
      */
     send(content, options) {
         [content, options] = this.constructor.swapOptions(content, options);
-        if ((this.command ? this.command.editable : true) && this.base && (!options.file || this.lastResponse.attachments.size)) return this.lastResponse.edit(content, options);
+        if ((this.command ? this.command.editable : true) && this.shouldEdit && (!options.file || this.lastResponse.attachments.size)) return this.lastResponse.edit(content, options);
 
         return this.message.channel.send(content, options).then(sent => {
             if (options.file) return sent;
             if (this.lastResponse && this.lastResponse.attachments.size) return sent;
 
-            this.base = Array.isArray(sent) ? sent.slice(-1)[0] : sent;
+            this.shouldEdit = true;
 
             if (Array.isArray(sent)) {
-                this.responses.unshift(...sent.reverse());
+                this.lastResponse = sent.slice(-1)[0];
             } else {
-                this.responses.unshift(sent);
+                this.lastResponse = sent;
             }
 
             return sent;
