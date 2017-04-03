@@ -2,6 +2,14 @@ declare module 'discord-akairo' {
     import { Client, ClientOptions, Collection, Message, MessageOptions, User, GuildMember, Channel, TextChannel, DMChannel, GroupDMChannel, Role, Emoji, Guild, PermissionOverwrites, RichEmbed } from 'discord.js';
     import EventEmitter from 'events';
 
+    interface Message {
+        command?: CommandUtil;
+    };
+
+    interface MessageOptions {
+        content?: string | string[];
+    };
+
     export const version: string;
 
     export class AkairoClient extends Client {
@@ -241,6 +249,25 @@ declare module 'discord-akairo' {
         prompt(message: Message, content?: string, check?: RegExp | ((this: ClientUtil, message: Message) => boolean), time?: number, options?: MessageOptions): Promise<Message>;
         promptIn(channel: TextChannel | DMChannel | GroupDMChannel | User, user?: User, content?: string, check?: RegExp | ((this: ClientUtil, message: Message) => boolean), time?: number, options?: MessageOptions): Promise<Message>;
         fetchMessage(channel: TextChannel | DMChannel | GroupDMChannel, id: string): Promise<Message>;
+    }
+
+    export class CommandUtil {
+        constructor(client: AkairoClient, message: Message, command: Command, prefix: string, alias: string);
+
+        client: AkairoClient;
+        message: Message;
+        command: Command;
+        prefix: string;
+        alias: string;
+        original?: Message;
+        originalDM: Message;
+        responses: Message[];
+        directs: Message[];
+        lastResponse?: Message;
+        lastDirect?: Message;
+
+        send(content: string | MessageOptions, options?: MessageOptions): Promise<Message>;
+        sendDM(content: string | MessageOptions, options?: MessageOptions): Promise<Message>;
     }
 
     export class SQLiteHandler extends EventEmitter {

@@ -1,6 +1,13 @@
 const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
 
 /**
+ * Extra properties applied to the Discord.js message options type.
+ * @typedef {Object} MessageOptions
+ * @prop {string|string[]} [content] - Content to send.
+ * Only available when returning in a prompt function.
+ */
+
+/**
  * The method to match arguments from text.
  * - `word` matches by the order of the words inputted.
  * It ignores words that matches a prefix or a flag.
@@ -291,7 +298,13 @@ class Argument {
                 text = text.content;
             }
 
-            return this.client.util.prompt(message, prompt.infinite && value.length && i === 1 ? '' : text, m => {
+            return this.client.util.prompt(message, prompt.infinite && value.length && i === 1 ? '' : text, (m, s) => {
+                if (m.guild) {
+                    this.handler.commandUtils.get(message.id).responses.unshift(s);
+                } else {
+                    this.handler.commandUtils.get(message.id).directs.unshift(s);
+                }
+
                 if (m.content.toLowerCase() === prompt.cancelWord.toLowerCase()) {
                     exited = true;
                     return false;

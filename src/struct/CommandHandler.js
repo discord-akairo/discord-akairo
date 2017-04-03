@@ -1,5 +1,6 @@
 const AkairoHandler = require('./AkairoHandler');
 const Command = require('./Command');
+const CommandUtil = require('../util/CommandUtil');
 const TypeResolver = require('../util/TypeResolver');
 const { CommandHandlerEvents, BuiltInReasons } = require('../util/Constants');
 const { Collection } = require('discord.js');
@@ -69,6 +70,12 @@ class CommandHandler extends AkairoHandler {
         this.cooldowns = new Collection();
 
         /**
+         * Default cooldown for commands.
+         * @type {number}
+         */
+        this.defaultCooldown = options.defaultCooldown || 0;
+
+        /**
          * Collection of sets of ongoing argument prompts.
          * @type {Collection<string, Set>}
          */
@@ -97,10 +104,10 @@ class CommandHandler extends AkairoHandler {
         }, options.defaultPrompt || {});
 
         /**
-         * Default cooldown for commands.
-         * @type {number}
+         * Collection of CommandUtils.
+         * @type {Collection<string, CommandUtil>}
          */
-        this.defaultCooldown = options.defaultCooldown || 0;
+        this.commandUtils = new Collection();
 
         /**
          * Gets the prefix.
@@ -271,7 +278,14 @@ class CommandHandler extends AkairoHandler {
                 const parsed = this._parseCommand(message, edited);
                 if (!parsed) return this._handleTriggers(message, edited);
 
-                const { command, content } = parsed;
+                const { command, content, prefix, alias } = parsed;
+
+                if (this.commandUtils.has(message.id)) {
+                    message.command = this.commandUtils.get(message.id);
+                } else {
+                    message.command = new CommandUtil(this.client, message, command, prefix, alias);
+                    this.commandUtils.set(message.id, message.command);
+                }
 
                 if (!command.enabled) {
                     this.emit(CommandHandlerEvents.COMMAND_DISABLED, message, command);
@@ -430,7 +444,7 @@ class CommandHandler extends AkairoHandler {
         }
 
         const content = message.content.slice(message.content.indexOf(name) + name.length + 1);
-        return { command, content };
+        return { command, content, prefix: start, alias: name };
     }
 
     /**
