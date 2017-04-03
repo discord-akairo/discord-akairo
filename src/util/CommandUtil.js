@@ -82,9 +82,12 @@ class CommandUtil {
      */
     send(content, options) {
         [content, options] = this.constructor.swapOptions(content, options);
-        if (this.command.editable && this.base) return this.lastResponse.edit(content, options);
+        if (this.command.editable && this.base && (!options.file || this.lastResponse.attachments.size)) return this.lastResponse.edit(content, options);
 
         return this.message.channel.send(content, options).then(sent => {
+            if (options.file) return sent;
+            if (this.lastResponse && this.lastResponse.attachments.size) return sent;
+
             this.base = Array.isArray(sent) ? sent.slice(-1)[0] : sent;
 
             if (Array.isArray(sent)) {
