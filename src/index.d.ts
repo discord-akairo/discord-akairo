@@ -1,14 +1,12 @@
 declare module 'discord-akairo' {
-    import { Client, ClientOptions, Collection, Message, MessageOptions, User, GuildMember, Channel, TextChannel, DMChannel, GroupDMChannel, Role, Emoji, Guild, PermissionsResolvable, PermissionOverwrites, RichEmbed } from 'discord.js';
+    import { Client, ClientOptions, Collection, Message, MessageOptions, User, GuildMember, Channel, TextChannel, DMChannel, GroupDMChannel, Role, Emoji, Guild, PermissionResolvable, PermissionOverwrites, RichEmbed } from 'discord.js';
     import EventEmitter from 'events';
 
-    interface Message {
-        util?: CommandUtil;
-    };
-
-    interface MessageOptions {
-        content?: string | string[];
-    };
+    module 'discord.js' {
+        export interface Message {
+            util?: CommandUtil;
+        }
+    }
 
     export const version: string;
 
@@ -267,7 +265,7 @@ declare module 'discord-akairo' {
         send(content: string | MessageOptions, options?: MessageOptions): Promise<Message | Message[]>;
         reply(content: string | MessageOptions, options?: MessageOptions): Promise<Message | Message[]>;
 
-        static swapOptions(content: string | MessageOptions, options?: MessageOptions): Array;
+        static swapOptions(content: string | MessageOptions, options?: MessageOptions): any[];
     }
 
     export class SQLiteHandler extends EventEmitter {
@@ -356,11 +354,11 @@ declare module 'discord-akairo' {
         stopWord?: string;
         optional?: boolean;
         infinite?: boolean;
-        start: string | string[] | ((this: Argument, message: Message, prevArgs: Object, amountOfTries: number) => string | string[] | MessageOptions);
-        retry: string | string[] | ((this: Argument, message: Message, prevArgs: Object, amountOfTries: number) => string | string[] | MessageOptions);
-        timeout: string | string[] | ((this: Argument, message: Message, prevArgs: Object, amountOfTries: number) => string | string[] | MessageOptions);
-        ended: string | string[] | ((this: Argument, message: Message, prevArgs: Object, amountOfTries: number) => string | string[] | MessageOptions);
-        cancel: string | string[] | ((this: Argument, message: Message, prevArgs: Object, amountOfTries: number) => string | string[] | MessageOptions);
+        start: string | string[] | ((this: Argument, message: Message, prevArgs: Object, amountOfTries: number) => string | string[] | MessageOptions & { content: string | string[] });
+        retry: string | string[] | ((this: Argument, message: Message, prevArgs: Object, amountOfTries: number) => string | string[] | MessageOptions & { content: string | string[] });
+        timeout: string | string[] | ((this: Argument, message: Message, prevArgs: Object, amountOfTries: number) => string | string[] | MessageOptions & { content: string | string[] });
+        ended: string | string[] | ((this: Argument, message: Message, prevArgs: Object, amountOfTries: number) => string | string[] | MessageOptions & { content: string | string[] });
+        cancel: string | string[] | ((this: Argument, message: Message, prevArgs: Object, amountOfTries: number) => string | string[] | MessageOptions & { content: string | string[] });
     };
 
     type ArgumentType = string | string[] | RegExp | ((this: Command, word: string, message: Message, prevArgs: Object) => any);
