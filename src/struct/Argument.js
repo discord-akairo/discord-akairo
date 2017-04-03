@@ -291,14 +291,12 @@ class Argument {
 
             text = Array.isArray(text) ? text.join('\n') : text;
 
-            let opts = {};
+            let opts;
 
             if (typeof text === 'object' && text.content) {
                 opts = text;
                 text = text.content;
             }
-
-            opts._cmd = true;
 
             return this.client.util.prompt(message, prompt.infinite && value.length && i === 1 ? '' : text, (m, s) => {
                 if (!Array.isArray(s)) s = [s];
