@@ -275,9 +275,7 @@ class CommandHandler extends AkairoHandler {
                     return undefined;
                 }
 
-                const parsed = this._parseCommand(message, edited);
-                if (!parsed) return this._handleTriggers(message, edited);
-
+                const parsed = this._parseCommand(message, edited) || {};
                 const { command, content, prefix, alias } = parsed;
 
                 if (this.commandUtils.has(message.id)) {
@@ -286,6 +284,8 @@ class CommandHandler extends AkairoHandler {
                     message.command = new CommandUtil(this.client, message, command, prefix, alias);
                     this.commandUtils.set(message.id, message.command);
                 }
+
+                if (!parsed.command) return this._handleTriggers(message, edited);
 
                 if (!command.enabled) {
                     this.emit(CommandHandlerEvents.COMMAND_DISABLED, message, command);
@@ -423,22 +423,22 @@ class CommandHandler extends AkairoHandler {
         const name = message.content.slice(firstWord).split(/\s{1,}|\n{1,}/)[0];
         const command = this.findCommand(name);
 
-        if (!command) return null;
-        if (overwrote == null && command.prefix != null) return null;
+        if (!command) return { prefix: start, alias: name };
+        if (overwrote == null && command.prefix != null) return { prefix: start, alias: name };
 
         if (overwrote != null) {
             if (command.prefix == null) {
-                if (overwrote.start !== start) return null;
+                if (overwrote.start !== start) return { prefix: start, alias: name };
             } else {
                 const commandPrefix = typeof command.prefix === 'function' ? command.prefix.call(this, message) : command.prefix;
 
                 if (Array.isArray(commandPrefix)) {
                     if (!commandPrefix.some(p => p.toLowerCase() === start.toLowerCase())) {
-                        return null;
+                        return { prefix: start, alias: name };
                     }
                 } else
                 if (commandPrefix.toLowerCase() !== start.toLowerCase()) {
-                    return null;
+                    return { prefix: start, alias: name };
                 }
             }
         }
