@@ -2,8 +2,8 @@
  * Extra properties applied to the Discord.js message object.
  * @typedef {Object} Message
  * @prop {?CommandUtil} util - Utilities for command responding.
- * Only available in command-related functions as a parameter.
- * Not available in regex/conditional commands as those can be ran at the same time.
+ * Available on all messages after 'all' inhibitors and built-in inhibitors (bot, client, notSelf).
+ * Not all properties of the util are available, depending on the input.
  */
 
 class CommandUtil {
@@ -42,13 +42,13 @@ class CommandUtil {
 
         /**
          * The prefix used.
-         * @type {string}
+         * @type {?string}
          */
         this.prefix = prefix;
 
         /**
          * The alias used.
-         * @type {string}
+         * @type {?string}
          */
         this.alias = alias;
 

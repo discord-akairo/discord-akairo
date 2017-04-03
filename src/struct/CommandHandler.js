@@ -265,6 +265,13 @@ class CommandHandler extends AkairoHandler {
                 return undefined;
             }
 
+            if (this.commandUtils.has(message.id)) {
+                message.util = this.commandUtils.get(message.id);
+            } else {
+                message.util = new CommandUtil(this.client, message);
+                this.commandUtils.set(message.id, message.util);
+            }
+
             const preTest = this.client.inhibitorHandler
             ? this.client.inhibitorHandler.test('pre', message)
             : Promise.resolve();
@@ -278,12 +285,9 @@ class CommandHandler extends AkairoHandler {
                 const parsed = this._parseCommand(message, edited) || {};
                 const { command, content, prefix, alias } = parsed;
 
-                if (this.commandUtils.has(message.id)) {
-                    message.util = this.commandUtils.get(message.id);
-                } else {
-                    message.util = new CommandUtil(this.client, message, command, prefix, alias);
-                    this.commandUtils.set(message.id, message.util);
-                }
+                message.util.command = command;
+                message.util.prefix = prefix;
+                message.util.alias = alias;
 
                 if (!parsed.command) return this._handleTriggers(message, edited);
 
