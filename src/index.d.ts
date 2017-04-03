@@ -259,15 +259,14 @@ declare module 'discord-akairo' {
         command: Command;
         prefix: string;
         alias: string;
-        original?: Message;
-        originalDM: Message;
+        base?: Message;
         responses: Message[];
-        directs: Message[];
         lastResponse?: Message;
-        lastDirect?: Message;
 
         send(content: string | MessageOptions, options?: MessageOptions): Promise<Message>;
-        sendDM(content: string | MessageOptions, options?: MessageOptions): Promise<Message>;
+        reply(content: string | MessageOptions, options?: MessageOptions): Promise<Message>;
+
+        static swapOptions(content: string | MessageOptions, options?: MessageOptions): Array;
     }
 
     export class SQLiteHandler extends EventEmitter {
