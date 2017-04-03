@@ -299,10 +299,12 @@ class Argument {
             }
 
             return this.client.util.prompt(message, prompt.infinite && value.length && i === 1 ? '' : text, (m, s) => {
+                if (!Array.isArray(s)) s = [s];
+
                 if (m.guild) {
-                    this.handler.commandUtils.get(message.id).responses.unshift(s);
+                    this.handler.commandUtils.get(message.id).responses.unshift(...s.reverse());
                 } else {
-                    this.handler.commandUtils.get(message.id).directs.unshift(s);
+                    this.handler.commandUtils.get(message.id).directs.unshift(...s.reverse());
                 }
 
                 if (m.content.toLowerCase() === prompt.cancelWord.toLowerCase()) {

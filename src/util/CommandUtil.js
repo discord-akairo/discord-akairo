@@ -104,11 +104,29 @@ class CommandUtil {
     send(content, options) {
         [content, options] = this.constructor.swapOptions(content, options);
         if (this.command.editable && this.original) return this.lastResponse.edit(content, options);
+
         return this.message.channel.send(content, options).then(sent => {
-            this.original = sent;
-            this.responses.unshift(sent);
+            this.original = Array.isArray(sent) ? sent.slice(-1)[0] : sent;
+
+            if (Array.isArray(sent)) {
+                this.responses.unshift(...sent.reverse());
+            } else {
+                this.responses.unshift(sent);
+            }
+
             return sent;
         });
+    }
+
+    /**
+     * Sends a response with a mention concantenated to it.
+     * @param {string|MessageOptions} content - Content to send.
+     * @param {MessageOptions} [options] - Options to use.
+     * @returns {Promise<Message>}
+     */
+    reply(content, options) {
+        if (this.message.channel.type !== 'dm') content = `${this.message.author}, ${content}`;
+        return this.send(content, options);
     }
 
     /**
@@ -120,9 +138,16 @@ class CommandUtil {
     sendDM(content, options) {
         [content, options] = this.constructor.swapOptions(content, options);
         if (this.command.editable && this.originalDM) return this.lastDirect.edit(content, options);
+
         return this.message.author.send(content, options).then(sent => {
-            this.originalDM = sent;
-            this.directs.unshift(sent);
+            this.originalDM = Array.isArray(sent) ? sent.slice(-1)[0] : sent;
+
+            if (Array.isArray(sent)) {
+                this.directs.unshift(...sent.reverse());
+            } else {
+                this.directs.unshift(sent);
+            }
+
             return sent;
         });
     }
