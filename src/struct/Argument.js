@@ -299,13 +299,7 @@ class Argument {
             }
 
             return this.client.util.prompt(message, prompt.infinite && value.length && i === 1 ? '' : text, (m, s) => {
-                if (s && this.handler.handleEdits && this.command.editable) {
-                    if (Array.isArray(s)) {
-                        this.handler.commandUtils.get(message.id).lastResponse = s.slice(-1)[0];
-                    } else {
-                        this.handler.commandUtils.get(message.id).lastResponse = s;
-                    }
-                }
+                if (s) this.handler.commandUtils.get(message.id).setLastResponse(s);
 
                 if (m.content.toLowerCase() === prompt.cancelWord.toLowerCase()) {
                     exited = true;

@@ -66,27 +66,39 @@ class CommandUtil {
     }
 
     /**
+     * Sets the last repsonse.
+     * @param {Message|Message[]} message - Message to set.
+     * @returns {void}
+     */
+    setLastResponse(message) {
+        if (!this.handler.handleEdits || !this.command.editable) return;
+
+        if (Array.isArray(message)) {
+            this.lastResponse = message.slice(-1)[0];
+        } else {
+            this.lastResponse = message;
+        }
+    }
+
+    /**
      * Sends a response or edits an old response if available.
      * @param {string|MessageOptions} content - Content to send.
      * @param {MessageOptions} [options] - Options to use.
-     * @returns {Promise<Message>}
+     * @returns {Promise<Message|Message[]>}
      */
     send(content, options) {
         [content, options] = this.constructor.swapOptions(content, options);
-        if ((this.command ? this.command.editable : true) && this.shouldEdit && (!options.file || this.lastResponse.attachments.size)) return this.lastResponse.edit(content, options);
+
+        if (this.shouldEdit && (this.command ? this.command.editable : true) && (!options.file || this.lastResponse.attachments.size)) {
+            return this.lastResponse.edit(content, options);
+        }
 
         return this.message.channel.send(content, options).then(sent => {
             if (options.file) return sent;
             if (this.lastResponse && this.lastResponse.attachments.size) return sent;
 
             this.shouldEdit = true;
-
-            if (Array.isArray(sent)) {
-                this.lastResponse = sent.slice(-1)[0];
-            } else {
-                this.lastResponse = sent;
-            }
-
+            this.setLastResponse(sent);
             return sent;
         });
     }
@@ -95,7 +107,7 @@ class CommandUtil {
      * Sends a response with a mention concantenated to it.
      * @param {string|MessageOptions} content - Content to send.
      * @param {MessageOptions} [options] - Options to use.
-     * @returns {Promise<Message>}
+     * @returns {Promise<Message|Message[]>}
      */
     reply(content, options) {
         if (this.message.channel.type !== 'dm') content = `${this.message.author}, ${content}`;

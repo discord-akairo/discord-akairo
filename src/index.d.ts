@@ -262,8 +262,9 @@ declare module 'discord-akairo' {
         shouldEdit: boolean;
         lastResponse?: Message;
 
-        send(content: string | MessageOptions, options?: MessageOptions): Promise<Message>;
-        reply(content: string | MessageOptions, options?: MessageOptions): Promise<Message>;
+        setLastResponse(message: Message | Message[]): void;
+        send(content: string | MessageOptions, options?: MessageOptions): Promise<Message | Message[]>;
+        reply(content: string | MessageOptions, options?: MessageOptions): Promise<Message | Message[]>;
 
         static swapOptions(content: string | MessageOptions, options?: MessageOptions): Array;
     }
