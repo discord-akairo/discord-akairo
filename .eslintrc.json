@@ -1,7 +1,7 @@
 {
   "extends": "eslint:recommended",
   "parserOptions": {
-    "ecmaVersion": 6
+    "ecmaVersion": 8
   },
   "env": {
     "es6": true,
@@ -42,7 +42,7 @@
     "dot-location": ["error", "property"],
     "dot-notation": "error",
     "eqeqeq": ["error", "smart"],
-    "no-console": "warn",
+    "no-console": "off",
     "no-empty-function": "error",
     "no-floating-decimal": "error",
     "no-implied-eval": "error",
@@ -115,7 +115,7 @@
     "operator-linebreak": ["error", "before"],
     "padded-blocks": ["error", "never"],
     "quote-props": ["error", "as-needed"],
-    "quotes": ["error", "single", { "avoidEscape": true, "allowTemplateLiterals": true }],
+    "quotes": ["error", "single"],
     "semi-spacing": "error",
     "semi": "error",
     "space-before-blocks": "error",
@@ -131,6 +131,7 @@
     "no-duplicate-imports": "error",
     "no-useless-computed-key": "error",
     "no-useless-constructor": "error",
+    "prefer-const": "error",
     "prefer-arrow-callback": "error",
     "prefer-numeric-literals": "error",
     "prefer-rest-params": "error",
