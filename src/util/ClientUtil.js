@@ -461,7 +461,9 @@ class ClientUtil {
      */
     prompt(message, content, check = () => true, time = 30000, options) {
         const promise = content || options
-        ? message.channel.send(content, options)
+        ? options._cmd
+        ? message.command.send(content, options)
+        : message.channel.send(content, options)
         : Promise.resolve();
 
         return promise.then(sent => new Promise((resolve, reject) => {

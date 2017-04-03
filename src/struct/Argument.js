@@ -291,12 +291,14 @@ class Argument {
 
             text = Array.isArray(text) ? text.join('\n') : text;
 
-            let opts;
+            let opts = {};
 
             if (typeof text === 'object' && text.content) {
                 opts = text;
                 text = text.content;
             }
+
+            opts._cmd = true;
 
             return this.client.util.prompt(message, prompt.infinite && value.length && i === 1 ? '' : text, (m, s) => {
                 if (!Array.isArray(s)) s = [s];
@@ -353,10 +355,10 @@ class Argument {
                     response = Array.isArray(response) ? response.join('\n') : response;
 
                     if (typeof response === 'object' && response.content) {
-                        return message.channel.send(response.content, response);
+                        return message.command.send(response.content, response);
                     }
 
-                    return message.channel.send(response);
+                    return message.command.send(response);
                 }
 
                 return retry(i + 1);
