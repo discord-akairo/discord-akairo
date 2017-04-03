@@ -11,6 +11,7 @@ module.exports = {
     ListenerHandler: require('./struct/ListenerHandler'),
     Category: require('./util/Category'),
     ClientUtil: require('./util/ClientUtil'),
+    CommandUtil: require('./util/CommandUtil'),
     Constants: require('./util/Constants'),
     SQLiteHandler: require('./util/SQLiteHandler'),
     TypeResolver: require('./util/TypeResolver'),
