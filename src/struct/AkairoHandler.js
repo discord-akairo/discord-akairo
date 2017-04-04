@@ -123,7 +123,12 @@ class AkairoHandler extends EventEmitter {
         const isObj = typeof thing === 'object';
         if (!isObj && !thing.endsWith('.js')) return undefined;
 
-        const mod = isObj ? thing : require(thing);
+        let mod = isObj ? thing : require(thing);
+
+        if (mod instanceof this.classToHandle.constructor) {
+            mod = new mod(); // eslint-disable-line new-cap
+        }
+
         if (!(mod instanceof this.classToHandle)) return undefined;
         if (this.modules.has(mod.id)) throw new Error(`${this.classToHandle.name} ${mod.id} already loaded.`);
 

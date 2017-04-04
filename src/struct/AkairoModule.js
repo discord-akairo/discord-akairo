@@ -58,7 +58,7 @@ class AkairoModule {
          * @method
          * @returns {any}
          */
-        this.exec = exec;
+        this.exec = exec || this.exec;
     }
 
     /**

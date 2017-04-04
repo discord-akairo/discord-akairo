@@ -152,7 +152,7 @@ class Command extends AkairoModule {
          * @param {Message} message - Message being handled.
          * @returns {RegExp}
          */
-        this.trigger = typeof options.trigger === 'function' ? options.trigger : () => options.trigger;
+        this.trigger = typeof options.trigger === 'function' ? options.trigger : this.trigger || (() => options.trigger);
 
         /**
          * Gets the condition trigger, if specified.
@@ -160,7 +160,7 @@ class Command extends AkairoModule {
          * @param {Message} message - Message being handled.
          * @returns {boolean}
          */
-        this.condition = options.condition || (() => false);
+        this.condition = options.condition || this.condition || (() => false);
 
         /**
          * The ID of this command.
