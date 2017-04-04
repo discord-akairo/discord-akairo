@@ -60,19 +60,19 @@ client.login('TOKEN').then(() => {
 
 ## Installation
 *discord-akairo*  
-`npm install discord-akairo --save`
+`npm install --save discord-akairo`
 
 *discord.js*  
-`npm install discord.js --save`
+`npm install --save discord.js`
 
 *sqlite (optional)*  
-`npm install sqlite --save`
+`npm install --save sqlite`
 
 ## Links
-Repository is available at [https://github.com/1Computer1/discord-akairo](https://github.com/1Computer1/discord-akairo).  
-Changelog is available at [https://github.com/1Computer1/discord-akairo/releases](https://github.com/1Computer1/discord-akairo/releases).  
-Documentation is available at [https://1computer1.github.io/discord-akairo](https://1computer1.github.io/discord-akairo/).  
-If you need more help, message me on Discord: 1Computer#7952.  
+Repository: [https://github.com/1Computer1/discord-akairo](https://github.com/1Computer1/discord-akairo).  
+Changelog: [https://github.com/1Computer1/discord-akairo/releases](https://github.com/1Computer1/discord-akairo/releases).  
+Documentation: [https://1computer1.github.io/discord-akairo](https://1computer1.github.io/discord-akairo/).  
+If you need more help, message me: **1Computer#7952**.  
 
 ## Tutorials
 1. [Setting Up a Bot](https://1computer1.github.io/discord-akairo/tutorial-1.%20Setting%20Up%20a%20Bot.html)
