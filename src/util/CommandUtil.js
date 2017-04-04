@@ -71,7 +71,9 @@ class CommandUtil {
      * @returns {void}
      */
     setLastResponse(message) {
-        if (!this.command.handler.handleEdits || !this.command.editable) return;
+        if (message.command) {
+            if (!this.command.handler.handleEdits || !this.command.editable) return;
+        }
 
         if (Array.isArray(message)) {
             this.lastResponse = message.slice(-1)[0];
