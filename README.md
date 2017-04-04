@@ -86,6 +86,7 @@ If you need more help, message me on Discord: 1Computer#7952.
 9. [Handling Edits](https://1computer1.github.io/discord-akairo/tutorial-9.%20Handling%20Edits.html)
 10. [Customizing Types](https://1computer1.github.io/discord-akairo/tutorial-10.%20Customizing%Types.html)
 11. [Advanced Args and Prompts](https://1computer1.github.io/discord-akairo/tutorial-11.%20Advanced%20Args%20and%20Prompts.html)
+12. [Other Things](https://1computer1.github.io/discord-akairo/tutorial-12.%20Other%20Things.html)
 
 ## Contributing
 Open an issue or a pull request!  
