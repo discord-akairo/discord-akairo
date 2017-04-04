@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li><li><a href="tutorial-10. Customizing Types.html">10. Customizing Types</a></li><li><a href="tutorial-11. Advanced Args and Prompts.html">11. Advanced Args and Prompts</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="CommandUtil.html">CommandUtil</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li><li><a href="tutorial-10. Customizing Types.html">10. Customizing Types</a></li><li><a href="tutorial-11. Advanced Args and Prompts.html">11. Advanced Args and Prompts</a></li><li><a href="tutorial-12. Other Things.html">12. Other Things</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -210,7 +210,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_TypeResolver.js.html">util/TypeResolver.js</a>, <a href="util_TypeResolver.js.html#line12">line 12</a>
+        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line9">line 9</a>
     </li></ul></dd>
     
 
@@ -279,7 +279,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_ClientUtil.js.html">util/ClientUtil.js</a>, <a href="util_ClientUtil.js.html#line9">line 9</a>
+        <a href="util_TypeResolver.js.html">util/TypeResolver.js</a>, <a href="util_TypeResolver.js.html#line12">line 12</a>
     </li></ul></dd>
     
 
@@ -3098,7 +3098,7 @@
 
     
 
-    <h4 class="name" id="fetchMessage"><span class="type-signature"></span>fetchMessage<span class="signature">(channel, id)</span><span class="type-signature"> &rarr; {Promise.&lt;Message>}</span></h4>
+    <h4 class="name" id="fetchMessage"><span class="type-signature"></span>fetchMessage<span class="signature">(channel, id)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="global.html#Message">Message</a>>}</span></h4>
 
     
 
@@ -3253,7 +3253,7 @@
 
 <div class="param-desc">
     
-<span class="param-type">Promise.&lt;Message></span>
+<span class="param-type">Promise.&lt;<a href="global.html#Message">Message</a>></span>
 
 
 </div>
@@ -3507,7 +3507,7 @@
 
     
 
-    <h4 class="name" id="prompt"><span class="type-signature"></span>prompt<span class="signature">(message<span class="signature-attributes">opt</span>, content<span class="signature-attributes">opt</span>, check<span class="signature-attributes">opt</span>, time<span class="signature-attributes">opt</span>, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Message>}</span></h4>
+    <h4 class="name" id="prompt"><span class="type-signature"></span>prompt<span class="signature">(message<span class="signature-attributes">opt</span>, content<span class="signature-attributes">opt</span>, check<span class="signature-attributes">opt</span>, time<span class="signature-attributes">opt</span>, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="global.html#Message">Message</a>>}</span></h4>
 
     
 
@@ -3607,7 +3607,7 @@
             <td class="type">
             
                 
-<span class="param-type">Message</span>
+<span class="param-type"><a href="global.html#Message">Message</a></span>
 
 
             
@@ -3760,7 +3760,7 @@
             <td class="type">
             
                 
-<span class="param-type">MessageOptions</span>
+<span class="param-type"><a href="global.html#MessageOptions">MessageOptions</a></span>
 
 
             
@@ -3810,7 +3810,7 @@
 
 <div class="param-desc">
     
-<span class="param-type">Promise.&lt;Message></span>
+<span class="param-type">Promise.&lt;<a href="global.html#Message">Message</a>></span>
 
 
 </div>
@@ -3823,7 +3823,7 @@
 
     
 
-    <h4 class="name" id="promptIn"><span class="type-signature"></span>promptIn<span class="signature">(channel, user<span class="signature-attributes">opt</span>, content<span class="signature-attributes">opt</span>, check<span class="signature-attributes">opt</span>, time<span class="signature-attributes">opt</span>, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Message>}</span></h4>
+    <h4 class="name" id="promptIn"><span class="type-signature"></span>promptIn<span class="signature">(channel, user<span class="signature-attributes">opt</span>, content<span class="signature-attributes">opt</span>, check<span class="signature-attributes">opt</span>, time<span class="signature-attributes">opt</span>, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="global.html#Message">Message</a>>}</span></h4>
 
     
 
@@ -4114,7 +4114,7 @@
             <td class="type">
             
                 
-<span class="param-type">MessageOptions</span>
+<span class="param-type"><a href="global.html#MessageOptions">MessageOptions</a></span>
 
 
             
@@ -4164,7 +4164,7 @@
 
 <div class="param-desc">
     
-<span class="param-type">Promise.&lt;Message></span>
+<span class="param-type">Promise.&lt;<a href="global.html#Message">Message</a>></span>
 
 
 </div>

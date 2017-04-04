@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li><li><a href="tutorial-10. Customizing Types.html">10. Customizing Types</a></li><li><a href="tutorial-11. Advanced Args and Prompts.html">11. Advanced Args and Prompts</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="CommandUtil.html">CommandUtil</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li><li><a href="tutorial-10. Customizing Types.html">10. Customizing Types</a></li><li><a href="tutorial-11. Advanced Args and Prompts.html">11. Advanced Args and Prompts</a></li><li><a href="tutorial-12. Other Things.html">12. Other Things</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -49,23 +49,11 @@ function exec(message, args, edited)
 function exec(message, match, groups, edited)
 
 // Condition command:
-function exec(message, edited)</code></pre><h3>Editing a Reply</h3><p>Of course, replying from an edit continuously may be a little annoying.<br>One way of editing the original reply would be to store it.  </p>
-<pre class="prettyprint source lang-js"><code>// At your client creation.
-const { Collection } = require('discord.js');
-client.mem.edits = new Collection();
-
-// At your command.
-const { Command } = require('discord-akairo');
+function exec(message, edited)</code></pre><h3>Editing a Reply</h3><p>Of course, replying from an edit continuously may be a little annoying.<br>So, we use the <code>util</code> property on <code>message</code>, which contains this:  </p>
+<pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
 
 function exec(message, args, edited) {
-    if (edited && this.client.mem.edits.has(message.id)) {
-        const oldReply = this.client.mem.edits.get(message.id);
-        return oldReply.edit(args.content);
-    }
-
-    return message.channel.send(args.content).then(sent => {
-        this.client.mem.edits.set(message.id, sent);
-    });
+    return message.util.send(args.content);
 }
 
 module.exports = new Command('say', exec, {
@@ -76,7 +64,7 @@ module.exports = new Command('say', exec, {
             match: 'content'
         }
     ]
-});</code></pre><p>There are probably better ways to do that, but it works for simple things.  </p>
+});</code></pre><p>This <code>send</code> method will take care of edits and previous responses for you.<br>Hopefully, it will provide a nice flow of messages.  </p>
 </article>
 
 </section>

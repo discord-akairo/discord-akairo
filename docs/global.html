@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li><li><a href="tutorial-10. Customizing Types.html">10. Customizing Types</a></li><li><a href="tutorial-11. Advanced Args and Prompts.html">11. Advanced Args and Prompts</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="CommandUtil.html">CommandUtil</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li><li><a href="tutorial-10. Customizing Types.html">10. Customizing Types</a></li><li><a href="tutorial-11. Advanced Args and Prompts.html">11. Advanced Args and Prompts</a></li><li><a href="tutorial-12. Other Things.html">12. Other Things</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -786,7 +786,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line3">line 3</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line10">line 10</a>
     </li></ul></dd>
     
 
@@ -865,7 +865,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line83">line 83</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line90">line 90</a>
     </li></ul></dd>
     
 
@@ -1259,7 +1259,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line32">line 32</a>
+        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line34">line 34</a>
     </li></ul></dd>
     
 
@@ -1335,7 +1335,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line22">line 22</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line29">line 29</a>
     </li></ul></dd>
     
 
@@ -1941,6 +1941,44 @@
             
 
             <td class="description last"><p>A prefix to overwrite the global one for this command.<br>Can be a function <code>(message =&gt; string|string[])</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>permissions</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;PermissionResolvable></span>
+ || 
+
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Permissions required to run this command.<br>Can be either an array of permission name or a function returning <code>true or</code>false`.</p></td>
         </tr>
 
     
@@ -2624,6 +2662,271 @@
 
             
                 
+<h4 class="name" id="Message">Message</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="util_CommandUtil.js.html">util/CommandUtil.js</a>, <a href="util_CommandUtil.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>util</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="CommandUtil.html">CommandUtil</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Utilities for command responding.<br>Available on all messages after 'all' inhibitors and built-in inhibitors (bot, client, notSelf).<br>Not all properties of the util are available, depending on the input.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<div class="description">
+    <p>Extra properties applied to the Discord.js message object.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    
+<span class="param-type">Object</span>
+
+
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="MessageOptions">MessageOptions</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line3">line 3</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>content</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+ || 
+
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Content to send.<br>Only available when returning in a prompt function.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<div class="description">
+    <p>Extra properties applied to the Discord.js message options type.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    
+<span class="param-type">Object</span>
+
+
+
+
+
+
+
+
+            
+                
 <h4 class="name" id="ModuleOptions">ModuleOptions</h4>
 
 
@@ -2774,7 +3077,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line61">line 61</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line68">line 68</a>
     </li></ul></dd>
     
 

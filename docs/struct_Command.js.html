@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li><li><a href="tutorial-10. Customizing Types.html">10. Customizing Types</a></li><li><a href="tutorial-11. Advanced Args and Prompts.html">11. Advanced Args and Prompts</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="CommandUtil.html">CommandUtil</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li><li><a href="tutorial-10. Customizing Types.html">10. Customizing Types</a></li><li><a href="tutorial-11. Advanced Args and Prompts.html">11. Advanced Args and Prompts</a></li><li><a href="tutorial-12. Other Things.html">12. Other Things</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -58,6 +58,8 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * @prop {number} [ratelimit=1] - Amount of command uses allowed until cooldown.
  * @prop {string|string[]|Function} [prefix] - A prefix to overwrite the global one for this command.
  * Can be a function `(message => string|string[])`.
+ * @prop {PermissionResolvable[]|Function} [permissions] - Permissions required to run this command.
+ * Can be either an array of permission name or a function returning `true or `false`.
  * @prop {RegExp|Function} [trigger] - A regex or function `(message => RegExp)` returning regex to match in messages that are NOT commands.
  * The exec function becomes `((message, match, groups, edited) => any)`.
  * @prop {Function} [condition] - A function `((message, edited) => {})` that returns true or false on messages that are NOT commands.
@@ -133,7 +135,7 @@ class Command extends AkairoModule {
          * Whether or not this command can be ran by an edit.
          * @type {boolean}
          */
-        this.editable = !(options.editable === false);
+        this.editable = options.editable === undefined ? true : !!options.editable;
 
         /**
          * Whether or not to type during command execution.
@@ -178,12 +180,18 @@ class Command extends AkairoModule {
         this.prefix = options.prefix;
 
         /**
+         * Permissions required to run command.
+         * @type {PermissionResolvable[]|Function}
+         */
+        this.permissions = options.permissions;
+
+        /**
          * Gets the regex trigger, if specified.
          * @method
          * @param {Message} message - Message being handled.
          * @returns {RegExp}
          */
-        this.trigger = typeof options.trigger === 'function' ? options.trigger : () => options.trigger;
+        this.trigger = typeof options.trigger === 'function' ? options.trigger : this.trigger || (() => options.trigger);
 
         /**
          * Gets the condition trigger, if specified.
@@ -191,7 +199,7 @@ class Command extends AkairoModule {
          * @param {Message} message - Message being handled.
          * @returns {boolean}
          */
-        this.condition = options.condition || (() => false);
+        this.condition = options.condition || this.condition || (() => false);
 
         /**
          * The ID of this command.

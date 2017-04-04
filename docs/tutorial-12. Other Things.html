@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>struct/Inhibitor.js - Documentation</title>
+    <title>Tutorial: 12. Other Things - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,107 +27,52 @@
 
 <div id="main">
     
-    <h1 class="page-title">struct/Inhibitor.js</h1>
+    <h1 class="page-title">Tutorial: 12. Other Things</h1>
     
 
-    
-
-
-
-    
     <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>const AkairoModule = require('./AkairoModule');
 
-/**
- * Options to use for inhibitor execution behavior.
- * @typedef {Object} InhibitorOptions
- * @prop {string} [reason=''] - Reason emitted when command or message is blocked.
- * @prop {boolean} [type='post'] - Can be 'all' to run on all messages, 'pre' to run on messages not blocked by the built-in inhibitors, or 'post' to run on messages that are commands.
- * @prop {string} [category='default'] - Category ID for organization purposes.
- */
+<article>
+    <p>Various things in Akairo that you may find noteworthy.<br>Mostly from version 7.3.0 and higher.<br>Probably the last &quot;tutorial&quot; for now.  </p>
+<h2>Class Exports</h2><p>For those who do not like exporting an instance of Command, Inhibitor, or Listener, you can export a class.<br>The second argument in <code>super()</code> should always be a falsey value.  </p>
+<pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
 
-/** @extends AkairoModule */
-class Inhibitor extends AkairoModule {
-    /**
-     * Creates a new Inhibitor.
-     * @param {string} id - Inhibitor ID.
-     * @param {Function} exec - Function `((message, command) => boolean)` called before a command is ran.
-     * Return `true` or a rejecting Promise to block.
-     * @param {InhibitorOptions} [options={}] - Options for the inhibitor.
-     */
-    constructor(id, exec, options = {}) {
-        super(id, exec, options);
-
-        /**
-         * Reason emitted when command is inhibited.
-         * @type {string}
-         */
-        this.reason = options.reason || '';
-
-        /**
-         * When the inhibitor is ran.
-         * @type {string}
-         */
-        this.type = options.type || 'post';
-
-        /**
-         * The ID of this inhibitor.
-         * @name Inhibitor#id
-         * @type {string}
-         */
-
-        /**
-         * Executes the inhibitor.
-         * @method
-         * @name Inhibitor#exec
-         * @returns {any}
-         */
-
-        /**
-         * The inhibitor handler.
-         * @readonly
-         * @name Inhibitor#handler
-         * @type {InhibitorHandler}
-         */
+class PingCommand extends Command {
+    constructor() {
+        super('ping', null, {
+            aliases: ['test']
+        });
     }
 
-    /**
-     * Reloads the inhibitor.
-     * @method
-     * @name Inhibitor#reload
-     * @returns {Inhibitor}
-     */
-
-    /**
-     * Removes the inhibitor.
-     * @method
-     * @name Inhibitor#remove
-     * @returns {Inhibitor}
-     */
-
-    /**
-     * Enables the inhibitor.
-     * @method
-     * @name Inhibitor#enable
-     * @returns {boolean}
-     */
-
-    /**
-     * Disables the inhibitor.
-     * @method
-     * @name Inhibitor#disable
-     * @returns {boolean}
-     */
+    exec(message) {
+        return message.reply('Pong!');
+    }
 }
 
-module.exports = Inhibitor;
-</code></pre>
-        </article>
-    </section>
+module.exports = PingCommand;</code></pre><h2>Permissions</h2><p>While inhibitors run on all commands, you may want to run on one or a few only.<br>This is where the <code>permissions</code> option is used in the command options.  </p>
+<pre class="prettyprint source lang-js"><code>permissions: ['MANAGE_MESSAGES']</code></pre><p>Or a function can be used:  </p>
+<pre class="prettyprint source lang-js"><code>permissions: message => {
+    // Return true or false.
+    // Unfortunately, not async.
+    // Use an inhibitor for that!
+}</code></pre><p>These will emit a <code>commandBlocked</code> event with the reason <code>permissions</code>.  </p>
+<h2>CommandUtil</h2><p>CommandUtil was touched on in tutorial #9.<br>It also contains these properties:  </p>
+<ul>
+<li><code>message.util.prefix</code> is the prefix used to call the command.  </li>
+<li><code>message.util.alias</code> is the alias used to call the command.</li>
+</ul>
+<p>So, you can basically use these to change how the commmand works.  </p>
+<p><code>message.util</code> is available before pre-inhibitors but after built-in pre-inhibitors.<br>Those are the ones that emit <code>notSelf</code>, <code>client</code>, and <code>bot</code>.<br>So even, if a command was not found, anything afterwards will have what the user inputted.  </p>
+<p>For example, if the input was <code>$something</code> but <code>something</code> is not a command:</p>
+<ul>
+<li><code>message.util.prefix</code> would be <code>$</code>.</li>
+<li><code>message.util.alias</code> would be <code>something</code>.</li>
+</ul>
+<p>Then this would most likely be passed to the <code>messageInvalid</code> where you can do whatever, such as running another command.<br>An example of that would be <code>this.handler.modules.get('somecommand').exec(message, { ... })</code>.  </p>
+<h2>Other Other Things</h2><p><em>More sections will be added in the future.</em><br><em>Have fun using Akairo!</em>  </p>
+</article>
 
-
-
+</section>
 
 </div>
 

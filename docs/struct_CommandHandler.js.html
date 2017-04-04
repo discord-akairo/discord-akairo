@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li><li><a href="tutorial-10. Customizing Types.html">10. Customizing Types</a></li><li><a href="tutorial-11. Advanced Args and Prompts.html">11. Advanced Args and Prompts</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="CommandUtil.html">CommandUtil</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li><li><a href="tutorial-10. Customizing Types.html">10. Customizing Types</a></li><li><a href="tutorial-11. Advanced Args and Prompts.html">11. Advanced Args and Prompts</a></li><li><a href="tutorial-12. Other Things.html">12. Other Things</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -39,6 +39,7 @@
         <article>
             <pre class="prettyprint source linenums"><code>const AkairoHandler = require('./AkairoHandler');
 const Command = require('./Command');
+const CommandUtil = require('../util/CommandUtil');
 const TypeResolver = require('../util/TypeResolver');
 const { CommandHandlerEvents, BuiltInReasons } = require('../util/Constants');
 const { Collection } = require('discord.js');
@@ -108,6 +109,12 @@ class CommandHandler extends AkairoHandler {
         this.cooldowns = new Collection();
 
         /**
+         * Default cooldown for commands.
+         * @type {number}
+         */
+        this.defaultCooldown = options.defaultCooldown || 0;
+
+        /**
          * Collection of sets of ongoing argument prompts.
          * @type {Collection&lt;string, Set>}
          */
@@ -136,10 +143,10 @@ class CommandHandler extends AkairoHandler {
         }, options.defaultPrompt || {});
 
         /**
-         * Default cooldown for commands.
-         * @type {number}
+         * Collection of CommandUtils.
+         * @type {Collection&lt;string, CommandUtil>}
          */
-        this.defaultCooldown = options.defaultCooldown || 0;
+        this.commandUtils = new Collection();
 
         /**
          * Gets the prefix.
@@ -297,6 +304,13 @@ class CommandHandler extends AkairoHandler {
                 return undefined;
             }
 
+            if (this.commandUtils.has(message.id)) {
+                message.util = this.commandUtils.get(message.id);
+            } else {
+                message.util = new CommandUtil(this.client, message);
+                this.commandUtils.set(message.id, message.util);
+            }
+
             const preTest = this.client.inhibitorHandler
             ? this.client.inhibitorHandler.test('pre', message)
             : Promise.resolve();
@@ -307,10 +321,14 @@ class CommandHandler extends AkairoHandler {
                     return undefined;
                 }
 
-                const parsed = this._parseCommand(message, edited);
-                if (!parsed) return this._handleTriggers(message, edited);
+                const parsed = this._parseCommand(message, edited) || {};
+                const { command, content, prefix, alias } = parsed;
 
-                const { command, content } = parsed;
+                message.util.command = command;
+                message.util.prefix = prefix;
+                message.util.alias = alias;
+
+                if (!parsed.command) return this._handleTriggers(message, edited);
 
                 if (!command.enabled) {
                     this.emit(CommandHandlerEvents.COMMAND_DISABLED, message, command);
@@ -338,6 +356,21 @@ class CommandHandler extends AkairoHandler {
                 if (command.channelRestriction === 'dm' &amp;&amp; message.guild) {
                     this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.DM);
                     return undefined;
+                }
+
+                if (command.permissions) {
+                    if (typeof command.permissions === 'function') {
+                        if (!command.permissions(message)) {
+                            this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.PERMISSIONS);
+                            return undefined;
+                        }
+                    } else
+                    if (message.guild) {
+                        if (!message.channel.permissionsFor(message.author).hasPermissions(command.permissions)) {
+                            this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.PERMISSIONS);
+                            return undefined;
+                        }
+                    }
                 }
 
                 const postTest = this.client.inhibitorHandler
@@ -448,28 +481,28 @@ class CommandHandler extends AkairoHandler {
         const name = message.content.slice(firstWord).split(/\s{1,}|\n{1,}/)[0];
         const command = this.findCommand(name);
 
-        if (!command) return null;
-        if (overwrote == null &amp;&amp; command.prefix != null) return null;
+        if (!command) return { prefix: start, alias: name };
+        if (overwrote == null &amp;&amp; command.prefix != null) return { prefix: start, alias: name };
 
         if (overwrote != null) {
             if (command.prefix == null) {
-                if (overwrote.start !== start) return null;
+                if (overwrote.start !== start) return { prefix: start, alias: name };
             } else {
                 const commandPrefix = typeof command.prefix === 'function' ? command.prefix.call(this, message) : command.prefix;
 
                 if (Array.isArray(commandPrefix)) {
                     if (!commandPrefix.some(p => p.toLowerCase() === start.toLowerCase())) {
-                        return null;
+                        return { prefix: start, alias: name };
                     }
                 } else
                 if (commandPrefix.toLowerCase() !== start.toLowerCase()) {
-                    return null;
+                    return { prefix: start, alias: name };
                 }
             }
         }
 
         const content = message.content.slice(message.content.indexOf(name) + name.length + 1);
-        return { command, content };
+        return { command, content, prefix: start, alias: name };
     }
 
     /**
@@ -720,7 +753,7 @@ module.exports = CommandHandler;
 
 /**
  * Emitted when a command is blocked by a post-message inhibitor.
- * The built-in inhibitors are 'owner', 'guild', and 'dm'.
+ * The built-in inhibitors are 'owner', 'guild', 'dm', and 'permissions'.
  * @event CommandHandler#commandBlocked
  * @param {Message} message - Message sent.
  * @param {Command} command - Command blocked.
