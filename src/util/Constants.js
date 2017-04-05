@@ -36,7 +36,15 @@ module.exports = {
         GUILD: 'guild',
         GUILDS: 'guilds',
         MESSAGE: 'message',
-        INVITE: 'invite'
+        INVITE: 'invite',
+        MEMBER_MENTION: 'memberMention',
+        CHANNEL_MENTION: 'channelMention',
+        ROLE_MENTION: 'roleMention',
+        EMOJI_MENTION: 'emojiMention',
+        COMMAND_ALIAS: 'commandAlias',
+        COMMAND: 'command',
+        INHIBITOR: 'inhibitor',
+        LISTENER: 'listener'
     },
     ArgumentSplits: {
         PLAIN: 'plain',

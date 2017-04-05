@@ -48,6 +48,7 @@ class TypeResolver {
 
     [ArgumentTypes.URL](word) {
         if (!word) return null;
+        if (/^<.+>$/.test(word)) word = word.slice(1, -1);
 
         try {
             return new URL(word);
@@ -224,6 +225,54 @@ class TypeResolver {
     [ArgumentTypes.INVITE](word) {
         if (!word) return null;
         return this.client.resolver.resolveInviteCode(word);
+    }
+
+    [ArgumentTypes.MEMBER_MENTION](word, message) {
+        if (!word) return null;
+        const id = word.match(/<@!?(\d+)>/);
+        if (!id) return null;
+        return message.guild.members.get(id[1]) || null;
+    }
+
+    [ArgumentTypes.CHANNEL_MENTION](word, message) {
+        if (!word) return null;
+        const id = word.match(/<#(\d+)>/);
+        if (!id) return null;
+        return message.guild.channels.get(id[1]) || null;
+    }
+
+    [ArgumentTypes.ROLE_MENTION](word, message) {
+        if (!word) return null;
+        const id = word.match(/<@&(\d+)>/);
+        if (!id) return null;
+        return message.guild.roles.get(id[1]) || null;
+    }
+
+    [ArgumentTypes.EMOJI_MENTION](word, message) {
+        if (!word) return null;
+        const id = word.match(/<:[a-zA-Z0-9_]+:(\d+)>/);
+        if (!id) return null;
+        return message.guild.emojis.get(id[1]) || null;
+    }
+
+    [ArgumentTypes.COMMAND_ALIAS](word) {
+        if (!word) return null;
+        return this.client.commandHandler.findCommand(word) || null;
+    }
+
+    [ArgumentTypes.COMMAND](word) {
+        if (!word) return null;
+        return this.client.commandHandler.modules.get(word) || null;
+    }
+
+    [ArgumentTypes.INHIBITOR](word) {
+        if (!word) return null;
+        return this.client.inhibitorHandler.modules.get(word) || null;
+    }
+
+    [ArgumentTypes.LISTENER](word) {
+        if (!word) return null;
+        return this.client.listenerHandler.modules.get(word) || null;
     }
 
     /**
