@@ -224,8 +224,16 @@ class Argument {
      */
     _processType(word, message, args) {
         if (Array.isArray(this.type)) {
-            if (!this.type.some(t => t.toLowerCase() === word.toLowerCase())) return null;
-            return word.toLowerCase();
+            for (const entry of this.type) {
+                if (Array.isArray(entry)) {
+                    if (entry.some(t => t.toLowerCase() === word.toLowerCase())) return entry[0];
+                } else
+                if (entry.toLowerCase() === word.toLowerCase()) {
+                    return entry;
+                }
+            }
+
+            return null;
         }
 
         if (typeof this.type === 'function') {
