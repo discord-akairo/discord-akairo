@@ -106,6 +106,42 @@ class CommandUtil {
     }
 
     /**
+     * Sends a response or edits an old response if available.
+     * @param {string|MessageOptions} content - Content to send.
+     * @param {MessageOptions} [options] - Options to use.
+     * @returns {Promise<Message|Message[]>}
+     */
+    sendMessage(content, options) {
+        return this.send(content, options);
+    }
+
+    /**
+     * Sends a response in a codeblock or edits an old response if available.
+     * @param {string} code - Language to use for syntax highlighting.
+     * @param {string|MessageOptions} content - Content to send.
+     * @param {MessageOptions} [options] - Options to use.
+     * @returns {Promise<Message|Message[]>}
+     */
+    sendCode(code, content, options) {
+        [content, options] = this.constructor.swapOptions(content, options);
+        options.code = code;
+        return this.send(content, options);
+    }
+
+    /**
+     * Sends a response with an embed or edits an old response if available.
+     * @param {RichEmbed|Object} embed - Embed to send.
+     * @param {string|MessageOptions} content - Content to send.
+     * @param {MessageOptions} [options] - Options to use.
+     * @returns {Promise<Message|Message[]>}
+     */
+    sendEmbed(embed, content, options) {
+        [content, options] = this.constructor.swapOptions(content, options);
+        options.embed = embed;
+        return this.send(content, options);
+    }
+
+    /**
      * Sends a response with a mention concantenated to it.
      * @param {string|MessageOptions} content - Content to send.
      * @param {MessageOptions} [options] - Options to use.

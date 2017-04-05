@@ -52,6 +52,12 @@ class CommandHandler extends AkairoHandler {
         this.blockBots = options.blockBots === undefined ? true : !!options.blockBots;
 
         /**
+         * Whether or not `fetchMember()` is used on each message author from a guild.
+         * @type {boolean}
+         */
+        this.fetchMembers = !!options.fetchMember;
+
+        /**
          * Whether or not edits are handled.
          * @type {boolean}
          */
@@ -64,10 +70,10 @@ class CommandHandler extends AkairoHandler {
         this.commandUtil = options.commandUtil !== undefined ? !!options.commandUtil : this.handleEdits;
 
         /**
-         * Whether or not `fetchMember()` is used on each message author from a guild.
-         * @type {boolean}
+         * Collection of CommandUtils.
+         * @type {Collection<string, CommandUtil>}
          */
-        this.fetchMembers = !!options.fetchMember;
+        this.commandUtils = new Collection();
 
         /**
          * Collection of cooldowns.
@@ -108,12 +114,6 @@ class CommandHandler extends AkairoHandler {
             optional: false,
             infinite: false
         }, options.defaultPrompt || {});
-
-        /**
-         * Collection of CommandUtils.
-         * @type {Collection<string, CommandUtil>}
-         */
-        this.commandUtils = new Collection();
 
         /**
          * Gets the prefix.

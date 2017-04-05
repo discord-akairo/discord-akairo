@@ -131,15 +131,18 @@ declare module 'discord-akairo' {
         aliases: Collection<string, string>;
         prefixes: Set<string | string[] | Function>;
         resolver: TypeResolver;
-        preInhibitors: boolean;
-        postInhibitors: boolean;
-        handleEdits: boolean;
+        blockNotSelf: boolean;
+        blockClient: boolean;
+        blockBots: boolean;
         fetchMembers: boolean;
+        handleEdits: boolean;
+        commandUtil: boolean;
+        commandUtils: Collection<string, CommandUtil>
         cooldowns: Collection<string, Object>;
+        defaultCooldown: number;
         prompts: Collection<string, Set<string>>;
         defaultPrompt: PromptOptions;
-        defaultCooldown: number;
-
+        
         prefix(message: Message): string | string[];
         allowMention(message: Message): boolean;
         findCommand(name: string): Command;
@@ -263,6 +266,9 @@ declare module 'discord-akairo' {
 
         setLastResponse(message: Message | Message[]): void;
         send(content: string | MessageOptions, options?: MessageOptions): Promise<Message | Message[]>;
+        sendMessage(content: string | MessageOptions, options?: MessageOptions): Promise<Message | Message[]>;
+        sendCode(code: string, content: string | MessageOptions, options?: MessageOptions): Promise<Message | Message[]>;
+        sendEmbed(embed: RichEmbed | Object, content: string | MessageOptions, options?: MessageOptions): Promise<Message | Message[]>;
         reply(content: string | MessageOptions, options?: MessageOptions): Promise<Message | Message[]>;
 
         static swapOptions(content: string | MessageOptions, options?: MessageOptions): any[];
@@ -321,6 +327,7 @@ declare module 'discord-akairo' {
         prefix?: string | string[] | ((this: CommandHandler<Command>, message: Message) => string | string[]);
         allowMention?: boolean | ((this: CommandHandler<Command>, message: Message) => boolean);
         handleEdits?: boolean;
+        commandUtil?: boolean;
         fetchMembers?: boolean;
         defaultCooldown?: number;
         defaultPrompt?: PromptOptions;
