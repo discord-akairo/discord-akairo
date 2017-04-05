@@ -35,6 +35,10 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  * - `dynamicInt` casts to an integer with `parseInt()` or a trimmed input if not a number.
  * - `url` casts to an `URL` object.
  * - `date` casts to a `Date` object.
+ * - `commandAlias` tries to resolve to a command from an alias.
+ * - `command` matches the ID of a command.
+ * - `inhibitor` matches the ID of an inhibitor.
+ * - `listener` matches the ID of a listener.
  *
  * Possible Discord-related types.
  * These types can be plural (add an 's' to the end) and a collection of matching objects will be used.
@@ -51,9 +55,14 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  * Other Discord-related types:
  * - `message` tries to fetch a message from an ID.
  * - `invite` tries to resolve an invite code from a link.
+ * - `memberMention` matches a mention of a guild member.
+ * - `channelMention` matches a mention of a channel.
+ * - `roleMention` matches a mention of a role.
+ * - `emojiMention` matches a mention of an emoji.
  *
  * An array of strings can be used to restrict input to only those strings, case insensitive.
- * The evaluated argument will be all lowercase.
+ * The array can also contain an inner array of strings, for aliases.
+ * If so, the first entry of the array will be used as the final argument.
  *
  * A regular expression can also be used.
  * The evaluated argument will be an object containing the `match` and `groups` if global.
