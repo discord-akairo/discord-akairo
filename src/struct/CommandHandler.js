@@ -1,7 +1,7 @@
 const AkairoHandler = require('./AkairoHandler');
 const Command = require('./Command');
-const CommandUtil = require('../util/CommandUtil');
-const TypeResolver = require('../util/TypeResolver');
+const CommandUtil = require('./CommandUtil');
+const TypeResolver = require('./TypeResolver');
 const { CommandHandlerEvents, BuiltInReasons } = require('../util/Constants');
 const { Collection } = require('discord.js');
 

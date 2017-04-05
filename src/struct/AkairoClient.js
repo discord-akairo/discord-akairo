@@ -2,7 +2,7 @@ const { Client } = require('discord.js');
 const CommandHandler = require('./CommandHandler');
 const InhibitorHandler = require('./InhibitorHandler');
 const ListenerHandler = require('./ListenerHandler');
-const ClientUtil = require('../util/ClientUtil');
+const ClientUtil = require('./ClientUtil');
 
 /**
  * Options used to determine how the framework behaves.
