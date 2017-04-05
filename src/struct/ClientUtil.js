@@ -1,4 +1,4 @@
-const { Constants, RichEmbed, Collection, User } = require('discord.js');
+const { Collection, Constants, RichEmbed, User } = require('discord.js');
 
 class ClientUtil {
     /**

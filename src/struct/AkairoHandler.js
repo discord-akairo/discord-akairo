@@ -1,10 +1,10 @@
-const fs = require('fs');
-const path = require('path');
-const EventEmitter = require('events');
+const { AkairoHandlerEvents } = require('../util/Constants');
 const AkairoModule = require('./AkairoModule');
 const Category = require('../util/Category');
-const { AkairoHandlerEvents } = require('../util/Constants');
 const { Collection } = require('discord.js');
+const EventEmitter = require('events');
+const fs = require('fs');
+const path = require('path');
 
 /** @extends EventEmitter */
 class AkairoHandler extends EventEmitter {

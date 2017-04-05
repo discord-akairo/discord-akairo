@@ -1,9 +1,9 @@
 const AkairoHandler = require('./AkairoHandler');
+const { BuiltInReasons, CommandHandlerEvents } = require('../util/Constants');
+const { Collection } = require('discord.js');
 const Command = require('./Command');
 const CommandUtil = require('./CommandUtil');
 const TypeResolver = require('./TypeResolver');
-const { CommandHandlerEvents, BuiltInReasons } = require('../util/Constants');
-const { Collection } = require('discord.js');
 
 /** @extends AkairoHandler */
 class CommandHandler extends AkairoHandler {

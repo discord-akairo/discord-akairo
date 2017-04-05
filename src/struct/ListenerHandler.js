@@ -1,7 +1,7 @@
 const AkairoHandler = require('./AkairoHandler');
-const Listener = require('./Listener');
 const { Collection } = require('discord.js');
 const EventEmitter = require('events');
+const Listener = require('./Listener');
 
 /** @extends AkairoHandler */
 class ListenerHandler extends AkairoHandler {
