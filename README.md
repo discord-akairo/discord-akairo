@@ -23,10 +23,11 @@ client.login('TOKEN').then(() => {
   - Reading files recursively from directories.
   - Adding, removing, and reloading modules.
   - Categorization for modules.
+  - Works with both object and class export.
 - Flexible command handling and creation.
   - Command aliases.
   - Command cooldowns.
-  - Running commands on edits.
+  - Running commands on edits and editing previous responses.
   - A dynamic command prefixing system.
     - Multiple prefixes.
     - Variable prefixes per message.
@@ -35,10 +36,11 @@ client.login('TOKEN').then(() => {
   - Different ways to trigger a command.
     - Regular expression triggers.
     - Conditional triggers.
+    - From somewhere else.
 - Complex and highly customizable arguments.
   - Support for quoted arguments.
   - Arguments based on previous arguments.
-  - Several ways to match arguments: by word, by flag, etc.
+  - Several ways to match arguments, such as flag arguments.
   - Casting input into certain types.
     - Simple types such as string, integer, float, url, date, etc.
     - Discord-related types such as user, member, message, etc.
@@ -48,9 +50,17 @@ client.login('TOKEN').then(() => {
     - Can also be based on previous arguments.
     - Customizable prompts with embeds, files, etc.
     - Infinite argument prompting.
+- Blocking and monitoring messages with inhibitors.
+  - Run at various stages of command handling.
+    - On all messages.
+    - On messages that are from valid users.
+    - On messages before commands.
+- Modular listeners.
+  - No more gigantic main files with listeners.
+  - Adding your own emitters.
 - Useful utility methods available.
   - Resolvers for members, users, and others that can filter by name.
-  - Shortcut methods for making embeds and collections.
+  - Shortcut methods for making embeds and collections and other things.
   - Helper methods for prompting users for input.
 - Support for SQLite.
   - Default values for keys.

@@ -65,12 +65,13 @@ client.login('TOKEN').then(() => {
 <li>Reading files recursively from directories.</li>
 <li>Adding, removing, and reloading modules.</li>
 <li>Categorization for modules.</li>
+<li>Works with both object and class export.</li>
 </ul>
 </li>
 <li>Flexible command handling and creation.<ul>
 <li>Command aliases.</li>
 <li>Command cooldowns.</li>
-<li>Running commands on edits.</li>
+<li>Running commands on edits and editing previous responses.</li>
 <li>A dynamic command prefixing system.<ul>
 <li>Multiple prefixes.</li>
 <li>Variable prefixes per message.</li>
@@ -81,6 +82,7 @@ client.login('TOKEN').then(() => {
 <li>Different ways to trigger a command.<ul>
 <li>Regular expression triggers.</li>
 <li>Conditional triggers.</li>
+<li>From somewhere else.</li>
 </ul>
 </li>
 </ul>
@@ -88,7 +90,7 @@ client.login('TOKEN').then(() => {
 <li>Complex and highly customizable arguments.<ul>
 <li>Support for quoted arguments.</li>
 <li>Arguments based on previous arguments.</li>
-<li>Several ways to match arguments: by word, by flag, etc.</li>
+<li>Several ways to match arguments, such as flag arguments.</li>
 <li>Casting input into certain types.<ul>
 <li>Simple types such as string, integer, float, url, date, etc.</li>
 <li>Discord-related types such as user, member, message, etc.</li>
@@ -104,9 +106,23 @@ client.login('TOKEN').then(() => {
 </li>
 </ul>
 </li>
+<li>Blocking and monitoring messages with inhibitors.<ul>
+<li>Run at various stages of command handling.<ul>
+<li>On all messages.</li>
+<li>On messages that are from valid users.</li>
+<li>On messages before commands.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Modular listeners.<ul>
+<li>No more gigantic main files with listeners.</li>
+<li>Adding your own emitters.</li>
+</ul>
+</li>
 <li>Useful utility methods available.<ul>
 <li>Resolvers for members, users, and others that can filter by name.</li>
-<li>Shortcut methods for making embeds and collections.</li>
+<li>Shortcut methods for making embeds and collections and other things.</li>
 <li>Helper methods for prompting users for input.</li>
 </ul>
 </li>
