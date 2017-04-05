@@ -37,25 +37,31 @@ class CommandHandler extends AkairoHandler {
          * Whether or not to block others, if a selfbot.
          * @type {boolean}
          */
-        this.blockNotSelf = !(options.blockNotSelf === false);
+        this.blockNotSelf = options.blockNotSelf === undefined ? true : !!options.blockNotSelf;
 
         /**
          * Whether or not to block self, if not a selfbot.
          * @type {boolean}
          */
-        this.blockClient = !(options.blockClient === false);
+        this.blockClient = options.blockClient === undefined ? true : !!options.blockClient;
 
         /**
          * Whether or not to block bots.
          * @type {boolean}
          */
-        this.blockBots = !(options.blockBots === false);
+        this.blockBots = options.blockBots === undefined ? true : !!options.blockBots;
 
         /**
          * Whether or not edits are handled.
          * @type {boolean}
          */
         this.handleEdits = !!options.handleEdits;
+
+        /**
+         * Whether or not `message.util` is assigned.
+         * @type {boolean}
+         */
+        this.commandUtil = options.commandUtil !== undefined ? !!options.commandUtil : this.handleEdits;
 
         /**
          * Whether or not `fetchMember()` is used on each message author from a guild.
@@ -265,11 +271,13 @@ class CommandHandler extends AkairoHandler {
                 return undefined;
             }
 
-            if (this.commandUtils.has(message.id)) {
-                message.util = this.commandUtils.get(message.id);
-            } else {
-                message.util = new CommandUtil(this.client, message);
-                this.commandUtils.set(message.id, message.util);
+            if (this.commandUtil) {
+                if (this.commandUtils.has(message.id)) {
+                    message.util = this.commandUtils.get(message.id);
+                } else {
+                    message.util = new CommandUtil(this.client, message);
+                    this.commandUtils.set(message.id, message.util);
+                }
             }
 
             const preTest = this.client.inhibitorHandler
@@ -285,9 +293,11 @@ class CommandHandler extends AkairoHandler {
                 const parsed = this._parseCommand(message, edited) || {};
                 const { command, content, prefix, alias } = parsed;
 
-                message.util.command = command;
-                message.util.prefix = prefix;
-                message.util.alias = alias;
+                if (this.commandUtil) {
+                    message.util.command = command;
+                    message.util.prefix = prefix;
+                    message.util.alias = alias;
+                }
 
                 if (!parsed.command) return this._handleTriggers(message, edited);
 

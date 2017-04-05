@@ -299,7 +299,9 @@ class Argument {
             }
 
             return this.client.util.prompt(message, prompt.infinite && value.length && i === 1 ? '' : text, (m, s) => {
-                if (s) this.handler.commandUtils.get(message.id).setLastResponse(s);
+                if (s && this.handler.commandUtil) {
+                    this.handler.commandUtils.get(message.id).setLastResponse(s);
+                }
 
                 if (m.content.toLowerCase() === prompt.cancelWord.toLowerCase()) {
                     exited = true;
@@ -348,10 +350,10 @@ class Argument {
                     response = Array.isArray(response) ? response.join('\n') : response;
 
                     if (typeof response === 'object' && response.content) {
-                        return message.util.send(response.content, response);
+                        return (message.util || message.channel).send(response.content, response);
                     }
 
-                    return message.util.send(response);
+                    return (message.util || message.channel).send(response);
                 }
 
                 return retry(i + 1);

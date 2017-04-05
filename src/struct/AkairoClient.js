@@ -14,6 +14,8 @@ const ClientUtil = require('../util/ClientUtil');
  * @prop {boolean|Function} [allowMention=true] - Whether or not to allow mentions to the client user as a prefix.
  * Can be function `(message => boolean)` that returns true or false.
  * @prop {boolean} [handleEdits=false] - Whether or not to handle edited messages.
+ * @prop {boolean} [commandUtil=false] - Whether or not to assign `message.util`.
+ * Set to `true` by default if `handleEdits` is on.
  * @prop {boolean} [fetchMembers=false] - Whether or not to fetch member on each message from a guild.
  * @prop {number} [defaultCooldown=0] - The default cooldown for commands.
  * @prop {PromptOptions} [defaultPrompt] - The default prompt options.
