@@ -74,6 +74,10 @@
  * - `dynamicInt` casts to an integer with `parseInt()` or a trimmed input if not a number.
  * - `url` casts to an `URL` object.
  * - `date` casts to a `Date` object.
+ * - `commandAlias` tries to resolve to a command from an alias.
+ * - `command` matches the ID of a command.
+ * - `inhibitor` matches the ID of an inhibitor.
+ * - `listener` matches the ID of a listener.
  *
  * Possible Discord-related types.
  * These types can be plural (add an 's' to the end) and a collection of matching objects will be used.
@@ -90,9 +94,14 @@
  * Other Discord-related types:
  * - `message` tries to fetch a message from an ID.
  * - `invite` tries to resolve an invite code from a link.
+ * - `memberMention` matches a mention of a guild member.
+ * - `channelMention` matches a mention of a channel.
+ * - `roleMention` matches a mention of a role.
+ * - `emojiMention` matches a mention of an emoji.
  *
  * An array of strings can be used to restrict input to only those strings, case insensitive.
- * The evaluated argument will be all lowercase.
+ * The array can also contain an inner array of strings, for aliases.
+ * If so, the first entry of the array will be used as the final argument.
  *
  * A regular expression can also be used.
  * The evaluated argument will be an object containing the `match` and `groups` if global.
@@ -263,8 +272,16 @@ class Argument {
      */
     _processType(word, message, args) {
         if (Array.isArray(this.type)) {
-            if (!this.type.some(t => t.toLowerCase() === word.toLowerCase())) return null;
-            return word.toLowerCase();
+            for (const entry of this.type) {
+                if (Array.isArray(entry)) {
+                    if (entry.some(t => t.toLowerCase() === word.toLowerCase())) return entry[0];
+                } else
+                if (entry.toLowerCase() === word.toLowerCase()) {
+                    return entry;
+                }
+            }
+
+            return null;
         }
 
         if (typeof this.type === 'function') {
@@ -338,7 +355,9 @@ class Argument {
             }
 
             return this.client.util.prompt(message, prompt.infinite &amp;&amp; value.length &amp;&amp; i === 1 ? '' : text, (m, s) => {
-                if (s) this.handler.commandUtils.get(message.id).setLastResponse(s);
+                if (s &amp;&amp; this.handler.commandUtil) {
+                    this.handler.commandUtils.get(message.id).setLastResponse(s);
+                }
 
                 if (m.content.toLowerCase() === prompt.cancelWord.toLowerCase()) {
                     exited = true;
@@ -387,10 +406,10 @@ class Argument {
                     response = Array.isArray(response) ? response.join('\n') : response;
 
                     if (typeof response === 'object' &amp;&amp; response.content) {
-                        return message.util.send(response.content, response);
+                        return (message.util || message.channel).send(response.content, response);
                     }
 
-                    return message.util.send(response);
+                    return (message.util || message.channel).send(response);
                 }
 
                 return retry(i + 1);

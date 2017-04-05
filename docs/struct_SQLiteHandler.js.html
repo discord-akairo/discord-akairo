@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>util/SQLiteHandler.js - Documentation</title>
+    <title>struct/SQLiteHandler.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">util/SQLiteHandler.js</h1>
+    <h1 class="page-title">struct/SQLiteHandler.js</h1>
     
 
     
@@ -37,10 +37,10 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const path = require('path');
+            <pre class="prettyprint source linenums"><code>const { Collection } = require('discord.js');
 const EventEmitter = require('events');
-const { Collection } = require('discord.js');
 const { SQLiteHandlerEvents } = require('../util/Constants');
+const path = require('path');
 
 let sql;
 

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>util/TypeResolver.js - Documentation</title>
+    <title>struct/TypeResolver.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">util/TypeResolver.js</h1>
+    <h1 class="page-title">struct/TypeResolver.js</h1>
     
 
     
@@ -37,7 +37,7 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const { ArgumentTypes } = require('./Constants');
+            <pre class="prettyprint source linenums"><code>const { ArgumentTypes } = require('../util/Constants');
 const { Collection } = require('discord.js');
 const { URL } = require('url');
 
@@ -87,6 +87,7 @@ class TypeResolver {
 
     [ArgumentTypes.URL](word) {
         if (!word) return null;
+        if (/^&lt;.+>$/.test(word)) word = word.slice(1, -1);
 
         try {
             return new URL(word);
@@ -263,6 +264,54 @@ class TypeResolver {
     [ArgumentTypes.INVITE](word) {
         if (!word) return null;
         return this.client.resolver.resolveInviteCode(word);
+    }
+
+    [ArgumentTypes.MEMBER_MENTION](word, message) {
+        if (!word) return null;
+        const id = word.match(/&lt;@!?(\d+)>/);
+        if (!id) return null;
+        return message.guild.members.get(id[1]) || null;
+    }
+
+    [ArgumentTypes.CHANNEL_MENTION](word, message) {
+        if (!word) return null;
+        const id = word.match(/&lt;#(\d+)>/);
+        if (!id) return null;
+        return message.guild.channels.get(id[1]) || null;
+    }
+
+    [ArgumentTypes.ROLE_MENTION](word, message) {
+        if (!word) return null;
+        const id = word.match(/&lt;@&amp;(\d+)>/);
+        if (!id) return null;
+        return message.guild.roles.get(id[1]) || null;
+    }
+
+    [ArgumentTypes.EMOJI_MENTION](word, message) {
+        if (!word) return null;
+        const id = word.match(/&lt;:[a-zA-Z0-9_]+:(\d+)>/);
+        if (!id) return null;
+        return message.guild.emojis.get(id[1]) || null;
+    }
+
+    [ArgumentTypes.COMMAND_ALIAS](word) {
+        if (!word) return null;
+        return this.client.commandHandler.findCommand(word) || null;
+    }
+
+    [ArgumentTypes.COMMAND](word) {
+        if (!word) return null;
+        return this.client.commandHandler.modules.get(word) || null;
+    }
+
+    [ArgumentTypes.INHIBITOR](word) {
+        if (!word) return null;
+        return this.client.inhibitorHandler.modules.get(word) || null;
+    }
+
+    [ArgumentTypes.LISTENER](word) {
+        if (!word) return null;
+        return this.client.listenerHandler.modules.get(word) || null;
     }
 
     /**

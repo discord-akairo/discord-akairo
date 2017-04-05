@@ -424,6 +424,43 @@
 
         <tr>
             
+                <td class="name"><code>commandUtil</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last"><p>Whether or not to assign <code>message.util</code>.<br>Set to <code>true</code> by default if <code>handleEdits</code> is on.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>fetchMembers</code></td>
             
 
@@ -865,7 +902,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line90">line 90</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line99">line 99</a>
     </li></ul></dd>
     
 
@@ -1384,6 +1421,10 @@
 <li><code>dynamicInt</code> casts to an integer with <code>parseInt()</code> or a trimmed input if not a number.</li>
 <li><code>url</code> casts to an <code>URL</code> object.</li>
 <li><code>date</code> casts to a <code>Date</code> object.</li>
+<li><code>commandAlias</code> tries to resolve to a command from an alias.</li>
+<li><code>command</code> matches the ID of a command.</li>
+<li><code>inhibitor</code> matches the ID of an inhibitor.</li>
+<li><code>listener</code> matches the ID of a listener.</li>
 </ul>
 <p>Possible Discord-related types.<br>These types can be plural (add an 's' to the end) and a collection of matching objects will be used.</p>
 <ul>
@@ -1401,8 +1442,12 @@
 <ul>
 <li><code>message</code> tries to fetch a message from an ID.</li>
 <li><code>invite</code> tries to resolve an invite code from a link.</li>
+<li><code>memberMention</code> matches a mention of a guild member.</li>
+<li><code>channelMention</code> matches a mention of a channel.</li>
+<li><code>roleMention</code> matches a mention of a role.</li>
+<li><code>emojiMention</code> matches a mention of an emoji.</li>
 </ul>
-<p>An array of strings can be used to restrict input to only those strings, case insensitive.<br>The evaluated argument will be all lowercase.</p>
+<p>An array of strings can be used to restrict input to only those strings, case insensitive.<br>The array can also contain an inner array of strings, for aliases.<br>If so, the first entry of the array will be used as the final argument.</p>
 <p>A regular expression can also be used.<br>The evaluated argument will be an object containing the <code>match</code> and <code>groups</code> if global.</p>
 <p>A function <code>((word, message, prevArgs) =&gt; any)</code> can also be used to filter or modify arguments.<br>A return value of <code>true</code> will let the word pass, a <code>null</code> or <code>undefined</code> return value will use the default value for the argument or start a prompt.<br>Any other truthy return value will be used as the evaluated argument.<br>If returning a Promise, the value resolved will be the argument, and a rejection will use the default value or start a prompt.</p>
 </div>
@@ -2673,7 +2718,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_CommandUtil.js.html">util/CommandUtil.js</a>, <a href="util_CommandUtil.js.html#line1">line 1</a>
+        <a href="struct_CommandUtil.js.html">struct/CommandUtil.js</a>, <a href="struct_CommandUtil.js.html#line1">line 1</a>
     </li></ul></dd>
     
 
@@ -3077,7 +3122,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line68">line 68</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line77">line 77</a>
     </li></ul></dd>
     
 
@@ -3606,7 +3651,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_SQLiteHandler.js.html">util/SQLiteHandler.js</a>, <a href="util_SQLiteHandler.js.html#line8">line 8</a>
+        <a href="struct_SQLiteHandler.js.html">struct/SQLiteHandler.js</a>, <a href="struct_SQLiteHandler.js.html#line8">line 8</a>
     </li></ul></dd>
     
 
