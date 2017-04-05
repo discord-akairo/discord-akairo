@@ -368,17 +368,17 @@ declare module 'discord-akairo' {
         cancel: string | string[] | ((this: Argument, message: Message, prevArgs: Object, amountOfTries: number) => string | string[] | MessageOptions & { content: string | string[] });
     };
 
-    type ArgumentType = string | string[] | RegExp | ((this: Command, word: string, message: Message, prevArgs: Object) => any);
+    type ArgumentType = 'string' | 'number' | 'integer' | 'dynamic' | 'dynamicInt' | 'url' | 'date' | 'color' | 'user' | 'users' | 'member' | 'members' | 'relevant' | 'relevants' | 'channel' | 'channels' | 'textChannel' | 'textChannels' | 'voiceChannel' | 'voiceChannels' | 'role' | 'roles' | 'emoji' | 'emojis' | 'guild' | 'guilds' | 'message' | 'invite' | 'memberMention' | 'channelMention' | 'roleMention' | 'emojiMention' | 'commandAlias' | 'command' | 'inhibitor' | 'listener' | string | string[] | RegExp | ((this: Command, word: string, message: Message, prevArgs: Object) => any);
 
-    type ArgumentMatch = string | ((this: Command, message: Message, prevArgs: Object) => string);
+    type ArgumentMatch = 'word' | 'prefix' | 'flag' | 'text' | 'content' | 'rest' | 'none' | ((this: Command, message: Message, prevArgs: Object) => string);
 
-    type ArgumentSplit = string | RegExp | ((this: Command, content: string, message: Message) => string[]);
+    type ArgumentSplit = 'plain' | 'split' | 'quoted' | 'sticky' | RegExp | ((this: Command, content: string, message: Message) => string[]);
 
     type CommandOptions = {
         aliases?: string[];
         args?: ArgumentOptions[];
         split?: ArgumentSplit;
-        channelRestriction?: string;
+        channelRestriction?: 'guild' | 'dm';
         category?: string;
         ownerOnly?: boolean;
         protected?: boolean;
@@ -397,14 +397,14 @@ declare module 'discord-akairo' {
 
     type InhibitorOptions = {
         reason?: string;
-        type?: string;
+        type?: 'all' | 'pre' | 'post';
         category?: string;
     };
 
     type ListenerOptions = {
         emitter?: string;
         eventName?: string;
-        type?: string;
+        type?: 'on' | 'once';
         category?: string;
     }
 
