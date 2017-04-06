@@ -252,13 +252,18 @@ class Command extends AkairoModule {
                 for (let i = words.length; i--;) {
                     const w = words[i];
                     if (Array.isArray(arg.prefix)) {
+                        let found = false;
+
                         for (const prefix of arg.prefix) {
                             if (w.toLowerCase().startsWith(prefix.toLowerCase())) {
                                 prefixUsed = prefix;
                                 word = w;
+                                found = true;
                                 break;
                             }
                         }
+
+                        if (found) break;
                     } else
                     if (w.toLowerCase().startsWith(arg.prefix.toLowerCase())) {
                         prefixUsed = arg.prefix;
@@ -280,12 +285,17 @@ class Command extends AkairoModule {
                 for (let i = words.length; i--;) {
                     const w = words[i];
                     if (Array.isArray(arg.prefix)) {
+                        let found = false;
+
                         for (const prefix of arg.prefix) {
                             if (w.toLowerCase().startsWith(prefix.toLowerCase())) {
                                 word = w;
+                                found = true;
                                 break;
                             }
                         }
+
+                        if (found) break;
                     } else
                     if (w.toLowerCase().startsWith(arg.prefix.toLowerCase())) {
                         word = w;
