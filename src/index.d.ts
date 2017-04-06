@@ -139,6 +139,7 @@ declare module 'discord-akairo' {
         handleEdits: boolean;
         commandUtil: boolean;
         commandUtils: Collection<string, CommandUtil>
+        commandUtilSweepInterval?: number; 
         cooldowns: Collection<string, Object>;
         defaultCooldown: number;
         prompts: Collection<string, Set<string>>;
@@ -331,6 +332,7 @@ declare module 'discord-akairo' {
         allowMention?: boolean | ((this: CommandHandler<Command>, message: Message) => boolean);
         handleEdits?: boolean;
         commandUtil?: boolean;
+        commandUtilSweepInterval?: number; 
         fetchMembers?: boolean;
         defaultCooldown?: number;
         defaultPrompt?: PromptOptions;
