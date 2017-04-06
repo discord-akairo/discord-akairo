@@ -76,6 +76,18 @@ class CommandHandler extends AkairoHandler {
         this.commandUtils = new Collection();
 
         /**
+         * Interval in seconds to clear the CommandUtils collection.
+         * @type {number}
+         */
+        this.commandUtilSweepInterval = options.commandUtilSweepInterval || 0;
+
+        if (this.commandUtilSweepInterval) {
+            this.client.setInterval(() => {
+                this.commandUtils.clear();
+            }, this.commandUtilSweepInterval * 1000);
+        }
+
+        /**
          * Collection of cooldowns.
          * @type {Collection<string, Object>}
          */
