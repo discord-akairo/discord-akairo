@@ -370,7 +370,7 @@ declare module 'discord-akairo' {
 
     type ArgumentType = 'string' | 'number' | 'integer' | 'dynamic' | 'dynamicInt' | 'url' | 'date' | 'color' | 'user' | 'users' | 'member' | 'members' | 'relevant' | 'relevants' | 'channel' | 'channels' | 'textChannel' | 'textChannels' | 'voiceChannel' | 'voiceChannels' | 'role' | 'roles' | 'emoji' | 'emojis' | 'guild' | 'guilds' | 'message' | 'invite' | 'memberMention' | 'channelMention' | 'roleMention' | 'emojiMention' | 'commandAlias' | 'command' | 'inhibitor' | 'listener' | string | string[] | RegExp | ((this: Command, word: string, message: Message, prevArgs: Object) => any);
 
-    type ArgumentMatch = 'word' | 'prefix' | 'flag' | 'text' | 'content' | 'rest' | 'none' | ((this: Command, message: Message, prevArgs: Object) => string);
+    type ArgumentMatch = 'word' | 'prefix' | 'flag' | 'text' | 'content' | 'rest' | 'none' | ((this: Command, message: Message, prevArgs: Object) => 'word' | 'prefix' | 'flag' | 'text' | 'content' | 'rest' | 'none');
 
     type ArgumentSplit = 'plain' | 'split' | 'quoted' | 'sticky' | RegExp | ((this: Command, content: string, message: Message) => string[]);
 
