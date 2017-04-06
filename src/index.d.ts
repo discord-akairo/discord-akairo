@@ -1,5 +1,5 @@
 declare module 'discord-akairo' {
-    import { Client, ClientOptions, Collection, Message, MessageOptions, User, GuildMember, Channel, TextChannel, DMChannel, GroupDMChannel, Role, Emoji, Guild, PermissionResolvable, PermissionOverwrites, RichEmbed } from 'discord.js';
+    import { Client, ClientOptions, Collection, Message, MessageOptions, MessageEditOptions, User, GuildMember, Channel, TextChannel, DMChannel, GroupDMChannel, Role, Emoji, Guild, PermissionResolvable, PermissionOverwrites, RichEmbed } from 'discord.js';
     import EventEmitter from 'events';
 
     module 'discord.js' {
@@ -267,11 +267,12 @@ declare module 'discord-akairo' {
         lastResponse?: Message;
 
         setLastResponse(message: Message | Message[]): void;
-        send(content: string | MessageOptions, options?: MessageOptions): Promise<Message | Message[]>;
-        sendMessage(content: string | MessageOptions, options?: MessageOptions): Promise<Message | Message[]>;
-        sendCode(code: string, content: string | MessageOptions, options?: MessageOptions): Promise<Message | Message[]>;
-        sendEmbed(embed: RichEmbed | Object, content: string | MessageOptions, options?: MessageOptions): Promise<Message | Message[]>;
-        reply(content: string | MessageOptions, options?: MessageOptions): Promise<Message | Message[]>;
+        send(content: string | MessageOptions | MessageEditOptions, options?: MessageOptions | MessageEditOptions): Promise<Message | Message[]>;
+        sendMessage(content: string | MessageOptions | MessageEditOptions, options?: MessageOptions | MessageEditOptions): Promise<Message | Message[]>;
+        sendCode(code: string, content: string | MessageOptions | MessageEditOptions, options?: MessageOptions | MessageEditOptions): Promise<Message | Message[]>;
+        sendEmbed(embed: RichEmbed | Object, content: string | MessageOptions | MessageEditOptions, options?: MessageOptions | MessageEditOptions): Promise<Message | Message[]>;
+        reply(content: string | MessageOptions | MessageEditOptions, options?: MessageOptions | MessageEditOptions): Promise<Message | Message[]>;
+        edit(content: string | MessageEditOptions, options?: MessageEditOptions): Promse<Message>;
 
         static swapOptions(content: string | MessageOptions, options?: MessageOptions): any[];
     }

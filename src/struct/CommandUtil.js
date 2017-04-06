@@ -84,8 +84,8 @@ class CommandUtil {
 
     /**
      * Sends a response or edits an old response if available.
-     * @param {string|MessageOptions} content - Content to send.
-     * @param {MessageOptions} [options] - Options to use.
+     * @param {string|MessageOptions|MessageEditOptions} content - Content to send.
+     * @param {MessageOptions|MessageEditOptions} [options] - Options to use.
      * @returns {Promise<Message|Message[]>}
      */
     send(content, options) {
@@ -107,8 +107,8 @@ class CommandUtil {
 
     /**
      * Sends a response or edits an old response if available.
-     * @param {string|MessageOptions} content - Content to send.
-     * @param {MessageOptions} [options] - Options to use.
+     * @param {string|MessageOptions|MessageEditOptions} content - Content to send.
+     * @param {MessageOptions|MessageEditOptions} [options] - Options to use.
      * @returns {Promise<Message|Message[]>}
      */
     sendMessage(content, options) {
@@ -118,8 +118,8 @@ class CommandUtil {
     /**
      * Sends a response in a codeblock or edits an old response if available.
      * @param {string} code - Language to use for syntax highlighting.
-     * @param {string|MessageOptions} content - Content to send.
-     * @param {MessageOptions} [options] - Options to use.
+     * @param {string|MessageOptions|MessageEditOptions} content - Content to send.
+     * @param {MessageOptions|MessageEditOptions} [options] - Options to use.
      * @returns {Promise<Message|Message[]>}
      */
     sendCode(code, content, options) {
@@ -131,8 +131,8 @@ class CommandUtil {
     /**
      * Sends a response with an embed or edits an old response if available.
      * @param {RichEmbed|Object} embed - Embed to send.
-     * @param {string|MessageOptions} content - Content to send.
-     * @param {MessageOptions} [options] - Options to use.
+     * @param {string|MessageOptions|MessageEditOptions} content - Content to send.
+     * @param {MessageOptions|MessageEditOptions} [options] - Options to use.
      * @returns {Promise<Message|Message[]>}
      */
     sendEmbed(embed, content, options) {
@@ -143,8 +143,8 @@ class CommandUtil {
 
     /**
      * Sends a response with a mention concantenated to it.
-     * @param {string|MessageOptions} content - Content to send.
-     * @param {MessageOptions} [options] - Options to use.
+     * @param {string|MessageOptions|MessageEditOptions} content - Content to send.
+     * @param {MessageOptions|MessageEditOptions} [options] - Options to use.
      * @returns {Promise<Message|Message[]>}
      */
     reply(content, options) {
@@ -153,8 +153,18 @@ class CommandUtil {
     }
 
     /**
+     * Edits the last response.
+     * @param {string|MessageEditOptions} content - Content to send.
+     * @param {MessageEditOptions} [options] - Options to use.
+     * @returns {Promise<Message>}
+     */
+    edit(content, options) {
+        return this.lastResponse.edit(content, options);
+    }
+
+    /**
      * Swaps and cleans up content and options.
-     * @param {string|MessageOptions} content - Content to send.
+     * @param {string|MessageOptions|MessageEditOptions} content - Content to send.
      * @param {MessageOptions} [options] - Options to use.
      * @returns {Array}
      */
