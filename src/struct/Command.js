@@ -246,30 +246,52 @@ class Command extends AkairoModule {
                 return arg.cast.bind(arg, word);
             },
             [ArgumentMatches.PREFIX]: arg => {
-                let word = words.find(w => {
-                    return Array.isArray(arg.prefix)
-                    ? arg.prefix.some(p => w.toLowerCase().startsWith(p.toLowerCase()))
-                    : w.toLowerCase().startsWith(arg.prefix.toLowerCase());
-                }) || '';
+                let prefixUsed;
+                let word;
 
-                const prefix = prefixes.find(p => {
-                    if (!p.flag) return word.toLowerCase().startsWith(p.value);
-                    return word.toLowerCase() === p.value;
-                });
+                for (let i = words.length; i--;) {
+                    const w = words[i];
+                    if (Array.isArray(arg.prefix)) {
+                        for (const prefix of arg.prefix) {
+                            if (w.toLowerCase().startsWith(prefix.toLowerCase())) {
+                                prefixUsed = prefix;
+                                word = w;
+                                break;
+                            }
+                        }
+                    } else
+                    if (w.toLowerCase().startsWith(arg.prefix.toLowerCase())) {
+                        prefixUsed = arg.prefix;
+                        word = w;
+                        break;
+                    }
+                }
 
-                if (prefix) {
-                    word = word.replace(prefix.value, '');
+                if (word && prefixUsed) {
+                    word = word.replace(prefixUsed, '');
                     if (this.split === ArgumentSplits.STICKY && /^".*"$/.test(word)) word = word.slice(1, -1);
                 }
 
                 return arg.cast.bind(arg, word);
             },
             [ArgumentMatches.FLAG]: arg => {
-                const word = words.find(w => {
-                    return Array.isArray(arg.prefix)
-                    ? arg.prefix.some(p => w.toLowerCase() === p.toLowerCase())
-                    : w.toLowerCase() === arg.prefix.toLowerCase();
-                }) || '';
+                let word;
+
+                for (let i = words.length; i--;) {
+                    const w = words[i];
+                    if (Array.isArray(arg.prefix)) {
+                        for (const prefix of arg.prefix) {
+                            if (w.toLowerCase().startsWith(prefix.toLowerCase())) {
+                                word = w;
+                                break;
+                            }
+                        }
+                    } else
+                    if (w.toLowerCase().startsWith(arg.prefix.toLowerCase())) {
+                        word = w;
+                        break;
+                    }
+                }
 
                 return () => Promise.resolve(arg.default() ? !word : !!word);
             },

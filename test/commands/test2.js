@@ -8,6 +8,15 @@ module.exports = class TestCommand extends Command {
                 {
                     id: 'array',
                     type: ['one', 'two', ['three', 'tree']]
+                },
+                {
+                    id: 'thing',
+                    match: 'prefix',
+                    prefix: '--thing:',
+                    type: word => {
+                        console.log(`in: ${word}`);
+                        return word || null;
+                    }
                 }
             ]
         });
