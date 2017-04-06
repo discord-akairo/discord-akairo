@@ -108,8 +108,9 @@ declare module 'discord-akairo' {
         typing: boolean;
         editable: boolean;
         cooldown?: number;
-        ratelimit: number;
-        permissions?: PermissionResolvable[] | ((message: Message) => boolean);
+        ratelimit: number
+        clientPermissions?: PermissionResolvable[] | ((message: Message) => boolean);
+        userPermissions?: PermissionResolvable[] | ((message: Message) => boolean);
         defaultPrompt: PromptOptions;
         options: Object;
         description: string;
@@ -162,6 +163,7 @@ declare module 'discord-akairo' {
         _addAliases(command: Command): void;
         _removeAliases(command: Command): void;
         _parseCommand(message: Message): Object;
+        _runInhibitors(message: Message, command: Command): boolean;
         _handleCooldowns(message: Message, command: Command): boolean;
         _handleTriggers(message: Message, edited: boolean): Promise<void>;
         _handleError(err: Error, message: Message, command: Command): void;
@@ -386,8 +388,9 @@ declare module 'discord-akairo' {
         editable?: boolean;
         cooldown?: number;
         ratelimit?: number;
-        permissions?: PermissionResolvable[] | ((this: Command, message: Message) => boolean);
-        prefix?: string | string[] | Function;
+        clientPermissions?: PermissionResolvable[] | ((this: Command, message: Message) => boolean);
+        userPermissions?: PermissionResolvable[] | ((this: Command, message: Message) => boolean);
+        prefix?: string | string[] | ((this: Command, message: Message) => string | string[]);
         trigger?: RegExp | ((this: Command, message: Message, edited: boolean) => RegExp);
         condition?: (this: Command, message: Message, edited: boolean) => boolean;
         defaultPrompt?: PromptOptions;

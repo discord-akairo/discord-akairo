@@ -19,7 +19,9 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * @prop {number} [ratelimit=1] - Amount of command uses allowed until cooldown.
  * @prop {string|string[]|Function} [prefix] - A prefix to overwrite the global one for this command.
  * Can be a function `(message => string|string[])`.
- * @prop {PermissionResolvable[]|Function} [permissions] - Permissions required to run this command.
+ * @prop {PermissionResolvable[]|Function} [userPermissions] - Permissions required by the user to run this command.
+ * Can be either an array of permission name or a function returning `true or `false`.
+ * @prop {PermissionResolvable[]|Function} [clientPermissions] - Permissions required by the client to run this command.
  * Can be either an array of permission name or a function returning `true or `false`.
  * @prop {RegExp|Function} [trigger] - A regex or function `(message => RegExp)` returning regex to match in messages that are NOT commands.
  * The exec function becomes `((message, match, groups, edited) => any)`.
@@ -138,13 +140,19 @@ class Command extends AkairoModule {
          * Command prefix overwrite.
          * @type {?string|string[]|Function}
          */
-        this.prefix = options.prefix;
+        this.prefix = options.prefix || this.prefix;
 
         /**
-         * Permissions required to run command.
+         * Permissions required to run command by the client.
          * @type {PermissionResolvable[]|Function}
          */
-        this.permissions = options.permissions;
+        this.clientPermissions = options.clientPermissions || this.clientPermissions;
+
+        /**
+         * Permissions required to run command by the user.
+         * @type {PermissionResolvable[]|Function}
+         */
+        this.userPermissions = options.userPermissions || this.userPermissions;
 
         /**
          * Gets the regex trigger, if specified.

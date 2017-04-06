@@ -307,42 +307,7 @@ class CommandHandler extends AkairoHandler {
                 }
 
                 if (edited && !command.editable) return undefined;
-
-                if (command.ownerOnly) {
-                    const notOwner = Array.isArray(this.client.ownerID)
-                    ? !this.client.ownerID.includes(message.author.id)
-                    : message.author.id !== this.client.ownerID;
-
-                    if (notOwner) {
-                        this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.OWNER);
-                        return undefined;
-                    }
-                }
-
-                if (command.channelRestriction === 'guild' && !message.guild) {
-                    this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.GUILD);
-                    return undefined;
-                }
-
-                if (command.channelRestriction === 'dm' && message.guild) {
-                    this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.DM);
-                    return undefined;
-                }
-
-                if (command.permissions) {
-                    if (typeof command.permissions === 'function') {
-                        if (!command.permissions(message)) {
-                            this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.PERMISSIONS);
-                            return undefined;
-                        }
-                    } else
-                    if (message.guild) {
-                        if (!message.channel.permissionsFor(message.author).hasPermissions(command.permissions)) {
-                            this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.PERMISSIONS);
-                            return undefined;
-                        }
-                    }
-                }
+                if (this._runInhibitors(message, command)) return undefined;
 
                 const postTest = this.client.inhibitorHandler
                 ? this.client.inhibitorHandler.test('post', message, command)
@@ -390,6 +355,60 @@ class CommandHandler extends AkairoHandler {
 
             this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, reason);
         });
+    }
+
+    /**
+     * Runs built in command inhibitors.
+     * @private
+     * @param {Message} message - Message that called the command.
+     * @param {Command} command - Command to check.
+     * @returns {boolean}
+     */
+    _runInhibitors(message, command) {
+        if (command.ownerOnly) {
+            const notOwner = Array.isArray(this.client.ownerID)
+            ? !this.client.ownerID.includes(message.author.id)
+            : message.author.id !== this.client.ownerID;
+
+            if (notOwner) {
+                this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.OWNER);
+                return true;
+            }
+        }
+
+        if (command.channelRestriction === 'guild' && !message.guild) {
+            this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.GUILD);
+            return true;
+        }
+
+        if (command.channelRestriction === 'dm' && message.guild) {
+            this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.DM);
+            return true;
+        }
+
+        if (command.clientPermissions) {
+            if (typeof command.clientPermissions === 'function' && !command.clientPermissions(message)) {
+                this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.CLIENT_PERMISSIONS);
+                return true;
+            } else
+            if (message.guild && !message.channel.permissionsFor(this.client.user).hasPermissions(command.clientPermissions)) {
+                this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.CLIENT_PERMISSIONS);
+                return true;
+            }
+        }
+
+        if (command.userPermissions) {
+            if (typeof command.userPermissions === 'function' && !command.userPermissions(message)) {
+                this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.USER_PERMISSIONS);
+                return true;
+            } else
+            if (message.guild && !message.channel.permissionsFor(message.author).hasPermissions(command.userPermissions)) {
+                this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.USER_PERMISSIONS);
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -724,7 +743,7 @@ module.exports = CommandHandler;
 
 /**
  * Emitted when a command is blocked by a post-message inhibitor.
- * The built-in inhibitors are 'owner', 'guild', 'dm', and 'permissions'.
+ * The built-in inhibitors are 'owner', 'guild', 'dm', 'clientPermissions', and 'userPermissions'.
  * @event CommandHandler#commandBlocked
  * @param {Message} message - Message sent.
  * @param {Command} command - Command blocked.

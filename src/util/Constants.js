@@ -88,6 +88,7 @@ module.exports = {
         OWNER: 'owner',
         GUILD: 'guild',
         DM: 'dm',
-        PERMISSIONS: 'permissions'
+        CLIENT_PERMISSIONS: 'clientPermissions',
+        USER_PERMISSIONS: 'userPermissions'
     }
 };
