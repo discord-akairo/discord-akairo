@@ -273,7 +273,7 @@ declare module 'discord-akairo' {
         sendCode(code: string, content: string | MessageOptions | MessageEditOptions, options?: MessageOptions | MessageEditOptions): Promise<Message | Message[]>;
         sendEmbed(embed: RichEmbed | Object, content: string | MessageOptions | MessageEditOptions, options?: MessageOptions | MessageEditOptions): Promise<Message | Message[]>;
         reply(content: string | MessageOptions | MessageEditOptions, options?: MessageOptions | MessageEditOptions): Promise<Message | Message[]>;
-        edit(content: string | MessageEditOptions, options?: MessageEditOptions): Promse<Message>;
+        edit(content: string | MessageEditOptions, options?: MessageEditOptions): Promise<Message>;
 
         static swapOptions(content: string | MessageOptions, options?: MessageOptions): any[];
     }
