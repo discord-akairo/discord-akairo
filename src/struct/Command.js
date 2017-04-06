@@ -277,7 +277,7 @@ class Command extends AkairoModule {
                     if (this.split === ArgumentSplits.STICKY && /^".*"$/.test(word)) word = word.slice(1, -1);
                 }
 
-                return arg.cast.bind(arg, word);
+                return arg.cast.bind(arg, word || '');
             },
             [ArgumentMatches.FLAG]: arg => {
                 let word;
