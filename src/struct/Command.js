@@ -74,7 +74,7 @@ class Command extends AkairoModule {
          * The command split method.
          * @type {ArgumentSplit}
          */
-        this.split = options.split || ArgumentSplits.PLAIN;
+        this.split = options.split || this.split || ArgumentSplits.PLAIN;
 
         /**
          * Usable only in this channel type.
@@ -203,8 +203,8 @@ class Command extends AkairoModule {
         const splitFuncs = {
             [ArgumentSplits.PLAIN]: c => c.match(/[^\s]+/g),
             [ArgumentSplits.SPLIT]: c => c.split(' '),
-            [ArgumentSplits.QUOTED]: c => c.match(/".*?"|[^\s"]+|"/g),
-            [ArgumentSplits.STICKY]: c => c.match(/[^\s"]*?".*?"|[^\s"]+|"/g)
+            [ArgumentSplits.QUOTED]: c => c.match(/".*?"|\s?[^\s"]+|"\s?/g),
+            [ArgumentSplits.STICKY]: c => c.match(/[^\s"]*?".*?"|\s?[^\s"]+\s?|"/g)
         };
 
         const words = typeof this.split === 'function'
@@ -250,7 +250,7 @@ class Command extends AkairoModule {
                 return arg.cast.bind(arg, word);
             },
             [ArgumentMatches.REST]: (arg, index) => {
-                const word = noPrefixWords.slice(arg.index != null ? arg.index : index).join(' ') || '';
+                const word = noPrefixWords.slice(arg.index != null ? arg.index : index).join('') || '';
                 return arg.cast.bind(arg, word);
             },
             [ArgumentMatches.PREFIX]: arg => {
@@ -314,7 +314,7 @@ class Command extends AkairoModule {
                 return () => Promise.resolve(arg.default() ? !word : !!word);
             },
             [ArgumentMatches.TEXT]: arg => {
-                const word = noPrefixWords.slice(arg.index).join(' ');
+                const word = noPrefixWords.slice(arg.index).join('');
                 return arg.cast.bind(arg, word);
             },
             [ArgumentMatches.CONTENT]: arg => {
