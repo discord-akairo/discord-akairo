@@ -13,7 +13,12 @@ class AkairoModule {
      * @param {Function} exec - Function called when module is used.
      * @param {ModuleOptions} [options={}] - Options.
      */
-    constructor(id, exec, options = {}) {
+    constructor(id, exec, options) {
+        if (!options && typeof exec === 'object') {
+            options = exec;
+            exec = null;
+        }
+
         /**
          * ID of the module.
          * @type {string}

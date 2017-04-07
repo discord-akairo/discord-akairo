@@ -17,7 +17,12 @@ class Listener extends AkairoModule {
      * @param {Function} exec - The function `((...args) => any)` called when event emitted.
      * @param {ListenerOptions} [options={}] - Options for the listener.
      */
-    constructor(id, exec, options = {}) {
+    constructor(id, exec, options) {
+        if (!options && typeof exec === 'object') {
+            options = exec;
+            exec = null;
+        }
+
         super(id, exec, options);
 
         /**

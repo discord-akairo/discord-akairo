@@ -58,7 +58,7 @@ declare module 'discord-akairo' {
     }
 
     export class AkairoModule {
-        constructor(id: string, exec: (this: AkairoModule, ...args: any[]) => any, options?: ModuleOptions);
+        constructor(id: string, exec: ((this: AkairoModule, ...args: any[]) => any) | ModuleOptions, options?: ModuleOptions);
 
         id: string;
         category: Category<string, AkairoModule>;
@@ -96,7 +96,7 @@ declare module 'discord-akairo' {
     }
 
     export class Command extends AkairoModule {
-        constructor(id: string, exec: ((this: Command, message: Message, args: Object, edited: boolean) => any) | ((this: Command, message: Message, match: string[], groups: string[] | null, edited: boolean) => any) | ((this: Command, message: Message, edited: boolean) => any), options?: CommandOptions);
+        constructor(id: string, exec: ((this: Command, message: Message, args: Object, edited: boolean) => any) | ((this: Command, message: Message, match: string[], groups: string[] | null, edited: boolean) => any) | ((this: Command, message: Message, edited: boolean) => any) | CommandOptions, options?: CommandOptions);
 
         handler: CommandHandler<Command>;
         aliases: string[];
@@ -171,7 +171,7 @@ declare module 'discord-akairo' {
     }
 
     export class Inhibitor extends AkairoModule {
-        constructor(id: string, exec: (this: Inhibitor, message: Message, command: Command) => any, options?: InhibitorOptions);
+        constructor(id: string, exec: ((this: Inhibitor, message: Message, command: Command) => any) | InhibitorOptions, options?: InhibitorOptions);
 
         handler: InhibitorHandler<Inhibitor>;
         reason: string;
@@ -190,7 +190,7 @@ declare module 'discord-akairo' {
     }
 
     export class Listener extends AkairoModule {
-        constructor(id: string, exec: (this: Listener, ...args: any[]) => any, options?: ListenerOptions);
+        constructor(id: string, exec: ((this: Listener, ...args: any[]) => any) | ListenerOptions, options?: ListenerOptions);
 
         handler: ListenerHandler<Listener>;
         emitter: EventEmitter;

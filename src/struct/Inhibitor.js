@@ -17,7 +17,12 @@ class Inhibitor extends AkairoModule {
      * Return `true` or a rejecting Promise to block.
      * @param {InhibitorOptions} [options={}] - Options for the inhibitor.
      */
-    constructor(id, exec, options = {}) {
+    constructor(id, exec, options) {
+        if (!options && typeof exec === 'object') {
+            options = exec;
+            exec = null;
+        }
+
         super(id, exec, options);
 
         /**

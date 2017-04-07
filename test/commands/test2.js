@@ -2,7 +2,7 @@ const { Command } = require('../../src/index.js');
 
 module.exports = class TestCommand extends Command {
     constructor() {
-        super('test2', null, {
+        super('test2', {
             aliases: ['test2', 't2'],
             args: [
                 {

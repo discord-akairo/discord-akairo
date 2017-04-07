@@ -55,7 +55,12 @@ class Command extends AkairoModule {
      * @param {Function} exec - Function `((message, args, edited) => any)` called when command is ran.
      * @param {CommandOptions} [options={}] - Options for the command.
      */
-    constructor(id, exec, options = {}) {
+    constructor(id, exec, options) {
+        if (!options && typeof exec === 'object') {
+            options = exec;
+            exec = null;
+        }
+
         super(id, exec, options);
 
         /**
