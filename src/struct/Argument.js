@@ -175,7 +175,7 @@ class Argument {
          * @param {Message} message - The message that called the command.
          * @returns {any}
          */
-        this.default = typeof options.default === 'function' ? options.default : () => options.default != null ? options.default : '';
+        this.default = typeof options.default === 'function' ? options.default : () => options.default !== undefined ? options.default : '';
     }
 
     /**
