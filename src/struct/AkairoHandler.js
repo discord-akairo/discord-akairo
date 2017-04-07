@@ -126,7 +126,7 @@ class AkairoHandler extends EventEmitter {
         let mod = isObj ? thing : require(thing);
 
         if (mod instanceof this.classToHandle.constructor) {
-            mod = new mod(); // eslint-disable-line new-cap
+            mod = new mod(this.client, this); // eslint-disable-line new-cap
         }
 
         if (!(mod instanceof this.classToHandle)) return undefined;
