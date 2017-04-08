@@ -248,7 +248,6 @@ class SQLiteHandler extends EventEmitter {
      */
     get(id, keys) {
         id = this.sanitize(id);
-        if (keys) keys = new Set(keys);
 
         const config = this.memory.get(id) || this.defaultConfig;
         const copy = {};
