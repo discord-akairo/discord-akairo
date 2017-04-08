@@ -341,7 +341,7 @@ class Argument {
                 return res;
             }, prompt.time, opts).then(() => {
                 if (prompt.infinite && !stopped) return retry(1);
-                this.handler.commandUtils.get(message.id).shouldEdit = false;
+                if (this.handler.commandUtil) message.util.shouldEdit = false;
                 return value;
             }).catch(reason => {
                 if (reason instanceof Error) {
