@@ -139,7 +139,7 @@ declare module 'discord-akairo' {
         handleEdits: boolean;
         commandUtil: boolean;
         commandUtils: Collection<string, CommandUtil>
-        commandUtilLifetime?: number; 
+        commandUtilLifetime: number;
         cooldowns: Collection<string, Object>;
         defaultCooldown: number;
         prompts: Collection<string, Set<string>>;
