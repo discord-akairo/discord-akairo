@@ -58,7 +58,9 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * @prop {number} [ratelimit=1] - Amount of command uses allowed until cooldown.
  * @prop {string|string[]|Function} [prefix] - A prefix to overwrite the global one for this command.
  * Can be a function `(message => string|string[])`.
- * @prop {PermissionResolvable[]|Function} [permissions] - Permissions required to run this command.
+ * @prop {PermissionResolvable[]|Function} [userPermissions] - Permissions required by the user to run this command.
+ * Can be either an array of permission name or a function returning `true or `false`.
+ * @prop {PermissionResolvable[]|Function} [clientPermissions] - Permissions required by the client to run this command.
  * Can be either an array of permission name or a function returning `true or `false`.
  * @prop {RegExp|Function} [trigger] - A regex or function `(message => RegExp)` returning regex to match in messages that are NOT commands.
  * The exec function becomes `((message, match, groups, edited) => any)`.
@@ -92,7 +94,12 @@ class Command extends AkairoModule {
      * @param {Function} exec - Function `((message, args, edited) => any)` called when command is ran.
      * @param {CommandOptions} [options={}] - Options for the command.
      */
-    constructor(id, exec, options = {}) {
+    constructor(id, exec, options) {
+        if (!options &amp;&amp; typeof exec === 'object') {
+            options = exec;
+            exec = null;
+        }
+
         super(id, exec, options);
 
         /**
@@ -111,7 +118,7 @@ class Command extends AkairoModule {
          * The command split method.
          * @type {ArgumentSplit}
          */
-        this.split = options.split || ArgumentSplits.PLAIN;
+        this.split = options.split || this.split || ArgumentSplits.PLAIN;
 
         /**
          * Usable only in this channel type.
@@ -177,13 +184,19 @@ class Command extends AkairoModule {
          * Command prefix overwrite.
          * @type {?string|string[]|Function}
          */
-        this.prefix = options.prefix;
+        this.prefix = options.prefix || this.prefix;
 
         /**
-         * Permissions required to run command.
+         * Permissions required to run command by the client.
          * @type {PermissionResolvable[]|Function}
          */
-        this.permissions = options.permissions;
+        this.clientPermissions = options.clientPermissions || this.clientPermissions;
+
+        /**
+         * Permissions required to run command by the user.
+         * @type {PermissionResolvable[]|Function}
+         */
+        this.userPermissions = options.userPermissions || this.userPermissions;
 
         /**
          * Gets the regex trigger, if specified.
@@ -234,8 +247,8 @@ class Command extends AkairoModule {
         const splitFuncs = {
             [ArgumentSplits.PLAIN]: c => c.match(/[^\s]+/g),
             [ArgumentSplits.SPLIT]: c => c.split(' '),
-            [ArgumentSplits.QUOTED]: c => c.match(/".*?"|[^\s"]+|"/g),
-            [ArgumentSplits.STICKY]: c => c.match(/[^\s"]*?".*?"|[^\s"]+|"/g)
+            [ArgumentSplits.QUOTED]: c => c.match(/".*?"|\s?[^\s"]+|"\s?/g),
+            [ArgumentSplits.STICKY]: c => c.match(/[^\s"]*?".*?"|\s?[^\s"]+\s?|"/g)
         };
 
         const words = typeof this.split === 'function'
@@ -281,39 +294,71 @@ class Command extends AkairoModule {
                 return arg.cast.bind(arg, word);
             },
             [ArgumentMatches.REST]: (arg, index) => {
-                const word = noPrefixWords.slice(arg.index != null ? arg.index : index).join(' ') || '';
+                const word = noPrefixWords.slice(arg.index != null ? arg.index : index).join('') || '';
                 return arg.cast.bind(arg, word);
             },
             [ArgumentMatches.PREFIX]: arg => {
-                let word = words.find(w => {
-                    return Array.isArray(arg.prefix)
-                    ? arg.prefix.some(p => w.toLowerCase().startsWith(p.toLowerCase()))
-                    : w.toLowerCase().startsWith(arg.prefix.toLowerCase());
-                }) || '';
+                let prefixUsed;
+                let word;
 
-                const prefix = prefixes.find(p => {
-                    if (!p.flag) return word.toLowerCase().startsWith(p.value);
-                    return word.toLowerCase() === p.value;
-                });
+                for (let i = words.length; i--;) {
+                    const w = words[i];
+                    if (Array.isArray(arg.prefix)) {
+                        let found = false;
 
-                if (prefix) {
-                    word = word.replace(prefix.value, '');
+                        for (const prefix of arg.prefix) {
+                            if (w.toLowerCase().startsWith(prefix.toLowerCase())) {
+                                prefixUsed = prefix;
+                                word = w;
+                                found = true;
+                                break;
+                            }
+                        }
+
+                        if (found) break;
+                    } else
+                    if (w.toLowerCase().startsWith(arg.prefix.toLowerCase())) {
+                        prefixUsed = arg.prefix;
+                        word = w;
+                        break;
+                    }
+                }
+
+                if (word &amp;&amp; prefixUsed) {
+                    word = word.replace(prefixUsed, '');
                     if (this.split === ArgumentSplits.STICKY &amp;&amp; /^".*"$/.test(word)) word = word.slice(1, -1);
                 }
 
-                return arg.cast.bind(arg, word);
+                return arg.cast.bind(arg, word || '');
             },
             [ArgumentMatches.FLAG]: arg => {
-                const word = words.find(w => {
-                    return Array.isArray(arg.prefix)
-                    ? arg.prefix.some(p => w.toLowerCase() === p.toLowerCase())
-                    : w.toLowerCase() === arg.prefix.toLowerCase();
-                }) || '';
+                let word;
+
+                for (let i = words.length; i--;) {
+                    const w = words[i];
+                    if (Array.isArray(arg.prefix)) {
+                        let found = false;
+
+                        for (const prefix of arg.prefix) {
+                            if (w.toLowerCase().startsWith(prefix.toLowerCase())) {
+                                word = w;
+                                found = true;
+                                break;
+                            }
+                        }
+
+                        if (found) break;
+                    } else
+                    if (w.toLowerCase().startsWith(arg.prefix.toLowerCase())) {
+                        word = w;
+                        break;
+                    }
+                }
 
                 return () => Promise.resolve(arg.default() ? !word : !!word);
             },
             [ArgumentMatches.TEXT]: arg => {
-                const word = noPrefixWords.slice(arg.index).join(' ');
+                const word = noPrefixWords.slice(arg.index).join('');
                 return arg.cast.bind(arg, word);
             },
             [ArgumentMatches.CONTENT]: arg => {

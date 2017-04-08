@@ -461,6 +461,43 @@
 
         <tr>
             
+                <td class="name"><code>commandUtilSweepInterval</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>0</code>
+                
+                </td>
+            
+
+            <td class="description last"><p>Interval in seconds to clear the collection of CommandUtils.<br>Set to 0 in order to never sweep it.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>fetchMembers</code></td>
             
 
@@ -1296,7 +1333,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line34">line 34</a>
+        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line36">line 36</a>
     </li></ul></dd>
     
 
@@ -1992,7 +2029,7 @@
 
         <tr>
             
-                <td class="name"><code>permissions</code></td>
+                <td class="name"><code>userPermissions</code></td>
             
 
             <td class="type">
@@ -2023,7 +2060,45 @@
                 </td>
             
 
-            <td class="description last"><p>Permissions required to run this command.<br>Can be either an array of permission name or a function returning <code>true or</code>false`.</p></td>
+            <td class="description last"><p>Permissions required by the user to run this command.<br>Can be either an array of permission name or a function returning <code>true or</code>false`.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>clientPermissions</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;PermissionResolvable></span>
+ || 
+
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Permissions required by the client to run this command.<br>Can be either an array of permission name or a function returning <code>true or</code>false`.</p></td>
         </tr>
 
     

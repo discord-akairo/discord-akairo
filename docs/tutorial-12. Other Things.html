@@ -33,13 +33,53 @@
     <section>
 
 <article>
-    <p>Various things in Akairo that you may find noteworthy.<br>Mostly from version 7.3.0 and higher.<br>Probably the last &quot;tutorial&quot; for now.  </p>
-<h2>Class Exports</h2><p>For those who do not like exporting an instance of Command, Inhibitor, or Listener, you can export a class.<br>The second argument in <code>super()</code> should always be a falsey value.  </p>
+    <p>Various things in Akairo that you may find noteworthy.<br>They are mostly from version 7.3.0 and higher.  </p>
+<h2>Permissions</h2><p>While inhibitors run on all commands, you may want to run on one or a few only.<br>This is where the <code>clientPermissions</code> or <code>userPermissions</code> options are used in the command options.<br>Note that the client is checked first.  </p>
+<pre class="prettyprint source lang-js"><code>clientPermissions: ['MANAGE_MESSAGES'],
+userPermissions: ['READ_MESSAGE_HISTORY']</code></pre><p>Or a function can be used:  </p>
+<pre class="prettyprint source lang-js"><code>clientPermissions: message => {
+    // Return true or false.
+    // Unfortunately, not async.
+    // Use an inhibitor for that!
+},
+userPermissions: message => {
+    // Same here.
+}</code></pre><p>These will emit a <code>commandBlocked</code> event with the reason <code>clientPermissions</code> or <code>userPermissions</code>.  </p>
+<h2>CommandUtil</h2><p>The <code>CommandUtil</code> class was touched on in tutorial #9.<br>It contains methods such as <code>send</code>, <code>sendEmbed</code>, <code>reply</code>, etc. to send or edit a response.<br>It also contains these properties:  </p>
+<ul>
+<li><code>message.util.prefix</code> is the prefix used to call the command.  </li>
+<li><code>message.util.alias</code> is the alias used to call the command.</li>
+</ul>
+<p>So, you can basically use these to change how the commmand works.  </p>
+<p><code>message.util</code> is available before pre-inhibitors but after built-in pre-inhibitors.<br>Those are the ones that emit <code>notSelf</code>, <code>client</code>, and <code>bot</code>.<br>So even if a command was not found, anything afterwards will have what the user inputted.  </p>
+<p>For example, if the input was <code>$something</code> but <code>something</code> is not a command:</p>
+<ul>
+<li><code>message.util.prefix</code> would be <code>$</code>.</li>
+<li><code>message.util.alias</code> would be <code>something</code>.</li>
+</ul>
+<p>Then this would most likely be passed to the <code>messageInvalid</code> where you can do whatever, such as running another command.<br>An example of that would be <code>this.handler.modules.get('commandID').exec(message, { ... })</code>.  </p>
+<h2>Class Exports</h2><p>For those who do not like exporting an instance of Command, Inhibitor, or Listener, you can export a class.<br>The constructor will be passed the client and the handler.<br>Note that this will most likely be called before login.<br>The <code>super</code> method will take the ID and the options.  </p>
+<p>While most things must still be passed in through the options, the following can be used as methods:  </p>
+<ul>
+<li>All module types:<ul>
+<li><code>exec</code></li>
+</ul>
+</li>
+<li>Command:<ul>
+<li><code>split</code></li>
+<li><code>trigger</code></li>
+<li><code>condition</code></li>
+<li><code>prefix</code></li>
+<li><code>userPermissions</code></li>
+<li><code>clientPermissions</code></li>
+</ul>
+</li>
+</ul>
 <pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
 
 class PingCommand extends Command {
     constructor() {
-        super('ping', null, {
+        super('ping', {
             aliases: ['test']
         });
     }
@@ -47,29 +87,13 @@ class PingCommand extends Command {
     exec(message) {
         return message.reply('Pong!');
     }
+
+    userPermissions(message) {
+        return message.author.roles.exists(r => r.name === 'Mods');
+    }
 }
 
-module.exports = PingCommand;</code></pre><h2>Permissions</h2><p>While inhibitors run on all commands, you may want to run on one or a few only.<br>This is where the <code>permissions</code> option is used in the command options.  </p>
-<pre class="prettyprint source lang-js"><code>permissions: ['MANAGE_MESSAGES']</code></pre><p>Or a function can be used:  </p>
-<pre class="prettyprint source lang-js"><code>permissions: message => {
-    // Return true or false.
-    // Unfortunately, not async.
-    // Use an inhibitor for that!
-}</code></pre><p>These will emit a <code>commandBlocked</code> event with the reason <code>permissions</code>.  </p>
-<h2>CommandUtil</h2><p>CommandUtil was touched on in tutorial #9.<br>It also contains these properties:  </p>
-<ul>
-<li><code>message.util.prefix</code> is the prefix used to call the command.  </li>
-<li><code>message.util.alias</code> is the alias used to call the command.</li>
-</ul>
-<p>So, you can basically use these to change how the commmand works.  </p>
-<p><code>message.util</code> is available before pre-inhibitors but after built-in pre-inhibitors.<br>Those are the ones that emit <code>notSelf</code>, <code>client</code>, and <code>bot</code>.<br>So even, if a command was not found, anything afterwards will have what the user inputted.  </p>
-<p>For example, if the input was <code>$something</code> but <code>something</code> is not a command:</p>
-<ul>
-<li><code>message.util.prefix</code> would be <code>$</code>.</li>
-<li><code>message.util.alias</code> would be <code>something</code>.</li>
-</ul>
-<p>Then this would most likely be passed to the <code>messageInvalid</code> where you can do whatever, such as running another command.<br>An example of that would be <code>this.handler.modules.get('somecommand').exec(message, { ... })</code>.  </p>
-<h2>Other Other Things</h2><p><em>More sections will be added in the future.</em><br><em>Have fun using Akairo!</em>  </p>
+module.exports = PingCommand;</code></pre><h2>Other Other Things</h2><p><em>More sections will be added in the future.</em><br><em>Have fun using Akairo!</em>  </p>
 </article>
 
 </section>

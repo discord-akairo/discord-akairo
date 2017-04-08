@@ -97,7 +97,7 @@ module.exports = new Command('spam', exec, {
                 args.members.map(members => members.user.longName).join(', ')
             ];
         },
-        start: (message, args) => {
+        retry: (message, args) => {
             return [
                 `${message.author}, multiple people were found again, who would you like?`,
                 args.members.map(members => members.user.longName).join(', ')
@@ -172,7 +172,7 @@ module.exports = new Command('send', exec, {
                         args.members.map(members => members.user.longName).join(', ')
                     ];
                 },
-                start: (message, args) => {
+                retry: (message, args) => {
                     return [
                         `${message.author}, multiple people were found again, who would you like?`,
                         args.members.map(members => members.user.longName).join(', ')
