@@ -300,7 +300,7 @@ declare module 'discord-akairo' {
         remove(id: string): Promise<this>;
         removeMemory(id: string): this;
         has(id: string): boolean;
-        get(id: string): Object;
+        get(id: string, keys?: string[]): Object;
         set(id: string, key: string, value: string | number): Promise<this>;
         setMemory(id: string, key: string, value: string | number): this;
         save(id: string): Promise<this>;

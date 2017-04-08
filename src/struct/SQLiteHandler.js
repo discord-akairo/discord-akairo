@@ -242,16 +242,18 @@ class SQLiteHandler extends EventEmitter {
     /**
      * Gets configuration for an ID.
      * @param {string} id - ID of entry.
+     * @param {string[]} [keys] - Specific keys to get.
+     * Leave blank to get the entire configuration.
      * @returns {Object}
      */
-    get(id) {
+    get(id, keys) {
         id = this.sanitize(id);
-        if (!this.has(id)) return Object.assign({}, this.defaultConfig);
+        if (keys) keys = new Set(keys);
 
-        const config = this.memory.get(id);
+        const config = this.memory.get(id) || this.defaultConfig;
         const copy = {};
 
-        for (const key of Object.keys(config)) {
+        for (const key of keys || Object.keys(config)) {
             if (config[key] == null) {
                 if (this.json.includes(key) && typeof this.defaultConfig[key] === 'string') {
                     copy[key] = JSON.parse(this.defaultConfig[key]);
