@@ -9,10 +9,13 @@
   "keywords": [
     "discord",
     "discord-js",
+    "discord.js",
     "framework",
     "bot",
     "client",
-    "modular"
+    "modular",
+    "commands",
+    "arguments"
   ],
   "dependencies": {},
   "peerDependencies": {
