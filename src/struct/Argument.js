@@ -317,7 +317,7 @@ class Argument {
 
             return this.client.util.prompt(message, prompt.infinite && value.length && i === 1 ? '' : text, (m, s) => {
                 if (s && this.handler.commandUtil) {
-                    this.handler.commandUtils.get(message.id).setLastResponse(s);
+                    message.util.setLastResponse(s);
                 }
 
                 if (m.content.toLowerCase() === prompt.cancelWord.toLowerCase()) {
