@@ -36,7 +36,7 @@ declare module 'discord-akairo' {
         modules: Collection<string, T>;
         categories: Collection<string, Category<string, T>>;
 
-        loadAll(): void;
+        loadAll(): this;
         load(thing: string | T, isReload?: boolean): T;
         add(filename: string): T;
         remove(id: string): T;

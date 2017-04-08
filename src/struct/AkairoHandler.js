@@ -66,11 +66,12 @@ class AkairoHandler extends EventEmitter {
 
     /**
      * Reads all modules from the directory and loads them.
-     * @returns {void}
+     * @returns {AkairoModule}
      */
     loadAll() {
         const filepaths = this.constructor.readdirRecursive(this.directory);
         for (const filepath of filepaths) this.load(filepath);
+        return this;
     }
 
     /**
@@ -121,7 +122,7 @@ class AkairoHandler extends EventEmitter {
      */
     load(thing, isReload = false) {
         const isObj = typeof thing === 'object';
-        if (!isObj && !thing.endsWith('.js')) return undefined;
+        if (!isObj && !(thing.endsWith('.js') || thing.endsWith('.json'))) return undefined;
 
         let mod = isObj ? thing : require(thing);
 
@@ -145,7 +146,7 @@ class AkairoHandler extends EventEmitter {
      */
     add(filename) {
         const files = this.constructor.readdirRecursive(this.directory);
-        const filepath = files.find(file => file.endsWith(`${filename}.js`));
+        const filepath = files.find(file => file.endsWith(`${filename}.js`) || file.endsWith(`${filename}.json`));
 
         if (!filepath) throw new Error(`File ${filename} not found.`);
 

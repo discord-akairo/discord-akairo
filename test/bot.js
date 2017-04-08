@@ -1,4 +1,5 @@
 const { AkairoClient, Constants } = require('../src/index.js');
+const JSONHandler = require('./JSONHandler');
 
 const client = new AkairoClient({
     prefix: '.',
@@ -14,6 +15,10 @@ const { Collection } = require('discord.js');
 client.mem.edits = new Collection();
 
 client.build();
+
+client.jsonHandler = new JSONHandler(client, {
+    directory: './test/jsons/'
+}).loadAll();
 
 client.commandHandler.resolver.addType('1-10', function type(word) {
     const num = this[Constants.ArgumentTypes.INTEGER](word);
