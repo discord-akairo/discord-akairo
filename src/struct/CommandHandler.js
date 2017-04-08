@@ -70,22 +70,16 @@ class CommandHandler extends AkairoHandler {
         this.commandUtil = options.commandUtil !== undefined ? !!options.commandUtil : this.handleEdits;
 
         /**
+         * How long a command util will last in milliseconds before it is removed.
+         * @type {number}
+         */
+        this.commandUtilLifetime = options.commandUtilLifetime || 0;
+
+        /**
          * Collection of CommandUtils.
          * @type {Collection<string, CommandUtil>}
          */
         this.commandUtils = new Collection();
-
-        /**
-         * Interval in seconds to clear the CommandUtils collection.
-         * @type {number}
-         */
-        this.commandUtilSweepInterval = options.commandUtilSweepInterval || 0;
-
-        if (this.commandUtilSweepInterval) {
-            this.client.setInterval(() => {
-                this.commandUtils.clear();
-            }, this.commandUtilSweepInterval * 1000);
-        }
 
         /**
          * Collection of cooldowns.
@@ -289,6 +283,10 @@ class CommandHandler extends AkairoHandler {
                 } else {
                     message.util = new CommandUtil(this.client, message);
                     this.commandUtils.set(message.id, message.util);
+
+                    if (this.commandUtilLifetime) {
+                        this.client.setTimeout(() => this.commandUtils.delete(message.id), this.commandUtilLifetime);
+                    }
                 }
             }
 
