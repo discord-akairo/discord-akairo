@@ -22,7 +22,10 @@ class Category extends Collection {
      * @returns {Category}
      */
     reloadAll() {
-        for (const m of Array.from(this.values())) m.reload();
+        for (const m of Array.from(this.values())) {
+            if (m.filepath) m.reload();
+        }
+
         return this;
     }
 
@@ -31,7 +34,10 @@ class Category extends Collection {
      * @returns {Category}
      */
     removeAll() {
-        for (const m of Array.from(this.values())) m.remove();
+        for (const m of Array.from(this.values())) {
+            if (m.filepath) m.remove();
+        }
+
         return this;
     }
 
