@@ -19,14 +19,18 @@ client.login('TOKEN').then(() => {
 ```
 
 ## Features
+
 #### Completely modular commands, inhibitors, and listeners.
+
   - Reading files recursively from directories.
   - Adding, removing, and reloading modules.
   - Categorization for modules.
   - Works with both object and class export.
   - Almost everything is optional or modifiable.
+  - Creating your own handlers and module types.
 
 #### Flexible command handling and creation.
+
   - Command aliases.
   - Command cooldowns.
   - Running commands on edits and editing previous responses.
@@ -41,6 +45,7 @@ client.login('TOKEN').then(() => {
     - From somewhere else in the bot.
 
 #### Complex and highly customizable arguments.
+
   - Support for quoted arguments.
   - Arguments based on previous arguments.
   - Several ways to match arguments, such as flag arguments.
@@ -56,6 +61,7 @@ client.login('TOKEN').then(() => {
     - Infinite argument prompting.
 
 #### Blocking and monitoring messages with inhibitors.
+
   - Allows for asynchronous execution.
   - Run at various stages of command handling.
     - On all messages.
@@ -63,22 +69,28 @@ client.login('TOKEN').then(() => {
     - On messages before commands.
 
 #### Modular listeners.
+
   - No more gigantic main files with listeners.
   - Adding your own emitters.
 
 #### Useful utility methods available.
+
   - Resolvers for members, users, and others that can filter by name.
   - Shortcut methods for making embeds and collections.
   - Helper methods for prompting users for input.
   - And some other useful things.
 
 #### Support for SQLite.
+
   - Default values for keys.
   - In-memory caching for stored data.
   - Sanitizing inputs and desanitizing outputs.
   - Parsing or stringifying as JSON.
 
 ## Installation
+
+Requires Node 6 or higher and Discord.js 11.0.0 or higher.  
+
 *discord-akairo*  
 `npm install --save discord-akairo`
 
@@ -89,12 +101,14 @@ client.login('TOKEN').then(() => {
 `npm install --save sqlite`
 
 ## Links
+
 Repository: [https://github.com/1Computer1/discord-akairo](https://github.com/1Computer1/discord-akairo).  
 Changelog: [https://github.com/1Computer1/discord-akairo/releases](https://github.com/1Computer1/discord-akairo/releases).  
 Documentation: [https://1computer1.github.io/discord-akairo](https://1computer1.github.io/discord-akairo/).  
 If you need more help, message me: **1Computer#7952**.  
 
 ## Tutorials
+
 1. [Setting Up a Bot](https://1computer1.github.io/discord-akairo/tutorial-1.%20Setting%20Up%20a%20Bot.html)
 2. [Creating a Command](https://1computer1.github.io/discord-akairo/tutorial-2.%20Creating%20a%20Command.html)
 3. [Customizing Commands](https://1computer1.github.io/discord-akairo/tutorial-3.%20Customizing%20Commands.html)
@@ -109,6 +123,7 @@ If you need more help, message me: **1Computer#7952**.
 12. [Other Things](https://1computer1.github.io/discord-akairo/tutorial-12.%20Other%20Things.html)
 
 ## Contributing
+
 Open an issue or a pull request!  
 Everyone is welcome to do so.  
 Make sure to run `npm run lint` before committing.  

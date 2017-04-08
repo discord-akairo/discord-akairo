@@ -233,7 +233,10 @@ class AkairoHandler extends EventEmitter {
      * @returns {AkairoHandler}
      */
     reloadAll() {
-        for (const m of Array.from(this.modules.values())) m.reload();
+        for (const m of Array.from(this.modules.values())) {
+            if (m.filepath) this.reload(m.id);
+        }
+
         return this;
     }
 

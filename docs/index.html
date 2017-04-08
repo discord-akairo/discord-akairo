@@ -60,15 +60,15 @@ const client = new AkairoClient({
 
 client.login('TOKEN').then(() => {
     console.log('Started up!');
-});</code></pre><h2>Features</h2><ul>
-<li>Completely modular commands, inhibitors, and listeners.<ul>
+});</code></pre><h2>Features</h2><h4>Completely modular commands, inhibitors, and listeners.</h4><ul>
 <li>Reading files recursively from directories.</li>
 <li>Adding, removing, and reloading modules.</li>
 <li>Categorization for modules.</li>
 <li>Works with both object and class export.</li>
+<li>Almost everything is optional or modifiable.</li>
+<li>Creating your own handlers and module types.</li>
 </ul>
-</li>
-<li>Flexible command handling and creation.<ul>
+<h4>Flexible command handling and creation.</h4><ul>
 <li>Command aliases.</li>
 <li>Command cooldowns.</li>
 <li>Running commands on edits and editing previous responses.</li>
@@ -82,12 +82,11 @@ client.login('TOKEN').then(() => {
 <li>Different ways to trigger a command.<ul>
 <li>Regular expression triggers.</li>
 <li>Conditional triggers.</li>
-<li>From somewhere else.</li>
+<li>From somewhere else in the bot.</li>
 </ul>
 </li>
 </ul>
-</li>
-<li>Complex and highly customizable arguments.<ul>
+<h4>Complex and highly customizable arguments.</h4><ul>
 <li>Support for quoted arguments.</li>
 <li>Arguments based on previous arguments.</li>
 <li>Several ways to match arguments, such as flag arguments.</li>
@@ -96,6 +95,7 @@ client.login('TOKEN').then(() => {
 <li>Discord-related types such as user, member, message, etc.</li>
 <li>Including plural forms: users, members, etc.</li>
 <li>Types that you can add yourself.</li>
+<li>Allows for asynchronous type casting.</li>
 </ul>
 </li>
 <li>Argument prompting.<ul>
@@ -105,8 +105,8 @@ client.login('TOKEN').then(() => {
 </ul>
 </li>
 </ul>
-</li>
-<li>Blocking and monitoring messages with inhibitors.<ul>
+<h4>Blocking and monitoring messages with inhibitors.</h4><ul>
+<li>Allows for asynchronous execution.</li>
 <li>Run at various stages of command handling.<ul>
 <li>On all messages.</li>
 <li>On messages that are from valid users.</li>
@@ -114,27 +114,24 @@ client.login('TOKEN').then(() => {
 </ul>
 </li>
 </ul>
-</li>
-<li>Modular listeners.<ul>
+<h4>Modular listeners.</h4><ul>
 <li>No more gigantic main files with listeners.</li>
 <li>Adding your own emitters.</li>
 </ul>
-</li>
-<li>Useful utility methods available.<ul>
+<h4>Useful utility methods available.</h4><ul>
 <li>Resolvers for members, users, and others that can filter by name.</li>
-<li>Shortcut methods for making embeds and collections and other things.</li>
+<li>Shortcut methods for making embeds and collections.</li>
 <li>Helper methods for prompting users for input.</li>
+<li>And some other useful things.</li>
 </ul>
-</li>
-<li>Support for SQLite.<ul>
+<h4>Support for SQLite.</h4><ul>
 <li>Default values for keys.</li>
 <li>In-memory caching for stored data.</li>
-<li>Santizing inputs and desanitizing outputs.</li>
+<li>Sanitizing inputs and desanitizing outputs.</li>
 <li>Parsing or stringifying as JSON.</li>
 </ul>
-</li>
-</ul>
-<h2>Installation</h2><p><em>discord-akairo</em><br><code>npm install --save discord-akairo</code></p>
+<h2>Installation</h2><p>Requires Node 6 or higher and Discord.js 11.0.0 or higher.  </p>
+<p><em>discord-akairo</em><br><code>npm install --save discord-akairo</code></p>
 <p><em>discord.js</em><br><code>npm install --save discord.js</code></p>
 <p><em>sqlite (optional)</em><br><code>npm install --save sqlite</code></p>
 <h2>Links</h2><p>Repository: <a href="https://github.com/1Computer1/discord-akairo">https://github.com/1Computer1/discord-akairo</a>.<br>Changelog: <a href="https://github.com/1Computer1/discord-akairo/releases">https://github.com/1Computer1/discord-akairo/releases</a>.<br>Documentation: <a href="https://1computer1.github.io/discord-akairo/">https://1computer1.github.io/discord-akairo</a>.<br>If you need more help, message me: <strong>1Computer#7952</strong>.  </p>
