@@ -329,9 +329,7 @@ class Command extends AkairoModule {
                 return arg.cast.bind(arg, word);
             },
             [ArgumentMatches.CONTENT]: arg => {
-                let word = arg.index ? content : content.split(' ').slice(arg.index).join(' ');
-                if (isQuoted && /^".*"$/.test(word)) word = word.slice(1, -1);
-
+                const word = arg.index ? content : content.split(' ').slice(arg.index).join(' ');
                 return arg.cast.bind(arg, word);
             },
             [ArgumentMatches.NONE]: arg => {
