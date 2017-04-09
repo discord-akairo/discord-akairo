@@ -10,6 +10,9 @@ module.exports = {
     },
     ArgumentTypes: {
         STRING: 'string',
+        LOWERCASE: 'lowercase',
+        UPPERCASE: 'uppercase',
+        CHAR_CODES: 'charCodes',
         NUMBER: 'number',
         INTEGER: 'integer',
         DYNAMIC: 'dynamic',

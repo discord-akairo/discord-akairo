@@ -29,6 +29,9 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
 /**
  * The type that the argument should be cast to.
  * - `string` does not cast to any type.
+ * - `lowercase` makes the input lowercase.
+ * - `uppercase` makes the input uppercase.
+ * - `charCodes` transforms the input to an array of char codes.
  * - `number` casts to an number with `parseFloat()`.
  * - `integer` casts to an integer with `parseInt()`.
  * - `dynamic` casts to a number with `parseFloat()` or a trimmed input if not a number.
