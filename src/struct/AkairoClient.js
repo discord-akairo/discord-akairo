@@ -99,7 +99,7 @@ class AkairoClient extends Client {
      * Logins the client, creates message listener, and initialize databases.
      * Resolves once client is ready.
      * @param {string} token - Client token.
-     * @returns {Promise<void>}
+     * @returns {Promise<string>}
      */
     login(token) {
         return new Promise((resolve, reject) => {
@@ -128,7 +128,7 @@ class AkairoClient extends Client {
                         }
                     }
 
-                    return resolve();
+                    return resolve(token);
                 }).catch(reject);
             });
         });
