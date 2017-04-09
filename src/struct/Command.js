@@ -212,8 +212,8 @@ class Command extends AkairoModule {
         const splitFuncs = {
             [ArgumentSplits.PLAIN]: c => c.match(/[\S\n]+/g),
             [ArgumentSplits.SPLIT]: c => c.split(' '),
-            [ArgumentSplits.QUOTED]: c => c.match(/"[\s\S]*?"|\s?[^\s"]+\s?|"/g),
-            [ArgumentSplits.STICKY]: c => c.match(/\s?[^\s"]*?"[\s\S]*?"\s?|\s?[^\s"]+\s?|"/g),
+            [ArgumentSplits.QUOTED]: c => c.match(/"[\s\S]*?"|\s?[\S\n]+\s?|"/g),
+            [ArgumentSplits.STICKY]: c => c.match(/\s?[^\s"]*?"[\s\S]*?"\s?|\s?[\S\n]+\s?|"/g),
             [ArgumentSplits.NONE]: c => [c]
         };
 
