@@ -214,6 +214,8 @@ class Command extends AkairoModule {
             [ArgumentSplits.NONE]: c => [c]
         };
 
+        const isQuoted = this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY;
+
         const words = typeof this.split === 'function'
         ? this.split(content, message) || []
         : splitFuncs[this.split]
@@ -250,14 +252,14 @@ class Command extends AkairoModule {
         const parseFuncs = {
             [ArgumentMatches.WORD]: (arg, index) => {
                 let word = noPrefixWords[arg.index != null ? arg.index : index] || '';
-
-                const isQuoted = (this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY) && /^".*"$/.test(word);
-                if (isQuoted) word = word.slice(1, -1);
+                if (isQuoted && /^".*"$/.test(word)) word = word.slice(1, -1);
 
                 return arg.cast.bind(arg, word);
             },
             [ArgumentMatches.REST]: (arg, index) => {
-                const word = noPrefixWords.slice(arg.index != null ? arg.index : index).join('') || '';
+                let word = noPrefixWords.slice(arg.index != null ? arg.index : index).join('') || '';
+                if (isQuoted && /^".*"$/.test(word)) word = word.slice(1, -1);
+
                 return arg.cast.bind(arg, word);
             },
             [ArgumentMatches.PREFIX]: arg => {
@@ -289,7 +291,7 @@ class Command extends AkairoModule {
 
                 if (word && prefixUsed) {
                     word = word.replace(prefixUsed, '');
-                    if (this.split === ArgumentSplits.STICKY && /^".*"$/.test(word)) word = word.slice(1, -1);
+                    if (isQuoted && /^".*"$/.test(word)) word = word.slice(1, -1);
                 }
 
                 return arg.cast.bind(arg, word || '');
@@ -321,11 +323,15 @@ class Command extends AkairoModule {
                 return () => Promise.resolve(arg.default() ? !word : !!word);
             },
             [ArgumentMatches.TEXT]: arg => {
-                const word = arg.index ? noPrefixWords.join('') : noPrefixWords.slice(arg.index).join('');
+                let word = arg.index ? noPrefixWords.join('') : noPrefixWords.slice(arg.index).join('');
+                if (isQuoted && /^".*"$/.test(word)) word = word.slice(1, -1);
+
                 return arg.cast.bind(arg, word);
             },
             [ArgumentMatches.CONTENT]: arg => {
-                const word = arg.index ? content : content.split(' ').slice(arg.index).join(' ');
+                let word = arg.index ? content : content.split(' ').slice(arg.index).join(' ');
+                if (isQuoted && /^".*"$/.test(word)) word = word.slice(1, -1);
+
                 return arg.cast.bind(arg, word);
             },
             [ArgumentMatches.NONE]: arg => {
