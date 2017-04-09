@@ -41,10 +41,11 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * Should not be used due to possible inconsistent whitespace.
  * - `quoted` is similar to plain, but counts text inside double quotes as one word.
  * - `sticky` is similar to quoted, but makes it so that quoted text must have a whitespace or another double quote before it to count as another word.
+ * - `none` gives the entire content.
  *
  * A regex or a character can be used instead (for example, a comma) to split the message by that regex or character.
- * A function `((content, message) => string[])` returning an array of strings can be also used.
- * @typedef {string} ArgumentSplit
+ * A function `((content, message) => string[])` can also be used, returning an array of strings.
+ * @typedef {string|RegExp} ArgumentSplit
  */
 
 /** @extends AkairoModule */
@@ -209,7 +210,8 @@ class Command extends AkairoModule {
             [ArgumentSplits.PLAIN]: c => c.match(/[^\s]+/g),
             [ArgumentSplits.SPLIT]: c => c.split(' '),
             [ArgumentSplits.QUOTED]: c => c.match(/".*?"|\s?[^\s"]+|"\s?/g),
-            [ArgumentSplits.STICKY]: c => c.match(/[^\s"]*?".*?"|\s?[^\s"]+\s?|"/g)
+            [ArgumentSplits.STICKY]: c => c.match(/[^\s"]*?".*?"|\s?[^\s"]+\s?|"/g),
+            [ArgumentSplits.NONE]: c => [c]
         };
 
         const words = typeof this.split === 'function'
@@ -319,11 +321,11 @@ class Command extends AkairoModule {
                 return () => Promise.resolve(arg.default() ? !word : !!word);
             },
             [ArgumentMatches.TEXT]: arg => {
-                const word = noPrefixWords.slice(arg.index).join('');
+                const word = arg.index ? noPrefixWords.join('') : noPrefixWords.slice(arg.index).join('');
                 return arg.cast.bind(arg, word);
             },
             [ArgumentMatches.CONTENT]: arg => {
-                const word = content.split(' ').slice(arg.index).join(' ');
+                const word = arg.index ? content : content.split(' ').slice(arg.index).join(' ');
                 return arg.cast.bind(arg, word);
             },
             [ArgumentMatches.NONE]: arg => {

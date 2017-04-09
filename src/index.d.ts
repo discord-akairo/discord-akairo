@@ -377,7 +377,7 @@ declare module 'discord-akairo' {
 
     type ArgumentMatch = 'word' | 'prefix' | 'flag' | 'text' | 'content' | 'rest' | 'none' | ((this: Command, message: Message, prevArgs: Object) => 'word' | 'prefix' | 'flag' | 'text' | 'content' | 'rest' | 'none');
 
-    type ArgumentSplit = 'plain' | 'split' | 'quoted' | 'sticky' | RegExp | ((this: Command, content: string, message: Message) => string[]);
+    type ArgumentSplit = 'plain' | 'split' | 'quoted' | 'sticky' | 'none' | RegExp | ((this: Command, content: string, message: Message) => string[]);
 
     type CommandOptions = {
         aliases?: string[];

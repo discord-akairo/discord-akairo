@@ -50,7 +50,8 @@ module.exports = {
         PLAIN: 'plain',
         SPLIT: 'split',
         QUOTED: 'quoted',
-        STICKY: 'sticky'
+        STICKY: 'sticky',
+        NONE: 'none'
     },
     AkairoHandlerEvents: {
         LOAD: 'load',
