@@ -68,6 +68,9 @@
 /**
  * The type that the argument should be cast to.
  * - `string` does not cast to any type.
+ * - `lowercase` makes the input lowercase.
+ * - `uppercase` makes the input uppercase.
+ * - `charCodes` transforms the input to an array of char codes.
  * - `number` casts to an number with `parseFloat()`.
  * - `integer` casts to an integer with `parseInt()`.
  * - `dynamic` casts to a number with `parseFloat()` or a trimmed input if not a number.
@@ -356,7 +359,7 @@ class Argument {
 
             return this.client.util.prompt(message, prompt.infinite &amp;&amp; value.length &amp;&amp; i === 1 ? '' : text, (m, s) => {
                 if (s &amp;&amp; this.handler.commandUtil) {
-                    this.handler.commandUtils.get(message.id).setLastResponse(s);
+                    message.util.setLastResponse(s);
                 }
 
                 if (m.content.toLowerCase() === prompt.cancelWord.toLowerCase()) {
@@ -380,7 +383,7 @@ class Argument {
                 return res;
             }, prompt.time, opts).then(() => {
                 if (prompt.infinite &amp;&amp; !stopped) return retry(1);
-                this.handler.commandUtils.get(message.id).shouldEdit = false;
+                if (this.handler.commandUtil) message.util.shouldEdit = false;
                 return value;
             }).catch(reason => {
                 if (reason instanceof Error) {

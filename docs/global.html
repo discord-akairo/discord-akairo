@@ -461,7 +461,7 @@
 
         <tr>
             
-                <td class="name"><code>commandUtilSweepInterval</code></td>
+                <td class="name"><code>commandUtilLifetime</code></td>
             
 
             <td class="type">
@@ -491,7 +491,7 @@
                 </td>
             
 
-            <td class="description last"><p>Interval in seconds to clear the collection of CommandUtils.<br>Set to 0 in order to never sweep it.</p></td>
+            <td class="description last"><p>Milliseconds a command util should last before it is removed.<br>If 0, command utils will never be removed.</p></td>
         </tr>
 
     
@@ -939,7 +939,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line99">line 99</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line102">line 102</a>
     </li></ul></dd>
     
 
@@ -1378,9 +1378,11 @@
 <li><code>plain</code> splits word separated by whitespace.<br>Extra whitespace between words are ignored.</li>
 <li><code>split</code> splits word separated by whitespace.<br>Should not be used due to possible inconsistent whitespace.</li>
 <li><code>quoted</code> is similar to plain, but counts text inside double quotes as one word.</li>
-<li><code>sticky</code> is similar to quoted, but makes it so that quoted text must have a whitespace or another double quote before it to count as another word.</li>
+<li><code>sticky</code> is similar to quoted, but makes it so that quoted text must have a whitespace or another double quote before it.<br>This means that <code>thing=&quot;hello world&quot;</code> would be one, rather than two like when using <code>quoted</code>.</li>
+<li><code>none</code> gives the entire content.</li>
 </ul>
-<p>A regex or a character can be used instead (for example, a comma) to split the message by that regex or character.<br>A function <code>((content, message) =&gt; string[])</code> returning an array of strings can be also used.</p>
+<p>It is recommended that you use either <code>plain</code> or <code>sticky</code> for your commands.</p>
+<p>A regex or a character can be used instead (for example, a comma) to split the message by that regex or character.<br>A function <code>((content, message) =&gt; string[])</code> can also be used, returning an array of strings.</p>
 </div>
 
 
@@ -1388,6 +1390,9 @@
     <h5>Type:</h5>
     
 <span class="param-type">string</span>
+ || 
+
+<span class="param-type">RegExp</span>
 
 
 
@@ -1452,6 +1457,9 @@
     <p>The type that the argument should be cast to.</p>
 <ul>
 <li><code>string</code> does not cast to any type.</li>
+<li><code>lowercase</code> makes the input lowercase.</li>
+<li><code>uppercase</code> makes the input uppercase.</li>
+<li><code>charCodes</code> transforms the input to an array of char codes.</li>
 <li><code>number</code> casts to an number with <code>parseFloat()</code>.</li>
 <li><code>integer</code> casts to an integer with <code>parseInt()</code>.</li>
 <li><code>dynamic</code> casts to a number with <code>parseFloat()</code> or a trimmed input if not a number.</li>
@@ -3197,7 +3205,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line77">line 77</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line80">line 80</a>
     </li></ul></dd>
     
 

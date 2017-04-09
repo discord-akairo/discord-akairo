@@ -63,6 +63,21 @@ class TypeResolver {
         return word || null;
     }
 
+    [ArgumentTypes.LOWERCASE](word) {
+        return word ? word.toLowerCase() : null;
+    }
+
+    [ArgumentTypes.UPPERCASE](word) {
+        return word ? word.toUpperCase() : null;
+    }
+
+    [ArgumentTypes.CHAR_CODES](word) {
+        if (!word) return null;
+        const codes = [];
+        for (const char of word) codes.push(char.charCodeAt(0));
+        return codes;
+    }
+
     [ArgumentTypes.NUMBER](word) {
         if (!word || isNaN(word)) return null;
         return parseFloat(word);
