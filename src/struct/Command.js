@@ -212,8 +212,8 @@ class Command extends AkairoModule {
         const splitFuncs = {
             [ArgumentSplits.PLAIN]: c => c.match(/[^\s]+/g),
             [ArgumentSplits.SPLIT]: c => c.split(' '),
-            [ArgumentSplits.QUOTED]: c => c.match(/".*?"|\s?[^\s"]+\s?|"/g),
-            [ArgumentSplits.STICKY]: c => c.match(/\s?[^\s"]*?".*?"\s?|\s?[^\s"]+\s?|"/g),
+            [ArgumentSplits.QUOTED]: c => c.match(/"[\s\S]*?"|\s?[^\s"]+\s?|"/g),
+            [ArgumentSplits.STICKY]: c => c.match(/\s?[^\s"]*?"[\s\S]*?"\s?|\s?[^\s"]+\s?|"/g),
             [ArgumentSplits.NONE]: c => [c]
         };
 
@@ -257,7 +257,7 @@ class Command extends AkairoModule {
         const parseFuncs = {
             [ArgumentMatches.WORD]: (arg, index) => {
                 let word = noPrefixWords[arg.index != null ? arg.index : index] || '';
-                if (isQuoted) word = word.replace(/^\s?"(.*)"\s?$/, '$1');
+                if (isQuoted) word = word.replace(/^\s?"([\s\S]*)"\s?$/, '$1');
                 return arg.cast.bind(arg, word);
             },
             [ArgumentMatches.REST]: (arg, index) => {
@@ -294,7 +294,7 @@ class Command extends AkairoModule {
 
                 if (word && prefixUsed) {
                     word = word.replace(prefixUsed, '');
-                    if (isQuoted) word = word.replace(/^\s?"(.*)"\s?$/, '$1');
+                    if (isQuoted) word = word.replace(/^\s?"([\s\S]*)"\s?$/, '$1');
                 }
 
                 return arg.cast.bind(arg, word || '');
