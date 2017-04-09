@@ -40,8 +40,11 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * - `split` splits word separated by whitespace.
  * Should not be used due to possible inconsistent whitespace.
  * - `quoted` is similar to plain, but counts text inside double quotes as one word.
- * - `sticky` is similar to quoted, but makes it so that quoted text must have a whitespace or another double quote before it to count as another word.
+ * - `sticky` is similar to quoted, but makes it so that quoted text must have a whitespace or another double quote before it.
+ * This means that `thing="hello world"` would be one, rather than two like when using `quoted`.
  * - `none` gives the entire content.
+ *
+ * It is recommended that you use either `plain` or `sticky` for your commands.
  *
  * A regex or a character can be used instead (for example, a comma) to split the message by that regex or character.
  * A function `((content, message) => string[])` can also be used, returning an array of strings.
@@ -209,7 +212,7 @@ class Command extends AkairoModule {
         const splitFuncs = {
             [ArgumentSplits.PLAIN]: c => c.match(/[^\s]+/g),
             [ArgumentSplits.SPLIT]: c => c.split(' '),
-            [ArgumentSplits.QUOTED]: c => c.match(/".*?"|\s?[^\s"]+|"\s?/g),
+            [ArgumentSplits.QUOTED]: c => c.match(/".*?"|\s?[^\s"]+\s?|"?/g),
             [ArgumentSplits.STICKY]: c => c.match(/[^\s"]*?".*?"|\s?[^\s"]+\s?|"/g),
             [ArgumentSplits.NONE]: c => [c]
         };
