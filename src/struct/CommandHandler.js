@@ -50,6 +50,12 @@ class CommandHandler extends AkairoHandler {
          * @type {boolean}
          */
         this.blockBots = options.blockBots === undefined ? true : !!options.blockBots;
+        
+        /**
+         * Whether or not to block userbots.
+         * @type {boolean}
+         */
+        this.blockUserbots = options.blockUserbots === undefined ? true : !!options.blockUserbots;
 
         /**
          * Whether or not `fetchMember()` is used on each message author from a guild.
@@ -282,6 +288,11 @@ class CommandHandler extends AkairoHandler {
 
             if (this.blockBots && message.author.bot) {
                 this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.BOT);
+                return undefined;
+            }
+            
+            if (this.blockUserbots && !message.author.typingIn(message.channel)) {
+                this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.USERBOT);
                 return undefined;
             }
 
