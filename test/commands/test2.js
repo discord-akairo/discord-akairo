@@ -1,28 +1,39 @@
 const { Command } = require('../../src/index.js');
+const util = require('util');
 
-module.exports = class TestCommand extends Command {
+class TestCommand extends Command {
     constructor() {
         super('test2', {
-            aliases: ['test2', 't2'],
+            aliases: ['t2'],
+            split: 'plain',
+            category: 'owner',
             args: [
                 {
-                    id: 'array',
-                    type: ['one', 'two', ['three', 'tree']]
+                    id: 'text',
+                    match: 'text'
                 },
                 {
-                    id: 'thing',
+                    id: 'prefix',
                     match: 'prefix',
-                    prefix: '--thing:',
-                    type: word => {
-                        console.log(`in: ${word}`);
-                        return word || null;
-                    }
+                    prefix: '--prefix='
+                },
+                {
+                    id: 'prefix2',
+                    match: 'prefix',
+                    prefix: '--prefix2='
+                },
+                {
+                    id: 'flag',
+                    match: 'flag',
+                    prefix: '--flag'
                 }
             ]
         });
     }
 
     exec(message, args) {
-        return console.log(args);
+        return message.util.sendCode('js', util.inspect(args, { depth: Infinity }));
     }
-};
+}
+
+module.exports = TestCommand;
