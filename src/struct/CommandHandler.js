@@ -55,7 +55,7 @@ class CommandHandler extends AkairoHandler {
          * Whether or not to block userbots.
          * @type {boolean}
          */
-        this.blockUserbots = options.blockUserbots === undefined ? true : !!options.blockUserbots;
+        this.blockUserbots = client.options.disabledEvents.some(event => ['TYPING_START', 'TYPING_END'].includes(event)) ? false : options.blockUserbots === undefined ? true : !!options.blockUserbots;
 
         /**
          * Whether or not `fetchMember()` is used on each message author from a guild.
