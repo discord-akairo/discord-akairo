@@ -257,11 +257,19 @@ class CommandHandler extends AkairoHandler {
      * @returns {Promise<void>}
      */
     handle(message, edited) {
-        const allTest = this.client.inhibitorHandler
-        ? this.client.inhibitorHandler.test('all', message)
+        const fetch = this.fetchMembers && message.guild
+        ? message.guild.fetchMember(message.author)
         : Promise.resolve();
 
-        return allTest.then(() => {
+        return fetch.then(member => {
+            if (member) message.member = member;
+
+            const allTest = this.client.inhibitorHandler
+            ? this.client.inhibitorHandler.test('all', message)
+            : Promise.resolve();
+
+            return allTest;
+        }).then(() => {
             if (this.blockNotSelf && message.author.id !== this.client.user.id && this.client.selfbot) {
                 this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.NOT_SELF);
                 return undefined;
@@ -327,16 +335,7 @@ class CommandHandler extends AkairoHandler {
                     const onCooldown = this._handleCooldowns(message, command);
                     if (onCooldown) return undefined;
 
-                    const fetch = this.fetchMembers
-                    ? message.guild
-                    ? message.guild.fetchMember(message.author)
-                    : Promise.resolve()
-                    : Promise.resolve();
-
-                    return fetch.then(member => {
-                        if (member) message.member = member;
-                        return command.parse(content, message);
-                    }).then(args => {
+                    return command.parse(content, message).then(args => {
                         if (command.typing) message.channel.startTyping();
                         this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, edited);
                         return Promise.resolve(command.exec(message, args, edited));
@@ -595,19 +594,10 @@ class CommandHandler extends AkairoHandler {
                 const onCooldown = this._handleCooldowns(message, entry.command);
                 if (onCooldown) return undefined;
 
-                const fetch = this.fetchMembers
-                ? message.guild
-                ? message.guild.fetchMember(message.author)
-                : Promise.resolve()
-                : Promise.resolve();
+                if (entry.command.typing) message.channel.startTyping();
+                this.emit(CommandHandlerEvents.COMMAND_STARTED, message, entry.command);
 
-                return fetch.then(member => {
-                    if (member) message.member = member;
-                    if (entry.command.typing) message.channel.startTyping();
-
-                    this.emit(CommandHandlerEvents.COMMAND_STARTED, message, entry.command);
-                    return Promise.resolve(entry.command.exec(message, entry.match, entry.groups, edited));
-                }).then(() => {
+                return Promise.resolve(entry.command.exec(message, entry.match, entry.groups, edited)).then(() => {
                     this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, entry.command);
                     if (entry.command.typing) message.channel.stopTyping();
                 });
@@ -639,19 +629,10 @@ class CommandHandler extends AkairoHandler {
                     const onCooldown = this._handleCooldowns(message, command);
                     if (onCooldown) return undefined;
 
-                    const fetch = this.fetchMembers
-                    ? message.guild
-                    ? message.guild.fetchMember(message.author)
-                    : Promise.resolve()
-                    : Promise.resolve();
+                    if (command.typing) message.channel.startTyping();
+                    this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command);
 
-                    return fetch.then(member => {
-                        if (member) message.member = member;
-                        if (command.typing) message.channel.startTyping();
-
-                        this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command);
-                        return Promise.resolve(command.exec(message, edited));
-                    }).then(() => {
+                    return Promise.resolve(command.exec(message, edited)).then(() => {
                         this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command);
                         if (command.typing) message.channel.stopTyping();
                     });
