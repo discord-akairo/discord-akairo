@@ -25,6 +25,7 @@ const ListenerHandler = require('./ListenerHandler');
  * @prop {boolean} [blockNotSelf=true] - Whether or not to block others, if a selfbot.
  * @prop {boolean} [blockClient=true] - Whether or not to block self, if not a selfbot.
  * @prop {boolean} [blockBots=true] - Whether or not to block bots.
+ * @prop {boolean} [blockUserbots=true] - Whether or not to block userbots. Requires both Typing start and end events else disabled.
  * @prop {string} [listenerDirectory] - Directory to listeners.
  * @prop {Object} [emitters={}] - Emitters to load onto the listener handler.
  */
