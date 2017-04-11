@@ -89,7 +89,7 @@ module.exports = {
         NOT_SELF: 'notSelf',
         CLIENT: 'client',
         BOT: 'bot',
-        USERBOT:'userbot',
+        USERBOT: 'userbot',
         OWNER: 'owner',
         GUILD: 'guild',
         DM: 'dm',
