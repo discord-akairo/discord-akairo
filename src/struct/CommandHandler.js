@@ -50,7 +50,7 @@ class CommandHandler extends AkairoHandler {
          * @type {boolean}
          */
         this.blockBots = options.blockBots === undefined ? true : !!options.blockBots;
-        
+
         /**
          * Whether or not to block userbots.
          * @type {boolean}
@@ -290,7 +290,7 @@ class CommandHandler extends AkairoHandler {
                 this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.BOT);
                 return undefined;
             }
-            
+
             if (this.blockUserbots && !message.author.typingIn(message.channel)) {
                 this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.USERBOT);
                 return undefined;
