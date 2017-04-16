@@ -18,7 +18,6 @@
     },
     "opts": {
         "destination": "./out/",
-        "tutorials": "./tutorials/",
         "encoding": "utf8",
         "private": true,
         "recurse": true,
