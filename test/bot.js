@@ -21,7 +21,7 @@ client.jsonHandler = new JSONHandler(client, {
 }).loadAll();
 
 client.commandHandler.resolver.addType('1-10', function type(word) {
-    const num = this[Constants.ArgumentTypes.INTEGER](word);
+    const num = this.type('integer')(word);
     if (num == null) return null;
     if (num < 1 || num > 10) return null;
     return num;
