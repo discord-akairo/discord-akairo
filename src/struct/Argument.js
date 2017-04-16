@@ -38,6 +38,7 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  * - `dynamicInt` casts to an integer with `parseInt()` or a trimmed input if not a number.
  * - `url` casts to an `URL` object.
  * - `date` casts to a `Date` object.
+ * - `color` casts a hex code to an integer.
  * - `commandAlias` tries to resolve to a command from an alias.
  * - `command` matches the ID of a command.
  * - `inhibitor` matches the ID of an inhibitor.
