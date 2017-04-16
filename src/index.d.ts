@@ -398,8 +398,8 @@ declare module 'discord-akairo' {
         editable?: boolean;
         cooldown?: number;
         ratelimit?: number;
-        clientPermissions?: PermissionResolvable[] | ((this: Command, message: Message) => boolean);
-        userPermissions?: PermissionResolvable[] | ((this: Command, message: Message) => boolean);
+        clientPermissions?: PermissionResolvable | PermissionResolvable[] | ((this: Command, message: Message) => boolean);
+        userPermissions?: PermissionResolvable | PermissionResolvable[] | ((this: Command, message: Message) => boolean);
         prefix?: string | string[] | ((this: Command, message: Message) => string | string[]);
         trigger?: RegExp | ((this: Command, message: Message, edited: boolean) => RegExp);
         condition?: (this: Command, message: Message, edited: boolean) => boolean;
