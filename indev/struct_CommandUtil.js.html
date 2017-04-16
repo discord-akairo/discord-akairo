@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>struct/CommandUtil.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="CommandUtil.html">CommandUtil</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">struct/CommandUtil.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Extra properties applied to the Discord.js message object.
+ * @typedef {Object} Message
+ * @prop {?CommandUtil} util - Utilities for command responding.
+ * Available on all messages after 'all' inhibitors and built-in inhibitors (bot, client, notSelf).
+ * Not all properties of the util are available, depending on the input.
+ */
+
+class CommandUtil {
+    /**
+     * Command utilies.
+     * @param {AkairoClient} client - The Akairo client.
+     * @param {Message} message - Message that triggered the command.
+     * @param {Command} command - Command triggered.
+     * @param {string} prefix - Prefix used to trigger.
+     * @param {string} alias - Alias used to trigger.
+     */
+    constructor(client, message, command, prefix, alias) {
+        /**
+         * The Akairo client.
+         * @readonly
+         * @name CommandUtil#client
+         * @type {AkairoClient}
+         */
+        Object.defineProperties(this, {
+            client: {
+                value: client
+            }
+        });
+
+        /**
+         * Message that triggered the command.
+         * @type {Message}
+         */
+        this.message = message;
+
+        /**
+         * Command used.
+         * @type {Command}
+         */
+        this.command = command;
+
+        /**
+         * The prefix used.
+         * @type {?string}
+         */
+        this.prefix = prefix;
+
+        /**
+         * The alias used.
+         * @type {?string}
+         */
+        this.alias = alias;
+
+        /**
+         * Whether or not the last response should be edited.
+         * @type {boolean}
+         */
+        this.shouldEdit = false;
+
+         /**
+          * The last response sent.
+          * @type {?Message}
+         */
+        this.lastResponse = null;
+    }
+
+    /**
+     * Sets the last repsonse.
+     * @param {Message|Message[]} message - Message to set.
+     * @returns {void}
+     */
+    setLastResponse(message) {
+        if (message.command) {
+            if (!this.command.handler.handleEdits || !this.command.editable) return;
+        }
+
+        if (Array.isArray(message)) {
+            this.lastResponse = message.slice(-1)[0];
+        } else {
+            this.lastResponse = message;
+        }
+    }
+
+    /**
+     * Sends a response or edits an old response if available.
+     * @param {string|MessageOptions|MessageEditOptions} content - Content to send.
+     * @param {MessageOptions|MessageEditOptions} [options] - Options to use.
+     * @returns {Promise&lt;Message|Message[]>}
+     */
+    send(content, options) {
+        [content, options] = this.constructor.swapOptions(content, options);
+
+        if (this.shouldEdit &amp;&amp; (this.command ? this.command.editable : true) &amp;&amp; (!options.file || this.lastResponse.attachments.size)) {
+            return this.lastResponse.edit(content, options);
+        }
+
+        return this.message.channel.send(content, options).then(sent => {
+            if (options.file) return sent;
+            if (this.lastResponse &amp;&amp; this.lastResponse.attachments.size) return sent;
+
+            this.shouldEdit = true;
+            this.setLastResponse(sent);
+            return sent;
+        });
+    }
+
+    /**
+     * Sends a response or edits an old response if available.
+     * @param {string|MessageOptions|MessageEditOptions} content - Content to send.
+     * @param {MessageOptions|MessageEditOptions} [options] - Options to use.
+     * @returns {Promise&lt;Message|Message[]>}
+     */
+    sendMessage(content, options) {
+        return this.send(content, options);
+    }
+
+    /**
+     * Sends a response in a codeblock or edits an old response if available.
+     * @param {string} code - Language to use for syntax highlighting.
+     * @param {string|MessageOptions|MessageEditOptions} content - Content to send.
+     * @param {MessageOptions|MessageEditOptions} [options] - Options to use.
+     * @returns {Promise&lt;Message|Message[]>}
+     */
+    sendCode(code, content, options) {
+        [content, options] = this.constructor.swapOptions(content, options);
+        options.code = code;
+        return this.send(content, options);
+    }
+
+    /**
+     * Sends a response with an embed or edits an old response if available.
+     * @param {RichEmbed|Object} embed - Embed to send.
+     * @param {string|MessageOptions|MessageEditOptions} content - Content to send.
+     * @param {MessageOptions|MessageEditOptions} [options] - Options to use.
+     * @returns {Promise&lt;Message|Message[]>}
+     */
+    sendEmbed(embed, content, options) {
+        [content, options] = this.constructor.swapOptions(content, options);
+        options.embed = embed;
+        return this.send(content, options);
+    }
+
+    /**
+     * Sends a response with a mention concantenated to it.
+     * @param {string|MessageOptions|MessageEditOptions} content - Content to send.
+     * @param {MessageOptions|MessageEditOptions} [options] - Options to use.
+     * @returns {Promise&lt;Message|Message[]>}
+     */
+    reply(content, options) {
+        if (this.message.channel.type !== 'dm') content = `${this.message.author}, ${content}`;
+        return this.send(content, options);
+    }
+
+    /**
+     * Edits the last response.
+     * @param {string|MessageEditOptions} content - Content to send.
+     * @param {MessageEditOptions} [options] - Options to use.
+     * @returns {Promise&lt;Message>}
+     */
+    edit(content, options) {
+        return this.lastResponse.edit(content, options);
+    }
+
+    /**
+     * Swaps and cleans up content and options.
+     * @param {string|MessageOptions|MessageEditOptions} content - Content to send.
+     * @param {MessageOptions} [options] - Options to use.
+     * @returns {Array}
+     */
+    static swapOptions(content, options) {
+        if (!options &amp;&amp; typeof content === 'object' &amp;&amp; !(content instanceof Array)) {
+            options = content;
+            content = '';
+        } else if (!options) {
+            options = {};
+        }
+
+        if (!options.embed) options.embed = null;
+        return [content, options];
+    }
+}
+
+module.exports = CommandUtil;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

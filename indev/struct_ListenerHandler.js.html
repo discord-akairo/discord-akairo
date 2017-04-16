@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>struct/ListenerHandler.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="CommandUtil.html">CommandUtil</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">struct/ListenerHandler.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const AkairoHandler = require('./AkairoHandler');
+const { Collection } = require('discord.js');
+const EventEmitter = require('events');
+const Listener = require('./Listener');
+
+/** @extends AkairoHandler */
+class ListenerHandler extends AkairoHandler {
+    /**
+     * Loads listeners and registers them with EventEmitters.
+     * @param {AkairoClient} client - The Akairo client.
+     * @param {Object} options - Options from client.
+     */
+    constructor(client, options) {
+        super(client, options.listenerDirectory, Listener);
+
+        /**
+         * EventEmitters for use, mapped by name to EventEmitter.
+         * By default, 'client', 'commandHandler', 'inhibitorHandler', 'listenerHandler' are set.
+         * Databases added through the client are also added here.
+         * @type {Collection&lt;string, EventEmitter>}
+         */
+        this.emitters = new Collection();
+        this.emitters.set('client', this.client);
+        this.emitters.set('commandHandler', this.client.commandHandler);
+        this.emitters.set('inhibitorHandler', this.client.inhibitorHandler);
+        this.emitters.set('listenerHandler', this.client.listenerHandler);
+
+        if (options.emitters) {
+            for (const key of Object.keys(options.emitters)) {
+                if (this.emitters.has(key)) continue;
+                this.emitters.set(key, options.emitters[key]);
+            }
+        }
+
+        /**
+         * Directory to listeners.
+         * @readonly
+         * @name ListenerHandler#directory
+         * @type {string}
+         */
+
+        /**
+         * Listeners loaded, mapped by ID to Listener.
+         * @name ListenerHandler#modules
+         * @type {Collection&lt;string, Listener>}
+         */
+    }
+
+    /**
+     * Registers a module.
+     * @private
+     * @param {Listener} listener - Module to use.
+     * @param {string} [filepath] - Filepath of module.
+     * @returns {void}
+     */
+    _apply(listener, filepath) {
+        super._apply(listener, filepath);
+        this.register(listener.id);
+        return listener;
+    }
+
+    /**
+     * Deregisters a module.
+     * @private
+     * @param {Listener} listener - Module to use.
+     * @returns {void}
+     */
+    _unapply(listener) {
+        this.deregister(listener.id);
+        super._unapply(listener);
+    }
+
+    /**
+     * Adds a listener to the EventEmitter.
+     * @param {string} id - ID of the listener.
+     * @returns {Listener}
+     */
+    register(id) {
+        const listener = this.modules.get(id.toString());
+        if (!listener) throw new Error(`Listener ${id} does not exist.`);
+
+        const emitter = listener.emitter instanceof EventEmitter ? listener.emitter : this.emitters.get(listener.emitter);
+        if (!(emitter instanceof EventEmitter)) throw new Error('Listener\'s emitter is not an EventEmitter');
+
+        if (listener.type === 'once') {
+            emitter.once(listener.eventName, listener.exec);
+            return listener;
+        }
+
+        emitter.on(listener.eventName, listener.exec);
+        return listener;
+    }
+
+    /**
+     * Removes a listener from the EventEmitter.
+     * @param {string} id - ID of the listener.
+     * @returns {Listener}
+     */
+    deregister(id) {
+        const listener = this.modules.get(id.toString());
+        if (!listener) throw new Error(`Listener ${id} does not exist.`);
+
+        const emitter = listener.emitter instanceof EventEmitter ? listener.emitter : this.emitters.get(listener.emitter);
+        if (!(emitter instanceof EventEmitter)) throw new Error('Listener\'s emitter is not an EventEmitter');
+
+        emitter.removeListener(listener.eventName, listener.exec);
+        return listener;
+    }
+
+    /**
+     * Loads a listener.
+     * @method
+     * @name ListenerHandler#load
+     * @param {string|Listener} thing - Module or path to module.
+     * @returns {Listener}
+     */
+
+    /**
+     * Adds a listener.
+     * @method
+     * @name ListenerHandler#add
+     * @param {string} filename - Filename to lookup in the directory.
+     * A .js extension is assumed.
+     * @returns {Listener}
+     */
+
+    /**
+     * Removes a listener.
+     * @method
+     * @name ListenerHandler#remove
+     * @param {string} id - ID of the listener.
+     * @returns {Listener}
+     */
+
+    /**
+     * Reloads a listener.
+     * @method
+     * @name ListenerHandler#reload
+     * @param {string} id - ID of the listener.
+     * @returns {Listener}
+     */
+
+    /**
+     * Reloads all listeners.
+     * @method
+     * @name ListenerHandler#reloadAll
+     * @returns {ListenerHandler}
+     */
+}
+
+module.exports = ListenerHandler;
+
+/**
+ * Emitted when a listener is loaded.
+ * @event ListenerHandler#load
+ * @param {Listener} listener - Listener loaded.
+ */
+
+/**
+ * Emitted when a listener is added.
+ * @event ListenerHandler#add
+ * @param {Listener} listener - Listener added.
+ */
+
+/**
+ * Emitted when a listener is removed.
+ * @event ListenerHandler#remove
+ * @param {Listener} listener - Listener removed.
+ */
+
+/**
+ * Emitted when a listener is reloaded.
+ * @event ListenerHandler#reload
+ * @param {Listener} listener - Listener reloaded.
+ */
+
+/**
+ * Emitted when a listener is enabled.
+ * @event ListenerHandler#enable
+ * @param {Listener} listener - Listener enabled.
+ */
+
+/**
+ * Emitted when a listener is disabled.
+ * @event ListenerHandler#disable
+ * @param {Listener} listener - Listener disabled.
+ */
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

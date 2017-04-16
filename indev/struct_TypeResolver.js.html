@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>struct/TypeResolver.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="CommandUtil.html">CommandUtil</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">struct/TypeResolver.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const { ArgumentTypes } = require('../util/Constants');
+const { Collection } = require('discord.js');
+const { URL } = require('url');
+
+class TypeResolver {
+    /**
+     * Type resolver for command arguments.
+     * The types are documented under ArgumentType.
+     * @param {AkairoClient} client - The client.
+     */
+    constructor(client) {
+        /**
+         * The Akairo client.
+         * @readonly
+         * @name ClientUtil#client
+         * @type {AkairoClient}
+         */
+        Object.defineProperty(this, 'client', {
+            value: client
+        });
+    }
+
+    [ArgumentTypes.STRING](word) {
+        return word || null;
+    }
+
+    [ArgumentTypes.LOWERCASE](word) {
+        return word ? word.toLowerCase() : null;
+    }
+
+    [ArgumentTypes.UPPERCASE](word) {
+        return word ? word.toUpperCase() : null;
+    }
+
+    [ArgumentTypes.CHAR_CODES](word) {
+        if (!word) return null;
+        const codes = [];
+        for (const char of word) codes.push(char.charCodeAt(0));
+        return codes;
+    }
+
+    [ArgumentTypes.NUMBER](word) {
+        if (!word || isNaN(word)) return null;
+        return parseFloat(word);
+    }
+
+    [ArgumentTypes.INTEGER](word) {
+        if (!word || isNaN(word)) return null;
+        return parseInt(word);
+    }
+
+    [ArgumentTypes.DYNAMIC](word) {
+        if (!word) return null;
+        if (isNaN(word)) return word;
+        return parseFloat(word);
+    }
+
+    [ArgumentTypes.DYNAMIC_INT](word) {
+        if (!word) return null;
+        if (isNaN(word)) return word;
+        return parseInt(word);
+    }
+
+    [ArgumentTypes.URL](word) {
+        if (!word) return null;
+        if (/^&lt;.+>$/.test(word)) word = word.slice(1, -1);
+
+        try {
+            return new URL(word);
+        } catch (err) {
+            return null;
+        }
+    }
+
+    [ArgumentTypes.DATE](word) {
+        if (!word) return null;
+
+        const timestamp = Date.parse(word);
+        if (isNaN(timestamp)) return null;
+
+        return new Date(timestamp);
+    }
+
+    [ArgumentTypes.COLOR](word) {
+        if (!word) return null;
+
+        const color = this.client.util.embed().setColor(word).color;
+        if (isNaN(color)) return null;
+
+        return color;
+    }
+
+    [ArgumentTypes.USER](word) {
+        if (!word) return null;
+        return this.client.util.resolveUser(word, this.client.users);
+    }
+
+    [ArgumentTypes.USERS](word) {
+        if (!word) return null;
+        const users = this.client.util.resolveUsers(word, this.client.users);
+        return users.size ? users : null;
+    }
+
+    [ArgumentTypes.MEMBER](word, message) {
+        if (!word) return null;
+        return this.client.util.resolveMember(word, message.guild.members);
+    }
+
+    [ArgumentTypes.MEMBERS](word, message) {
+        if (!word) return null;
+        const members = this.client.util.resolveMembers(word, message.guild.members);
+        return members.size ? members : null;
+    }
+
+    [ArgumentTypes.RELEVANT](word, message) {
+        if (!word) return null;
+
+        const person = message.channel.type === 'text'
+        ? this.client.util.resolveMember(word, message.guild.members)
+        : message.channel.type === 'dm'
+        ? this.client.util.resolveUser(word, new Collection([
+            [message.channel.recipient.id, message.channel.recipient],
+            [this.client.user.id, this.client.user]
+        ]))
+        : this.client.util.resolveUser(word, new Collection([
+            [this.client.user.id, this.client.user]
+        ]).concat(message.channel.recipients));
+
+        if (!person) return null;
+        if (message.channel.type === 'text') return person.user;
+        return person;
+    }
+
+    [ArgumentTypes.RELEVANTS](word, message) {
+        if (!word) return null;
+
+        const persons = message.channel.type === 'text'
+        ? this.client.util.resolveMembers(word, message.guild.members)
+        : message.channel.type === 'dm'
+        ? this.client.util.resolveUsers(word, new Collection([
+            [message.channel.recipient.id, message.channel.recipient],
+            [this.client.user.id, this.client.user]
+        ]))
+        : this.client.util.resolveUsers(word, new Collection([
+            [this.client.user.id, this.client.user]
+        ]).concat(message.channel.recipients));
+
+        if (!persons.size) return null;
+        if (message.channel.type === 'text') return new Collection(persons.map(m => [m.id, m.user]));
+        return persons;
+    }
+
+    [ArgumentTypes.CHANNEL](word, message) {
+        if (!word) return null;
+        return this.client.util.resolveChannel(word, message.guild.channels);
+    }
+
+    [ArgumentTypes.CHANNELS](word, message) {
+        if (!word) return null;
+        const channels = this.client.util.resolveChannels(word, message.guild.channels);
+        return channels.size ? channels : null;
+    }
+
+    [ArgumentTypes.TEXT_CHANNEL](word, message) {
+        if (!word) return null;
+
+        const channel = this.client.util.resolveChannel(word, message.guild.channels);
+        if (!channel || channel.type !== 'text') return null;
+
+        return channel;
+    }
+
+    [ArgumentTypes.TEXT_CHANNELS](word, message) {
+        if (!word) return null;
+
+        const channels = this.client.util.resolveChannels(word, message.guild.channels);
+        if (!channels.size) return null;
+
+        const textChannels = channels.filter(c => c.type === 'text');
+        return textChannels.size ? textChannels : null;
+    }
+
+    [ArgumentTypes.VOICE_CHANNEL](word, message) {
+        if (!word) return null;
+
+        const channel = this.client.util.resolveChannel(word, message.guild.channels);
+        if (!channel || channel.type !== 'voice') return null;
+
+        return channel;
+    }
+
+    [ArgumentTypes.VOICE_CHANNELS](word, message) {
+        if (!word) return null;
+
+        const channels = this.client.util.resolveChannels(word, message.guild.channels);
+        if (!channels.size) return null;
+
+        const voiceChannels = channels.filter(c => c.type === 'voice');
+        return voiceChannels.size ? voiceChannels : null;
+    }
+
+    [ArgumentTypes.ROLE](word, message) {
+        if (!word) return null;
+        return this.client.util.resolveRole(word, message.guild.roles);
+    }
+
+    [ArgumentTypes.ROLES](word, message) {
+        if (!word) return null;
+        const roles = this.client.util.resolveRoles(word, message.guild.roles);
+        return roles.size ? roles : null;
+    }
+
+    [ArgumentTypes.EMOJI](word, message) {
+        if (!word) return null;
+        return this.client.util.resolveEmoji(word, message.guild.emojis);
+    }
+
+    [ArgumentTypes.EMOJIS](word, message) {
+        if (!word) return null;
+        const emojis = this.client.util.resolveEmojis(word, message.guild.emojis);
+        return emojis.size ? emojis : null;
+    }
+
+    [ArgumentTypes.GUILD](word) {
+        if (!word) return null;
+        return this.client.util.resolveGuild(word, this.client.guilds);
+    }
+
+    [ArgumentTypes.GUILDS](word) {
+        if (!word) return null;
+        const guilds = this.client.util.resolveGuilds(word, this.client.guilds);
+        return guilds.size ? guilds : null;
+    }
+
+    [ArgumentTypes.MESSAGE](word, message) {
+        if (!word) return null;
+        return this.client.util.fetchMessage(message.channel, word).catch(() => Promise.reject());
+    }
+
+    [ArgumentTypes.INVITE](word) {
+        if (!word) return null;
+        return this.client.resolver.resolveInviteCode(word);
+    }
+
+    [ArgumentTypes.MEMBER_MENTION](word, message) {
+        if (!word) return null;
+        const id = word.match(/&lt;@!?(\d+)>/);
+        if (!id) return null;
+        return message.guild.members.get(id[1]) || null;
+    }
+
+    [ArgumentTypes.CHANNEL_MENTION](word, message) {
+        if (!word) return null;
+        const id = word.match(/&lt;#(\d+)>/);
+        if (!id) return null;
+        return message.guild.channels.get(id[1]) || null;
+    }
+
+    [ArgumentTypes.ROLE_MENTION](word, message) {
+        if (!word) return null;
+        const id = word.match(/&lt;@&amp;(\d+)>/);
+        if (!id) return null;
+        return message.guild.roles.get(id[1]) || null;
+    }
+
+    [ArgumentTypes.EMOJI_MENTION](word, message) {
+        if (!word) return null;
+        const id = word.match(/&lt;:[a-zA-Z0-9_]+:(\d+)>/);
+        if (!id) return null;
+        return message.guild.emojis.get(id[1]) || null;
+    }
+
+    [ArgumentTypes.COMMAND_ALIAS](word) {
+        if (!word) return null;
+        return this.client.commandHandler.findCommand(word) || null;
+    }
+
+    [ArgumentTypes.COMMAND](word) {
+        if (!word) return null;
+        return this.client.commandHandler.modules.get(word) || null;
+    }
+
+    [ArgumentTypes.INHIBITOR](word) {
+        if (!word) return null;
+        return this.client.inhibitorHandler.modules.get(word) || null;
+    }
+
+    [ArgumentTypes.LISTENER](word) {
+        if (!word) return null;
+        return this.client.listenerHandler.modules.get(word) || null;
+    }
+
+    /**
+     * Gets the resolver function for a type.
+     * @param {string} name - Name of type.
+     * @returns {Function}
+     */
+    type(name) {
+        return this[name].bind(this);
+    }
+
+    /**
+     * Adds a new type.
+     * @param {string} name - Name of the type.
+     * @param {Function} resolver - Function `((word, message) => any)` that resolves the type.
+     * Returning `null` or `undefined` means that the type could not be resolved.
+     * @returns {TypeResolver}
+     */
+    addType(name, resolver) {
+        if (['client', 'addType', 'addTypes'].includes(name)) throw new Error(`Argument type ${name} is reserved.`);
+
+        Object.defineProperty(this, name, {
+            value: resolver.bind(this)
+        });
+
+        return this;
+    }
+
+    /**
+     * Adds multiple new types.
+     * @param {Object} types  - Object with keys as the type name and values as the resolver function.
+     * @returns {TypeResolver}
+     */
+    addTypes(types) {
+        for (const key of Object.keys(types)) {
+            this.addType(key, types[key]);
+        }
+
+        return this;
+    }
+}
+
+module.exports = TypeResolver;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
