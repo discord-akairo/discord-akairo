@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>struct/Command.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="CommandUtil.html">CommandUtil</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li><li><a href="tutorial-10. Customizing Types.html">10. Customizing Types</a></li><li><a href="tutorial-11. Advanced Args and Prompts.html">11. Advanced Args and Prompts</a></li><li><a href="tutorial-12. Other Things.html">12. Other Things</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">struct/Command.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const AkairoModule = require('./AkairoModule');
+const Argument = require('./Argument');
+const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
+
+/**
+ * Options to use for command execution behavior.
+ * @typedef {Object} CommandOptions
+ * @prop {string[]} [aliases=[]] - Command names.
+ * @prop {ArgumentOptions[]} [args=[]] - Arguments to parse.
+ * @prop {ArgumentSplit} [split='plain'] - Method to split text into words.
+ * @prop {string} [channelRestriction] - Restricts channel: 'guild' or 'dm'.
+ * @prop {string} [category='default'] - Category ID for organization purposes.
+ * @prop {boolean} [ownerOnly=false] - Whether or not to allow client owner(s) only.
+ * @prop {boolean} [protected=false] - Whether or not this command cannot be disabled.
+ * @prop {boolean} [typing=false] - Whether or not to type in channel during execution.
+ * @prop {boolean} [editable=true] - Whether or not message edits will run this command.
+ * On an edited message, the exec function edited param will be true.
+ * @prop {number} [cooldown] - The command cooldown in milliseconds.
+ * @prop {number} [ratelimit=1] - Amount of command uses allowed until cooldown.
+ * @prop {string|string[]|Function} [prefix] - A prefix to overwrite the global one for this command.
+ * Can be a function `(message => string|string[])`.
+ * @prop {PermissionResolvable[]|Function} [userPermissions] - Permissions required by the user to run this command.
+ * Can be either an array of permission name or a function returning `true or `false`.
+ * @prop {PermissionResolvable[]|Function} [clientPermissions] - Permissions required by the client to run this command.
+ * Can be either an array of permission name or a function returning `true or `false`.
+ * @prop {RegExp|Function} [trigger] - A regex or function `(message => RegExp)` returning regex to match in messages that are NOT commands.
+ * The exec function becomes `((message, match, groups, edited) => any)`.
+ * @prop {Function} [condition] - A function `((message, edited) => {})` that returns true or false on messages that are NOT commands.
+ * The exec function becomes `((message, edited) => any)`.
+ * @prop {PromptOptions} [defaultPrompt={}] - The default prompt options.
+ * @prop {Object} [options={}] - An object for custom options.
+ * Accessible with `Command#options`.
+ * @prop {string|string[]} [description=''] - Description of the command.
+ */
+
+/**
+ * The method to split text into words.
+ * - `plain` splits word separated by whitespace.
+ * Extra whitespace between words are ignored.
+ * - `split` splits word separated by whitespace.
+ * Should not be used due to possible inconsistent whitespace.
+ * - `quoted` is similar to plain, but counts text inside double quotes as one word.
+ * - `sticky` is similar to quoted, but makes it so that quoted text must have a whitespace or another double quote before it.
+ * This means that `thing="hello world"` would be one, rather than two like when using `quoted`.
+ * - `none` gives the entire content.
+ *
+ * It is recommended that you use either `plain` or `sticky` for your commands.
+ *
+ * A regex or a character can be used instead (for example, a comma) to split the message by that regex or character.
+ * A function `((content, message) => string[])` can also be used, returning an array of strings.
+ * @typedef {string|RegExp} ArgumentSplit
+ */
+
+/** @extends AkairoModule */
+class Command extends AkairoModule {
+    /**
+     * Creates a new command.
+     * @param {string} id - Command ID.
+     * @param {Function} exec - Function `((message, args, edited) => any)` called when command is ran.
+     * @param {CommandOptions} [options={}] - Options for the command.
+     */
+    constructor(id, exec, options) {
+        if (!options &amp;&amp; typeof exec === 'object') {
+            options = exec;
+            exec = null;
+        }
+
+        super(id, exec, options);
+
+        /**
+         * Command names.
+         * @type {string[]}
+         */
+        this.aliases = options.aliases || [];
+
+        /**
+         * Arguments for the command.
+         * @type {Argument[]}
+         */
+        this.args = (options.args || []).map(a => new Argument(this, a));
+
+        /**
+         * The command split method.
+         * @type {ArgumentSplit}
+         */
+        this.split = options.split || this.split || ArgumentSplits.PLAIN;
+
+        /**
+         * Usable only in this channel type.
+         * @type {string}
+         */
+        this.channelRestriction = options.channelRestriction;
+
+        /**
+         * Usable only by the client owner.
+         * @type {boolean}
+         */
+        this.ownerOnly = !!options.ownerOnly;
+
+        /**
+         * Whether or not this command cannot be disabled.
+         * @type {boolean}
+         */
+        this.protected = !!options.protected;
+
+        /**
+         * Whether or not this command can be ran by an edit.
+         * @type {boolean}
+         */
+        this.editable = options.editable === undefined ? true : !!options.editable;
+
+        /**
+         * Whether or not to type during command execution.
+         * @type {boolean}
+         */
+        this.typing = !!options.typing;
+
+        /**
+         * Cooldown in milliseconds.
+         * @type {number}
+         */
+        this.cooldown = options.cooldown;
+
+        /**
+         * Uses allowed before cooldown.
+         * @type {number}
+         */
+        this.ratelimit = options.ratelimit || 1;
+
+        /**
+         * Default prompt options.
+         * @type {PromptOptions}
+         */
+        this.defaultPrompt = options.defaultPrompt || {};
+
+        /**
+         * Custom options for the command.
+         * @type {Object}
+         */
+        this.options = options.custom || options.options || {};
+
+        /**
+         * Description of the command.
+         * @type {string}
+         */
+        this.description = (Array.isArray(options.description) ? options.description.join('\n') : options.description) || '';
+
+        /**
+         * Command prefix overwrite.
+         * @type {?string|string[]|Function}
+         */
+        this.prefix = options.prefix || this.prefix;
+
+        /**
+         * Permissions required to run command by the client.
+         * @type {PermissionResolvable[]|Function}
+         */
+        this.clientPermissions = options.clientPermissions || this.clientPermissions;
+
+        /**
+         * Permissions required to run command by the user.
+         * @type {PermissionResolvable[]|Function}
+         */
+        this.userPermissions = options.userPermissions || this.userPermissions;
+
+        /**
+         * Gets the regex trigger, if specified.
+         * @method
+         * @param {Message} message - Message being handled.
+         * @returns {RegExp}
+         */
+        this.trigger = typeof options.trigger === 'function' ? options.trigger : this.trigger || (() => options.trigger);
+
+        /**
+         * Gets the condition trigger, if specified.
+         * @method
+         * @param {Message} message - Message being handled.
+         * @returns {boolean}
+         */
+        this.condition = options.condition || this.condition || (() => false);
+
+        /**
+         * The ID of this command.
+         * @name Command#id
+         * @type {string}
+         */
+
+        /**
+         * Executes the command.
+         * @method
+         * @name Command#exec
+         * @returns {any}
+         */
+
+        /**
+         * The command handler.
+         * @readonly
+         * @name Command#handler
+         * @type {CommandHandler}
+         */
+    }
+
+    /**
+     * Parses text based on this command's args.
+     * @param {string} content - String to parse.
+     * @param {Message} [message] - Message to use.
+     * @returns {Promise&lt;Object>}
+     */
+    parse(content, message) {
+        if (!this.args.length) return Promise.resolve({});
+
+        const splitFuncs = {
+            [ArgumentSplits.PLAIN]: c => c.match(/[\S\n]+\s?/g),
+            [ArgumentSplits.SPLIT]: c => c.split(' '),
+            [ArgumentSplits.QUOTED]: c => c.match(/"[\s\S]*?"\s?|[\S\n]+\s?|"/g),
+            [ArgumentSplits.STICKY]: c => c.match(/[^\s"]*?"[\s\S]*?"\s?|[\S\n]+\s?|"/g),
+            [ArgumentSplits.NONE]: c => [c]
+        };
+
+        const isQuoted = this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY;
+
+        const words = typeof this.split === 'function'
+        ? this.split(content, message) || []
+        : splitFuncs[this.split]
+        ? splitFuncs[this.split](content) || []
+        : content.split(this.split);
+
+        const prefixes = this.args.reduce((arr, arg) => {
+            if (arg.match === ArgumentMatches.PREFIX || arg.match === ArgumentMatches.FLAG) {
+                if (Array.isArray(arg.prefix)) {
+                    for (const p of arg.prefix) {
+                        arr.push({
+                            value: p.toLowerCase(),
+                            flag: arg.match === ArgumentMatches.FLAG
+                        });
+                    }
+                } else {
+                    arr.push({
+                        value: arg.prefix.toLowerCase(),
+                        flag: arg.match === ArgumentMatches.FLAG
+                    });
+                }
+            }
+
+            return arr;
+        }, []);
+
+        const noPrefixWords = words.filter(w => {
+            w = w.trim();
+
+            return !prefixes.some(p => {
+                if (!p.flag) return w.toLowerCase().startsWith(p.value);
+                return w.toLowerCase() === p.value;
+            });
+        });
+
+        const parseFuncs = {
+            [ArgumentMatches.WORD]: (arg, index) => {
+                let word = noPrefixWords[arg.index != null ? arg.index : index] || '';
+                if (isQuoted) word = word.replace(/^"([\s\S]*)"\s?$/, '$1');
+                return arg.cast.bind(arg, word);
+            },
+            [ArgumentMatches.REST]: (arg, index) => {
+                const joiner = this.split === ArgumentSplits.SPLIT ? ' ' : '';
+                const word = noPrefixWords.slice(arg.index != null ? arg.index : index).join(joiner) || '';
+                return arg.cast.bind(arg, word);
+            },
+            [ArgumentMatches.PREFIX]: arg => {
+                let prefixUsed;
+                let word;
+
+                for (let i = words.length; i--;) {
+                    const w = words[i].trim();
+
+                    if (Array.isArray(arg.prefix)) {
+                        let found = false;
+
+                        for (const prefix of arg.prefix) {
+                            if (w.toLowerCase().startsWith(prefix.toLowerCase())) {
+                                prefixUsed = prefix;
+                                word = w;
+                                found = true;
+                                break;
+                            }
+                        }
+
+                        if (found) break;
+                    } else
+                    if (w.toLowerCase().startsWith(arg.prefix.toLowerCase())) {
+                        prefixUsed = arg.prefix;
+                        word = w;
+                        break;
+                    }
+                }
+
+                if (word &amp;&amp; prefixUsed) {
+                    word = word.replace(prefixUsed, '');
+                    if (isQuoted) word = word.replace(/^"([\s\S]*)"\s?$/, '$1');
+                }
+
+                return arg.cast.bind(arg, word || '');
+            },
+            [ArgumentMatches.FLAG]: arg => {
+                let word;
+
+                for (let i = words.length; i--;) {
+                    const w = words[i].trim();
+
+                    if (Array.isArray(arg.prefix)) {
+                        let found = false;
+
+                        for (const prefix of arg.prefix) {
+                            if (w.toLowerCase().startsWith(prefix.toLowerCase())) {
+                                word = w;
+                                found = true;
+                                break;
+                            }
+                        }
+
+                        if (found) break;
+                    } else
+                    if (w.toLowerCase().startsWith(arg.prefix.toLowerCase())) {
+                        word = w;
+                        break;
+                    }
+                }
+
+                return () => Promise.resolve(arg.default() ? !word : !!word);
+            },
+            [ArgumentMatches.TEXT]: arg => {
+                const joiner = this.split === ArgumentSplits.SPLIT ? ' ' : '';
+                const word = arg.index ? noPrefixWords.join(joiner) : noPrefixWords.slice(arg.index).join(joiner);
+                return arg.cast.bind(arg, word);
+            },
+            [ArgumentMatches.CONTENT]: arg => {
+                const word = arg.index ? content : content.split(' ').slice(arg.index).join(' ');
+                return arg.cast.bind(arg, word);
+            },
+            [ArgumentMatches.NONE]: arg => {
+                return arg.cast.bind(arg, '');
+            }
+        };
+
+        const processed = {};
+        let wordIndex = 0;
+
+        const process = i => {
+            if (i === this.args.length) return processed;
+
+            const arg = this.args[i];
+            const matchType = typeof arg.match === 'function' ? arg.match.call(this, message, processed) : arg.match;
+            const castFunc = parseFuncs[matchType](arg, wordIndex);
+
+            if (matchType === ArgumentMatches.WORD || matchType === ArgumentMatches.REST) wordIndex++;
+
+            return castFunc(message, processed).then(res => {
+                processed[arg.id] = res;
+                return process(i + 1);
+            });
+        };
+
+        return process(0);
+    }
+
+    /**
+     * Disables the command.
+     * @returns {boolean}
+     */
+    disable() {
+        if (this.protected) return false;
+        return super.disable();
+    }
+
+    /**
+     * Reloads the command.
+     * @method
+     * @name Command#reload
+     * @returns {Command}
+     */
+
+    /**
+     * Removes the command.
+     * @method
+     * @name Command#remove
+     * @returns {Command}
+     */
+
+    /**
+     * Enables the command.
+     * @method
+     * @name Command#enable
+     * @returns {boolean}
+     */
+}
+
+module.exports = Command;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

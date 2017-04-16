@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Tutorial: 10. Customizing Types - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="CommandUtil.html">CommandUtil</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li><li><a href="tutorial-10. Customizing Types.html">10. Customizing Types</a></li><li><a href="tutorial-11. Advanced Args and Prompts.html">11. Advanced Args and Prompts</a></li><li><a href="tutorial-12. Other Things.html">12. Other Things</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">Tutorial: 10. Customizing Types</h1>
+    
+
+    <section>
+
+<article>
+    <p>This tutorial is for the following:</p>
+<ul>
+<li>Adding new argument types</li>
+<li>Types returning Promises</li>
+<li>Types that changes based on previous arguments</li>
+</ul>
+<p>No commands will be demonstrated here, just the workings.  </p>
+<h3>Adding New Types</h3><p>Sometimes it can be tedious to copy-paste type functions.<br>So here's how to add new types.  </p>
+<pre class="prettyprint source lang-js"><code>const client = new AkairoClient({ ... });
+
+// This is done to create the handlers before login in order to add new types.
+client.build();
+
+// A type that only allows the first three U.S. presidents, for some reason.
+client.commandHandler.addType('presidents', (word, message) => {
+    if (!word) return null;
+
+    const lower = word.toLowerCase();
+    if (!['washington', 'adams', 'jefferson'].includes(lower)) return null;
+
+    return lower;
+});</code></pre><p>The first check makes sure that the input exists and not an empty string.<br>The second check makes sure that the word is a president.<br>Note that they return <code>null</code>.<br>To the resolver, this means that the type casting has failed, and that it should move on to prompting or using the default.<br>The end result is the lowercase name of the president.  </p>
+<h3>Promise Types</h3><p>Here's a type that returns a Promise.  </p>
+<pre class="prettyprint source lang-js"><code>client.commandHandler.addType('pokemon', (word, message) => {
+    if (!word) return null;
+    return request.get('https://www.example.com').then(res => {
+        // Do something here...
+        if (isGood) return someValue;
+        if (isBad) return Promise.reject();
+    });
+});</code></pre><p>Instead of returning <code>null</code> to signify that the casting failed, simply reject with anything (other than an error).<br>The resolved value is the value that will be used in the final arguments.  </p>
+<h3>Changing Types</h3><p>Sometimes you want an argument to change its type depending on something.<br>The following is inside a <code>CommandOptions</code>.  </p>
+<pre class="prettyprint source lang-js"><code>args: [
+    {
+        id: 'option',
+        type: ['number', 'string']
+    },
+    {
+        id: 'changing',
+        type: function(word, message, args) {
+            return this.handler.resolver[args.option](word);
+        }
+    }
+]</code></pre><p>As you can see, depending on if <code>number</code> or <code>string</code> was inputted, the type of the <code>changing</code> args changes.<br>The <code>args</code> object are all the previous arguments.<br>It is also present in the <code>match</code> and <code>default</code> function and the <code>PromptOptions</code> functions.  </p>
+</article>
+
+</section>
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

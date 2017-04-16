@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Tutorial: 2. Creating a Command - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="CommandUtil.html">CommandUtil</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li><li><a href="tutorial-10. Customizing Types.html">10. Customizing Types</a></li><li><a href="tutorial-11. Advanced Args and Prompts.html">11. Advanced Args and Prompts</a></li><li><a href="tutorial-12. Other Things.html">12. Other Things</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">Tutorial: 2. Creating a Command</h1>
+    
+
+    <section>
+
+<article>
+    <p>This tutorial is for how to create a command.<br>Two commands will be made, a ping command, and a roll command.  </p>
+<h2>Ping Command</h2><p>First, go to your command directory.<br>Create a new .js file and call it whatever you like.<br>Then, require and export a new <code>Command</code> from discord-akairo.<br>The parameters of the Command constructor are the ID, the execution function, then the options.<br>For those who do not like exporting a command instance, see tutorial #12, under class exports.  </p>
+<pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
+
+function exec(message) {
+    // client.ping is the heartbeat ping.
+    return message.reply('Pong! ' + this.client.ping);
+}
+
+module.exports = new Command('ping', exec, {
+    aliases: ['ping', 'hello'] // You can call the command with these names.
+});</code></pre><p>Now, doing ping or hello with your prefix will have the bot reply with the client's ping.<br>Note that the <code>function</code> keyword is used here instead of an arrow function.<br>This is why:  </p>
+<pre class="prettyprint source lang-js"><code>const exec = message => {
+    // The client is undefined here due to how this works.
+    // Just an annoying intricacy of JS!
+    return message.reply('Pong! ' + this.client.ping);
+};</code></pre><h2>Roll Command</h2><p>Create another .js file.<br>We will now make a roll command.  </p>
+<pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
+
+function exec(message) {
+    const rand = Math.floor(Math.random() * 100) + 1;
+    return message.reply(rand);
+}
+
+module.exports = new Command('roll', exec, {
+    aliases: ['roll']
+});</code></pre><p>This command will reply with a random number from 1 to 100.<br>What if we want to let the user specify the maximum number?<br>Let's use arguments:  </p>
+<pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
+
+function exec(message) {
+    const rand = Math.floor(Math.random() * 100) + 1;
+    return message.reply(rand);
+}
+
+module.exports = new Command('roll', exec, {
+    aliases: ['roll'],
+    args: [
+        {
+            id: 'maximum',
+            type: 'integer',
+            default: 100
+        }
+    ]
+});</code></pre><p>Here, a new argument is made inside the command's options.<br>It is called <code>maximum</code>, is of type <code>integer</code>, and has a default value of <code>100</code>.<br>So now, whatever the user enters, it will be parsed as an integer, and if it isn't an integer, <code>100</code> will be used.  </p>
+<p>Access the args parameter in the exec function and you can use your argument.<br>The property will be the same as the argument's ID.  </p>
+<pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
+
+function exec(message, args) {
+    const rand = Math.floor(Math.random() * args.maximum) + 1;
+    return message.reply(rand);
+}
+
+module.exports = new Command('roll', exec, {
+    aliases: ['roll'],
+    args: [
+        {
+            id: 'maximum',
+            type: 'integer',
+            default: 100
+        }
+    ]
+});</code></pre><p>More advanced commands are shown in the next tutorial.<br>See the documentation to learn all the way you can customize a command.  </p>
+</article>
+
+</section>
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
