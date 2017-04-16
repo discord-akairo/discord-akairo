@@ -513,18 +513,18 @@ class ClientUtil {
         if (channel instanceof User) {
             const user = channel; // eslint-disable-line no-shadow
 
-            const promise = content || options
+            const sendPromise = content || options
             ? user.send(content, options)
             : Promise.resolve();
 
-            return promise.then(msg => {
-                const dm = msg.channel || user.dmChannel;
-                if (!dm) throw new Error('A DM channel could not be found to prompt in.');
+            return sendPromise.then(msg => {
+                const dmChannel = (msg && msg.channel) || user.dmChannel;
+                const channelPromise = dmChannel ? Promise.resolve(dmChannel) : user.createDM();
 
-                return this.prompt({
-                    author: channel,
+                return channelPromise.then(dm => this.prompt({
+                    author: user,
                     channel: dm
-                }, null, check, time, null);
+                }, null, check, time, null));
             });
         }
 
