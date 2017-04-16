@@ -1,7 +1,7 @@
 {
   "extends": "eslint:recommended",
   "parserOptions": {
-    "ecmaVersion": 8
+    "ecmaVersion": 6
   },
   "env": {
     "es6": true,
@@ -42,7 +42,7 @@
     "dot-location": ["error", "property"],
     "dot-notation": "error",
     "eqeqeq": ["error", "smart"],
-    "no-console": "off",
+    "no-console": "error",
     "no-empty-function": "error",
     "no-floating-decimal": "error",
     "no-implied-eval": "error",
