@@ -1,4 +1,4 @@
-const { AkairoClient, Constants } = require('../src/index.js');
+const { AkairoClient } = require('../src/index.js');
 const JSONHandler = require('./JSONHandler');
 
 const client = new AkairoClient({
