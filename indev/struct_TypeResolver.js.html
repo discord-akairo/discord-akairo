@@ -181,7 +181,13 @@ class TypeResolver {
         ]).concat(message.channel.recipients));
 
         if (!persons.size) return null;
-        if (message.channel.type === 'text') return new Collection(persons.map(m => [m.id, m.user]));
+
+        if (message.channel.type === 'text') {
+            const coll = new Collection();
+            for (const person of persons) coll.set(person.id, person.user);
+            return coll;
+        }
+
         return persons;
     }
 

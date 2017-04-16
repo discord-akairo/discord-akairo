@@ -146,12 +146,13 @@ class AkairoClient extends Client {
             super.login(token).catch(reject);
 
             this.once('ready', () => {
-                const promises = Object.keys(this.databases).map(key => {
-                    const db = this.databases[key];
+                const promises = [];
 
-                    const ids = db.init ? db.init(this) || [] : [];
-                    return db.load ? db.load(ids) : Promise.resolve();
-                });
+                for (const key of Object.keys(this.databases)) {
+                    const db = this.databases[key];
+                    const ids = (db.init &amp;&amp; db.init(this)) || [];
+                    promises.push(db.load ? db.load(ids) : Promise.resolve());
+                }
 
                 Promise.all(promises).then(() => {
                     if (this.commandHandler) {

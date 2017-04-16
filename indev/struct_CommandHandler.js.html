@@ -465,7 +465,7 @@ class CommandHandler extends AkairoHandler {
      * @param {Message} message - Message that called the command.
      * @returns {Object}
      */
-    _parseCommand(message) {
+    _parseCommand(message) { // eslint-disable-line complexity
         let prefix = this.prefix(message);
 
         if (this.allowMention(message)) {
@@ -488,58 +488,63 @@ class CommandHandler extends AkairoHandler {
             start = prefix;
         }
 
-        for (const ovPrefix of this.prefixes.keys()) {
-            const commandPrefix = typeof ovPrefix === 'function' ? ovPrefix.call(this, message) : ovPrefix;
+        if (this.prefixes.size) {
+            for (const ovPrefix of this.prefixes.keys()) {
+                const commandPrefix = typeof ovPrefix === 'function' ? ovPrefix.call(this, message) : ovPrefix;
 
-            if (Array.isArray(commandPrefix)) {
-                const match = commandPrefix.find(p => {
-                    return message.content.toLowerCase().startsWith(p.toLowerCase());
-                });
+                if (Array.isArray(commandPrefix)) {
+                    const match = commandPrefix.find(p => {
+                        return message.content.toLowerCase().startsWith(p.toLowerCase());
+                    });
 
-                if (match) {
-                    overwrote = { start };
-                    start = match;
-                    break;
+                    if (match) {
+                        overwrote = { start };
+                        start = match;
+                        break;
+                    }
+
+                    continue;
                 }
 
-                continue;
-            }
-
-            if (message.content.toLowerCase().startsWith(commandPrefix.toLowerCase())) {
-                overwrote = { start };
-                start = commandPrefix;
-                break;
+                if (message.content.toLowerCase().startsWith(commandPrefix.toLowerCase())) {
+                    overwrote = { start };
+                    start = commandPrefix;
+                    break;
+                }
             }
         }
 
         if (start == null) return null;
 
-        const startRegex = new RegExp(start.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&amp;'), 'i'); // eslint-disable-line no-useless-escape
-        const firstWord = message.content.replace(startRegex, '').search(/\S/) + start.length;
-        const name = message.content.slice(firstWord).split(/\s{1,}|\n{1,}/)[0];
+        const startIndex = message.content.search(start) + start.length;
+        const argsIndex = message.content.slice(startIndex).search(/\S/) + start.length;
+        const name = message.content.slice(argsIndex).split(/\s{1,}|\n{1,}/)[0];
         const command = this.findCommand(name);
 
         if (!command) return { prefix: start, alias: name };
-        if (overwrote == null &amp;&amp; command.prefix != null) return { prefix: start, alias: name };
 
-        if (overwrote != null) {
-            if (command.prefix == null) {
-                if (overwrote.start !== start) return { prefix: start, alias: name };
-            } else {
-                const commandPrefix = typeof command.prefix === 'function' ? command.prefix.call(this, message) : command.prefix;
+        if (this.prefixes.size) {
+            if (overwrote == null &amp;&amp; command.prefix != null) return { prefix: start, alias: name };
 
-                if (Array.isArray(commandPrefix)) {
-                    if (!commandPrefix.some(p => p.toLowerCase() === start.toLowerCase())) {
+            if (overwrote != null) {
+                if (command.prefix == null) {
+                    if (overwrote.start !== start) return { prefix: start, alias: name };
+                } else {
+                    const commandPrefix = typeof command.prefix === 'function' ? command.prefix.call(this, message) : command.prefix;
+
+                    if (Array.isArray(commandPrefix)) {
+                        if (!commandPrefix.some(p => p.toLowerCase() === start.toLowerCase())) {
+                            return { prefix: start, alias: name };
+                        }
+                    } else
+                    if (commandPrefix.toLowerCase() !== start.toLowerCase()) {
                         return { prefix: start, alias: name };
                     }
-                } else
-                if (commandPrefix.toLowerCase() !== start.toLowerCase()) {
-                    return { prefix: start, alias: name };
                 }
             }
         }
 
-        const content = message.content.slice(message.content.indexOf(name) + name.length + 1);
+        const content = message.content.slice(argsIndex + name.length + 1);
         return { command, content, prefix: start, alias: name };
     }
 
@@ -596,6 +601,19 @@ class CommandHandler extends AkairoHandler {
      * @returns {Promise&lt;void>}
      */
     _handleTriggers(message, edited) {
+        return this._handleRegex(message, edited).then(() => {
+            return this._handleConditional(message, edited);
+        });
+    }
+
+    /**
+     * Handles regex commands.
+     * @private
+     * @param {Message} message - Message to handle.
+     * @param {boolean} edited - Whether or not the message was edited.
+     * @returns {Promise&lt;void>}
+     */
+    _handleRegex(message, edited) {
         const matchedCommands = [];
 
         for (const command of this.modules.values()) {
@@ -624,12 +642,14 @@ class CommandHandler extends AkairoHandler {
             triggered.push({ command: entry.command, match, groups });
         }
 
-        return Promise.all(triggered.map(entry => {
+        const promises = [];
+
+        for (const entry of triggered) {
             const postTest = this.client.inhibitorHandler
             ? this.client.inhibitorHandler.test('post', message, entry.command)
             : Promise.resolve();
 
-            return postTest.then(() => {
+            promises.push(postTest.then(() => {
                 const onCooldown = this._handleCooldowns(message, entry.command);
                 if (onCooldown) return undefined;
 
@@ -650,44 +670,59 @@ class CommandHandler extends AkairoHandler {
                 }
 
                 this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, entry.command, reason);
-            });
-        })).then(() => {
-            const trueCommands = this.modules.filter(command => (edited ? command.editable : true) &amp;&amp; command.enabled &amp;&amp; command.condition(message));
-
-            if (!trueCommands.size) {
-                this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
-                return undefined;
-            }
-
-            return Promise.all(trueCommands.map(command => {
-                const postTest = this.client.inhibitorHandler
-                ? this.client.inhibitorHandler.test('post', message, command)
-                : Promise.resolve();
-
-                return postTest.then(() => {
-                    const onCooldown = this._handleCooldowns(message, command);
-                    if (onCooldown) return undefined;
-
-                    if (command.typing) message.channel.startTyping();
-                    this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command);
-
-                    return Promise.resolve(command.exec(message, edited)).then(() => {
-                        this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command);
-                        if (command.typing) message.channel.stopTyping();
-                    });
-                }).catch(reason => {
-                    if (command.typing) message.channel.stopTyping();
-
-                    if (reason == null) return;
-                    if (reason instanceof Error) {
-                        this._handleError(reason, message, command);
-                        return;
-                    }
-
-                    this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
-                });
             }));
-        });
+        }
+
+        return Promise.all(promises);
+    }
+
+    /**
+     * Handles conditional commands.
+     * @private
+     * @param {Message} message - Message to handle.
+     * @param {boolean} edited - Whether or not the message was edited.
+     * @returns {Promise&lt;void>}
+     */
+    _handleConditional(message, edited) {
+        const trueCommands = this.modules.filter(command => (edited ? command.editable : true) &amp;&amp; command.enabled &amp;&amp; command.condition(message));
+
+        if (!trueCommands.size) {
+            this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
+            return undefined;
+        }
+
+        const promises = [];
+
+        for (const command of trueCommands.values()) {
+            const postTest = this.client.inhibitorHandler
+            ? this.client.inhibitorHandler.test('post', message, command)
+            : Promise.resolve();
+
+            promises.push(postTest.then(() => {
+                const onCooldown = this._handleCooldowns(message, command);
+                if (onCooldown) return undefined;
+
+                if (command.typing) message.channel.startTyping();
+                this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command);
+
+                return Promise.resolve(command.exec(message, edited)).then(() => {
+                    this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command);
+                    if (command.typing) message.channel.stopTyping();
+                });
+            }).catch(reason => {
+                if (command.typing) message.channel.stopTyping();
+
+                if (reason == null) return;
+                if (reason instanceof Error) {
+                    this._handleError(reason, message, command);
+                    return;
+                }
+
+                this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
+            }));
+        }
+
+        return Promise.all(promises);
     }
 
     /**

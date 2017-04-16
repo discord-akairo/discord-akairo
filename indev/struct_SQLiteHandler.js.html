@@ -417,7 +417,9 @@ class SQLiteHandler extends EventEmitter {
      * @returns {Promise&lt;SQLiteHandler>}
      */
     saveAll() {
-        const promises = this.memory.map(config => this.save(config.id));
+        const promises = [];
+        for (const config of this.memory.values()) promises.push(this.save(config.id));
+
         return Promise.all(promises).then(() => {
             this.emit(SQLiteHandlerEvents.SAVE_ALL);
             return this;
