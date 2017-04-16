@@ -36,21 +36,31 @@ class InhibitorHandler extends AkairoHandler {
     test(type, message, command) {
         if (!this.modules.size) return Promise.resolve();
 
-        const promises = this.modules.filter(i => i.type === type && i.enabled).map(inhibitor => {
+        const inhibitors = this.modules.filter(i => i.type === type && i.enabled);
+        if (!inhibitors.size) return Promise.resolve();
+
+        const promises = [];
+
+        for (const inhibitor of inhibitors.values()) {
             const inhibited = inhibitor.exec(message, command);
 
             if (inhibited instanceof Promise) {
-                return inhibited.catch(err => {
+                promises.push(inhibited.catch(err => {
                     if (err instanceof Error) throw err;
                     return Promise.reject(inhibitor.reason);
-                });
+                }));
+
+                continue;
             }
 
-            if (!inhibited) return Promise.resolve();
-            return Promise.reject(inhibitor.reason);
-        });
+            if (!inhibited) {
+                promises.push(Promise.resolve());
+                continue;
+            }
 
-        if (!promises.length) return Promise.resolve();
+            promises.push(Promise.reject(inhibitor.reason));
+        }
+
         return Promise.all(promises);
     }
 

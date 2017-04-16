@@ -77,7 +77,7 @@ class Command extends AkairoModule {
          * Arguments for the command.
          * @type {Argument[]}
          */
-        this.args = (options.args || []).map(a => new Argument(this, a));
+        this.args = options.args ? options.args.map(a => new Argument(this, a)) : [];
 
         /**
          * The command split method.
@@ -169,7 +169,7 @@ class Command extends AkairoModule {
          * @param {Message} message - Message being handled.
          * @returns {RegExp}
          */
-        this.trigger = typeof options.trigger === 'function' ? options.trigger : this.trigger || (() => options.trigger);
+        this.trigger = (typeof options.trigger === 'function' ? options.trigger : this.trigger) || (() => options.trigger);
 
         /**
          * Gets the condition trigger, if specified.
