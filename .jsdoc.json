@@ -17,7 +17,7 @@
         }
     },
     "opts": {
-        "destination": "./out/",
+        "destination": "../discord-akairo-docs/out",
         "encoding": "utf8",
         "private": true,
         "recurse": true,
