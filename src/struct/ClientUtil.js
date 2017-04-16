@@ -326,7 +326,7 @@ class ClientUtil {
 
     /**
      * Gets the role which is used to display the member's color.
-     * @deprecated
+     * @deprecated Use GuildMember#colorRole
      * @param {GuildMember} member - The member to find the role.
      * @returns {Role}
      */
@@ -338,7 +338,7 @@ class ClientUtil {
 
     /**
      * Gets the display color in decimal of the member.
-     * @deprecated
+     * @deprecated Use GuildMember#displayColor
      * @param {GuildMember} member - The member to find color of.
      * @returns {number}
      */
@@ -349,7 +349,7 @@ class ClientUtil {
 
     /**
      * Gets the display color in hex code of the member.
-     * @deprecated
+     * @deprecated Use GuildMember#displayHexColor
      * @param {GuildMember} member - The member to find color of.
      * @returns {string}
      */
@@ -360,7 +360,7 @@ class ClientUtil {
 
     /**
      * Gets the role which is used to hoist the member.
-     * @deprecated
+     * @deprecated Use GuildMember#hoistRole
      * @param {GuildMember} member - The member to find the role.
      * @returns {Role}
      */
@@ -536,7 +536,7 @@ class ClientUtil {
 
     /**
      * Fetches a message, works for both bots and user accounts.
-     * @deprecated
+     * @deprecated Use TextBasedChannel#fetchMessage
      * @param {TextBasedChannel} channel - Channel to fetch in.
      * @param {Snowflake} id - ID of the message.
      * @returns {Promise<Message>}
