@@ -400,7 +400,7 @@ class CommandHandler extends AkairoHandler {
                 this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.CLIENT_PERMISSIONS);
                 return true;
             } else
-            if (message.guild && !message.channel.permissionsFor(this.client.user).hasPermissions(command.clientPermissions)) {
+            if (message.guild && !message.channel.permissionsFor(this.client.user).has(command.clientPermissions)) {
                 this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.CLIENT_PERMISSIONS);
                 return true;
             }
@@ -411,7 +411,7 @@ class CommandHandler extends AkairoHandler {
                 this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.USER_PERMISSIONS);
                 return true;
             } else
-            if (message.guild && !message.channel.permissionsFor(message.author).hasPermissions(command.userPermissions)) {
+            if (message.guild && !message.channel.permissionsFor(message.author).has(command.userPermissions)) {
                 this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.USER_PERMISSIONS);
                 return true;
             }
