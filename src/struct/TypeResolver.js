@@ -74,19 +74,15 @@ class TypeResolver {
 
     [ArgumentTypes.DATE](word) {
         if (!word) return null;
-
         const timestamp = Date.parse(word);
         if (isNaN(timestamp)) return null;
-
         return new Date(timestamp);
     }
 
     [ArgumentTypes.COLOR](word) {
         if (!word) return null;
-
-        const color = this.client.util.embed().setColor(word).color;
+        const color = this.client.resolver.constructor.resolveColor(word);
         if (isNaN(color)) return null;
-
         return color;
     }
 
@@ -234,7 +230,7 @@ class TypeResolver {
 
     [ArgumentTypes.MESSAGE](word, message) {
         if (!word) return null;
-        return this.client.util.fetchMessage(message.channel, word).catch(() => Promise.reject());
+        return message.channel.fetchMessage(word).catch(() => Promise.reject());
     }
 
     [ArgumentTypes.INVITE](word) {
