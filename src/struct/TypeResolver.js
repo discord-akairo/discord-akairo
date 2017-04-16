@@ -291,6 +291,15 @@ class TypeResolver {
     }
 
     /**
+     * Gets the resolver function for a type.
+     * @param {string} name - Name of type.
+     * @returns {Function}
+     */
+    type(name) {
+        return this[name].bind(this);
+    }
+
+    /**
      * Adds a new type.
      * @param {string} name - Name of the type.
      * @param {Function} resolver - Function `((word, message) => any)` that resolves the type.

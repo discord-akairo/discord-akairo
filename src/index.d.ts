@@ -320,6 +320,7 @@ declare module 'discord-akairo' {
 
         client: AkairoClient;
 
+        type(name: BuiltInArgumentTypes | string): ((word: string, message: Message, prevArgs: Object) => any);
         addType(name: string, resolver: (this: TypeResolver, word: string, message: Message, prevArgs: Object) => any): this;
         addTypes(types: Object): this;
     }
@@ -373,11 +374,17 @@ declare module 'discord-akairo' {
         cancel: string | string[] | ((this: Argument, message: Message, prevArgs: Object, amountOfTries: number) => string | string[] | MessageOptions & { content: string | string[] });
     };
 
-    type ArgumentType = 'string' | 'lowercase' | 'uppercase' | 'charCodes' | 'number' | 'integer' | 'dynamic' | 'dynamicInt' | 'url' | 'date' | 'color' | 'user' | 'users' | 'member' | 'members' | 'relevant' | 'relevants' | 'channel' | 'channels' | 'textChannel' | 'textChannels' | 'voiceChannel' | 'voiceChannels' | 'role' | 'roles' | 'emoji' | 'emojis' | 'guild' | 'guilds' | 'message' | 'invite' | 'memberMention' | 'channelMention' | 'roleMention' | 'emojiMention' | 'commandAlias' | 'command' | 'inhibitor' | 'listener' | string | string[] | RegExp | ((this: Command, word: string, message: Message, prevArgs: Object) => any);
+    type BuiltInArgumentTypes = 'string' | 'lowercase' | 'uppercase' | 'charCodes' | 'number' | 'integer' | 'dynamic' | 'dynamicInt' | 'url' | 'date' | 'color' | 'user' | 'users' | 'member' | 'members' | 'relevant' | 'relevants' | 'channel' | 'channels' | 'textChannel' | 'textChannels' | 'voiceChannel' | 'voiceChannels' | 'role' | 'roles' | 'emoji' | 'emojis' | 'guild' | 'guilds' | 'message' | 'invite' | 'memberMention' | 'channelMention' | 'roleMention' | 'emojiMention' | 'commandAlias' | 'command' | 'inhibitor' | 'listener';
+    
+    type ArgumentType = BuiltInArgumentTypes | string | string[] | RegExp | ((this: Command, word: string, message: Message, prevArgs: Object) => any);
 
-    type ArgumentMatch = 'word' | 'prefix' | 'flag' | 'text' | 'content' | 'rest' | 'none' | ((this: Command, message: Message, prevArgs: Object) => 'word' | 'prefix' | 'flag' | 'text' | 'content' | 'rest' | 'none');
+    type BuiltInArgumentMatches = 'word' | 'prefix' | 'flag' | 'text' | 'content' | 'rest' | 'none';
 
-    type ArgumentSplit = 'plain' | 'split' | 'quoted' | 'sticky' | 'none' | RegExp | ((this: Command, content: string, message: Message) => string[]);
+    type ArgumentMatch = BuiltInArgumentMatches | ((this: Command, message: Message, prevArgs: Object) => BuiltInArgumentMatches);
+
+    type BuiltInArgumentSplits = 'plain' | 'split' | 'quoted' | 'sticky' | 'none';
+
+    type ArgumentSplit = BuiltInArgumentSplits | RegExp | ((this: Command, content: string, message: Message) => string[]);
 
     type CommandOptions = {
         aliases?: string[];
