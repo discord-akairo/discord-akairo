@@ -300,6 +300,7 @@ class Argument {
         let exited = false;
         let stopped = false;
         let value = prompt.infinite ? [] : null;
+        if (prompt.infinite) args[this.id] = value;
 
         const retry = i => {
             this.handler.addPrompt(message);

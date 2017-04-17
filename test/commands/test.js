@@ -9,7 +9,10 @@ module.exports = new Command('test', exec, {
     args: [
         {
             id: 'thing',
-            type: 'integer',
+            type: (word, message, args) => {
+                console.log(args);
+                return word || null;
+            },
             prompt: {
                 infinite: true,
                 retries: 2
