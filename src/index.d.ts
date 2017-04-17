@@ -23,8 +23,9 @@ declare module 'discord-akairo' {
         listenerHandler: ListenerHandler<Listener>;
 
         addDatabase(name: string, database: SQLiteHandler): this;
-        build(): this;
         login(token: string): Promise<string>;
+        build(): this;
+        loadAll(): void;
     }
 
     export class AkairoHandler<T> extends EventEmitter {

@@ -164,14 +164,20 @@ class AkairoClient extends Client {
             this.listenerHandler = new ListenerHandler(this, this.akairoOptions);
         }
 
-        if (!this._built) {
-            if (this.listenerHandler) this.listenerHandler.loadAll();
-            if (this.commandHandler) this.commandHandler.loadAll();
-            if (this.inhibitorHandler) this.inhibitorHandler.loadAll();
-        }
-
+        if (!this._built) this.loadAll();
         this._built = true;
+
         return this;
+    }
+
+    /**
+     * Calls `loadAll()` on the handlers.
+     * @returns {void}
+     */
+    loadAll() {
+        if (this.listenerHandler) this.listenerHandler.loadAll();
+        if (this.commandHandler) this.commandHandler.loadAll();
+        if (this.inhibitorHandler) this.inhibitorHandler.loadAll();
     }
 }
 
