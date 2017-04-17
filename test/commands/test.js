@@ -1,7 +1,8 @@
 const { Command } = require('../../src/index.js');
+const util = require('util');
 
 function exec(message, args) {
-    return console.dir(args, { depth: 1 });
+    return process.stdout.write(util.inspect(args, { depth: 1 }));
 }
 
 module.exports = new Command('test', exec, {
@@ -10,7 +11,7 @@ module.exports = new Command('test', exec, {
         {
             id: 'thing',
             type: (word, message, args) => {
-                console.log(args);
+                process.stdout.write(util.inspect(args.thing));
                 return word || null;
             },
             prompt: {

@@ -10,6 +10,6 @@ module.exports = class LoadListener extends Listener {
     }
 
     exec(command) {
-        console.log(`Loaded ${command.id}`);
+        process.stdout.write(`Loaded ${command.id}`);
     }
 };

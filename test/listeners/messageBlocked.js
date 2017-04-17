@@ -1,7 +1,7 @@
 const { Listener } = require('../../src/index.js');
 
 function exec(message, reason) {
-    console.log(`Blocked ${reason}`);
+    process.stdout.write(`Blocked ${reason}`);
 }
 
 module.exports = new Listener('messageBlocked', exec, {
