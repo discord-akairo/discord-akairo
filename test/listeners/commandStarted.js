@@ -1,7 +1,7 @@
 const { Listener } = require('../../src/index.js');
 
 function exec(message, command) {
-    process.stdout.write(`Used ${command.id}\n`);
+    console.log(`Used ${command.id}`); // eslint-disable-line no-console
 }
 
 module.exports = new Listener('commandStarted', exec, {

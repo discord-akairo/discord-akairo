@@ -1,7 +1,7 @@
 const { Listener } = require('../../src/index.js');
 
 function exec(message, reason) {
-    process.stdout.write(`Blocked ${reason}\n`);
+    console.log(`Blocked ${reason}`); // eslint-disable-line no-console
 }
 
 module.exports = new Listener('messageBlocked', exec, {
