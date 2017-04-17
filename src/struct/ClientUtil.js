@@ -1,4 +1,4 @@
-const { Collection, Constants, RichEmbed, User } = require('discord.js');
+const { Collection, Permissions, RichEmbed, User } = require('discord.js');
 
 class ClientUtil {
     /**
@@ -375,7 +375,7 @@ class ClientUtil {
      * @returns {string[]}
      */
     permissionNames() {
-        return Object.keys(Constants.PermissionFlags);
+        return Object.keys(Permissions.FLAGS);
     }
 
     /**
@@ -386,8 +386,8 @@ class ClientUtil {
     resolvePermissionNumber(number) {
         const resolved = [];
 
-        for (const key of Object.keys(Constants.PermissionFlags)) {
-            if (number & Constants.PermissionFlags[key]) resolved.push(key);
+        for (const key of Object.keys(Permissions.FLAGS)) {
+            if (number & Permissions.FLAGS[key]) resolved.push(key);
         }
 
         return resolved;
