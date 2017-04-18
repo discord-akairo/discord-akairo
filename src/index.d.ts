@@ -317,9 +317,10 @@ declare module 'discord-akairo' {
     }
 
     export class TypeResolver {
-        constructor(client: AkairoClient);
+        constructor(handler: CommandHandler<Command>);
 
         client: AkairoClient;
+        handler: CommandHandler<Command>;
 
         type(name: BuiltInArgumentTypes | string): ((word: string, message: Message, prevArgs: Object) => any);
         addType(name: string, resolver: (this: TypeResolver, word: string, message: Message, prevArgs: Object) => any): this;

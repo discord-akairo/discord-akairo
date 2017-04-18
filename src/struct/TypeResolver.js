@@ -6,9 +6,9 @@ class TypeResolver {
     /**
      * Type resolver for command arguments.
      * The types are documented under ArgumentType.
-     * @param {AkairoClient} client - The client.
+     * @param {CommandHandler} handler - The command handler.
      */
-    constructor(client) {
+    constructor(handler) {
         /**
          * The Akairo client.
          * @readonly
@@ -16,8 +16,14 @@ class TypeResolver {
          * @type {AkairoClient}
          */
         Object.defineProperty(this, 'client', {
-            value: client
+            value: handler.client
         });
+
+        /**
+         * The command handler.
+         * @type {CommandHandler}
+         */
+        this.handler = handler;
     }
 
     [ArgumentTypes.STRING](word) {

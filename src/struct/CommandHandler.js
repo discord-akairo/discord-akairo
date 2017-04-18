@@ -19,7 +19,7 @@ class CommandHandler extends AkairoHandler {
          * The type resolver.
          * @type {TypeResolver}
          */
-        this.resolver = new TypeResolver(client);
+        this.resolver = new TypeResolver(this);
 
         /**
          * Collecion of command aliases.
