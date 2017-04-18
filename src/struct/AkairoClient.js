@@ -77,7 +77,7 @@ class AkairoClient extends Client {
          */
         this.akairoOptions = options;
 
-        this._built = false;
+        this._loaded = false;
     }
 
     /**
@@ -104,6 +104,10 @@ class AkairoClient extends Client {
     login(token) {
         return new Promise((resolve, reject) => {
             this.build();
+
+            if (!this._loaded) this.loadAll();
+            this._loaded = true;
+
             super.login(token).catch(reject);
 
             this.once('ready', () => {
@@ -163,9 +167,6 @@ class AkairoClient extends Client {
              */
             this.listenerHandler = new ListenerHandler(this, this.akairoOptions);
         }
-
-        if (!this._built) this.loadAll();
-        this._built = true;
 
         return this;
     }
