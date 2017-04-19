@@ -101,7 +101,7 @@ class CommandHandler extends AkairoHandler {
 
         /**
          * Default prompt options.
-         * @type {PromptOptions}
+         * @type {ArgumentPromptOptions}
          */
         this.defaultPrompt = Object.assign({
             start: function start(m) {

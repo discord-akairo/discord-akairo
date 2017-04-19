@@ -27,7 +27,7 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * The exec function becomes `((message, match, groups, edited) => any)`.
  * @prop {Function} [condition] - A function `((message, edited) => {})` that returns true or false on messages that are NOT commands.
  * The exec function becomes `((message, edited) => any)`.
- * @prop {PromptOptions} [defaultPrompt={}] - The default prompt options.
+ * @prop {ArgumentPromptOptions} [defaultPrompt={}] - The default prompt options.
  * @prop {Object} [options={}] - An object for custom options.
  * Accessible with `Command#options`.
  * @prop {string|string[]} [description=''] - Description of the command.
@@ -129,7 +129,7 @@ class Command extends AkairoModule {
 
         /**
          * Default prompt options.
-         * @type {PromptOptions}
+         * @type {ArgumentPromptOptions}
          */
         this.defaultPrompt = options.defaultPrompt || {};
 

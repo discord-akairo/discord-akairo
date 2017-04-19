@@ -84,7 +84,7 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  * The functions are `((message, prevArgs, amountOfTries) => string|string[]|MessageOptions)` returning the reply.
  * The object should be equivalent to a `MessageOptions`, with an extra optional property called `content` for message content.
  * Can also be a string literal that will have a mention concatenated to the start.
- * @typedef {Object} PromptOptions
+ * @typedef {Object} ArgumentPromptOptions
  * @prop {number} [retries=1] - Amount of times allowed to retries.
  * @prop {number} [time=30000] - Time to wait for input.
  * @prop {string} [cancelWord='cancel'] - Word to use for cancelling the command.
@@ -113,7 +113,7 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  * Can be a function `((message, prevArgs) => any)`.
  * If using a flag arg, setting the default value inverses the result.
  * @prop {string|string[]} [description=''] - A description of the argument.
- * @prop {PromptOptions} [prompt] - Prompt options for when user does not provide input.
+ * @prop {ArgumentPromptOptions} [prompt] - Prompt options for when user does not provide input.
  * Must not have a default value for this to work.
  */
 
@@ -168,7 +168,7 @@ class Argument {
 
         /**
          * The prompt options.
-         * @type {PromptOptions}
+         * @type {ArgumentPromptOptions}
          */
         this.prompt = options.prompt;
 

@@ -85,7 +85,7 @@ declare module 'discord-akairo' {
         prefix?: string;
         index?: number;
         description: string;
-        prompt: PromptOptions;
+        prompt: ArgumentPromptOptions;
         client: AkairoClient;
         handler: CommandHandler<Command>;
 
@@ -112,7 +112,7 @@ declare module 'discord-akairo' {
         ratelimit: number
         clientPermissions?: PermissionResolvable[] | ((message: Message) => boolean);
         userPermissions?: PermissionResolvable[] | ((message: Message) => boolean);
-        defaultPrompt: PromptOptions;
+        defaultPrompt: ArgumentPromptOptions;
         options: Object;
         description: string;
         prefix: string | string[] | ((this: CommandHandler<Command>, message: Message) => string | string[]);
@@ -144,7 +144,7 @@ declare module 'discord-akairo' {
         cooldowns: Collection<string, Object>;
         defaultCooldown: number;
         prompts: Collection<string, Set<string>>;
-        defaultPrompt: PromptOptions;
+        defaultPrompt: ArgumentPromptOptions;
         
         prefix(message: Message): string | string[];
         allowMention(message: Message): boolean;
@@ -338,7 +338,7 @@ declare module 'discord-akairo' {
         commandUtilLifetime?: number; 
         fetchMembers?: boolean;
         defaultCooldown?: number;
-        defaultPrompt?: PromptOptions;
+        defaultPrompt?: ArgumentPromptOptions;
         inhibitorDirectory?: string;
         blockNotSelf?: boolean;
         blockClient?: boolean;
@@ -359,10 +359,10 @@ declare module 'discord-akairo' {
         index?: number;
         default?: any | ((this: Command, message: Message, prevArgs: Object) => any);
         description?: string | string[];
-        prompt?: PromptOptions;
+        prompt?: ArgumentPromptOptions;
     };
 
-    type PromptOptions = {
+    type ArgumentPromptOptions = {
         retries?: number;
         time?: number;
         cancelWord?: string;
@@ -405,7 +405,7 @@ declare module 'discord-akairo' {
         prefix?: string | string[] | ((this: Command, message: Message) => string | string[]);
         trigger?: RegExp | ((this: Command, message: Message, edited: boolean) => RegExp);
         condition?: (this: Command, message: Message, edited: boolean) => boolean;
-        defaultPrompt?: PromptOptions;
+        defaultPrompt?: ArgumentPromptOptions;
         options?: Object;
         description?: string | string[];
     };

@@ -20,7 +20,7 @@ const ListenerHandler = require('./ListenerHandler');
  * If 0, command utils will never be removed.
  * @prop {boolean} [fetchMembers=false] - Whether or not to fetch member on each message from a guild.
  * @prop {number} [defaultCooldown=0] - The default cooldown for commands.
- * @prop {PromptOptions} [defaultPrompt] - The default prompt options.
+ * @prop {ArgumentPromptOptions} [defaultPrompt] - The default prompt options.
  * @prop {string} [inhibitorDirectory] - Directory to inhibitors.
  * @prop {boolean} [blockNotSelf=true] - Whether or not to block others, if a selfbot.
  * @prop {boolean} [blockClient=true] - Whether or not to block self, if not a selfbot.
