@@ -199,7 +199,12 @@ class CommandHandler extends AkairoHandler {
      */
     _removeAliases(command) {
         for (const alias of command.aliases) this.aliases.delete(alias.toLowerCase());
-        if (command.prefix != null) this.prefixes.delete(command.prefix);
+
+        if (command.prefix != null) {
+            if (!this.modules.some(c => c.id !== command.id && c.prefix === command.prefix)) {
+                this.prefixes.delete(command.prefix);
+            }
+        }
     }
 
     /**
