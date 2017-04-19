@@ -104,9 +104,7 @@ class AkairoClient extends Client {
     login(token) {
         return new Promise((resolve, reject) => {
             this.build();
-
             if (!this._loaded) this.loadAll();
-            this._loaded = true;
 
             super.login(token).catch(reject);
 
@@ -176,6 +174,7 @@ class AkairoClient extends Client {
      * @returns {void}
      */
     loadAll() {
+        this._loaded = true;
         if (this.listenerHandler) this.listenerHandler.loadAll();
         if (this.commandHandler) this.commandHandler.loadAll();
         if (this.inhibitorHandler) this.inhibitorHandler.loadAll();
