@@ -10,9 +10,8 @@ const ListenerHandler = require('./ListenerHandler');
  * @prop {string|string[]} [ownerID=''] - Discord ID of the client owner(s).
  * @prop {boolean} [selfbot=false] - Whether or not this bot is a selfbot.
  * @prop {string} [commandDirectory] - Directory to commands.
- * @prop {string|string[]|Function} [prefix='!'] - Default command prefix(es) or function `(message => string|string[])` returning prefix(es).
- * @prop {boolean|Function} [allowMention=true] - Whether or not to allow mentions to the client user as a prefix.
- * Can be function `(message => boolean)` that returns true or false.
+ * @prop {string|string[]|PrefixFunction} [prefix='!'] - Default command prefix(es).
+ * @prop {boolean|AllowMentionFunction} [allowMention=true] - Whether or not to allow mentions to the client user as a prefix.
  * @prop {boolean} [handleEdits=false] - Whether or not to handle edited messages.
  * @prop {boolean} [commandUtil=false] - Whether or not to assign `message.util`.
  * Set to `true` by default if `handleEdits` is on.
@@ -27,6 +26,20 @@ const ListenerHandler = require('./ListenerHandler');
  * @prop {boolean} [blockBots=true] - Whether or not to block bots.
  * @prop {string} [listenerDirectory] - Directory to listeners.
  * @prop {Object} [emitters={}] - Emitters to load onto the listener handler.
+ */
+
+/**
+ * A function that returns the prefix(es) to use.
+ * @typedef {Function} PrefixFunction
+ * @param {Message} message - Message to get prefix for.
+ * @returns {string|string[]}
+ */
+
+/**
+ * A function that returns whether mentions can be used as a prefix.
+ * @typedef {Function} AllowMentionFunction
+ * @param {Message} message - Message to option for.
+ * @returns {boolean}
  */
 
 class AkairoClient extends Client {

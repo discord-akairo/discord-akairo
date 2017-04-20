@@ -7,7 +7,7 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * @typedef {Object} CommandOptions
  * @prop {string[]} [aliases=[]] - Command names.
  * @prop {ArgumentOptions[]} [args=[]] - Arguments to parse.
- * @prop {ArgumentSplit} [split='plain'] - Method to split text into words.
+ * @prop {ArgumentSplit|ArgumentSplitFunction} [split='plain'] - Method to split text into words.
  * @prop {string} [channelRestriction] - Restricts channel: 'guild' or 'dm'.
  * @prop {string} [category='default'] - Category ID for organization purposes.
  * @prop {boolean} [ownerOnly=false] - Whether or not to allow client owner(s) only.
@@ -17,20 +17,37 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * On an edited message, the exec function edited param will be true.
  * @prop {number} [cooldown] - The command cooldown in milliseconds.
  * @prop {number} [ratelimit=1] - Amount of command uses allowed until cooldown.
- * @prop {string|string[]|Function} [prefix] - A prefix to overwrite the global one for this command.
- * Can be a function `(message => string|string[])`.
- * @prop {PermissionResolvable|PermissionResolvable[]|Function} [userPermissions] - Permissions required by the user to run this command.
- * Can be either an array of permission name or a function returning `true or `false`.
- * @prop {PermissionResolvable|PermissionResolvable[]|Function} [clientPermissions] - Permissions required by the client to run this command.
- * Can be either an array of permission name or a function returning `true or `false`.
- * @prop {RegExp|Function} [trigger] - A regex or function `(message => RegExp)` returning regex to match in messages that are NOT commands.
+ * @prop {string|string[]|PrefixFunction} [prefix] - The prefix(es) to overwrite the global one for this command.
+ * @prop {PermissionResolvable|PermissionResolvable[]|PermissionFunction} [userPermissions] - Permissions required by the user to run this command.
+ * @prop {PermissionResolvable|PermissionResolvable[]|PermissionFunction} [clientPermissions] - Permissions required by the client to run this command.
+ * @prop {RegExp|TriggerFunction} [trigger] - A regex to match in messages that are NOT commands.
  * The exec function becomes `((message, match, groups, edited) => any)`.
- * @prop {Function} [condition] - A function `((message, edited) => {})` that returns true or false on messages that are NOT commands.
+ * @prop {ConditionFunction} [condition] - Whether or not to run on messages that are NOT commands.
  * The exec function becomes `((message, edited) => any)`.
  * @prop {ArgumentPromptOptions} [defaultPrompt={}] - The default prompt options.
  * @prop {Object} [options={}] - An object for custom options.
- * Accessible with `Command#options`.
  * @prop {string|string[]} [description=''] - Description of the command.
+ */
+
+/**
+ * A function used to check if a message has permissions for the command.
+ * @typedef {Function} PermissionFunction
+ * @param {Message} message - Message that triggered the command.
+ * @returns {boolean}
+ */
+
+/**
+ * A function used to return a regular expression.
+ * @typedef {Function} TriggerFunction
+ * @param {Message} message - Message to get regex for.
+ * @returns {RegExp}
+ */
+
+/**
+ * A function used to check if the command should run.
+ * @typedef {Function} ConditionFunction
+ * @param {Message} message - Message to check.
+ * @returns {boolean}
  */
 
 /**
@@ -47,8 +64,42 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * It is recommended that you use either `plain` or `sticky` for your commands.
  *
  * A regex or a character can be used instead (for example, a comma) to split the message by that regex or character.
- * A function `((content, message) => string[])` can also be used, returning an array of strings.
  * @typedef {string|RegExp} ArgumentSplit
+ */
+
+/**
+ * A function that returns the words to use for the arguments.
+ * @typedef {Function} ArgumentSplitFunction
+ * @param {string} content - The message content without the prefix and command.
+ * @param {Message} message - Message that triggered the command.
+ * @returns {string[]}
+ */
+
+/**
+ * The command's execution function.
+ * @typedef {Function} CommandExecFunction
+ * @param {Message} message - Message that triggered the command.
+ * @param {Object} args - Evaluated arguments.
+ * @param {boolean} edited - Whether the user's message was edited.
+ * @returns {any}
+ */
+
+/**
+ * The command's execution function when triggered with a regex.
+ * @typedef {Function} RegexCommandExecFunction
+ * @param {Message} message - Message that triggered the command.
+ * @param {any} match - The results from `string.match()` with the regex.
+ * @param {string[]} groups - The matched groups if a global regex.
+ * @param {boolean} edited - Whether the user's message was edited.
+ * @returns {any}
+ */
+
+/**
+ * The command's execution function when triggered with a condition.
+ * @typedef {Function} ConditionalCommandExecFunction
+ * @param {Message} message - Message that triggered the command.
+ * @param {boolean} edited - Whether the user's message was edited.
+ * @returns {any}
  */
 
 /** @extends AkairoModule */
@@ -56,7 +107,7 @@ class Command extends AkairoModule {
     /**
      * Creates a new command.
      * @param {string} id - Command ID.
-     * @param {Function} exec - Function `((message, args, edited) => any)` called when command is ran.
+     * @param {CommandExecFunction|RegexCommandExecFunction|ConditionalCommandExecFunction} exec - Function called when command is ran.
      * @param {CommandOptions} [options={}] - Options for the command.
      */
     constructor(id, exec, options) {
@@ -147,19 +198,19 @@ class Command extends AkairoModule {
 
         /**
          * Command prefix overwrite.
-         * @type {?string|string[]|Function}
+         * @type {?string|string[]|PrefixFunction}
          */
         this.prefix = options.prefix || this.prefix;
 
         /**
          * Permissions required to run command by the client.
-         * @type {PermissionResolvable|PermissionResolvable[]|Function}
+         * @type {PermissionResolvable|PermissionResolvable[]|PermissionFunction}
          */
         this.clientPermissions = options.clientPermissions || this.clientPermissions;
 
         /**
          * Permissions required to run command by the user.
-         * @type {PermissionResolvable|PermissionResolvable[]|Function}
+         * @type {PermissionResolvable|PermissionResolvable[]|PermissionFunction}
          */
         this.userPermissions = options.userPermissions || this.userPermissions;
 
@@ -189,6 +240,9 @@ class Command extends AkairoModule {
          * Executes the command.
          * @method
          * @name Command#exec
+         * @param {Message} message - Message that triggered the command.
+         * @param {Object} args - Evaluated arguments.
+         * @param {boolean} edited - Whether the user's message was edited.
          * @returns {any}
          */
 

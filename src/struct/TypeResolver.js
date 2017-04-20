@@ -310,8 +310,7 @@ class TypeResolver {
     /**
      * Adds a new type.
      * @param {string} name - Name of the type.
-     * @param {Function} resolver - Function `((word, message) => any)` that resolves the type.
-     * Returning `null` or `undefined` means that the type could not be resolved.
+     * @param {ArgumentTypeFunction} resolver - Function that resolves the type.
      * @returns {TypeResolver}
      */
     addType(name, resolver) {

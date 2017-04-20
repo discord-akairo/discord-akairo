@@ -1,5 +1,10 @@
 declare module 'discord-akairo' {
-    import { Client, ClientOptions, Collection, Message, MessageOptions, MessageEditOptions, User, GuildMember, Channel, TextChannel, DMChannel, GroupDMChannel, Role, Emoji, Guild, PermissionResolvable, PermissionOverwrites, RichEmbed } from 'discord.js';
+    import {
+        Client, ClientOptions, Collection, Message, MessageOptions, MessageEditOptions,
+        User, GuildMember, Channel, TextChannel, DMChannel, GroupDMChannel, Role, Emoji, Guild,
+        PermissionResolvable, PermissionOverwrites, RichEmbed
+    } from 'discord.js';
+
     import EventEmitter from 'events';
 
     module 'discord.js' {
@@ -58,8 +63,10 @@ declare module 'discord-akairo' {
         static readdirRecursive(directory: string): string[];
     }
 
+    type ModuleExecFunction = (this: AkairoModule, ...args: any[]) => any;
+
     export class AkairoModule {
-        constructor(id: string, exec: ((this: AkairoModule, ...args: any[]) => any) | ModuleOptions, options?: ModuleOptions);
+        constructor(id: string, exec: ModuleExecFunction | ModuleOptions, options?: ModuleOptions);
 
         id: string;
         category: Category<string, AkairoModule>;
@@ -96,8 +103,12 @@ declare module 'discord-akairo' {
         _promptArgument(message: Message, args: Object): Promise<any>;
     }
 
+    type CommandExecFunction = (this: Command, message: Message, args: Object, edited: boolean) => any;
+    type RegexCommandExecFunction = (this: Command, message: Message, match: string[], groups: string[] | null, edited: boolean) => any;
+    type ConditionalCommandExecFunction = (this: Command, message: Message, edited: boolean) => any;
+
     export class Command extends AkairoModule {
-        constructor(id: string, exec: ((this: Command, message: Message, args: Object, edited: boolean) => any) | ((this: Command, message: Message, match: string[], groups: string[] | null, edited: boolean) => any) | ((this: Command, message: Message, edited: boolean) => any) | CommandOptions, options?: CommandOptions);
+        constructor(id: string, exec: CommandExecFunction | RegexCommandExecFunction | ConditionalCommandExecFunction | CommandOptions, options?: CommandOptions);
 
         handler: CommandHandler<Command>;
         aliases: string[];
@@ -115,7 +126,7 @@ declare module 'discord-akairo' {
         defaultPrompt: ArgumentPromptOptions;
         options: Object;
         description: string;
-        prefix: string | string[] | ((this: CommandHandler<Command>, message: Message) => string | string[]);
+        prefix: string | string[] | ((message: Message) => string | string[]);
 
         trigger(message: Message): RegExp;
         condition(message: Message): boolean;
@@ -171,14 +182,16 @@ declare module 'discord-akairo' {
         _handleError(err: Error, message: Message, command: Command): void;
     }
 
+    type InhibitorExecFunction = (this: Inhibitor, message: Message, command?: Command) => any;
+
     export class Inhibitor extends AkairoModule {
-        constructor(id: string, exec: ((this: Inhibitor, message: Message, command: Command) => any) | InhibitorOptions, options?: InhibitorOptions);
+        constructor(id: string, exec: InhibitorExecFunction | InhibitorOptions, options?: InhibitorOptions);
 
         handler: InhibitorHandler<Inhibitor>;
         reason: string;
         type: string;
 
-        exec(message: Message, command: Command): boolean | Promise<any>;
+        exec(message: Message, command?: Command): boolean | Promise<any>;
         reload(): Inhibitor;
         remove(): Inhibitor;
     }
@@ -190,8 +203,10 @@ declare module 'discord-akairo' {
         testCommand(message: Message, command: Command): Promise<void>;
     }
 
+    type ListenerExecFunction = (this: Listener, ...args: any[]) => any;
+
     export class Listener extends AkairoModule {
-        constructor(id: string, exec: ((this: Listener, ...args: any[]) => any) | ListenerOptions, options?: ListenerOptions);
+        constructor(id: string, exec: ListenerExecFunction | ListenerOptions, options?: ListenerOptions);
 
         handler: ListenerHandler<Listener>;
         emitter: EventEmitter;
@@ -219,6 +234,8 @@ declare module 'discord-akairo' {
         enableAll(): this;
         disableAll(): this;
     }
+
+    type PromptCheckFunction = (this: ClientUtil, message: Message) => boolean;
 
     export class ClientUtil {
         constructor(client: AkairoClient);
@@ -252,8 +269,8 @@ declare module 'discord-akairo' {
         fetchMemberFrom(guild: Guild, id: string, cache?: boolean): Promise<GuildMember>
         embed(data: Object): RichEmbed;
         collection(iterable: Iterable<any>): Collection<any, any>;
-        prompt(message: Message, content?: string, check?: RegExp | ((this: ClientUtil, message: Message) => boolean), time?: number, options?: MessageOptions): Promise<Message>;
-        promptIn(channel: TextChannel | DMChannel | GroupDMChannel | User, user?: User, content?: string, check?: RegExp | ((this: ClientUtil, message: Message) => boolean), time?: number, options?: MessageOptions): Promise<Message>;
+        prompt(message: Message, content?: string, check?: RegExp | PromptCheckFunction, time?: number, options?: MessageOptions): Promise<Message>;
+        promptIn(channel: TextChannel | DMChannel | GroupDMChannel | User, user?: User, content?: string, check?: RegExp | PromptCheckFunction, time?: number, options?: MessageOptions): Promise<Message>;
         fetchMessage(channel: TextChannel | DMChannel | GroupDMChannel, id: string): Promise<Message>;
     }
 
@@ -322,17 +339,21 @@ declare module 'discord-akairo' {
         client: AkairoClient;
         handler: CommandHandler<Command>;
 
-        type(name: BuiltInArgumentTypes | string): ((word: string, message: Message, prevArgs: Object) => any);
-        addType(name: string, resolver: (this: TypeResolver, word: string, message: Message, prevArgs: Object) => any): this;
+        type(name: BuiltInArgumentTypes | string): ArgumentTypeFunction<TypeResolver>;
+        addType(name: string, resolver: ArgumentTypeFunction<TypeResolver>);
         addTypes(types: Object): this;
     }
+
+    type PrefixFunction<T> = (this: T, message: Message) => string | string[];
+
+    type AllowMentionFunction = (this: CommandHandler<Command>, message: Message) => boolean;
 
     type AkairoOptions = {
         ownerID?: string | string[];
         selfbot?: boolean;
         commandDirectory?: string;
-        prefix?: string | string[] | ((this: CommandHandler<Command>, message: Message) => string | string[]);
-        allowMention?: boolean | ((this: CommandHandler<Command>, message: Message) => boolean);
+        prefix?: string | string[] | PrefixFunction<CommandHandler>;
+        allowMention?: boolean | AllowMentionFunction;
         handleEdits?: boolean;
         commandUtil?: boolean;
         commandUtilLifetime?: number; 
@@ -351,13 +372,15 @@ declare module 'discord-akairo' {
         category?: string;
     };
 
+    type ArgumentDefaultFunction = (this: Command, message: Message, prevArgs: Object) => any;
+
     type ArgumentOptions = {
         id: string;
         match?: ArgumentMatch;
         type?: ArgumentType;
         prefix?: string | string[];
         index?: number;
-        default?: any | ((this: Command, message: Message, prevArgs: Object) => any);
+        default?: any | ArgumentDefaultFunction;
         description?: string | string[];
         prompt?: ArgumentPromptOptions;
     };
@@ -376,22 +399,40 @@ declare module 'discord-akairo' {
         cancel: string | string[] | ((this: Argument, message: Message, prevArgs: Object, amountOfTries: number) => string | string[] | MessageOptions & { content: string | string[] });
     };
 
-    type BuiltInArgumentTypes = 'string' | 'lowercase' | 'uppercase' | 'charCodes' | 'number' | 'integer' | 'dynamic' | 'dynamicInt' | 'url' | 'date' | 'color' | 'user' | 'users' | 'member' | 'members' | 'relevant' | 'relevants' | 'channel' | 'channels' | 'textChannel' | 'textChannels' | 'voiceChannel' | 'voiceChannels' | 'role' | 'roles' | 'emoji' | 'emojis' | 'guild' | 'guilds' | 'message' | 'invite' | 'memberMention' | 'channelMention' | 'roleMention' | 'emojiMention' | 'commandAlias' | 'command' | 'inhibitor' | 'listener';
-    
-    type ArgumentType = BuiltInArgumentTypes | string | string[] | RegExp | ((this: Command, word: string, message: Message, prevArgs: Object) => any);
+    type BuiltInArgumentTypes = 'string' | 'lowercase' | 'uppercase' | 'charCodes' 
+    | 'number' | 'integer' | 'dynamic' | 'dynamicInt' | 'url' | 'date' | 'color'
+    | 'user' | 'users' | 'member' | 'members' | 'relevant' | 'relevants'
+    | 'channel' | 'channels' | 'textChannel' | 'textChannels' | 'voiceChannel'
+    | 'voiceChannels' | 'role' | 'roles' | 'emoji' | 'emojis' | 'guild' | 'guilds'
+    | 'message' | 'invite' | 'memberMention' | 'channelMention' | 'roleMention'
+    | 'emojiMention' | 'commandAlias' | 'command' | 'inhibitor' | 'listener';
+
+    type ArgumentTypeFunction<T> = (this: T, word: string, message: Message, prevArgs: Object) => any;
+
+    type ArgumentType = BuiltInArgumentTypes | string | string[] | RegExp | ArgumentTypeFunction<Command>;
 
     type BuiltInArgumentMatches = 'word' | 'prefix' | 'flag' | 'text' | 'content' | 'rest' | 'none';
 
-    type ArgumentMatch = BuiltInArgumentMatches | ((this: Command, message: Message, prevArgs: Object) => BuiltInArgumentMatches);
+    type ArgumentMatchFunction = (this: Command, message: Message, prevArgs: Object) => BuiltInArgumentMatches;
+
+    type ArgumentMatch = BuiltInArgumentMatches | ArgumentMatchFunction;
 
     type BuiltInArgumentSplits = 'plain' | 'split' | 'quoted' | 'sticky' | 'none';
 
-    type ArgumentSplit = BuiltInArgumentSplits | RegExp | ((this: Command, content: string, message: Message) => string[]);
+    type ArgumentSplitFunction = (this: Command, content: string, message: Message) => string[];
+
+    type ArgumentSplit = BuiltInArgumentSplits | RegExp | ArgumentSplitFunction;
+
+    type PermissionFunction = (this: Command, message: Message) => boolean;
+
+    type TriggerFunction = (this: Command, message: Message, edited: boolean) => RegExp;
+
+    type ConditionFunction = (this: Command, message: Message, edited: boolean) => boolean;
 
     type CommandOptions = {
         aliases?: string[];
         args?: ArgumentOptions[];
-        split?: ArgumentSplit;
+        split?: ArgumentSplit | ArgumentSplitFunction;
         channelRestriction?: 'guild' | 'dm';
         category?: string;
         ownerOnly?: boolean;
@@ -400,11 +441,11 @@ declare module 'discord-akairo' {
         editable?: boolean;
         cooldown?: number;
         ratelimit?: number;
-        clientPermissions?: PermissionResolvable | PermissionResolvable[] | ((this: Command, message: Message) => boolean);
-        userPermissions?: PermissionResolvable | PermissionResolvable[] | ((this: Command, message: Message) => boolean);
-        prefix?: string | string[] | ((this: Command, message: Message) => string | string[]);
-        trigger?: RegExp | ((this: Command, message: Message, edited: boolean) => RegExp);
-        condition?: (this: Command, message: Message, edited: boolean) => boolean;
+        clientPermissions?: PermissionResolvable | PermissionResolvable[] | PermissionFunction;
+        userPermissions?: PermissionResolvable | PermissionResolvable[] | PermissionFunction;
+        prefix?: string | string[] | PrefixFunction<Command>;
+        trigger?: RegExp | TriggerFunction;
+        condition?: ConditionFunction;
         defaultPrompt?: ArgumentPromptOptions;
         options?: Object;
         description?: string | string[];
@@ -423,10 +464,12 @@ declare module 'discord-akairo' {
         category?: string;
     }
 
+    type SQLiteInitFunction = (this: SQLiteHandler, client: AkairoClient) => string[];
+
     type SQLiteOptions = {
         tableName?: string;
         defaultConfig?: Object;
         json?: string[];
-        init?: string[] | ((this: SQLiteHandler, client: AkairoClient) => string[]);
+        init?: string[] | SQLiteInitFunction;
     };
 }

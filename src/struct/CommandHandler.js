@@ -29,7 +29,7 @@ class CommandHandler extends AkairoHandler {
 
         /**
          * Set of prefix overwrites.
-         * @type {Set<string|string[]|Function>}
+         * @type {Set<string|string[]|PrefixFunction>}
          */
         this.prefixes = new Set();
 

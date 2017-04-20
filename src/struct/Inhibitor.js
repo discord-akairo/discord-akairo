@@ -8,13 +8,21 @@ const AkairoModule = require('./AkairoModule');
  * @prop {string} [category='default'] - Category ID for organization purposes.
  */
 
+/**
+ * Function to check if message should be blocked.
+ * A return value of true or a rejecting Promise will block the message.
+ * @typedef {Function} InhibitorExecFunction
+ * @param {Message} message - Message being handled.
+ * @param {Command} [command] - Command to check.
+ * @returns {boolean|Promise<any>}
+ */
+
 /** @extends AkairoModule */
 class Inhibitor extends AkairoModule {
     /**
      * Creates a new Inhibitor.
      * @param {string} id - Inhibitor ID.
-     * @param {Function} exec - Function `((message, command) => boolean)` called before a command is ran.
-     * Return `true` or a rejecting Promise to block.
+     * @param {InhibitorExecFunction} exec - Function called before a command is ran.
      * @param {InhibitorOptions} [options={}] - Options for the inhibitor.
      */
     constructor(id, exec, options) {
@@ -47,7 +55,9 @@ class Inhibitor extends AkairoModule {
          * Executes the inhibitor.
          * @method
          * @name Inhibitor#exec
-         * @returns {any}
+         * @param {Message} message - Message being handled.
+         * @param {Command} [command] - Command to check.
+         * @returns {boolean|Promise<any>}
          */
 
         /**

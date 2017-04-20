@@ -21,9 +21,15 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  * It ignores words that matches a prefix or a flag.
  * - `content` matches the entire text as it was inputted, except for the command.
  * - `none` matches nothing at all and an empty string will be used for type operations.
- *
- * A function `((message, prevArgs) => string)` can also be used to return one of the above.
  * @typedef {string} ArgumentMatch
+ */
+
+/**
+ * A function returning a method to match arguments.
+ * @typedef {Function} ArgumentMatchFunction
+ * @param {Message} message - Message that triggered the command.
+ * @param {Object} prevArgs - Previous arguments.
+ * @returns {ArgumentMatch}
  */
 
 /**
@@ -70,20 +76,26 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  *
  * A regular expression can also be used.
  * The evaluated argument will be an object containing the `match` and `groups` if global.
- *
- * A function `((word, message, prevArgs) => any)` can also be used to filter or modify arguments.
- * A return value of `true` will let the word pass, a `null` or `undefined` return value will use the default value for the argument or start a prompt.
- * Any other truthy return value will be used as the evaluated argument.
- * If returning a Promise, the value resolved will be the argument, and a rejection will use the default value or start a prompt.
  * @typedef {string|string[]} ArgumentType
+ */
+
+/**
+ * A function for processing user input to use as an argument.
+ * A return value of `true` will let the word pass.
+ * A `null` or `undefined` return value will use the default value for the argument or start a prompt.
+ * Any other truthy return value will be used as the evaluated argument.
+ * If returning a Promise, the value resolved will be the argument.
+ * A rejection will use the default value or start a prompt.
+ * @typedef {Function} ArgumentTypeFunction
+ * @param {string} word - The user input.
+ * @param {Message} message - Message that triggered the command.
+ * @param {Object} prevArgs - Previous arguments.
+ * @returns {any}
  */
 
 /**
  * A prompt to run if the user did not input the argument correctly.
  * Can only be used if there is not a default value (unless optional is true).
- * The functions are `((message, prevArgs, amountOfTries) => string|string[]|MessageOptions)` returning the reply.
- * The object should be equivalent to a `MessageOptions`, with an extra optional property called `content` for message content.
- * Can also be a string literal that will have a mention concatenated to the start.
  * @typedef {Object} ArgumentPromptOptions
  * @prop {number} [retries=1] - Amount of times allowed to retries.
  * @prop {number} [time=30000] - Time to wait for input.
@@ -93,24 +105,41 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  * @prop {boolean} [infinite=false] - Prompts forever until the stop word, cancel word, time limit, or retry limit.
  * Note that the retry count resets back to one on each valid entry.
  * The final evaluated argument will be an array of the inputs.
- * @prop {string|string[]|Function} [start] - Function called on start of prompt.
- * @prop {string|string[]|Function} [retry] - Function called on a retry (failure to cast type).
- * @prop {string|string[]|Function} [timeout] - Function called on collector time out.
- * @prop {string|string[]|Function} [ended] - Function called on amount of tries reaching the max.
- * @prop {string|string[]|Function} [cancel] - Function called on cancellation of command.
+ * @prop {string|string[]|ArgumentPromptFunction} [start] - Text sent on start of prompt.
+ * @prop {string|string[]|ArgumentPromptFunction} [retry] - Text sent on a retry (failure to cast type).
+ * @prop {string|string[]|ArgumentPromptFunction} [timeout] - Text sent on collector time out.
+ * @prop {string|string[]|ArgumentPromptFunction} [ended] - Text sent on amount of tries reaching the max.
+ * @prop {string|string[]|ArgumentPromptFunction} [cancel] - Text sent on cancellation of command.
+ */
+
+/**
+ * A function returning text for the prompt or a `MessageOptions` object.
+ * The options can have an extra optional property called `content` for message content.
+ * @typedef {Function} ArgumentPromptFunction
+ * @param {Message} message - Message that triggered the command.
+ * @param {Object} prevArgs - Previous arguments.
+ * @param {number} tries - The amount of tried the user has taken.
+ * @returns {string|string[]|MessageOptions}
+ */
+
+/**
+ * Function get the default value of the argument.
+ * @typedef {Function} ArgumentDefaultFunction
+ * @param {Message} message - Message that triggered the command.
+ * @param {Object} prevArgs - Previous arguments.
+ * @returns {any}
  */
 
 /**
  * Options for how an argument parses text.
  * @typedef {Object} ArgumentOptions
  * @prop {string} id - ID of the argument for use in the args object.
- * @prop {ArgumentMatch} [match='word'] - Method to match text.
- * @prop {ArgumentType} [type='string'] - Type to cast to.
+ * @prop {ArgumentMatch|ArgumentMatchFunction} [match='word'] - Method to match text.
+ * @prop {ArgumentType|ArgumentTypeFunction} [type='string'] - Type to cast to.
  * @prop {string|string[]} [prefix] - The string(s) to use as the flag for prefix and flag args.
  * @prop {number} [index] - Index/word of text to start from.
  * Applicable to word, text, or content match only.
- * @prop {any} [default=''] - Default value if text does not parse or cast correctly.
- * Can be a function `((message, prevArgs) => any)`.
+ * @prop {any|ArgumentDefaultFunction} [default=''] - Default value if text does not parse or cast correctly.
  * If using a flag arg, setting the default value inverses the result.
  * @prop {string|string[]} [description=''] - A description of the argument.
  * @prop {ArgumentPromptOptions} [prompt] - Prompt options for when user does not provide input.

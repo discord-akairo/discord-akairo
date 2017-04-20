@@ -9,12 +9,19 @@ const AkairoModule = require('./AkairoModule');
  * @prop {string} [category='default'] - Category ID for organization purposes.
  */
 
+/**
+ * Function called when event emitted.
+ * @typedef {Function} ListenerExecFunction
+ * @param {...args} [args] - Arguments.
+ * @returns {any}
+ */
+
 /** @extends AkairoModule */
 class Listener extends AkairoModule {
     /**
      * Creates a new Listener.
      * @param {string} id - Listener ID.
-     * @param {Function} exec - The function `((...args) => any)` called when event emitted.
+     * @param {ListenerExecFunction} exec - The function called when event emitted.
      * @param {ListenerOptions} [options={}] - Options for the listener.
      */
     constructor(id, exec, options) {
@@ -47,6 +54,7 @@ class Listener extends AkairoModule {
          * Executes the listener.
          * @method
          * @name Listener#exec
+         * @param {...args} [args] - Arguments.
          * @returns {any}
          */
         this.exec = this.exec.bind(this);

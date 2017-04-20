@@ -1,5 +1,13 @@
 const { Collection, Permissions, RichEmbed, User } = require('discord.js');
 
+/**
+ * Function used to check if a response should pass for the prompt.
+ * @typedef {Function} PromptCheckFunction
+ * @param {Message} message - Message to check.
+ * @param {Message} [sent] - The prompt's sent message.
+ * @returns {boolean}
+ */
+
 class ClientUtil {
     /**
      * Client utilities to help with common tasks.
@@ -458,7 +466,7 @@ class ClientUtil {
      * Prompts a user for input, returning the message that passes.
      * @param {Message} [message] - Message to prompt.
      * @param {string} [content] - Text to send.
-     * @param {RegExp|Function} [check] - Regex or function `(message => boolean)` to check if message should pass.
+     * @param {RegExp|PromptCheckFunction} [check] - Regex or function to check if message should pass.
      * @param {number} [time=30000] - Time in milliseconds to wait.
      * @param {MessageOptions} [options] - Message options for message.
      * @returns {Promise<Message>}
@@ -504,7 +512,7 @@ class ClientUtil {
      * @param {TextBasedChannel|User} channel - Channel to prompt in or a user to prompt in DM.
      * @param {User} [user] - User to prompt, if not a user object in the channel param.
      * @param {string} [content] - Text to send.
-     * @param {RegExp|Function} [check] - Regex or function `(message => boolean)` to check if message should pass.
+     * @param {RegExp|PromptCheckFunction} [check] - Regex or function to check if message should pass.
      * @param {number} [time=30000] - Time in milliseconds to wait.
      * @param {MessageOptions} [options] - Message options for message.
      * @returns {Promise<Message>}
