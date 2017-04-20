@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="CommandUtil.html">CommandUtil</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="CommandUtil.html">CommandUtil</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Typedefs</h3><ul><li><a href="global.html#AkairoOptions">AkairoOptions</a></li><li><a href="global.html#AllowMentionFunction">AllowMentionFunction</a></li><li><a href="global.html#ArgumentDefaultFunction">ArgumentDefaultFunction</a></li><li><a href="global.html#ArgumentMatch">ArgumentMatch</a></li><li><a href="global.html#ArgumentMatchFunction">ArgumentMatchFunction</a></li><li><a href="global.html#ArgumentOptions">ArgumentOptions</a></li><li><a href="global.html#ArgumentPromptFunction">ArgumentPromptFunction</a></li><li><a href="global.html#ArgumentPromptOptions">ArgumentPromptOptions</a></li><li><a href="global.html#ArgumentSplit">ArgumentSplit</a></li><li><a href="global.html#ArgumentSplitFunction">ArgumentSplitFunction</a></li><li><a href="global.html#ArgumentType">ArgumentType</a></li><li><a href="global.html#ArgumentTypeFunction">ArgumentTypeFunction</a></li><li><a href="global.html#CommandExecFunction">CommandExecFunction</a></li><li><a href="global.html#CommandOptions">CommandOptions</a></li><li><a href="global.html#ConditionalCommandExecFunction">ConditionalCommandExecFunction</a></li><li><a href="global.html#ConditionFunction">ConditionFunction</a></li><li><a href="global.html#InhibitorExecFunction">InhibitorExecFunction</a></li><li><a href="global.html#InhibitorOptions">InhibitorOptions</a></li><li><a href="global.html#ListenerExecFunction">ListenerExecFunction</a></li><li><a href="global.html#ListenerOptions">ListenerOptions</a></li><li><a href="global.html#Message">Message</a></li><li><a href="global.html#MessageOptions">MessageOptions</a></li><li><a href="global.html#ModuleExecFunction">ModuleExecFunction</a></li><li><a href="global.html#ModuleOptions">ModuleOptions</a></li><li><a href="global.html#PermissionFunction">PermissionFunction</a></li><li><a href="global.html#PrefixFunction">PrefixFunction</a></li><li><a href="global.html#PromptCheckFunction">PromptCheckFunction</a></li><li><a href="global.html#RegexCommandExecFunction">RegexCommandExecFunction</a></li><li><a href="global.html#SQLiteInitFunction">SQLiteInitFunction</a></li><li><a href="global.html#SQLiteOptions">SQLiteOptions</a></li><li><a href="global.html#TriggerFunction">TriggerFunction</a></li></ul>
 </nav>
 
 <div id="main">
@@ -53,7 +53,7 @@
 
     
 
-    <h4 class="name" id="TypeResolver"><span class="type-signature"></span>new TypeResolver<span class="signature">(client)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="TypeResolver"><span class="type-signature"></span>new TypeResolver<span class="signature">(handler)</span><span class="type-signature"></span></h4>
 
     
 
@@ -143,13 +143,13 @@
 
         <tr>
             
-                <td class="name"><code>client</code></td>
+                <td class="name"><code>handler</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="AkairoClient.html">AkairoClient</a></span>
+<span class="param-type"><a href="CommandHandler.html">CommandHandler</a></span>
 
 
             
@@ -159,7 +159,7 @@
 
             
 
-            <td class="description last"><p>The client.</p></td>
+            <td class="description last"><p>The command handler.</p></td>
         </tr>
 
     
@@ -195,6 +195,78 @@
     
 
     
+        <h3 class="subsection-title">Properties</h3>
+
+        
+            
+<h4 class="name" id="handler"><span class="type-signature"></span>handler<span class="type-signature"> :<a href="CommandHandler.html">CommandHandler</a></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_TypeResolver.js.html">struct/TypeResolver.js</a>, <a href="struct_TypeResolver.js.html#line26">line 26</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>The command handler.</p>
+</div>
+
+
+
+    <b>Type:</b> 
+<span class="param-type"><a href="CommandHandler.html">CommandHandler</a></span>
+
+
+
+
+
+
+
+
+        
+    
 
     
         <h3 class="subsection-title">Methods</h3>
@@ -216,7 +288,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_TypeResolver.js.html">struct/TypeResolver.js</a>, <a href="struct_TypeResolver.js.html#line311">line 311</a>
+        <a href="struct_TypeResolver.js.html">struct/TypeResolver.js</a>, <a href="struct_TypeResolver.js.html#line316">line 316</a>
     </li></ul></dd>
     
 
@@ -323,7 +395,7 @@
             <td class="type">
             
                 
-<span class="param-type">function</span>
+<span class="param-type"><a href="global.html#ArgumentTypeFunction">ArgumentTypeFunction</a></span>
 
 
             
@@ -333,7 +405,7 @@
 
             
 
-            <td class="description last"><p>Function <code>((word, message) =&gt; any)</code> that resolves the type.<br>Returning <code>null</code> or <code>undefined</code> means that the type could not be resolved.</p></td>
+            <td class="description last"><p>Function that resolves the type.</p></td>
         </tr>
 
     
@@ -383,7 +455,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_TypeResolver.js.html">struct/TypeResolver.js</a>, <a href="struct_TypeResolver.js.html#line326">line 326</a>
+        <a href="struct_TypeResolver.js.html">struct/TypeResolver.js</a>, <a href="struct_TypeResolver.js.html#line331">line 331</a>
     </li></ul></dd>
     
 
@@ -527,7 +599,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_TypeResolver.js.html">struct/TypeResolver.js</a>, <a href="struct_TypeResolver.js.html#line300">line 300</a>
+        <a href="struct_TypeResolver.js.html">struct/TypeResolver.js</a>, <a href="struct_TypeResolver.js.html#line306">line 306</a>
     </li></ul></dd>
     
 

@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="CommandUtil.html">CommandUtil</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="CommandUtil.html">CommandUtil</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Typedefs</h3><ul><li><a href="global.html#AkairoOptions">AkairoOptions</a></li><li><a href="global.html#AllowMentionFunction">AllowMentionFunction</a></li><li><a href="global.html#ArgumentDefaultFunction">ArgumentDefaultFunction</a></li><li><a href="global.html#ArgumentMatch">ArgumentMatch</a></li><li><a href="global.html#ArgumentMatchFunction">ArgumentMatchFunction</a></li><li><a href="global.html#ArgumentOptions">ArgumentOptions</a></li><li><a href="global.html#ArgumentPromptFunction">ArgumentPromptFunction</a></li><li><a href="global.html#ArgumentPromptOptions">ArgumentPromptOptions</a></li><li><a href="global.html#ArgumentSplit">ArgumentSplit</a></li><li><a href="global.html#ArgumentSplitFunction">ArgumentSplitFunction</a></li><li><a href="global.html#ArgumentType">ArgumentType</a></li><li><a href="global.html#ArgumentTypeFunction">ArgumentTypeFunction</a></li><li><a href="global.html#CommandExecFunction">CommandExecFunction</a></li><li><a href="global.html#CommandOptions">CommandOptions</a></li><li><a href="global.html#ConditionalCommandExecFunction">ConditionalCommandExecFunction</a></li><li><a href="global.html#ConditionFunction">ConditionFunction</a></li><li><a href="global.html#InhibitorExecFunction">InhibitorExecFunction</a></li><li><a href="global.html#InhibitorOptions">InhibitorOptions</a></li><li><a href="global.html#ListenerExecFunction">ListenerExecFunction</a></li><li><a href="global.html#ListenerOptions">ListenerOptions</a></li><li><a href="global.html#Message">Message</a></li><li><a href="global.html#MessageOptions">MessageOptions</a></li><li><a href="global.html#ModuleExecFunction">ModuleExecFunction</a></li><li><a href="global.html#ModuleOptions">ModuleOptions</a></li><li><a href="global.html#PermissionFunction">PermissionFunction</a></li><li><a href="global.html#PrefixFunction">PrefixFunction</a></li><li><a href="global.html#PromptCheckFunction">PromptCheckFunction</a></li><li><a href="global.html#RegexCommandExecFunction">RegexCommandExecFunction</a></li><li><a href="global.html#SQLiteInitFunction">SQLiteInitFunction</a></li><li><a href="global.html#SQLiteOptions">SQLiteOptions</a></li><li><a href="global.html#TriggerFunction">TriggerFunction</a></li></ul>
 </nav>
 
 <div id="main">
@@ -60,9 +60,15 @@
  * It ignores words that matches a prefix or a flag.
  * - `content` matches the entire text as it was inputted, except for the command.
  * - `none` matches nothing at all and an empty string will be used for type operations.
- *
- * A function `((message, prevArgs) => string)` can also be used to return one of the above.
  * @typedef {string} ArgumentMatch
+ */
+
+/**
+ * A function returning a method to match arguments.
+ * @typedef {Function} ArgumentMatchFunction
+ * @param {Message} message - Message that triggered the command.
+ * @param {Object} prevArgs - Previous arguments.
+ * @returns {ArgumentMatch}
  */
 
 /**
@@ -109,21 +115,27 @@
  *
  * A regular expression can also be used.
  * The evaluated argument will be an object containing the `match` and `groups` if global.
- *
- * A function `((word, message, prevArgs) => any)` can also be used to filter or modify arguments.
- * A return value of `true` will let the word pass, a `null` or `undefined` return value will use the default value for the argument or start a prompt.
- * Any other truthy return value will be used as the evaluated argument.
- * If returning a Promise, the value resolved will be the argument, and a rejection will use the default value or start a prompt.
  * @typedef {string|string[]} ArgumentType
+ */
+
+/**
+ * A function for processing user input to use as an argument.
+ * A return value of `true` will let the word pass.
+ * A `null` or `undefined` return value will use the default value for the argument or start a prompt.
+ * Any other truthy return value will be used as the evaluated argument.
+ * If returning a Promise, the value resolved will be the argument.
+ * A rejection will use the default value or start a prompt.
+ * @typedef {Function} ArgumentTypeFunction
+ * @param {string} word - The user input.
+ * @param {Message} message - Message that triggered the command.
+ * @param {Object} prevArgs - Previous arguments.
+ * @returns {any}
  */
 
 /**
  * A prompt to run if the user did not input the argument correctly.
  * Can only be used if there is not a default value (unless optional is true).
- * The functions are `((message, prevArgs, amountOfTries) => string|string[]|MessageOptions)` returning the reply.
- * The object should be equivalent to a `MessageOptions`, with an extra optional property called `content` for message content.
- * Can also be a string literal that will have a mention concatenated to the start.
- * @typedef {Object} PromptOptions
+ * @typedef {Object} ArgumentPromptOptions
  * @prop {number} [retries=1] - Amount of times allowed to retries.
  * @prop {number} [time=30000] - Time to wait for input.
  * @prop {string} [cancelWord='cancel'] - Word to use for cancelling the command.
@@ -132,27 +144,44 @@
  * @prop {boolean} [infinite=false] - Prompts forever until the stop word, cancel word, time limit, or retry limit.
  * Note that the retry count resets back to one on each valid entry.
  * The final evaluated argument will be an array of the inputs.
- * @prop {string|string[]|Function} [start] - Function called on start of prompt.
- * @prop {string|string[]|Function} [retry] - Function called on a retry (failure to cast type).
- * @prop {string|string[]|Function} [timeout] - Function called on collector time out.
- * @prop {string|string[]|Function} [ended] - Function called on amount of tries reaching the max.
- * @prop {string|string[]|Function} [cancel] - Function called on cancellation of command.
+ * @prop {string|string[]|ArgumentPromptFunction} [start] - Text sent on start of prompt.
+ * @prop {string|string[]|ArgumentPromptFunction} [retry] - Text sent on a retry (failure to cast type).
+ * @prop {string|string[]|ArgumentPromptFunction} [timeout] - Text sent on collector time out.
+ * @prop {string|string[]|ArgumentPromptFunction} [ended] - Text sent on amount of tries reaching the max.
+ * @prop {string|string[]|ArgumentPromptFunction} [cancel] - Text sent on cancellation of command.
+ */
+
+/**
+ * A function returning text for the prompt or a `MessageOptions` object.
+ * The options can have an extra optional property called `content` for message content.
+ * @typedef {Function} ArgumentPromptFunction
+ * @param {Message} message - Message that triggered the command.
+ * @param {Object} prevArgs - Previous arguments.
+ * @param {number} tries - The amount of tried the user has taken.
+ * @returns {string|string[]|MessageOptions}
+ */
+
+/**
+ * Function get the default value of the argument.
+ * @typedef {Function} ArgumentDefaultFunction
+ * @param {Message} message - Message that triggered the command.
+ * @param {Object} prevArgs - Previous arguments.
+ * @returns {any}
  */
 
 /**
  * Options for how an argument parses text.
  * @typedef {Object} ArgumentOptions
  * @prop {string} id - ID of the argument for use in the args object.
- * @prop {ArgumentMatch} [match='word'] - Method to match text.
- * @prop {ArgumentType} [type='string'] - Type to cast to.
+ * @prop {ArgumentMatch|ArgumentMatchFunction} [match='word'] - Method to match text.
+ * @prop {ArgumentType|ArgumentTypeFunction} [type='string'] - Type to cast to.
  * @prop {string|string[]} [prefix] - The string(s) to use as the flag for prefix and flag args.
  * @prop {number} [index] - Index/word of text to start from.
  * Applicable to word, text, or content match only.
- * @prop {any} [default=''] - Default value if text does not parse or cast correctly.
- * Can be a function `((message, prevArgs) => any)`.
+ * @prop {any|ArgumentDefaultFunction} [default=''] - Default value if text does not parse or cast correctly.
  * If using a flag arg, setting the default value inverses the result.
  * @prop {string|string[]} [description=''] - A description of the argument.
- * @prop {PromptOptions} [prompt] - Prompt options for when user does not provide input.
+ * @prop {ArgumentPromptOptions} [prompt] - Prompt options for when user does not provide input.
  * Must not have a default value for this to work.
  */
 
@@ -207,7 +236,7 @@ class Argument {
 
         /**
          * The prompt options.
-         * @type {PromptOptions}
+         * @type {ArgumentPromptOptions}
          */
         this.prompt = options.prompt;
 
@@ -339,6 +368,7 @@ class Argument {
         let exited = false;
         let stopped = false;
         let value = prompt.infinite ? [] : null;
+        if (prompt.infinite) args[this.id] = value;
 
         const retry = i => {
             this.handler.addPrompt(message);
