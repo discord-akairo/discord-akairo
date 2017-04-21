@@ -118,16 +118,8 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  * @typedef {Function} ArgumentPromptFunction
  * @param {Message} message - Message that triggered the command.
  * @param {Object} prevArgs - Previous arguments.
- * @param {number} tries - The amount of tried the user has taken.
+ * @param {number} tries - The amount of tries the user has taken.
  * @returns {string|string[]|MessageOptions}
- */
-
-/**
- * Function get the default value of the argument.
- * @typedef {Function} ArgumentDefaultFunction
- * @param {Message} message - Message that triggered the command.
- * @param {Object} prevArgs - Previous arguments.
- * @returns {any}
  */
 
 /**
@@ -144,6 +136,14 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  * @prop {string|string[]} [description=''] - A description of the argument.
  * @prop {ArgumentPromptOptions} [prompt] - Prompt options for when user does not provide input.
  * Must not have a default value for this to work.
+ */
+
+/**
+ * Function get the default value of the argument.
+ * @typedef {Function} ArgumentDefaultFunction
+ * @param {Message} message - Message that triggered the command.
+ * @param {Object} prevArgs - Previous arguments.
+ * @returns {any}
  */
 
 class Argument {
