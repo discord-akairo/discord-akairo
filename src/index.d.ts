@@ -352,7 +352,7 @@ declare module 'discord-akairo' {
         ownerID?: string | string[];
         selfbot?: boolean;
         commandDirectory?: string;
-        prefix?: string | string[] | PrefixFunction<CommandHandler>;
+        prefix?: string | string[] | PrefixFunction<CommandHandler<Command>>;
         allowMention?: boolean | AllowMentionFunction;
         handleEdits?: boolean;
         commandUtil?: boolean;
@@ -385,6 +385,8 @@ declare module 'discord-akairo' {
         prompt?: ArgumentPromptOptions;
     };
 
+    type ArgumentPromptFunction = (this: Argument, message: Message, prevArgs: Object, amountOfTries: number) => string | string[] | MessageOptions & { content: string | string[] };
+
     type ArgumentPromptOptions = {
         retries?: number;
         time?: number;
@@ -392,11 +394,11 @@ declare module 'discord-akairo' {
         stopWord?: string;
         optional?: boolean;
         infinite?: boolean;
-        start: string | string[] | ((this: Argument, message: Message, prevArgs: Object, amountOfTries: number) => string | string[] | MessageOptions & { content: string | string[] });
-        retry: string | string[] | ((this: Argument, message: Message, prevArgs: Object, amountOfTries: number) => string | string[] | MessageOptions & { content: string | string[] });
-        timeout: string | string[] | ((this: Argument, message: Message, prevArgs: Object, amountOfTries: number) => string | string[] | MessageOptions & { content: string | string[] });
-        ended: string | string[] | ((this: Argument, message: Message, prevArgs: Object, amountOfTries: number) => string | string[] | MessageOptions & { content: string | string[] });
-        cancel: string | string[] | ((this: Argument, message: Message, prevArgs: Object, amountOfTries: number) => string | string[] | MessageOptions & { content: string | string[] });
+        start: string | string[] | ArgumentPromptFunction;
+        retry: string | string[] | ArgumentPromptFunction;
+        timeout: string | string[] | ArgumentPromptFunction;
+        ended: string | string[] | ArgumentPromptFunction;
+        cancel: string | string[] | ArgumentPromptFunction;
     };
 
     type BuiltInArgumentTypes = 'string' | 'lowercase' | 'uppercase' | 'charCodes' 
