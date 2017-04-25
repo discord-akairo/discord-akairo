@@ -188,6 +188,8 @@ class CommandHandler extends AkairoHandler {
             this.aliases.set(alias.toLowerCase(), command.id);
         }
 
+        if (command.prefix === '') throw new Error('Prefix overwrites cannot be empty.');
+        if (Array.isArray(command.prefix) && command.prefix.includes('')) throw new Error('Prefix overwrites cannot be empty.');
         if (command.prefix !== undefined) this.prefixes.add(command.prefix);
     }
 
