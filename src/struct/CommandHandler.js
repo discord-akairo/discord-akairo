@@ -482,7 +482,7 @@ class CommandHandler extends AkairoHandler {
 
         if (start == null) return null;
 
-        const startIndex = message.content.search(start) + start.length;
+        const startIndex = message.content.indexOf(start) + start.length;
         const argsIndex = message.content.slice(startIndex).search(/\S/) + start.length;
         const name = message.content.slice(argsIndex).split(/\s{1,}|\n{1,}/)[0];
         const command = this.findCommand(name);
