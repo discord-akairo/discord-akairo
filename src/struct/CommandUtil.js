@@ -171,7 +171,7 @@ class CommandUtil {
     static swapOptions(content, options) {
         if (!options && typeof content === 'object' && !(content instanceof Array)) {
             options = content;
-            content = '';
+            content = options.content || '';
         } else if (!options) {
             options = {};
         }
