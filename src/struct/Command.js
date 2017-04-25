@@ -200,7 +200,7 @@ class Command extends AkairoModule {
          * Command prefix overwrite.
          * @type {?string|string[]|PrefixFunction}
          */
-        this.prefix = options.prefix || this.prefix;
+        this.prefix = options.prefix !== undefined ? options.prefix : this.prefix;
 
         /**
          * Permissions required to run command by the client.

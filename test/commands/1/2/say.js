@@ -20,5 +20,5 @@ module.exports = new Command('say', exec, {
             default: 1
         }
     ],
-    prefix: '$'
+    prefix: ''
 });

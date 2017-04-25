@@ -188,7 +188,7 @@ class CommandHandler extends AkairoHandler {
             this.aliases.set(alias.toLowerCase(), command.id);
         }
 
-        if (command.prefix != null) this.prefixes.add(command.prefix);
+        if (command.prefix !== undefined) this.prefixes.add(command.prefix);
     }
 
     /**
@@ -200,7 +200,7 @@ class CommandHandler extends AkairoHandler {
     _removeAliases(command) {
         for (const alias of command.aliases) this.aliases.delete(alias.toLowerCase());
 
-        if (command.prefix != null) {
+        if (command.prefix !== undefined) {
             if (!this.modules.some(c => c.id !== command.id && c.prefix === command.prefix)) {
                 this.prefixes.delete(command.prefix);
             }
@@ -224,8 +224,8 @@ class CommandHandler extends AkairoHandler {
     addPrompt(message) {
         let channels = this.prompts.get(message.author.id);
         if (!channels) this.prompts.set(message.author.id, new Set());
-        channels = this.prompts.get(message.author.id);
 
+        channels = this.prompts.get(message.author.id);
         channels.add(message.channel.id);
     }
 
@@ -239,7 +239,6 @@ class CommandHandler extends AkairoHandler {
         if (!channels) return;
 
         channels.delete(message.channel.id);
-
         if (!channels.size) this.prompts.delete(message.author.id);
     }
 
@@ -251,7 +250,6 @@ class CommandHandler extends AkairoHandler {
     hasPrompt(message) {
         const channels = this.prompts.get(message.author.id);
         if (!channels) return false;
-
         return channels.has(message.channel.id);
     }
 
@@ -480,7 +478,7 @@ class CommandHandler extends AkairoHandler {
             }
         }
 
-        if (start == null) return null;
+        if (start === undefined) return null;
 
         const startIndex = message.content.indexOf(start) + start.length;
         const argsIndex = message.content.slice(startIndex).search(/\S/) + start.length;
@@ -490,10 +488,10 @@ class CommandHandler extends AkairoHandler {
         if (!command) return { prefix: start, alias: name };
 
         if (this.prefixes.size) {
-            if (overwrote == null && command.prefix != null) return { prefix: start, alias: name };
+            if (overwrote === undefined && command.prefix !== undefined) return { prefix: start, alias: name };
 
-            if (overwrote != null) {
-                if (command.prefix == null) {
+            if (overwrote !== undefined) {
+                if (command.prefix === undefined) {
                     if (overwrote.start !== start) return { prefix: start, alias: name };
                 } else {
                     const commandPrefix = typeof command.prefix === 'function' ? command.prefix.call(this, message) : command.prefix;
