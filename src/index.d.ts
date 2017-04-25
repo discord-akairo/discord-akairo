@@ -274,6 +274,8 @@ declare module 'discord-akairo' {
         fetchMessage(channel: TextChannel | DMChannel | GroupDMChannel, id: string): Promise<Message>;
     }
 
+    type ExtendedMessageOptions = MessageOptions & { content?: string | string[] };
+
     export class CommandUtil {
         constructor(client: AkairoClient, message: Message, command: Command, prefix: string, alias: string);
 
@@ -286,11 +288,11 @@ declare module 'discord-akairo' {
         lastResponse?: Message;
 
         setLastResponse(message: Message | Message[]): void;
-        send(content: string | MessageOptions | MessageEditOptions, options?: MessageOptions | MessageEditOptions): Promise<Message | Message[]>;
-        sendMessage(content: string | MessageOptions | MessageEditOptions, options?: MessageOptions | MessageEditOptions): Promise<Message | Message[]>;
-        sendCode(code: string, content: string | MessageOptions | MessageEditOptions, options?: MessageOptions | MessageEditOptions): Promise<Message | Message[]>;
-        sendEmbed(embed: RichEmbed | Object, content: string | MessageOptions | MessageEditOptions, options?: MessageOptions | MessageEditOptions): Promise<Message | Message[]>;
-        reply(content: string | MessageOptions | MessageEditOptions, options?: MessageOptions | MessageEditOptions): Promise<Message | Message[]>;
+        send(content: string | ExtendedMessageOptions | MessageEditOptions, options?: ExtendedMessageOptions | MessageEditOptions): Promise<Message | Message[]>;
+        sendMessage(content: string | ExtendedMessageOptions | MessageEditOptions, options?: ExtendedMessageOptions | MessageEditOptions): Promise<Message | Message[]>;
+        sendCode(code: string, content: string | ExtendedMessageOptions | MessageEditOptions, options?: ExtendedMessageOptions | MessageEditOptions): Promise<Message | Message[]>;
+        sendEmbed(embed: RichEmbed | Object, content: string | ExtendedMessageOptions | MessageEditOptions, options?: ExtendedMessageOptions | MessageEditOptions): Promise<Message | Message[]>;
+        reply(content: string | ExtendedMessageOptions | MessageEditOptions, options?: ExtendedMessageOptions | MessageEditOptions): Promise<Message | Message[]>;
         edit(content: string | MessageEditOptions, options?: MessageEditOptions): Promise<Message>;
 
         static swapOptions(content: string | MessageOptions, options?: MessageOptions): any[];
@@ -385,7 +387,7 @@ declare module 'discord-akairo' {
         prompt?: ArgumentPromptOptions;
     };
 
-    type ArgumentPromptFunction = (this: Argument, message: Message, prevArgs: Object, amountOfTries: number) => string | string[] | MessageOptions & { content: string | string[] };
+    type ArgumentPromptFunction = (this: Argument, message: Message, prevArgs: Object, amountOfTries: number) => string | string[] | ExtendedMessageOptions;
 
     type ArgumentPromptOptions = {
         retries?: number;
