@@ -25,7 +25,7 @@ client.login('TOKEN').then(() => {
   - Reading files recursively from directories.
   - Adding, removing, and reloading modules.
   - Categorization for modules.
-  - Works with both object and class export.
+  - Working with both object and class export.
   - Almost everything is optional or modifiable.
   - Creating your own handlers and module types.
 
@@ -54,7 +54,7 @@ client.login('TOKEN').then(() => {
     - Discord-related types such as user, member, message, etc.
     - Including plural forms: users, members, etc.
     - Types that you can add yourself.
-    - Allows for asynchronous type casting.
+    - Asynchronous type casting.
   - Argument prompting.
     - Can also be based on previous arguments.
     - Customizable prompts with embeds, files, etc.
@@ -62,7 +62,7 @@ client.login('TOKEN').then(() => {
 
 #### Blocking and monitoring messages with inhibitors.
 
-  - Allows for asynchronous execution.
+  - Asynchronous execution.
   - Run at various stages of command handling.
     - On all messages.
     - On messages that are from valid users.
