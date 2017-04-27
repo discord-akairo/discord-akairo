@@ -124,13 +124,24 @@ class AkairoHandler extends EventEmitter {
         const isObj = typeof thing === 'object';
         if (!isObj && !(thing.endsWith('.js') || thing.endsWith('.json'))) return undefined;
 
-        let mod = isObj ? thing : require(thing);
+        const findExport = m => {
+            if (!m) return null;
+            if (m instanceof this.classToHandle.constructor) return m;
+            if (m instanceof this.classToHandle) return m;
+            return findExport(m.default);
+        };
+
+        let mod = isObj ? thing : findExport(require(thing));
 
         if (mod instanceof this.classToHandle.constructor) {
             mod = new mod(this.client, this); // eslint-disable-line new-cap
         }
 
-        if (!(mod instanceof this.classToHandle)) return undefined;
+        if (!(mod instanceof this.classToHandle)) {
+            if (!isObj) delete require.cache[require.resolve(thing)];
+            return undefined;
+        }
+
         if (this.modules.has(mod.id)) throw new Error(`${this.classToHandle.name} ${mod.id} already loaded.`);
 
         this._apply(mod, isObj ? null : thing);
