@@ -5,7 +5,7 @@ declare module 'discord-akairo' {
         PermissionResolvable, PermissionOverwrites, RichEmbed
     } from 'discord.js';
 
-    import EventEmitter from 'events';
+    import * as EventEmitter from 'events';
 
     module 'discord.js' {
         export interface Message {
@@ -396,11 +396,11 @@ declare module 'discord-akairo' {
         stopWord?: string;
         optional?: boolean;
         infinite?: boolean;
-        start: string | string[] | ArgumentPromptFunction;
-        retry: string | string[] | ArgumentPromptFunction;
-        timeout: string | string[] | ArgumentPromptFunction;
-        ended: string | string[] | ArgumentPromptFunction;
-        cancel: string | string[] | ArgumentPromptFunction;
+        start?: string | string[] | ArgumentPromptFunction;
+        retry?: string | string[] | ArgumentPromptFunction;
+        timeout?: string | string[] | ArgumentPromptFunction;
+        ended?: string | string[] | ArgumentPromptFunction;
+        cancel?: string | string[] | ArgumentPromptFunction;
     };
 
     type BuiltInArgumentTypes = 'string' | 'lowercase' | 'uppercase' | 'charCodes' 
