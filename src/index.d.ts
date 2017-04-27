@@ -99,11 +99,11 @@ declare module 'discord-akairo' {
         default(message: Message): any;
         cast(word: string, message: Message): Promise<any>;
 
-        _processType(word: string, message: Message, args: Object): any;
-        _promptArgument(message: Message, args: Object): Promise<any>;
+        _processType(word: string, message: Message, args: any): any;
+        _promptArgument(message: Message, args: any): Promise<any>;
     }
 
-    type CommandExecFunction = (this: Command, message: Message, args: Object, edited: boolean) => any;
+    type CommandExecFunction = (this: Command, message: Message, args: any, edited: boolean) => any;
     type RegexCommandExecFunction = (this: Command, message: Message, match: string[], groups: string[] | null, edited: boolean) => any;
     type ConditionalCommandExecFunction = (this: Command, message: Message, edited: boolean) => any;
 
@@ -130,9 +130,7 @@ declare module 'discord-akairo' {
 
         trigger(message: Message): RegExp;
         condition(message: Message): boolean;
-        exec(message: Message, args: Object, edited: boolean): any;
-        exec(message: Message, match: string[], groups: string[] | null, edited: boolean): any;
-        exec(message: Message, edited: boolean): any;
+        exec(message: Message, ...args: any[]): any;
         reload(): Command;
         remove(): Command;
         parse(content: string, message?: Message): Promise<Object>;
@@ -156,7 +154,7 @@ declare module 'discord-akairo' {
         defaultCooldown: number;
         prompts: Collection<string, Set<string>>;
         defaultPrompt: ArgumentPromptOptions;
-        
+
         prefix(message: Message): string | string[];
         allowMention(message: Message): boolean;
         findCommand(name: string): Command;
@@ -199,8 +197,7 @@ declare module 'discord-akairo' {
     export class InhibitorHandler<Inhibitor> extends AkairoHandler<Inhibitor> {
         constructor(client: AkairoClient, options: Object);
 
-        testMessage(message: Message): Promise<void>;
-        testCommand(message: Message, command: Command): Promise<void>;
+        test(type: string, message: Message, command?: Command): Promise<void>;
     }
 
     type ListenerExecFunction = (this: Listener, ...args: any[]) => any;
@@ -342,7 +339,7 @@ declare module 'discord-akairo' {
         handler: CommandHandler<Command>;
 
         type(name: BuiltInArgumentTypes | string): ArgumentTypeFunction<TypeResolver>;
-        addType(name: string, resolver: ArgumentTypeFunction<TypeResolver>);
+        addType(name: string, resolver: ArgumentTypeFunction<TypeResolver>): this;
         addTypes(types: Object): this;
     }
 
