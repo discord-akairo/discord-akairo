@@ -122,7 +122,7 @@ class AkairoHandler extends EventEmitter {
      */
     load(thing, isReload = false) {
         const isObj = typeof thing === 'object';
-        if (!isObj && !(thing.endsWith('.js') || thing.endsWith('.json'))) return undefined;
+        if (!isObj && !/\.(js|json|ts)$/.test(thing)) return undefined;
 
         const findExport = m => {
             if (!m) return null;
