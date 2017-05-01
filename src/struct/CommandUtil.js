@@ -116,6 +116,7 @@ class CommandUtil {
 
     /**
      * Sends a response or edits an old response if available.
+     * @deprecated Use CommandUtil#send
      * @param {string|MessageOptions|MessageEditOptions} content - Content to send.
      * @param {MessageOptions|MessageEditOptions} [options] - Options to use.
      * @returns {Promise<Message|Message[]>}
@@ -126,6 +127,7 @@ class CommandUtil {
 
     /**
      * Sends a response in a codeblock or edits an old response if available.
+     * @deprecated Use CommandUtil#send
      * @param {string} code - Language to use for syntax highlighting.
      * @param {string|MessageOptions|MessageEditOptions} content - Content to send.
      * @param {MessageOptions|MessageEditOptions} [options] - Options to use.
@@ -139,6 +141,7 @@ class CommandUtil {
 
     /**
      * Sends a response with an embed or edits an old response if available.
+     * @deprecated Use CommandUtil#send
      * @param {RichEmbed|Object} embed - Embed to send.
      * @param {string|MessageOptions|MessageEditOptions} content - Content to send.
      * @param {MessageOptions|MessageEditOptions} [options] - Options to use.
