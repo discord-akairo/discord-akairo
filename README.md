@@ -1,4 +1,4 @@
-<p align="center"><a href=https://github.com/1Computer1/discord-akairo><img src="https://a.safe.moe/PwUgW.png"/></a></p><p align="center"><a href=https://www.npmjs.com/package/discord-akairo><img src="https://img.shields.io/npm/v/discord-akairo.svg?maxAge=3600"/></a> <a href=https://david-dm.org/1computer1/discord-akairo><img src="https://david-dm.org/1computer1/discord-akairo.svg"/></a> <a href=https://travis-ci.org/1Computer1/discord-akairo><img src="https://travis-ci.org/1Computer1/discord-akairo.svg?branch=indev"/></a></p><p align="center"><a href=https://nodei.co/npm/discord-akairo><img src="https://nodei.co/npm/discord-akairo.png?downloads=true"/></a></p><p align="center">A modular and highly customizable bot framework for Discord.js v11.</p>
+<p align="center"><a href=https://github.com/1Computer1/discord-akairo><img src="https://a.safe.moe/PwUgW.png"/></a></p><p align="center"><a href=https://www.npmjs.com/package/discord-akairo><img src="https://img.shields.io/npm/v/discord-akairo.svg?maxAge=3600"/></a> <a href=https://david-dm.org/1computer1/discord-akairo><img src="https://david-dm.org/1computer1/discord-akairo.svg"/></a> <a href=https://travis-ci.org/1Computer1/discord-akairo><img src="https://travis-ci.org/1Computer1/discord-akairo.svg?branch=indev"/></a></p><p align="center"><a href=https://nodei.co/npm/discord-akairo><img src="https://nodei.co/npm/discord-akairo.png?downloads=true"/></a></p><p align="center">A modular and highly customizable bot framework for Discord.js v11</p>
 
 ## Example
 
@@ -89,7 +89,7 @@ client.login('TOKEN').then(() => {
 
 ## Installation
 
-Requires Node 6 or higher and Discord.js 11.0.0 or higher.  
+Requires Node 6 or higher and Discord.js 11.1.0 or higher.  
 
 *discord-akairo*  
 `npm install --save discord-akairo`
@@ -105,7 +105,7 @@ Requires Node 6 or higher and Discord.js 11.0.0 or higher.
 Repository: [https://github.com/1Computer1/discord-akairo](https://github.com/1Computer1/discord-akairo).  
 Changelog: [https://github.com/1Computer1/discord-akairo/releases](https://github.com/1Computer1/discord-akairo/releases).  
 Documentation: [https://1computer1.github.io/discord-akairo](https://1computer1.github.io/discord-akairo/).  
-Tutorials [https://1computer1.gitbooks.io/akairo-tutorials/content/](https://1computer1.gitbooks.io/akairo-tutorials/content/).  
+Tutorials: [https://1computer1.gitbooks.io/akairo-tutorials/content/](https://1computer1.gitbooks.io/akairo-tutorials/content/).  
 Discord Server: [https://discord.gg/arTauDY](https://discord.gg/arTauDY).  
 
 ## Contributing
