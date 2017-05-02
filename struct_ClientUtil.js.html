@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="CommandUtil.html">CommandUtil</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li><li><a href="tutorial-10. Customizing Types.html">10. Customizing Types</a></li><li><a href="tutorial-11. Advanced Args and Prompts.html">11. Advanced Args and Prompts</a></li><li><a href="tutorial-12. Other Things.html">12. Other Things</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="CommandUtil.html">CommandUtil</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Typedefs</h3><ul><li><a href="global.html#AkairoOptions">AkairoOptions</a></li><li><a href="global.html#AllowMentionFunction">AllowMentionFunction</a></li><li><a href="global.html#ArgumentDefaultFunction">ArgumentDefaultFunction</a></li><li><a href="global.html#ArgumentMatch">ArgumentMatch</a></li><li><a href="global.html#ArgumentMatchFunction">ArgumentMatchFunction</a></li><li><a href="global.html#ArgumentOptions">ArgumentOptions</a></li><li><a href="global.html#ArgumentPromptFunction">ArgumentPromptFunction</a></li><li><a href="global.html#ArgumentPromptOptions">ArgumentPromptOptions</a></li><li><a href="global.html#ArgumentSplit">ArgumentSplit</a></li><li><a href="global.html#ArgumentSplitFunction">ArgumentSplitFunction</a></li><li><a href="global.html#ArgumentType">ArgumentType</a></li><li><a href="global.html#ArgumentTypeFunction">ArgumentTypeFunction</a></li><li><a href="global.html#CommandExecFunction">CommandExecFunction</a></li><li><a href="global.html#CommandOptions">CommandOptions</a></li><li><a href="global.html#ConditionalCommandExecFunction">ConditionalCommandExecFunction</a></li><li><a href="global.html#ConditionFunction">ConditionFunction</a></li><li><a href="global.html#InhibitorExecFunction">InhibitorExecFunction</a></li><li><a href="global.html#InhibitorOptions">InhibitorOptions</a></li><li><a href="global.html#ListenerExecFunction">ListenerExecFunction</a></li><li><a href="global.html#ListenerOptions">ListenerOptions</a></li><li><a href="global.html#Message">Message</a></li><li><a href="global.html#MessageOptions">MessageOptions</a></li><li><a href="global.html#ModuleExecFunction">ModuleExecFunction</a></li><li><a href="global.html#ModuleOptions">ModuleOptions</a></li><li><a href="global.html#PermissionFunction">PermissionFunction</a></li><li><a href="global.html#PrefixFunction">PrefixFunction</a></li><li><a href="global.html#PromptCheckFunction">PromptCheckFunction</a></li><li><a href="global.html#RegexCommandExecFunction">RegexCommandExecFunction</a></li><li><a href="global.html#SQLiteInitFunction">SQLiteInitFunction</a></li><li><a href="global.html#SQLiteOptions">SQLiteOptions</a></li><li><a href="global.html#TriggerFunction">TriggerFunction</a></li></ul>
 </nav>
 
 <div id="main">
@@ -37,7 +37,15 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const { Collection, Constants, RichEmbed, User } = require('discord.js');
+            <pre class="prettyprint source linenums"><code>const { Collection, Permissions, RichEmbed, User } = require('discord.js');
+
+/**
+ * Function used to check if a response should pass for the prompt.
+ * @typedef {Function} PromptCheckFunction
+ * @param {Message} message - Message to check.
+ * @param {Message} [sent] - The prompt's sent message.
+ * @returns {boolean}
+ */
 
 class ClientUtil {
     /**
@@ -365,6 +373,7 @@ class ClientUtil {
 
     /**
      * Gets the role which is used to display the member's color.
+     * @deprecated Use GuildMember#colorRole
      * @param {GuildMember} member - The member to find the role.
      * @returns {Role}
      */
@@ -376,6 +385,7 @@ class ClientUtil {
 
     /**
      * Gets the display color in decimal of the member.
+     * @deprecated Use GuildMember#displayColor
      * @param {GuildMember} member - The member to find color of.
      * @returns {number}
      */
@@ -386,6 +396,7 @@ class ClientUtil {
 
     /**
      * Gets the display color in hex code of the member.
+     * @deprecated Use GuildMember#displayHexColor
      * @param {GuildMember} member - The member to find color of.
      * @returns {string}
      */
@@ -396,6 +407,7 @@ class ClientUtil {
 
     /**
      * Gets the role which is used to hoist the member.
+     * @deprecated Use GuildMember#hoistRole
      * @param {GuildMember} member - The member to find the role.
      * @returns {Role}
      */
@@ -410,7 +422,7 @@ class ClientUtil {
      * @returns {string[]}
      */
     permissionNames() {
-        return Object.keys(Constants.PermissionFlags);
+        return Object.keys(Permissions.FLAGS);
     }
 
     /**
@@ -421,8 +433,8 @@ class ClientUtil {
     resolvePermissionNumber(number) {
         const resolved = [];
 
-        for (const key of Object.keys(Constants.PermissionFlags)) {
-            if (number &amp; Constants.PermissionFlags[key]) resolved.push(key);
+        for (const key of Object.keys(Permissions.FLAGS)) {
+            if (number &amp; Permissions.FLAGS[key]) resolved.push(key);
         }
 
         return resolved;
@@ -493,7 +505,7 @@ class ClientUtil {
      * Prompts a user for input, returning the message that passes.
      * @param {Message} [message] - Message to prompt.
      * @param {string} [content] - Text to send.
-     * @param {RegExp|Function} [check] - Regex or function `(message => boolean)` to check if message should pass.
+     * @param {RegExp|PromptCheckFunction} [check] - Regex or function to check if message should pass.
      * @param {number} [time=30000] - Time in milliseconds to wait.
      * @param {MessageOptions} [options] - Message options for message.
      * @returns {Promise&lt;Message>}
@@ -539,7 +551,7 @@ class ClientUtil {
      * @param {TextBasedChannel|User} channel - Channel to prompt in or a user to prompt in DM.
      * @param {User} [user] - User to prompt, if not a user object in the channel param.
      * @param {string} [content] - Text to send.
-     * @param {RegExp|Function} [check] - Regex or function `(message => boolean)` to check if message should pass.
+     * @param {RegExp|PromptCheckFunction} [check] - Regex or function to check if message should pass.
      * @param {number} [time=30000] - Time in milliseconds to wait.
      * @param {MessageOptions} [options] - Message options for message.
      * @returns {Promise&lt;Message>}
@@ -548,18 +560,18 @@ class ClientUtil {
         if (channel instanceof User) {
             const user = channel; // eslint-disable-line no-shadow
 
-            const promise = content || options
+            const sendPromise = content || options
             ? user.send(content, options)
             : Promise.resolve();
 
-            return promise.then(msg => {
-                const dm = msg.channel || user.dmChannel;
-                if (!dm) throw new Error('A DM channel could not be found to prompt in.');
+            return sendPromise.then(msg => {
+                const dmChannel = (msg &amp;&amp; msg.channel) || user.dmChannel;
+                const channelPromise = dmChannel ? Promise.resolve(dmChannel) : user.createDM();
 
-                return this.prompt({
-                    author: channel,
+                return channelPromise.then(dm => this.prompt({
+                    author: user,
                     channel: dm
-                }, null, check, time, null);
+                }, null, check, time, null));
             });
         }
 
@@ -571,6 +583,7 @@ class ClientUtil {
 
     /**
      * Fetches a message, works for both bots and user accounts.
+     * @deprecated Use TextBasedChannel#fetchMessage
      * @param {TextBasedChannel} channel - Channel to fetch in.
      * @param {Snowflake} id - ID of the message.
      * @returns {Promise&lt;Message>}

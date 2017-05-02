@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="CommandUtil.html">CommandUtil</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li><li><a href="tutorial-10. Customizing Types.html">10. Customizing Types</a></li><li><a href="tutorial-11. Advanced Args and Prompts.html">11. Advanced Args and Prompts</a></li><li><a href="tutorial-12. Other Things.html">12. Other Things</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="CommandUtil.html">CommandUtil</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Typedefs</h3><ul><li><a href="global.html#AkairoOptions">AkairoOptions</a></li><li><a href="global.html#AllowMentionFunction">AllowMentionFunction</a></li><li><a href="global.html#ArgumentDefaultFunction">ArgumentDefaultFunction</a></li><li><a href="global.html#ArgumentMatch">ArgumentMatch</a></li><li><a href="global.html#ArgumentMatchFunction">ArgumentMatchFunction</a></li><li><a href="global.html#ArgumentOptions">ArgumentOptions</a></li><li><a href="global.html#ArgumentPromptFunction">ArgumentPromptFunction</a></li><li><a href="global.html#ArgumentPromptOptions">ArgumentPromptOptions</a></li><li><a href="global.html#ArgumentSplit">ArgumentSplit</a></li><li><a href="global.html#ArgumentSplitFunction">ArgumentSplitFunction</a></li><li><a href="global.html#ArgumentType">ArgumentType</a></li><li><a href="global.html#ArgumentTypeFunction">ArgumentTypeFunction</a></li><li><a href="global.html#CommandExecFunction">CommandExecFunction</a></li><li><a href="global.html#CommandOptions">CommandOptions</a></li><li><a href="global.html#ConditionalCommandExecFunction">ConditionalCommandExecFunction</a></li><li><a href="global.html#ConditionFunction">ConditionFunction</a></li><li><a href="global.html#InhibitorExecFunction">InhibitorExecFunction</a></li><li><a href="global.html#InhibitorOptions">InhibitorOptions</a></li><li><a href="global.html#ListenerExecFunction">ListenerExecFunction</a></li><li><a href="global.html#ListenerOptions">ListenerOptions</a></li><li><a href="global.html#Message">Message</a></li><li><a href="global.html#MessageOptions">MessageOptions</a></li><li><a href="global.html#ModuleExecFunction">ModuleExecFunction</a></li><li><a href="global.html#ModuleOptions">ModuleOptions</a></li><li><a href="global.html#PermissionFunction">PermissionFunction</a></li><li><a href="global.html#PrefixFunction">PrefixFunction</a></li><li><a href="global.html#PromptCheckFunction">PromptCheckFunction</a></li><li><a href="global.html#RegexCommandExecFunction">RegexCommandExecFunction</a></li><li><a href="global.html#SQLiteInitFunction">SQLiteInitFunction</a></li><li><a href="global.html#SQLiteOptions">SQLiteOptions</a></li><li><a href="global.html#TriggerFunction">TriggerFunction</a></li></ul>
 </nav>
 
 <div id="main">
@@ -199,7 +199,7 @@
             
                 
 <span class="param-type">string</span>
- || 
+|
 
 <span class="param-type">Array.&lt;string></span>
 
@@ -311,12 +311,12 @@
             
                 
 <span class="param-type">string</span>
- || 
+|
 
 <span class="param-type">Array.&lt;string></span>
- || 
+|
 
-<span class="param-type">function</span>
+<span class="param-type"><a href="global.html#PrefixFunction">PrefixFunction</a></span>
 
 
             
@@ -340,7 +340,7 @@
                 </td>
             
 
-            <td class="description last"><p>Default command prefix(es) or function <code>(message =&gt; string|string[])</code> returning prefix(es).</p></td>
+            <td class="description last"><p>Default command prefix(es).</p></td>
         </tr>
 
     
@@ -354,9 +354,9 @@
             
                 
 <span class="param-type">boolean</span>
- || 
+|
 
-<span class="param-type">function</span>
+<span class="param-type"><a href="global.html#AllowMentionFunction">AllowMentionFunction</a></span>
 
 
             
@@ -380,7 +380,7 @@
                 </td>
             
 
-            <td class="description last"><p>Whether or not to allow mentions to the client user as a prefix.<br>Can be function <code>(message =&gt; boolean)</code> that returns true or false.</p></td>
+            <td class="description last"><p>Whether or not to allow mentions to the client user as a prefix.</p></td>
         </tr>
 
     
@@ -578,7 +578,7 @@
             <td class="type">
             
                 
-<span class="param-type"><a href="global.html#PromptOptions">PromptOptions</a></span>
+<span class="param-type"><a href="global.html#ArgumentPromptOptions">ArgumentPromptOptions</a></span>
 
 
             
@@ -836,8 +836,7 @@
 
 
 
-    <h5>Type:</h5>
-    
+    <b>Type:</b> 
 <span class="param-type">Object</span>
 
 
@@ -845,6 +844,317 @@
 
 
 
+
+
+            
+                
+
+    
+
+    <h4 class="name" id="AllowMentionFunction"><span class="type-signature"></span>AllowMentionFunction<span class="signature">(message)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_AkairoClient.js.html">struct/AkairoClient.js</a>, <a href="struct_AkairoClient.js.html#line38">line 38</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>A function that returns whether mentions can be used as a prefix.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Message">Message</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Message to option for.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<b>Returns:</b>
+
+        
+
+
+    
+<span class="param-type">boolean</span>
+
+
+
+    
+
+
+            
+                
+
+    
+
+    <h4 class="name" id="ArgumentDefaultFunction"><span class="type-signature"></span>ArgumentDefaultFunction<span class="signature">(message, prevArgs)</span><span class="type-signature"> &rarr; {any}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line141">line 141</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Function get the default value of the argument.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Message">Message</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Message that triggered the command.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>prevArgs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Previous arguments.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<b>Returns:</b>
+
+        
+
+
+    
+<span class="param-type">any</span>
+
+
+
+    
 
 
             
@@ -910,13 +1220,11 @@
 <li><code>content</code> matches the entire text as it was inputted, except for the command.</li>
 <li><code>none</code> matches nothing at all and an empty string will be used for type operations.</li>
 </ul>
-<p>A function <code>((message, prevArgs) =&gt; string)</code> can also be used to return one of the above.</p>
 </div>
 
 
 
-    <h5>Type:</h5>
-    
+    <b>Type:</b> 
 <span class="param-type">string</span>
 
 
@@ -924,6 +1232,173 @@
 
 
 
+
+
+            
+                
+
+    
+
+    <h4 class="name" id="ArgumentMatchFunction"><span class="type-signature"></span>ArgumentMatchFunction<span class="signature">(message, prevArgs)</span><span class="type-signature"> &rarr; {<a href="global.html#ArgumentMatch">ArgumentMatch</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line27">line 27</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>A function returning a method to match arguments.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Message">Message</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Message that triggered the command.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>prevArgs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Previous arguments.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<b>Returns:</b>
+
+        
+
+
+    
+<span class="param-type"><a href="global.html#ArgumentMatch">ArgumentMatch</a></span>
+
+
+
+    
 
 
             
@@ -939,7 +1414,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line102">line 102</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line125">line 125</a>
     </li></ul></dd>
     
 
@@ -1046,6 +1521,9 @@
             
                 
 <span class="param-type"><a href="global.html#ArgumentMatch">ArgumentMatch</a></span>
+|
+
+<span class="param-type"><a href="global.html#ArgumentMatchFunction">ArgumentMatchFunction</a></span>
 
 
             
@@ -1083,6 +1561,9 @@
             
                 
 <span class="param-type"><a href="global.html#ArgumentType">ArgumentType</a></span>
+|
+
+<span class="param-type"><a href="global.html#ArgumentTypeFunction">ArgumentTypeFunction</a></span>
 
 
             
@@ -1120,7 +1601,7 @@
             
                 
 <span class="param-type">string</span>
- || 
+|
 
 <span class="param-type">Array.&lt;string></span>
 
@@ -1193,6 +1674,9 @@
             
                 
 <span class="param-type">any</span>
+|
+
+<span class="param-type"><a href="global.html#ArgumentDefaultFunction">ArgumentDefaultFunction</a></span>
 
 
             
@@ -1216,7 +1700,7 @@
                 </td>
             
 
-            <td class="description last"><p>Default value if text does not parse or cast correctly.<br>Can be a function <code>((message, prevArgs) =&gt; any)</code>.<br>If using a flag arg, setting the default value inverses the result.</p></td>
+            <td class="description last"><p>Default value if text does not parse or cast correctly.<br>If using a flag arg, setting the default value inverses the result.</p></td>
         </tr>
 
     
@@ -1230,7 +1714,7 @@
             
                 
 <span class="param-type">string</span>
- || 
+|
 
 <span class="param-type">Array.&lt;string></span>
 
@@ -1269,7 +1753,7 @@
             <td class="type">
             
                 
-<span class="param-type"><a href="global.html#PromptOptions">PromptOptions</a></span>
+<span class="param-type"><a href="global.html#ArgumentPromptOptions">ArgumentPromptOptions</a></span>
 
 
             
@@ -1309,8 +1793,731 @@
 
 
 
-    <h5>Type:</h5>
+    <b>Type:</b> 
+<span class="param-type">Object</span>
+
+
+
+
+
+
+
+
+            
+                
+
     
+
+    <h4 class="name" id="ArgumentPromptFunction"><span class="type-signature"></span>ArgumentPromptFunction<span class="signature">(message, prevArgs, tries)</span><span class="type-signature"> &rarr; {string|Array.&lt;string>|<a href="global.html#MessageOptions">MessageOptions</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line115">line 115</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>A function returning text for the prompt or a <code>MessageOptions</code> object.<br>The options can have an extra optional property called <code>content</code> for message content.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Message">Message</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Message that triggered the command.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>prevArgs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Previous arguments.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>tries</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The amount of tries the user has taken.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<b>Returns:</b>
+
+        
+
+
+    
+<span class="param-type">string</span>
+|
+
+<span class="param-type">Array.&lt;string></span>
+|
+
+<span class="param-type"><a href="global.html#MessageOptions">MessageOptions</a></span>
+
+
+
+    
+
+
+            
+                
+<h4 class="name" id="ArgumentPromptOptions">ArgumentPromptOptions</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line96">line 96</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>retries</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>1</code>
+                
+                </td>
+            
+
+            <td class="description last"><p>Amount of times allowed to retries.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>time</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>30000</code>
+                
+                </td>
+            
+
+            <td class="description last"><p>Time to wait for input.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cancelWord</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>'cancel'</code>
+                
+                </td>
+            
+
+            <td class="description last"><p>Word to use for cancelling the command.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>stopWord</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>'stop'</code>
+                
+                </td>
+            
+
+            <td class="description last"><p>Word to use for ending infinite prompts.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>optional</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last"><p>Prompts only when argument is provided but was not of the right type.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>infinite</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last"><p>Prompts forever until the stop word, cancel word, time limit, or retry limit.<br>Note that the retry count resets back to one on each valid entry.<br>The final evaluated argument will be an array of the inputs.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>start</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">Array.&lt;string></span>
+|
+
+<span class="param-type"><a href="global.html#ArgumentPromptFunction">ArgumentPromptFunction</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Text sent on start of prompt.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>retry</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">Array.&lt;string></span>
+|
+
+<span class="param-type"><a href="global.html#ArgumentPromptFunction">ArgumentPromptFunction</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Text sent on a retry (failure to cast type).</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>timeout</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">Array.&lt;string></span>
+|
+
+<span class="param-type"><a href="global.html#ArgumentPromptFunction">ArgumentPromptFunction</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Text sent on collector time out.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ended</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">Array.&lt;string></span>
+|
+
+<span class="param-type"><a href="global.html#ArgumentPromptFunction">ArgumentPromptFunction</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Text sent on amount of tries reaching the max.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cancel</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">Array.&lt;string></span>
+|
+
+<span class="param-type"><a href="global.html#ArgumentPromptFunction">ArgumentPromptFunction</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Text sent on cancellation of command.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<div class="description">
+    <p>A prompt to run if the user did not input the argument correctly.<br>Can only be used if there is not a default value (unless optional is true).</p>
+</div>
+
+
+
+    <b>Type:</b> 
 <span class="param-type">Object</span>
 
 
@@ -1333,7 +2540,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line36">line 36</a>
+        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line53">line 53</a>
     </li></ul></dd>
     
 
@@ -1382,15 +2589,14 @@
 <li><code>none</code> gives the entire content.</li>
 </ul>
 <p>It is recommended that you use either <code>plain</code> or <code>sticky</code> for your commands.</p>
-<p>A regex or a character can be used instead (for example, a comma) to split the message by that regex or character.<br>A function <code>((content, message) =&gt; string[])</code> can also be used, returning an array of strings.</p>
+<p>A regex or a character can be used instead (for example, a comma) to split the message by that regex or character.</p>
 </div>
 
 
 
-    <h5>Type:</h5>
-    
+    <b>Type:</b> 
 <span class="param-type">string</span>
- || 
+|
 
 <span class="param-type">RegExp</span>
 
@@ -1399,6 +2605,173 @@
 
 
 
+
+
+            
+                
+
+    
+
+    <h4 class="name" id="ArgumentSplitFunction"><span class="type-signature"></span>ArgumentSplitFunction<span class="signature">(content, message)</span><span class="type-signature"> &rarr; {Array.&lt;string>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line70">line 70</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>A function that returns the words to use for the arguments.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>content</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The message content without the prefix and command.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Message">Message</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Message that triggered the command.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<b>Returns:</b>
+
+        
+
+
+    
+<span class="param-type">Array.&lt;string></span>
+
+
+
+    
 
 
             
@@ -1414,7 +2787,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line29">line 29</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line35">line 35</a>
     </li></ul></dd>
     
 
@@ -1466,6 +2839,7 @@
 <li><code>dynamicInt</code> casts to an integer with <code>parseInt()</code> or a trimmed input if not a number.</li>
 <li><code>url</code> casts to an <code>URL</code> object.</li>
 <li><code>date</code> casts to a <code>Date</code> object.</li>
+<li><code>color</code> casts a hex code to an integer.</li>
 <li><code>commandAlias</code> tries to resolve to a command from an alias.</li>
 <li><code>command</code> matches the ID of a command.</li>
 <li><code>inhibitor</code> matches the ID of an inhibitor.</li>
@@ -1494,15 +2868,13 @@
 </ul>
 <p>An array of strings can be used to restrict input to only those strings, case insensitive.<br>The array can also contain an inner array of strings, for aliases.<br>If so, the first entry of the array will be used as the final argument.</p>
 <p>A regular expression can also be used.<br>The evaluated argument will be an object containing the <code>match</code> and <code>groups</code> if global.</p>
-<p>A function <code>((word, message, prevArgs) =&gt; any)</code> can also be used to filter or modify arguments.<br>A return value of <code>true</code> will let the word pass, a <code>null</code> or <code>undefined</code> return value will use the default value for the argument or start a prompt.<br>Any other truthy return value will be used as the evaluated argument.<br>If returning a Promise, the value resolved will be the argument, and a rejection will use the default value or start a prompt.</p>
 </div>
 
 
 
-    <h5>Type:</h5>
-    
+    <b>Type:</b> 
 <span class="param-type">string</span>
- || 
+|
 
 <span class="param-type">Array.&lt;string></span>
 
@@ -1511,6 +2883,386 @@
 
 
 
+
+
+            
+                
+
+    
+
+    <h4 class="name" id="ArgumentTypeFunction"><span class="type-signature"></span>ArgumentTypeFunction<span class="signature">(word, message, prevArgs)</span><span class="type-signature"> &rarr; {any}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line82">line 82</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>A function for processing user input to use as an argument.<br>A return value of <code>true</code> will let the word pass.<br>A <code>null</code> or <code>undefined</code> return value will use the default value for the argument or start a prompt.<br>Any other truthy return value will be used as the evaluated argument.<br>If returning a Promise, the value resolved will be the argument.<br>A rejection will use the default value or start a prompt.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>word</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The user input.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Message">Message</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Message that triggered the command.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>prevArgs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Previous arguments.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<b>Returns:</b>
+
+        
+
+
+    
+<span class="param-type">any</span>
+
+
+
+    
+
+
+            
+                
+
+    
+
+    <h4 class="name" id="CommandExecFunction"><span class="type-signature"></span>CommandExecFunction<span class="signature">(message, args, edited)</span><span class="type-signature"> &rarr; {any}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line78">line 78</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>The command's execution function.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Message">Message</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Message that triggered the command.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>args</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Evaluated arguments.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>edited</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Whether the user's message was edited.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<b>Returns:</b>
+
+        
+
+
+    
+<span class="param-type">any</span>
+
+
+
+    
 
 
             
@@ -1674,6 +3426,9 @@
             
                 
 <span class="param-type"><a href="global.html#ArgumentSplit">ArgumentSplit</a></span>
+|
+
+<span class="param-type"><a href="global.html#ArgumentSplitFunction">ArgumentSplitFunction</a></span>
 
 
             
@@ -2003,12 +3758,12 @@
             
                 
 <span class="param-type">string</span>
- || 
+|
 
 <span class="param-type">Array.&lt;string></span>
- || 
+|
 
-<span class="param-type">function</span>
+<span class="param-type"><a href="global.html#PrefixFunction">PrefixFunction</a></span>
 
 
             
@@ -2030,7 +3785,7 @@
                 </td>
             
 
-            <td class="description last"><p>A prefix to overwrite the global one for this command.<br>Can be a function <code>(message =&gt; string|string[])</code>.</p></td>
+            <td class="description last"><p>The prefix(es) to overwrite the global one for this command.</p></td>
         </tr>
 
     
@@ -2043,10 +3798,13 @@
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;PermissionResolvable></span>
- || 
+<span class="param-type">PermissionResolvable</span>
+|
 
-<span class="param-type">function</span>
+<span class="param-type">Array.&lt;PermissionResolvable></span>
+|
+
+<span class="param-type"><a href="global.html#PermissionFunction">PermissionFunction</a></span>
 
 
             
@@ -2068,7 +3826,7 @@
                 </td>
             
 
-            <td class="description last"><p>Permissions required by the user to run this command.<br>Can be either an array of permission name or a function returning <code>true or</code>false`.</p></td>
+            <td class="description last"><p>Permissions required by the user to run this command.</p></td>
         </tr>
 
     
@@ -2081,10 +3839,13 @@
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;PermissionResolvable></span>
- || 
+<span class="param-type">PermissionResolvable</span>
+|
 
-<span class="param-type">function</span>
+<span class="param-type">Array.&lt;PermissionResolvable></span>
+|
+
+<span class="param-type"><a href="global.html#PermissionFunction">PermissionFunction</a></span>
 
 
             
@@ -2106,7 +3867,7 @@
                 </td>
             
 
-            <td class="description last"><p>Permissions required by the client to run this command.<br>Can be either an array of permission name or a function returning <code>true or</code>false`.</p></td>
+            <td class="description last"><p>Permissions required by the client to run this command.</p></td>
         </tr>
 
     
@@ -2120,9 +3881,9 @@
             
                 
 <span class="param-type">RegExp</span>
- || 
+|
 
-<span class="param-type">function</span>
+<span class="param-type"><a href="global.html#TriggerFunction">TriggerFunction</a></span>
 
 
             
@@ -2144,7 +3905,7 @@
                 </td>
             
 
-            <td class="description last"><p>A regex or function <code>(message =&gt; RegExp)</code> returning regex to match in messages that are NOT commands.<br>The exec function becomes <code>((message, match, groups, edited) =&gt; any)</code>.</p></td>
+            <td class="description last"><p>A regex to match in messages that are NOT commands.<br>The exec function becomes <code>((message, match, groups, edited) =&gt; any)</code>.</p></td>
         </tr>
 
     
@@ -2157,7 +3918,7 @@
             <td class="type">
             
                 
-<span class="param-type">function</span>
+<span class="param-type"><a href="global.html#ConditionFunction">ConditionFunction</a></span>
 
 
             
@@ -2179,7 +3940,7 @@
                 </td>
             
 
-            <td class="description last"><p>A function <code>((message, edited) =&gt; {})</code> that returns true or false on messages that are NOT commands.<br>The exec function becomes <code>((message, edited) =&gt; any)</code>.</p></td>
+            <td class="description last"><p>Whether or not to run on messages that are NOT commands.<br>The exec function becomes <code>((message, edited) =&gt; any)</code>.</p></td>
         </tr>
 
     
@@ -2192,7 +3953,7 @@
             <td class="type">
             
                 
-<span class="param-type"><a href="global.html#PromptOptions">PromptOptions</a></span>
+<span class="param-type"><a href="global.html#ArgumentPromptOptions">ArgumentPromptOptions</a></span>
 
 
             
@@ -2253,7 +4014,7 @@
                 </td>
             
 
-            <td class="description last"><p>An object for custom options.<br>Accessible with <code>Command#options</code>.</p></td>
+            <td class="description last"><p>An object for custom options.</p></td>
         </tr>
 
     
@@ -2267,7 +4028,7 @@
             
                 
 <span class="param-type">string</span>
- || 
+|
 
 <span class="param-type">Array.&lt;string></span>
 
@@ -2311,8 +4072,7 @@
 
 
 
-    <h5>Type:</h5>
-    
+    <b>Type:</b> 
 <span class="param-type">Object</span>
 
 
@@ -2320,6 +4080,507 @@
 
 
 
+
+
+            
+                
+
+    
+
+    <h4 class="name" id="ConditionalCommandExecFunction"><span class="type-signature"></span>ConditionalCommandExecFunction<span class="signature">(message, edited)</span><span class="type-signature"> &rarr; {any}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line97">line 97</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>The command's execution function when triggered with a condition.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Message">Message</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Message that triggered the command.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>edited</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Whether the user's message was edited.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<b>Returns:</b>
+
+        
+
+
+    
+<span class="param-type">any</span>
+
+
+
+    
+
+
+            
+                
+
+    
+
+    <h4 class="name" id="ConditionFunction"><span class="type-signature"></span>ConditionFunction<span class="signature">(message)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line46">line 46</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>A function used to check if the command should run.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Message">Message</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Message to check.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<b>Returns:</b>
+
+        
+
+
+    
+<span class="param-type">boolean</span>
+
+
+
+    
+
+
+            
+                
+
+    
+
+    <h4 class="name" id="InhibitorExecFunction"><span class="type-signature"></span>InhibitorExecFunction<span class="signature">(message, command<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {boolean|Promise.&lt;any>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_Inhibitor.js.html">struct/Inhibitor.js</a>, <a href="struct_Inhibitor.js.html#line11">line 11</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Function to check if message should be blocked.<br>A return value of true or a rejecting Promise will block the message.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Message">Message</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Message being handled.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>command</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Command.html">Command</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Command to check.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<b>Returns:</b>
+
+        
+
+
+    
+<span class="param-type">boolean</span>
+|
+
+<span class="param-type">Promise.&lt;any></span>
+
+
+
+    
 
 
             
@@ -2524,8 +4785,7 @@
 
 
 
-    <h5>Type:</h5>
-    
+    <b>Type:</b> 
 <span class="param-type">Object</span>
 
 
@@ -2533,6 +4793,164 @@
 
 
 
+
+
+            
+                
+
+    
+
+    <h4 class="name" id="ListenerExecFunction"><span class="type-signature"></span>ListenerExecFunction<span class="signature">(&hellip;args<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {any}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_Listener.js.html">struct/Listener.js</a>, <a href="struct_Listener.js.html#line12">line 12</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Function called when event emitted.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>args</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">args</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                    &lt;repeatable><br>
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Arguments.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<b>Returns:</b>
+
+        
+
+
+    
+<span class="param-type">any</span>
+
+
+
+    
 
 
             
@@ -2622,7 +5040,7 @@
             
                 
 <span class="param-type">string</span>
- || 
+|
 
 <span class="param-type">EventEmitter</span>
 
@@ -2777,8 +5195,7 @@
 
 
 
-    <h5>Type:</h5>
-    
+    <b>Type:</b> 
 <span class="param-type">Object</span>
 
 
@@ -2801,7 +5218,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandUtil.js.html">struct/CommandUtil.js</a>, <a href="struct_CommandUtil.js.html#line1">line 1</a>
+        <a href="struct_CommandUtil.js.html">struct/CommandUtil.js</a>, <a href="struct_CommandUtil.js.html#line3">line 3</a>
     </li></ul></dd>
     
 
@@ -2908,8 +5325,7 @@
 
 
 
-    <h5>Type:</h5>
-    
+    <b>Type:</b> 
 <span class="param-type">Object</span>
 
 
@@ -3004,7 +5420,7 @@
             
                 
 <span class="param-type">string</span>
- || 
+|
 
 <span class="param-type">Array.&lt;string></span>
 
@@ -3024,7 +5440,7 @@
 
             
 
-            <td class="description last"><p>Content to send.<br>Only available when returning in a prompt function.</p></td>
+            <td class="description last"><p>Content to send.<br>Available when returning in a prompt function or in CommandUtil.</p></td>
         </tr>
 
     
@@ -3042,8 +5458,7 @@
 
 
 
-    <h5>Type:</h5>
-    
+    <b>Type:</b> 
 <span class="param-type">Object</span>
 
 
@@ -3051,6 +5466,162 @@
 
 
 
+
+
+            
+                
+
+    
+
+    <h4 class="name" id="ModuleExecFunction"><span class="type-signature"></span>ModuleExecFunction<span class="signature">(&hellip;args)</span><span class="type-signature"> &rarr; {any}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_AkairoModule.js.html">struct/AkairoModule.js</a>, <a href="struct_AkairoModule.js.html#line9">line 9</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>The module's execution function.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>args</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">any</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                    &lt;repeatable><br>
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Arguments.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<b>Returns:</b>
+
+        
+
+
+    
+<span class="param-type">any</span>
+
+
+
+    
 
 
             
@@ -3181,8 +5752,7 @@
 
 
 
-    <h5>Type:</h5>
-    
+    <b>Type:</b> 
 <span class="param-type">Object</span>
 
 
@@ -3194,8 +5764,12 @@
 
             
                 
-<h4 class="name" id="PromptOptions">PromptOptions</h4>
 
+    
+
+    <h4 class="name" id="PermissionFunction"><span class="type-signature"></span>PermissionFunction<span class="signature">(message)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
 
 
 
@@ -3205,7 +5779,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line80">line 80</a>
+        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line32">line 32</a>
     </li></ul></dd>
     
 
@@ -3242,11 +5816,317 @@
 
 
 
-    <h5 class="subsection-title">Properties:</h5>
+
+
+<div class="description">
+    <p>A function used to check if a message has permissions for the command.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Message">Message</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Message that triggered the command.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<b>Returns:</b>
+
+        
+
+
+    
+<span class="param-type">boolean</span>
+
+
 
     
 
-<table class="props">
+
+            
+                
+
+    
+
+    <h4 class="name" id="PrefixFunction"><span class="type-signature"></span>PrefixFunction<span class="signature">(message)</span><span class="type-signature"> &rarr; {string|Array.&lt;string>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_AkairoClient.js.html">struct/AkairoClient.js</a>, <a href="struct_AkairoClient.js.html#line31">line 31</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>A function that returns the prefix(es) to use.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Message">Message</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Message to get prefix for.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<b>Returns:</b>
+
+        
+
+
+    
+<span class="param-type">string</span>
+|
+
+<span class="param-type">Array.&lt;string></span>
+
+
+
+    
+
+
+            
+                
+
+    
+
+    <h4 class="name" id="PromptCheckFunction"><span class="type-signature"></span>PromptCheckFunction<span class="signature">(message, sent<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_ClientUtil.js.html">struct/ClientUtil.js</a>, <a href="struct_ClientUtil.js.html#line3">line 3</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Function used to check if a response should pass for the prompt.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
     <thead>
     <tr>
         
@@ -3260,8 +6140,6 @@
         
 
         
-        <th>Default</th>
-        
 
         <th class="last">Description</th>
     </tr>
@@ -3272,13 +6150,13 @@
 
         <tr>
             
-                <td class="name"><code>retries</code></td>
+                <td class="name"><code>message</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><a href="global.html#Message">Message</a></span>
 
 
             
@@ -3287,7 +6165,7 @@
             
                 <td class="attributes">
                 
-                    &lt;optional><br>
+
                 
 
                 
@@ -3295,27 +6173,21 @@
             
 
             
-                <td class="default">
-                
-                    <code>1</code>
-                
-                </td>
-            
 
-            <td class="description last"><p>Amount of times allowed to retries.</p></td>
+            <td class="description last"><p>Message to check.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>time</code></td>
+                <td class="name"><code>sent</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><a href="global.html#Message">Message</a></span>
 
 
             
@@ -3328,371 +6200,14 @@
                 
 
                 
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    <code>30000</code>
-                
-                </td>
-            
-
-            <td class="description last"><p>Time to wait for input.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>cancelWord</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
 
                 
                 </td>
             
 
             
-                <td class="default">
-                
-                    <code>'cancel'</code>
-                
-                </td>
-            
 
-            <td class="description last"><p>Word to use for cancelling the command.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>stopWord</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    <code>'stop'</code>
-                
-                </td>
-            
-
-            <td class="description last"><p>Word to use for ending infinite prompts.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>optional</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    <code>false</code>
-                
-                </td>
-            
-
-            <td class="description last"><p>Prompts only when argument is provided but was not of the right type.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>infinite</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    <code>false</code>
-                
-                </td>
-            
-
-            <td class="description last"><p>Prompts forever until the stop word, cancel word, time limit, or retry limit.<br>Note that the retry count resets back to one on each valid entry.<br>The final evaluated argument will be an array of the inputs.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>start</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
- || 
-
-<span class="param-type">Array.&lt;string></span>
- || 
-
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last"><p>Function called on start of prompt.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>retry</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
- || 
-
-<span class="param-type">Array.&lt;string></span>
- || 
-
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last"><p>Function called on a retry (failure to cast type).</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>timeout</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
- || 
-
-<span class="param-type">Array.&lt;string></span>
- || 
-
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last"><p>Function called on collector time out.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>ended</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
- || 
-
-<span class="param-type">Array.&lt;string></span>
- || 
-
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last"><p>Function called on amount of tries reaching the max.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>cancel</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
- || 
-
-<span class="param-type">Array.&lt;string></span>
- || 
-
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last"><p>Function called on cancellation of command.</p></td>
+            <td class="description last"><p>The prompt's sent message.</p></td>
         </tr>
 
     
@@ -3704,21 +6219,382 @@
 
 
 
+
+
+
+
+
+
+
+
+<b>Returns:</b>
+
+        
+
+
+    
+<span class="param-type">boolean</span>
+
+
+
+    
+
+
+            
+                
+
+    
+
+    <h4 class="name" id="RegexCommandExecFunction"><span class="type-signature"></span>RegexCommandExecFunction<span class="signature">(message, match, groups, edited)</span><span class="type-signature"> &rarr; {any}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line87">line 87</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
 <div class="description">
-    <p>A prompt to run if the user did not input the argument correctly.<br>Can only be used if there is not a default value (unless optional is true).<br>The functions are <code>((message, prevArgs, amountOfTries) =&gt; string|string[]|MessageOptions)</code> returning the reply.<br>The object should be equivalent to a <code>MessageOptions</code>, with an extra optional property called <code>content</code> for message content.<br>Can also be a string literal that will have a mention concatenated to the start.</p>
+    <p>The command's execution function when triggered with a regex.</p>
 </div>
 
 
 
-    <h5>Type:</h5>
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
     
-<span class="param-type">Object</span>
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Message">Message</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Message that triggered the command.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>match</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">any</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The results from <code>string.match()</code> with the regex.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>groups</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The matched groups if a global regex.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>edited</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Whether the user's message was edited.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
 
 
 
+
+
+
+
+
+
+
+
+<b>Returns:</b>
+
+        
+
+
+    
+<span class="param-type">any</span>
+
+
+
+    
+
+
+            
+                
+
+    
+
+    <h4 class="name" id="SQLiteInitFunction"><span class="type-signature"></span>SQLiteInitFunction<span class="signature">(client)</span><span class="type-signature"> &rarr; {Array.&lt;string>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_SQLiteHandler.js.html">struct/SQLiteHandler.js</a>, <a href="struct_SQLiteHandler.js.html#line18">line 18</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Function used to get IDs for database.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>client</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="AkairoClient.html">AkairoClient</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The client.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<b>Returns:</b>
+
+        
+
+
+    
+<span class="param-type">Array.&lt;string></span>
+
+
+
+    
 
 
             
@@ -3919,9 +6795,9 @@
             
                 
 <span class="param-type">Array.&lt;string></span>
- || 
+|
 
-<span class="param-type">function</span>
+<span class="param-type"><a href="global.html#SQLiteInitFunction">SQLiteInitFunction</a></span>
 
 
             
@@ -3945,7 +6821,7 @@
                 </td>
             
 
-            <td class="description last"><p>Array or function <code>(client =&gt; string[])</code> that returns an array of IDs.<br>If you want to load the database before login, use <code>SQLiteHandler#load</code>.</p></td>
+            <td class="description last"><p>IDs to use to initialize database.<br>If you want to load the database before login, use <code>SQLiteHandler#load</code>.</p></td>
         </tr>
 
     
@@ -3963,8 +6839,7 @@
 
 
 
-    <h5>Type:</h5>
-    
+    <b>Type:</b> 
 <span class="param-type">Object</span>
 
 
@@ -3972,6 +6847,150 @@
 
 
 
+
+
+            
+                
+
+    
+
+    <h4 class="name" id="TriggerFunction"><span class="type-signature"></span>TriggerFunction<span class="signature">(message)</span><span class="type-signature"> &rarr; {RegExp}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line39">line 39</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>A function used to return a regular expression.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Message">Message</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Message to get regex for.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<b>Returns:</b>
+
+        
+
+
+    
+<span class="param-type">RegExp</span>
+
+
+
+    
 
 
             

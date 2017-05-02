@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="CommandUtil.html">CommandUtil</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-1. Setting Up a Bot.html">1. Setting Up a Bot</a></li><li><a href="tutorial-2. Creating a Command.html">2. Creating a Command</a></li><li><a href="tutorial-3. Customizing Commands.html">3. Customizing Commands</a></li><li><a href="tutorial-4. Creating an Inhibitor.html">4. Creating an Inhibitor</a></li><li><a href="tutorial-5. Creating a Listener.html">5. Creating a Listener</a></li><li><a href="tutorial-6. Storing Data with SQLite.html">6. Storing Data with SQLite</a></li><li><a href="tutorial-7. Regex and Conditionals.html">7. Regex and Conditionals</a></li><li><a href="tutorial-8. Argument Prompting.html">8. Argument Prompting</a></li><li><a href="tutorial-9. Handling Edits.html">9. Handling Edits</a></li><li><a href="tutorial-10. Customizing Types.html">10. Customizing Types</a></li><li><a href="tutorial-11. Advanced Args and Prompts.html">11. Advanced Args and Prompts</a></li><li><a href="tutorial-12. Other Things.html">12. Other Things</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="CommandUtil.html">CommandUtil</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="SQLiteHandler.html">SQLiteHandler</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Typedefs</h3><ul><li><a href="global.html#AkairoOptions">AkairoOptions</a></li><li><a href="global.html#AllowMentionFunction">AllowMentionFunction</a></li><li><a href="global.html#ArgumentDefaultFunction">ArgumentDefaultFunction</a></li><li><a href="global.html#ArgumentMatch">ArgumentMatch</a></li><li><a href="global.html#ArgumentMatchFunction">ArgumentMatchFunction</a></li><li><a href="global.html#ArgumentOptions">ArgumentOptions</a></li><li><a href="global.html#ArgumentPromptFunction">ArgumentPromptFunction</a></li><li><a href="global.html#ArgumentPromptOptions">ArgumentPromptOptions</a></li><li><a href="global.html#ArgumentSplit">ArgumentSplit</a></li><li><a href="global.html#ArgumentSplitFunction">ArgumentSplitFunction</a></li><li><a href="global.html#ArgumentType">ArgumentType</a></li><li><a href="global.html#ArgumentTypeFunction">ArgumentTypeFunction</a></li><li><a href="global.html#CommandExecFunction">CommandExecFunction</a></li><li><a href="global.html#CommandOptions">CommandOptions</a></li><li><a href="global.html#ConditionalCommandExecFunction">ConditionalCommandExecFunction</a></li><li><a href="global.html#ConditionFunction">ConditionFunction</a></li><li><a href="global.html#InhibitorExecFunction">InhibitorExecFunction</a></li><li><a href="global.html#InhibitorOptions">InhibitorOptions</a></li><li><a href="global.html#ListenerExecFunction">ListenerExecFunction</a></li><li><a href="global.html#ListenerOptions">ListenerOptions</a></li><li><a href="global.html#Message">Message</a></li><li><a href="global.html#MessageOptions">MessageOptions</a></li><li><a href="global.html#ModuleExecFunction">ModuleExecFunction</a></li><li><a href="global.html#ModuleOptions">ModuleOptions</a></li><li><a href="global.html#PermissionFunction">PermissionFunction</a></li><li><a href="global.html#PrefixFunction">PrefixFunction</a></li><li><a href="global.html#PromptCheckFunction">PromptCheckFunction</a></li><li><a href="global.html#RegexCommandExecFunction">RegexCommandExecFunction</a></li><li><a href="global.html#SQLiteInitFunction">SQLiteInitFunction</a></li><li><a href="global.html#SQLiteOptions">SQLiteOptions</a></li><li><a href="global.html#TriggerFunction">TriggerFunction</a></li></ul>
 </nav>
 
 <div id="main">
@@ -46,7 +46,7 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * @typedef {Object} CommandOptions
  * @prop {string[]} [aliases=[]] - Command names.
  * @prop {ArgumentOptions[]} [args=[]] - Arguments to parse.
- * @prop {ArgumentSplit} [split='plain'] - Method to split text into words.
+ * @prop {ArgumentSplit|ArgumentSplitFunction} [split='plain'] - Method to split text into words.
  * @prop {string} [channelRestriction] - Restricts channel: 'guild' or 'dm'.
  * @prop {string} [category='default'] - Category ID for organization purposes.
  * @prop {boolean} [ownerOnly=false] - Whether or not to allow client owner(s) only.
@@ -56,20 +56,37 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * On an edited message, the exec function edited param will be true.
  * @prop {number} [cooldown] - The command cooldown in milliseconds.
  * @prop {number} [ratelimit=1] - Amount of command uses allowed until cooldown.
- * @prop {string|string[]|Function} [prefix] - A prefix to overwrite the global one for this command.
- * Can be a function `(message => string|string[])`.
- * @prop {PermissionResolvable[]|Function} [userPermissions] - Permissions required by the user to run this command.
- * Can be either an array of permission name or a function returning `true or `false`.
- * @prop {PermissionResolvable[]|Function} [clientPermissions] - Permissions required by the client to run this command.
- * Can be either an array of permission name or a function returning `true or `false`.
- * @prop {RegExp|Function} [trigger] - A regex or function `(message => RegExp)` returning regex to match in messages that are NOT commands.
+ * @prop {string|string[]|PrefixFunction} [prefix] - The prefix(es) to overwrite the global one for this command.
+ * @prop {PermissionResolvable|PermissionResolvable[]|PermissionFunction} [userPermissions] - Permissions required by the user to run this command.
+ * @prop {PermissionResolvable|PermissionResolvable[]|PermissionFunction} [clientPermissions] - Permissions required by the client to run this command.
+ * @prop {RegExp|TriggerFunction} [trigger] - A regex to match in messages that are NOT commands.
  * The exec function becomes `((message, match, groups, edited) => any)`.
- * @prop {Function} [condition] - A function `((message, edited) => {})` that returns true or false on messages that are NOT commands.
+ * @prop {ConditionFunction} [condition] - Whether or not to run on messages that are NOT commands.
  * The exec function becomes `((message, edited) => any)`.
- * @prop {PromptOptions} [defaultPrompt={}] - The default prompt options.
+ * @prop {ArgumentPromptOptions} [defaultPrompt={}] - The default prompt options.
  * @prop {Object} [options={}] - An object for custom options.
- * Accessible with `Command#options`.
  * @prop {string|string[]} [description=''] - Description of the command.
+ */
+
+/**
+ * A function used to check if a message has permissions for the command.
+ * @typedef {Function} PermissionFunction
+ * @param {Message} message - Message that triggered the command.
+ * @returns {boolean}
+ */
+
+/**
+ * A function used to return a regular expression.
+ * @typedef {Function} TriggerFunction
+ * @param {Message} message - Message to get regex for.
+ * @returns {RegExp}
+ */
+
+/**
+ * A function used to check if the command should run.
+ * @typedef {Function} ConditionFunction
+ * @param {Message} message - Message to check.
+ * @returns {boolean}
  */
 
 /**
@@ -86,8 +103,42 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * It is recommended that you use either `plain` or `sticky` for your commands.
  *
  * A regex or a character can be used instead (for example, a comma) to split the message by that regex or character.
- * A function `((content, message) => string[])` can also be used, returning an array of strings.
  * @typedef {string|RegExp} ArgumentSplit
+ */
+
+/**
+ * A function that returns the words to use for the arguments.
+ * @typedef {Function} ArgumentSplitFunction
+ * @param {string} content - The message content without the prefix and command.
+ * @param {Message} message - Message that triggered the command.
+ * @returns {string[]}
+ */
+
+/**
+ * The command's execution function.
+ * @typedef {Function} CommandExecFunction
+ * @param {Message} message - Message that triggered the command.
+ * @param {Object} args - Evaluated arguments.
+ * @param {boolean} edited - Whether the user's message was edited.
+ * @returns {any}
+ */
+
+/**
+ * The command's execution function when triggered with a regex.
+ * @typedef {Function} RegexCommandExecFunction
+ * @param {Message} message - Message that triggered the command.
+ * @param {any} match - The results from `string.match()` with the regex.
+ * @param {string[]} groups - The matched groups if a global regex.
+ * @param {boolean} edited - Whether the user's message was edited.
+ * @returns {any}
+ */
+
+/**
+ * The command's execution function when triggered with a condition.
+ * @typedef {Function} ConditionalCommandExecFunction
+ * @param {Message} message - Message that triggered the command.
+ * @param {boolean} edited - Whether the user's message was edited.
+ * @returns {any}
  */
 
 /** @extends AkairoModule */
@@ -95,7 +146,7 @@ class Command extends AkairoModule {
     /**
      * Creates a new command.
      * @param {string} id - Command ID.
-     * @param {Function} exec - Function `((message, args, edited) => any)` called when command is ran.
+     * @param {CommandExecFunction|RegexCommandExecFunction|ConditionalCommandExecFunction} exec - Function called when command is ran.
      * @param {CommandOptions} [options={}] - Options for the command.
      */
     constructor(id, exec, options) {
@@ -116,7 +167,7 @@ class Command extends AkairoModule {
          * Arguments for the command.
          * @type {Argument[]}
          */
-        this.args = (options.args || []).map(a => new Argument(this, a));
+        this.args = options.args ? options.args.map(a => new Argument(this, a)) : [];
 
         /**
          * The command split method.
@@ -168,7 +219,7 @@ class Command extends AkairoModule {
 
         /**
          * Default prompt options.
-         * @type {PromptOptions}
+         * @type {ArgumentPromptOptions}
          */
         this.defaultPrompt = options.defaultPrompt || {};
 
@@ -186,19 +237,19 @@ class Command extends AkairoModule {
 
         /**
          * Command prefix overwrite.
-         * @type {?string|string[]|Function}
+         * @type {?string|string[]|PrefixFunction}
          */
-        this.prefix = options.prefix || this.prefix;
+        this.prefix = options.prefix !== undefined ? options.prefix : this.prefix;
 
         /**
          * Permissions required to run command by the client.
-         * @type {PermissionResolvable[]|Function}
+         * @type {PermissionResolvable|PermissionResolvable[]|PermissionFunction}
          */
         this.clientPermissions = options.clientPermissions || this.clientPermissions;
 
         /**
          * Permissions required to run command by the user.
-         * @type {PermissionResolvable[]|Function}
+         * @type {PermissionResolvable|PermissionResolvable[]|PermissionFunction}
          */
         this.userPermissions = options.userPermissions || this.userPermissions;
 
@@ -208,7 +259,7 @@ class Command extends AkairoModule {
          * @param {Message} message - Message being handled.
          * @returns {RegExp}
          */
-        this.trigger = typeof options.trigger === 'function' ? options.trigger : this.trigger || (() => options.trigger);
+        this.trigger = (typeof options.trigger === 'function' ? options.trigger : this.trigger) || (() => options.trigger);
 
         /**
          * Gets the condition trigger, if specified.
@@ -228,6 +279,9 @@ class Command extends AkairoModule {
          * Executes the command.
          * @method
          * @name Command#exec
+         * @param {Message} message - Message that triggered the command.
+         * @param {Object} args - Evaluated arguments.
+         * @param {boolean} edited - Whether the user's message was edited.
          * @returns {any}
          */
 
