@@ -477,7 +477,7 @@ class ClientUtil {
         : Promise.resolve();
 
         return promise.then(sent => new Promise((resolve, reject) => {
-            const collector = message.channel.createCollector(m => {
+            const collector = message.channel.createMessageCollector(m => {
                 try {
                     if (sent && m.id === sent.id) return undefined;
                     if (m.author.id !== message.author.id) return undefined;
