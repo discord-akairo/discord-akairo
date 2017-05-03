@@ -1,10 +1,10 @@
 const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
 
 /**
- * Extra properties applied to the Discord.js message options type.
- * @typedef {Object} MessageOptions
+ * Extra properties alongside the Discord.js message options type.
+ * Available for use when returning in a prompt function or in CommandUtil.
+ * @typedef {Object} MessageOptionsExtensions
  * @prop {string|string[]} [content] - Content to send.
- * Available when returning in a prompt function or in CommandUtil.
  */
 
 /**

@@ -1,6 +1,6 @@
 /**
  * Extra properties applied to the Discord.js message object.
- * @typedef {Object} Message
+ * @typedef {Object} MessageExtensions
  * @prop {?CommandUtil} util - Utilities for command responding.
  * Available on all messages after 'all' inhibitors and built-in inhibitors (bot, client, notSelf).
  * Not all properties of the util are available, depending on the input.
