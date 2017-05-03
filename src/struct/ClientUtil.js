@@ -498,7 +498,7 @@ class ClientUtil {
                 }
             }, { time });
 
-            collector.on('message', () => collector.stop('passed'));
+            collector.on('collect', () => collector.stop('passed'));
 
             collector.on('end', (collected, reason) => {
                 if (reason !== 'passed') return reject(reason);
