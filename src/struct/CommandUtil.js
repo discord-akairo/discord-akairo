@@ -1,5 +1,3 @@
-const { Message } = require('discord.js');
-
 /**
  * Extra properties applied to the Discord.js message object.
  * @typedef {Object} Message
@@ -7,13 +5,6 @@ const { Message } = require('discord.js');
  * Available on all messages after 'all' inhibitors and built-in inhibitors (bot, client, notSelf).
  * Not all properties of the util are available, depending on the input.
  */
-
-Object.defineProperty(Message.prototype, 'util', {
-    value: null,
-    enumerable: true,
-    configurable: true,
-    writable: true
-});
 
 class CommandUtil {
     /**
