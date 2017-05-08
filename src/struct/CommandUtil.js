@@ -71,10 +71,7 @@ class CommandUtil {
      * @returns {void}
      */
     setLastResponse(message) {
-        if (message.command) {
-            if (!this.command.handler.handleEdits || !this.command.editable) return;
-        }
-
+        if (message.command && (!this.command.handler.handleEdits || !this.command.editable)) return;
         if (Array.isArray(message)) {
             this.lastResponse = message.slice(-1)[0];
         } else {
@@ -91,12 +88,12 @@ class CommandUtil {
     send(content, options) {
         [content, options] = this.constructor.swapOptions(content, options);
 
-        if (this.shouldEdit && (this.command ? this.command.editable : true) && (!options.file || this.lastResponse.attachments.size)) {
+        if (this.shouldEdit && (this.command ? this.command.editable : true) && (!(options.files || options.file) || this.lastResponse.attachments.size)) {
             return this.lastResponse.edit(content, options);
         }
 
         return this.message.channel.send(content, options).then(sent => {
-            if (options.file) return sent;
+            if (options.files || options.file) return sent;
             if (this.lastResponse && this.lastResponse.attachments.size) return sent;
 
             this.shouldEdit = true;
