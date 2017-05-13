@@ -271,13 +271,13 @@ class Command extends AkairoModule {
             [ArgumentSplits.NONE]: c => [c]
         };
 
-        const isQuoted = this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY;
-
         const words = typeof this.split === 'function'
         ? this.split(content, message) || []
         : splitFuncs[this.split]
         ? splitFuncs[this.split](content) || []
         : content.split(this.split);
+
+        const isQuoted = this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY || words.isQuoted;
 
         const prefixes = this.args.reduce((arr, arg) => {
             if (arg.match === ArgumentMatches.PREFIX || arg.match === ArgumentMatches.FLAG) {
@@ -311,7 +311,7 @@ class Command extends AkairoModule {
         const parseFuncs = {
             [ArgumentMatches.WORD]: (arg, index) => {
                 let word = noPrefixWords[arg.index != null ? arg.index : index] || '';
-                if (isQuoted) word = word.replace(/^"([\s\S]*)"\s?$/, '$1');
+                if (isQuoted && /^".+"$/.test(word.trim())) word = word.trim().slice(1, -1);
                 return arg.cast.bind(arg, word);
             },
             [ArgumentMatches.REST]: (arg, index) => {
@@ -349,7 +349,7 @@ class Command extends AkairoModule {
 
                 if (word && prefixUsed) {
                     word = word.replace(prefixUsed, '');
-                    if (isQuoted) word = word.replace(/^"([\s\S]*)"\s?$/, '$1');
+                    if (isQuoted && /^".+"$/.test(word.trim())) word = word.trim().slice(1, -1);
                 }
 
                 return arg.cast.bind(arg, word || '');
