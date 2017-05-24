@@ -87,9 +87,13 @@ class TypeResolver {
 
     [ArgumentTypes.COLOR](word) {
         if (!word) return null;
-        const color = this.client.resolver.constructor.resolveColor(word);
-        if (isNaN(color)) return null;
-        return color;
+
+        const color = parseInt(word.replace('#', ''), 16);
+        if (color < 0 || color > 0xFFFFFF || isNaN(color)) {
+            return null;
+        }
+
+        return word;
     }
 
     [ArgumentTypes.USER](word) {
@@ -247,7 +251,9 @@ class TypeResolver {
 
     [ArgumentTypes.INVITE](word) {
         if (!word) return null;
-        return this.client.resolver.resolveInviteCode(word);
+        const match = word.match(/discord(?:app\.com\/invite|\.gg)\/([\w-]{2,255})/i);
+        if (match && match[1]) return match[1];
+        return null;
     }
 
     [ArgumentTypes.MEMBER_MENTION](word, message) {
