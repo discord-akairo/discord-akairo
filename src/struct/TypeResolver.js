@@ -93,7 +93,7 @@ class TypeResolver {
             return null;
         }
 
-        return word;
+        return color;
     }
 
     [ArgumentTypes.USER](word) {
