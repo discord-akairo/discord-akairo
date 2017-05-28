@@ -90,7 +90,7 @@ class CommandUtil {
         const hadFiles = (options.file || options.files)
         || (options.embed && (options.embed.file || options.embed.files));
 
-        if (this.shouldEdit && (this.command ? this.command.editable : true) && (hadFiles || this.lastResponse.attachments.size)) {
+        if (this.shouldEdit && (this.command ? this.command.editable : true) && (hadFiles || !this.lastResponse.attachments.size)) {
             return this.lastResponse.edit(content, options);
         }
 
