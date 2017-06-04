@@ -93,9 +93,9 @@ class AkairoHandler extends EventEmitter {
                 value: this
             },
             category: {
-                value: this.client.akairoOptions.automateCategories
-                ? path.dirname(filepath).match(/\/([^/]+)$/)[1]
-                : mod.category
+                value: mod.category === 'default' && this.client.akairoOptions.automateCategories
+                  ? path.dirname(filepath).match(/\/([^/]+)$/)[1]
+                  : mod.category
             }
         });
 
