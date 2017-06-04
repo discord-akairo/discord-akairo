@@ -96,6 +96,11 @@ class AkairoHandler extends EventEmitter {
 
         this.modules.set(mod.id, mod);
 
+        if (mod.category === 'default' && this.client.akairoOptions.automateCategories) {
+            const dirs = path.dirname(filepath).split(path.sep);
+            mod.category = dirs[dirs.length - 1];
+        }
+
         if (!this.categories.has(mod.category)) this.categories.set(mod.category, new Category(mod.category));
         const category = this.categories.get(mod.category);
         mod.category = category;
