@@ -5,12 +5,17 @@ class TestCommand extends Command {
     constructor() {
         super('test2', {
             aliases: ['t2'],
-            split: 'plain',
+            split: 'sticky',
             category: 'owner',
             args: [
                 {
-                    id: 'text',
-                    match: 'text'
+                    id: 'a'
+                },
+                {
+                    id: 'b'
+                },
+                {
+                    id: 'c'
                 },
                 {
                     id: 'prefix',

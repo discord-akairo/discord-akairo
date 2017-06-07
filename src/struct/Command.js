@@ -311,7 +311,7 @@ class Command extends AkairoModule {
         const parseFuncs = {
             [ArgumentMatches.WORD]: (arg, index) => {
                 let word = noPrefixWords[arg.index != null ? arg.index : index] || '';
-                if (isQuoted && /^".+"$/.test(word.trim())) word = word.trim().slice(1, -1);
+                if (isQuoted && /^"[^]+"$/.test(word.trim())) word = word.trim().slice(1, -1);
                 return arg.cast.bind(arg, word);
             },
             [ArgumentMatches.REST]: (arg, index) => {
@@ -349,7 +349,7 @@ class Command extends AkairoModule {
 
                 if (word && prefixUsed) {
                     word = word.replace(prefixUsed, '');
-                    if (isQuoted && /^".+"$/.test(word.trim())) word = word.trim().slice(1, -1);
+                    if (isQuoted && /^"[^]+"$/.test(word.trim())) word = word.trim().slice(1, -1);
                 }
 
                 return arg.cast.bind(arg, word || '');
