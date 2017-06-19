@@ -109,6 +109,13 @@ class InhibitorHandler extends AkairoHandler {
      */
 
     /**
+     * Removes all inhibitors.
+     * @method
+     * @name InhibitorHandler#removeAll
+     * @returns {InhibitorHandler}
+     */
+
+    /**
      * Reloads an inhibitor.
      * @method
      * @name InhibitorHandler#reload

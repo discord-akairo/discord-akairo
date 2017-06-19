@@ -187,6 +187,18 @@ class AkairoHandler extends EventEmitter {
     }
 
     /**
+     * Removes all modules.
+     * @returns {AkairoHandler}
+     */
+    removeAll() {
+        for (const m of Array.from(this.modules.values())) {
+            if (m.filepath) this.remove(m.id);
+        }
+
+        return this;
+    }
+
+    /**
      * Reloads a module.
      * @param {string} id - ID of the module.
      * @returns {AkairoModule}

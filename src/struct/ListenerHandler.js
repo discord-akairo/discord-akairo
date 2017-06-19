@@ -133,6 +133,13 @@ class ListenerHandler extends AkairoHandler {
      */
 
     /**
+     * Removes all listeners.
+     * @method
+     * @name ListenerHandler#removeAll
+     * @returns {ListenerHandler}
+     */
+
+    /**
      * Reloads a listener.
      * @method
      * @name ListenerHandler#reload

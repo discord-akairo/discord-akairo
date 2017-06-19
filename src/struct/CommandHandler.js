@@ -734,6 +734,13 @@ class CommandHandler extends AkairoHandler {
      */
 
     /**
+     * Removes all commands.
+     * @method
+     * @name CommandHandler#removeAll
+     * @returns {CommandHandler}
+     */
+
+    /**
      * Reloads a command.
      * @method
      * @name CommandHandler#reload
