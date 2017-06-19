@@ -135,6 +135,11 @@ class AkairoHandler extends EventEmitter {
 
         this.modules.set(mod.id, mod);
 
+        if (mod.category === 'default' &amp;&amp; this.client.akairoOptions.automateCategories) {
+            const dirs = path.dirname(filepath).split(path.sep);
+            mod.category = dirs[dirs.length - 1];
+        }
+
         if (!this.categories.has(mod.category)) this.categories.set(mod.category, new Category(mod.category));
         const category = this.categories.get(mod.category);
         mod.category = category;
@@ -196,7 +201,7 @@ class AkairoHandler extends EventEmitter {
      */
     add(filename) {
         const files = this.constructor.readdirRecursive(this.directory);
-        const filepath = files.find(file => file.endsWith(`${filename}.js`) || file.endsWith(`${filename}.json`));
+        const filepath = files.find(file => ['js', 'json', 'ts'].some(ext => file.endsWith(`${filename}.${ext}`)));
 
         if (!filepath) throw new Error(`File ${filename} not found.`);
 
@@ -218,6 +223,18 @@ class AkairoHandler extends EventEmitter {
 
         this.emit(AkairoHandlerEvents.REMOVE, mod);
         return mod;
+    }
+
+    /**
+     * Removes all modules.
+     * @returns {AkairoHandler}
+     */
+    removeAll() {
+        for (const m of Array.from(this.modules.values())) {
+            if (m.filepath) this.remove(m.id);
+        }
+
+        return this;
     }
 
     /**

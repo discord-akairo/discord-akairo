@@ -126,14 +126,15 @@ class CommandUtil {
      */
     send(content, options) {
         [content, options] = this.constructor.swapOptions(content, options);
+        const hadFiles = (options.file || options.files)
+        || (options.embed &amp;&amp; (options.embed.file || options.embed.files));
 
-        if (this.shouldEdit &amp;&amp; (this.command ? this.command.editable : true) &amp;&amp; (!(options.files || options.file) || this.lastResponse.attachments.size)) {
+        if (this.shouldEdit &amp;&amp; (this.command ? this.command.editable : true) &amp;&amp; (hadFiles || !this.lastResponse.attachments.size)) {
             return this.lastResponse.edit(content, options);
         }
 
         return this.message.channel.send(content, options).then(sent => {
-            if (options.files || options.file) return sent;
-            if (this.lastResponse &amp;&amp; this.lastResponse.attachments.size) return sent;
+            if (hadFiles || (this.lastResponse &amp;&amp; this.lastResponse.attachments.size)) return sent;
 
             this.shouldEdit = true;
             this.setLastResponse(sent);
