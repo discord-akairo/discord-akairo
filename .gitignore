@@ -1,6 +1,5 @@
 node_modules
 .git
-.gitattributes
 .vscode
 package-lock.json
 test/auth.json
