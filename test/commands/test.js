@@ -15,7 +15,7 @@ module.exports = new Command('test', exec, {
             },
             prompt: {
                 infinite: true,
-                retries: 2
+                limit: 5
             }
         },
         {

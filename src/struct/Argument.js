@@ -105,6 +105,7 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  * @prop {boolean} [infinite=false] - Prompts forever until the stop word, cancel word, time limit, or retry limit.
  * Note that the retry count resets back to one on each valid entry.
  * The final evaluated argument will be an array of the inputs.
+ * @prop {number} [limit=Infinite] - Amount of inputs allowed for an infinite prompt before finishing.
  * @prop {string|string[]|ArgumentPromptFunction} [start] - Text sent on start of prompt.
  * @prop {string|string[]|ArgumentPromptFunction} [retry] - Text sent on a retry (failure to cast type).
  * @prop {string|string[]|ArgumentPromptFunction} [timeout] - Text sent on collector time out.
@@ -374,7 +375,11 @@ class Argument {
 
                 return res;
             }, prompt.time, opts).then(() => {
-                if (prompt.infinite && !stopped) return retry(1);
+                const limit = prompt.limit == null ? Infinity : prompt.limit;
+                if (prompt.infinite && !stopped && value.length < limit) {
+                    return retry(1);
+                }
+
                 if (this.handler.commandUtil) message.util.shouldEdit = false;
                 return value;
             }).catch(reason => {
