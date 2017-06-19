@@ -46,6 +46,7 @@ declare module 'discord-akairo' {
         load(thing: string | T, isReload?: boolean): T;
         add(filename: string): T;
         remove(id: string): T;
+        removeAll(): this;
         reload(id: string): T;
         reloadAll(): this;
         findCategory(name: string): Category<string, T>;
@@ -360,6 +361,7 @@ declare module 'discord-akairo' {
         fetchMembers?: boolean;
         defaultCooldown?: number;
         defaultPrompt?: ArgumentPromptOptions;
+        automateCategory?: boolean;
         inhibitorDirectory?: string;
         blockNotSelf?: boolean;
         blockClient?: boolean;
@@ -394,6 +396,7 @@ declare module 'discord-akairo' {
         stopWord?: string;
         optional?: boolean;
         infinite?: boolean;
+        limit?: boolean;
         start?: string | string[] | ArgumentPromptFunction;
         retry?: string | string[] | ArgumentPromptFunction;
         timeout?: string | string[] | ArgumentPromptFunction;
