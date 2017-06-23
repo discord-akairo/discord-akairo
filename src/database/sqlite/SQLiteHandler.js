@@ -78,6 +78,13 @@ class SQLiteHandler extends EventEmitter {
          * @returns {string[]}
          */
         this.init = typeof options.init === 'function' ? options.init : () => options.init;
+
+        /**
+         * The Akairo client.
+         * @readonly
+         * @name SQLiteHandler#client
+         * @type {AkairoClient}
+         */
     }
 
     /**
