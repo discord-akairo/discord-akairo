@@ -11,7 +11,7 @@ module.exports = {
     InhibitorHandler: require('./struct/InhibitorHandler'),
     Listener: require('./struct/Listener'),
     ListenerHandler: require('./struct/ListenerHandler'),
-    SQLiteHandler: require('./struct/SQLiteHandler'),
+    SQLiteHandler: require('./database/sqlite/SQLiteHandler'),
     TypeResolver: require('./struct/TypeResolver'),
     Category: require('./util/Category'),
     Constants: require('./util/Constants'),

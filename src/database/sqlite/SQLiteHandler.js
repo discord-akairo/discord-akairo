@@ -1,6 +1,6 @@
 const { Collection } = require('discord.js');
 const EventEmitter = require('events');
-const { SQLiteHandlerEvents } = require('../util/Constants');
+const { SQLiteHandlerEvents } = require('../../util/Constants');
 const path = require('path');
 
 let sql;
