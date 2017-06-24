@@ -1,5 +1,13 @@
 const { Collection } = require('discord.js');
 
+/**
+ * Options to use for the SequelizeHandler.
+ * @typedef {Object} SequelizeHandlerOptions
+ * @prop {Object} [defaultConfig={}] - Default configuration.
+ * @prop {string[]|DatabaseInitFunction} [init=[]] - IDs to use to initialize database.
+ * If you want to load the database before login, use `SequelizeHandler#load`.
+ */
+
 class SequelizeHandler {
     /**
      * Wrapper around a Sequelize Model.

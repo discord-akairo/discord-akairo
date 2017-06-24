@@ -5,6 +5,9 @@ declare module 'discord-akairo' {
         PermissionResolvable, PermissionOverwrites, RichEmbed
     } from 'discord.js';
 
+    import { Database } from 'sqlite';
+    import { Model } from 'sequelize';
+
     import * as EventEmitter from 'events';
 
     module 'discord.js' {
@@ -225,7 +228,7 @@ declare module 'discord-akairo' {
     }
 
     export class Category<K, V> extends Collection<K, V> {
-        constructor(id: string, iterable: Iterable<any>);
+        constructor(id: string, iterable: any);
 
         reloadAll(): this;
         removeAll(): this;
@@ -266,7 +269,7 @@ declare module 'discord-akairo' {
         compareStreaming(oldMember: GuildMember, newMember: GuildMember): number;
         fetchMemberFrom(guild: Guild, id: string, cache?: boolean): Promise<GuildMember>
         embed(data: Object): RichEmbed;
-        collection(iterable: Iterable<any>): Collection<any, any>;
+        collection(iterable: any): Collection<any, any>;
         prompt(message: Message, content?: string, check?: RegExp | PromptCheckFunction, time?: number, options?: MessageOptions): Promise<Message>;
         promptIn(channel: TextChannel | DMChannel | GroupDMChannel | User, user?: User, content?: string, check?: RegExp | PromptCheckFunction, time?: number, options?: MessageOptions): Promise<Message>;
         fetchMessage(channel: TextChannel | DMChannel | GroupDMChannel, id: string): Promise<Message>;
@@ -304,7 +307,7 @@ declare module 'discord-akairo' {
         tableName: string;
         defaultConfig: Object;
         json: string[];
-        db: Object;
+        db: Database;
         memory: Collection<string, Object>;
         ids: string[];
         configs: Object[];
@@ -332,6 +335,25 @@ declare module 'discord-akairo' {
         on(event: 'set', listener: (this: SQLiteHandler, config: Object, memory: boolean) => void): this;
         on(event: 'save', listener: (this: SQLiteHandler, config: Object, newInsert: boolean) => void): this;
         on(event: 'saveAll', listener: (this: SQLiteHandler) => void): this;
+    }
+
+    export class SequelizeHandler {
+        constructor(model: Model<any, any>, options?: SequelizeOptions);
+
+        defaultConfig: Object;
+        model: Model<any, any>;
+        memory: Collection<string, Object>;
+        ids: string[];
+        configs: Object[];
+
+        init(client: AkairoClient): string[];
+        load(ids: string[]): Promise<string[]>;
+        reload(): Promise<void>;
+        add(id: string): Promise<Object>;
+        remove(id: string): Promise<Object>;
+        has(id: string): boolean;
+        get(id: string, keys?: string[]): Object;
+        set(id: string, key: string, value: any): Promise<Object>;
     }
 
     export class TypeResolver {
@@ -469,12 +491,17 @@ declare module 'discord-akairo' {
         category?: string;
     }
 
-    type SQLiteInitFunction = (this: SQLiteHandler, client: AkairoClient) => string[];
+    type DatabaseInitFunction<T> = (this: T, client: AkairoClient) => string[];
 
     type SQLiteOptions = {
         tableName?: string;
         defaultConfig?: Object;
         json?: string[];
-        init?: string[] | SQLiteInitFunction;
+        init?: string[] | DatabaseInitFunction<SQLiteHandler>;
+    };
+
+    type SequelizeOptions = {
+        defaultConfig?: Object;
+        init?: string[] | DatabaseInitFunction<SequelizeHandler>;
     };
 }
