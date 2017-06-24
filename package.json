@@ -20,7 +20,9 @@
   "dependencies": {},
   "peerDependencies": {
     "discord.js": "^11.1.0",
-    "sqlite": "^2.7.0"
+    "sqlite": "^2.7.0",
+    "sequelize": "^4.2.0",
+    "@types/sequelize": "^4.0.62"
   },
   "devDependencies": {
     "docdash": "^0.4.0",

@@ -1,5 +1,6 @@
-const { AkairoClient } = require('../src/index.js');
+const { AkairoClient, SequelizeHandler } = require('../src/index.js');
 const JSONHandler = require('./JSONHandler');
+const Sequelize = require('sequelize');
 
 const client = new AkairoClient({
     prefix: '.',
@@ -26,6 +27,26 @@ client.commandHandler.resolver.addType('1-10', function type(word) {
     if (num < 1 || num > 10) return null;
     return num;
 });
+
+const sequelize = new Sequelize({
+    dialect: 'sqlite',
+    storage: './test/db.sqlite'
+});
+
+const Guild = sequelize.define('guild', {
+    id: {
+        type: Sequelize.STRING,
+        primaryKey: true
+    },
+    prefix: {
+        type: Sequelize.STRING,
+        defaultValue: '.'
+    }
+});
+
+client.addDatabase('guilds', new SequelizeHandler(Guild, {
+    init: () => client.guilds.keyArray()
+}));
 
 client.login(require('./auth.json').token).then(() => {
     console.log('Ready!'); // eslint-disable-line no-console
