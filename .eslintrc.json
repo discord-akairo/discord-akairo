@@ -93,7 +93,7 @@
     "func-names": "error",
     "func-name-matching": "error",
     "func-style": ["error", "declaration", { "allowArrowFunctions": true }],
-    "indent": ["error", 4],
+    "indent": ["error", 4, { "MemberExpression": 0 }],
     "key-spacing": "error",
     "keyword-spacing": "error",
     "max-depth": "error",
