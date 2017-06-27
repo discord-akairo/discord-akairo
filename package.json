@@ -24,10 +24,10 @@
     "sequelize": "^4.2.0"
   },
   "devDependencies": {
+    "@types/sequelize": "^4.0.62",
     "docdash": "^0.4.0",
-    "jsdoc": "^3.4.3",
     "eslint": "^4.1.1",
-    "@types/sequelize": "^4.0.62"
+    "jsdoc": "^3.4.3"
   },
   "scripts": {
     "docs": "node_modules/.bin/jsdoc --configure .jsdoc.json --verbose",

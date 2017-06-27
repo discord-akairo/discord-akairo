@@ -58,7 +58,7 @@ class CommandUtil {
          */
         this.shouldEdit = false;
 
-         /**
+        /**
           * The last response sent.
           * @type {?Message}
          */
