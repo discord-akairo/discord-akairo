@@ -404,6 +404,7 @@ class Argument {
                     : `${message.author}, ${Array.isArray(response) ? response.join('\n') : response}`;
 
                     response = Array.isArray(response) ? response.join('\n') : response;
+                    if (!response) return undefined;
 
                     if (typeof response === 'object' && response.content) {
                         return (message.util || message.channel).send(response.content, response);
