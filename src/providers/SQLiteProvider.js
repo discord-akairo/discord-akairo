@@ -10,7 +10,7 @@ class SQLiteProvider extends Provider {
     }
 
     init() {
-        return this.db.all('SELECT * FROM $table', { $table: this.tableName }).then(rows => {
+        return this.db.all(`SELECT * FROM ${this.tableName}`).then(rows => {
             for (const row of rows) {
                 this.items.set(row.id, this.dataColumn ? JSON.parse(row[this.dataColumn]) : row);
             }
@@ -32,17 +32,13 @@ class SQLiteProvider extends Provider {
         this.items.set(id, data);
 
         if (this.dataColumn) {
-            return this.db.run('REPLACE INTO $table (id, $key) VALUES ($id, $value)', {
-                $table: this.tableName,
-                $key: this.dataColumn,
+            return this.db.run(`REPLACE INTO ${this.tableName} (id, ${this.dataColumn}) VALUES ($id, $value)`, {
                 $id: id,
                 $value: JSON.stringify(data)
             });
         }
 
-        return this.db.run('REPLACE INTO $table (id, $key) VALUES ($id, $value)', {
-            $table: this.tableName,
-            $key: key,
+        return this.db.run(`REPLACE INTO ${this.tableName} (id, ${key}) VALUES ($id, $value)`, {
             $id: id,
             $value: value
         });
@@ -53,17 +49,13 @@ class SQLiteProvider extends Provider {
         delete data[key];
 
         if (this.dataColumn) {
-            return this.db.run('REPLACE INTO $table (id, $key) VALUES ($id, $value)', {
-                $table: this.tableName,
-                $key: this.dataColumn,
+            return this.db.run(`REPLACE INTO ${this.tableName} (id, ${this.dataColumn}) VALUES ($id, $value)`, {
                 $id: id,
                 $value: JSON.stringify(data)
             });
         }
 
-        return this.db.run('REPLACE INTO $table (id, $key) VALUES ($id, $value)', {
-            $table: this.tableName,
-            $key: key,
+        return this.db.run(`REPLACE INTO ${this.tableName} (id, ${key}) VALUES ($id, $value)`, {
             $id: id,
             $value: null
         });
@@ -71,10 +63,7 @@ class SQLiteProvider extends Provider {
 
     clear(id) {
         this.items.delete(id);
-        return this.db.run('DELETE FROM $table WHERE id = $id', {
-            $table: this.tableName,
-            $id: id
-        });
+        return this.db.run(`DELETE FROM ${this.tableName} WHERE id = $id`, { $id: id });
     }
 }
 
