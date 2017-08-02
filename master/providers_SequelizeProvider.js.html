@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>struct/InhibitorHandler.js - Documentation</title>
+    <title>providers/SequelizeProvider.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">struct/InhibitorHandler.js</h1>
+    <h1 class="page-title">providers/SequelizeProvider.js</h1>
     
 
     
@@ -37,176 +37,122 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const AkairoHandler = require('./AkairoHandler');
-const Inhibitor = require('./Inhibitor');
+            <pre class="prettyprint source linenums"><code>const Provider = require('./Provider');
 
-/** @extends AkairoHandler */
-class InhibitorHandler extends AkairoHandler {
+/** @extends Provider */
+class SequelizeProvider extends Provider {
     /**
-     * Loads inhibitors and checks messages.
-     * @param {AkairoClient} client - The Akairo client.
-     * @param {Object} options - Options from client.
+     * Provider using the `sequelize` library.
+     * @param {Model} table - A Sequelize model.
+     * @param {string} [dataColumn] - Column for JSON data.
+     * If not provided, the provider will use all columns of the table.
+     * If provided, only one column will be used, but it will be more flexible due to being parsed as JSON.
+     * Note that the model has to specify the type of the column as JSON or JSONB.
      */
-    constructor(client, options = {}) {
-        super(client, options.inhibitorDirectory, Inhibitor);
+    constructor(table, dataColumn) {
+        super();
 
         /**
-         * Directory to inhibitors.
-         * @readonly
-         * @name InhibitorHandler#directory
-         * @type {string}
+         * Sequelize model.
+         * @type {Model}
          */
+        this.table = table;
 
         /**
-         * Inhibitors loaded, mapped by ID to Inhibitor.
-         * @name InhibitorHandler#modules
-         * @type {Collection&lt;string, Inhibitor>}
+         * Column for JSON data.
+         * @type {?string}
          */
+        this.dataColumn = dataColumn;
     }
 
     /**
-     * Tests inhibitors against the message.
-     * Rejects with the reason if blocked.
-     * @param {string} type - Type of inhibitor, 'all', 'pre', or 'post'.
-     * @param {Message} message - Message to test.
-     * @param {Command} [command] - Command to use.
-     * @returns {Promise&lt;string>}
+     * Initializes the provider.
+     * @returns {Bluebird&lt;void>}
      */
-    test(type, message, command) {
-        if (!this.modules.size) return Promise.resolve();
-
-        const inhibitors = this.modules.filter(i => i.type === type &amp;&amp; i.enabled);
-        if (!inhibitors.size) return Promise.resolve();
-
-        const promises = [];
-
-        for (const inhibitor of inhibitors.values()) {
-            const inhibited = inhibitor.exec(message, command);
-
-            if (inhibited instanceof Promise) {
-                promises.push(inhibited.catch(err => {
-                    if (err instanceof Error) throw err;
-                    return Promise.reject(inhibitor.reason);
-                }));
-
-                continue;
+    init() {
+        return this.table.findAll().then(rows => {
+            for (const row of rows) {
+                this.items.set(row.id, this.dataColumn ? row[this.dataColumn] : row);
             }
+        });
+    }
 
-            if (!inhibited) {
-                promises.push(Promise.resolve());
-                continue;
-            }
-
-            promises.push(Promise.reject(inhibitor.reason));
+    /**
+     * Gets a value.
+     * @param {string} id - ID of entry.
+     * @param {string} key - The key to get.
+     * @param {any} [defaultValue] - Default value if not found or null.
+     * @returns {any}
+     */
+    get(id, key, defaultValue) {
+        if (this.items.has(id)) {
+            const value = this.items.get(id)[key];
+            return value == null ? defaultValue : value;
         }
 
-        return Promise.all(promises);
+        return defaultValue;
     }
 
     /**
-     * Deregisters a module.
-     * @private
-     * @method
-     * @name InhibitorHandler#_unapply
-     * @param {Inhibitor} inhibitor - Module to use.
-     * @returns {void}
+     * Sets a value.
+     * @param {string} id - ID of entry.
+     * @param {string} key - The key to set.
+     * @param {any} [value] - The value.
+     * @returns {Bluebird&lt;boolean>}
      */
+    set(id, key, value) {
+        const data = this.items.get(id) || {};
+        data[key] = value;
+        this.items.set(id, data);
+
+        if (this.dataColumn) {
+            return this.table.upsert({
+                id,
+                [this.dataColumn]: data
+            });
+        }
+
+        return this.table.upsert({
+            id,
+            [key]: value
+        });
+    }
 
     /**
-     * Registers a module.
-     * @private
-     * @method
-     * @name InhibitorHandler#_apply
-     * @param {Inhibitor} inhibitor - Module to use.
-     * @param {string} [filepath] - Filepath of module.
-     * @returns {void}
+     * Deletes a value.
+     * @param {string} id - ID of entry.
+     * @param {string} key - The key to delete.
+     * @returns {Promise&lt;boolean>}
      */
+    delete(id, key) {
+        const data = this.items.get(id) || {};
+        delete data[key];
+
+        if (this.dataColumn) {
+            return this.table.upsert({
+                id,
+                [this.dataColumn]: data
+            });
+        }
+
+        return this.table.upsert({
+            id,
+            [key]: null
+        });
+    }
 
     /**
-     * Loads an inhibitor.
-     * @method
-     * @param {string|Inhibitor} thing - Module or path to module.
-     * @name InhibitorHandler#load
-     * @returns {Inhibitor}
+     * Clears an entry.
+     * @param {string} id - ID of entry.
+     * @returns {Bluebird&lt;void>}
      */
-
-    /**
-     * Adds an inhibitor.
-     * @method
-     * @name InhibitorHandler#add
-     * @param {string} filename - Filename to lookup in the directory.
-     * A .js extension is assumed.
-     * @returns {Inhibitor}
-     */
-
-    /**
-     * Removes an inhibitor.
-     * @method
-     * @name InhibitorHandler#remove
-     * @param {string} id - ID of the inhibitor.
-     * @returns {Inhibitor}
-     */
-
-    /**
-     * Removes all inhibitors.
-     * @method
-     * @name InhibitorHandler#removeAll
-     * @returns {InhibitorHandler}
-     */
-
-    /**
-     * Reloads an inhibitor.
-     * @method
-     * @name InhibitorHandler#reload
-     * @param {string} id - ID of the inhibitor.
-     * @returns {Inhibitor}
-     */
-
-    /**
-     * Reloads all inhibitors.
-     * @method
-     * @name InhibitorHandler#reloadAll
-     * @returns {InhibitorHandler}
-     */
+    clear(id) {
+        this.items.delete(id);
+        return this.table.destroy({ where: { id } });
+    }
 }
 
-module.exports = InhibitorHandler;
-
-/**
- * Emitted when an inhibitor is loaded.
- * @event InhibitorHandler#load
- * @param {Inhibitor} inhibitor - Inhibitor loaded.
- */
-
-/**
- * Emitted when an inhibitor is added.
- * @event InhibitorHandler#add
- * @param {Inhibitor} inhibitor - Inhibitor added.
- */
-
-/**
- * Emitted when an inhibitor is removed.
- * @event InhibitorHandler#remove
- * @param {Inhibitor} inhibitor - Inhibitor removed.
- */
-
-/**
- * Emitted when an inhibitor is reloaded.
- * @event InhibitorHandler#reload
- * @param {Inhibitor} inhibitor - Inhibitor reloaded.
- */
-
-/**
- * Emitted when an inhibitor is enabled.
- * @event InhibitorHandler#enable
- * @param {Inhibitor} inhibitor - Inhibitor enabled.
- */
-
-/**
- * Emitted when an inhibitor is disabled.
- * @event InhibitorHandler#disable
- * @param {Inhibitor} inhibitor - Inhibitor disabled.
- */
+module.exports = SequelizeProvider;
 </code></pre>
         </article>
     </section>
