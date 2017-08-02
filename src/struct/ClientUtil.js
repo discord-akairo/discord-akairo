@@ -1,4 +1,4 @@
-const { Collection, Permissions, RichEmbed, User } = require('discord.js');
+const { Collection, Permissions, RichEmbed, MessageEmbed, User } = require('discord.js');
 
 /**
  * Function used to check if a response should pass for the prompt.
@@ -450,7 +450,7 @@ class ClientUtil {
      * @returns {RichEmbed}
      */
     embed(data) {
-        return new RichEmbed(data);
+        return new (RichEmbed || MessageEmbed)(data);
     }
 
     /**
