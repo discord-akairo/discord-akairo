@@ -1,6 +1,6 @@
 const { Collection } = require('discord.js');
 const EventEmitter = require('events');
-const { SQLiteHandlerEvents } = require('../../util/Constants');
+const { SQLiteHandlerEvents } = require('../util/Constants');
 const path = require('path');
 
 let sql;
@@ -29,6 +29,7 @@ class SQLiteHandler extends EventEmitter {
      * Tables must have an 'id' column.
      * @param {string} filepath - Path to .sqlite file.
      * @param {SQLiteOptions} [options={}] - Options for the handler.
+     * @deprecated Use SQLiteProvider instead.
      */
     constructor(filepath, options = {}) {
         super();

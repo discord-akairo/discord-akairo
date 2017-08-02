@@ -6,7 +6,6 @@ declare module 'discord-akairo' {
     } from 'discord.js';
 
     import { Database } from 'sqlite';
-    import { Model } from 'sequelize';
 
     import * as EventEmitter from 'events';
 
@@ -337,25 +336,6 @@ declare module 'discord-akairo' {
         on(event: 'saveAll', listener: (this: SQLiteHandler) => void): this;
     }
 
-    export class SequelizeHandler {
-        constructor(model: Model<any, any>, options?: SequelizeOptions);
-
-        defaultConfig: Object;
-        model: Model<any, any>;
-        memory: Collection<string, Object>;
-        ids: string[];
-        configs: Object[];
-
-        init(client: AkairoClient): string[];
-        load(ids: string[]): Promise<string[]>;
-        reload(): Promise<void>;
-        add(id: string): Promise<Object>;
-        remove(id: string): Promise<Object>;
-        has(id: string): boolean;
-        get(id: string, keys?: string[]): Object;
-        set(id: string, key: string, value: any): Promise<Object>;
-    }
-
     export class TypeResolver {
         constructor(handler: CommandHandler<Command>);
 
@@ -498,10 +478,5 @@ declare module 'discord-akairo' {
         defaultConfig?: Object;
         json?: string[];
         init?: string[] | DatabaseInitFunction<SQLiteHandler>;
-    };
-
-    type SequelizeOptions = {
-        defaultConfig?: Object;
-        init?: string[] | DatabaseInitFunction<SequelizeHandler>;
     };
 }
