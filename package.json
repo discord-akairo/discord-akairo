@@ -21,13 +21,14 @@
   "peerDependencies": {
     "discord.js": "^11.1.0",
     "sqlite": "^2.8.0",
-    "sequelize": "^4.2.0"
+    "sequelize": "^4.4.2"
   },
   "devDependencies": {
-    "@types/sequelize": "^4.0.62",
+    "@types/node": "^8.0.19",
+    "@types/sequelize": "^4.0.67",
     "docdash": "^0.4.0",
-    "eslint": "^4.1.1",
-    "jsdoc": "^3.4.3"
+    "eslint": "^4.3.0",
+    "jsdoc": "^3.5.3"
   },
   "scripts": {
     "docs": "node_modules/.bin/jsdoc --configure .jsdoc.json --verbose",
