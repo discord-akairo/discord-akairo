@@ -515,7 +515,7 @@
 
         
             
-<h4 class="name" id="channelRestriction"><span class="type-signature"></span>channelRestriction<span class="type-signature"> :string</span></h4>
+<h4 class="name" id="channelRestriction"><span class="type-signature">(nullable) </span>channelRestriction<span class="type-signature"> :string</span></h4>
 
 
 
@@ -730,7 +730,7 @@
 
         
             
-<h4 class="name" id="cooldown"><span class="type-signature"></span>cooldown<span class="type-signature"> :number</span></h4>
+<h4 class="name" id="cooldown"><span class="type-signature">(nullable) </span>cooldown<span class="type-signature"> :number</span></h4>
 
 
 
@@ -1148,7 +1148,7 @@
 
         
             
-<h4 class="name" id="handler"><span class="type-signature">(readonly) </span>handler<span class="type-signature"> :<a href="CommandHandler.html">CommandHandler</a></span></h4>
+<h4 class="name" id="handler"><span class="type-signature">(readonly) </span>handler<span class="type-signature"> :<a href="AkairoHandler.html">AkairoHandler</a></span></h4>
 
 
 
@@ -1159,7 +1159,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line249">line 249</a>
+        <a href="struct_AkairoModule.js.html">struct/AkairoModule.js</a>, <a href="struct_AkairoModule.js.html#line66">line 66</a>
     </li></ul></dd>
     
 
@@ -1168,10 +1168,8 @@
     
 
     
-
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
         <a href="AkairoModule.html#handler">AkairoModule#handler</a>
     </li></ul></dd>
     
@@ -1197,6 +1195,8 @@
     
 
     
+
+    
 </dl>
 
 
@@ -1204,13 +1204,13 @@
 
 
 <div class="description">
-    <p>The command handler.</p>
+    <p>The handler.</p>
 </div>
 
 
 
     <b>Type:</b> 
-<span class="param-type"><a href="CommandHandler.html">CommandHandler</a></span>
+<span class="param-type"><a href="AkairoHandler.html">AkairoHandler</a></span>
 
 
 
@@ -1232,7 +1232,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line233">line 233</a>
+        <a href="struct_AkairoModule.js.html">struct/AkairoModule.js</a>, <a href="struct_AkairoModule.js.html#line33">line 33</a>
     </li></ul></dd>
     
 
@@ -1241,10 +1241,8 @@
     
 
     
-
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
         <a href="AkairoModule.html#id">AkairoModule#id</a>
     </li></ul></dd>
     
@@ -1270,6 +1268,8 @@
     
 
     
+
+    
 </dl>
 
 
@@ -1277,7 +1277,7 @@
 
 
 <div class="description">
-    <p>The ID of this command.</p>
+    <p>ID of the module.</p>
 </div>
 
 
@@ -2115,7 +2115,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line442">line 442</a>
+        <a href="struct_AkairoModule.js.html">struct/AkairoModule.js</a>, <a href="struct_AkairoModule.js.html#line97">line 97</a>
     </li></ul></dd>
     
 
@@ -2124,12 +2124,12 @@
     
 
     
-
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
         <a href="AkairoModule.html#enable">AkairoModule#enable</a>
     </li></ul></dd>
+    
+
     
 
     
@@ -2160,7 +2160,7 @@
 
 
 <div class="description">
-    <p>Enables the command.</p>
+    <p>Enables the module.</p>
 </div>
 
 
@@ -2203,7 +2203,7 @@
 
     
 
-    <h4 class="name" id="exec"><span class="type-signature"></span>exec<span class="signature">(message, args, edited)</span><span class="type-signature"> &rarr; {any}</span></h4>
+    <h4 class="name" id="exec"><span class="type-signature"></span>exec<span class="signature">(&hellip;args)</span><span class="type-signature"> &rarr; {any}</span></h4>
 
     
 
@@ -2215,7 +2215,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line239">line 239</a>
+        <a href="struct_AkairoModule.js.html">struct/AkairoModule.js</a>, <a href="struct_AkairoModule.js.html#line74">line 74</a>
     </li></ul></dd>
     
 
@@ -2224,12 +2224,12 @@
     
 
     
-
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
         <a href="AkairoModule.html#exec">AkairoModule#exec</a>
     </li></ul></dd>
+    
+
     
 
     
@@ -2260,7 +2260,7 @@
 
 
 <div class="description">
-    <p>Executes the command.</p>
+    <p>Executes the module.</p>
 </div>
 
 
@@ -2286,6 +2286,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -2298,69 +2300,33 @@
 
         <tr>
             
-                <td class="name"><code>message</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Message</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Message that triggered the command.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>args</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type">any</span>
 
 
             
             </td>
 
             
-
-            
-
-            <td class="description last"><p>Evaluated arguments.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>edited</code></td>
-            
-
-            <td class="type">
-            
+                <td class="attributes">
                 
-<span class="param-type">boolean</span>
 
+                
+
+                
+                    &lt;repeatable><br>
+                
+                </td>
+            
 
             
-            </td>
 
-            
-
-            
-
-            <td class="description last"><p>Whether the user's message was edited.</p></td>
+            <td class="description last"><p>Arguments.</p></td>
         </tr>
 
     
@@ -2585,7 +2551,7 @@
 
     
 
-    <h4 class="name" id="reload"><span class="type-signature"></span>reload<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Command.html">Command</a>}</span></h4>
+    <h4 class="name" id="reload"><span class="type-signature"></span>reload<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="AkairoModule.html">AkairoModule</a>}</span></h4>
 
     
 
@@ -2597,7 +2563,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line428">line 428</a>
+        <a href="struct_AkairoModule.js.html">struct/AkairoModule.js</a>, <a href="struct_AkairoModule.js.html#line81">line 81</a>
     </li></ul></dd>
     
 
@@ -2606,10 +2572,8 @@
     
 
     
-
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
         <a href="AkairoModule.html#reload">AkairoModule#reload</a>
     </li></ul></dd>
     
@@ -2635,6 +2599,8 @@
     
 
     
+
+    
 </dl>
 
 
@@ -2642,7 +2608,7 @@
 
 
 <div class="description">
-    <p>Reloads the command.</p>
+    <p>Reloads the module.</p>
 </div>
 
 
@@ -2673,7 +2639,7 @@
 
 
     
-<span class="param-type"><a href="Command.html">Command</a></span>
+<span class="param-type"><a href="AkairoModule.html">AkairoModule</a></span>
 
 
 
@@ -2685,7 +2651,7 @@
 
     
 
-    <h4 class="name" id="remove"><span class="type-signature"></span>remove<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Command.html">Command</a>}</span></h4>
+    <h4 class="name" id="remove"><span class="type-signature"></span>remove<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="AkairoModule.html">AkairoModule</a>}</span></h4>
 
     
 
@@ -2697,7 +2663,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line435">line 435</a>
+        <a href="struct_AkairoModule.js.html">struct/AkairoModule.js</a>, <a href="struct_AkairoModule.js.html#line89">line 89</a>
     </li></ul></dd>
     
 
@@ -2706,10 +2672,8 @@
     
 
     
-
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
         <a href="AkairoModule.html#remove">AkairoModule#remove</a>
     </li></ul></dd>
     
@@ -2735,6 +2699,8 @@
     
 
     
+
+    
 </dl>
 
 
@@ -2742,7 +2708,7 @@
 
 
 <div class="description">
-    <p>Removes the command.</p>
+    <p>Removes the module.</p>
 </div>
 
 
@@ -2773,7 +2739,7 @@
 
 
     
-<span class="param-type"><a href="Command.html">Command</a></span>
+<span class="param-type"><a href="AkairoModule.html">AkairoModule</a></span>
 
 
 
@@ -3042,7 +3008,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
