@@ -11,7 +11,7 @@ let sql;
  * @prop {string} [tablename='configs'] - Name of the table.
  * @prop {Object} [defaultConfig={}] - Default configuration.
  * @prop {string[]} [json=[]] - Array of keys to parse and stringify as JSON.
- * @prop {string[]|DatabaseInitFunction} [init=[]] - IDs to use to initialize database.
+ * @prop {string[]|SQLiteInitFunction} [init=[]] - IDs to use to initialize database.
  * If you want to load the database before login, use `SQLiteHandler#load`.
  */
 
