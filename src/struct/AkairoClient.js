@@ -69,7 +69,7 @@ class AkairoClient extends Client {
         /**
          * An empty object.
          * Useful for storing things.
-         * @deprecated
+         * @deprecated No alternatives
          * @type {Object}
          */
         this.mem = {};
@@ -82,7 +82,7 @@ class AkairoClient extends Client {
 
         /**
          * Databases added.
-         * @deprecated
+         * @deprecated Use providers
          * @type {Object}
          */
         this.databases = {};
@@ -99,7 +99,7 @@ class AkairoClient extends Client {
 
     /**
      * Adds a database that will be initialized once ready.
-     * @deprecated
+     * @deprecated Use providers
      * @param {string} name - Name of database.
      * @param {SQLiteHandler} database - The database.
      * @returns {AkairoClient}

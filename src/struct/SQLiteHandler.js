@@ -27,9 +27,9 @@ class SQLiteHandler extends EventEmitter {
     /**
      * Creates an SQLiteHandler.
      * Tables must have an 'id' column.
+     * @deprecated Use SQLiteProvider
      * @param {string} filepath - Path to .sqlite file.
      * @param {SQLiteOptions} [options={}] - Options for the handler.
-     * @deprecated Use SQLiteProvider instead.
      */
     constructor(filepath, options = {}) {
         super();
