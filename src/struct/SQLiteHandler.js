@@ -62,7 +62,7 @@ class SQLiteHandler extends EventEmitter {
 
         /**
          * The database.
-         * @type {Object}
+         * @type {Database}
          */
         this.db = null;
 
@@ -101,7 +101,7 @@ class SQLiteHandler extends EventEmitter {
      * Array of configs.
      * Note that this calls the Collection's `array()`.
      * Values from here should be desanitized.
-     * @type {string[]}
+     * @type {Object[]}
      */
     get configs() {
         return this.memory.array();

@@ -31,7 +31,7 @@ class InhibitorHandler extends AkairoHandler {
      * @param {string} type - Type of inhibitor, 'all', 'pre', or 'post'.
      * @param {Message} message - Message to test.
      * @param {Command} [command] - Command to use.
-     * @returns {Promise<string>}
+     * @returns {Promise<void[]>}
      */
     test(type, message, command) {
         if (!this.modules.size) return Promise.resolve();
@@ -89,6 +89,13 @@ class InhibitorHandler extends AkairoHandler {
      * @param {string|Inhibitor} thing - Module or path to module.
      * @name InhibitorHandler#load
      * @returns {Inhibitor}
+     */
+
+    /**
+     * Reads all inhibitors from the directory and loads them.
+     * @method
+     * @name InhibitorHandler#loadAll
+     * @returns {InhibitorHandler}
      */
 
     /**

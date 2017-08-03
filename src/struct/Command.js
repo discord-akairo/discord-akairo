@@ -138,7 +138,7 @@ class Command extends AkairoModule {
 
         /**
          * Usable only in this channel type.
-         * @type {string}
+         * @type {?string}
          */
         this.channelRestriction = options.channelRestriction;
 
@@ -168,7 +168,7 @@ class Command extends AkairoModule {
 
         /**
          * Cooldown in milliseconds.
-         * @type {number}
+         * @type {?number}
          */
         this.cooldown = options.cooldown;
 

@@ -12,8 +12,8 @@ class CommandUtil {
      * @param {AkairoClient} client - The Akairo client.
      * @param {Message} message - Message that triggered the command.
      * @param {Command} command - Command triggered.
-     * @param {string} prefix - Prefix used to trigger.
-     * @param {string} alias - Alias used to trigger.
+     * @param {string} [prefix] - Prefix used to trigger.
+     * @param {string} [alias] - Alias used to trigger.
      */
     constructor(client, message, command, prefix, alias) {
         /**

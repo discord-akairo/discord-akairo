@@ -717,6 +717,13 @@ class CommandHandler extends AkairoHandler {
      */
 
     /**
+     * Reads all commands from the directory and loads them.
+     * @method
+     * @name CommandHandler#loadAll
+     * @returns {CommandHandler}
+     */
+
+    /**
      * Adds a command.
      * @method
      * @name CommandHandler#add

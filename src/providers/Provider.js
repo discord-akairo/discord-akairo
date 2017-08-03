@@ -38,7 +38,7 @@ class Provider {
      * @abstract
      * @param {string} id - ID of entry.
      * @param {string} key - The key to set.
-     * @param {any} [value] - The value.
+     * @param {any} value - The value.
      * @returns {any}
      */
     set() {

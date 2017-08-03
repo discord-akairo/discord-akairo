@@ -116,6 +116,13 @@ class ListenerHandler extends AkairoHandler {
      */
 
     /**
+     * Reads all listeners from the directory and loads them.
+     * @method
+     * @name ListenerHandler#loadAll
+     * @returns {ListenerHandler}
+     */
+
+    /**
      * Adds a listener.
      * @method
      * @name ListenerHandler#add

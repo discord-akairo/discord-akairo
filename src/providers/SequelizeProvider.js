@@ -58,7 +58,7 @@ class SequelizeProvider extends Provider {
      * Sets a value.
      * @param {string} id - ID of entry.
      * @param {string} key - The key to set.
-     * @param {any} [value] - The value.
+     * @param {any} value - The value.
      * @returns {Bluebird<boolean>}
      */
     set(id, key, value) {

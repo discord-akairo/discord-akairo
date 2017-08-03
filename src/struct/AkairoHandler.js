@@ -66,7 +66,7 @@ class AkairoHandler extends EventEmitter {
 
     /**
      * Reads all modules from the directory and loads them.
-     * @returns {AkairoModule}
+     * @returns {AkairoHandler}
      */
     loadAll() {
         const filepaths = this.constructor.readdirRecursive(this.directory);

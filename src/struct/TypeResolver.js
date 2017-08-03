@@ -12,7 +12,7 @@ class TypeResolver {
         /**
          * The Akairo client.
          * @readonly
-         * @name ClientUtil#client
+         * @name TypeResolver#client
          * @type {AkairoClient}
          */
         Object.defineProperty(this, 'client', {

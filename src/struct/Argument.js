@@ -180,7 +180,7 @@ class Argument {
 
         /**
          * The prefix to use for flag or prefix args.
-         * @type {?string}
+         * @type {?string | string[]}
          */
         this.prefix = options.prefix;
 
@@ -198,7 +198,7 @@ class Argument {
 
         /**
          * The prompt options.
-         * @type {ArgumentPromptOptions}
+         * @type {?ArgumentPromptOptions}
          */
         this.prompt = options.prompt;
 
@@ -207,6 +207,7 @@ class Argument {
          * @method
          * @name Argument#default
          * @param {Message} message - The message that called the command.
+         * @param {Object} args - Previous arguments from command.
          * @returns {any}
          */
         this.default = typeof options.default === 'function' ? options.default : () => options.default !== undefined ? options.default : '';

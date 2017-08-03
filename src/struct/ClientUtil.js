@@ -464,7 +464,7 @@ class ClientUtil {
 
     /**
      * Prompts a user for input, returning the message that passes.
-     * @param {Message} [message] - Message to prompt.
+     * @param {Message} message - Message to prompt.
      * @param {string} [content] - Text to send.
      * @param {RegExp|PromptCheckFunction} [check] - Regex or function to check if message should pass.
      * @param {number} [time=30000] - Time in milliseconds to wait.
