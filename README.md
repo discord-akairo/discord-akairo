@@ -80,25 +80,28 @@ client.login('TOKEN').then(() => {
   - Helper methods for prompting users for input.
   - And some other useful things.
 
-#### Support for SQLite.
+#### Database providers.
 
-  - Default values for keys.
-  - In-memory caching for stored data.
-  - Sanitizing inputs and desanitizing outputs.
-  - Parsing or stringifying as JSON.
+  - Built-in support for `sqlite` and `sequelize`.
+    - Works on entire table or single JSON column.
+  - Caching data from databases.
+  - Default values.
 
 ## Installation
 
 Requires Node 6 or higher and Discord.js 11.1.0 or higher.  
 
 *discord-akairo*  
-`npm install --save discord-akairo`
+`npm install discord-akairo`
 
 *discord.js*  
-`npm install --save discord.js`
+`npm install discord.js`
 
 *sqlite (optional)*  
-`npm install --save sqlite`
+`npm install sqlite`
+
+*sequelize (optional)*  
+`npm install sequelize`
 
 ## Links
 
