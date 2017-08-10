@@ -47,6 +47,7 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  * - `color` casts a hex code to an integer.
  * - `commandAlias` tries to resolve to a command from an alias.
  * - `command` matches the ID of a command.
+ * - `commandCategory` matches the ID of a command category.
  * - `inhibitor` matches the ID of an inhibitor.
  * - `listener` matches the ID of a listener.
  *
