@@ -4,7 +4,7 @@ const Provider = require('./Provider');
 class SQLiteProvider extends Provider {
     /**
      * Provider using the `sqlite` library.
-     * @param {Database} db - SQLite database from `sqlite`.
+     * @param {Database|Promise<Database>} db - SQLite database from `sqlite`.
      * @param {string} tableName - Name of table to handle.
      * @param {string} [dataColumn] - Column for JSON data.
      * If not provided, the provider will use all columns of the table.
@@ -37,10 +37,13 @@ class SQLiteProvider extends Provider {
      * @returns {Promise<void>}
      */
     init() {
-        return this.db.all(`SELECT * FROM ${this.tableName}`).then(rows => {
-            for (const row of rows) {
-                this.items.set(row.id, this.dataColumn ? JSON.parse(row[this.dataColumn]) : row);
-            }
+        return Promise.resolve(this.db).then(db => {
+            this.db = db;
+            return this.db.all(`SELECT * FROM ${this.tableName}`).then(rows => {
+                for (const row of rows) {
+                    this.items.set(row.id, this.dataColumn ? JSON.parse(row[this.dataColumn]) : row);
+                }
+            });
         });
     }
 

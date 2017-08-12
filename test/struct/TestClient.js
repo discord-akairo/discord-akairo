@@ -11,7 +11,10 @@ class TestClient extends AkairoClient {
             allowMention: true
         });
 
-        this.settings = null;
+        this.settings = new SQLiteProvider(sqlite.open('./test/db.sqlite').then(db => {
+            return db.run('CREATE TABLE IF NOT EXISTS guilds (id TEXT NOT NULL UNIQUE, settings TEXT)')
+            .then(() => db);
+        }), 'guilds', 'settings');
     }
 
     setup() {
@@ -26,12 +29,7 @@ class TestClient extends AkairoClient {
 
     start(token) {
         this.setup();
-        return sqlite.open('./test/db.sqlite')
-        .then(db => db.run('CREATE TABLE IF NOT EXISTS guilds (id TEXT NOT NULL UNIQUE, settings TEXT)').then(() => db))
-        .then(db => {
-            this.settings = new SQLiteProvider(db, 'guilds', 'settings');
-            return this.settings.init();
-        })
+        return this.settings.init()
         .then(() => this.login(token))
         .then(() => console.log('Ready!')); // eslint-disable-line no-console
     }

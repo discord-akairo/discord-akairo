@@ -416,7 +416,7 @@ declare module 'discord-akairo' {
     }
 
     export class SQLiteProvider extends Provider {
-        public constructor(db: Database, tableName: string, dataColumn?: string);
+        public constructor(db: Database | Promise<Database>, tableName: string, dataColumn?: string);
 
         public dataColumn?: string;
         public db: Database;
