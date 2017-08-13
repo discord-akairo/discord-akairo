@@ -6,11 +6,9 @@ class SQLiteProvider extends Provider {
      * Provider using the `sqlite` library.
      * @param {Database|Promise<Database>} db - SQLite database from `sqlite`.
      * @param {string} tableName - Name of table to handle.
-     * @param {string} [dataColumn] - Column for JSON data.
-     * If not provided, the provider will use all columns of the table.
-     * If provided, only one column will be used, but it will be more flexible due to being parsed as JSON.
+     * @param {ProviderOptions} [options={}] - Options to use.
      */
-    constructor(db, tableName, dataColumn) {
+    constructor(db, tableName, options = {}) {
         super();
 
         /**
@@ -26,10 +24,16 @@ class SQLiteProvider extends Provider {
         this.tableName = tableName;
 
         /**
+         * Column for ID.
+         * @type {string}
+         */
+        this.idColumn = options.idColumn || 'id';
+
+        /**
          * Column for JSON data.
          * @type {?string}
          */
-        this.dataColumn = dataColumn;
+        this.dataColumn = options.dataColumn;
     }
 
     /**
@@ -41,7 +45,7 @@ class SQLiteProvider extends Provider {
             this.db = db;
             return this.db.all(`SELECT * FROM ${this.tableName}`).then(rows => {
                 for (const row of rows) {
-                    this.items.set(row.id, this.dataColumn ? JSON.parse(row[this.dataColumn]) : row);
+                    this.items.set(row[this.idColumn], this.dataColumn ? JSON.parse(row[this.dataColumn]) : row);
                 }
             });
         });
@@ -76,13 +80,13 @@ class SQLiteProvider extends Provider {
         this.items.set(id, data);
 
         if (this.dataColumn) {
-            return this.db.run(`REPLACE INTO ${this.tableName} (id, ${this.dataColumn}) VALUES ($id, $value)`, {
+            return this.db.run(`REPLACE INTO ${this.tableName} (${this.idColumn}, ${this.dataColumn}) VALUES ($id, $value)`, {
                 $id: id,
                 $value: JSON.stringify(data)
             });
         }
 
-        return this.db.run(`REPLACE INTO ${this.tableName} (id, ${key}) VALUES ($id, $value)`, {
+        return this.db.run(`REPLACE INTO ${this.tableName} (${this.idColumn}, ${key}) VALUES ($id, $value)`, {
             $id: id,
             $value: value
         });
@@ -99,13 +103,13 @@ class SQLiteProvider extends Provider {
         delete data[key];
 
         if (this.dataColumn) {
-            return this.db.run(`REPLACE INTO ${this.tableName} (id, ${this.dataColumn}) VALUES ($id, $value)`, {
+            return this.db.run(`REPLACE INTO ${this.tableName} (${this.idColumn}, ${this.dataColumn}) VALUES ($id, $value)`, {
                 $id: id,
                 $value: JSON.stringify(data)
             });
         }
 
-        return this.db.run(`REPLACE INTO ${this.tableName} (id, ${key}) VALUES ($id, $value)`, {
+        return this.db.run(`REPLACE INTO ${this.tableName} (${this.idColumn}, ${key}) VALUES ($id, $value)`, {
             $id: id,
             $value: null
         });
@@ -118,7 +122,7 @@ class SQLiteProvider extends Provider {
      */
     clear(id) {
         this.items.delete(id);
-        return this.db.run(`DELETE FROM ${this.tableName} WHERE id = $id`, { $id: id });
+        return this.db.run(`DELETE FROM ${this.tableName} WHERE ${this.idColumn} = $id`, { $id: id });
     }
 }
 

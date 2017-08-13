@@ -11,10 +11,10 @@ class TestClient extends AkairoClient {
             allowMention: true
         });
 
-        this.settings = new SQLiteProvider(sqlite.open('./test/db.sqlite').then(db => {
-            return db.run('CREATE TABLE IF NOT EXISTS guilds (id TEXT NOT NULL UNIQUE, settings TEXT)')
-            .then(() => db);
-        }), 'guilds', 'settings');
+        this.settings = new SQLiteProvider(sqlite.open('./test/db.sqlite')
+            .then(db => db.run('CREATE TABLE IF NOT EXISTS guilds (id TEXT NOT NULL UNIQUE, settings TEXT)')
+            .then(() => db)
+        ), 'guilds', { dataColumn: 'settings' });
     }
 
     setup() {

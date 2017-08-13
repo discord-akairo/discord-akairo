@@ -5,12 +5,9 @@ class SequelizeProvider extends Provider {
     /**
      * Provider using the `sequelize` library.
      * @param {Model} table - A Sequelize model.
-     * @param {string} [dataColumn] - Column for JSON data.
-     * If not provided, the provider will use all columns of the table.
-     * If provided, only one column will be used, but it will be more flexible due to being parsed as JSON.
-     * Note that the model has to specify the type of the column as JSON or JSONB.
+     * @param {ProviderOptions} [options={}] - Options to use. 
      */
-    constructor(table, dataColumn) {
+    constructor(table, options = {}) {
         super();
 
         /**
@@ -20,10 +17,16 @@ class SequelizeProvider extends Provider {
         this.table = table;
 
         /**
+         * Column for ID.
+         * @type {string}
+         */
+        this.idColumn = options.idColumn || 'id';
+
+        /**
          * Column for JSON data.
          * @type {?string}
          */
-        this.dataColumn = dataColumn;
+        this.dataColumn = options.dataColumn;
     }
 
     /**
@@ -33,7 +36,7 @@ class SequelizeProvider extends Provider {
     init() {
         return this.table.findAll().then(rows => {
             for (const row of rows) {
-                this.items.set(row.id, this.dataColumn ? row[this.dataColumn] : row);
+                this.items.set(row[this.idColumn], this.dataColumn ? row[this.dataColumn] : row);
             }
         });
     }
@@ -68,13 +71,13 @@ class SequelizeProvider extends Provider {
 
         if (this.dataColumn) {
             return this.table.upsert({
-                id,
+                [this.idColumn]: id,
                 [this.dataColumn]: data
             });
         }
 
         return this.table.upsert({
-            id,
+            [this.idColumn]: id,
             [key]: value
         });
     }
@@ -91,13 +94,13 @@ class SequelizeProvider extends Provider {
 
         if (this.dataColumn) {
             return this.table.upsert({
-                id,
+                [this.idColumn]: id,
                 [this.dataColumn]: data
             });
         }
 
         return this.table.upsert({
-            id,
+            [this.idColumn]: id,
             [key]: null
         });
     }
@@ -109,7 +112,7 @@ class SequelizeProvider extends Provider {
      */
     clear(id) {
         this.items.delete(id);
-        return this.table.destroy({ where: { id } });
+        return this.table.destroy({ where: { [this.idColumn]: id } });
     }
 }
 

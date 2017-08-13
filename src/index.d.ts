@@ -368,9 +368,10 @@ declare module 'discord-akairo' {
     }
 
     export class SequelizeProvider extends Provider {
-        public constructor(table: Model<any, any>, dataColumn?: string);
+        public constructor(table: Model<any, any>, options?: ProviderOptions);
 
         public dataColumn?: string;
+        public idColumn: string;
         public items: Collection<string, any>;
         public table: Model<any, any>;
 
@@ -416,10 +417,11 @@ declare module 'discord-akairo' {
     }
 
     export class SQLiteProvider extends Provider {
-        public constructor(db: Database | Promise<Database>, tableName: string, dataColumn?: string);
+        public constructor(db: Database | Promise<Database>, tableName: string, options?: ProviderOptions);
 
         public dataColumn?: string;
         public db: Database;
+        public idColumn: string;
         public items: Collection<string, any>;
         public tableName: string;
 
@@ -556,6 +558,11 @@ declare module 'discord-akairo' {
     export type PrefixFunction = (message: Message) => boolean;
 
     export type PromptCheckFunction = (message: Message, sent: Message) => boolean;
+
+    export type ProviderOptions = {
+        idColumn?: string;
+        dataColumn?: string;
+    };
 
     export type RegexCommandExecFunction = (match: string | RegExpMatchArray, groups: RegExpMatchArray[] | void, edited: boolean) => any;
 
