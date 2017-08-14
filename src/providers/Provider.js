@@ -3,8 +3,8 @@ const { Collection } = require('discord.js');
 /**
  * Options to use for providers.
  * @typedef {Object} ProviderOptions
- * @prop {?string} [idColumn='id'] - Column for the unique key, defaults to 'id'.
- * @prop {?string} [dataColumn] - Column for JSON data.
+ * @prop {string} [idColumn='id'] - Column for the unique key, defaults to 'id'.
+ * @prop {string} [dataColumn] - Column for JSON data.
  * If not provided, the provider will use all columns of the table.
  * If provided, only one column will be used, but it will be more flexible due to being parsed as JSON.
  * For Sequelize, note that the model has to specify the type of the column as JSON or JSONB.
@@ -13,6 +13,7 @@ const { Collection } = require('discord.js');
 class Provider {
     /**
      * A provider for key-value storage.
+     * Must be implemented.
      */
     constructor() {
         /**
