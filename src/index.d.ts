@@ -148,7 +148,7 @@ declare module 'discord-akairo' {
     }
 
     export class Command extends AkairoModule {
-        public constructor(id: string, exec: CommandExecFunction | RegexCommandExecFunction | ConditionalCommandExecFunction, options?: CommandOptions);
+        public constructor(id: string, exec: CommandExecFunction | RegexCommandExecFunction | ConditionalCommandExecFunction | CommandOptions, options?: CommandOptions);
 
         public aliases: string[];
         public args: Argument[];
@@ -269,7 +269,7 @@ declare module 'discord-akairo' {
     }
 
     export class Inhibitor extends AkairoModule {
-        public constructor(id: string, exec: (message: Message, command?: Command) => (boolean | Promise<any>), options?: InhibitorOptions);
+        public constructor(id: string, exec: ((message: Message, command?: Command) => boolean | Promise<any>) | InhibitorOptions, options?: InhibitorOptions);
 
         public category: Category<string, Inhibitor>;
         public readonly client: AkairoClient;
@@ -312,7 +312,7 @@ declare module 'discord-akairo' {
     }
 
     export class Listener extends AkairoModule {
-        public constructor(id: string, exec: (...args: any[]) => (any), options?: ListenerOptions);
+        public constructor(id: string, exec: ((...args: any[]) => any) | ListenerOptions, options?: ListenerOptions);
 
         public category: Category<string, Inhibitor>;
         public readonly client: AkairoClient;
