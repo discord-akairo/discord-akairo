@@ -294,6 +294,11 @@ class TypeResolver {
         return this.client.commandHandler.modules.get(word) || null;
     }
 
+    [ArgumentTypes.COMMAND_CATEGORY](word) {
+        if (!word) return null;
+        return this.client.commandHandler.categories.get(word) || null;
+    }
+
     [ArgumentTypes.INHIBITOR](word) {
         if (!word) return null;
         return this.client.inhibitorHandler.modules.get(word) || null;

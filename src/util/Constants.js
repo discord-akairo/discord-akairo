@@ -46,6 +46,7 @@ module.exports = {
         EMOJI_MENTION: 'emojiMention',
         COMMAND_ALIAS: 'commandAlias',
         COMMAND: 'command',
+        COMMAND_CATEGORY: 'commandCategory',
         INHIBITOR: 'inhibitor',
         LISTENER: 'listener'
     },
