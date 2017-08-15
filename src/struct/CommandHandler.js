@@ -401,9 +401,11 @@ class CommandHandler extends AkairoHandler {
         }
 
         if (command.clientPermissions) {
-            if (typeof command.clientPermissions === 'function' && !command.clientPermissions(message)) {
-                this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.CLIENT_PERMISSIONS);
-                return true;
+            if (typeof command.clientPermissions === 'function') {
+                if (!command.clientPermissions(message)) {
+                    this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.CLIENT_PERMISSIONS);
+                    return true;
+                }
             } else
             if (message.guild && !message.channel.permissionsFor(this.client.user).has(command.clientPermissions)) {
                 this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.CLIENT_PERMISSIONS);
@@ -412,9 +414,11 @@ class CommandHandler extends AkairoHandler {
         }
 
         if (command.userPermissions) {
-            if (typeof command.userPermissions === 'function' && !command.userPermissions(message)) {
-                this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.USER_PERMISSIONS);
-                return true;
+            if (typeof command.userPermissions === 'function') {
+                if (!command.userPermissions(message)) {
+                    this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.USER_PERMISSIONS);
+                    return true;
+                }
             } else
             if (message.guild && !message.channel.permissionsFor(message.author).has(command.userPermissions)) {
                 this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.USER_PERMISSIONS);
