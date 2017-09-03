@@ -282,7 +282,6 @@ class Argument {
 
         if (typeof this.type === 'function') {
             const res = this.type.call(this.command, word, message, args);
-            if (res === true) return word;
             if (res != null) return res;
             return null;
         }
