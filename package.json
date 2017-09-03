@@ -28,7 +28,8 @@
     "@types/sequelize": "^4.0.73",
     "docdash": "^0.4.0",
     "eslint": "^4.3.0",
-    "jsdoc": "^3.5.4"
+    "jsdoc": "^3.5.4",
+    "jsdoc-strip-async-await": "^0.1.0"
   },
   "scripts": {
     "docs": "node_modules/.bin/jsdoc --configure .jsdoc.json --verbose",

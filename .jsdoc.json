@@ -27,7 +27,7 @@
             "sort": false
         }
     },
-    "plugins": ["plugins/markdown"],
+    "plugins": ["plugins/markdown", "node_modules/jsdoc-strip-async-await"],
     "markdown": {
         "hardwrap": true
     }
