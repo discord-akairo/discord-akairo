@@ -379,7 +379,7 @@ class ClientUtil {
      * @param {boolean} cache - Whether or not to add to cache.
      * @returns {Promise<GuildMember>}
      */
-    fetchMemberFrom(guild, id, cache) {
+    fetchMemberIn(guild, id, cache) {
         return this.client.fetchUser(id, cache).then(fetched => {
             return guild.fetchMember(fetched, cache);
         });
