@@ -52,7 +52,7 @@ class CommandHandler extends AkairoHandler {
         this.blockBots = options.blockBots === undefined ? true : !!options.blockBots;
 
         /**
-         * Whether or not `fetchMember()` is used on each message author from a guild.
+         * Whether or not members are fetched on each message author from a guild.
          * @type {boolean}
          */
         this.fetchMembers = !!options.fetchMember;
@@ -263,7 +263,7 @@ class CommandHandler extends AkairoHandler {
      */
     handle(message, edited) {
         const fetch = this.fetchMembers && message.guild
-        ? message.guild.fetchMember(message.author)
+        ? message.guild.members.fetch(message.author)
         : Promise.resolve();
 
         return fetch.then(member => {

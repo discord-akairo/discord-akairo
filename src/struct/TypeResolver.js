@@ -246,7 +246,7 @@ class TypeResolver {
 
     [ArgumentTypes.MESSAGE](word, message) {
         if (!word) return null;
-        return message.channel.fetchMessage(word).catch(() => Promise.reject());
+        return message.channel.messages.fetch(word).catch(() => Promise.reject());
     }
 
     [ArgumentTypes.INVITE](word) {

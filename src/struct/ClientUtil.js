@@ -1,4 +1,4 @@
-const { Collection, Permissions, RichEmbed, MessageEmbed, User } = require('discord.js');
+const { Collection, Permissions, MessageEmbed, User } = require('discord.js');
 
 /**
  * Function used to check if a response should pass for the prompt.
@@ -380,18 +380,18 @@ class ClientUtil {
      * @returns {Promise<GuildMember>}
      */
     fetchMemberIn(guild, id, cache) {
-        return this.client.fetchUser(id, cache).then(fetched => {
-            return guild.fetchMember(fetched, cache);
+        return this.client.users.fetch(id, cache).then(fetched => {
+            return guild.members.fetch(fetched, cache);
         });
     }
 
     /**
-     * Makes a RichEmbed.
+     * Makes a MessageEmbed.
      * @param {Object} [data] - Embed data.
-     * @returns {RichEmbed}
+     * @returns {MessageEmbed}
      */
     embed(data) {
-        return new (RichEmbed || MessageEmbed)(data);
+        return new MessageEmbed(data);
     }
 
     /**
