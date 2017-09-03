@@ -2,7 +2,7 @@ declare module 'discord-akairo' {
     import {
         Client, ClientOptions, Collection, Message, MessageOptions, MessageEditOptions,
         User, GuildChannel, GuildMember, Channel, TextChannel, TextBasedChannel, DMChannel, GroupDMChannel, Role, Emoji, Guild,
-        PermissionResolvable, PermissionOverwrites, RichEmbed
+        PermissionResolvable, PermissionOverwrites, MessageEmbed
     } from 'discord.js';
 
     import { Database, Statement } from 'sqlite';
@@ -20,15 +20,12 @@ declare module 'discord-akairo' {
 
         public akairoOptions: AkairoOptions;
         public commandHandler: CommandHandler;
-        public databases: Object;
         public inhibitorHandler: InhibitorHandler;
         public listenerHandler: ListenerHandler;
-        public mem: Object;
         public ownerID: string | string[];
         public selfbot: boolean;
         public util: ClientUtil;
 
-        public addDatabase(name: string, database: SQLiteHandler): this;
         public build(): this;
         public loadAll(): void;
         public login(token: string): Promise<string>;
@@ -121,14 +118,8 @@ declare module 'discord-akairo' {
         public checkUser(text: string, user: User, caseSensitive?: boolean, wholeWord?: boolean): boolean;
         public collection<K, V>(iterable: Iterable<Array<[K, V]>>): Collection<K, V>;
         public compareStreaming(oldMember: GuildMember, newMember: GuildMember): number;
-        public displayColor(member: GuildMember): number;
-        public displayHexColor(member: GuildMember): string;
-        public displayRole(member: GuildMember): Role;
-        public embed(data?: any): RichEmbed;
-        public fetchMemberFrom(guild: Guild, id: string, cache?: boolean): Promise<GuildMember>;
-        public fetchMessage(channel: TextBasedChannel, id: string): Promise<Message>;
-        public hoistRole(member: GuildMember): Role;
-        public permissionNames(): string[];
+        public embed(data?: any): MessageEmbed;
+        public fetchMemberIn(guild: Guild, id: string, cache?: boolean): Promise<GuildMember>;
         public prompt(message: Message, content?: string, check?: RegExp | PromptCheckFunction, time?: number, options?: MessageOptions): Promise<Message>;
         public promptIn(channel: TextBasedChannel | User, user?: User, content?: string, check?: RegExp | PromptCheckFunction, time?: number, options?: MessageOptions): Promise<Message>;
         public resolveChannel(text: string, channels: Collection<any, GuildChannel>, caseSensitive?: boolean, wholeWord?: boolean): GuildChannel;
@@ -140,7 +131,6 @@ declare module 'discord-akairo' {
         public resolveMember(text: string, members: Collection<any, GuildMember>, caseSensitive?: boolean, wholeWord?: boolean): GuildMember;
         public resolveMembers(text: string, members: Collection<any, GuildMember>, caseSensitive?: boolean, wholeWord?: boolean): Collection<any, GuildMember>;
         public resolvePermissionNumber(number: number): string[];
-        public resolvePermissionOverwrite(overwrite: PermissionOverwrites): PermissionOverwrites & { allow: string[], deny: string[] };
         public resolveRole(text: string, roles: Collection<any, Role>, caseSensitive?: boolean, wholeWord?: boolean): Role;
         public resolveRoles(text: string, roles: Collection<any, Role>, caseSensitive?: boolean, wholeWord?: boolean): Collection<any, Role>;
         public resolveUser(text: string, users: Collection<any, User>, caseSensitive?: boolean, wholeWord?: boolean): User;
@@ -262,9 +252,6 @@ declare module 'discord-akairo' {
         public edit(content: string | MessageEditOptions, options?: MessageEditOptions): Promise<Message>;
         public reply(content: string | MessageEditOptions, options?: MessageEditOptions): Promise<Message | Message[]>;
         public send(content: string | MessageEditOptions, options?: MessageEditOptions): Promise<Message | Message[]>;
-        public sendCode(code: string, content: string | MessageEditOptions, options?: MessageEditOptions): Promise<Message | Message[]>;
-        public sendEmbed(embed: RichEmbed, content: string | MessageEditOptions, options?: MessageEditOptions): Promise<Message | Message[]>;
-        public sendMessage(content: string | MessageEditOptions, options?: MessageEditOptions): Promise<Message | Message[]>;
         public setLastResponse(message: Message | Message[]): void;
     }
 
