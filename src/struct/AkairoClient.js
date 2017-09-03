@@ -67,25 +67,10 @@ class AkairoClient extends Client {
         this.selfbot = !!options.selfbot;
 
         /**
-         * An empty object.
-         * Useful for storing things.
-         * @deprecated No alternatives
-         * @type {Object}
-         */
-        this.mem = {};
-
-        /**
          * Utility methods.
          * @type {ClientUtil}
          */
         this.util = new ClientUtil(this);
-
-        /**
-         * Databases added.
-         * @deprecated Use providers
-         * @type {Object}
-         */
-        this.databases = {};
 
         /**
          * Options for the framework.
@@ -95,25 +80,6 @@ class AkairoClient extends Client {
 
         this._built = false;
         this._loaded = false;
-    }
-
-    /**
-     * Adds a database that will be initialized once ready.
-     * @deprecated Use providers
-     * @param {string} name - Name of database.
-     * @param {SQLiteHandler} database - The database.
-     * @returns {AkairoClient}
-     */
-    addDatabase(name, database) {
-        this.databases[name] = database;
-        Object.defineProperty(database, 'client', {
-            value: this
-        });
-
-        if (!this.akairoOptions.emitters) this.akairoOptions.emitters = {};
-        this.akairoOptions.emitters[name] = database;
-
-        return this;
     }
 
     /**

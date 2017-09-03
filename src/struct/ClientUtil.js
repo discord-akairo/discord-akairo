@@ -333,52 +333,6 @@ class ClientUtil {
     }
 
     /**
-     * Gets the role which is used to display the member's color.
-     * @deprecated Use GuildMember#colorRole
-     * @param {GuildMember} member - The member to find the role.
-     * @returns {Role}
-     */
-    displayRole(member) {
-        const coloredRoles = member.roles.filter(role => role.color);
-        if (!coloredRoles.size) return null;
-        return coloredRoles.reduce((prev, role) => !prev || role.comparePositionTo(prev) > 0 ? role : prev);
-    }
-
-    /**
-     * Gets the display color in decimal of the member.
-     * @deprecated Use GuildMember#displayColor
-     * @param {GuildMember} member - The member to find color of.
-     * @returns {number}
-     */
-    displayColor(member) {
-        const role = this.displayRole(member);
-        return (role && role.color) || 0;
-    }
-
-    /**
-     * Gets the display color in hex code of the member.
-     * @deprecated Use GuildMember#displayHexColor
-     * @param {GuildMember} member - The member to find color of.
-     * @returns {string}
-     */
-    displayHexColor(member) {
-        const role = this.displayRole(member);
-        return (role && role.hexColor) || '#000000';
-    }
-
-    /**
-     * Gets the role which is used to hoist the member.
-     * @deprecated Use GuildMember#hoistRole
-     * @param {GuildMember} member - The member to find the role.
-     * @returns {Role}
-     */
-    hoistRole(member) {
-        const hoistedRoles = member.roles.filter(role => role.hoist);
-        if (!hoistedRoles.size) return null;
-        return hoistedRoles.reduce((prev, role) => !prev || role.comparePositionTo(prev) > 0 ? role : prev);
-    }
-
-    /**
      * Array of permission names.
      * @returns {string[]}
      */
@@ -399,20 +353,6 @@ class ClientUtil {
         }
 
         return resolved;
-    }
-
-    /**
-     * Resolves a channel permission overwrite.
-     * Returns an object with the `allow` and `deny` arrays of permission names.
-     * @deprecated Use Permissions constructor
-     * @param {PermissionOverwrites} overwrite - Permissions overwrite.
-     * @returns {Object}
-     */
-    resolvePermissionOverwrite(overwrite) {
-        const copy = Object.assign({}, overwrite);
-        copy.allow = this.resolvePermissionNumber(overwrite.allow);
-        copy.deny = this.resolvePermissionNumber(overwrite.deny);
-        return copy;
     }
 
     /**
@@ -541,23 +481,6 @@ class ClientUtil {
             channel,
             author: user
         }, content, check, time, options);
-    }
-
-    /**
-     * Fetches a message, works for both bots and user accounts.
-     * @deprecated Use TextBasedChannel#fetchMessage
-     * @param {TextBasedChannel} channel - Channel to fetch in.
-     * @param {Snowflake} id - ID of the message.
-     * @returns {Promise<Message>}
-     */
-    fetchMessage(channel, id) {
-        if (this.client.user.bot) return channel.fetchMessage(id);
-
-        return channel.fetchMessages({ around: id, limit: 1 }).then(msgs => {
-            const msg = msgs.get(id);
-            if (!msg) throw new Error('Message was not found.');
-            return msg;
-        });
     }
 }
 
