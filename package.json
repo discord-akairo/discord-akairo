@@ -19,7 +19,7 @@
   ],
   "dependencies": {},
   "peerDependencies": {
-    "discord.js": "^11.2.1",
+    "discord.js": "hydrabolt/discord.js",
     "sqlite": "^2.8.0",
     "sequelize": "^4.8.0"
   },
