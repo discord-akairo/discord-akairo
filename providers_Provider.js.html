@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>struct/Inhibitor.js - Documentation</title>
+    <title>providers/Provider.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">struct/Inhibitor.js</h1>
+    <h1 class="page-title">providers/Provider.js</h1>
     
 
     
@@ -37,106 +37,87 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const AkairoModule = require('./AkairoModule');
+            <pre class="prettyprint source linenums"><code>const { Collection } = require('discord.js');
 
 /**
- * Options to use for inhibitor execution behavior.
- * @typedef {Object} InhibitorOptions
- * @prop {string} [reason=''] - Reason emitted when command or message is blocked.
- * @prop {boolean} [type='post'] - Can be 'all' to run on all messages, 'pre' to run on messages not blocked by the built-in inhibitors, or 'post' to run on messages that are commands.
- * @prop {string} [category='default'] - Category ID for organization purposes.
+ * Options to use for providers.
+ * @typedef {Object} ProviderOptions
+ * @prop {string} [idColumn='id'] - Column for the unique key, defaults to 'id'.
+ * @prop {string} [dataColumn] - Column for JSON data.
+ * If not provided, the provider will use all columns of the table.
+ * If provided, only one column will be used, but it will be more flexible due to being parsed as JSON.
+ * For Sequelize, note that the model has to specify the type of the column as JSON or JSONB.
  */
 
-/**
- * Function to check if message should be blocked.
- * A return value of true or a rejecting Promise will block the message.
- * @typedef {Function} InhibitorExecFunction
- * @param {Message} message - Message being handled.
- * @param {Command} [command] - Command to check.
- * @returns {boolean|Promise&lt;any>}
- */
-
-/** @extends AkairoModule */
-class Inhibitor extends AkairoModule {
+class Provider {
     /**
-     * Creates a new Inhibitor.
-     * @param {string} id - Inhibitor ID.
-     * @param {InhibitorExecFunction} exec - Function called before a command is ran.
-     * @param {InhibitorOptions} [options={}] - Options for the inhibitor.
+     * A provider for key-value storage.
+     * Must be implemented.
      */
-    constructor(id, exec, options) {
-        if (!options &amp;&amp; typeof exec === 'object') {
-            options = exec;
-            exec = null;
-        }
-
-        super(id, exec, options);
-
+    constructor() {
         /**
-         * Reason emitted when command is inhibited.
-         * @type {string}
+         * Cached entries.
+         * @type {Collection&lt;string, Object>}
          */
-        this.reason = options.reason || '';
-
-        /**
-         * When the inhibitor is ran.
-         * @type {string}
-         */
-        this.type = options.type || 'post';
-
-        /**
-         * The ID of this inhibitor.
-         * @name Inhibitor#id
-         * @type {string}
-         */
-
-        /**
-         * Executes the inhibitor.
-         * @method
-         * @name Inhibitor#exec
-         * @param {Message} message - Message being handled.
-         * @param {Command} [command] - Command to check.
-         * @returns {boolean|Promise&lt;any>}
-         */
-
-        /**
-         * The inhibitor handler.
-         * @readonly
-         * @name Inhibitor#handler
-         * @type {InhibitorHandler}
-         */
+        this.items = new Collection();
     }
 
     /**
-     * Reloads the inhibitor.
-     * @method
-     * @name Inhibitor#reload
-     * @returns {Inhibitor}
+     * Initializes the provider.
+     * @abstract
+     * @returns {any}
      */
+    init() {
+        throw new TypeError(`${this.constructor.name}#init has not been implemented`);
+    }
 
     /**
-     * Removes the inhibitor.
-     * @method
-     * @name Inhibitor#remove
-     * @returns {Inhibitor}
+     * Gets a value.
+     * @abstract
+     * @param {string} id - ID of entry.
+     * @param {string} key - The key to get.
+     * @param {any} [defaultValue] - Default value if not found or null.
+     * @returns {any}
      */
+    get() {
+        throw new TypeError(`${this.constructor.name}#get has not been implemented`);
+    }
 
     /**
-     * Enables the inhibitor.
-     * @method
-     * @name Inhibitor#enable
-     * @returns {boolean}
+     * Sets a value.
+     * @abstract
+     * @param {string} id - ID of entry.
+     * @param {string} key - The key to set.
+     * @param {any} value - The value.
+     * @returns {any}
      */
+    set() {
+        throw new TypeError(`${this.constructor.name}#set has not been implemented`);
+    }
 
     /**
-     * Disables the inhibitor.
-     * @method
-     * @name Inhibitor#disable
-     * @returns {boolean}
+     * Deletes a value.
+     * @abstract
+     * @param {string} id - ID of entry.
+     * @param {string} key - The key to delete.
+     * @returns {any}
      */
+    delete() {
+        throw new TypeError(`${this.constructor.name}#delete has not been implemented`);
+    }
+
+    /**
+     * Clears an entry.
+     * @abstract
+     * @param {string} id - ID of entry.
+     * @returns {any}
+     */
+    clear() {
+        throw new TypeError(`${this.constructor.name}#clear has not been implemented`);
+    }
 }
 
-module.exports = Inhibitor;
+module.exports = Provider;
 </code></pre>
         </article>
     </section>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>struct/Inhibitor.js - Documentation</title>
+    <title>providers/SequelizeProvider.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">struct/Inhibitor.js</h1>
+    <h1 class="page-title">providers/SequelizeProvider.js</h1>
     
 
     
@@ -37,106 +37,125 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const AkairoModule = require('./AkairoModule');
+            <pre class="prettyprint source linenums"><code>const Provider = require('./Provider');
 
-/**
- * Options to use for inhibitor execution behavior.
- * @typedef {Object} InhibitorOptions
- * @prop {string} [reason=''] - Reason emitted when command or message is blocked.
- * @prop {boolean} [type='post'] - Can be 'all' to run on all messages, 'pre' to run on messages not blocked by the built-in inhibitors, or 'post' to run on messages that are commands.
- * @prop {string} [category='default'] - Category ID for organization purposes.
- */
-
-/**
- * Function to check if message should be blocked.
- * A return value of true or a rejecting Promise will block the message.
- * @typedef {Function} InhibitorExecFunction
- * @param {Message} message - Message being handled.
- * @param {Command} [command] - Command to check.
- * @returns {boolean|Promise&lt;any>}
- */
-
-/** @extends AkairoModule */
-class Inhibitor extends AkairoModule {
+/** @extends Provider */
+class SequelizeProvider extends Provider {
     /**
-     * Creates a new Inhibitor.
-     * @param {string} id - Inhibitor ID.
-     * @param {InhibitorExecFunction} exec - Function called before a command is ran.
-     * @param {InhibitorOptions} [options={}] - Options for the inhibitor.
+     * Provider using the `sequelize` library.
+     * @param {Model} table - A Sequelize model.
+     * @param {ProviderOptions} [options={}] - Options to use.
      */
-    constructor(id, exec, options) {
-        if (!options &amp;&amp; typeof exec === 'object') {
-            options = exec;
-            exec = null;
-        }
-
-        super(id, exec, options);
+    constructor(table, options = {}) {
+        super();
 
         /**
-         * Reason emitted when command is inhibited.
+         * Sequelize model.
+         * @type {Model}
+         */
+        this.table = table;
+
+        /**
+         * Column for ID.
          * @type {string}
          */
-        this.reason = options.reason || '';
+        this.idColumn = options.idColumn || 'id';
 
         /**
-         * When the inhibitor is ran.
-         * @type {string}
+         * Column for JSON data.
+         * @type {?string}
          */
-        this.type = options.type || 'post';
-
-        /**
-         * The ID of this inhibitor.
-         * @name Inhibitor#id
-         * @type {string}
-         */
-
-        /**
-         * Executes the inhibitor.
-         * @method
-         * @name Inhibitor#exec
-         * @param {Message} message - Message being handled.
-         * @param {Command} [command] - Command to check.
-         * @returns {boolean|Promise&lt;any>}
-         */
-
-        /**
-         * The inhibitor handler.
-         * @readonly
-         * @name Inhibitor#handler
-         * @type {InhibitorHandler}
-         */
+        this.dataColumn = options.dataColumn;
     }
 
     /**
-     * Reloads the inhibitor.
-     * @method
-     * @name Inhibitor#reload
-     * @returns {Inhibitor}
+     * Initializes the provider.
+     * @returns {Bluebird&lt;void>}
      */
+    init() {
+        return this.table.findAll().then(rows => {
+            for (const row of rows) {
+                this.items.set(row[this.idColumn], this.dataColumn ? row[this.dataColumn] : row);
+            }
+        });
+    }
 
     /**
-     * Removes the inhibitor.
-     * @method
-     * @name Inhibitor#remove
-     * @returns {Inhibitor}
+     * Gets a value.
+     * @param {string} id - ID of entry.
+     * @param {string} key - The key to get.
+     * @param {any} [defaultValue] - Default value if not found or null.
+     * @returns {any}
      */
+    get(id, key, defaultValue) {
+        if (this.items.has(id)) {
+            const value = this.items.get(id)[key];
+            return value == null ? defaultValue : value;
+        }
+
+        return defaultValue;
+    }
 
     /**
-     * Enables the inhibitor.
-     * @method
-     * @name Inhibitor#enable
-     * @returns {boolean}
+     * Sets a value.
+     * @param {string} id - ID of entry.
+     * @param {string} key - The key to set.
+     * @param {any} value - The value.
+     * @returns {Bluebird&lt;boolean>}
      */
+    set(id, key, value) {
+        const data = this.items.get(id) || {};
+        data[key] = value;
+        this.items.set(id, data);
+
+        if (this.dataColumn) {
+            return this.table.upsert({
+                [this.idColumn]: id,
+                [this.dataColumn]: data
+            });
+        }
+
+        return this.table.upsert({
+            [this.idColumn]: id,
+            [key]: value
+        });
+    }
 
     /**
-     * Disables the inhibitor.
-     * @method
-     * @name Inhibitor#disable
-     * @returns {boolean}
+     * Deletes a value.
+     * @param {string} id - ID of entry.
+     * @param {string} key - The key to delete.
+     * @returns {Promise&lt;boolean>}
      */
+    delete(id, key) {
+        const data = this.items.get(id) || {};
+        delete data[key];
+
+        if (this.dataColumn) {
+            return this.table.upsert({
+                [this.idColumn]: id,
+                [this.dataColumn]: data
+            });
+        }
+
+        return this.table.upsert({
+            [this.idColumn]: id,
+            [key]: null
+        });
+    }
+
+    /**
+     * Clears an entry.
+     * @param {string} id - ID of entry.
+     * @returns {Bluebird&lt;void>}
+     */
+    clear(id) {
+        this.items.delete(id);
+        return this.table.destroy({ where: { [this.idColumn]: id } });
+    }
 }
 
-module.exports = Inhibitor;
+module.exports = SequelizeProvider;
 </code></pre>
         </article>
     </section>
