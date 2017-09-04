@@ -87,7 +87,7 @@ class Command extends AkairoModule {
     /**
      * Creates a new command.
      * @param {string} id - Command ID.
-     * @param {CommandExecFunction|RegexCommandExecFunction|ConditionalCommandExecFunction} exec - Function called when command is ran.
+     * @param {CommandExecFunction} exec - Function called when command is ran.
      * @param {CommandOptions} [options={}] - Options for the command.
      */
     constructor(id, exec, options) {

@@ -159,7 +159,7 @@ class AkairoClient extends Client {
 
     /**
      * Calls `loadAll()` on the handlers.
-     * @returns {void}
+     * @returns {AkairoClient}
      */
     loadAll() {
         if (this._loaded) {
@@ -171,6 +171,8 @@ class AkairoClient extends Client {
         if (this.listenerHandler) this.listenerHandler.loadAll();
         if (this.commandHandler) this.commandHandler.loadAll();
         if (this.inhibitorHandler) this.inhibitorHandler.loadAll();
+
+        return this;
     }
 }
 

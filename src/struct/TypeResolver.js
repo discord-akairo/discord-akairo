@@ -37,6 +37,7 @@ class TypeResolver {
     /**
      * Adds built-in types.
      * @private
+     * @returns {void}
      */
     _addBuiltInTypes() {
         const builtins = {
@@ -325,7 +326,7 @@ class TypeResolver {
     /**
      * Gets the resolver function for a type.
      * @param {string} name - Name of type.
-     * @returns {Function}
+     * @returns {ArgumentTypeFunction}
      */
     type(name) {
         return this.types.get(name);

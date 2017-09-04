@@ -15,7 +15,7 @@
     "no-template-curly-in-string": "error",
     "no-unsafe-negation": "error",
     "valid-jsdoc": ["error", {
-      "requireReturn": false,
+      "requireReturn": true,
       "requireReturnDescription": false,
       "prefer": {
         "return": "returns",

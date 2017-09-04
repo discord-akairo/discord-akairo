@@ -272,6 +272,7 @@ class CommandHandler extends AkairoHandler {
     /**
      * Handles a message.
      * @param {Message} message - Message to handle.
+     * @returns {Promise<void>}
      */
     async handle(message) {
         try {
@@ -577,6 +578,7 @@ class CommandHandler extends AkairoHandler {
      * Handles regex and conditional commands.
      * @private
      * @param {Message} message - Message to handle.
+     * @returns {Promise<void>}
      */
     async _handleTriggers(message) {
         await this._handleRegex(message);
@@ -587,6 +589,7 @@ class CommandHandler extends AkairoHandler {
      * Handles regex commands.
      * @private
      * @param {Message} message - Message to handle.
+     * @returns {Promise<void>}
      */
     async _handleRegex(message) {
         const matchedCommands = [];
@@ -655,6 +658,7 @@ class CommandHandler extends AkairoHandler {
      * Handles conditional commands.
      * @private
      * @param {Message} message - Message to handle.
+     * @returns {Promise<void>}
      */
     async _handleConditional(message) {
         const trueCommands = this.modules.filter(command =>
@@ -708,6 +712,7 @@ class CommandHandler extends AkairoHandler {
      * @param {Error} err - The error.
      * @param {Message} message - Message that called the command.
      * @param {Command} [command] - Command that errored.
+     * @returns {Promise<void>}
      */
     _handleError(err, message, command) {
         if (this.listenerCount(CommandHandlerEvents.ERROR)) {
