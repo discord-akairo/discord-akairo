@@ -6,7 +6,8 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * Options to use for command execution behavior.
  * @typedef {Object} CommandOptions
  * @prop {string[]} [aliases=[]] - Command names.
- * @prop {ArgumentOptions[]} [args=[]] - Arguments to parse.
+ * @prop {ArgumentOptions[]|ArgumentOptions[][]} [args=[]] - Arguments to parse.
+ * When an item is an array of arguments, the first argument that is allowed to run will be ran.
  * @prop {ArgumentSplit|ArgumentSplitFunction} [split='plain'] - Method to split text into words.
  * @prop {string} [channel] - Restricts channel to either 'guild' or 'dm'.
  * @prop {string} [category='default'] - Category ID for organization purposes.
@@ -129,7 +130,7 @@ class Command extends AkairoModule {
          * Arguments for the command.
          * @type {Argument[]}
          */
-        this.args = args.map(a => new Argument(this, a));
+        this.args = args.map(arg => Array.isArray(arg) ? arg.map(a => new Argument(this, a)) : new Argument(this, arg));
 
         /**
          * The command split method.
@@ -279,25 +280,34 @@ class Command extends AkairoModule {
 
         const isQuoted = this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY || words.isQuoted;
 
-        const prefixes = this.args.reduce((arr, arg) => {
+        const prefixes = [];
+        const pushPrefix = arg => {
             if (arg.match === ArgumentMatches.PREFIX || arg.match === ArgumentMatches.FLAG) {
                 if (Array.isArray(arg.prefix)) {
                     for (const p of arg.prefix) {
-                        arr.push({
+                        prefixes.push({
                             value: p.toLowerCase(),
                             flag: arg.match === ArgumentMatches.FLAG
                         });
                     }
                 } else {
-                    arr.push({
+                    prefixes.push({
                         value: arg.prefix.toLowerCase(),
                         flag: arg.match === ArgumentMatches.FLAG
                     });
                 }
             }
+        };
 
-            return arr;
-        }, []);
+        for (const arg of this.args) {
+            if (Array.isArray(arg)) {
+                for (const a of arg) {
+                    pushPrefix(a);
+                }
+            } else {
+                pushPrefix(arg);
+            }
+        }
 
         const noPrefixWords = words.filter(w => {
             w = w.trim();
@@ -415,7 +425,15 @@ class Command extends AkairoModule {
         const process = async i => {
             if (i === this.args.length) return processed;
 
-            const arg = this.args[i];
+            let arg = this.args[i];
+            if (Array.isArray(arg)) {
+                arg = arg.find(a => a.allow(message, processed));
+                if (!arg) return process(i + 1);
+            } else
+            if (!arg.allow(message, processed)) {
+                return process(i + 1);
+            }
+
             const matchType = typeof arg.match === 'function' ? arg.match(message, processed) : arg.match;
             const castFunc = parseFuncs[matchType](arg, wordIndex);
 

@@ -6,14 +6,21 @@ class TestCommand extends Command {
             aliases: ['test'],
             args: [
                 {
-                    id: 'numbers',
-                    match: 'separate',
-                    type: 'number',
-                    prompt: {
-                        start: 'pls input number',
-                        retry: 'pls input number (retry)'
+                    id: 'option',
+                    type: ['number', 'channel']
+                },
+                [
+                    {
+                        id: 'number',
+                        type: 'number',
+                        allow: (m, { option }) => option === 'number'
+                    },
+                    {
+                        id: 'channel',
+                        type: 'channel',
+                        allow: (m, { option }) => option === 'channel'
                     }
-                }
+                ]
             ]
         });
     }

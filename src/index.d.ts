@@ -233,11 +233,11 @@ declare module 'discord-akairo' {
     }
 
     export class CommandUtil {
-        public constructor(client: AkairoClient, message: Message, command: Command, prefix?: string, alias?: string);
+        public constructor(client: AkairoClient, message: Message, command?: Command, prefix?: string, alias?: string);
 
         public alias?: string;
         public readonly client: AkairoClient;
-        public command: Command;
+        public command?: Command;
         public lastResponse?: Message;
         public message: Message;
         public prefix?: string;
@@ -424,9 +424,11 @@ declare module 'discord-akairo' {
 
     export type AllowMentionFunction = (message: Message) => boolean;
 
+    export type ArgumentAllowFunction = (message: Message, args: any) => boolean;
+
     export type ArgumentDefaultFunction = (message: Message, args: any) => any;
 
-    export type ArgumentMatch = 'word' | 'rest' | 'prefix' | 'flag' | 'text' | 'content' | 'none';
+    export type ArgumentMatch = 'word' | 'rest' | 'separate' | 'prefix' | 'flag' | 'text' | 'content' | 'none';
 
     export type ArgumentMatchFunction = (message: Message, args: any) => ArgumentMatch;
 
@@ -439,6 +441,7 @@ declare module 'discord-akairo' {
         default?: ArgumentDefaultFunction | any;
         description?: string | string[];
         prompt?: ArgumentPromptOptions;
+        allow?: ArgumentAllowFunction;
     };
 
     export type ArgumentPromptFunction = (message: Message, args: any, tries: number) => (string | string[] | MessageOptions);
@@ -468,7 +471,7 @@ declare module 'discord-akairo' {
 
     export type CommandOptions = {
         aliases?: string[];
-        args?: ArgumentOptions[];
+        args?: ArgumentOptions[] | ArgumentOptions[][];
         split?: ArgumentSplit | ArgumentSplitFunction;
         channel?: string;
         category?: string;

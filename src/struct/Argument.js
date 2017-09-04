@@ -84,6 +84,14 @@ const { isPromise } = require('../util/Util');
  */
 
 /**
+ * A function that checks if the argument should be allowed to run.
+ * @typedef {Function} ArgumentAllowFunction
+ * @param {Message} message - Message that triggered the command.
+ * @param {Object} prevArgs - Previous arguments.
+ * @returns {boolean}
+ */
+
+/**
  * A function for processing user input to use as an argument.
  * A `null` or `undefined` return value will use the default value for the argument or start a prompt.
  * Any other truthy return value will be used as the evaluated argument.
@@ -138,6 +146,8 @@ const { isPromise } = require('../util/Util');
  * @prop {string|string[]} [description=''] - A description of the argument.
  * @prop {ArgumentPromptOptions} [prompt] - Prompt options for when user does not provide input.
  * Must not have a default value for this to work.
+ * @prop {ArgumentAllowFunction} [allow] - A function that checks if this argument should be ran.
+ * If not provided, this argument will always be ran.
  */
 
 /**
@@ -162,7 +172,8 @@ class Argument {
         index,
         description = '',
         prompt,
-        default: defaultValue = ''
+        default: defaultValue = '',
+        allow = () => true
     } = {}) {
         /**
          * The ID of the argument.
@@ -221,6 +232,16 @@ class Argument {
          * @returns {any}
          */
         this.default = typeof defaultValue === 'function' ? defaultValue : () => defaultValue;
+
+        /**
+         * Checks if the argument is allowed to run.
+         * @method
+         * @name Argument#allow
+         * @param {Message} message - The message that called the command.
+         * @param {Object} args - Previous arguments from command.
+         * @returns {boolean}
+         */
+        this.allow = allow;
     }
 
     /**
