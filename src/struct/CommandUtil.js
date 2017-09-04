@@ -11,7 +11,7 @@ class CommandUtil {
      * Command utilies.
      * @param {AkairoClient} client - The Akairo client.
      * @param {Message} message - Message that triggered the command.
-     * @param {Command} command - Command triggered.
+     * @param {Command} [command] - Command triggered.
      * @param {string} [prefix] - Prefix used to trigger.
      * @param {string} [alias] - Alias used to trigger.
      */
@@ -36,7 +36,7 @@ class CommandUtil {
 
         /**
          * Command used.
-         * @type {Command}
+         * @type {?Command}
          */
         this.command = command;
 
@@ -68,15 +68,16 @@ class CommandUtil {
     /**
      * Sets the last repsonse.
      * @param {Message|Message[]} message - Message to set.
-     * @returns {void}
+     * @returns {Message}
      */
     setLastResponse(message) {
-        if (!this.command.handler.handleEdits || !this.command.editable) return;
         if (Array.isArray(message)) {
             this.lastResponse = message.slice(-1)[0];
         } else {
             this.lastResponse = message;
         }
+
+        return this.lastResponse;
     }
 
     /**
@@ -87,32 +88,30 @@ class CommandUtil {
      */
     async send(content, options) {
         [content, options] = this.constructor.swapOptions(content, options);
-        const hadFiles = options.files || (options.embed && options.embed.files);
+        const hasFiles = options.files || (options.embed && options.embed.files);
 
-        if (this.shouldEdit && (this.command ? this.command.editable : true) && (hadFiles || !this.lastResponse.attachments.size)) {
+        if (this.shouldEdit && (this.command ? this.command.editable : true) && !hasFiles && !this.lastResponse.attachments.size) {
             return this.lastResponse.edit(content, options);
         }
 
         const sent = await this.message.channel.send(content, options);
-        if (hadFiles || (this.lastResponse && this.lastResponse.attachments.size)) return sent;
-
-        this.shouldEdit = true;
-        this.setLastResponse(sent);
+        const lastSent = this.setLastResponse(sent);
+        this.shouldEdit = !lastSent.attachments.size;
         return sent;
     }
 
     /**
      * Sends a response, overwriting the last response.
-     * @param {string|MessageOptions|MessageEditOptions} content - Content to send.
-     * @param {MessageOptions|MessageEditOptions} [options] - Options to use.
+     * @param {string|MessageOptions} content - Content to send.
+     * @param {MessageOptions} [options] - Options to use.
      * @returns {Promise<Message|Message[]>}
      */
     async sendNew(content, options) {
         [content, options] = this.constructor.swapOptions(content, options);
         const sent = await this.message.channel.send(content, options);
 
-        this.shouldEdit = true;
-        this.setLastResponse(sent);
+        const lastSent = this.setLastResponse(sent);
+        this.shouldEdit = !lastSent.attachments.size;
         return sent;
     }
 
