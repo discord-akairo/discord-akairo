@@ -139,10 +139,11 @@ const { isPromise } = require('../util/Util');
  * @prop {ArgumentMatch|ArgumentMatchFunction} [match='word'] - Method to match text.
  * @prop {ArgumentType|ArgumentTypeFunction} [type='string'] - Type to cast to.
  * @prop {string|string[]} [prefix] - The string(s) to use as the flag for prefix and flag args.
+ * Note that even if the command isn't ran, all prefixes are separated from the content.
  * @prop {number} [index] - Index/word of text to start from.
- * Applicable to word, text, or content match only.
+ * Applicable to word, text, content, rest, or separate match only.
  * @prop {any|ArgumentDefaultFunction} [default=''] - Default value if text does not parse or cast correctly.
- * If using a flag arg, setting the default value inverses the result.
+ * If using a flag arg, setting the default value to a non-null/undefined value inverses the result.
  * @prop {string|string[]} [description=''] - A description of the argument.
  * @prop {ArgumentPromptOptions} [prompt] - Prompt options for when user does not provide input.
  * Must not have a default value for this to work.

@@ -403,7 +403,7 @@ class Command extends AkairoModule {
                     }
                 }
 
-                return () => Promise.resolve(arg.default() ? !word : Boolean(word));
+                return async (m, p) => await arg.default(m, p) == null ? !word : Boolean(word);
             },
             [ArgumentMatches.TEXT]: arg => {
                 const joiner = this.split === ArgumentSplits.SPLIT ? ' ' : '';
