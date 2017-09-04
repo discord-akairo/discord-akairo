@@ -341,8 +341,8 @@ class Argument {
         Object.assign(prompt, this.command.defaultPrompt);
         Object.assign(prompt, this.prompt || {});
 
-        const value = prompt.infinite ? [] : null;
-        if (prompt.infinite) args[this.id] = value;
+        const values = prompt.infinite ? [] : null;
+        if (prompt.infinite) args[this.id] = values;
 
         const getText = (textOption, retryCount) => {
             textOption = typeof textOption === 'function'
@@ -389,24 +389,24 @@ class Argument {
                 }
 
                 if (prompt.infinite && input.content.toLowerCase() === prompt.stopWord.toLowerCase()) {
-                    if (!value.length) return promptOne(retryCount + 1);
-                    return value;
+                    if (!values.length) return promptOne(retryCount + 1);
+                    return values;
                 }
 
                 const parsedValue = await this._processType(input.content, input, args);
                 if (parsedValue == null) return promptOne(retryCount + 1);
 
                 if (prompt.infinite) {
-                    value.push(parsedValue);
+                    values.push(parsedValue);
                     if (prompt.infinite) {
                         const limit = prompt.limit == null ? Infinity : prompt.limit;
-                        if (value.length < limit) return promptOne(1);
+                        if (values.length < limit) return promptOne(1);
                     }
 
-                    return value;
+                    return values;
                 }
 
-                return value;
+                return parsedValue;
             } catch (err) {
                 if (err instanceof Error) throw err;
                 if (err === Symbols.COMMAND_CANCELLED) throw err;
