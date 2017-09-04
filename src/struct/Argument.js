@@ -1,4 +1,5 @@
 const { ArgumentMatches, ArgumentTypes, Symbols } = require('../util/Constants');
+const { isPromise } = require('../util/Util');
 
 /**
  * Extra properties alongside the Discord.js message options type.
@@ -250,7 +251,7 @@ class Argument {
 
         if (!word && this.prompt && this.prompt.optional) {
             let res = this.default(message, args);
-            if (res && typeof res.then === 'function') res = await res;
+            if (isPromise(res)) res = await res;
             return res;
         }
 
@@ -260,7 +261,7 @@ class Argument {
             if (this.prompt) return this._promptArgument(message, args, Boolean(word));
 
             res = this.default(message, args);
-            if (res && typeof res.then === 'function') res = await res;
+            if (isPromise(res)) res = await res;
             return res;
         }
 
@@ -293,7 +294,7 @@ class Argument {
 
         if (typeof this.type === 'function') {
             let res = this.type(word, message, args);
-            if (res && typeof res.then === 'function') res = await res;
+            if (isPromise(res)) res = await res;
             if (res != null) return res;
             return null;
         }
@@ -317,7 +318,7 @@ class Argument {
 
         if (this.handler.resolver.type(this.type)) {
             let res = this.handler.resolver.type(this.type)(word, message, args);
-            if (res && typeof res.then === 'function') res = await res;
+            if (isPromise(res)) res = await res;
             if (res != null) return res;
             return null;
         }

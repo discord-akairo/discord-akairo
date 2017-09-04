@@ -3,6 +3,7 @@ module.exports = {
     AkairoClient: require('./struct/AkairoClient'),
     AkairoHandler: require('./struct/AkairoHandler'),
     AkairoModule: require('./struct/AkairoModule'),
+    ClientUtil: require('./struct/ClientUtil'),
 
     // Commands
     Argument: require('./struct/Argument'),
@@ -26,7 +27,7 @@ module.exports = {
 
     // Utilities
     Category: require('./util/Category'),
-    ClientUtil: require('./struct/ClientUtil'),
     Constants: require('./util/Constants'),
+    Util: require('./util/Util'),
     version: require('../package.json').version
 };

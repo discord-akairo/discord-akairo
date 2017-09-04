@@ -395,6 +395,11 @@ declare module 'discord-akairo' {
         public type(name: string): ArgumentTypeFunction;
     }
 
+    export class Util {
+        public static isPromise(value: any): boolean;
+        public static isEventEmitter(value: any): boolean;
+    }
+
     export type AkairoOptions = {
         ownerID?: string | string[];
         selfbot?: boolean;

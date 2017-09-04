@@ -1,5 +1,6 @@
 const AkairoHandler = require('./AkairoHandler');
 const Inhibitor = require('./Inhibitor');
+const { isPromise } = require('../util/Util');
 
 /** @extends AkairoHandler */
 class InhibitorHandler extends AkairoHandler {
@@ -43,7 +44,7 @@ class InhibitorHandler extends AkairoHandler {
         for (const inhibitor of inhibitors.values()) {
             promises.push((async () => {
                 let inhibited = inhibitor.exec(message, command);
-                if (inhibited && typeof inhibited.then === 'function') inhibited = await inhibited;
+                if (isPromise(inhibited)) inhibited = await inhibited;
 
                 if (inhibited === true) {
                     return inhibitor.reason;

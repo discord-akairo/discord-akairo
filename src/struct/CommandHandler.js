@@ -4,6 +4,7 @@ const { Collection } = require('discord.js');
 const Command = require('./Command');
 const CommandUtil = require('./CommandUtil');
 const TypeResolver = require('./TypeResolver');
+const { isPromise } = require('../util/Util');
 
 /** @extends AkairoHandler */
 class CommandHandler extends AkairoHandler {
@@ -429,7 +430,7 @@ class CommandHandler extends AkairoHandler {
         if (command.clientPermissions) {
             if (typeof command.clientPermissions === 'function') {
                 let allowed = command.clientPermissions(message);
-                if (allowed && typeof allowed.then === 'function') allowed = await allowed;
+                if (isPromise(allowed)) allowed = await allowed;
 
                 if (!allowed) {
                     this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.CLIENT_PERMISSIONS);
@@ -445,7 +446,7 @@ class CommandHandler extends AkairoHandler {
         if (command.userPermissions) {
             if (typeof command.userPermissions === 'function') {
                 let allowed = command.userPermissions(message);
-                if (allowed && typeof allowed.then === 'function') allowed = await allowed;
+                if (isPromise(allowed)) allowed = await allowed;
 
                 if (!allowed) {
                     this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.USER_PERMISSIONS);

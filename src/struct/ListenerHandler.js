@@ -1,7 +1,7 @@
 const AkairoHandler = require('./AkairoHandler');
 const { Collection } = require('discord.js');
-const EventEmitter = require('events');
 const Listener = require('./Listener');
+const { isEventEmitter } = require('../util/Util');
 
 /** @extends AkairoHandler */
 class ListenerHandler extends AkairoHandler {
@@ -28,6 +28,7 @@ class ListenerHandler extends AkairoHandler {
         if (emitters) {
             for (const [key, value] of Object.entries(emitters)) {
                 if (this.emitters.has(key)) continue;
+                if (!isEventEmitter(value)) throw new Error(`Emitter ${key} is not an EventEmitter`);
                 this.emitters.set(key, value);
             }
         }
@@ -79,8 +80,8 @@ class ListenerHandler extends AkairoHandler {
         const listener = this.modules.get(id.toString());
         if (!listener) throw new Error(`Listener ${id} does not exist.`);
 
-        const emitter = listener.emitter instanceof EventEmitter ? listener.emitter : this.emitters.get(listener.emitter);
-        if (!(emitter instanceof EventEmitter)) throw new Error('Listener\'s emitter is not an EventEmitter');
+        const emitter = isEventEmitter(listener.emitter) ? listener.emitter : this.emitters.get(listener.emitter);
+        if (!isEventEmitter(emitter)) throw new Error('Listener\'s emitter is not an EventEmitter');
 
         if (listener.type === 'once') {
             emitter.once(listener.event, listener.exec);
@@ -100,8 +101,8 @@ class ListenerHandler extends AkairoHandler {
         const listener = this.modules.get(id.toString());
         if (!listener) throw new Error(`Listener ${id} does not exist.`);
 
-        const emitter = listener.emitter instanceof EventEmitter ? listener.emitter : this.emitters.get(listener.emitter);
-        if (!(emitter instanceof EventEmitter)) throw new Error('Listener\'s emitter is not an EventEmitter');
+        const emitter = isEventEmitter(listener.emitter) ? listener.emitter : this.emitters.get(listener.emitter);
+        if (!isEventEmitter(emitter)) throw new Error('Listener\'s emitter is not an EventEmitter');
 
         emitter.removeListener(listener.event, listener.exec);
         return listener;
