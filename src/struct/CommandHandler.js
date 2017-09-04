@@ -770,7 +770,7 @@ class CommandHandler extends AkairoHandler {
      * @method
      * @name CommandHandler#add
      * @param {string} filename - Filename to lookup in the directory.
-     * A .js extension is assumed.
+     * A .js extension is assumed if one is not given.
      * @returns {Command}
      */
 
@@ -881,24 +881,13 @@ module.exports = CommandHandler;
  * Emitted when a command is loaded.
  * @event CommandHandler#load
  * @param {Command} command - Module loaded.
- */
-
-/**
- * Emitted when a command is added.
- * @event CommandHandler#add
- * @param {Command} command - Command added.
+ * @param {boolean} isReload - Whether or not this was a reload.
  */
 
 /**
  * Emitted when a command is removed.
  * @event CommandHandler#remove
  * @param {Command} command - Command removed.
- */
-
-/**
- * Emitted when a command is reloaded.
- * @event CommandHandler#reload
- * @param {Command} command - Command reloaded.
  */
 
 /**

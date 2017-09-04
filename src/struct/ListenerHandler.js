@@ -127,7 +127,7 @@ class ListenerHandler extends AkairoHandler {
      * @method
      * @name ListenerHandler#add
      * @param {string} filename - Filename to lookup in the directory.
-     * A .js extension is assumed.
+     * A .js extension is assumed if one is not given.
      * @returns {Listener}
      */
 
@@ -168,24 +168,13 @@ module.exports = ListenerHandler;
  * Emitted when a listener is loaded.
  * @event ListenerHandler#load
  * @param {Listener} listener - Listener loaded.
- */
-
-/**
- * Emitted when a listener is added.
- * @event ListenerHandler#add
- * @param {Listener} listener - Listener added.
+ * @param {boolean} isReload - Whether or not this was a reload.
  */
 
 /**
  * Emitted when a listener is removed.
  * @event ListenerHandler#remove
  * @param {Listener} listener - Listener removed.
- */
-
-/**
- * Emitted when a listener is reloaded.
- * @event ListenerHandler#reload
- * @param {Listener} listener - Listener reloaded.
  */
 
 /**

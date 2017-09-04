@@ -58,9 +58,7 @@ module.exports = {
     },
     AkairoHandlerEvents: {
         LOAD: 'load',
-        ADD: 'add',
         REMOVE: 'remove',
-        RELOAD: 'reload',
         ENABLE: 'enable',
         DISABLE: 'disable'
     },
@@ -74,14 +72,6 @@ module.exports = {
         COMMAND_COOLDOWN: 'commandCooldown',
         IN_PROMPT: 'inPrompt',
         ERROR: 'error'
-    },
-    SQLiteHandlerEvents: {
-        INIT: 'init',
-        ADD: 'add',
-        REMOVE: 'remove',
-        SET: 'set',
-        SAVE: 'save',
-        SAVE_ALL: 'saveAll'
     },
     BuiltInReasons: {
         NOT_SELF: 'notSelf',

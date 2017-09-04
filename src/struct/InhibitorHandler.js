@@ -96,7 +96,7 @@ class InhibitorHandler extends AkairoHandler {
      * @method
      * @name InhibitorHandler#add
      * @param {string} filename - Filename to lookup in the directory.
-     * A .js extension is assumed.
+     * A .js extension is assumed if one is not given.
      * @returns {Inhibitor}
      */
 
@@ -137,24 +137,14 @@ module.exports = InhibitorHandler;
  * Emitted when an inhibitor is loaded.
  * @event InhibitorHandler#load
  * @param {Inhibitor} inhibitor - Inhibitor loaded.
- */
-
-/**
- * Emitted when an inhibitor is added.
- * @event InhibitorHandler#add
- * @param {Inhibitor} inhibitor - Inhibitor added.
+ * @param {boolean} isReload - Whether or not this was a reload.
  */
 
 /**
  * Emitted when an inhibitor is removed.
  * @event InhibitorHandler#remove
  * @param {Inhibitor} inhibitor - Inhibitor removed.
- */
-
-/**
- * Emitted when an inhibitor is reloaded.
- * @event InhibitorHandler#reload
- * @param {Inhibitor} inhibitor - Inhibitor reloaded.
+ * @param {boolean} isReload - Whether or not this was a reload.
  */
 
 /**
