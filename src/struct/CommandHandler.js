@@ -280,8 +280,11 @@ class CommandHandler extends AkairoHandler {
                 message.member = await message.guild.members.fetch(message.author);
             }
 
-            let reason = this.client.inhibitorHandler && await this.client.inhibitorHandler.test('all', message);
-            if (reason) {
+            let reason = this.client.inhibitorHandler
+                ? await this.client.inhibitorHandler.test('all', message)
+                : null;
+
+            if (reason != null) {
                 this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, reason);
                 return;
             }
@@ -314,8 +317,11 @@ class CommandHandler extends AkairoHandler {
                 }
             }
 
-            reason = this.client.inhibitorHandler && await this.client.inhibitorHandler.test('pre', message);
-            if (reason) {
+            reason = this.client.inhibitorHandler
+                ? await this.client.inhibitorHandler.test('pre', message)
+                : null;
+
+            if (reason != null) {
                 this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, reason);
                 return;
             }
@@ -339,40 +345,55 @@ class CommandHandler extends AkairoHandler {
                 return;
             }
 
-            try {
-                if (!command.enabled) {
-                    this.emit(CommandHandlerEvents.COMMAND_DISABLED, message, command);
-                    return;
-                }
-
-                if (message.edited && !command.editable) return;
-                if (await this._runInhibitors(message, command)) return;
-
-                reason = this.client.inhibitorHandler && await this.client.inhibitorHandler.test('post', message, command);
-                if (reason) {
-                    if (command.typing) message.channel.stopTyping();
-                    this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
-                    return;
-                }
-
-                const onCooldown = this._handleCooldowns(message, command);
-                if (onCooldown) return;
-
-                const args = await command.parse(content, message);
-
-                if (command.typing) message.channel.startTyping();
-                this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, args);
-
-                const ret = await command.exec(message, args);
-
-                this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, args, ret);
-                if (command.typing) message.channel.stopTyping();
-            } catch (err) {
-                if (err === Symbols.COMMAND_CANCELLED) return;
-                this._handleError(err, message, command);
-            }
+            this._handleCommand(message, content, command);
         } catch (err) {
             this._handleError(err, message);
+        }
+    }
+
+    /**
+     * Handles normal commands.
+     * @private
+     * @param {Message} message - Message to handle.
+     * @param {string} content - Content of message without command.
+     * @param {Command} command - Command instance.
+     * @returns {Promise<void>}
+     */
+    async _handleCommand(message, content, command) {
+        try {
+            if (!command.enabled) {
+                this.emit(CommandHandlerEvents.COMMAND_DISABLED, message, command);
+                return;
+            }
+
+            if (message.edited && !command.editable) return;
+            if (await this._runInhibitors(message, command)) return;
+
+            const reason = this.client.inhibitorHandler
+                ? await this.client.inhibitorHandler.test('post', message, command)
+                : null;
+
+            if (reason != null) {
+                if (command.typing) message.channel.stopTyping();
+                this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
+                return;
+            }
+
+            const onCooldown = this._handleCooldowns(message, command);
+            if (onCooldown) return;
+
+            const args = await command.parse(content, message);
+
+            if (command.typing) message.channel.startTyping();
+            this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, args);
+
+            const ret = await command.exec(message, args);
+
+            this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, args, ret);
+            if (command.typing) message.channel.stopTyping();
+        } catch (err) {
+            if (err === Symbols.COMMAND_CANCELLED) return;
+            this._handleError(err, message, command);
         }
     }
 
@@ -446,7 +467,7 @@ class CommandHandler extends AkairoHandler {
      * @param {Message} message - Message that called the command.
      * @returns {Object}
      */
-    _parseCommand(message) { // eslint-disable-line complexity
+    _parseCommand(message) {
         let prefix = this.prefix(message);
 
         if (this.allowMention(message)) {
@@ -627,8 +648,11 @@ class CommandHandler extends AkairoHandler {
                 try {
                     if (await this._runInhibitors(message, command)) return;
 
-                    const reason = this.client.inhibitorHandler && await this.client.inhibitorHandler.test('post', message, command);
-                    if (reason) {
+                    const reason = this.client.inhibitorHandler
+                        ? await this.client.inhibitorHandler.test('post', message, command)
+                        : null;
+
+                    if (reason != null) {
                         this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
                         return;
                     }
@@ -679,8 +703,11 @@ class CommandHandler extends AkairoHandler {
                 try {
                     if (await this._runInhibitors(message, command)) return;
 
-                    const reason = this.client.inhibitorHandler && await this.client.inhibitorHandler.test('post', message, command);
-                    if (reason) {
+                    const reason = this.client.inhibitorHandler
+                        ? await this.client.inhibitorHandler.test('post', message, command)
+                        : null;
+
+                    if (reason != null) {
                         this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
                         return;
                     }
