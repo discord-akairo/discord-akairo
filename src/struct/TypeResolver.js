@@ -265,9 +265,7 @@ class TypeResolver {
 
             [ArgumentTypes.INVITE]: word => {
                 if (!word) return null;
-                const match = word.match(/discord(?:app\.com\/invite|\.gg)\/([\w-]{2,255})/i);
-                if (match && match[1]) return this.client.fetchInvite(match[1]).catch(() => null);
-                return null;
+                return this.client.fetchInvite(word).catch(() => null);
             },
 
             [ArgumentTypes.MEMBER_MENTION]: (word, message) => {
