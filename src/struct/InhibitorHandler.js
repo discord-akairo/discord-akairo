@@ -41,7 +41,7 @@ class InhibitorHandler extends AkairoHandler {
         const promises = [];
 
         for (const inhibitor of inhibitors.values()) {
-            promises.push(async () => {
+            promises.push((async () => {
                 let inhibited = inhibitor.exec(message, command);
                 if (inhibited && typeof inhibited.then === 'function') inhibited = await inhibited;
 
@@ -50,7 +50,7 @@ class InhibitorHandler extends AkairoHandler {
                 }
 
                 return null;
-            });
+            })());
         }
 
         const reason = (await Promise.all(promises)).find(r => r != null);

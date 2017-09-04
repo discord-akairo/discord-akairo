@@ -619,7 +619,7 @@ class CommandHandler extends AkairoHandler {
         const promises = [];
 
         for (const { command, match, groups } of triggered) {
-            promises.push(async () => {
+            promises.push((async () => {
                 try {
                     if (await this._runInhibitors(message, command)) return;
 
@@ -644,7 +644,7 @@ class CommandHandler extends AkairoHandler {
                 } catch (err) {
                     this._handleError(err, message, command);
                 }
-            });
+            })());
         }
 
         await Promise.all(promises);
@@ -670,7 +670,7 @@ class CommandHandler extends AkairoHandler {
         const promises = [];
 
         for (const command of trueCommands.values()) {
-            promises.push(async () => {
+            promises.push((async () => {
                 try {
                     if (await this._runInhibitors(message, command)) return;
 
@@ -695,7 +695,7 @@ class CommandHandler extends AkairoHandler {
                 } catch (err) {
                     this._handleError(err, message, command);
                 }
-            });
+            })());
         }
 
         await Promise.all(promises);
