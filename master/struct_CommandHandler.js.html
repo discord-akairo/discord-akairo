@@ -43,6 +43,7 @@ const { Collection } = require('discord.js');
 const Command = require('./Command');
 const CommandUtil = require('./CommandUtil');
 const TypeResolver = require('./TypeResolver');
+const { isPromise } = require('../util/Util');
 
 /** @extends AkairoHandler */
 class CommandHandler extends AkairoHandler {
@@ -319,8 +320,11 @@ class CommandHandler extends AkairoHandler {
                 message.member = await message.guild.members.fetch(message.author);
             }
 
-            let reason = this.client.inhibitorHandler &amp;&amp; await this.client.inhibitorHandler.test('all', message);
-            if (reason) {
+            let reason = this.client.inhibitorHandler
+                ? await this.client.inhibitorHandler.test('all', message)
+                : null;
+
+            if (reason != null) {
                 this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, reason);
                 return;
             }
@@ -353,8 +357,11 @@ class CommandHandler extends AkairoHandler {
                 }
             }
 
-            reason = this.client.inhibitorHandler &amp;&amp; await this.client.inhibitorHandler.test('pre', message);
-            if (reason) {
+            reason = this.client.inhibitorHandler
+                ? await this.client.inhibitorHandler.test('pre', message)
+                : null;
+
+            if (reason != null) {
                 this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, reason);
                 return;
             }
@@ -378,40 +385,55 @@ class CommandHandler extends AkairoHandler {
                 return;
             }
 
-            try {
-                if (!command.enabled) {
-                    this.emit(CommandHandlerEvents.COMMAND_DISABLED, message, command);
-                    return;
-                }
-
-                if (message.edited &amp;&amp; !command.editable) return;
-                if (await this._runInhibitors(message, command)) return;
-
-                reason = this.client.inhibitorHandler &amp;&amp; await this.client.inhibitorHandler.test('post', message, command);
-                if (reason) {
-                    if (command.typing) message.channel.stopTyping();
-                    this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
-                    return;
-                }
-
-                const onCooldown = this._handleCooldowns(message, command);
-                if (onCooldown) return;
-
-                const args = await command.parse(content, message);
-
-                if (command.typing) message.channel.startTyping();
-                this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, args);
-
-                const ret = await command.exec(message, args);
-
-                this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, args, ret);
-                if (command.typing) message.channel.stopTyping();
-            } catch (err) {
-                if (err === Symbols.COMMAND_CANCELLED) return;
-                this._handleError(err, message, command);
-            }
+            this._handleCommand(message, content, command);
         } catch (err) {
             this._handleError(err, message);
+        }
+    }
+
+    /**
+     * Handles normal commands.
+     * @private
+     * @param {Message} message - Message to handle.
+     * @param {string} content - Content of message without command.
+     * @param {Command} command - Command instance.
+     * @returns {Promise&lt;void>}
+     */
+    async _handleCommand(message, content, command) {
+        try {
+            if (!command.enabled) {
+                this.emit(CommandHandlerEvents.COMMAND_DISABLED, message, command);
+                return;
+            }
+
+            if (message.edited &amp;&amp; !command.editable) return;
+            if (await this._runInhibitors(message, command)) return;
+
+            const reason = this.client.inhibitorHandler
+                ? await this.client.inhibitorHandler.test('post', message, command)
+                : null;
+
+            if (reason != null) {
+                if (command.typing) message.channel.stopTyping();
+                this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
+                return;
+            }
+
+            const onCooldown = this._handleCooldowns(message, command);
+            if (onCooldown) return;
+
+            const args = await command.parse(content, message);
+
+            if (command.typing) message.channel.startTyping();
+            this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, args);
+
+            const ret = await command.exec(message, args);
+
+            this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, args, ret);
+            if (command.typing) message.channel.stopTyping();
+        } catch (err) {
+            if (err === Symbols.COMMAND_CANCELLED) return;
+            this._handleError(err, message, command);
         }
     }
 
@@ -447,7 +469,7 @@ class CommandHandler extends AkairoHandler {
         if (command.clientPermissions) {
             if (typeof command.clientPermissions === 'function') {
                 let allowed = command.clientPermissions(message);
-                if (allowed &amp;&amp; typeof allowed.then === 'function') allowed = await allowed;
+                if (isPromise(allowed)) allowed = await allowed;
 
                 if (!allowed) {
                     this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.CLIENT_PERMISSIONS);
@@ -463,7 +485,7 @@ class CommandHandler extends AkairoHandler {
         if (command.userPermissions) {
             if (typeof command.userPermissions === 'function') {
                 let allowed = command.userPermissions(message);
-                if (allowed &amp;&amp; typeof allowed.then === 'function') allowed = await allowed;
+                if (isPromise(allowed)) allowed = await allowed;
 
                 if (!allowed) {
                     this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.USER_PERMISSIONS);
@@ -485,7 +507,7 @@ class CommandHandler extends AkairoHandler {
      * @param {Message} message - Message that called the command.
      * @returns {Object}
      */
-    _parseCommand(message) { // eslint-disable-line complexity
+    _parseCommand(message) {
         let prefix = this.prefix(message);
 
         if (this.allowMention(message)) {
@@ -666,8 +688,11 @@ class CommandHandler extends AkairoHandler {
                 try {
                     if (await this._runInhibitors(message, command)) return;
 
-                    const reason = this.client.inhibitorHandler &amp;&amp; await this.client.inhibitorHandler.test('post', message, command);
-                    if (reason) {
+                    const reason = this.client.inhibitorHandler
+                        ? await this.client.inhibitorHandler.test('post', message, command)
+                        : null;
+
+                    if (reason != null) {
                         this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
                         return;
                     }
@@ -718,8 +743,11 @@ class CommandHandler extends AkairoHandler {
                 try {
                     if (await this._runInhibitors(message, command)) return;
 
-                    const reason = this.client.inhibitorHandler &amp;&amp; await this.client.inhibitorHandler.test('post', message, command);
-                    if (reason) {
+                    const reason = this.client.inhibitorHandler
+                        ? await this.client.inhibitorHandler.test('post', message, command)
+                        : null;
+
+                    if (reason != null) {
                         this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
                         return;
                     }
@@ -782,7 +810,7 @@ class CommandHandler extends AkairoHandler {
      * @method
      * @name CommandHandler#add
      * @param {string} filename - Filename to lookup in the directory.
-     * A .js extension is assumed.
+     * A .js extension is assumed if one is not given.
      * @returns {Command}
      */
 
@@ -893,24 +921,13 @@ module.exports = CommandHandler;
  * Emitted when a command is loaded.
  * @event CommandHandler#load
  * @param {Command} command - Module loaded.
- */
-
-/**
- * Emitted when a command is added.
- * @event CommandHandler#add
- * @param {Command} command - Command added.
+ * @param {boolean} isReload - Whether or not this was a reload.
  */
 
 /**
  * Emitted when a command is removed.
  * @event CommandHandler#remove
  * @param {Command} command - Command removed.
- */
-
-/**
- * Emitted when a command is reloaded.
- * @event CommandHandler#reload
- * @param {Command} command - Command reloaded.
  */
 
 /**

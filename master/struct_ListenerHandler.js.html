@@ -39,8 +39,8 @@
         <article>
             <pre class="prettyprint source linenums"><code>const AkairoHandler = require('./AkairoHandler');
 const { Collection } = require('discord.js');
-const EventEmitter = require('events');
 const Listener = require('./Listener');
+const { isEventEmitter } = require('../util/Util');
 
 /** @extends AkairoHandler */
 class ListenerHandler extends AkairoHandler {
@@ -67,6 +67,7 @@ class ListenerHandler extends AkairoHandler {
         if (emitters) {
             for (const [key, value] of Object.entries(emitters)) {
                 if (this.emitters.has(key)) continue;
+                if (!isEventEmitter(value)) throw new Error(`Emitter ${key} is not an EventEmitter`);
                 this.emitters.set(key, value);
             }
         }
@@ -118,8 +119,8 @@ class ListenerHandler extends AkairoHandler {
         const listener = this.modules.get(id.toString());
         if (!listener) throw new Error(`Listener ${id} does not exist.`);
 
-        const emitter = listener.emitter instanceof EventEmitter ? listener.emitter : this.emitters.get(listener.emitter);
-        if (!(emitter instanceof EventEmitter)) throw new Error('Listener\'s emitter is not an EventEmitter');
+        const emitter = isEventEmitter(listener.emitter) ? listener.emitter : this.emitters.get(listener.emitter);
+        if (!isEventEmitter(emitter)) throw new Error('Listener\'s emitter is not an EventEmitter');
 
         if (listener.type === 'once') {
             emitter.once(listener.event, listener.exec);
@@ -139,8 +140,8 @@ class ListenerHandler extends AkairoHandler {
         const listener = this.modules.get(id.toString());
         if (!listener) throw new Error(`Listener ${id} does not exist.`);
 
-        const emitter = listener.emitter instanceof EventEmitter ? listener.emitter : this.emitters.get(listener.emitter);
-        if (!(emitter instanceof EventEmitter)) throw new Error('Listener\'s emitter is not an EventEmitter');
+        const emitter = isEventEmitter(listener.emitter) ? listener.emitter : this.emitters.get(listener.emitter);
+        if (!isEventEmitter(emitter)) throw new Error('Listener\'s emitter is not an EventEmitter');
 
         emitter.removeListener(listener.event, listener.exec);
         return listener;
@@ -166,7 +167,7 @@ class ListenerHandler extends AkairoHandler {
      * @method
      * @name ListenerHandler#add
      * @param {string} filename - Filename to lookup in the directory.
-     * A .js extension is assumed.
+     * A .js extension is assumed if one is not given.
      * @returns {Listener}
      */
 
@@ -207,24 +208,13 @@ module.exports = ListenerHandler;
  * Emitted when a listener is loaded.
  * @event ListenerHandler#load
  * @param {Listener} listener - Listener loaded.
- */
-
-/**
- * Emitted when a listener is added.
- * @event ListenerHandler#add
- * @param {Listener} listener - Listener added.
+ * @param {boolean} isReload - Whether or not this was a reload.
  */
 
 /**
  * Emitted when a listener is removed.
  * @event ListenerHandler#remove
  * @param {Listener} listener - Listener removed.
- */
-
-/**
- * Emitted when a listener is reloaded.
- * @event ListenerHandler#reload
- * @param {Listener} listener - Listener reloaded.
  */
 
 /**

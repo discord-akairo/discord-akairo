@@ -189,25 +189,24 @@ class AkairoHandler extends EventEmitter {
         if (this.modules.has(mod.id)) throw new Error(`${this.classToHandle.name} ${mod.id} already loaded.`);
 
         this._apply(mod, isObj ? null : thing);
-        if (!isReload) this.emit(AkairoHandlerEvents.LOAD, mod);
+        this.emit(AkairoHandlerEvents.LOAD, mod, isReload);
         return mod;
     }
 
     /**
      * Adds a module.
      * @param {string} filename - Filename to lookup in the directory.
-     * A .js extension is assumed.
+     * A .js extension is assumed if one is not given.
      * @returns {AkairoModule}
      */
     add(filename) {
+        if (!path.extname(filename)) filename = `${filename}.js`;
+
         const files = this.constructor.readdirRecursive(this.directory);
-        const filepath = files.find(file => ['js', 'json', 'ts'].some(ext => file.endsWith(`${filename}.${ext}`)));
+        const filepath = files.find(file => file === filename);
 
         if (!filepath) throw new Error(`File ${filename} not found.`);
-
-        const mod = this.load(filepath);
-        this.emit(AkairoHandlerEvents.ADD, mod);
-        return mod;
+        return this.load(filepath);
     }
 
     /**
@@ -251,8 +250,6 @@ class AkairoHandler extends EventEmitter {
 
         const filepath = mod.filepath;
         const newMod = this.load(filepath, true);
-
-        this.emit(AkairoHandlerEvents.RELOAD, newMod);
         return newMod;
     }
 
@@ -311,24 +308,13 @@ module.exports = AkairoHandler;
  * Emitted when a module is loaded.
  * @event AkairoHandler#load
  * @param {AkairoModule} mod - Module loaded.
- */
-
-/**
- * Emitted when a module is added.
- * @event AkairoHandler#add
- * @param {AkairoModule} mod - Module added.
+ * @param {boolean} isReload - Whether or not this was a reload.
  */
 
 /**
  * Emitted when a module is removed.
  * @event AkairoHandler#remove
  * @param {AkairoModule} mod - Module removed.
- */
-
-/**
- * Emitted when a module is reloaded.
- * @event AkairoHandler#reload
- * @param {AkairoModule} mod - Module reloaded.
  */
 
 /**

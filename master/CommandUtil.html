@@ -53,7 +53,7 @@
 
     
 
-    <h4 class="name" id="CommandUtil"><span class="type-signature"></span>new CommandUtil<span class="signature">(client, message, command, prefix<span class="signature-attributes">opt</span>, alias<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="CommandUtil"><span class="type-signature"></span>new CommandUtil<span class="signature">(client, message, command<span class="signature-attributes">opt</span>, prefix<span class="signature-attributes">opt</span>, alias<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
@@ -221,6 +221,8 @@
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -473,7 +475,7 @@
 
         
             
-<h4 class="name" id="command"><span class="type-signature"></span>command<span class="type-signature"> :<a href="Command.html">Command</a></span></h4>
+<h4 class="name" id="command"><span class="type-signature">(nullable) </span>command<span class="type-signature"> :<a href="Command.html">Command</a></span></h4>
 
 
 
@@ -834,7 +836,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandUtil.js.html">struct/CommandUtil.js</a>, <a href="struct_CommandUtil.js.html#line146">line 146</a>
+        <a href="struct_CommandUtil.js.html">struct/CommandUtil.js</a>, <a href="struct_CommandUtil.js.html#line145">line 145</a>
     </li></ul></dd>
     
 
@@ -1027,7 +1029,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandUtil.js.html">struct/CommandUtil.js</a>, <a href="struct_CommandUtil.js.html#line136">line 136</a>
+        <a href="struct_CommandUtil.js.html">struct/CommandUtil.js</a>, <a href="struct_CommandUtil.js.html#line135">line 135</a>
     </li></ul></dd>
     
 
@@ -1217,7 +1219,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandUtil.js.html">struct/CommandUtil.js</a>, <a href="struct_CommandUtil.js.html#line125">line 125</a>
+        <a href="struct_CommandUtil.js.html">struct/CommandUtil.js</a>, <a href="struct_CommandUtil.js.html#line124">line 124</a>
     </li></ul></dd>
     
 
@@ -1413,7 +1415,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandUtil.js.html">struct/CommandUtil.js</a>, <a href="struct_CommandUtil.js.html#line88">line 88</a>
+        <a href="struct_CommandUtil.js.html">struct/CommandUtil.js</a>, <a href="struct_CommandUtil.js.html#line89">line 89</a>
     </li></ul></dd>
     
 
@@ -1609,7 +1611,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandUtil.js.html">struct/CommandUtil.js</a>, <a href="struct_CommandUtil.js.html#line110">line 110</a>
+        <a href="struct_CommandUtil.js.html">struct/CommandUtil.js</a>, <a href="struct_CommandUtil.js.html#line109">line 109</a>
     </li></ul></dd>
     
 
@@ -1699,9 +1701,6 @@
 |
 
 <span class="param-type">MessageOptions</span>
-|
-
-<span class="param-type">MessageEditOptions</span>
 
 
             
@@ -1733,9 +1732,6 @@
             
                 
 <span class="param-type">MessageOptions</span>
-|
-
-<span class="param-type">MessageEditOptions</span>
 
 
             
@@ -1793,7 +1789,7 @@
 
     
 
-    <h4 class="name" id="setLastResponse"><span class="type-signature"></span>setLastResponse<span class="signature">(message)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="setLastResponse"><span class="type-signature"></span>setLastResponse<span class="signature">(message)</span><span class="type-signature"> &rarr; {Message}</span></h4>
 
     
 
@@ -1928,7 +1924,7 @@
 
 
     
-<span class="param-type">void</span>
+<span class="param-type">Message</span>
 
 
 
