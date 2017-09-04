@@ -138,7 +138,7 @@ declare module 'discord-akairo' {
         public constructor(id: string, exec: ((message: Message, args: any) => any) | CommandOptions, options?: CommandOptions);
 
         public aliases: string[];
-        public args: Argument[];
+        public args: Array<Argument | Argument[]>;
         public category: Category<string, Command>;
         public channel?: string;
         public readonly client: AkairoClient;
@@ -337,7 +337,6 @@ declare module 'discord-akairo' {
         public reloadAll(): this;
         public remove(id: string): Listener;
         public removeAll(): this;
-        public test(type: 'all' | 'pre' | 'post', message: Message, command?: Command): Promise<void[]>;
         public on(event: 'add' | 'disable' | 'enable' | 'load' | 'reload' | 'remove', listener: (listener: Listener) => any): this;
     }
 
@@ -465,13 +464,13 @@ declare module 'discord-akairo' {
 
     export type ArgumentSplitFunction = (content: string, message: Message) => string[];
 
-    export type ArgumentType = 'string' | 'lowercase' | 'uppercase' | 'charCodes' | 'number' | 'integer' | 'dynamic' | 'dynamicInt' | 'url' | 'date' | 'color' | 'user' | 'users' | 'member' | 'members' | 'relevant' | 'relevants' | 'channel' | 'channels' | 'textChannel' | 'textChannels' | 'voiceChannel' | 'voiceChannels' | 'role' | 'roles' | 'emoji' | 'emojis' | 'guild' | 'guilds' | 'message' | 'invite' | 'memberMention' | 'channelMention' | 'roleMention' | 'emojiMention' | 'commandAlias' | 'command' | 'inhibitor' | 'listener' | string[];
+    export type ArgumentType = 'string' | 'lowercase' | 'uppercase' | 'charCodes' | 'number' | 'integer' | 'dynamic' | 'dynamicInt' | 'url' | 'date' | 'color' | 'user' | 'users' | 'member' | 'members' | 'relevant' | 'relevants' | 'channel' | 'channels' | 'textChannel' | 'textChannels' | 'voiceChannel' | 'voiceChannels' | 'role' | 'roles' | 'emoji' | 'emojis' | 'guild' | 'guilds' | 'message' | 'invite' | 'memberMention' | 'channelMention' | 'roleMention' | 'emojiMention' | 'commandAlias' | 'command' | 'inhibitor' | 'listener' | Array<string | string[]>;
 
     export type ArgumentTypeFunction = (word: string, message: Message, args: any) => any;
 
     export type CommandOptions = {
         aliases?: string[];
-        args?: ArgumentOptions[] | ArgumentOptions[][];
+        args?: Array<ArgumentOptions | ArgumentOptions[]>;
         split?: ArgumentSplit | ArgumentSplitFunction;
         channel?: string;
         category?: string;
