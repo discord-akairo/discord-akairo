@@ -159,7 +159,7 @@ class Argument {
         index,
         description = '',
         prompt,
-        defaultValue = ''
+        default: defaultValue = ''
     } = {}) {
         /**
          * The ID of the argument.
