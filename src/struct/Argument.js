@@ -360,8 +360,9 @@ class Argument {
 
             let sent;
             if (startText) {
-                sent = await message.channel.send(startText);
+                sent = await (message.util || message.channel).send(startText);
                 if (this.handler.commandUtil) {
+                    message.util.shouldEdit = false;
                     message.util.setLastResponse(sent);
                 }
             }
@@ -380,10 +381,9 @@ class Argument {
                 if (input.content.toLowerCase() === prompt.cancelWord.toLowerCase()) {
                     const cancelText = getText(prompt.cancel, retryCount);
                     if (cancelText) {
-                        await (message.util || message.channel).send(cancelText);
+                        await message.channel.send(cancelText);
                     }
 
-                    if (this.handler.commandUtil) message.util.shouldEdit = false;
                     this.handler.removePrompt(message);
                     throw Symbols.COMMAND_CANCELLED;
                 }
@@ -413,10 +413,9 @@ class Argument {
 
                 const timeoutText = getText(prompt.timeout, retryCount);
                 if (timeoutText) {
-                    await (message.util || message.channel).send(timeoutText);
+                    await message.channel.send(timeoutText);
                 }
 
-                if (this.handler.commandUtil) message.util.shouldEdit = false;
                 this.handler.removePrompt(message);
                 throw Symbols.COMMAND_CANCELLED;
             }

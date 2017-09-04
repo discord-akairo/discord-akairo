@@ -71,7 +71,7 @@ class CommandUtil {
      * @returns {void}
      */
     setLastResponse(message) {
-        if (message.command && (!this.command.handler.handleEdits || !this.command.editable)) return;
+        if (!this.command.handler.handleEdits || !this.command.editable) return;
         if (Array.isArray(message)) {
             this.lastResponse = message.slice(-1)[0];
         } else {
@@ -85,22 +85,35 @@ class CommandUtil {
      * @param {MessageOptions|MessageEditOptions} [options] - Options to use.
      * @returns {Promise<Message|Message[]>}
      */
-    send(content, options) {
+    async send(content, options) {
         [content, options] = this.constructor.swapOptions(content, options);
-        const hadFiles = (options.file || options.files)
-        || (options.embed && (options.embed.file || options.embed.files));
+        const hadFiles = options.files || (options.embed && options.embed.files);
 
         if (this.shouldEdit && (this.command ? this.command.editable : true) && (hadFiles || !this.lastResponse.attachments.size)) {
             return this.lastResponse.edit(content, options);
         }
 
-        return this.message.channel.send(content, options).then(sent => {
-            if (hadFiles || (this.lastResponse && this.lastResponse.attachments.size)) return sent;
+        const sent = await this.message.channel.send(content, options);
+        if (hadFiles || (this.lastResponse && this.lastResponse.attachments.size)) return sent;
 
-            this.shouldEdit = true;
-            this.setLastResponse(sent);
-            return sent;
-        });
+        this.shouldEdit = true;
+        this.setLastResponse(sent);
+        return sent;
+    }
+
+    /**
+     * Sends a response, overwriting the last response.
+     * @param {string|MessageOptions|MessageEditOptions} content - Content to send.
+     * @param {MessageOptions|MessageEditOptions} [options] - Options to use.
+     * @returns {Promise<Message|Message[]>}
+     */
+    async sendNew(content, options) {
+        [content, options] = this.constructor.swapOptions(content, options);
+        const sent = await this.message.channel.send(content, options);
+
+        this.shouldEdit = true;
+        this.setLastResponse(sent);
+        return sent;
     }
 
     /**
@@ -110,8 +123,8 @@ class CommandUtil {
      * @returns {Promise<Message|Message[]>}
      */
     reply(content, options) {
-        if (this.message.channel.type !== 'dm') content = `${this.message.author}, ${content}`;
-        return this.send(content, options);
+        [content, options] = this.constructor.swapOptions(content, options);
+        return this.send(content, Object.assign(options, { reply: this.message.member || this.message.author }));
     }
 
     /**
