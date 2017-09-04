@@ -22,7 +22,6 @@ module.exports = {
     // Providers
     Provider: require('./providers/Provider'),
     SequelizeProvider: require('./providers/SequelizeProvider'),
-    SQLiteHandler: require('./struct/SQLiteHandler'),
     SQLiteProvider: require('./providers/SQLiteProvider'),
 
     // Utilities

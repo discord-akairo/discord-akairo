@@ -10,7 +10,8 @@ const AkairoModule = require('./AkairoModule');
 
 /**
  * Function to check if message should be blocked.
- * A return value of true or a rejecting Promise will block the message.
+ * A return value of true will block the message.
+ * If returning a Promise, a resolved value of true wil block the message.
  * @typedef {Function} InhibitorExecFunction
  * @param {Message} message - Message being handled.
  * @param {Command} [command] - Command to check.
@@ -33,17 +34,22 @@ class Inhibitor extends AkairoModule {
 
         super(id, exec, options);
 
+        const {
+            reason = '',
+            type = 'post'
+        } = options;
+
         /**
          * Reason emitted when command is inhibited.
          * @type {string}
          */
-        this.reason = options.reason || '';
+        this.reason = reason;
 
         /**
          * When the inhibitor is ran.
          * @type {string}
          */
-        this.type = options.type || 'post';
+        this.type = type;
 
         /**
          * The ID of this inhibitor.

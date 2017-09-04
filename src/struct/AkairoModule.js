@@ -26,6 +26,8 @@ class AkairoModule {
             exec = null;
         }
 
+        const { category = 'default' } = options;
+
         /**
          * ID of the module.
          * @type {string}
@@ -36,7 +38,7 @@ class AkairoModule {
          * Category this belongs to.
          * @type {Category}
          */
-        this.category = options.category || 'default';
+        this.category = category;
 
         /**
          * Whether or not this is enabled.

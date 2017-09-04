@@ -7,7 +7,7 @@ class SequelizeProvider extends Provider {
      * @param {Model} table - A Sequelize model.
      * @param {ProviderOptions} [options={}] - Options to use.
      */
-    constructor(table, options = {}) {
+    constructor(table, { idColumn = 'id', dataColumn } = {}) {
         super();
 
         /**
@@ -20,25 +20,23 @@ class SequelizeProvider extends Provider {
          * Column for ID.
          * @type {string}
          */
-        this.idColumn = options.idColumn || 'id';
+        this.idColumn = idColumn || 'id';
 
         /**
          * Column for JSON data.
          * @type {?string}
          */
-        this.dataColumn = options.dataColumn;
+        this.dataColumn = dataColumn;
     }
 
     /**
      * Initializes the provider.
-     * @returns {Bluebird<void>}
      */
-    init() {
-        return this.table.findAll().then(rows => {
-            for (const row of rows) {
-                this.items.set(row[this.idColumn], this.dataColumn ? row[this.dataColumn] : row);
-            }
-        });
+    async init() {
+        const rows = await this.table.findAll();
+        for (const row of rows) {
+            this.items.set(row[this.idColumn], this.dataColumn ? row[this.dataColumn] : row);
+        }
     }
 
     /**
@@ -62,7 +60,7 @@ class SequelizeProvider extends Provider {
      * @param {string} id - ID of entry.
      * @param {string} key - The key to set.
      * @param {any} value - The value.
-     * @returns {Bluebird<boolean>}
+     * @returns {Promise<boolean>}
      */
     set(id, key, value) {
         const data = this.items.get(id) || {};
@@ -108,7 +106,7 @@ class SequelizeProvider extends Provider {
     /**
      * Clears an entry.
      * @param {string} id - ID of entry.
-     * @returns {Bluebird<void>}
+     * @returns {Promise<void>}
      */
     clear(id) {
         this.items.delete(id);

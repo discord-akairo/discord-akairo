@@ -8,10 +8,10 @@ class ListenerHandler extends AkairoHandler {
     /**
      * Loads listeners and registers them with EventEmitters.
      * @param {AkairoClient} client - The Akairo client.
-     * @param {Object} options - Options from client.
      */
-    constructor(client, options) {
-        super(client, options.listenerDirectory, Listener);
+    constructor(client) {
+        const { listenerDirectory, emitters } = client.akairoOptions;
+        super(client, listenerDirectory, Listener);
 
         /**
          * EventEmitters for use, mapped by name to EventEmitter.
@@ -25,10 +25,10 @@ class ListenerHandler extends AkairoHandler {
         this.emitters.set('inhibitorHandler', this.client.inhibitorHandler);
         this.emitters.set('listenerHandler', this.client.listenerHandler);
 
-        if (options.emitters) {
-            for (const key of Object.keys(options.emitters)) {
+        if (emitters) {
+            for (const [key, value] of Object.entries(emitters)) {
                 if (this.emitters.has(key)) continue;
-                this.emitters.set(key, options.emitters[key]);
+                this.emitters.set(key, value);
             }
         }
 
@@ -83,11 +83,11 @@ class ListenerHandler extends AkairoHandler {
         if (!(emitter instanceof EventEmitter)) throw new Error('Listener\'s emitter is not an EventEmitter');
 
         if (listener.type === 'once') {
-            emitter.once(listener.eventName, listener.exec);
+            emitter.once(listener.event, listener.exec);
             return listener;
         }
 
-        emitter.on(listener.eventName, listener.exec);
+        emitter.on(listener.event, listener.exec);
         return listener;
     }
 
@@ -103,7 +103,7 @@ class ListenerHandler extends AkairoHandler {
         const emitter = listener.emitter instanceof EventEmitter ? listener.emitter : this.emitters.get(listener.emitter);
         if (!(emitter instanceof EventEmitter)) throw new Error('Listener\'s emitter is not an EventEmitter');
 
-        emitter.removeListener(listener.eventName, listener.exec);
+        emitter.removeListener(listener.event, listener.exec);
         return listener;
     }
 

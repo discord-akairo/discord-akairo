@@ -8,22 +8,20 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * @prop {string[]} [aliases=[]] - Command names.
  * @prop {ArgumentOptions[]} [args=[]] - Arguments to parse.
  * @prop {ArgumentSplit|ArgumentSplitFunction} [split='plain'] - Method to split text into words.
- * @prop {string} [channelRestriction] - Restricts channel: 'guild' or 'dm'.
+ * @prop {string} [channel] - Restricts channel to either 'guild' or 'dm'.
  * @prop {string} [category='default'] - Category ID for organization purposes.
  * @prop {boolean} [ownerOnly=false] - Whether or not to allow client owner(s) only.
  * @prop {boolean} [protected=false] - Whether or not this command cannot be disabled.
  * @prop {boolean} [typing=false] - Whether or not to type in channel during execution.
  * @prop {boolean} [editable=true] - Whether or not message edits will run this command.
- * On an edited message, the exec function edited param will be true.
  * @prop {number} [cooldown] - The command cooldown in milliseconds.
  * @prop {number} [ratelimit=1] - Amount of command uses allowed until cooldown.
  * @prop {string|string[]|PrefixFunction} [prefix] - The prefix(es) to overwrite the global one for this command.
  * @prop {PermissionResolvable|PermissionResolvable[]|PermissionFunction} [userPermissions] - Permissions required by the user to run this command.
  * @prop {PermissionResolvable|PermissionResolvable[]|PermissionFunction} [clientPermissions] - Permissions required by the client to run this command.
  * @prop {RegExp|TriggerFunction} [trigger] - A regex to match in messages that are NOT commands.
- * The exec function becomes `((message, match, groups, edited) => any)`.
+ * The args object will have `match` and `groups` properties.
  * @prop {ConditionFunction} [condition] - Whether or not to run on messages that are NOT commands.
- * The exec function becomes `((message, edited) => any)`.
  * @prop {ArgumentPromptOptions} [defaultPrompt={}] - The default prompt options.
  * @prop {Object} [options={}] - An object for custom options.
  * @prop {string|string[]} [description=''] - Description of the command.
@@ -33,7 +31,7 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * A function used to check if a message has permissions for the command.
  * @typedef {Function} PermissionFunction
  * @param {Message} message - Message that triggered the command.
- * @returns {boolean}
+ * @returns {boolean|Promise<boolean>}
  */
 
 /**
@@ -84,24 +82,6 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * @returns {any}
  */
 
-/**
- * The command's execution function when triggered with a regex.
- * @typedef {Function} RegexCommandExecFunction
- * @param {Message} message - Message that triggered the command.
- * @param {any} match - The results from `string.match()` with the regex.
- * @param {string[]} groups - The matched groups if a global regex.
- * @param {boolean} edited - Whether the user's message was edited.
- * @returns {any}
- */
-
-/**
- * The command's execution function when triggered with a condition.
- * @typedef {Function} ConditionalCommandExecFunction
- * @param {Message} message - Message that triggered the command.
- * @param {boolean} edited - Whether the user's message was edited.
- * @returns {any}
- */
-
 /** @extends AkairoModule */
 class Command extends AkairoModule {
     /**
@@ -118,101 +98,122 @@ class Command extends AkairoModule {
 
         super(id, exec, options);
 
+        const {
+            aliases = [],
+            args = [],
+            split = this.split || ArgumentSplits.PLAIN,
+            channel,
+            ownerOnly = false,
+            protect = false,
+            editable = true,
+            typing = false,
+            cooldown,
+            ratelimit = 1,
+            defaultPrompt = {},
+            options: opts = {},
+            description = '',
+            prefix = this.prefix,
+            clientPermissions = this.clientPermissions,
+            userPermissions = this.userPermissions,
+            trigger = this.trigger,
+            condition = this.condition
+        } = options;
+
         /**
          * Command names.
          * @type {string[]}
          */
-        this.aliases = options.aliases || [];
+        this.aliases = aliases;
 
         /**
          * Arguments for the command.
          * @type {Argument[]}
          */
-        this.args = options.args ? options.args.map(a => new Argument(this, a)) : [];
+        this.args = args.map(a => new Argument(this, a));
 
         /**
          * The command split method.
          * @type {ArgumentSplit}
          */
-        this.split = options.split || this.split || ArgumentSplits.PLAIN;
+        this.split = split;
 
         /**
          * Usable only in this channel type.
          * @type {?string}
          */
-        this.channelRestriction = options.channelRestriction;
+        this.channel = channel;
 
         /**
          * Usable only by the client owner.
          * @type {boolean}
          */
-        this.ownerOnly = !!options.ownerOnly;
+        this.ownerOnly = Boolean(ownerOnly);
 
         /**
          * Whether or not this command cannot be disabled.
          * @type {boolean}
          */
-        this.protected = !!options.protected;
+        this.protected = Boolean(protect);
 
         /**
          * Whether or not this command can be ran by an edit.
          * @type {boolean}
          */
-        this.editable = options.editable === undefined ? true : !!options.editable;
+        this.editable = Boolean(editable);
 
         /**
          * Whether or not to type during command execution.
          * @type {boolean}
          */
-        this.typing = !!options.typing;
+        this.typing = Boolean(typing);
 
         /**
          * Cooldown in milliseconds.
          * @type {?number}
          */
-        this.cooldown = options.cooldown;
+        this.cooldown = cooldown;
 
         /**
          * Uses allowed before cooldown.
          * @type {number}
          */
-        this.ratelimit = options.ratelimit || 1;
+        this.ratelimit = ratelimit;
 
         /**
          * Default prompt options.
          * @type {ArgumentPromptOptions}
          */
-        this.defaultPrompt = options.defaultPrompt || {};
+        this.defaultPrompt = defaultPrompt;
 
         /**
          * Custom options for the command.
          * @type {Object}
          */
-        this.options = options.custom || options.options || {};
+        this.options = opts;
 
         /**
          * Description of the command.
          * @type {string}
          */
-        this.description = (Array.isArray(options.description) ? options.description.join('\n') : options.description) || '';
+        this.description = Array.isArray(description) ? description.join('\n') : description;
 
         /**
          * Command prefix overwrite.
          * @type {?string|string[]|PrefixFunction}
          */
-        this.prefix = options.prefix !== undefined ? options.prefix : this.prefix;
+        this.prefix = prefix;
 
         /**
          * Permissions required to run command by the client.
          * @type {PermissionResolvable|PermissionResolvable[]|PermissionFunction}
          */
-        this.clientPermissions = options.clientPermissions || this.clientPermissions;
+        this.clientPermissions = clientPermissions;
 
         /**
          * Permissions required to run command by the user.
          * @type {PermissionResolvable|PermissionResolvable[]|PermissionFunction}
          */
-        this.userPermissions = options.userPermissions || this.userPermissions;
+        this.userPermissions = userPermissions;
 
         /**
          * Gets the regex trigger, if specified.
@@ -220,7 +221,7 @@ class Command extends AkairoModule {
          * @param {Message} message - Message being handled.
          * @returns {RegExp}
          */
-        this.trigger = (typeof options.trigger === 'function' ? options.trigger : this.trigger) || (() => options.trigger);
+        this.trigger = typeof trigger === 'function' ? trigger : () => trigger;
 
         /**
          * Gets the condition trigger, if specified.
@@ -228,7 +229,7 @@ class Command extends AkairoModule {
          * @param {Message} message - Message being handled.
          * @returns {boolean}
          */
-        this.condition = options.condition || this.condition || (() => false);
+        this.condition = typeof condition === 'function' ? condition : () => Boolean(condition);
 
         /**
          * The ID of this command.
@@ -242,7 +243,6 @@ class Command extends AkairoModule {
          * @name Command#exec
          * @param {Message} message - Message that triggered the command.
          * @param {Object} args - Evaluated arguments.
-         * @param {boolean} edited - Whether the user's message was edited.
          * @returns {any}
          */
 
@@ -272,10 +272,10 @@ class Command extends AkairoModule {
         };
 
         const words = typeof this.split === 'function'
-        ? this.split(content, message) || []
-        : splitFuncs[this.split]
-        ? splitFuncs[this.split](content) || []
-        : content.split(this.split);
+            ? this.split(content, message) || []
+            : splitFuncs[this.split]
+                ? splitFuncs[this.split](content) || []
+                : content.split(this.split);
 
         const isQuoted = this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY || words.isQuoted;
 
@@ -379,7 +379,7 @@ class Command extends AkairoModule {
                     }
                 }
 
-                return () => Promise.resolve(arg.default() ? !word : !!word);
+                return () => Promise.resolve(arg.default() ? !word : Boolean(word));
             },
             [ArgumentMatches.TEXT]: arg => {
                 const joiner = this.split === ArgumentSplits.SPLIT ? ' ' : '';
@@ -398,19 +398,18 @@ class Command extends AkairoModule {
         const processed = {};
         let wordIndex = 0;
 
-        const process = i => {
+        const process = async i => {
             if (i === this.args.length) return processed;
 
             const arg = this.args[i];
-            const matchType = typeof arg.match === 'function' ? arg.match.call(this, message, processed) : arg.match;
+            const matchType = typeof arg.match === 'function' ? arg.match(message, processed) : arg.match;
             const castFunc = parseFuncs[matchType](arg, wordIndex);
 
             if (matchType === ArgumentMatches.WORD || matchType === ArgumentMatches.REST) wordIndex++;
 
-            return castFunc(message, processed).then(res => {
-                processed[arg.id] = res;
-                return process(i + 1);
-            });
+            const res = await castFunc(message, processed);
+            processed[arg.id] = res;
+            return process(i + 1);
         };
 
         return process(0);

@@ -54,17 +54,22 @@ class AkairoClient extends Client {
     constructor(options = {}, clientOptions) {
         super(clientOptions || options);
 
+        const {
+            ownerID,
+            selfbot = false
+        } = options;
+
         /**
          * The ID of the owner.
          * @type {string}
          */
-        this.ownerID = options.ownerID;
+        this.ownerID = ownerID;
 
         /**
          * Whether or not this is a selfbot.
          * @type {boolean}
          */
-        this.selfbot = !!options.selfbot;
+        this.selfbot = Boolean(selfbot);
 
         /**
          * Utility methods.
@@ -83,7 +88,7 @@ class AkairoClient extends Client {
     }
 
     /**
-     * Logins the client, creates message listener, and initialize databases.
+     * Logins the client and builds the client.
      * Resolves once client is ready.
      * @param {string} token - Client token.
      * @returns {Promise<string>}
@@ -96,30 +101,20 @@ class AkairoClient extends Client {
             super.login(token).catch(reject);
 
             this.once('ready', () => {
-                const promises = [];
+                if (this.commandHandler) {
+                    this.on('message', m => {
+                        this.commandHandler.handle(m);
+                    });
 
-                for (const key of Object.keys(this.databases)) {
-                    const db = this.databases[key];
-                    const ids = (db.init && db.init(this)) || [];
-                    promises.push(db.load ? db.load(ids) : Promise.resolve());
+                    if (this.commandHandler.handleEdits) {
+                        this.on('messageUpdate', (o, m) => {
+                            if (o.content === m.content) return;
+                            if (this.commandHandler.handleEdits) this.commandHandler.handle(m);
+                        });
+                    }
                 }
 
-                Promise.all(promises).then(() => {
-                    if (this.commandHandler) {
-                        this.on('message', m => {
-                            this.commandHandler.handle(m, false);
-                        });
-
-                        if (this.commandHandler.handleEdits) {
-                            this.on('messageUpdate', (o, m) => {
-                                if (o.content === m.content) return;
-                                if (this.commandHandler.handleEdits) this.commandHandler.handle(m, true);
-                            });
-                        }
-                    }
-
-                    return resolve(token);
-                }).catch(reject);
+                return resolve(token);
             });
         });
     }
@@ -140,7 +135,7 @@ class AkairoClient extends Client {
              * The command handler.
              * @type {CommandHandler}
              */
-            this.commandHandler = new CommandHandler(this, this.akairoOptions);
+            this.commandHandler = new CommandHandler(this);
         }
 
         if (this.akairoOptions.inhibitorDirectory && !this.inhibitorHandler) {
@@ -148,7 +143,7 @@ class AkairoClient extends Client {
              * The inhibitor handler.
              * @type {InhibitorHandler}
              */
-            this.inhibitorHandler = new InhibitorHandler(this, this.akairoOptions);
+            this.inhibitorHandler = new InhibitorHandler(this);
         }
 
         if (this.akairoOptions.listenerDirectory && !this.listenerHandler) {
@@ -156,7 +151,7 @@ class AkairoClient extends Client {
              * The listener handler.
              * @type {ListenerHandler}
              */
-            this.listenerHandler = new ListenerHandler(this, this.akairoOptions);
+            this.listenerHandler = new ListenerHandler(this);
         }
 
         return this;

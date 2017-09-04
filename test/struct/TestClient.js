@@ -12,8 +12,8 @@ class TestClient extends AkairoClient {
         });
 
         this.settings = new SQLiteProvider(sqlite.open('./test/db.sqlite')
-            .then(db => db.run('CREATE TABLE IF NOT EXISTS guilds (id TEXT NOT NULL UNIQUE, settings TEXT)')
-            .then(() => db)
+        .then(db => db.run('CREATE TABLE IF NOT EXISTS guilds (id TEXT NOT NULL UNIQUE, settings TEXT)')
+        .then(() => db)
         ), 'guilds', { dataColumn: 'settings' });
     }
 
@@ -27,11 +27,11 @@ class TestClient extends AkairoClient {
         });
     }
 
-    start(token) {
+    async start(token) {
         this.setup();
-        return this.settings.init()
-        .then(() => this.login(token))
-        .then(() => console.log('Ready!')); // eslint-disable-line no-console
+        await this.settings.init();
+        await this.login(token);
+        console.log('Ready!'); // eslint-disable-line no-console
     }
 }
 

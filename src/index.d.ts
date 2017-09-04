@@ -1,8 +1,7 @@
 declare module 'discord-akairo' {
     import {
-        Client, ClientOptions, Collection, Message, MessageOptions, MessageEditOptions,
-        User, GuildChannel, GuildMember, Channel, TextChannel, TextBasedChannel, DMChannel, GroupDMChannel, Role, Emoji, Guild,
-        PermissionResolvable, PermissionOverwrites, MessageEmbed
+        Client, ClientOptions, Collection, Message, MessageEmbed, MessageOptions, MessageEditOptions,
+        User, GuildChannel, GuildMember, Channel, TextChannel, Role, Emoji, Guild, PermissionResolvable
     } from 'discord.js';
 
     import { Database, Statement } from 'sqlite';
@@ -15,8 +14,8 @@ declare module 'discord-akairo' {
         }
     }
 
-    export class AkairoClient {
-        public constructor(options: AkairoOptions, clientOptions: ClientOptions);
+    export class AkairoClient extends Client {
+        public constructor(options?: AkairoOptions, clientOptions?: ClientOptions);
 
         public akairoOptions: AkairoOptions;
         public commandHandler: CommandHandler;
@@ -87,7 +86,7 @@ declare module 'discord-akairo' {
         public prompt?: ArgumentPromptOptions;
         public type: ArgumentType;
 
-        private _processType(word: string, message: Message, args: any): any;
+        private _processType(word: string, message: Message, args: any): Promise<any>;
         private _promptArgument(message: Message, args: any): Promise<any>;
 
         public cast(word: string, message: Message, args: any): Promise<any>;
@@ -120,8 +119,6 @@ declare module 'discord-akairo' {
         public compareStreaming(oldMember: GuildMember, newMember: GuildMember): number;
         public embed(data?: any): MessageEmbed;
         public fetchMemberIn(guild: Guild, id: string, cache?: boolean): Promise<GuildMember>;
-        public prompt(message: Message, content?: string, check?: RegExp | PromptCheckFunction, time?: number, options?: MessageOptions): Promise<Message>;
-        public promptIn(channel: TextBasedChannel | User, user?: User, content?: string, check?: RegExp | PromptCheckFunction, time?: number, options?: MessageOptions): Promise<Message>;
         public resolveChannel(text: string, channels: Collection<any, GuildChannel>, caseSensitive?: boolean, wholeWord?: boolean): GuildChannel;
         public resolveChannels(text: string, channels: Collection<any, GuildChannel>, caseSensitive?: boolean, wholeWord?: boolean): Collection<any, GuildChannel>;
         public resolveEmoji(text: string, emojis: Collection<any, Emoji>, caseSensitive?: boolean, wholeWord?: boolean): Emoji;
@@ -138,12 +135,12 @@ declare module 'discord-akairo' {
     }
 
     export class Command extends AkairoModule {
-        public constructor(id: string, exec: CommandExecFunction | RegexCommandExecFunction | ConditionalCommandExecFunction | CommandOptions, options?: CommandOptions);
+        public constructor(id: string, exec: ((message: Message, args: any) => any) | CommandOptions, options?: CommandOptions);
 
         public aliases: string[];
         public args: Argument[];
         public category: Category<string, Command>;
-        public channelRestriction?: string;
+        public channel?: string;
         public readonly client: AkairoClient;
         public clientPermissions: PermissionResolvable | PermissionResolvable[] | PermissionFunction;
         public cooldown?: number;
@@ -165,9 +162,7 @@ declare module 'discord-akairo' {
         public condition(message): boolean;
         public disable(): boolean;
         public enable(): boolean;
-        public exec(message: Message, args: any, edited: boolean): any;
-        public exec(message: Message, match: string | RegExpMatchArray, groups: RegExpMatchArray[] | void, edited: boolean): any;
-        public exec(message: Message, edited: boolean): any;
+        public exec(message: Message, args: any): any;
         public parse(content: string, message: Message): Promise<any>;
         public reload(): this;
         public remove(): this;
@@ -175,7 +170,7 @@ declare module 'discord-akairo' {
     }
 
     export class CommandHandler extends AkairoHandler {
-        public constructor(client: AkairoClient, options: AkairoOptions);
+        public constructor(client: AkairoClient);
 
         public aliases: Collection<string, string>;
         public blockBots: boolean;
@@ -199,11 +194,11 @@ declare module 'discord-akairo' {
         public resolver: TypeResolver;
 
         private _addAliases(command: Command): void;
-        private _handleConditional(message: Message, edited: boolean): Promise<void>;
+        private _handleConditional(message: Message): Promise<void>;
         private _handleCooldowns(message: Message, command: Command): boolean;
         private _handleError(err: Error, message: Message, command?: Command): void;
-        private _handleRegex(message: Message, edited: boolean): Promise<void>;
-        private _handleTriggers(message: Message, edited: boolean): Promise<void>;
+        private _handleRegex(message: Message): Promise<void>;
+        private _handleTriggers(message: Message): Promise<void>;
         private _parseCommand(message: Message): any;
         private _removeAliases(command: Command): void;
         private _runInhibitors(message: Message, command: Command): boolean;
@@ -216,7 +211,7 @@ declare module 'discord-akairo' {
         public allowMention(message: Message): boolean;
         public findCategory(name: string): Category<string, Command>;
         public findCommand(name: string): Command;
-        public handle(message: Message, edited: boolean): Promise<void>;
+        public handle(message: Message): Promise<void>;
         public hasPrompt(message: Message): boolean;
         public load(thing: string | Command): Command;
         public loadAll(): this;
@@ -230,7 +225,8 @@ declare module 'discord-akairo' {
         public on(event: 'commandBlocked', listener: (message: Message, command: Command, reason: string) => any): this;
         public on(event: 'commandCooldown', listener: (message: Message, command: Command, remaining: number) => any): this;
         public on(event: 'commandDisabled', listener: (message: Message, command: Command) => any): this;
-        public on(event: 'commandFinished' | 'commandStarted', listener: (message: Message, command: Command, edited: boolean) => any): this;
+        public on(event: 'commandFinished', listener: (message: Message, command: Command, args: any, returnValue: any) => any): this;
+        public on(event: 'commandStarted', listener: (message: Message, command: Command, args: any) => any): this;
         public on(event: 'error', listener: (error: Error, message: Message, command: Command) => any): this;
         public on(event: 'inPrompt' | 'messageInvalid', listener: (message: Message) => any): this;
         public on(event: 'messageBlocked', listener: (message: Message, reason: string) => any): this;
@@ -256,7 +252,7 @@ declare module 'discord-akairo' {
     }
 
     export class Inhibitor extends AkairoModule {
-        public constructor(id: string, exec: ((message: Message, command?: Command) => boolean | Promise<any>) | InhibitorOptions, options?: InhibitorOptions);
+        public constructor(id: string, exec: ((message: Message, command?: Command) => boolean | Promise<boolean>) | InhibitorOptions, options?: InhibitorOptions);
 
         public category: Category<string, Inhibitor>;
         public readonly client: AkairoClient;
@@ -269,13 +265,13 @@ declare module 'discord-akairo' {
 
         public disable(): boolean;
         public enable(): boolean;
-        public exec(message: Message, command?: Command): boolean | Promise<any>;
+        public exec(message: Message, command?: Command): boolean | Promise<boolean>;
         public reload(): this;
         public remove(): this;
     }
 
     export class InhibitorHandler extends AkairoHandler {
-        public constructor(client: AkairoClient, options: AkairoOptions);
+        public constructor(client: AkairoClient);
 
         public categories: Collection<string, Category<string, Inhibitor>>;
         public readonly classToHandle: Function;
@@ -294,18 +290,18 @@ declare module 'discord-akairo' {
         public reloadAll(): this;
         public remove(id: string): Inhibitor;
         public removeAll(): this;
-        public test(type: 'all' | 'pre' | 'post', message: Message, command?: Command): Promise<void[]>;
+        public test(type: 'all' | 'pre' | 'post', message: Message, command?: Command): Promise<string | void>;
         public on(event: 'add' | 'disable' | 'enable' | 'load' | 'reload' | 'remove', listener: (inhibitor: Inhibitor) => any): this;
     }
 
     export class Listener extends AkairoModule {
         public constructor(id: string, exec: ((...args: any[]) => any) | ListenerOptions, options?: ListenerOptions);
 
-        public category: Category<string, Inhibitor>;
+        public category: Category<string, Listener>;
         public readonly client: AkairoClient;
         public emitter: string | EventEmitter;
         public enabled: boolean;
-        public eventName: string;
+        public event: string;
         public readonly filepath: string;
         public readonly handler: InhibitorHandler;
         public type: string;
@@ -318,14 +314,14 @@ declare module 'discord-akairo' {
     }
 
     export class ListenerHandler extends AkairoHandler {
-        public constructor(client: AkairoClient, options: AkairoOptions);
+        public constructor(client: AkairoClient);
 
-        public categories: Collection<string, Category<string, Inhibitor>>;
+        public categories: Collection<string, Category<string, Listener>>;
         public readonly classToHandle: Function;
         public readonly client: AkairoClient;
         public readonly directory: string;
         public emitters: Collection<string, EventEmitter>;
-        public modules: Collection<string, Inhibitor>;
+        public modules: Collection<string, Listener>;
 
         protected _apply(listener: Listener, filepath?: string): void;
         protected _unapply(listener: Listener): void;
@@ -369,40 +365,6 @@ declare module 'discord-akairo' {
         public set(id: string, key: string, value: any): Promise<boolean>;
     }
 
-    export class SQLiteHandler extends EventEmitter {
-        public constructor(filepath: string, options?: SQLiteOptions);
-
-        public readonly client: AkairoClient;
-        public configs: any[];
-        public db: Database;
-        public defaultConfig: any;
-        public filepath: string;
-        public ids: string[];
-        public json: string[];
-        public memory: Collection<string, any>;
-        public tableName: string;
-
-        public add(id: string): Promise<this>;
-        public addMemory(id: string): this;
-        public desanitize(input: string, json?: boolean): any;
-        public get(id: string, keys?: string[]): any;
-        public has(id: string): boolean;
-        public init(client: AkairoClient): string[];
-        public load(ids: string[]): Promise<this>;
-        public open(): Promise<Database>;
-        public remove(id: string): Promise<this>;
-        public removeMemory(id: string): this;
-        public sanitize(input: string, json?: boolean): any;
-        public save(id: string): Promise<this>;
-        public saveAll(): Promise<this>;
-        public set(id: string, key: string, value: any): Promise<this>;
-        public setMemory(id: string, key: string, value: any): this;
-        public on(event: 'add' | 'set', listener: (config: any, memory: boolean) => any): this;
-        public on(event: 'init' | 'saveAll', listener: () => any): this;
-        public on(event: 'remove', listener: (id: string, memory: boolean) => any): this;
-        public on(event: 'save', listener: (config: any, newInsert: boolean) => any): this;
-    }
-
     export class SQLiteProvider extends Provider {
         public constructor(db: Database | Promise<Database>, tableName: string, options?: ProviderOptions);
 
@@ -424,6 +386,9 @@ declare module 'discord-akairo' {
 
         public readonly client: AkairoClient;
         public handler: CommandHandler;
+        public types: Collection<string, ArgumentTypeFunction>;
+
+        private _addBuiltInTypes(): void;
 
         public addType(name: string, resolver: ArgumentTypeFunction): this;
         public addTypes(types: { [x: string]: ArgumentTypeFunction }): this;
@@ -495,13 +460,11 @@ declare module 'discord-akairo' {
 
     export type ArgumentTypeFunction = (word: string, message: Message, args: any) => any;
 
-    export type CommandExecFunction = (message: Message, args: any, edited: boolean) => any;
-
     export type CommandOptions = {
         aliases?: string[];
         args?: ArgumentOptions[];
         split?: ArgumentSplit | ArgumentSplitFunction;
-        channelRestriction?: string;
+        channel?: string;
         category?: string;
         ownerOnly?: string;
         protected?: string;
@@ -519,8 +482,6 @@ declare module 'discord-akairo' {
         description?: string | string[];
     };
 
-    export type ConditionalCommandExecFunction = (message: Message, edited: boolean) => any;
-
     export type ConditionFunction = (message: Message) => any;
 
     export type InhibitorOptions = {
@@ -531,7 +492,7 @@ declare module 'discord-akairo' {
 
     export type ListenerOptions = {
         emitter?: string | EventEmitter;
-        eventName?: string;
+        event?: string;
         type?: string;
         category?: string;
     };
@@ -540,7 +501,7 @@ declare module 'discord-akairo' {
         category?: string;
     };
 
-    export type PermissionFunction = (message: Message) => boolean;
+    export type PermissionFunction = (message: Message) => boolean | Promise<boolean>;
 
     export type PrefixFunction = (message: Message) => boolean;
 
@@ -549,17 +510,6 @@ declare module 'discord-akairo' {
     export type ProviderOptions = {
         idColumn?: string;
         dataColumn?: string;
-    };
-
-    export type RegexCommandExecFunction = (match: string | RegExpMatchArray, groups: RegExpMatchArray[] | void, edited: boolean) => any;
-
-    export type SQLiteInitFunction = (client: AkairoClient) => string[];
-
-    export type SQLiteOptions = {
-        tableName?: string;
-        defaultConfig?: any;
-        json?: string[];
-        init?: string[] | SQLiteInitFunction;
     };
 
     export type TriggerFunction = (message: Message) => RegExp;

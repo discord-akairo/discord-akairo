@@ -64,7 +64,7 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
  *
  * Other Discord-related types:
  * - `message` tries to fetch a message from an ID.
- * - `invite` tries to resolve an invite code from a link.
+ * - `invite` tries to resolve an invite object from a link.
  * - `memberMention` matches a mention of a guild member.
  * - `channelMention` matches a mention of a channel.
  * - `roleMention` matches a mention of a role.
@@ -81,11 +81,9 @@ const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
 
 /**
  * A function for processing user input to use as an argument.
- * A return value of `true` will let the word pass.
  * A `null` or `undefined` return value will use the default value for the argument or start a prompt.
  * Any other truthy return value will be used as the evaluated argument.
- * If returning a Promise, the value resolved will be the argument.
- * A rejection will use the default value or start a prompt.
+ * If returning a Promise, the resolved value will go through the above steps.
  * @typedef {Function} ArgumentTypeFunction
  * @param {string} word - The user input.
  * @param {Message} message - Message that triggered the command.
@@ -153,12 +151,21 @@ class Argument {
      * @param {Command} command - Command of the argument.
      * @param {ArgumentOptions} options - Options for the argument.
      */
-    constructor(command, options = {}) {
+    constructor(command, {
+        id,
+        match = ArgumentMatches.WORD,
+        type = ArgumentTypes.STRING,
+        prefix,
+        index,
+        description = '',
+        prompt,
+        defaultValue = ''
+    } = {}) {
         /**
          * The ID of the argument.
          * @type {string}
          */
-        this.id = options.id;
+        this.id = id;
 
         /**
          * The command this argument belongs to.
@@ -170,37 +177,37 @@ class Argument {
          * The method to match text.
          * @type {ArgumentMatch}
          */
-        this.match = options.match || ArgumentMatches.WORD;
+        this.match = match;
 
         /**
          * The type to cast to.
          * @type {ArgumentType}
          */
-        this.type = options.type || ArgumentTypes.STRING;
+        this.type = type;
 
         /**
          * The prefix to use for flag or prefix args.
          * @type {?string | string[]}
          */
-        this.prefix = options.prefix;
+        this.prefix = prefix;
 
         /**
          * The index to skip to.
          * @type {?number}
          */
-        this.index = options.index;
+        this.index = index;
 
         /**
          * The description.
          * @type {string}
          */
-        this.description = Array.isArray(options.description) ? options.description.join('\n') : options.description || '';
+        this.description = Array.isArray(description) ? description.join('\n') : description;
 
         /**
          * The prompt options.
          * @type {?ArgumentPromptOptions}
          */
-        this.prompt = options.prompt;
+        this.prompt = prompt;
 
         /**
          * The default value.
@@ -210,7 +217,7 @@ class Argument {
          * @param {Object} args - Previous arguments from command.
          * @returns {any}
          */
-        this.default = typeof options.default === 'function' ? options.default : () => options.default !== undefined ? options.default : '';
+        this.default = typeof defaultValue === 'function' ? defaultValue : () => defaultValue;
     }
 
     /**
@@ -238,24 +245,26 @@ class Argument {
      * @param {Object} args - Previous arguments from command.
      * @returns {Promise<any>}
      */
-    cast(word, message, args) {
+    async cast(word, message, args) {
         word = word.trim();
 
         if (!word && this.prompt && this.prompt.optional) {
-            return Promise.resolve(this.default.call(this.command, message, args));
+            let res = this.default(message, args);
+            if (res && typeof res.then === 'function') res = await res;
+            return res;
         }
 
-        const res = this._processType(word, message, args);
+        let res = await this._processType(word, message, args);
 
-        if (res != null) {
-            return Promise.resolve(res).catch(err => {
-                if (err instanceof Error) throw err;
-                return this.prompt ? this._promptArgument(message, args) : this.default.call(this.command, message, args);
-            });
+        if (res == null) {
+            if (this.prompt) return this._promptArgument(message, args, Boolean(word));
+
+            res = this.default(message, args);
+            if (res && typeof res.then === 'function') res = await res;
+            return res;
         }
 
-        if (this.prompt) return this._promptArgument(message, args);
-        return Promise.resolve(this.default.call(this.command, message, args));
+        return res;
     }
 
     /**
@@ -264,13 +273,15 @@ class Argument {
      * @param {string} word - Word to process.
      * @param {Message} message - Message that called the command.
      * @param {Object} args - Previous arguments from command.
-     * @returns {any}
+     * @returns {Promise<any>}
      */
-    _processType(word, message, args) {
+    async _processType(word, message, args) {
         if (Array.isArray(this.type)) {
             for (const entry of this.type) {
                 if (Array.isArray(entry)) {
-                    if (entry.some(t => t.toLowerCase() === word.toLowerCase())) return entry[0];
+                    if (entry.some(t => t.toLowerCase() === word.toLowerCase())) {
+                        return entry[0];
+                    }
                 } else
                 if (entry.toLowerCase() === word.toLowerCase()) {
                     return entry;
@@ -281,7 +292,8 @@ class Argument {
         }
 
         if (typeof this.type === 'function') {
-            const res = this.type.call(this.command, word, message, args);
+            let res = this.type(word, message, args);
+            if (res && typeof res.then === 'function') res = await res;
             if (res != null) return res;
             return null;
         }
@@ -304,7 +316,8 @@ class Argument {
         }
 
         if (this.handler.resolver[this.type]) {
-            const res = this.handler.resolver[this.type](word, message, args);
+            let res = this.handler.resolver[this.type](word, message, args);
+            if (res && typeof res.then === 'function') res = await res;
             if (res != null) return res;
             return null;
         }
@@ -318,109 +331,94 @@ class Argument {
      * @private
      * @param {Message} message - Message to prompt.
      * @param {Object} args - Previous arguments from command.
+     * @param {boolean} hadInput - Whether or not there was already input.
      * @returns {Promise<any>}
      */
-    _promptArgument(message, args) {
+    async _promptArgument(message, args, hadInput) {
         const prompt = {};
 
         Object.assign(prompt, this.handler.defaultPrompt);
         Object.assign(prompt, this.command.defaultPrompt);
         Object.assign(prompt, this.prompt || {});
 
-        let exited = false;
-        let stopped = false;
-        let value = prompt.infinite ? [] : null;
+        const value = prompt.infinite ? [] : null;
         if (prompt.infinite) args[this.id] = value;
 
-        const retry = i => {
-            this.handler.addPrompt(message);
+        const getText = (textOption, retryCount) => {
+            textOption = typeof textOption === 'function'
+                ? textOption.call(this, message, args, retryCount)
+                : `${message.author}, ${Array.isArray(textOption) ? textOption.join('\n') : textOption}`;
 
-            let text = i === 1 ? prompt.start : prompt.retry;
-
-            text = typeof text === 'function'
-            ? text.call(this, message, args, i)
-            : `${message.author}, ${Array.isArray(text) ? text.join('\n') : text}`;
-
-            text = Array.isArray(text) ? text.join('\n') : text;
-
-            let opts;
-
-            if (typeof text === 'object' && text.content) {
-                opts = text;
-                text = text.content;
-            }
-
-            return this.client.util.prompt(message, prompt.infinite && value.length && i === 1 ? '' : text, (m, s) => {
-                if (s && this.handler.commandUtil) {
-                    message.util.setLastResponse(s);
-                }
-
-                if (m.content.toLowerCase() === prompt.cancelWord.toLowerCase()) {
-                    exited = true;
-                    return false;
-                }
-
-                if (prompt.infinite && m.content.toLowerCase() === prompt.stopWord.toLowerCase()) {
-                    if (value.length) stopped = true;
-                    return false;
-                }
-
-                const res = this._processType(m.content, m, args);
-
-                if (prompt.infinite) {
-                    if (res != null) value.push(res);
-                } else {
-                    value = res;
-                }
-
-                return res;
-            }, prompt.time, opts).then(() => {
-                const limit = prompt.limit == null ? Infinity : prompt.limit;
-                if (prompt.infinite && !stopped && value.length < limit) {
-                    return retry(1);
-                }
-
-                if (this.handler.commandUtil) message.util.shouldEdit = false;
-                return value;
-            }).catch(reason => {
-                if (reason instanceof Error) {
-                    this.handler.removePrompt(message);
-                    throw reason;
-                }
-
-                if (stopped) return value;
-
-                let response;
-
-                if (reason === 'time') response = prompt.timeout;
-                if (reason === 'failed' && exited) response = prompt.cancel;
-                if (i > prompt.retries) response = prompt.ended;
-
-                if (response) exited = true;
-
-                if (exited) {
-                    response = typeof response === 'function'
-                    ? response.call(this, message, args, i)
-                    : `${message.author}, ${Array.isArray(response) ? response.join('\n') : response}`;
-
-                    response = Array.isArray(response) ? response.join('\n') : response;
-                    if (!response) return undefined;
-
-                    if (typeof response === 'object' && response.content) {
-                        return (message.util || message.channel).send(response.content, response);
-                    }
-
-                    return (message.util || message.channel).send(response);
-                }
-
-                return retry(i + 1);
-            });
+            textOption = Array.isArray(textOption) ? textOption.join('\n') : textOption;
+            return textOption;
         };
 
-        return retry(1).then(v => {
-            this.handler.removePrompt(message);
-            return exited ? Promise.reject() : v;
-        });
+        const promptOne = async retryCount => {
+            this.handler.addPrompt(message);
+
+            const startText = getText(retryCount === 1 ? prompt.start : prompt.retry, retryCount);
+
+            let sent;
+            if (startText) {
+                sent = await message.channel.send(startText);
+                if (this.handler.commandUtil) {
+                    message.util.setLastResponse(sent);
+                }
+            }
+
+            try {
+                const [input] = await message.channel.awaitMessages(m => {
+                    if (sent && m.id === sent.id) return false;
+                    if (m.author.id !== message.author.id) return false;
+                    return true;
+                }, {
+                    max: 1,
+                    time: prompt.time,
+                    errors: ['time']
+                });
+
+                if (input.content.toLowerCase() === prompt.cancelWord.toLowerCase()) {
+                    const cancelText = getText(prompt.cancel, retryCount);
+                    if (cancelText) {
+                        await (message.util || message.channel).send(cancelText);
+                        return null;
+                    }
+                }
+
+                if (prompt.infinite && input.content.toLowerCase() === prompt.stopWord.toLowerCase()) {
+                    if (!value.length) return promptOne(retryCount + 1);
+                    return value;
+                }
+
+                const parsedValue = await this._processType(input.content, input, args);
+                if (parsedValue == null) return promptOne(retryCount + 1);
+
+                if (prompt.infinite) {
+                    value.push(parsedValue);
+                    if (prompt.infinite) {
+                        const limit = prompt.limit == null ? Infinity : prompt.limit;
+                        if (value.length < limit) return promptOne(1);
+                    }
+
+                    return value;
+                }
+
+                return value;
+            } catch (err) {
+                if (err instanceof Error) throw err;
+                const timeoutText = getText(prompt.timeout, retryCount);
+                if (timeoutText) {
+                    await (message.util || message.channel).send(timeoutText);
+                }
+
+                return null;
+            }
+        };
+
+        const returnValue = await promptOne(1 + Number(hadInput));
+        if (this.handler.commandUtil) message.util.shouldEdit = false;
+        this.handler.removePrompt(message);
+        return returnValue;
     }
 }
 

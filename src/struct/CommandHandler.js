@@ -10,10 +10,24 @@ class CommandHandler extends AkairoHandler {
     /**
      * Loads commands and handles messages.
      * @param {AkairoClient} client - The Akairo client.
-     * @param {Object} options - Options from client.
      */
-    constructor(client, options = {}) {
-        super(client, options.commandDirectory, Command);
+    constructor(client) {
+        const {
+            commandDirectory,
+            blockNotSelf = true,
+            blockClient = true,
+            blockBots = true,
+            fetchMembers = false,
+            handleEdits = false,
+            commandUtil = undefined,
+            commandUtilLifetime = 0,
+            defaultCooldown = 0,
+            defaultPrompt = {},
+            prefix = '',
+            allowMention = false
+        } = client.akairoOptions;
+
+        super(client, commandDirectory, Command);
 
         /**
          * The type resolver.
@@ -37,43 +51,43 @@ class CommandHandler extends AkairoHandler {
          * Whether or not to block others, if a selfbot.
          * @type {boolean}
          */
-        this.blockNotSelf = options.blockNotSelf === undefined ? true : !!options.blockNotSelf;
+        this.blockNotSelf = Boolean(blockNotSelf);
 
         /**
          * Whether or not to block self, if not a selfbot.
          * @type {boolean}
          */
-        this.blockClient = options.blockClient === undefined ? true : !!options.blockClient;
+        this.blockClient = Boolean(blockClient);
 
         /**
          * Whether or not to block bots.
          * @type {boolean}
          */
-        this.blockBots = options.blockBots === undefined ? true : !!options.blockBots;
+        this.blockBots = Boolean(blockBots);
 
         /**
          * Whether or not members are fetched on each message author from a guild.
          * @type {boolean}
          */
-        this.fetchMembers = !!options.fetchMember;
+        this.fetchMembers = Boolean(fetchMembers);
 
         /**
          * Whether or not edits are handled.
          * @type {boolean}
          */
-        this.handleEdits = !!options.handleEdits;
+        this.handleEdits = Boolean(handleEdits);
 
         /**
          * Whether or not `message.util` is assigned.
          * @type {boolean}
          */
-        this.commandUtil = options.commandUtil !== undefined ? !!options.commandUtil : this.handleEdits;
+        this.commandUtil = commandUtil !== undefined ? Boolean(commandUtil) : this.handleEdits;
 
         /**
          * How long a command util will last in milliseconds before it is removed.
          * @type {number}
          */
-        this.commandUtilLifetime = options.commandUtilLifetime || 0;
+        this.commandUtilLifetime = commandUtilLifetime;
 
         /**
          * Collection of CommandUtils.
@@ -91,7 +105,7 @@ class CommandHandler extends AkairoHandler {
          * Default cooldown for commands.
          * @type {number}
          */
-        this.defaultCooldown = options.defaultCooldown || 0;
+        this.defaultCooldown = defaultCooldown;
 
         /**
          * Collection of sets of ongoing argument prompts.
@@ -119,7 +133,7 @@ class CommandHandler extends AkairoHandler {
             stopWord: 'stop',
             optional: false,
             infinite: false
-        }, options.defaultPrompt || {});
+        }, defaultPrompt);
 
         /**
          * Gets the prefix.
@@ -127,7 +141,7 @@ class CommandHandler extends AkairoHandler {
          * @param {Message} message - Message being handled.
          * @returns {string}
          */
-        this.prefix = typeof options.prefix === 'function' ? options.prefix : () => options.prefix;
+        this.prefix = typeof prefix === 'function' ? prefix : () => prefix;
 
         /**
          * Gets if mentions are allowed for prefixing.
@@ -135,7 +149,7 @@ class CommandHandler extends AkairoHandler {
          * @param {Message} message - Message being handled.
          * @returns {boolean}
          */
-        this.allowMention = typeof options.allowMention === 'function' ? options.allowMention : () => options.allowMention;
+        this.allowMention = typeof allowMention === 'function' ? allowMention : () => Boolean(allowMention);
 
         /**
          * Directory to commands.
@@ -258,36 +272,32 @@ class CommandHandler extends AkairoHandler {
     /**
      * Handles a message.
      * @param {Message} message - Message to handle.
-     * @param {boolean} edited - Whether or not the message was edited.
-     * @returns {Promise<void>}
      */
-    handle(message, edited) {
-        const fetch = this.fetchMembers && message.guild
-        ? message.guild.members.fetch(message.author)
-        : Promise.resolve();
+    async handle(message) {
+        try {
+            if (this.fetchMembers && message.guild && !message.member) {
+                message.member = await message.guild.members.fetch(message.author);
+            }
 
-        return fetch.then(member => {
-            if (member) message.member = member;
+            let reason = this.client.inhibitorHandler && await this.client.inhibitorHandler.test('all', message);
+            if (reason) {
+                this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, reason);
+                return;
+            }
 
-            const allTest = this.client.inhibitorHandler
-            ? this.client.inhibitorHandler.test('all', message)
-            : Promise.resolve();
-
-            return allTest;
-        }).then(() => {
             if (this.blockNotSelf && message.author.id !== this.client.user.id && this.client.selfbot) {
                 this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.NOT_SELF);
-                return undefined;
+                return;
             }
 
             if (this.blockClient && message.author.id === this.client.user.id && !this.client.selfbot) {
                 this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.CLIENT);
-                return undefined;
+                return;
             }
 
             if (this.blockBots && message.author.bot) {
                 this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.BOT);
-                return undefined;
+                return;
             }
 
             if (this.commandUtil) {
@@ -303,72 +313,65 @@ class CommandHandler extends AkairoHandler {
                 }
             }
 
-            const preTest = this.client.inhibitorHandler
-            ? this.client.inhibitorHandler.test('pre', message)
-            : Promise.resolve();
-
-            return preTest.then(() => {
-                if (this.hasPrompt(message)) {
-                    this.emit(CommandHandlerEvents.IN_PROMPT, message);
-                    return undefined;
-                }
-
-                const parsed = this._parseCommand(message, edited) || {};
-                const { command, content, prefix, alias } = parsed;
-
-                if (this.commandUtil) {
-                    message.util.command = command;
-                    message.util.prefix = prefix;
-                    message.util.alias = alias;
-                }
-
-                if (!parsed.command) return this._handleTriggers(message, edited);
-
-                if (!command.enabled) {
-                    this.emit(CommandHandlerEvents.COMMAND_DISABLED, message, command);
-                    return undefined;
-                }
-
-                if (edited && !command.editable) return undefined;
-                if (this._runInhibitors(message, command)) return undefined;
-
-                const postTest = this.client.inhibitorHandler
-                ? this.client.inhibitorHandler.test('post', message, command)
-                : Promise.resolve();
-
-                return postTest.then(() => {
-                    const onCooldown = this._handleCooldowns(message, command);
-                    if (onCooldown) return undefined;
-
-                    return command.parse(content, message).then(args => {
-                        if (command.typing) message.channel.startTyping();
-                        this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, edited);
-                        return Promise.resolve(command.exec(message, args, edited));
-                    }).then(() => {
-                        this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, edited);
-                        if (command.typing) message.channel.stopTyping();
-                    });
-                }).catch(reason => {
-                    if (command.typing) message.channel.stopTyping();
-
-                    if (reason == null) return;
-                    if (reason instanceof Error) {
-                        this._handleError(reason, message, command);
-                        return;
-                    }
-
-                    this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
-                });
-            });
-        }).catch(reason => {
-            if (reason == null) return;
-            if (reason instanceof Error) {
-                this._handleError(reason, message);
+            reason = this.client.inhibitorHandler && await this.client.inhibitorHandler.test('pre', message);
+            if (reason) {
+                this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, reason);
                 return;
             }
 
-            this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, reason);
-        });
+            if (this.hasPrompt(message)) {
+                this.emit(CommandHandlerEvents.IN_PROMPT, message);
+                return;
+            }
+
+            const parsed = this._parseCommand(message) || {};
+            const { command, content, prefix, alias } = parsed;
+
+            if (this.commandUtil) {
+                Object.assign(message.util, {
+                    command, prefix, alias
+                });
+            }
+
+            if (!parsed.command) {
+                this._handleTriggers(message);
+                return;
+            }
+
+            try {
+                if (!command.enabled) {
+                    this.emit(CommandHandlerEvents.COMMAND_DISABLED, message, command);
+                    return;
+                }
+
+                if (message.edited && !command.editable) return;
+                if (await this._runInhibitors(message, command)) return;
+
+                reason = this.client.inhibitorHandler && await this.client.inhibitorHandler.test('post', message, command);
+                if (reason) {
+                    if (command.typing) message.channel.stopTyping();
+                    this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
+                    return;
+                }
+
+                const onCooldown = this._handleCooldowns(message, command);
+                if (onCooldown) return;
+
+                const args = await command.parse(content, message);
+
+                if (command.typing) message.channel.startTyping();
+                this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, args);
+
+                const ret = await command.exec(message, args);
+
+                this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, args, ret);
+                if (command.typing) message.channel.stopTyping();
+            } catch (err) {
+                this._handleError(err, message, command);
+            }
+        } catch (err) {
+            this._handleError(err, message);
+        }
     }
 
     /**
@@ -378,11 +381,11 @@ class CommandHandler extends AkairoHandler {
      * @param {Command} command - Command to check.
      * @returns {boolean}
      */
-    _runInhibitors(message, command) {
+    async _runInhibitors(message, command) {
         if (command.ownerOnly) {
             const notOwner = Array.isArray(this.client.ownerID)
-            ? !this.client.ownerID.includes(message.author.id)
-            : message.author.id !== this.client.ownerID;
+                ? !this.client.ownerID.includes(message.author.id)
+                : message.author.id !== this.client.ownerID;
 
             if (notOwner) {
                 this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.OWNER);
@@ -390,19 +393,22 @@ class CommandHandler extends AkairoHandler {
             }
         }
 
-        if (command.channelRestriction === 'guild' && !message.guild) {
+        if (command.channel === 'guild' && !message.guild) {
             this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.GUILD);
             return true;
         }
 
-        if (command.channelRestriction === 'dm' && message.guild) {
+        if (command.channel === 'dm' && message.guild) {
             this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.DM);
             return true;
         }
 
         if (command.clientPermissions) {
             if (typeof command.clientPermissions === 'function') {
-                if (!command.clientPermissions(message)) {
+                let allowed = command.clientPermissions(message);
+                if (allowed && typeof allowed.then === 'function') allowed = await allowed;
+
+                if (!allowed) {
                     this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.CLIENT_PERMISSIONS);
                     return true;
                 }
@@ -415,7 +421,10 @@ class CommandHandler extends AkairoHandler {
 
         if (command.userPermissions) {
             if (typeof command.userPermissions === 'function') {
-                if (!command.userPermissions(message)) {
+                let allowed = command.userPermissions(message);
+                if (allowed && typeof allowed.then === 'function') allowed = await allowed;
+
+                if (!allowed) {
                     this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.USER_PERMISSIONS);
                     return true;
                 }
@@ -440,8 +449,8 @@ class CommandHandler extends AkairoHandler {
 
         if (this.allowMention(message)) {
             prefix = Array.isArray(prefix)
-            ? [`<@${this.client.user.id}>`, `<@!${this.client.user.id}>`, ...prefix]
-            : [`<@${this.client.user.id}>`, `<@!${this.client.user.id}>`, prefix];
+                ? [`<@${this.client.user.id}>`, `<@!${this.client.user.id}>`, ...prefix]
+                : [`<@${this.client.user.id}>`, `<@!${this.client.user.id}>`, prefix];
         }
 
         let start;
@@ -567,27 +576,22 @@ class CommandHandler extends AkairoHandler {
      * Handles regex and conditional commands.
      * @private
      * @param {Message} message - Message to handle.
-     * @param {boolean} edited - Whether or not the message was edited.
-     * @returns {Promise<void>}
      */
-    _handleTriggers(message, edited) {
-        return this._handleRegex(message, edited).then(() => {
-            return this._handleConditional(message, edited);
-        });
+    async _handleTriggers(message) {
+        await this._handleRegex(message);
+        await this._handleConditional(message);
     }
 
     /**
      * Handles regex commands.
      * @private
      * @param {Message} message - Message to handle.
-     * @param {boolean} edited - Whether or not the message was edited.
-     * @returns {Promise<void>}
      */
-    _handleRegex(message, edited) {
+    async _handleRegex(message) {
         const matchedCommands = [];
 
         for (const command of this.modules.values()) {
-            if ((edited ? command.editable : true) && command.enabled) {
+            if ((message.edited ? command.editable : true) && command.enabled) {
                 const regex = command.trigger(message);
                 if (regex) matchedCommands.push({ command, regex });
             }
@@ -614,85 +618,87 @@ class CommandHandler extends AkairoHandler {
 
         const promises = [];
 
-        for (const entry of triggered) {
-            const postTest = this.client.inhibitorHandler
-            ? this.client.inhibitorHandler.test('post', message, entry.command)
-            : Promise.resolve();
+        for (const { command, match, groups } of triggered) {
+            promises.push(async () => {
+                try {
+                    if (await this._runInhibitors(message, command)) return;
 
-            promises.push(postTest.then(() => {
-                const onCooldown = this._handleCooldowns(message, entry.command);
-                if (onCooldown) return undefined;
+                    const reason = this.client.inhibitorHandler && await this.client.inhibitorHandler.test('post', message, command);
+                    if (reason) {
+                        this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
+                        return;
+                    }
 
-                if (entry.command.typing) message.channel.startTyping();
-                this.emit(CommandHandlerEvents.COMMAND_STARTED, message, entry.command);
+                    const onCooldown = this._handleCooldowns(message, command);
+                    if (onCooldown) return;
 
-                return Promise.resolve(entry.command.exec(message, entry.match, entry.groups, edited)).then(() => {
-                    this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, entry.command);
-                    if (entry.command.typing) message.channel.stopTyping();
-                });
-            }).catch(reason => {
-                if (entry.command.typing) message.channel.stopTyping();
+                    const args = { match, groups };
 
-                if (reason == null) return;
-                if (reason instanceof Error) {
-                    this._handleError(reason, message, entry.command);
-                    return;
+                    if (command.typing) message.channel.startTyping();
+                    this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, args);
+
+                    const ret = await command.exec(message, args);
+
+                    this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, args, ret);
+                    if (command.typing) message.channel.stopTyping();
+                } catch (err) {
+                    this._handleError(err, message, command);
                 }
-
-                this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, entry.command, reason);
-            }));
+            });
         }
 
-        return Promise.all(promises);
+        await Promise.all(promises);
     }
 
     /**
      * Handles conditional commands.
      * @private
      * @param {Message} message - Message to handle.
-     * @param {boolean} edited - Whether or not the message was edited.
-     * @returns {Promise<void>}
      */
-    _handleConditional(message, edited) {
-        const trueCommands = this.modules.filter(command => (edited ? command.editable : true) && command.enabled && command.condition(message));
+    async _handleConditional(message) {
+        const trueCommands = this.modules.filter(command =>
+            (message.edited ? command.editable : true)
+            && command.enabled
+            && command.condition(message)
+        );
 
         if (!trueCommands.size) {
             this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
-            return undefined;
+            return;
         }
 
         const promises = [];
 
         for (const command of trueCommands.values()) {
-            const postTest = this.client.inhibitorHandler
-            ? this.client.inhibitorHandler.test('post', message, command)
-            : Promise.resolve();
+            promises.push(async () => {
+                try {
+                    if (await this._runInhibitors(message, command)) return;
 
-            promises.push(postTest.then(() => {
-                const onCooldown = this._handleCooldowns(message, command);
-                if (onCooldown) return undefined;
+                    const reason = this.client.inhibitorHandler && await this.client.inhibitorHandler.test('post', message, command);
+                    if (reason) {
+                        this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
+                        return;
+                    }
 
-                if (command.typing) message.channel.startTyping();
-                this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command);
+                    const onCooldown = this._handleCooldowns(message, command);
+                    if (onCooldown) return;
 
-                return Promise.resolve(command.exec(message, edited)).then(() => {
-                    this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command);
+                    const args = {};
+
+                    if (command.typing) message.channel.startTyping();
+                    this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command);
+
+                    const ret = await command.exec(message, args);
+
+                    this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, args, ret);
                     if (command.typing) message.channel.stopTyping();
-                });
-            }).catch(reason => {
-                if (command.typing) message.channel.stopTyping();
-
-                if (reason == null) return;
-                if (reason instanceof Error) {
-                    this._handleError(reason, message, command);
-                    return;
+                } catch (err) {
+                    this._handleError(err, message, command);
                 }
-
-                this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
-            }));
+            });
         }
 
-        return Promise.all(promises);
+        await Promise.all(promises);
     }
 
     /**
@@ -701,7 +707,6 @@ class CommandHandler extends AkairoHandler {
      * @param {Error} err - The error.
      * @param {Message} message - Message that called the command.
      * @param {Command} [command] - Command that errored.
-     * @returns {void}
      */
     _handleError(err, message, command) {
         if (this.listenerCount(CommandHandlerEvents.ERROR)) {
@@ -812,7 +817,7 @@ module.exports = CommandHandler;
  * @event CommandHandler#commandStarted
  * @param {Message} message - Message sent.
  * @param {Command} command - Command executed.
- * @param {boolean} edited - Whether or not the command came from an edited message.
+ * @param {Object} args - The args passed to the command.
  */
 
 /**
@@ -820,7 +825,8 @@ module.exports = CommandHandler;
  * @event CommandHandler#commandFinished
  * @param {Message} message - Message sent.
  * @param {Command} command - Command executed.
- * @param {boolean} edited - Whether or not the command came from an edited message.
+ * @param {Object} args - The args passed to the command.
+ * @param {any} returnValue - The command's return value.
  */
 
 /**

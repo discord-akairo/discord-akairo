@@ -8,7 +8,7 @@ class SQLiteProvider extends Provider {
      * @param {string} tableName - Name of table to handle.
      * @param {ProviderOptions} [options={}] - Options to use.
      */
-    constructor(db, tableName, options = {}) {
+    constructor(db, tableName, { idColumn = 'id', dataColumn } = {}) {
         super();
 
         /**
@@ -27,28 +27,26 @@ class SQLiteProvider extends Provider {
          * Column for ID.
          * @type {string}
          */
-        this.idColumn = options.idColumn || 'id';
+        this.idColumn = idColumn;
 
         /**
          * Column for JSON data.
          * @type {?string}
          */
-        this.dataColumn = options.dataColumn;
+        this.dataColumn = dataColumn;
     }
 
     /**
      * Initializes the provider.
-     * @returns {Promise<void>}
      */
-    init() {
-        return Promise.resolve(this.db).then(db => {
-            this.db = db;
-            return this.db.all(`SELECT * FROM ${this.tableName}`).then(rows => {
-                for (const row of rows) {
-                    this.items.set(row[this.idColumn], this.dataColumn ? JSON.parse(row[this.dataColumn]) : row);
-                }
-            });
-        });
+    async init() {
+        const db = await this.db;
+        this.db = db;
+
+        const rows = await this.db.all(`SELECT * FROM ${this.tableName}`);
+        for (const row of rows) {
+            this.items.set(row[this.idColumn], this.dataColumn ? JSON.parse(row[this.dataColumn]) : row);
+        }
     }
 
     /**

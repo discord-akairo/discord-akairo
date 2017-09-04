@@ -4,7 +4,7 @@ const AkairoModule = require('./AkairoModule');
  * Options to use for listener execution behavior.
  * @typedef {Object} ListenerOptions
  * @prop {string|EventEmitter} [emitter='client'] - The event emitter, either a key from `ListenerHandler#emitters` or an EventEmitter.
- * @prop {string} [eventName='ready'] - Event name to listen to.
+ * @prop {string} [event='ready'] - Event name to listen to.
  * @prop {string} [type='on'] - Type of listener, either 'on' or 'once'.
  * @prop {string} [category='default'] - Category ID for organization purposes.
  */
@@ -32,23 +32,29 @@ class Listener extends AkairoModule {
 
         super(id, exec, options);
 
+        const {
+            emitter = 'client',
+            event = 'ready',
+            type = 'on'
+        } = options;
+
         /**
          * The event emitter.
          * @type {string|EventEmitter}
          */
-        this.emitter = options.emitter || 'client';
+        this.emitter = emitter;
 
         /**
          * The event name listened to.
          * @type {string}
          */
-        this.eventName = options.eventName || 'ready';
+        this.event = event;
 
         /**
          * Type of listener.
          * @type {string}
          */
-        this.type = options.type || 'on';
+        this.type = type;
 
         /**
          * Executes the listener.

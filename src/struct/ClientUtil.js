@@ -1,4 +1,4 @@
-const { Collection, Permissions, MessageEmbed, User } = require('discord.js');
+const { Collection, Permissions, MessageEmbed } = require('discord.js');
 
 /**
  * Function used to check if a response should pass for the prompt.
@@ -379,10 +379,9 @@ class ClientUtil {
      * @param {boolean} cache - Whether or not to add to cache.
      * @returns {Promise<GuildMember>}
      */
-    fetchMemberIn(guild, id, cache) {
-        return this.client.users.fetch(id, cache).then(fetched => {
-            return guild.members.fetch(fetched, cache);
-        });
+    async fetchMemberIn(guild, id, cache) {
+        const user = await this.client.users.fetch(id, cache);
+        return guild.members.fetch(user, cache);
     }
 
     /**
@@ -401,86 +400,6 @@ class ClientUtil {
      */
     collection(iterable) {
         return new Collection(iterable);
-    }
-
-    /**
-     * Prompts a user for input, returning the message that passes.
-     * @param {Message} message - Message to prompt.
-     * @param {string} [content] - Text to send.
-     * @param {RegExp|PromptCheckFunction} [check] - Regex or function to check if message should pass.
-     * @param {number} [time=30000] - Time in milliseconds to wait.
-     * @param {MessageOptions} [options] - Message options for message.
-     * @returns {Promise<Message>}
-     */
-    prompt(message, content, check = () => true, time = 30000, options) {
-        const promise = content || options
-        ? message.channel.send(content, options)
-        : Promise.resolve();
-
-        return promise.then(sent => new Promise((resolve, reject) => {
-            const collector = message.channel.createMessageCollector(m => {
-                try {
-                    if (sent && m.id === sent.id) return undefined;
-                    if (m.author.id !== message.author.id) return undefined;
-
-                    let passed;
-
-                    if (typeof check === 'function') {
-                        const checked = check(m, sent);
-                        passed = checked != null && checked !== false;
-                    } else {
-                        passed = check.test(m.content);
-                    }
-
-                    if (!passed) return collector.stop('failed');
-                    return true;
-                } catch (err) {
-                    return collector.stop(err);
-                }
-            }, { time });
-
-            collector.on('collect', () => collector.stop('passed'));
-
-            collector.on('end', (collected, reason) => {
-                if (reason !== 'passed') return reject(reason);
-                return resolve(collected.first());
-            });
-        }));
-    }
-
-    /**
-     * Prompts a user for input in a specific channel, returning the message that passes.
-     * @param {TextBasedChannel|User} channel - Channel to prompt in or a user to prompt in DM.
-     * @param {User} [user] - User to prompt, if not a user object in the channel param.
-     * @param {string} [content] - Text to send.
-     * @param {RegExp|PromptCheckFunction} [check] - Regex or function to check if message should pass.
-     * @param {number} [time=30000] - Time in milliseconds to wait.
-     * @param {MessageOptions} [options] - Message options for message.
-     * @returns {Promise<Message>}
-     */
-    promptIn(channel, user, content, check, time, options) {
-        if (channel instanceof User) {
-            const user = channel; // eslint-disable-line no-shadow
-
-            const sendPromise = content || options
-            ? user.send(content, options)
-            : Promise.resolve();
-
-            return sendPromise.then(msg => {
-                const dmChannel = (msg && msg.channel) || user.dmChannel;
-                const channelPromise = dmChannel ? Promise.resolve(dmChannel) : user.createDM();
-
-                return channelPromise.then(dm => this.prompt({
-                    author: user,
-                    channel: dm
-                }, null, check, time, null));
-            });
-        }
-
-        return this.prompt({
-            channel,
-            author: user
-        }, content, check, time, options);
     }
 }
 

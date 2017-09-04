@@ -6,10 +6,9 @@ class InhibitorHandler extends AkairoHandler {
     /**
      * Loads inhibitors and checks messages.
      * @param {AkairoClient} client - The Akairo client.
-     * @param {Object} options - Options from client.
      */
-    constructor(client, options = {}) {
-        super(client, options.inhibitorDirectory, Inhibitor);
+    constructor(client) {
+        super(client, client.akairoOptions.inhibitorDirectory, Inhibitor);
 
         /**
          * Directory to inhibitors.
@@ -27,41 +26,35 @@ class InhibitorHandler extends AkairoHandler {
 
     /**
      * Tests inhibitors against the message.
-     * Rejects with the reason if blocked.
+     * Returns the reason if blocked.
      * @param {string} type - Type of inhibitor, 'all', 'pre', or 'post'.
      * @param {Message} message - Message to test.
      * @param {Command} [command] - Command to use.
-     * @returns {Promise<void[]>}
+     * @returns {Promise<string|void>}
      */
-    test(type, message, command) {
-        if (!this.modules.size) return Promise.resolve();
+    async test(type, message, command) {
+        if (!this.modules.size) return Promise.resolve(null);
 
         const inhibitors = this.modules.filter(i => i.type === type && i.enabled);
-        if (!inhibitors.size) return Promise.resolve();
+        if (!inhibitors.size) return Promise.resolve(null);
 
         const promises = [];
 
         for (const inhibitor of inhibitors.values()) {
-            const inhibited = inhibitor.exec(message, command);
+            promises.push(async () => {
+                let inhibited = inhibitor.exec(message, command);
+                if (inhibited && typeof inhibited.then === 'function') inhibited = await inhibited;
 
-            if (inhibited instanceof Promise) {
-                promises.push(inhibited.catch(err => {
-                    if (err instanceof Error) throw err;
-                    return Promise.reject(inhibitor.reason);
-                }));
+                if (inhibited === true) {
+                    return inhibitor.reason;
+                }
 
-                continue;
-            }
-
-            if (!inhibited) {
-                promises.push(Promise.resolve());
-                continue;
-            }
-
-            promises.push(Promise.reject(inhibitor.reason));
+                return null;
+            });
         }
 
-        return Promise.all(promises);
+        const reason = (await Promise.all(promises)).find(r => r != null);
+        return reason === undefined ? null : reason;
     }
 
     /**
