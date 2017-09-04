@@ -319,6 +319,20 @@ class Command extends AkairoModule {
                 const word = noPrefixWords.slice(arg.index != null ? arg.index : index).join(joiner) || '';
                 return arg.cast.bind(arg, word);
             },
+            [ArgumentMatches.SEPARATE]: (arg, index) => {
+                const wordArr = noPrefixWords.slice(arg.index != null ? arg.index : index);
+                return async (m, p) => {
+                    const res = [];
+                    p[arg.id] = res;
+
+                    for (const word of wordArr) {
+                        // eslint-disable-next-line no-await-in-loop
+                        res.push(await arg.cast(word, m, p));
+                    }
+
+                    return res;
+                };
+            },
             [ArgumentMatches.PREFIX]: arg => {
                 let prefixUsed;
                 let word;

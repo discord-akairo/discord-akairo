@@ -6,6 +6,7 @@ module.exports = {
         TEXT: 'text',
         CONTENT: 'content',
         REST: 'rest',
+        SEPARATE: 'separate',
         NONE: 'none'
     },
     ArgumentTypes: {

@@ -14,6 +14,9 @@ const { isPromise } = require('../util/Util');
  * It ignores words that matches a prefix or a flag.
  * - `rest` matches the rest of the words in order.
  * It ignores words that matches a prefix or a flag.
+ * - `separate` matches the rest of the words in order.
+ * Unlike rest, each word is processed separately.
+ * It ignores words that matches a prefix or a flag.
  * - `prefix` matches words that starts with the prefix.
  * The word after the prefix is the evaluated argument.
  * - `flag` matches words that are the same as its prefix.
@@ -114,7 +117,6 @@ const { isPromise } = require('../util/Util');
 
 /**
  * A function returning text for the prompt or a `MessageOptions` object.
- * The options can have an extra optional property called `content` for message content.
  * @typedef {Function} ArgumentPromptFunction
  * @param {Message} message - Message that triggered the command.
  * @param {Object} prevArgs - Previous arguments.
