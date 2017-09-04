@@ -114,7 +114,7 @@
  * If so, the first entry of the array will be used as the final argument.
  *
  * A regular expression can also be used.
- * The evaluated argument will be an object containing the `match` and `groups` if global.
+ * The evaluated argument will be an object containing the `match` and `matches` if global.
  * @typedef {string|string[]} ArgumentType
  */
 
@@ -341,17 +341,17 @@ class Argument {
             const match = word.match(this.type);
             if (!match) return null;
 
-            const groups = [];
+            const matches = [];
 
             if (this.type.global) {
-                let group;
+                let matched;
 
-                while ((group = this.type.exec(word)) != null) {
-                    groups.push(group);
+                while ((matched = this.type.exec(word)) != null) {
+                    matches.push(matched);
                 }
             }
 
-            return { match, groups };
+            return { match, matches };
         }
 
         if (this.handler.resolver.type(this.type)) {
@@ -399,8 +399,9 @@ class Argument {
 
             let sent;
             if (startText) {
-                sent = await message.channel.send(startText);
+                sent = await (message.util || message.channel).send(startText);
                 if (this.handler.commandUtil) {
+                    message.util.shouldEdit = false;
                     message.util.setLastResponse(sent);
                 }
             }
@@ -419,10 +420,9 @@ class Argument {
                 if (input.content.toLowerCase() === prompt.cancelWord.toLowerCase()) {
                     const cancelText = getText(prompt.cancel, retryCount);
                     if (cancelText) {
-                        await (message.util || message.channel).send(cancelText);
+                        await message.channel.send(cancelText);
                     }
 
-                    if (this.handler.commandUtil) message.util.shouldEdit = false;
                     this.handler.removePrompt(message);
                     throw Symbols.COMMAND_CANCELLED;
                 }
@@ -452,10 +452,9 @@ class Argument {
 
                 const timeoutText = getText(prompt.timeout, retryCount);
                 if (timeoutText) {
-                    await (message.util || message.channel).send(timeoutText);
+                    await message.channel.send(timeoutText);
                 }
 
-                if (this.handler.commandUtil) message.util.shouldEdit = false;
                 this.handler.removePrompt(message);
                 throw Symbols.COMMAND_CANCELLED;
             }
