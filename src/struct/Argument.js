@@ -75,7 +75,7 @@ const { ArgumentMatches, ArgumentTypes, Symbols } = require('../util/Constants')
  * If so, the first entry of the array will be used as the final argument.
  *
  * A regular expression can also be used.
- * The evaluated argument will be an object containing the `match` and `groups` if global.
+ * The evaluated argument will be an object containing the `match` and `matches` if global.
  * @typedef {string|string[]} ArgumentType
  */
 
@@ -302,17 +302,17 @@ class Argument {
             const match = word.match(this.type);
             if (!match) return null;
 
-            const groups = [];
+            const matches = [];
 
             if (this.type.global) {
-                let group;
+                let matched;
 
-                while ((group = this.type.exec(word)) != null) {
-                    groups.push(group);
+                while ((matched = this.type.exec(word)) != null) {
+                    matches.push(matched);
                 }
             }
 
-            return { match, groups };
+            return { match, matches };
         }
 
         if (this.handler.resolver.type(this.type)) {

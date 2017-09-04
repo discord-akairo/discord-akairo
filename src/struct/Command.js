@@ -20,7 +20,7 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * @prop {PermissionResolvable|PermissionResolvable[]|PermissionFunction} [userPermissions] - Permissions required by the user to run this command.
  * @prop {PermissionResolvable|PermissionResolvable[]|PermissionFunction} [clientPermissions] - Permissions required by the client to run this command.
  * @prop {RegExp|TriggerFunction} [trigger] - A regex to match in messages that are NOT commands.
- * The args object will have `match` and `groups` properties.
+ * The args object will have `match` and `matches` properties.
  * @prop {ConditionFunction} [condition] - Whether or not to run on messages that are NOT commands.
  * @prop {ArgumentPromptOptions} [defaultPrompt={}] - The default prompt options.
  * @prop {Object} [options={}] - An object for custom options.

@@ -604,22 +604,22 @@ class CommandHandler extends AkairoHandler {
             const match = message.content.match(entry.regex);
             if (!match) continue;
 
-            const groups = [];
+            const matches = [];
 
             if (entry.regex.global) {
-                let group;
+                let matched;
 
-                while ((group = entry.regex.exec(message.content)) != null) {
-                    groups.push(group);
+                while ((matched = entry.regex.exec(message.content)) != null) {
+                    matches.push(matched);
                 }
             }
 
-            triggered.push({ command: entry.command, match, groups });
+            triggered.push({ command: entry.command, match, matches });
         }
 
         const promises = [];
 
-        for (const { command, match, groups } of triggered) {
+        for (const { command, match, matches } of triggered) {
             promises.push((async () => {
                 try {
                     if (await this._runInhibitors(message, command)) return;
@@ -633,7 +633,7 @@ class CommandHandler extends AkairoHandler {
                     const onCooldown = this._handleCooldowns(message, command);
                     if (onCooldown) return;
 
-                    const args = { match, groups };
+                    const args = { match, matches };
 
                     if (command.typing) message.channel.startTyping();
                     this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, args);
