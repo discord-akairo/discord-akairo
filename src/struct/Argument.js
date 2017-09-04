@@ -1,4 +1,4 @@
-const { ArgumentMatches, ArgumentTypes } = require('../util/Constants');
+const { ArgumentMatches, ArgumentTypes, Symbols } = require('../util/Constants');
 
 /**
  * Extra properties alongside the Discord.js message options type.
@@ -367,7 +367,7 @@ class Argument {
             }
 
             try {
-                const [input] = await message.channel.awaitMessages(m => {
+                const input = (await message.channel.awaitMessages(m => {
                     if (sent && m.id === sent.id) return false;
                     if (m.author.id !== message.author.id) return false;
                     return true;
@@ -375,14 +375,15 @@ class Argument {
                     max: 1,
                     time: prompt.time,
                     errors: ['time']
-                });
+                })).first();
 
                 if (input.content.toLowerCase() === prompt.cancelWord.toLowerCase()) {
                     const cancelText = getText(prompt.cancel, retryCount);
                     if (cancelText) {
                         await (message.util || message.channel).send(cancelText);
-                        return null;
                     }
+
+                    throw Symbols.COMMAND_CANCELLED;
                 }
 
                 if (prompt.infinite && input.content.toLowerCase() === prompt.stopWord.toLowerCase()) {
@@ -406,12 +407,14 @@ class Argument {
                 return value;
             } catch (err) {
                 if (err instanceof Error) throw err;
+                if (err === Symbols.COMMAND_CANCELLED) throw err;
+
                 const timeoutText = getText(prompt.timeout, retryCount);
                 if (timeoutText) {
                     await (message.util || message.channel).send(timeoutText);
                 }
 
-                return null;
+                throw Symbols.COMMAND_CANCELLED;
             }
         };
 

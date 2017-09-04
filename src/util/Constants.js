@@ -75,8 +75,6 @@ module.exports = {
         IN_PROMPT: 'inPrompt',
         ERROR: 'error'
     },
-    InhibitorHandlerEvents: {},
-    ListenerHandlerEvents: {},
     SQLiteHandlerEvents: {
         INIT: 'init',
         ADD: 'add',
@@ -94,5 +92,8 @@ module.exports = {
         DM: 'dm',
         CLIENT_PERMISSIONS: 'clientPermissions',
         USER_PERMISSIONS: 'userPermissions'
+    },
+    Symbols: {
+        COMMAND_CANCELLED: Symbol('commandCancelled')
     }
 };

@@ -1,5 +1,5 @@
 const AkairoHandler = require('./AkairoHandler');
-const { BuiltInReasons, CommandHandlerEvents } = require('../util/Constants');
+const { BuiltInReasons, CommandHandlerEvents, Symbols } = require('../util/Constants');
 const { Collection } = require('discord.js');
 const Command = require('./Command');
 const CommandUtil = require('./CommandUtil');
@@ -367,6 +367,7 @@ class CommandHandler extends AkairoHandler {
                 this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, args, ret);
                 if (command.typing) message.channel.stopTyping();
             } catch (err) {
+                if (err === Symbols.COMMAND_CANCELLED) return;
                 this._handleError(err, message, command);
             }
         } catch (err) {
