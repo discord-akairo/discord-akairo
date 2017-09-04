@@ -315,8 +315,8 @@ class Argument {
             return { match, groups };
         }
 
-        if (this.handler.resolver[this.type]) {
-            let res = this.handler.resolver[this.type](word, message, args);
+        if (this.handler.resolver.type(this.type)) {
+            let res = this.handler.resolver.type(this.type)(word, message, args);
             if (res && typeof res.then === 'function') res = await res;
             if (res != null) return res;
             return null;
