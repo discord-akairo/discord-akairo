@@ -31,6 +31,7 @@ class SequelizeProvider extends Provider {
 
     /**
      * Initializes the provider.
+     * @returns {Promise<void>}
      */
     async init() {
         const rows = await this.table.findAll();

@@ -38,6 +38,7 @@ class SQLiteProvider extends Provider {
 
     /**
      * Initializes the provider.
+     * @returns {Promise<void>}
      */
     async init() {
         const db = await this.db;
