@@ -383,6 +383,8 @@ class Argument {
                         await (message.util || message.channel).send(cancelText);
                     }
 
+                    if (this.handler.commandUtil) message.util.shouldEdit = false;
+                    this.handler.removePrompt(message);
                     throw Symbols.COMMAND_CANCELLED;
                 }
 
@@ -414,6 +416,8 @@ class Argument {
                     await (message.util || message.channel).send(timeoutText);
                 }
 
+                if (this.handler.commandUtil) message.util.shouldEdit = false;
+                this.handler.removePrompt(message);
                 throw Symbols.COMMAND_CANCELLED;
             }
         };
