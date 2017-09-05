@@ -131,6 +131,7 @@ const { isPromise } = require('../util/Util');
  * @prop {number} retries - Amount of retries.
  * @prop {boolean} infinite - Whether the prompt is infinite or not.
  * @prop {Message} message - The message that caused the prompt.
+ * @prop {string} word - The input word that caused the prompt if there was one.
  */
 
 /**
