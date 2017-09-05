@@ -121,8 +121,16 @@ const { isPromise } = require('../util/Util');
  * @typedef {Function} ArgumentPromptFunction
  * @param {Message} message - Message that triggered the command.
  * @param {Object} prevArgs - Previous arguments.
- * @param {number} tries - The amount of tries the user has taken.
+ * @param {ArgumentPromptData} data - Miscellaneous data.
  * @returns {string|string[]|MessageOptions}
+ */
+
+/**
+ * Data passed to argument prompt functions.
+ * @typedef {Object} ArgumentPromptData
+ * @prop {number} retries - Amount of retries.
+ * @prop {boolean} infinite - Whether the prompt is infinite or not.
+ * @prop {Message} message - The message that caused the prompt.
  */
 
 /**
@@ -284,7 +292,7 @@ class Argument {
         let res = await this.cast(word, message, args);
 
         if (res == null) {
-            if (this.prompt) return this.collect(message, args, Boolean(word));
+            if (this.prompt) return this.collect(message, args, word);
 
             res = this.default(message, args);
             if (isPromise(res)) res = await res;
@@ -354,12 +362,13 @@ class Argument {
 
     /**
      * Collects input from the user by prompting.
+     * Throws a Symbol if the command was cancelled via timeout or user cancel.
      * @param {Message} message - Message to prompt.
      * @param {Object} args - Previous arguments from command.
-     * @param {boolean} hadInput - Whether or not there was already input.
+     * @param {string} [commandInput] - Previous input from command if there was one.
      * @returns {Promise<any>}
      */
-    async collect(message, args, hadInput) {
+    async collect(message, args, commandInput) {
         const prompt = {};
 
         Object.assign(prompt, this.handler.defaultPrompt);
@@ -367,14 +376,19 @@ class Argument {
         Object.assign(prompt, this.prompt || {});
 
         const matchType = typeof this.match === 'function' ? this.match(message, args) : this.match;
-        const isInfinite = prompt.infinite && (matchType === ArgumentMatches.SEPARATE ? !hadInput : true);
+        const isInfinite = prompt.infinite && (matchType === ArgumentMatches.SEPARATE ? !commandInput : true);
 
         const values = isInfinite ? [] : null;
         if (isInfinite) args[this.id] = values;
 
-        const getText = (textOption, retryCount) => {
+        const getText = (textOption, retryCount, inputMessage, inputWord) => {
             if (typeof textOption === 'function') {
-                textOption = textOption.call(this, message, args, retryCount);
+                textOption = textOption.call(this, message, args, {
+                    retries: retryCount,
+                    infinite: isInfinite,
+                    message: inputMessage,
+                    word: inputWord
+                });
             }
 
             if (Array.isArray(textOption)) {
@@ -384,7 +398,7 @@ class Argument {
             return textOption;
         };
 
-        const promptOne = async retryCount => {
+        const promptOne = async (prevMessage, retryCount) => {
             this.handler.addPrompt(message);
 
             let sent;
@@ -393,7 +407,16 @@ class Argument {
                 : true;
 
             if (shouldSend) {
-                const startText = getText(retryCount === 1 ? prompt.start : prompt.retry, retryCount);
+                const prompter = retryCount === 1 ? prompt.start : prompt.retry;
+
+                let prevInput;
+                if (retryCount <= 1 + Number(Boolean(commandInput))) {
+                    prevInput = commandInput || '';
+                } else {
+                    prevInput = prevMessage.content;
+                }
+
+                const startText = getText(prompter, retryCount, prevMessage, prevInput);
 
                 if (startText) {
                     sent = await (message.util || message.channel).send(startText);
@@ -416,7 +439,7 @@ class Argument {
                 })).first();
 
                 if (input.content.toLowerCase() === prompt.cancelWord.toLowerCase()) {
-                    const cancelText = getText(prompt.cancel, retryCount);
+                    const cancelText = getText(prompt.cancel, retryCount, input, '');
                     if (cancelText) {
                         await message.channel.send(cancelText);
                     }
@@ -426,17 +449,17 @@ class Argument {
                 }
 
                 if (isInfinite && input.content.toLowerCase() === prompt.stopWord.toLowerCase()) {
-                    if (!values.length) return promptOne(retryCount + 1);
+                    if (!values.length) return promptOne(input, retryCount + 1);
                     return values;
                 }
 
                 const parsedValue = await this.cast(input.content, input, args);
-                if (parsedValue == null) return promptOne(retryCount + 1);
+                if (parsedValue == null) return promptOne(input, retryCount + 1);
 
                 if (isInfinite) {
                     values.push(parsedValue);
                     const limit = prompt.limit;
-                    if (values.length < limit) return promptOne(1);
+                    if (values.length < limit) return promptOne(message, 1);
 
                     return values;
                 }
@@ -446,7 +469,7 @@ class Argument {
                 if (err instanceof Error) throw err;
                 if (err === Symbols.COMMAND_CANCELLED) throw err;
 
-                const timeoutText = getText(prompt.timeout, retryCount);
+                const timeoutText = getText(prompt.timeout, retryCount, prevMessage, '');
                 if (timeoutText) {
                     await message.channel.send(timeoutText);
                 }
@@ -456,7 +479,7 @@ class Argument {
             }
         };
 
-        const returnValue = await promptOne(1 + Number(hadInput));
+        const returnValue = await promptOne(message, 1 + Number(Boolean(commandInput)));
         if (this.handler.commandUtil) message.util.shouldEdit = false;
         this.handler.removePrompt(message);
         return returnValue;

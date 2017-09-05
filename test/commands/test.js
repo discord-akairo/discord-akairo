@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 const { Command } = require('../..');
 
 class TestCommand extends Command {
@@ -8,10 +10,25 @@ class TestCommand extends Command {
                 {
                     id: 'numbers',
                     match: 'separate',
-                    type: 'number',
+                    type: (word, message, args) => {
+                        console.log('type:');
+                        console.log(word);
+                        console.dir(args, { colors: true });
+                        return this.handler.resolver.type('number')(word);
+                    },
                     prompt: {
-                        start: 'Input numbers',
-                        retry: 'Gotta be a number',
+                        start: (message, args, data) => {
+                            console.log('start:');
+                            console.dir(args, { colors: true });
+                            console.dir(data, { depth: 1, colors: true });
+                            return 'Input numbers';
+                        },
+                        retry: (message, args, data) => {
+                            console.log('retry:');
+                            console.dir(args, { colors: true });
+                            console.dir(data, { depth: 1, colors: true });
+                            return 'Gotta be a number';
+                        },
                         infinite: true
                     }
                 }
@@ -20,7 +37,7 @@ class TestCommand extends Command {
     }
 
     exec(message, args) {
-        // eslint-disable-next-line no-console
+        console.log('end:');
         console.dir(args, { colors: true });
     }
 }

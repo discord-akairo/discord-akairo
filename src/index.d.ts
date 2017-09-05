@@ -94,7 +94,7 @@ declare module 'discord-akairo' {
         public cast(word: string, message: Message, args: any): Promise<any>;
         public default(message: Message, args: any): any;
         public process(word: string, message: Message, args: any): Promise<any>;
-        public collect(message: Message, args: any, hadInput?: boolean): Promise<any>;
+        public collect(message: Message, args: any, commandInput?: string): Promise<any>;
     }
 
     export class Category<K, V> extends Collection<K, V> {
@@ -452,7 +452,14 @@ declare module 'discord-akairo' {
         allow?: ArgumentAllowFunction;
     };
 
-    export type ArgumentPromptFunction = (message: Message, args: any, tries: number) => (string | string[] | MessageOptions);
+    export type ArgumentPromptData = {
+        retries: number;
+        infinite: boolean;
+        message: Message;
+        word: string;
+    };
+
+    export type ArgumentPromptFunction = (message: Message, args: any, data: ArgumentPromptData) => (string | string[] | MessageOptions);
 
     export type ArgumentPromptOptions = {
         retries?: number;
