@@ -1,4 +1,4 @@
-<p align="center"><a href=https://github.com/1Computer1/discord-akairo><img src="https://a.safe.moe/PwUgW.png"/></a></p><p align="center"><a href=https://www.npmjs.com/package/discord-akairo><img src="https://img.shields.io/npm/v/discord-akairo.svg?maxAge=3600"/></a> <a href=https://david-dm.org/1computer1/discord-akairo><img src="https://david-dm.org/1computer1/discord-akairo.svg"/></a> <a href=https://travis-ci.org/1Computer1/discord-akairo><img src="https://travis-ci.org/1Computer1/discord-akairo.svg?branch=indev"/></a></p><p align="center"><a href=https://nodei.co/npm/discord-akairo><img src="https://nodei.co/npm/discord-akairo.png?downloads=true"/></a></p><p align="center">A modular and highly customizable bot framework for Discord.js v11</p>
+<p align="center"><a href=https://github.com/1Computer1/discord-akairo><img src="https://a.safe.moe/PwUgW.png"/></a></p><p align="center"><a href=https://www.npmjs.com/package/discord-akairo><img src="https://img.shields.io/npm/v/discord-akairo.svg?maxAge=3600"/></a> <a href=https://david-dm.org/1computer1/discord-akairo><img src="https://david-dm.org/1computer1/discord-akairo.svg"/></a> <a href=https://travis-ci.org/1Computer1/discord-akairo><img src="https://travis-ci.org/1Computer1/discord-akairo.svg?branch=indev"/></a></p><p align="center"><a href=https://nodei.co/npm/discord-akairo><img src="https://nodei.co/npm/discord-akairo.png?downloads=true"/></a></p><p align="center">A modular and highly customizable bot framework for Discord.js v12</p>
 
 ## Example
 
@@ -33,6 +33,7 @@ client.login('TOKEN').then(() => {
 
   - Command aliases.
   - Command cooldowns.
+  - Client and user permission checks.
   - Running commands on edits and editing previous responses.
   - A dynamic command prefixing system.
     - Multiple prefixes.
@@ -77,19 +78,18 @@ client.login('TOKEN').then(() => {
 
   - Resolvers for members, users, and others that can filter by name.
   - Shortcut methods for making embeds and collections.
-  - Helper methods for prompting users for input.
   - And some other useful things.
 
 #### Database providers.
 
   - Built-in support for `sqlite` and `sequelize`.
-    - Works on entire table or single JSON column.
+  - Works on entire table or single JSON column.
   - Caching data from databases.
   - Default values.
 
 ## Installation
 
-Requires Node 8 or higher and Discord.js v12.  
+Requires Node 8 and Discord.js v12.  
 
 *discord-akairo*  
 `npm install discord-akairo`
