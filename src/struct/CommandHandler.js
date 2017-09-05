@@ -433,13 +433,17 @@ class CommandHandler extends AkairoHandler {
                 if (isPromise(allowed)) allowed = await allowed;
 
                 if (!allowed) {
-                    this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.CLIENT_PERMISSIONS);
+                    this.emit(CommandHandlerEvents.MISSING_PERMISSIONS, message, command, 'client', null);
                     return true;
                 }
             } else
-            if (message.guild && !message.channel.permissionsFor(this.client.user).has(command.clientPermissions)) {
-                this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.CLIENT_PERMISSIONS);
-                return true;
+            if (message.guild) {
+                const check = Array.isArray(command.clientPermissions) ? command.clientPermissions : [command.clientPermissions];
+                const missing = message.channel.permissionsFor(this.client.user).missing(check);
+                if (missing.length) {
+                    this.emit(CommandHandlerEvents.MISSING_PERMISSIONS, message, command, 'client', missing);
+                    return true;
+                }
             }
         }
 
@@ -449,13 +453,17 @@ class CommandHandler extends AkairoHandler {
                 if (isPromise(allowed)) allowed = await allowed;
 
                 if (!allowed) {
-                    this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.USER_PERMISSIONS);
+                    this.emit(CommandHandlerEvents.MISSING_PERMISSIONS, message, command, 'user', null);
                     return true;
                 }
             } else
-            if (message.guild && !message.channel.permissionsFor(message.author).has(command.userPermissions)) {
-                this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.USER_PERMISSIONS);
-                return true;
+            if (message.guild) {
+                const check = Array.isArray(command.userPermissions) ? command.userPermissions : [command.userPermissions];
+                const missing = message.channel.permissionsFor(message.author).missing(check);
+                if (missing.length) {
+                    this.emit(CommandHandlerEvents.MISSING_PERMISSIONS, message, command, 'user', missing);
+                    return true;
+                }
             }
         }
 
@@ -588,7 +596,7 @@ class CommandHandler extends AkairoHandler {
             const end = this.cooldowns.get(message.author.id)[command.id].end;
             const diff = end - message.createdTimestamp;
 
-            this.emit(CommandHandlerEvents.COMMAND_COOLDOWN, message, command, diff);
+            this.emit(CommandHandlerEvents.COOLDOWN, message, command, diff);
             return true;
         }
 
@@ -831,19 +839,11 @@ module.exports = CommandHandler;
 
 /**
  * Emitted when a command is blocked by a post-message inhibitor.
- * The built-in inhibitors are 'owner', 'guild', 'dm', 'clientPermissions', and 'userPermissions'.
+ * The built-in inhibitors are 'owner', 'guild', and 'dm'.
  * @event CommandHandler#commandBlocked
  * @param {Message} message - Message sent.
  * @param {Command} command - Command blocked.
  * @param {string} reason - Reason for the block.
- */
-
-/**
- * Emitted when a command is found on cooldown.
- * @event CommandHandler#commandCooldown
- * @param {Message} message - Message sent.
- * @param {Command} command - Command blocked.
- * @param {number} remaining - Remaining time in milliseconds for cooldown.
  */
 
 /**
@@ -864,10 +864,27 @@ module.exports = CommandHandler;
  */
 
 /**
+ * Emitted when a command is found on cooldown.
+ * @event CommandHandler#cooldown
+ * @param {Message} message - Message sent.
+ * @param {Command} command - Command blocked.
+ * @param {number} remaining - Remaining time in milliseconds for cooldown.
+ */
+
+/**
  * Emitted when a user is in a command argument prompt.
  * Used to prevent usage of commands during a prompt.
  * @event CommandHandler#inPrompt
  * @param {Message} message - Message sent.
+ */
+
+/**
+ * Emitted when a permissions check is failed.
+ * @event CommandHandler#missingPermissions
+ * @param {Message} message - Message sent.
+ * @param {Command} command - Command blocked.
+ * @param {string} type - Either 'client' or 'user'.
+ * @param {PermissionResolvable[]} missing - The missing permissions if a function was not used for the permissions check.
  */
 
 /**

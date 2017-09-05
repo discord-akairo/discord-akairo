@@ -52,7 +52,8 @@ declare module 'discord-akairo' {
         public reloadAll(): this;
         public remove(id: string): AkairoModule;
         public removeAll(): this;
-        public on(event: 'add' | 'disable' | 'enable' | 'load' | 'reload' | 'remove', listener: (mod: AkairoModule) => any): this;
+        public on(event: 'disable' | 'enable' | 'remove', listener: (mod: AkairoModule) => any): this;
+        public on(event: 'load', listener: (mod: AkairoModule, isReload: boolean) => any): this;
     }
 
     export class AkairoModule {
@@ -221,15 +222,17 @@ declare module 'discord-akairo' {
         public remove(id: string): Command;
         public removeAll(): this;
         public removePrompt(message: Message): void;
-        public on(event: 'add' | 'disable' | 'enable' | 'load' | 'reload' | 'remove', listener: (command: Command) => any): this;
+        public on(event: 'disable' | 'enable' | 'remove', listener: (command: Command) => any): this;
+        public on(event: 'load', listener: (command: Command, isReload: boolean) => any): this;
         public on(event: 'commandBlocked', listener: (message: Message, command: Command, reason: string) => any): this;
-        public on(event: 'commandCooldown', listener: (message: Message, command: Command, remaining: number) => any): this;
         public on(event: 'commandDisabled', listener: (message: Message, command: Command) => any): this;
         public on(event: 'commandFinished', listener: (message: Message, command: Command, args: any, returnValue: any) => any): this;
         public on(event: 'commandStarted', listener: (message: Message, command: Command, args: any) => any): this;
+        public on(event: 'cooldown', listener: (message: Message, command: Command, remaining: number) => any): this;
         public on(event: 'error', listener: (error: Error, message: Message, command: Command) => any): this;
         public on(event: 'inPrompt' | 'messageInvalid', listener: (message: Message) => any): this;
         public on(event: 'messageBlocked', listener: (message: Message, reason: string) => any): this;
+        public on(event: 'missingPermissions', listener: (message: Message, command: Command, type: 'client' | 'user', missing?: PermissionResolvable[]) => any): this;
     }
 
     export class CommandUtil {
@@ -292,7 +295,8 @@ declare module 'discord-akairo' {
         public remove(id: string): Inhibitor;
         public removeAll(): this;
         public test(type: 'all' | 'pre' | 'post', message: Message, command?: Command): Promise<string | void>;
-        public on(event: 'add' | 'disable' | 'enable' | 'load' | 'reload' | 'remove', listener: (inhibitor: Inhibitor) => any): this;
+        public on(event: 'disable' | 'enable' | 'remove', listener: (inhibitor: Inhibitor) => any): this;
+        public on(event: 'load', listener: (inhibitor: Inhibitor, isReload: boolean) => any): this;
     }
 
     export class Listener extends AkairoModule {
@@ -337,7 +341,8 @@ declare module 'discord-akairo' {
         public reloadAll(): this;
         public remove(id: string): Listener;
         public removeAll(): this;
-        public on(event: 'add' | 'disable' | 'enable' | 'load' | 'reload' | 'remove', listener: (listener: Listener) => any): this;
+        public on(event: 'disable' | 'enable' | 'remove', listener: (listener: Listener) => any): this;
+        public on(event: 'load', listener: (listener: Listener, isReload: boolean) => any): this;
     }
 
     export abstract class Provider {

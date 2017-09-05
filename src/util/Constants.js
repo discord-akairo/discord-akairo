@@ -70,7 +70,8 @@ module.exports = {
         COMMAND_BLOCKED: 'commandBlocked',
         COMMAND_STARTED: 'commandStarted',
         COMMAND_FINISHED: 'commandFinished',
-        COMMAND_COOLDOWN: 'commandCooldown',
+        MISSING_PERMISSIONS: 'missingPermissions',
+        COOLDOWN: 'cooldown',
         IN_PROMPT: 'inPrompt',
         ERROR: 'error'
     },
@@ -80,9 +81,7 @@ module.exports = {
         BOT: 'bot',
         OWNER: 'owner',
         GUILD: 'guild',
-        DM: 'dm',
-        CLIENT_PERMISSIONS: 'clientPermissions',
-        USER_PERMISSIONS: 'userPermissions'
+        DM: 'dm'
     },
     Symbols: {
         COMMAND_CANCELLED: Symbol('commandCancelled')
