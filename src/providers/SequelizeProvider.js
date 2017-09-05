@@ -31,7 +31,7 @@ class SequelizeProvider extends Provider {
 
     /**
      * Initializes the provider.
-     * @returns {Promise<void>}
+     * @returns {Bluebird<void>}
      */
     async init() {
         const rows = await this.table.findAll();
@@ -61,7 +61,7 @@ class SequelizeProvider extends Provider {
      * @param {string} id - ID of entry.
      * @param {string} key - The key to set.
      * @param {any} value - The value.
-     * @returns {Promise<boolean>}
+     * @returns {Bluebird<boolean>}
      */
     set(id, key, value) {
         const data = this.items.get(id) || {};
@@ -85,7 +85,7 @@ class SequelizeProvider extends Provider {
      * Deletes a value.
      * @param {string} id - ID of entry.
      * @param {string} key - The key to delete.
-     * @returns {Promise<boolean>}
+     * @returns {Bluebird<boolean>}
      */
     delete(id, key) {
         const data = this.items.get(id) || {};
@@ -107,7 +107,7 @@ class SequelizeProvider extends Provider {
     /**
      * Clears an entry.
      * @param {string} id - ID of entry.
-     * @returns {Promise<void>}
+     * @returns {Bluebird<void>}
      */
     clear(id) {
         this.items.delete(id);

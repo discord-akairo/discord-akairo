@@ -4,9 +4,9 @@
         "dictionaries": ["jsdoc"]
     },
     "source": {
-        "include": ["README.md", "src/providers", "src/struct", "src/util", "package.json"],
+        "include": ["README.md", "src", "package.json"],
         "includePattern": ".js$",
-        "excludePattern": "(node_modules/|docs)"
+        "excludePattern": "(node_modules/|index.(?:js|d.ts)$)"
     },
     "templates": {
         "cleverLinks": false,
