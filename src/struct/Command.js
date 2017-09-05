@@ -320,24 +320,27 @@ class Command extends AkairoModule {
 
         const parseFuncs = {
             [ArgumentMatches.WORD]: (arg, index) => {
-                let word = noPrefixWords[arg.index != null ? arg.index : index] || '';
+                index = arg.index != null ? arg.index : index;
+                let word = noPrefixWords[index] || '';
                 if (isQuoted && /^"[^]+"$/.test(word.trim())) word = word.trim().slice(1, -1);
                 return arg.cast.bind(arg, word);
             },
             [ArgumentMatches.REST]: (arg, index) => {
+                index = arg.index != null ? arg.index : index;
                 const joiner = this.split === ArgumentSplits.SPLIT ? ' ' : '';
-                const word = noPrefixWords.slice(arg.index != null ? arg.index : index).join(joiner) || '';
+                const word = noPrefixWords.slice(index, index + arg.limit).join(joiner) || '';
                 return arg.cast.bind(arg, word);
             },
             [ArgumentMatches.SEPARATE]: (arg, index) => {
-                const wordArr = noPrefixWords.slice(arg.index != null ? arg.index : index);
-                return async (m, p) => {
+                index = arg.index != null ? arg.index : index;
+                const wordArr = noPrefixWords.slice(index, index + arg.limit);
+                return async (msg, processed) => {
                     const res = [];
-                    p[arg.id] = res;
+                    processed[arg.id] = res;
 
                     for (const word of wordArr) {
                         // eslint-disable-next-line no-await-in-loop
-                        res.push(await arg.cast(word, m, p));
+                        res.push(await arg.cast(word, msg, processed));
                     }
 
                     return res;
@@ -403,15 +406,19 @@ class Command extends AkairoModule {
                     }
                 }
 
-                return async (m, p) => await arg.default(m, p) == null ? !word : Boolean(word);
+                return async (msg, processed) => {
+                    return await arg.default(msg, processed) == null ? !word : Boolean(word);
+                };
             },
             [ArgumentMatches.TEXT]: arg => {
                 const joiner = this.split === ArgumentSplits.SPLIT ? ' ' : '';
-                const word = arg.index ? noPrefixWords.join(joiner) : noPrefixWords.slice(arg.index).join(joiner);
+                const index = arg.index == null ? 0 : arg.index;
+                const word = noPrefixWords.slice(index, index + arg.limit).join(joiner);
                 return arg.cast.bind(arg, word);
             },
             [ArgumentMatches.CONTENT]: arg => {
-                const word = arg.index ? content : content.split(' ').slice(arg.index).join(' ');
+                const index = arg.index == null ? 0 : arg.index;
+                const word = content.split(' ').slice(index, index + arg.limit).join(' ');
                 return arg.cast.bind(arg, word);
             },
             [ArgumentMatches.NONE]: arg => {

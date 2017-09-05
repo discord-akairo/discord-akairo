@@ -6,21 +6,10 @@ class TestCommand extends Command {
             aliases: ['test'],
             args: [
                 {
-                    id: 'option',
-                    type: ['number', 'channel']
-                },
-                [
-                    {
-                        id: 'number',
-                        type: 'number',
-                        allow: (m, { option }) => option === 'number'
-                    },
-                    {
-                        id: 'channel',
-                        type: 'channel',
-                        allow: (m, { option }) => option === 'channel'
-                    }
-                ]
+                    id: 'numbers',
+                    match: 'text',
+                    limit: 3
+                }
             ]
         });
     }

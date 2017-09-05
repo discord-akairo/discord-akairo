@@ -108,7 +108,7 @@ const { isPromise } = require('../util/Util');
  * @prop {boolean} [infinite=false] - Prompts forever until the stop word, cancel word, time limit, or retry limit.
  * Note that the retry count resets back to one on each valid entry.
  * The final evaluated argument will be an array of the inputs.
- * @prop {number} [limit=Infinite] - Amount of inputs allowed for an infinite prompt before finishing.
+ * @prop {number} [limit=Infinity] - Amount of inputs allowed for an infinite prompt before finishing.
  * @prop {string|string[]|ArgumentPromptFunction} [start] - Text sent on start of prompt.
  * @prop {string|string[]|ArgumentPromptFunction} [retry] - Text sent on a retry (failure to cast type).
  * @prop {string|string[]|ArgumentPromptFunction} [timeout] - Text sent on collector time out.
@@ -135,6 +135,8 @@ const { isPromise } = require('../util/Util');
  * Note that even if the command isn't ran, all prefixes are separated from the content.
  * @prop {number} [index] - Index/word of text to start from.
  * Applicable to word, text, content, rest, or separate match only.
+ * @prop {number} [limit=Infinity] - Amount of words to match when matching more than one.
+ * Applicable to text, content, rest, or separate match only.
  * @prop {any|ArgumentDefaultFunction} [default=''] - Default value if text does not parse or cast correctly.
  * If using a flag arg, setting the default value to a non-null/undefined value inverses the result.
  * @prop {string|string[]} [description=''] - A description of the argument.
@@ -164,6 +166,7 @@ class Argument {
         type = ArgumentTypes.STRING,
         prefix,
         index,
+        limit = Infinity,
         description = '',
         prompt,
         default: defaultValue = '',
@@ -204,6 +207,12 @@ class Argument {
          * @type {?number}
          */
         this.index = index;
+
+        /**
+         * The amount of words to match.
+         * @type {number}
+         */
+        this.limit = limit;
 
         /**
          * The description.

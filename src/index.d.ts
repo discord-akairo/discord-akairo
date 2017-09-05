@@ -82,6 +82,7 @@ declare module 'discord-akairo' {
         public readonly handler: CommandHandler;
         public id: string;
         public index?: number;
+        public limit: number;
         public match: ArgumentMatch;
         public prefix?: string | string[];
         public prompt?: ArgumentPromptOptions;
@@ -442,6 +443,7 @@ declare module 'discord-akairo' {
         type?: ArgumentType | ArgumentTypeFunction;
         prefix?: string | string[];
         index?: number;
+        limit?: number;
         default?: ArgumentDefaultFunction | any;
         description?: string | string[];
         prompt?: ArgumentPromptOptions;
