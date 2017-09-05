@@ -2,13 +2,6 @@ const { ArgumentMatches, ArgumentTypes, Symbols } = require('../util/Constants')
 const { isPromise } = require('../util/Util');
 
 /**
- * Extra properties alongside the Discord.js message options type.
- * Available for use when returning in a prompt function or in CommandUtil.
- * @typedef {Object} MessageOptionsExtensions
- * @prop {string|string[]} [content] - Content to send.
- */
-
-/**
  * The method to match arguments from text.
  * - `word` matches by the order of the words inputted.
  * It ignores words that matches a prefix or a flag.
@@ -68,7 +61,7 @@ const { isPromise } = require('../util/Util');
  *
  * Other Discord-related types:
  * - `message` tries to fetch a message from an ID.
- * - `invite` tries to resolve an invite object from a link.
+ * - `invite` tries to fetch an invite object from a link.
  * - `memberMention` matches a mention of a guild member.
  * - `channelMention` matches a mention of a channel.
  * - `roleMention` matches a mention of a role.

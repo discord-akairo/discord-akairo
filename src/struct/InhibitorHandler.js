@@ -145,7 +145,6 @@ module.exports = InhibitorHandler;
  * Emitted when an inhibitor is removed.
  * @event InhibitorHandler#remove
  * @param {Inhibitor} inhibitor - Inhibitor removed.
- * @param {boolean} isReload - Whether or not this was a reload.
  */
 
 /**
