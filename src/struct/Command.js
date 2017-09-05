@@ -323,24 +323,29 @@ class Command extends AkairoModule {
                 index = arg.index != null ? arg.index : index;
                 let word = noPrefixWords[index] || '';
                 if (isQuoted && /^"[^]+"$/.test(word.trim())) word = word.trim().slice(1, -1);
-                return arg.cast.bind(arg, word);
+                return arg.process.bind(arg, word);
             },
             [ArgumentMatches.REST]: (arg, index) => {
                 index = arg.index != null ? arg.index : index;
                 const joiner = this.split === ArgumentSplits.SPLIT ? ' ' : '';
                 const word = noPrefixWords.slice(index, index + arg.limit).join(joiner) || '';
-                return arg.cast.bind(arg, word);
+                return arg.process.bind(arg, word);
             },
             [ArgumentMatches.SEPARATE]: (arg, index) => {
                 index = arg.index != null ? arg.index : index;
                 const wordArr = noPrefixWords.slice(index, index + arg.limit);
+
+                if (!wordArr.length) {
+                    return arg.process.bind(arg, '');
+                }
+
                 return async (msg, processed) => {
                     const res = [];
                     processed[arg.id] = res;
 
                     for (const word of wordArr) {
                         // eslint-disable-next-line no-await-in-loop
-                        res.push(await arg.cast(word, msg, processed));
+                        res.push(await arg.process(word, msg, processed));
                     }
 
                     return res;
@@ -379,7 +384,7 @@ class Command extends AkairoModule {
                     if (isQuoted && /^"[^]+"$/.test(word.trim())) word = word.trim().slice(1, -1);
                 }
 
-                return arg.cast.bind(arg, word || '');
+                return arg.process.bind(arg, word || '');
             },
             [ArgumentMatches.FLAG]: arg => {
                 let word;
@@ -414,15 +419,15 @@ class Command extends AkairoModule {
                 const joiner = this.split === ArgumentSplits.SPLIT ? ' ' : '';
                 const index = arg.index == null ? 0 : arg.index;
                 const word = noPrefixWords.slice(index, index + arg.limit).join(joiner);
-                return arg.cast.bind(arg, word);
+                return arg.process.bind(arg, word);
             },
             [ArgumentMatches.CONTENT]: arg => {
                 const index = arg.index == null ? 0 : arg.index;
                 const word = content.split(' ').slice(index, index + arg.limit).join(' ');
-                return arg.cast.bind(arg, word);
+                return arg.process.bind(arg, word);
             },
             [ArgumentMatches.NONE]: arg => {
-                return arg.cast.bind(arg, '');
+                return arg.process.bind(arg, '');
             }
         };
 
@@ -442,11 +447,11 @@ class Command extends AkairoModule {
             }
 
             const matchType = typeof arg.match === 'function' ? arg.match(message, processed) : arg.match;
-            const castFunc = parseFuncs[matchType](arg, wordIndex);
+            const processFunc = parseFuncs[matchType](arg, wordIndex);
 
             if (matchType === ArgumentMatches.WORD || matchType === ArgumentMatches.REST) wordIndex++;
 
-            const res = await castFunc(message, processed);
+            const res = await processFunc(message, processed);
             processed[arg.id] = res;
             return process(i + 1);
         };

@@ -119,21 +119,18 @@ class CommandHandler extends AkairoHandler {
          * @type {ArgumentPromptOptions}
          */
         this.defaultPrompt = Object.assign({
-            start: function start(m) {
-                return `${m.author}, what ${this.type} would you like to use?\n${this.description || ''}`;
-            },
-            retry: function retry(m) {
-                return `${m.author}, you need to input a valid ${this.type}!`;
-            },
-            timeout: 'time ran out for command.',
-            ended: 'retries limit reached for command.\nCommand has been cancelled.',
-            cancel: 'command has been cancelled.',
+            start: '',
+            retry: '',
+            timeout: '',
+            ended: '',
+            cancel: '',
             retries: 1,
             time: 30000,
             cancelWord: 'cancel',
             stopWord: 'stop',
             optional: false,
-            infinite: false
+            infinite: false,
+            limit: Infinity
         }, defaultPrompt);
 
         /**

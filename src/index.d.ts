@@ -91,11 +91,10 @@ declare module 'discord-akairo' {
         public prompt?: ArgumentPromptOptions;
         public type: ArgumentType;
 
-        protected _processType(word: string, message: Message, args: any): Promise<any>;
-        protected _promptArgument(message: Message, args: any): Promise<any>;
-
         public cast(word: string, message: Message, args: any): Promise<any>;
         public default(message: Message, args: any): any;
+        public process(word: string, message: Message, args: any): Promise<any>;
+        public collect(message: Message, args: any, hadInput?: boolean): Promise<any>;
     }
 
     export class Category<K, V> extends Collection<K, V> {

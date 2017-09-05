@@ -8,7 +8,14 @@ class TestClient extends AkairoClient {
             ownerID: '123992700587343872',
             commandDirectory: './test/commands/',
             handleEdits: true,
-            allowMention: true
+            allowMention: true,
+            defaultPrompt: {
+                start: 'What is thing?',
+                retry: 'What is thing, again?',
+                timeout: 'Out of time.',
+                ended: 'No more tries.',
+                cancel: 'Cancelled.'
+            }
         });
 
         this.settings = new SQLiteProvider(sqlite.open('./test/db.sqlite')

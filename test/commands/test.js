@@ -7,8 +7,13 @@ class TestCommand extends Command {
             args: [
                 {
                     id: 'numbers',
-                    match: 'text',
-                    limit: 3
+                    match: 'separate',
+                    type: 'number',
+                    prompt: {
+                        start: 'Input numbers',
+                        retry: 'Gotta be a number',
+                        infinite: true
+                    }
                 }
             ]
         });

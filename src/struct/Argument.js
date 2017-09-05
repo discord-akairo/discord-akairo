@@ -266,13 +266,13 @@ class Argument {
     }
 
     /**
-     * Casts the type of this argument onto a word.
-     * @param {string} word - The word to cast.
+     * Processes the type casting and prompting of the argument for a word.
+     * @param {string} word - The word to process.
      * @param {Message} message - The message that called the command.
      * @param {Object} args - Previous arguments from command.
      * @returns {Promise<any>}
      */
-    async cast(word, message, args) {
+    async process(word, message, args) {
         word = word.trim();
 
         if (!word && this.prompt && this.prompt.optional) {
@@ -281,10 +281,10 @@ class Argument {
             return res;
         }
 
-        let res = await this._processType(word, message, args);
+        let res = await this.cast(word, message, args);
 
         if (res == null) {
-            if (this.prompt) return this._promptArgument(message, args, Boolean(word));
+            if (this.prompt) return this.collect(message, args, Boolean(word));
 
             res = this.default(message, args);
             if (isPromise(res)) res = await res;
@@ -295,14 +295,13 @@ class Argument {
     }
 
     /**
-     * Processes the type casting.
-     * @protected
+     * Casts a word to the argument's type.
      * @param {string} word - Word to process.
      * @param {Message} message - Message that called the command.
      * @param {Object} args - Previous arguments from command.
      * @returns {Promise<any>}
      */
-    async _processType(word, message, args) {
+    async cast(word, message, args) {
         if (Array.isArray(this.type)) {
             for (const entry of this.type) {
                 if (Array.isArray(entry)) {
@@ -354,43 +353,54 @@ class Argument {
     }
 
     /**
-     * Prompts a message for a word and casts it.
-     * @protected
+     * Collects input from the user by prompting.
      * @param {Message} message - Message to prompt.
      * @param {Object} args - Previous arguments from command.
      * @param {boolean} hadInput - Whether or not there was already input.
      * @returns {Promise<any>}
      */
-    async _promptArgument(message, args, hadInput) {
+    async collect(message, args, hadInput) {
         const prompt = {};
 
         Object.assign(prompt, this.handler.defaultPrompt);
         Object.assign(prompt, this.command.defaultPrompt);
         Object.assign(prompt, this.prompt || {});
 
-        const values = prompt.infinite ? [] : null;
-        if (prompt.infinite) args[this.id] = values;
+        const matchType = typeof this.match === 'function' ? this.match(message, args) : this.match;
+        const isInfinite = prompt.infinite && (matchType === ArgumentMatches.SEPARATE ? !hadInput : true);
+
+        const values = isInfinite ? [] : null;
+        if (isInfinite) args[this.id] = values;
 
         const getText = (textOption, retryCount) => {
-            textOption = typeof textOption === 'function'
-                ? textOption.call(this, message, args, retryCount)
-                : `${message.author}, ${Array.isArray(textOption) ? textOption.join('\n') : textOption}`;
+            if (typeof textOption === 'function') {
+                textOption = textOption.call(this, message, args, retryCount);
+            }
 
-            textOption = Array.isArray(textOption) ? textOption.join('\n') : textOption;
+            if (Array.isArray(textOption)) {
+                textOption = textOption.join('\n');
+            }
+
             return textOption;
         };
 
         const promptOne = async retryCount => {
             this.handler.addPrompt(message);
 
-            const startText = getText(retryCount === 1 ? prompt.start : prompt.retry, retryCount);
-
             let sent;
-            if (startText) {
-                sent = await (message.util || message.channel).send(startText);
-                if (this.handler.commandUtil) {
-                    message.util.shouldEdit = false;
-                    message.util.setLastResponse(sent);
+            const shouldSend = retryCount === 1
+                ? !isInfinite || (isInfinite && !values.length)
+                : true;
+
+            if (shouldSend) {
+                const startText = getText(retryCount === 1 ? prompt.start : prompt.retry, retryCount);
+
+                if (startText) {
+                    sent = await (message.util || message.channel).send(startText);
+                    if (this.handler.commandUtil) {
+                        message.util.shouldEdit = false;
+                        message.util.setLastResponse(sent);
+                    }
                 }
             }
 
@@ -415,20 +425,18 @@ class Argument {
                     throw Symbols.COMMAND_CANCELLED;
                 }
 
-                if (prompt.infinite && input.content.toLowerCase() === prompt.stopWord.toLowerCase()) {
+                if (isInfinite && input.content.toLowerCase() === prompt.stopWord.toLowerCase()) {
                     if (!values.length) return promptOne(retryCount + 1);
                     return values;
                 }
 
-                const parsedValue = await this._processType(input.content, input, args);
+                const parsedValue = await this.cast(input.content, input, args);
                 if (parsedValue == null) return promptOne(retryCount + 1);
 
-                if (prompt.infinite) {
+                if (isInfinite) {
                     values.push(parsedValue);
-                    if (prompt.infinite) {
-                        const limit = prompt.limit == null ? Infinity : prompt.limit;
-                        if (values.length < limit) return promptOne(1);
-                    }
+                    const limit = prompt.limit;
+                    if (values.length < limit) return promptOne(1);
 
                     return values;
                 }
