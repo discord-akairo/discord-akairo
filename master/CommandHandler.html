@@ -1604,7 +1604,7 @@
 
     
 
-    <h4 class="name" id="_addAliases"><span class="type-signature">(private) </span>_addAliases<span class="signature">(command)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="_addAliases"><span class="type-signature">(protected) </span>_addAliases<span class="signature">(command)</span><span class="type-signature"> &rarr; {void}</span></h4>
 
     
 
@@ -1748,7 +1748,7 @@
 
     
 
-    <h4 class="name" id="_apply"><span class="type-signature">(private) </span>_apply<span class="signature">(command, filepath<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="_deregister"><span class="type-signature">(protected) </span>_deregister<span class="signature">(command)</span><span class="type-signature"> &rarr; {void}</span></h4>
 
     
 
@@ -1760,7 +1760,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line176">line 176</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line187">line 187</a>
     </li></ul></dd>
     
 
@@ -1773,7 +1773,7 @@
     
     <dt class="tag-overrides">Overrides:</dt>
     <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="AkairoHandler.html#_apply">AkairoHandler#_apply</a>
+        <a href="AkairoHandler.html#_deregister">AkairoHandler#_deregister</a>
     </li></ul></dd>
     
 
@@ -1805,7 +1805,7 @@
 
 
 <div class="description">
-    <p>Registers a module.</p>
+    <p>Deregisters a module.</p>
 </div>
 
 
@@ -1830,8 +1830,6 @@
 
         <th>Type</th>
 
-        
-        <th>Attributes</th>
         
 
         
@@ -1858,51 +1856,10 @@
             </td>
 
             
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
 
             
 
             <td class="description last"><p>Module to use.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>filepath</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>Filepath of module.</p></td>
         </tr>
 
     
@@ -1940,7 +1897,7 @@
 
     
 
-    <h4 class="name" id="_handleCommand"><span class="type-signature">(private) </span>_handleCommand<span class="signature">(message, content, command)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    <h4 class="name" id="_handleCommand"><span class="type-signature">(protected) </span>_handleCommand<span class="signature">(message, content, command)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
 
     
 
@@ -1952,7 +1909,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line363">line 363</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line317">line 317</a>
     </li></ul></dd>
     
 
@@ -2130,7 +2087,7 @@
 
     
 
-    <h4 class="name" id="_handleConditional"><span class="type-signature">(private) </span>_handleConditional<span class="signature">(message)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    <h4 class="name" id="_handleConditional"><span class="type-signature">(protected) </span>_handleConditional<span class="signature">(message)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
 
     
 
@@ -2142,7 +2099,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line696">line 696</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line650">line 650</a>
     </li></ul></dd>
     
 
@@ -2274,7 +2231,7 @@
 
     
 
-    <h4 class="name" id="_handleCooldowns"><span class="type-signature">(private) </span>_handleCooldowns<span class="signature">(message, command)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    <h4 class="name" id="_handleCooldowns"><span class="type-signature">(protected) </span>_handleCooldowns<span class="signature">(message, command)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
 
     
 
@@ -2286,7 +2243,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line569">line 569</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line434">line 434</a>
     </li></ul></dd>
     
 
@@ -2441,7 +2398,7 @@
 
     
 
-    <h4 class="name" id="_handleError"><span class="type-signature">(private) </span>_handleError<span class="signature">(err, message, command<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    <h4 class="name" id="_handleError"><span class="type-signature">(protected) </span>_handleError<span class="signature">(err, message, command<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
 
     
 
@@ -2453,7 +2410,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line753">line 753</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line707">line 707</a>
     </li></ul></dd>
     
 
@@ -2659,7 +2616,7 @@
 
     
 
-    <h4 class="name" id="_handleRegex"><span class="type-signature">(private) </span>_handleRegex<span class="signature">(message)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    <h4 class="name" id="_handleRegex"><span class="type-signature">(protected) </span>_handleRegex<span class="signature">(message)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
 
     
 
@@ -2671,7 +2628,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line624">line 624</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line578">line 578</a>
     </li></ul></dd>
     
 
@@ -2803,7 +2760,7 @@
 
     
 
-    <h4 class="name" id="_handleTriggers"><span class="type-signature">(private) </span>_handleTriggers<span class="signature">(message)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    <h4 class="name" id="_handleTriggers"><span class="type-signature">(protected) </span>_handleTriggers<span class="signature">(message)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
 
     
 
@@ -2815,7 +2772,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line613">line 613</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line567">line 567</a>
     </li></ul></dd>
     
 
@@ -2947,7 +2904,7 @@
 
     
 
-    <h4 class="name" id="_parseCommand"><span class="type-signature">(private) </span>_parseCommand<span class="signature">(message)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    <h4 class="name" id="_parseCommand"><span class="type-signature">(protected) </span>_parseCommand<span class="signature">(message)</span><span class="type-signature"> &rarr; {Object}</span></h4>
 
     
 
@@ -2959,7 +2916,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line479">line 479</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line478">line 478</a>
     </li></ul></dd>
     
 
@@ -3091,7 +3048,199 @@
 
     
 
-    <h4 class="name" id="_removeAliases"><span class="type-signature">(private) </span>_removeAliases<span class="signature">(command)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="_register"><span class="type-signature">(protected) </span>_register<span class="signature">(command, filepath<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {void}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line176">line 176</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#_register">AkairoHandler#_register</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Registers a module.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>command</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Command.html">Command</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Module to use.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>filepath</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Filepath of module.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<b>Returns:</b>
+
+        
+
+
+    
+<span class="param-type">void</span>
+
+
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_removeAliases"><span class="type-signature">(protected) </span>_removeAliases<span class="signature">(command)</span><span class="type-signature"> &rarr; {void}</span></h4>
 
     
 
@@ -3235,7 +3384,7 @@
 
     
 
-    <h4 class="name" id="_runInhibitors"><span class="type-signature">(private) </span>_runInhibitors<span class="signature">(message, command)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    <h4 class="name" id="_runInhibitors"><span class="type-signature">(protected) </span>_runInhibitors<span class="signature">(message, command)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
 
     
 
@@ -3247,7 +3396,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line408">line 408</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line362">line 362</a>
     </li></ul></dd>
     
 
@@ -3391,155 +3540,6 @@
 
     
 <span class="param-type">boolean</span>
-
-
-
-    
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="_unapply"><span class="type-signature">(private) </span>_unapply<span class="signature">(command)</span><span class="type-signature"> &rarr; {void}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line187">line 187</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="AkairoHandler.html#_unapply">AkairoHandler#_unapply</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    <p>Deregisters a module.</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>command</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Command.html">Command</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Module to use.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<b>Returns:</b>
-
-        
-
-
-    
-<span class="param-type">void</span>
 
 
 
@@ -3712,7 +3712,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line241">line 241</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line721">line 721</a>
     </li></ul></dd>
     
 
@@ -4149,7 +4149,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line232">line 232</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line758">line 758</a>
     </li></ul></dd>
     
 
@@ -4293,7 +4293,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line278">line 278</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line232">line 232</a>
     </li></ul></dd>
     
 
@@ -4437,7 +4437,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line267">line 267</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line747">line 747</a>
     </li></ul></dd>
     
 
@@ -4581,7 +4581,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_AkairoHandler.js.html">struct/AkairoHandler.js</a>, <a href="struct_AkairoHandler.js.html#line128">line 128</a>
+        <a href="struct_AkairoHandler.js.html">struct/AkairoHandler.js</a>, <a href="struct_AkairoHandler.js.html#line118">line 118</a>
     </li></ul></dd>
     
 
@@ -4788,7 +4788,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_AkairoHandler.js.html">struct/AkairoHandler.js</a>, <a href="struct_AkairoHandler.js.html#line71">line 71</a>
+        <a href="struct_AkairoHandler.js.html">struct/AkairoHandler.js</a>, <a href="struct_AkairoHandler.js.html#line151">line 151</a>
     </li></ul></dd>
     
 
@@ -5530,7 +5530,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line254">line 254</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line734">line 734</a>
     </li></ul></dd>
     
 

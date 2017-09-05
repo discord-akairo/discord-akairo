@@ -652,7 +652,156 @@
 
     
 
-    <h4 class="name" id="_apply"><span class="type-signature">(private) </span>_apply<span class="signature">(listener, filepath<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="_deregister"><span class="type-signature">(protected) </span>_deregister<span class="signature">(listener)</span><span class="type-signature"> &rarr; {void}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_ListenerHandler.js.html">struct/ListenerHandler.js</a>, <a href="struct_ListenerHandler.js.html#line69">line 69</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="AkairoHandler.html#_deregister">AkairoHandler#_deregister</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Deregisters a module.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>listener</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Listener.html">Listener</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Module to use.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<b>Returns:</b>
+
+        
+
+
+    
+<span class="param-type">void</span>
+
+
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_register"><span class="type-signature">(protected) </span>_register<span class="signature">(listener, filepath<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {void}</span></h4>
 
     
 
@@ -677,7 +826,7 @@
     
     <dt class="tag-overrides">Overrides:</dt>
     <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="AkairoHandler.html#_apply">AkairoHandler#_apply</a>
+        <a href="AkairoHandler.html#_register">AkairoHandler#_register</a>
     </li></ul></dd>
     
 
@@ -807,155 +956,6 @@
             
 
             <td class="description last"><p>Filepath of module.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<b>Returns:</b>
-
-        
-
-
-    
-<span class="param-type">void</span>
-
-
-
-    
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="_unapply"><span class="type-signature">(private) </span>_unapply<span class="signature">(listener)</span><span class="type-signature"> &rarr; {void}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_ListenerHandler.js.html">struct/ListenerHandler.js</a>, <a href="struct_ListenerHandler.js.html#line69">line 69</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="AkairoHandler.html#_unapply">AkairoHandler#_unapply</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    <p>Deregisters a module.</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>listener</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Listener.html">Listener</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Module to use.</p></td>
         </tr>
 
     
@@ -1447,7 +1447,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_AkairoHandler.js.html">struct/AkairoHandler.js</a>, <a href="struct_AkairoHandler.js.html#line128">line 128</a>
+        <a href="struct_AkairoHandler.js.html">struct/AkairoHandler.js</a>, <a href="struct_AkairoHandler.js.html#line118">line 118</a>
     </li></ul></dd>
     
 
@@ -1654,7 +1654,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_AkairoHandler.js.html">struct/AkairoHandler.js</a>, <a href="struct_AkairoHandler.js.html#line71">line 71</a>
+        <a href="struct_AkairoHandler.js.html">struct/AkairoHandler.js</a>, <a href="struct_AkairoHandler.js.html#line151">line 151</a>
     </li></ul></dd>
     
 

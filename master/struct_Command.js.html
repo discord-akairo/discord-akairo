@@ -446,7 +446,7 @@ class Command extends AkairoModule {
                 }
 
                 return async (msg, processed) => {
-                    return await arg.default(msg, processed) == null ? !word : Boolean(word);
+                    return await arg.default(msg, processed) == null ? Boolean(word) : !word;
                 };
             },
             [ArgumentMatches.TEXT]: arg => {
