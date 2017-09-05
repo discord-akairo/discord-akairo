@@ -1,11 +1,11 @@
 declare module 'discord-akairo' {
     import {
         Client, ClientOptions, Collection, Message, MessageEmbed, MessageOptions, MessageEditOptions,
-        User, GuildChannel, GuildMember, Channel, TextChannel, Role, Emoji, Guild, PermissionResolvable
+        User, GuildMember, Channel, Role, Emoji, Guild, PermissionResolvable
     } from 'discord.js';
 
     import { Database, Statement } from 'sqlite';
-    import { Model } from 'sequelize';
+    import { Model, Promise as Bluebird } from 'sequelize';
     import * as EventEmitter from 'events';
 
     module 'discord.js' {
@@ -15,7 +15,7 @@ declare module 'discord-akairo' {
     }
 
     export class AkairoClient extends Client {
-        public constructor(options?: AkairoOptions, clientOptions?: ClientOptions);
+        public constructor(options?: AkairoOptions & ClientOptions, clientOptions?: ClientOptions);
 
         protected _built: boolean;
         protected _loaded: boolean;
@@ -124,19 +124,19 @@ declare module 'discord-akairo' {
         public compareStreaming(oldMember: GuildMember, newMember: GuildMember): number;
         public embed(data?: any): MessageEmbed;
         public fetchMemberIn(guild: Guild, id: string, cache?: boolean): Promise<GuildMember>;
-        public resolveChannel(text: string, channels: Collection<any, GuildChannel>, caseSensitive?: boolean, wholeWord?: boolean): GuildChannel;
-        public resolveChannels(text: string, channels: Collection<any, GuildChannel>, caseSensitive?: boolean, wholeWord?: boolean): Collection<any, GuildChannel>;
-        public resolveEmoji(text: string, emojis: Collection<any, Emoji>, caseSensitive?: boolean, wholeWord?: boolean): Emoji;
-        public resolveEmojis(text: string, emojis: Collection<any, Emoji>, caseSensitive?: boolean, wholeWord?: boolean): Collection<any, Emoji>;
-        public resolveGuild(text: string, guilds: Collection<any, Guild>, caseSensitive?: boolean, wholeWord?: boolean): Guild;
-        public resolveGuilds(text: string, guilds: Collection<any, Guild>, caseSensitive?: boolean, wholeWord?: boolean): Collection<any, Guild>;
-        public resolveMember(text: string, members: Collection<any, GuildMember>, caseSensitive?: boolean, wholeWord?: boolean): GuildMember;
-        public resolveMembers(text: string, members: Collection<any, GuildMember>, caseSensitive?: boolean, wholeWord?: boolean): Collection<any, GuildMember>;
+        public resolveChannel(text: string, channels: Collection<string, Channel>, caseSensitive?: boolean, wholeWord?: boolean): Channel;
+        public resolveChannels(text: string, channels: Collection<string, Channel>, caseSensitive?: boolean, wholeWord?: boolean): Collection<string, Channel>;
+        public resolveEmoji(text: string, emojis: Collection<string, Emoji>, caseSensitive?: boolean, wholeWord?: boolean): Emoji;
+        public resolveEmojis(text: string, emojis: Collection<string, Emoji>, caseSensitive?: boolean, wholeWord?: boolean): Collection<string, Emoji>;
+        public resolveGuild(text: string, guilds: Collection<string, Guild>, caseSensitive?: boolean, wholeWord?: boolean): Guild;
+        public resolveGuilds(text: string, guilds: Collection<string, Guild>, caseSensitive?: boolean, wholeWord?: boolean): Collection<string, Guild>;
+        public resolveMember(text: string, members: Collection<string, GuildMember>, caseSensitive?: boolean, wholeWord?: boolean): GuildMember;
+        public resolveMembers(text: string, members: Collection<string, GuildMember>, caseSensitive?: boolean, wholeWord?: boolean): Collection<string, GuildMember>;
         public resolvePermissionNumber(number: number): string[];
-        public resolveRole(text: string, roles: Collection<any, Role>, caseSensitive?: boolean, wholeWord?: boolean): Role;
-        public resolveRoles(text: string, roles: Collection<any, Role>, caseSensitive?: boolean, wholeWord?: boolean): Collection<any, Role>;
-        public resolveUser(text: string, users: Collection<any, User>, caseSensitive?: boolean, wholeWord?: boolean): User;
-        public resolveUsers(text: string, users: Collection<any, User>, caseSensitive?: boolean, wholeWord?: boolean): Collection<any, User>;
+        public resolveRole(text: string, roles: Collection<string, Role>, caseSensitive?: boolean, wholeWord?: boolean): Role;
+        public resolveRoles(text: string, roles: Collection<string, Role>, caseSensitive?: boolean, wholeWord?: boolean): Collection<string, Role>;
+        public resolveUser(text: string, users: Collection<string, User>, caseSensitive?: boolean, wholeWord?: boolean): User;
+        public resolveUsers(text: string, users: Collection<string, User>, caseSensitive?: boolean, wholeWord?: boolean): Collection<string, User>;
     }
 
     export class Command extends AkairoModule {
@@ -367,11 +367,11 @@ declare module 'discord-akairo' {
         public items: Collection<string, any>;
         public table: Model<any, any>;
 
-        public clear(id: string): Promise<void>;
-        public delete(id: string, key: string): Promise<boolean>;
+        public clear(id: string): Bluebird<void>;
+        public delete(id: string, key: string): Bluebird<boolean>;
         public get(id: string, key: string, defaultValue: any): any;
-        public init(): Promise<void>;
-        public set(id: string, key: string, value: any): Promise<boolean>;
+        public init(): Bluebird<void>;
+        public set(id: string, key: string, value: any): Bluebird<boolean>;
     }
 
     export class SQLiteProvider extends Provider {
