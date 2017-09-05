@@ -18,6 +18,24 @@ client.login('TOKEN').then(() => {
 });
 ```
 
+```js
+const { Command } = require('discord-akairo');
+
+class PingCommand extends Command {
+    constructor() {
+        super('ping', {
+            aliases: ['ping']
+        });
+    }
+
+    exec(message) {
+        return message.reply('Pong!');
+    }
+}
+
+module.exports = Command;
+```
+
 ## Features
 
 #### Completely modular commands, inhibitors, and listeners.
@@ -108,7 +126,7 @@ Requires Node 8 and Discord.js v12.
 Repository: [https://github.com/1Computer1/discord-akairo](https://github.com/1Computer1/discord-akairo).  
 Changelog: [https://github.com/1Computer1/discord-akairo/releases](https://github.com/1Computer1/discord-akairo/releases).  
 Documentation: [https://1computer1.github.io/discord-akairo](https://1computer1.github.io/discord-akairo/).  
-Tutorials: [https://1computer1.gitbooks.io/akairo-tutorials/content/](https://1computer1.gitbooks.io/akairo-tutorials/content/).  
+Tutorials: [https://1computer1.gitbooks.io/akairo-tutorials/content](https://1computer1.gitbooks.io/akairo-tutorials/content/).  
 Discord Server: [https://discord.gg/arTauDY](https://discord.gg/arTauDY).  
 
 ## Contributing
