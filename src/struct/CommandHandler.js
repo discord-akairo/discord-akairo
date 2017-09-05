@@ -173,8 +173,8 @@ class CommandHandler extends AkairoHandler {
      * @param {string} [filepath] - Filepath of module.
      * @returns {void}
      */
-    _apply(command, filepath) {
-        super._apply(command, filepath);
+    _register(command, filepath) {
+        super._register(command, filepath);
         this._addAliases(command);
     }
 
@@ -184,9 +184,9 @@ class CommandHandler extends AkairoHandler {
      * @param {Command} command - Module to use.
      * @returns {void}
      */
-    _unapply(command) {
+    _deregister(command) {
         this._removeAliases(command);
-        super._unapply(command);
+        super._deregister(command);
     }
 
     /**
@@ -222,52 +222,6 @@ class CommandHandler extends AkairoHandler {
                 this.prefixes.delete(command.prefix);
             }
         }
-    }
-
-    /**
-     * Finds a command by alias.
-     * @param {string} name - Alias to find with.
-     * @returns {Command}
-     */
-    findCommand(name) {
-        return this.modules.get(this.aliases.get(name.toLowerCase()));
-    }
-
-    /**
-     * Adds an ongoing prompt in order to prevent command usage in the channel.
-     * @param {Message} message - Message to use.
-     * @returns {void}
-     */
-    addPrompt(message) {
-        let channels = this.prompts.get(message.author.id);
-        if (!channels) this.prompts.set(message.author.id, new Set());
-
-        channels = this.prompts.get(message.author.id);
-        channels.add(message.channel.id);
-    }
-
-    /**
-     * Removes an ongoing prompt.
-     * @param {Message} message - Message to use.
-     * @returns {void}
-     */
-    removePrompt(message) {
-        const channels = this.prompts.get(message.author.id);
-        if (!channels) return;
-
-        channels.delete(message.channel.id);
-        if (!channels.size) this.prompts.delete(message.author.id);
-    }
-
-    /**
-     * Checks if there is an ongoing prompt.
-     * @param {Message} message - Message to use.
-     * @returns {boolean}
-     */
-    hasPrompt(message) {
-        const channels = this.prompts.get(message.author.id);
-        if (!channels) return false;
-        return channels.has(message.channel.id);
     }
 
     /**
@@ -471,6 +425,51 @@ class CommandHandler extends AkairoHandler {
     }
 
     /**
+     * Handles cooldowns and checks if a user is under cooldown.
+     * @private
+     * @param {Message} message - Message that called the command.
+     * @param {Command} command - Command to cooldown.
+     * @returns {boolean}
+     */
+    _handleCooldowns(message, command) {
+        if (!command.cooldown) return false;
+
+        const id = message.author.id;
+        if (!this.cooldowns.has(id)) this.cooldowns.set(id, {});
+
+        const time = command.cooldown || this.defaultCooldown;
+        const endTime = message.createdTimestamp + time;
+
+        if (!this.cooldowns.get(id)[command.id]) {
+            this.cooldowns.get(id)[command.id] = {
+                timer: this.client.setTimeout(() => {
+                    this.client.clearTimeout(this.cooldowns.get(id)[command.id].timer);
+                    this.cooldowns.get(id)[command.id] = null;
+
+                    if (!Object.keys(this.cooldowns.get(id)).length) {
+                        this.cooldowns.delete(id);
+                    }
+                }, time),
+                end: endTime,
+                uses: 0
+            };
+        }
+
+        const entry = this.cooldowns.get(id)[command.id];
+
+        if (entry.uses >= command.ratelimit) {
+            const end = this.cooldowns.get(message.author.id)[command.id].end;
+            const diff = end - message.createdTimestamp;
+
+            this.emit(CommandHandlerEvents.COOLDOWN, message, command, diff);
+            return true;
+        }
+
+        entry.uses++;
+        return false;
+    }
+
+    /**
      * Parses the command and its argument list.
      * @private
      * @param {Message} message - Message that called the command.
@@ -557,51 +556,6 @@ class CommandHandler extends AkairoHandler {
 
         const content = message.content.slice(argsIndex + name.length + 1);
         return { command, content, prefix: start, alias: name };
-    }
-
-    /**
-     * Handles cooldowns and checks if a user is under cooldown.
-     * @private
-     * @param {Message} message - Message that called the command.
-     * @param {Command} command - Command to cooldown.
-     * @returns {boolean}
-     */
-    _handleCooldowns(message, command) {
-        if (!command.cooldown) return false;
-
-        const id = message.author.id;
-        if (!this.cooldowns.has(id)) this.cooldowns.set(id, {});
-
-        const time = command.cooldown || this.defaultCooldown;
-        const endTime = message.createdTimestamp + time;
-
-        if (!this.cooldowns.get(id)[command.id]) {
-            this.cooldowns.get(id)[command.id] = {
-                timer: this.client.setTimeout(() => {
-                    this.client.clearTimeout(this.cooldowns.get(id)[command.id].timer);
-                    this.cooldowns.get(id)[command.id] = null;
-
-                    if (!Object.keys(this.cooldowns.get(id)).length) {
-                        this.cooldowns.delete(id);
-                    }
-                }, time),
-                end: endTime,
-                uses: 0
-            };
-        }
-
-        const entry = this.cooldowns.get(id)[command.id];
-
-        if (entry.uses >= command.ratelimit) {
-            const end = this.cooldowns.get(message.author.id)[command.id].end;
-            const diff = end - message.createdTimestamp;
-
-            this.emit(CommandHandlerEvents.COOLDOWN, message, command, diff);
-            return true;
-        }
-
-        entry.uses++;
-        return false;
     }
 
     /**
@@ -757,6 +711,52 @@ class CommandHandler extends AkairoHandler {
         }
 
         throw err;
+    }
+
+    /**
+     * Adds an ongoing prompt in order to prevent command usage in the channel.
+     * @param {Message} message - Message to use.
+     * @returns {void}
+     */
+    addPrompt(message) {
+        let channels = this.prompts.get(message.author.id);
+        if (!channels) this.prompts.set(message.author.id, new Set());
+
+        channels = this.prompts.get(message.author.id);
+        channels.add(message.channel.id);
+    }
+
+    /**
+     * Removes an ongoing prompt.
+     * @param {Message} message - Message to use.
+     * @returns {void}
+     */
+    removePrompt(message) {
+        const channels = this.prompts.get(message.author.id);
+        if (!channels) return;
+
+        channels.delete(message.channel.id);
+        if (!channels.size) this.prompts.delete(message.author.id);
+    }
+
+    /**
+     * Checks if there is an ongoing prompt.
+     * @param {Message} message - Message to use.
+     * @returns {boolean}
+     */
+    hasPrompt(message) {
+        const channels = this.prompts.get(message.author.id);
+        if (!channels) return false;
+        return channels.has(message.channel.id);
+    }
+
+    /**
+     * Finds a command by alias.
+     * @param {string} name - Alias to find with.
+     * @returns {Command}
+     */
+    findCommand(name) {
+        return this.modules.get(this.aliases.get(name.toLowerCase()));
     }
 
     /**

@@ -88,38 +88,6 @@ class AkairoClient extends Client {
     }
 
     /**
-     * Logins the client and builds the client.
-     * Resolves once client is ready.
-     * @param {string} token - Client token.
-     * @returns {Promise<string>}
-     */
-    login(token) {
-        return new Promise((resolve, reject) => {
-            if (!this._built) this.build();
-            if (!this._loaded) this.loadAll();
-
-            super.login(token).catch(reject);
-
-            this.once('ready', () => {
-                if (this.commandHandler) {
-                    this.on('message', m => {
-                        this.commandHandler.handle(m);
-                    });
-
-                    if (this.commandHandler.handleEdits) {
-                        this.on('messageUpdate', (o, m) => {
-                            if (o.content === m.content) return;
-                            if (this.commandHandler.handleEdits) this.commandHandler.handle(m);
-                        });
-                    }
-                }
-
-                return resolve(token);
-            });
-        });
-    }
-
-    /**
      * Builds the client by creating the handlers.
      * @returns {AkairoClient}
      */
@@ -173,6 +141,38 @@ class AkairoClient extends Client {
         if (this.inhibitorHandler) this.inhibitorHandler.loadAll();
 
         return this;
+    }
+
+    /**
+     * Logins the client and builds the client.
+     * Resolves once client is ready.
+     * @param {string} token - Client token.
+     * @returns {Promise<string>}
+     */
+    login(token) {
+        return new Promise((resolve, reject) => {
+            if (!this._built) this.build();
+            if (!this._loaded) this.loadAll();
+
+            super.login(token).catch(reject);
+
+            this.once('ready', () => {
+                if (this.commandHandler) {
+                    this.on('message', m => {
+                        this.commandHandler.handle(m);
+                    });
+
+                    if (this.commandHandler.handleEdits) {
+                        this.on('messageUpdate', (o, m) => {
+                            if (o.content === m.content) return;
+                            if (this.commandHandler.handleEdits) this.commandHandler.handle(m);
+                        });
+                    }
+                }
+
+                return resolve(token);
+            });
+        });
     }
 }
 

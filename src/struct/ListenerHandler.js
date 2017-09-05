@@ -54,8 +54,8 @@ class ListenerHandler extends AkairoHandler {
      * @param {string} [filepath] - Filepath of module.
      * @returns {void}
      */
-    _apply(listener, filepath) {
-        super._apply(listener, filepath);
+    _register(listener, filepath) {
+        super._register(listener, filepath);
         this.register(listener.id);
         return listener;
     }
@@ -66,9 +66,9 @@ class ListenerHandler extends AkairoHandler {
      * @param {Listener} listener - Module to use.
      * @returns {void}
      */
-    _unapply(listener) {
+    _deregister(listener) {
         this.deregister(listener.id);
-        super._unapply(listener);
+        super._deregister(listener);
     }
 
     /**

@@ -41,8 +41,8 @@ declare module 'discord-akairo' {
 
         public static readdirRecursive(directory: string): string[];
 
-        protected _apply(mod: AkairoModule, filepath?: string): void;
-        protected _unapply(mod: AkairoModule): void;
+        protected _register(mod: AkairoModule, filepath?: string): void;
+        protected _deregister(mod: AkairoModule): void;
 
         public add(filename: string): AkairoModule;
         public findCategory(name: string): Category<string, AkairoModule>;
@@ -205,8 +205,8 @@ declare module 'discord-akairo' {
         private _removeAliases(command: Command): void;
         private _runInhibitors(message: Message, command: Command): boolean;
 
-        protected _apply(command: Command, filepath?: string): void;
-        protected _unapply(command: Command): void;
+        protected _register(command: Command, filepath?: string): void;
+        protected _deregister(command: Command): void;
 
         public add(filename: string): Command;
         public addPrompt(message: Message): void;
@@ -284,8 +284,8 @@ declare module 'discord-akairo' {
         public readonly directory: string;
         public modules: Collection<string, Inhibitor>;
 
-        protected _apply(inhibitor: Inhibitor, filepath?: string): void;
-        protected _unapply(inhibitor: Inhibitor): void;
+        protected _register(inhibitor: Inhibitor, filepath?: string): void;
+        protected _deregister(inhibitor: Inhibitor): void;
 
         public add(filename: string): Inhibitor;
         public findCategory(name: string): Category<string, Inhibitor>;
@@ -329,8 +329,8 @@ declare module 'discord-akairo' {
         public emitters: Collection<string, EventEmitter>;
         public modules: Collection<string, Listener>;
 
-        protected _apply(listener: Listener, filepath?: string): void;
-        protected _unapply(listener: Listener): void;
+        protected _register(listener: Listener, filepath?: string): void;
+        protected _deregister(listener: Listener): void;
 
         public add(filename: string): Listener;
         public deregister(id: string): Listener;

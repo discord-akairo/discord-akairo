@@ -65,23 +65,13 @@ class AkairoHandler extends EventEmitter {
     }
 
     /**
-     * Reads all modules from the directory and loads them.
-     * @returns {AkairoHandler}
-     */
-    loadAll() {
-        const filepaths = this.constructor.readdirRecursive(this.directory);
-        for (const filepath of filepaths) this.load(filepath);
-        return this;
-    }
-
-    /**
      * Registers a module.
      * @private
      * @param {AkairoModule} mod - Module to use.
      * @param {string} [filepath] - Filepath of module.
      * @returns {void}
      */
-    _apply(mod, filepath) {
+    _register(mod, filepath) {
         Object.defineProperties(mod, {
             filepath: {
                 value: filepath
@@ -113,7 +103,7 @@ class AkairoHandler extends EventEmitter {
      * @param {AkairoModule} mod - Module to use.
      * @returns {void}
      */
-    _unapply(mod) {
+    _deregister(mod) {
         if (mod.filepath) delete require.cache[require.resolve(mod.filepath)];
         this.modules.delete(mod.id);
         mod.category.delete(mod.id);
@@ -149,9 +139,19 @@ class AkairoHandler extends EventEmitter {
 
         if (this.modules.has(mod.id)) throw new Error(`${this.classToHandle.name} ${mod.id} already loaded.`);
 
-        this._apply(mod, isObj ? null : thing);
+        this._register(mod, isObj ? null : thing);
         this.emit(AkairoHandlerEvents.LOAD, mod, isReload);
         return mod;
+    }
+
+    /**
+     * Reads all modules from the directory and loads them.
+     * @returns {AkairoHandler}
+     */
+    loadAll() {
+        const filepaths = this.constructor.readdirRecursive(this.directory);
+        for (const filepath of filepaths) this.load(filepath);
+        return this;
     }
 
     /**
@@ -179,7 +179,7 @@ class AkairoHandler extends EventEmitter {
         const mod = this.modules.get(id.toString());
         if (!mod) throw new Error(`${this.classToHandle.name} ${id} does not exist.`);
 
-        this._unapply(mod);
+        this._deregister(mod);
 
         this.emit(AkairoHandlerEvents.REMOVE, mod);
         return mod;
@@ -207,7 +207,7 @@ class AkairoHandler extends EventEmitter {
         if (!mod) throw new Error(`${this.classToHandle.name} ${id} does not exist.`);
         if (!mod.filepath) throw new Error(`${this.classToHandle.name} ${id} is not reloadable.`);
 
-        this._unapply(mod);
+        this._deregister(mod);
 
         const filepath = mod.filepath;
         const newMod = this.load(filepath, true);
