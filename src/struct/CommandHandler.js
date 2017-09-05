@@ -168,7 +168,7 @@ class CommandHandler extends AkairoHandler {
 
     /**
      * Registers a module.
-     * @private
+     * @protected
      * @param {Command} command - Module to use.
      * @param {string} [filepath] - Filepath of module.
      * @returns {void}
@@ -180,7 +180,7 @@ class CommandHandler extends AkairoHandler {
 
     /**
      * Deregisters a module.
-     * @private
+     * @protected
      * @param {Command} command - Module to use.
      * @returns {void}
      */
@@ -191,7 +191,7 @@ class CommandHandler extends AkairoHandler {
 
     /**
      * Adds aliases of a command.
-     * @private
+     * @protected
      * @param {Command} command - Command to use.
      * @returns {void}
      */
@@ -210,7 +210,7 @@ class CommandHandler extends AkairoHandler {
 
     /**
      * Removes aliases of a command.
-     * @private
+     * @protected
      * @param {Command} command - Command to use.
      * @returns {void}
      */
@@ -308,7 +308,7 @@ class CommandHandler extends AkairoHandler {
 
     /**
      * Handles normal commands.
-     * @private
+     * @protected
      * @param {Message} message - Message to handle.
      * @param {string} content - Content of message without command.
      * @param {Command} command - Command instance.
@@ -354,7 +354,7 @@ class CommandHandler extends AkairoHandler {
 
     /**
      * Runs built in command inhibitors.
-     * @private
+     * @protected
      * @param {Message} message - Message that called the command.
      * @param {Command} command - Command to check.
      * @returns {boolean}
@@ -426,7 +426,7 @@ class CommandHandler extends AkairoHandler {
 
     /**
      * Handles cooldowns and checks if a user is under cooldown.
-     * @private
+     * @protected
      * @param {Message} message - Message that called the command.
      * @param {Command} command - Command to cooldown.
      * @returns {boolean}
@@ -471,7 +471,7 @@ class CommandHandler extends AkairoHandler {
 
     /**
      * Parses the command and its argument list.
-     * @private
+     * @protected
      * @param {Message} message - Message that called the command.
      * @returns {Object}
      */
@@ -560,7 +560,7 @@ class CommandHandler extends AkairoHandler {
 
     /**
      * Handles regex and conditional commands.
-     * @private
+     * @protected
      * @param {Message} message - Message to handle.
      * @returns {Promise<void>}
      */
@@ -571,7 +571,7 @@ class CommandHandler extends AkairoHandler {
 
     /**
      * Handles regex commands.
-     * @private
+     * @protected
      * @param {Message} message - Message to handle.
      * @returns {Promise<void>}
      */
@@ -643,7 +643,7 @@ class CommandHandler extends AkairoHandler {
 
     /**
      * Handles conditional commands.
-     * @private
+     * @protected
      * @param {Message} message - Message to handle.
      * @returns {Promise<void>}
      */
@@ -698,7 +698,7 @@ class CommandHandler extends AkairoHandler {
 
     /**
      * Handles errors from the handling.
-     * @private
+     * @protected
      * @param {Error} err - The error.
      * @param {Message} message - Message that called the command.
      * @param {Command} [command] - Command that errored.

@@ -36,7 +36,7 @@ class TypeResolver {
 
     /**
      * Adds built-in types.
-     * @private
+     * @protected
      * @returns {void}
      */
     _addBuiltInTypes() {

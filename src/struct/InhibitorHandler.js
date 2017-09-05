@@ -60,7 +60,7 @@ class InhibitorHandler extends AkairoHandler {
 
     /**
      * Deregisters a module.
-     * @private
+     * @protected
      * @method
      * @name InhibitorHandler#_deregister
      * @param {Inhibitor} inhibitor - Module to use.
@@ -69,7 +69,7 @@ class InhibitorHandler extends AkairoHandler {
 
     /**
      * Registers a module.
-     * @private
+     * @protected
      * @method
      * @name InhibitorHandler#_register
      * @param {Inhibitor} inhibitor - Module to use.

@@ -49,7 +49,7 @@ class ListenerHandler extends AkairoHandler {
 
     /**
      * Registers a module.
-     * @private
+     * @protected
      * @param {Listener} listener - Module to use.
      * @param {string} [filepath] - Filepath of module.
      * @returns {void}
@@ -62,7 +62,7 @@ class ListenerHandler extends AkairoHandler {
 
     /**
      * Deregisters a module.
-     * @private
+     * @protected
      * @param {Listener} listener - Module to use.
      * @returns {void}
      */

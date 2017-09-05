@@ -296,7 +296,7 @@ class Argument {
 
     /**
      * Processes the type casting.
-     * @private
+     * @protected
      * @param {string} word - Word to process.
      * @param {Message} message - Message that called the command.
      * @param {Object} args - Previous arguments from command.
@@ -355,7 +355,7 @@ class Argument {
 
     /**
      * Prompts a message for a word and casts it.
-     * @private
+     * @protected
      * @param {Message} message - Message to prompt.
      * @param {Object} args - Previous arguments from command.
      * @param {boolean} hadInput - Whether or not there was already input.

@@ -83,7 +83,18 @@ class AkairoClient extends Client {
          */
         this.akairoOptions = options;
 
+        /**
+         * Whether or not handlers are built.
+         * @protected
+         * @type {boolean}
+         */
         this._built = false;
+
+        /**
+         * Whether or not modules are loaded.
+         * @protected
+         * @type {boolean}
+         */
         this._loaded = false;
     }
 

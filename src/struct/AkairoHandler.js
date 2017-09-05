@@ -66,7 +66,7 @@ class AkairoHandler extends EventEmitter {
 
     /**
      * Registers a module.
-     * @private
+     * @protected
      * @param {AkairoModule} mod - Module to use.
      * @param {string} [filepath] - Filepath of module.
      * @returns {void}
@@ -99,7 +99,7 @@ class AkairoHandler extends EventEmitter {
 
     /**
      * Deregisters a module.
-     * @private
+     * @protected
      * @param {AkairoModule} mod - Module to use.
      * @returns {void}
      */

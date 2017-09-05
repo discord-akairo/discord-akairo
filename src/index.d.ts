@@ -17,6 +17,9 @@ declare module 'discord-akairo' {
     export class AkairoClient extends Client {
         public constructor(options?: AkairoOptions, clientOptions?: ClientOptions);
 
+        protected _built: boolean;
+        protected _loaded: boolean;
+
         public akairoOptions: AkairoOptions;
         public commandHandler: CommandHandler;
         public inhibitorHandler: InhibitorHandler;
@@ -88,8 +91,8 @@ declare module 'discord-akairo' {
         public prompt?: ArgumentPromptOptions;
         public type: ArgumentType;
 
-        private _processType(word: string, message: Message, args: any): Promise<any>;
-        private _promptArgument(message: Message, args: any): Promise<any>;
+        protected _processType(word: string, message: Message, args: any): Promise<any>;
+        protected _promptArgument(message: Message, args: any): Promise<any>;
 
         public cast(word: string, message: Message, args: any): Promise<any>;
         public default(message: Message, args: any): any;
@@ -195,15 +198,15 @@ declare module 'discord-akairo' {
         public prompts: Collection<string, Set<any>>;
         public resolver: TypeResolver;
 
-        private _addAliases(command: Command): void;
-        private _handleConditional(message: Message): Promise<void>;
-        private _handleCooldowns(message: Message, command: Command): boolean;
-        private _handleError(err: Error, message: Message, command?: Command): void;
-        private _handleRegex(message: Message): Promise<void>;
-        private _handleTriggers(message: Message): Promise<void>;
-        private _parseCommand(message: Message): any;
-        private _removeAliases(command: Command): void;
-        private _runInhibitors(message: Message, command: Command): boolean;
+        protected _addAliases(command: Command): void;
+        protected _handleConditional(message: Message): Promise<void>;
+        protected _handleCooldowns(message: Message, command: Command): boolean;
+        protected _handleError(err: Error, message: Message, command?: Command): void;
+        protected _handleRegex(message: Message): Promise<void>;
+        protected _handleTriggers(message: Message): Promise<void>;
+        protected _parseCommand(message: Message): any;
+        protected _removeAliases(command: Command): void;
+        protected _runInhibitors(message: Message, command: Command): boolean;
 
         protected _register(command: Command, filepath?: string): void;
         protected _deregister(command: Command): void;
@@ -394,7 +397,7 @@ declare module 'discord-akairo' {
         public handler: CommandHandler;
         public types: Collection<string, ArgumentTypeFunction>;
 
-        private _addBuiltInTypes(): void;
+        protected _addBuiltInTypes(): void;
 
         public addType(name: string, resolver: ArgumentTypeFunction): this;
         public addTypes(types: { [x: string]: ArgumentTypeFunction }): this;
@@ -402,8 +405,8 @@ declare module 'discord-akairo' {
     }
 
     export class Util {
-        public static isPromise(value: any): boolean;
         public static isEventEmitter(value: any): boolean;
+        public static isPromise(value: any): boolean;
     }
 
     export type AkairoOptions = {
@@ -481,8 +484,8 @@ declare module 'discord-akairo' {
         split?: ArgumentSplit | ArgumentSplitFunction;
         channel?: string;
         category?: string;
-        ownerOnly?: string;
-        protected?: string;
+        ownerOnly?: boolean;
+        protected?: boolean;
         typing?: boolean;
         editable?: boolean;
         cooldown?: number;
@@ -501,7 +504,7 @@ declare module 'discord-akairo' {
 
     export type InhibitorOptions = {
         reason?: string;
-        type?: boolean;
+        type?: string;
         category?: string;
     };
 
@@ -518,9 +521,7 @@ declare module 'discord-akairo' {
 
     export type PermissionFunction = (message: Message) => boolean | Promise<boolean>;
 
-    export type PrefixFunction = (message: Message) => boolean;
-
-    export type PromptCheckFunction = (message: Message, sent: Message) => boolean;
+    export type PrefixFunction = (message: Message) => string;
 
     export type ProviderOptions = {
         idColumn?: string;
