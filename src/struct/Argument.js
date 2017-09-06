@@ -281,7 +281,7 @@ class Argument {
      * @param {Object} args - Previous arguments from command.
      * @returns {Promise<any>}
      */
-    async process(word, message, args) {
+    async process(word, message, args = {}) {
         word = word.trim();
 
         if (!word && this.prompt && this.prompt.optional) {
@@ -310,7 +310,7 @@ class Argument {
      * @param {Object} args - Previous arguments from command.
      * @returns {Promise<any>}
      */
-    async cast(word, message, args) {
+    async cast(word, message, args = {}) {
         if (Array.isArray(this.type)) {
             for (const entry of this.type) {
                 if (Array.isArray(entry)) {
@@ -369,7 +369,7 @@ class Argument {
      * @param {string} [commandInput] - Previous input from command if there was one.
      * @returns {Promise<any>}
      */
-    async collect(message, args, commandInput) {
+    async collect(message, args = {}, commandInput = '') {
         const prompt = {};
 
         Object.assign(prompt, this.handler.defaultPrompt);
