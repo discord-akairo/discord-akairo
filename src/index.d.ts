@@ -1,7 +1,7 @@
 declare module 'discord-akairo' {
     import {
         Client, ClientOptions, Collection, Message, MessageEmbed, MessageOptions, MessageEditOptions,
-        User, GuildMember, Channel, Role, Emoji, Guild, PermissionResolvable
+        User, GuildMember, Channel, Role, Emoji, Guild, PermissionResolvable, Snowflake
     } from 'discord.js';
 
     import { Database, Statement } from 'sqlite';
@@ -86,10 +86,10 @@ declare module 'discord-akairo' {
         public id: string;
         public index?: number;
         public limit: number;
-        public match: ArgumentMatch;
+        public match: ArgumentMatch | ArgumentMatchFunction;
         public prefix?: string | string[];
         public prompt?: ArgumentPromptOptions;
-        public type: ArgumentType;
+        public type: ArgumentType | ArgumentTypeFunction;
 
         public cast(word: string, message: Message, args: any): Promise<any>;
         public default(message: Message, args: any): any;
@@ -98,7 +98,7 @@ declare module 'discord-akairo' {
     }
 
     export class Category<K, V> extends Collection<K, V> {
-        public constructor(id: string, iterable: Iterable<Array<[K, V]>>);
+        public constructor(id: string, iterable: Iterable<[K, V][]>);
 
         public id: string;
 
@@ -119,23 +119,23 @@ declare module 'discord-akairo' {
         public checkMember(text: string, member: GuildMember, caseSensitive?: boolean, wholeWord?: boolean): boolean;
         public checkRole(text: string, role: Role, caseSensitive?: boolean, wholeWord?: boolean): boolean;
         public checkUser(text: string, user: User, caseSensitive?: boolean, wholeWord?: boolean): boolean;
-        public collection<K, V>(iterable: Iterable<Array<[K, V]>>): Collection<K, V>;
+        public collection<K, V>(iterable: Iterable<[K, V][]>): Collection<K, V>;
         public compareStreaming(oldMember: GuildMember, newMember: GuildMember): number;
         public embed(data?: any): MessageEmbed;
         public fetchMemberIn(guild: Guild, id: string, cache?: boolean): Promise<GuildMember>;
-        public resolveChannel(text: string, channels: Collection<string, Channel>, caseSensitive?: boolean, wholeWord?: boolean): Channel;
-        public resolveChannels(text: string, channels: Collection<string, Channel>, caseSensitive?: boolean, wholeWord?: boolean): Collection<string, Channel>;
-        public resolveEmoji(text: string, emojis: Collection<string, Emoji>, caseSensitive?: boolean, wholeWord?: boolean): Emoji;
-        public resolveEmojis(text: string, emojis: Collection<string, Emoji>, caseSensitive?: boolean, wholeWord?: boolean): Collection<string, Emoji>;
-        public resolveGuild(text: string, guilds: Collection<string, Guild>, caseSensitive?: boolean, wholeWord?: boolean): Guild;
-        public resolveGuilds(text: string, guilds: Collection<string, Guild>, caseSensitive?: boolean, wholeWord?: boolean): Collection<string, Guild>;
-        public resolveMember(text: string, members: Collection<string, GuildMember>, caseSensitive?: boolean, wholeWord?: boolean): GuildMember;
-        public resolveMembers(text: string, members: Collection<string, GuildMember>, caseSensitive?: boolean, wholeWord?: boolean): Collection<string, GuildMember>;
+        public resolveChannel(text: string, channels: Collection<Snowflake, Channel>, caseSensitive?: boolean, wholeWord?: boolean): Channel;
+        public resolveChannels(text: string, channels: Collection<Snowflake, Channel>, caseSensitive?: boolean, wholeWord?: boolean): Collection<Snowflake, Channel>;
+        public resolveEmoji(text: string, emojis: Collection<Snowflake, Emoji>, caseSensitive?: boolean, wholeWord?: boolean): Emoji;
+        public resolveEmojis(text: string, emojis: Collection<Snowflake, Emoji>, caseSensitive?: boolean, wholeWord?: boolean): Collection<Snowflake, Emoji>;
+        public resolveGuild(text: string, guilds: Collection<Snowflake, Guild>, caseSensitive?: boolean, wholeWord?: boolean): Guild;
+        public resolveGuilds(text: string, guilds: Collection<Snowflake, Guild>, caseSensitive?: boolean, wholeWord?: boolean): Collection<Snowflake, Guild>;
+        public resolveMember(text: string, members: Collection<Snowflake, GuildMember>, caseSensitive?: boolean, wholeWord?: boolean): GuildMember;
+        public resolveMembers(text: string, members: Collection<Snowflake, GuildMember>, caseSensitive?: boolean, wholeWord?: boolean): Collection<Snowflake, GuildMember>;
         public resolvePermissionNumber(number: number): string[];
-        public resolveRole(text: string, roles: Collection<string, Role>, caseSensitive?: boolean, wholeWord?: boolean): Role;
-        public resolveRoles(text: string, roles: Collection<string, Role>, caseSensitive?: boolean, wholeWord?: boolean): Collection<string, Role>;
-        public resolveUser(text: string, users: Collection<string, User>, caseSensitive?: boolean, wholeWord?: boolean): User;
-        public resolveUsers(text: string, users: Collection<string, User>, caseSensitive?: boolean, wholeWord?: boolean): Collection<string, User>;
+        public resolveRole(text: string, roles: Collection<Snowflake, Role>, caseSensitive?: boolean, wholeWord?: boolean): Role;
+        public resolveRoles(text: string, roles: Collection<Snowflake, Role>, caseSensitive?: boolean, wholeWord?: boolean): Collection<Snowflake, Role>;
+        public resolveUser(text: string, users: Collection<Snowflake, User>, caseSensitive?: boolean, wholeWord?: boolean): User;
+        public resolveUsers(text: string, users: Collection<Snowflake, User>, caseSensitive?: boolean, wholeWord?: boolean): Collection<Snowflake, User>;
     }
 
     export class Command extends AkairoModule {
@@ -159,7 +159,7 @@ declare module 'discord-akairo' {
         public prefix?: string | string[] | PrefixFunction;
         public protected: boolean;
         public ratelimit: number;
-        public split: ArgumentSplit;
+        public split: ArgumentSplit | ArgumentSplitFunction;
         public typing: boolean;
         public userPermissions: PermissionResolvable | PermissionResolvable[] | PermissionFunction;
 
@@ -170,7 +170,7 @@ declare module 'discord-akairo' {
         public parse(content: string, message: Message): Promise<any>;
         public reload(): this;
         public remove(): this;
-        public trigger(message: Message): RegExp | void; 
+        public trigger(message: Message): RegExp;
     }
 
     export class CommandHandler extends AkairoHandler {
@@ -459,7 +459,7 @@ declare module 'discord-akairo' {
         word: string;
     };
 
-    export type ArgumentPromptFunction = (message: Message, args: any, data: ArgumentPromptData) => (string | string[] | MessageOptions);
+    export type ArgumentPromptFunction = (message: Message, args: any, data: ArgumentPromptData) => string | string[] | MessageOptions;
 
     export type ArgumentPromptOptions = {
         retries?: number;
@@ -480,13 +480,13 @@ declare module 'discord-akairo' {
 
     export type ArgumentSplitFunction = (content: string, message: Message) => string[];
 
-    export type ArgumentType = 'string' | 'lowercase' | 'uppercase' | 'charCodes' | 'number' | 'integer' | 'dynamic' | 'dynamicInt' | 'url' | 'date' | 'color' | 'user' | 'users' | 'member' | 'members' | 'relevant' | 'relevants' | 'channel' | 'channels' | 'textChannel' | 'textChannels' | 'voiceChannel' | 'voiceChannels' | 'role' | 'roles' | 'emoji' | 'emojis' | 'guild' | 'guilds' | 'message' | 'invite' | 'memberMention' | 'channelMention' | 'roleMention' | 'emojiMention' | 'commandAlias' | 'command' | 'inhibitor' | 'listener' | Array<string | string[]>;
+    export type ArgumentType = 'string' | 'lowercase' | 'uppercase' | 'charCodes' | 'number' | 'integer' | 'dynamic' | 'dynamicInt' | 'url' | 'date' | 'color' | 'user' | 'users' | 'member' | 'members' | 'relevant' | 'relevants' | 'channel' | 'channels' | 'textChannel' | 'textChannels' | 'voiceChannel' | 'voiceChannels' | 'role' | 'roles' | 'emoji' | 'emojis' | 'guild' | 'guilds' | 'message' | 'invite' | 'memberMention' | 'channelMention' | 'roleMention' | 'emojiMention' | 'commandAlias' | 'command' | 'inhibitor' | 'listener' | (string | string[])[];
 
     export type ArgumentTypeFunction = (word: string, message: Message, args: any) => any;
 
     export type CommandOptions = {
         aliases?: string[];
-        args?: Array<ArgumentOptions | ArgumentOptions[]>;
+        args?: (ArgumentOptions | ArgumentOptions[])[];
         split?: ArgumentSplit | ArgumentSplitFunction;
         channel?: string;
         category?: string;
@@ -506,7 +506,7 @@ declare module 'discord-akairo' {
         description?: string | string[];
     };
 
-    export type ConditionFunction = (message: Message) => any;
+    export type ConditionFunction = (message: Message) => boolean;
 
     export type InhibitorOptions = {
         reason?: string;
@@ -527,7 +527,7 @@ declare module 'discord-akairo' {
 
     export type PermissionFunction = (message: Message) => boolean | Promise<boolean>;
 
-    export type PrefixFunction = (message: Message) => string;
+    export type PrefixFunction = (message: Message) => string | string[];
 
     export type ProviderOptions = {
         idColumn?: string;

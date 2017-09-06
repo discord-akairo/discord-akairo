@@ -195,19 +195,19 @@ class Argument {
 
         /**
          * The method to match text.
-         * @type {ArgumentMatch}
+         * @type {ArgumentMatch|ArgumentMatchFunction}
          */
         this.match = match;
 
         /**
          * The type to cast to.
-         * @type {ArgumentType}
+         * @type {ArgumentType|ArgumentTypeFunction}
          */
         this.type = type;
 
         /**
          * The prefix to use for flag or prefix args.
-         * @type {?string | string[]}
+         * @type {?string|string[]}
          */
         this.prefix = prefix;
 
