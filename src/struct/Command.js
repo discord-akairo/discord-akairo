@@ -79,7 +79,6 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * @typedef {Function} CommandExecFunction
  * @param {Message} message - Message that triggered the command.
  * @param {Object} args - Evaluated arguments.
- * @param {boolean} edited - Whether the user's message was edited.
  * @returns {any}
  */
 
