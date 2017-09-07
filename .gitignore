@@ -1,6 +1,5 @@
 node_modules
 .git
 .vscode
-package-lock.json
 test/auth.json
 test/db.sqlite
