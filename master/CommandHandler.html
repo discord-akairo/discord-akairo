@@ -1391,7 +1391,7 @@
 
         
             
-<h4 class="name" id="prefixes"><span class="type-signature"></span>prefixes<span class="type-signature"> :Set.&lt;(string|Array.&lt;string>|<a href="global.html#PrefixFunction">PrefixFunction</a>)></span></h4>
+<h4 class="name" id="prefixes"><span class="type-signature"></span>prefixes<span class="type-signature"> :Collection.&lt;(string|<a href="global.html#PrefixFunction">PrefixFunction</a>), Set.&lt;string>></span></h4>
 
 
 
@@ -1442,13 +1442,13 @@
 
 
 <div class="description">
-    <p>Set of prefix overwrites.</p>
+    <p>Collection of prefix overwrites to commands.</p>
 </div>
 
 
 
     <b>Type:</b> 
-<span class="param-type">Set.&lt;(string|Array.&lt;string>|<a href="global.html#PrefixFunction">PrefixFunction</a>)></span>
+<span class="param-type">Collection.&lt;(string|<a href="global.html#PrefixFunction">PrefixFunction</a>), Set.&lt;string>></span>
 
 
 
@@ -1909,7 +1909,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line314">line 314</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line365">line 365</a>
     </li></ul></dd>
     
 
@@ -2099,7 +2099,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line647">line 647</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line712">line 712</a>
     </li></ul></dd>
     
 
@@ -2243,7 +2243,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line431">line 431</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line482">line 482</a>
     </li></ul></dd>
     
 
@@ -2410,7 +2410,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line704">line 704</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line769">line 769</a>
     </li></ul></dd>
     
 
@@ -2628,7 +2628,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line575">line 575</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line640">line 640</a>
     </li></ul></dd>
     
 
@@ -2772,7 +2772,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line564">line 564</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line629">line 629</a>
     </li></ul></dd>
     
 
@@ -2916,7 +2916,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line475">line 475</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line526">line 526</a>
     </li></ul></dd>
     
 
@@ -2957,6 +2957,150 @@
 
 <div class="description">
     <p>Parses the command and its argument list.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Message</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Message that called the command.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<b>Returns:</b>
+
+        
+
+
+    
+<span class="param-type">Object</span>
+
+
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_parseOverwrittenCommand"><span class="type-signature">(protected) </span>_parseOverwrittenCommand<span class="signature">(message)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line569">line 569</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Parses the command and its argument list using prefix overwrites.</p>
 </div>
 
 
@@ -3252,7 +3396,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line214">line 214</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line248">line 248</a>
     </li></ul></dd>
     
 
@@ -3396,7 +3540,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line359">line 359</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line410">line 410</a>
     </li></ul></dd>
     
 
@@ -3712,7 +3856,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line718">line 718</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line783">line 783</a>
     </li></ul></dd>
     
 
@@ -4149,7 +4293,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line755">line 755</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line820">line 820</a>
     </li></ul></dd>
     
 
@@ -4293,7 +4437,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line229">line 229</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line277">line 277</a>
     </li></ul></dd>
     
 
@@ -4437,7 +4581,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line744">line 744</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line809">line 809</a>
     </li></ul></dd>
     
 
@@ -5530,7 +5674,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line731">line 731</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line796">line 796</a>
     </li></ul></dd>
     
 
@@ -5682,7 +5826,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line837">line 837</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line902">line 902</a>
     </li></ul></dd>
     
 
@@ -5861,7 +6005,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line830">line 830</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line895">line 895</a>
     </li></ul></dd>
     
 
@@ -6017,7 +6161,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line854">line 854</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line919">line 919</a>
     </li></ul></dd>
     
 
@@ -6219,7 +6363,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line846">line 846</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line911">line 911</a>
     </li></ul></dd>
     
 
@@ -6398,7 +6542,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line863">line 863</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line928">line 928</a>
     </li></ul></dd>
     
 
@@ -6577,7 +6721,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line914">line 914</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line979">line 979</a>
     </li></ul></dd>
     
 
@@ -6715,7 +6859,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line908">line 908</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line973">line 973</a>
     </li></ul></dd>
     
 
@@ -6853,7 +6997,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line887">line 887</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line952">line 952</a>
     </li></ul></dd>
     
 
@@ -7060,7 +7204,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line871">line 871</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line936">line 936</a>
     </li></ul></dd>
     
 
@@ -7193,7 +7337,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line895">line 895</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line960">line 960</a>
     </li></ul></dd>
     
 
@@ -7354,7 +7498,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line816">line 816</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line881">line 881</a>
     </li></ul></dd>
     
 
@@ -7510,7 +7654,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line824">line 824</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line889">line 889</a>
     </li></ul></dd>
     
 
@@ -7643,7 +7787,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line878">line 878</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line943">line 943</a>
     </li></ul></dd>
     
 
@@ -7845,7 +7989,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line902">line 902</a>
+        <a href="struct_CommandHandler.js.html">struct/CommandHandler.js</a>, <a href="struct_CommandHandler.js.html#line967">line 967</a>
     </li></ul></dd>
     
 
