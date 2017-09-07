@@ -11,11 +11,8 @@ class CommandUtil {
      * Command utilies.
      * @param {AkairoClient} client - The Akairo client.
      * @param {Message} message - Message that triggered the command.
-     * @param {Command} [command] - Command triggered.
-     * @param {string} [prefix] - Prefix used to trigger.
-     * @param {string} [alias] - Alias used to trigger.
      */
-    constructor(client, message, command, prefix, alias) {
+    constructor(client, message) {
         /**
          * The Akairo client.
          * @readonly
@@ -38,19 +35,25 @@ class CommandUtil {
          * Command used.
          * @type {?Command}
          */
-        this.command = command;
+        this.command = null;
 
         /**
          * The prefix used.
          * @type {?string}
          */
-        this.prefix = prefix;
+        this.prefix = null;
 
         /**
          * The alias used.
          * @type {?string}
          */
-        this.alias = alias;
+        this.alias = null;
+
+        /**
+         * The parsed content.
+         * @type {?string}
+         */
+        this.content = null;
 
         /**
          * Whether or not the last response should be edited.

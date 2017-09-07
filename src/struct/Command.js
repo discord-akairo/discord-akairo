@@ -202,7 +202,7 @@ class Command extends AkairoModule {
          * Command prefix overwrite.
          * @type {?string|string[]|PrefixFunction}
          */
-        this.prefix = prefix;
+        this.prefix = typeof prefix === 'function' ? prefix.bind(this) : prefix;
 
         /**
          * Permissions required to run command by the client.

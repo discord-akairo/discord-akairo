@@ -43,10 +43,10 @@ class CommandHandler extends AkairoHandler {
         this.aliases = new Collection();
 
         /**
-         * Set of prefix overwrites.
-         * @type {Set<string|string[]|PrefixFunction>}
+         * Collection of prefix overwrites to commands.
+         * @type {Collection<string|PrefixFunction, Set<string>>}
          */
-        this.prefixes = new Set();
+        this.prefixes = new Collection();
 
         /**
          * Whether or not to block others, if a selfbot.
@@ -200,9 +200,43 @@ class CommandHandler extends AkairoHandler {
             this.aliases.set(alias.toLowerCase(), command.id);
         }
 
-        if (command.prefix === '') throw new Error('Prefix overwrites cannot be empty.');
-        if (Array.isArray(command.prefix) && command.prefix.includes('')) throw new Error('Prefix overwrites cannot be empty.');
-        if (command.prefix !== undefined) this.prefixes.add(command.prefix);
+        if (command.prefix != null) {
+            let newEntry = false;
+
+            if (Array.isArray(command.prefix)) {
+                for (const prefix of command.prefix) {
+                    const prefixes = this.prefixes.get(prefix);
+                    if (prefixes) {
+                        prefixes.add(command.id);
+                    } else {
+                        this.prefixes.set(prefix, new Set([command.id]));
+                        newEntry = true;
+                    }
+                }
+            } else {
+                const prefixes = this.prefixes.get(command.prefix);
+                if (prefixes) {
+                    prefixes.add(command.id);
+                } else {
+                    this.prefixes.set(command.prefix, new Set([command.id]));
+                    newEntry = true;
+                }
+            }
+
+            if (newEntry) {
+                this.prefixes = this.prefixes.sort((aVal, bVal, aKey, bKey) => {
+                    if (aKey === '' && bKey === '') return 0;
+                    if (aKey === '') return 1;
+                    if (bKey === '') return -1;
+                    if (typeof aKey === 'function' && typeof bKey === 'function') return 0;
+                    if (typeof aKey === 'function') return 1;
+                    if (typeof bKey === 'function') return -1;
+                    return aKey.length === bKey.length
+                        ? aKey.localeCompare(bKey)
+                        : bKey.length - aKey.length;
+                });
+            }
+        }
     }
 
     /**
@@ -214,9 +248,23 @@ class CommandHandler extends AkairoHandler {
     _removeAliases(command) {
         for (const alias of command.aliases) this.aliases.delete(alias.toLowerCase());
 
-        if (command.prefix !== undefined) {
-            if (!this.modules.some(c => c.id !== command.id && c.prefix === command.prefix)) {
-                this.prefixes.delete(command.prefix);
+        if (command.prefix != null) {
+            if (Array.isArray(command.prefix)) {
+                for (const prefix of command.prefix) {
+                    const prefixes = this.prefixes.get(prefix);
+                    if (prefixes.size === 1) {
+                        this.prefixes.delete(prefix);
+                    } else {
+                        prefixes.delete(prefix);
+                    }
+                }
+            } else {
+                const prefixes = this.prefixes.get(command.prefix);
+                if (prefixes.size === 1) {
+                    this.prefixes.delete(command.prefix);
+                } else {
+                    prefixes.delete(command.prefix);
+                }
             }
         }
     }
@@ -288,7 +336,10 @@ class CommandHandler extends AkairoHandler {
 
             if (this.commandUtil) {
                 Object.assign(message.util, {
-                    command, prefix, alias
+                    command,
+                    prefix,
+                    alias,
+                    content
                 });
             }
 
@@ -482,11 +533,11 @@ class CommandHandler extends AkairoHandler {
         }
 
         let start;
-        let overwrote;
 
         if (Array.isArray(prefix)) {
+            const content = message.content.toLowerCase();
             const match = prefix.find(p => {
-                return message.content.toLowerCase().startsWith(p.toLowerCase());
+                return content.startsWith(p.toLowerCase());
             });
 
             start = match;
@@ -495,29 +546,64 @@ class CommandHandler extends AkairoHandler {
             start = prefix;
         }
 
-        if (this.prefixes.size) {
-            for (const ovPrefix of this.prefixes.keys()) {
-                const commandPrefix = typeof ovPrefix === 'function' ? ovPrefix.call(this, message) : ovPrefix;
+        if (start === undefined) return this._parseOverwrittenCommand(message);
 
-                if (Array.isArray(commandPrefix)) {
-                    const match = commandPrefix.find(p => {
-                        return message.content.toLowerCase().startsWith(p.toLowerCase());
-                    });
+        const startIndex = message.content.indexOf(start) + start.length;
+        const argsIndex = message.content.slice(startIndex).search(/\S/) + start.length;
+        const name = message.content.slice(argsIndex).split(/\s{1,}|\n{1,}/)[0];
+        const command = this.findCommand(name);
 
-                    if (match) {
-                        overwrote = { start };
-                        start = match;
-                        break;
-                    }
+        if (command.prefix != null) return this._parseOverwrittenCommand(message);
+        if (!command) return this._parseOverwrittenCommand(message) || { prefix: start, alias: name };
 
-                    continue;
-                }
+        const content = message.content.slice(argsIndex + name.length + 1);
+        return { command, content, prefix: start, alias: name };
+    }
 
-                if (message.content.toLowerCase().startsWith(commandPrefix.toLowerCase())) {
-                    overwrote = { start };
-                    start = commandPrefix;
+    /**
+     * Parses the command and its argument list using prefix overwrites.
+     * @protected
+     * @param {Message} message - Message that called the command.
+     * @returns {Object}
+     */
+    _parseOverwrittenCommand(message) {
+        if (!this.prefixes.size) return null;
+
+        let start;
+        let commands;
+
+        for (const entry of this.prefixes) {
+            const prefix = typeof entry[0] === 'function'
+                ? entry[0](message)
+                : entry[0];
+
+            if (Array.isArray(prefix)) {
+                prefix.sort((a, b) => {
+                    if (a === '' && b === '') return 0;
+                    if (a === '') return 1;
+                    if (a === '') return -1;
+                    return a.length === b.length
+                        ? a.localeCompare(b)
+                        : b.length - a.length;
+                });
+            }
+
+            if (Array.isArray(prefix)) {
+                const content = message.content.toLowerCase();
+                const match = prefix.find(p => {
+                    return content.startsWith(p.toLowerCase());
+                });
+
+                if (match !== undefined) {
+                    start = match;
+                    commands = entry[1];
                     break;
                 }
+            } else
+            if (message.content.toLowerCase().startsWith(prefix.toLowerCase())) {
+                start = prefix;
+                commands = entry[1];
+                break;
             }
         }
 
@@ -528,28 +614,7 @@ class CommandHandler extends AkairoHandler {
         const name = message.content.slice(argsIndex).split(/\s{1,}|\n{1,}/)[0];
         const command = this.findCommand(name);
 
-        if (!command) return { prefix: start, alias: name };
-
-        if (this.prefixes.size) {
-            if (overwrote === undefined && command.prefix !== undefined) return { prefix: start, alias: name };
-
-            if (overwrote !== undefined) {
-                if (command.prefix === undefined) {
-                    if (overwrote.start !== start) return { prefix: start, alias: name };
-                } else {
-                    const commandPrefix = typeof command.prefix === 'function' ? command.prefix.call(this, message) : command.prefix;
-
-                    if (Array.isArray(commandPrefix)) {
-                        if (!commandPrefix.some(p => p.toLowerCase() === start.toLowerCase())) {
-                            return { prefix: start, alias: name };
-                        }
-                    } else
-                    if (commandPrefix.toLowerCase() !== start.toLowerCase()) {
-                        return { prefix: start, alias: name };
-                    }
-                }
-            }
-        }
+        if (!command || !commands.has(command.id)) return { prefix: start, alias: name };
 
         const content = message.content.slice(argsIndex + name.length + 1);
         return { command, content, prefix: start, alias: name };

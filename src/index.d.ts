@@ -193,7 +193,7 @@ declare module 'discord-akairo' {
         public fetchMembers: boolean;
         public handleEdits: boolean;
         public modules: Collection<string, Command>;
-        public prefixes: Set<string | string[] | PrefixFunction>;
+        public prefixes: Collection<string | PrefixFunction, Set<string>>;
         public prompts: Collection<string, Set<any>>;
         public resolver: TypeResolver;
 
@@ -204,6 +204,7 @@ declare module 'discord-akairo' {
         protected _handleRegex(message: Message): Promise<void>;
         protected _handleTriggers(message: Message): Promise<void>;
         protected _parseCommand(message: Message): any;
+        protected _parseOverwrittenCommand(message: Message): any;
         protected _removeAliases(command: Command): void;
         protected _runInhibitors(message: Message, command: Command): boolean;
 
@@ -239,11 +240,12 @@ declare module 'discord-akairo' {
     }
 
     export class CommandUtil {
-        public constructor(client: AkairoClient, message: Message, command?: Command, prefix?: string, alias?: string);
+        public constructor(client: AkairoClient, message: Message);
 
         public alias?: string;
         public readonly client: AkairoClient;
         public command?: Command;
+        public content?: string;
         public lastResponse?: Message;
         public message: Message;
         public prefix?: string;
