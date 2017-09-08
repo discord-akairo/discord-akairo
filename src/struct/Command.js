@@ -264,10 +264,10 @@ class Command extends AkairoModule {
         if (!this.args.length) return Promise.resolve({});
 
         const splitFuncs = {
-            [ArgumentSplits.PLAIN]: c => c.match(/[\S\n]+\s?/g),
+            [ArgumentSplits.PLAIN]: c => c.match(/\S+\s?/g),
             [ArgumentSplits.SPLIT]: c => c.split(' '),
-            [ArgumentSplits.QUOTED]: c => c.match(/"[\s\S]*?"\s?|[\S\n]+\s?|"/g),
-            [ArgumentSplits.STICKY]: c => c.match(/[^\s"]*?"[\s\S]*?"\s?|[\S\n]+\s?|"/g),
+            [ArgumentSplits.QUOTED]: c => c.match(/"[^]*?"\s?|\S+\s?|"/g),
+            [ArgumentSplits.STICKY]: c => c.match(/[^\s"]*?"[^]*?"\s?|\S+\s?|"/g),
             [ArgumentSplits.NONE]: c => [c]
         };
 
@@ -321,7 +321,10 @@ class Command extends AkairoModule {
             [ArgumentMatches.WORD]: (arg, index) => {
                 index = arg.index != null ? arg.index : index;
                 let word = noPrefixWords[index] || '';
-                if (isQuoted && /^"[^]+"$/.test(word.trim())) word = word.trim().slice(1, -1);
+                if (isQuoted && /^"[^]+"$/.test(word.trim())) {
+                    word = word.trim().slice(1, -1);
+                }
+
                 return arg.process.bind(arg, word);
             },
             [ArgumentMatches.REST]: (arg, index) => {
@@ -352,18 +355,18 @@ class Command extends AkairoModule {
             },
             [ArgumentMatches.PREFIX]: arg => {
                 let prefixUsed;
-                let word;
+                let wordFound;
 
                 for (let i = words.length; i--;) {
-                    const w = words[i].trim();
+                    const word = words[i].trim().toLowerCase();
 
                     if (Array.isArray(arg.prefix)) {
                         let found = false;
 
                         for (const prefix of arg.prefix) {
-                            if (w.toLowerCase().startsWith(prefix.toLowerCase())) {
+                            if (word.startsWith(prefix.toLowerCase())) {
                                 prefixUsed = prefix;
-                                word = w;
+                                wordFound = word;
                                 found = true;
                                 break;
                             }
@@ -371,47 +374,45 @@ class Command extends AkairoModule {
 
                         if (found) break;
                     } else
-                    if (w.toLowerCase().startsWith(arg.prefix.toLowerCase())) {
+                    if (word.startsWith(arg.prefix.toLowerCase())) {
                         prefixUsed = arg.prefix;
-                        word = w;
+                        wordFound = word;
                         break;
                     }
                 }
 
-                if (word && prefixUsed) {
-                    word = word.replace(prefixUsed, '');
-                    if (isQuoted && /^"[^]+"$/.test(word.trim())) word = word.trim().slice(1, -1);
+                if (wordFound && prefixUsed) {
+                    wordFound = wordFound.replace(prefixUsed, '');
+                    if (isQuoted && /^"[^]+"$/.test(wordFound.trim())) {
+                        wordFound = wordFound.trim().slice(1, -1);
+                    }
                 }
 
-                return arg.process.bind(arg, word || '');
+                return arg.process.bind(arg, wordFound || '');
             },
             [ArgumentMatches.FLAG]: arg => {
-                let word;
+                let flagFound = false;
 
                 for (let i = words.length; i--;) {
-                    const w = words[i].trim();
+                    const word = words[i].trim().toLowerCase();
 
                     if (Array.isArray(arg.prefix)) {
-                        let found = false;
-
                         for (const prefix of arg.prefix) {
-                            if (w.toLowerCase().startsWith(prefix.toLowerCase())) {
-                                word = w;
-                                found = true;
+                            if (word === prefix.toLowerCase()) {
+                                flagFound = true;
                                 break;
                             }
                         }
-
-                        if (found) break;
                     } else
-                    if (w.toLowerCase().startsWith(arg.prefix.toLowerCase())) {
-                        word = w;
+                    if (word === arg.prefix.toLowerCase()) {
+                        flagFound = true;
                         break;
                     }
                 }
 
                 return async (msg, processed) => {
-                    return await arg.default(msg, processed) == null ? Boolean(word) : !word;
+                    const inverse = !await arg.default(msg, processed);
+                    return inverse ? flagFound : !flagFound;
                 };
             },
             [ArgumentMatches.TEXT]: arg => {
