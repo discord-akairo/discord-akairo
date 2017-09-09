@@ -62,6 +62,7 @@ const { isPromise } = require('../util/Util');
  * Other Discord-related types:
  * - `message` tries to fetch a message from an ID.
  * - `invite` tries to fetch an invite object from a link.
+ * - `userMention` matches a mention of a user.
  * - `memberMention` matches a mention of a guild member.
  * - `channelMention` matches a mention of a channel.
  * - `roleMention` matches a mention of a role.
