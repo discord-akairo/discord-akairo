@@ -58,9 +58,9 @@ class ClientUtil {
      * @returns {boolean}
      */
     checkUser(text, user, caseSensitive = false, wholeWord = false) {
-        if (user.id === text) return true;
+        if (user.id !== '1' && user.id === text) return true;
 
-        const reg = /<@!?(\d+)>/;
+        const reg = /<@!?(\d{17,19})>/;
         const match = text.match(reg);
 
         if (match && user.id === match[1]) return true;
@@ -111,9 +111,9 @@ class ClientUtil {
      * @returns {boolean}
      */
     checkMember(text, member, caseSensitive = false, wholeWord = false) {
-        if (member.id === text) return true;
+        if (member.id !== '1' && member.id === text) return true;
 
-        const reg = /<@!?(\d+)>/;
+        const reg = /<@!?(\d{17,19})>/;
         const match = text.match(reg);
 
         if (match && member.id === match[1]) return true;
@@ -169,7 +169,7 @@ class ClientUtil {
     checkChannel(text, channel, caseSensitive = false, wholeWord = false) {
         if (channel.id === text) return true;
 
-        const reg = /<#(\d+)>/;
+        const reg = /<#(\d{17,19})>/;
         const match = text.match(reg);
 
         if (match && channel.id === match[1]) return true;
@@ -221,7 +221,7 @@ class ClientUtil {
     checkRole(text, role, caseSensitive = false, wholeWord = false) {
         if (role.id === text) return true;
 
-        const reg = /<@&(\d+)>/;
+        const reg = /<@&(\d{17,19})>/;
         const match = text.match(reg);
 
         if (match && role.id === match[1]) return true;
@@ -273,7 +273,7 @@ class ClientUtil {
     checkEmoji(text, emoji, caseSensitive = false, wholeWord = false) {
         if (emoji.id === text) return true;
 
-        const reg = /<:[a-zA-Z0-9_]+:(\d+)>/;
+        const reg = /<:[a-zA-Z0-9_]+:(\d{17,19})>/;
         const match = text.match(reg);
 
         if (match && emoji.id === match[1]) return true;

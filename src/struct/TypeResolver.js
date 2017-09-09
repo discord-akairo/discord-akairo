@@ -269,30 +269,37 @@ class TypeResolver {
                 return this.client.fetchInvite(word).catch(() => null);
             },
 
+            [ArgumentTypes.USER_MENTION]: word => {
+                if (!word) return null;
+                const id = word.match(/<@!?(\d{17,19})>/);
+                if (!id) return null;
+                return this.client.users.get(id[1]) || null;
+            },
+
             [ArgumentTypes.MEMBER_MENTION]: (word, message) => {
                 if (!word) return null;
-                const id = word.match(/<@!?(\d+)>/);
+                const id = word.match(/<@!?(\d{17,19})>/);
                 if (!id) return null;
                 return message.guild.members.get(id[1]) || null;
             },
 
             [ArgumentTypes.CHANNEL_MENTION]: (word, message) => {
                 if (!word) return null;
-                const id = word.match(/<#(\d+)>/);
+                const id = word.match(/<#(\d{17,19})>/);
                 if (!id) return null;
                 return message.guild.channels.get(id[1]) || null;
             },
 
             [ArgumentTypes.ROLE_MENTION]: (word, message) => {
                 if (!word) return null;
-                const id = word.match(/<@&(\d+)>/);
+                const id = word.match(/<@&(\d{17,19})>/);
                 if (!id) return null;
                 return message.guild.roles.get(id[1]) || null;
             },
 
             [ArgumentTypes.EMOJI_MENTION]: (word, message) => {
                 if (!word) return null;
-                const id = word.match(/<:[a-zA-Z0-9_]+:(\d+)>/);
+                const id = word.match(/<:[a-zA-Z0-9_]+:(\d{17,19})>/);
                 if (!id) return null;
                 return message.guild.emojis.get(id[1]) || null;
             },
