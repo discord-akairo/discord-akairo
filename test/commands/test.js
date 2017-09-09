@@ -7,20 +7,14 @@ class TestCommand extends Command {
     constructor() {
         super('test', {
             aliases: ['test'],
-            split: 'sticky',
             args: [
                 {
-                    id: 'prefix',
-                    match: 'prefix',
-                    prefix: '-prefix='
-                },
-                {
-                    id: 'flag',
-                    match: 'flag',
-                    prefix: '-flag'
-                },
-                {
-                    id: 'test'
+                    id: 'number',
+                    type: 'number',
+                    prompt: {
+                        start: 'Type a number!',
+                        retry: 'Please type a valid number.'
+                    }
                 }
             ]
         });

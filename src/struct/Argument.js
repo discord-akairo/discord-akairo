@@ -110,16 +110,31 @@ const { isPromise } = require('../util/Util');
  * Note that the retry count resets back to one on each valid entry.
  * The final evaluated argument will be an array of the inputs.
  * @prop {number} [limit=Infinity] - Amount of inputs allowed for an infinite prompt before finishing.
- * @prop {string|string[]|ArgumentPromptFunction} [start] - Text sent on start of prompt.
- * @prop {string|string[]|ArgumentPromptFunction} [retry] - Text sent on a retry (failure to cast type).
- * @prop {string|string[]|ArgumentPromptFunction} [timeout] - Text sent on collector time out.
- * @prop {string|string[]|ArgumentPromptFunction} [ended] - Text sent on amount of tries reaching the max.
- * @prop {string|string[]|ArgumentPromptFunction} [cancel] - Text sent on cancellation of command.
+ * @prop {string|string[]|MessageOptions|ArgumentPromptFunction} [start] - Text sent on start of prompt.
+ * @prop {string|string[]|MessageOptions|ArgumentPromptFunction} [retry] - Text sent on a retry (failure to cast type).
+ * @prop {string|string[]|MessageOptions|ArgumentPromptFunction} [timeout] - Text sent on collector time out.
+ * @prop {string|string[]|MessageOptions|ArgumentPromptFunction} [ended] - Text sent on amount of tries reaching the max.
+ * @prop {string|string[]|MessageOptions|ArgumentPromptFunction} [cancel] - Text sent on cancellation of command.
+ * @prop {ArgumentPromptModifyFunction} [modifyStart] - Function to modify start prompts.
+ * @prop {ArgumentPromptModifyFunction} [modifyRetry] - Function to modify retry prompts.
+ * @prop {ArgumentPromptModifyFunction} [modifyTimeout] - Function to modify timeout messages.
+ * @prop {ArgumentPromptModifyFunction} [modifyEnded] - Function to modify out of tries messages.
+ * @prop {ArgumentPromptModifyFunction} [modifyCancel] - Function to modify cancel messages.
  */
 
 /**
  * A function returning text for the prompt or a `MessageOptions` object.
  * @typedef {Function} ArgumentPromptFunction
+ * @param {Message} message - Message that triggered the command.
+ * @param {Object} prevArgs - Previous arguments.
+ * @param {ArgumentPromptData} data - Miscellaneous data.
+ * @returns {string|string[]|MessageOptions}
+ */
+
+/**
+ * A function modifying a prompt text.
+ * @typedef {Function} ArgumentPromptModifyFunction
+ * @param {string|string[]|MessageOptions} text - Text from the prompt to modify.
  * @param {Message} message - Message that triggered the command.
  * @param {Object} prevArgs - Previous arguments.
  * @param {ArgumentPromptData} data - Miscellaneous data.
@@ -383,9 +398,11 @@ class Argument {
         const values = isInfinite ? [] : null;
         if (isInfinite) args[this.id] = values;
 
-        const getText = (textOption, retryCount, inputMessage, inputWord) => {
-            if (typeof textOption === 'function') {
-                textOption = textOption.call(this, message, args, {
+        const getText = (promptType, prompter, retryCount, inputMessage, inputWord) => {
+            let text = prompter;
+
+            if (typeof prompter === 'function') {
+                text = prompter.call(this, message, args, {
                     retries: retryCount,
                     infinite: isInfinite,
                     message: inputMessage,
@@ -393,11 +410,28 @@ class Argument {
                 });
             }
 
-            if (Array.isArray(textOption)) {
-                textOption = textOption.join('\n');
+            if (Array.isArray(prompter)) {
+                text = prompter.join('\n');
             }
 
-            return textOption;
+            const modifier = {
+                start: prompt.modifyStart,
+                retry: prompt.modifyRetry,
+                timeout: prompt.modifyTimeout,
+                ended: prompt.modifyEnded,
+                cancel: prompt.modifyCancel
+            }[promptType];
+
+            if (modifier) {
+                text = modifier.call(this, text, message, args, {
+                    retries: retryCount,
+                    infinite: isInfinite,
+                    message: inputMessage,
+                    word: inputWord
+                });
+            }
+
+            return text;
         };
 
         const promptOne = async (prevMessage, retryCount) => {
@@ -409,8 +443,6 @@ class Argument {
                 : true;
 
             if (shouldSend) {
-                const prompter = retryCount === 1 ? prompt.start : prompt.retry;
-
                 let prevInput;
                 if (retryCount <= 1 + Number(Boolean(commandInput))) {
                     prevInput = commandInput || '';
@@ -418,7 +450,9 @@ class Argument {
                     prevInput = prevMessage.content;
                 }
 
-                const startText = getText(prompter, retryCount, prevMessage, prevInput);
+                const promptType = retryCount === 1 ? 'start' : 'retry';
+                const prompter = retryCount === 1 ? prompt.start : prompt.retry;
+                const startText = getText(promptType, prompter, retryCount, prevMessage, prevInput);
 
                 if (startText) {
                     sent = await (message.util || message.channel).send(startText);
@@ -441,7 +475,7 @@ class Argument {
                 })).first();
 
                 if (input.content.toLowerCase() === prompt.cancelWord.toLowerCase()) {
-                    const cancelText = getText(prompt.cancel, retryCount, input, '');
+                    const cancelText = getText('cancel', prompt.cancel, retryCount, input, '');
                     if (cancelText) {
                         await message.channel.send(cancelText);
                     }
@@ -456,7 +490,19 @@ class Argument {
                 }
 
                 const parsedValue = await this.cast(input.content, input, args);
-                if (parsedValue == null) return promptOne(input, retryCount + 1);
+                if (parsedValue == null) {
+                    if (retryCount > prompt.retries) {
+                        const endedText = getText('ended', prompt.ended, retryCount, input, input.content);
+                        if (endedText) {
+                            await message.channel.send(endedText);
+                        }
+
+                        this.handler.removePrompt(message);
+                        throw Symbols.COMMAND_CANCELLED;
+                    }
+
+                    return promptOne(input, retryCount + 1);
+                }
 
                 if (isInfinite) {
                     values.push(parsedValue);
@@ -471,7 +517,7 @@ class Argument {
                 if (err instanceof Error) throw err;
                 if (err === Symbols.COMMAND_CANCELLED) throw err;
 
-                const timeoutText = getText(prompt.timeout, retryCount, prevMessage, '');
+                const timeoutText = getText('timeout', prompt.timeout, retryCount, prevMessage, '');
                 if (timeoutText) {
                     await message.channel.send(timeoutText);
                 }

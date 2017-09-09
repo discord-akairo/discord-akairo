@@ -467,19 +467,26 @@ declare module 'discord-akairo' {
 
     export type ArgumentPromptFunction = (message: Message, args: any, data: ArgumentPromptData) => string | string[] | MessageOptions;
 
+    export type ArgumentPromptModifyFunction = (text: string, message: Message, args: any, data: ArgumentPromptData) => string | string[] | MessageOptions;
+
     export type ArgumentPromptOptions = {
-        cancel?: string | string[] | ArgumentPromptFunction;
+        cancel?: string | string[] | MessageOptions | ArgumentPromptFunction;
         cancelWord?: string;
-        ended?: string | string[] | ArgumentPromptFunction;
+        ended?: string | string[] | MessageOptions | ArgumentPromptFunction;
         infinite?: boolean;
         limit?: number;
+        modifyCancel?: ArgumentPromptModifyFunction;
+        modifyEnded?: ArgumentPromptModifyFunction;
+        modifyRetry?: ArgumentPromptModifyFunction;
+        modifyStart?: ArgumentPromptModifyFunction;
+        modifyTimeout?: ArgumentPromptModifyFunction;
         optional?: boolean;
         retries?: number;
-        retry?: string | string[] | ArgumentPromptFunction;
-        start?: string | string[] | ArgumentPromptFunction;
+        retry?: string | string[] | MessageOptions | ArgumentPromptFunction;
+        start?: string | string[] | MessageOptions | ArgumentPromptFunction;
         stopWord?: string;
         time?: number;
-        timeout?: string | string[] | ArgumentPromptFunction;
+        timeout?: string | string[] | MessageOptions | ArgumentPromptFunction;
     };
 
     export type ArgumentSplit = 'plain' | 'split' | 'quoted' | 'sticky' | 'none' | string | RegExp;
