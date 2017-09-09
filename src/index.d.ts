@@ -257,10 +257,10 @@ declare module 'discord-akairo' {
 
         public static swapOptions(content: string | MessageOptions | MessageEditOptions, options?: MessageOptions | MessageEditOptions): any[];
 
-        public edit(content: string | MessageEditOptions, options?: MessageEditOptions): Promise<Message>;
-        public reply(content: string | MessageOptions | MessageEditOptions, options?: MessageOptions | MessageEditOptions): Promise<Message | Message[]>;
-        public send(content: string | MessageOptions | MessageEditOptions, options?: MessageOptions | MessageEditOptions): Promise<Message | Message[]>;
-        public sendNew(content: string | MessageOptions, options?: MessageOptions): Promise<Message | Message[]>;
+        public edit(content: string | string[] | MessageEditOptions, options?: MessageEditOptions): Promise<Message>;
+        public reply(content: string | string[] | MessageOptions | MessageEditOptions, options?: MessageOptions | MessageEditOptions): Promise<Message | Message[]>;
+        public send(content: string | string[] | MessageOptions | MessageEditOptions, options?: MessageOptions | MessageEditOptions): Promise<Message | Message[]>;
+        public sendNew(content: string | string[] | MessageOptions, options?: MessageOptions): Promise<Message | Message[]>;
         public setLastResponse(message: Message | Message[]): Message;
     }
 
