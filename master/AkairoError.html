@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>util/Category.js - Documentation</title>
+    <title>AkairoError - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,90 +27,237 @@
 
 <div id="main">
     
-    <h1 class="page-title">util/Category.js</h1>
+    <h1 class="page-title">AkairoError</h1>
     
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>const { Collection } = require('discord.js');
+        <h2>
+        AkairoError
+        </h2>
+        
+    
+</header>
 
-/** @extends Collection */
-class Category extends Collection {
-    /**
-     * A group of modules.
-     * @param {string} id - ID of the category.
-     * @param {Iterable} [iterable] - Entries to set.
-     */
-    constructor(id, iterable) {
-        super(iterable);
+<article>
+    <div class="container-overview">
+    
+        
 
-        /**
-         * ID of the category.
-         * @type {string}
-         */
-        this.id = id;
-    }
+    
 
-    /**
-     * Calls `reload()` on all items in this category.
-     * @returns {Category}
-     */
-    reloadAll() {
-        for (const m of Array.from(this.values())) {
-            if (m.filepath) m.reload();
-        }
+    <h4 class="name" id="AkairoError"><span class="type-signature"></span>new AkairoError<span class="signature">(key, &hellip;args)</span><span class="type-signature"></span></h4>
 
-        return this;
-    }
+    
 
-    /**
-     * Calls `remove()` on all items in this category.
-     * @returns {Category}
-     */
-    removeAll() {
-        for (const m of Array.from(this.values())) {
-            if (m.filepath) m.remove();
-        }
 
-        return this;
-    }
 
-    /**
-     * Calls `enable()` on all items in this category.
-     * @returns {Category}
-     */
-    enableAll() {
-        for (const m of this.values()) m.enable();
-        return this;
-    }
 
-    /**
-     * Calls `disable()` on all items in this category.
-     * @returns {Category}
-     */
-    disableAll() {
-        for (const m of this.values()) m.disable();
-        return this;
-    }
+<dl class="details">
 
-    /**
-     * Returns the ID.
-     * @returns {string}
-     */
-    toString() {
-        return this.id;
-    }
-}
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="util_AkairoError.js.html">util/AkairoError.js</a>, <a href="util_AkairoError.js.html#line21">line 21</a>
+    </li></ul></dd>
+    
 
-module.exports = Category;
-</code></pre>
-        </article>
-    </section>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Creates an error for Akairo</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Error key.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>args</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">any</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                    &lt;repeatable><br>
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Arguments.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li>Error</li>
+    </ul>
+
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

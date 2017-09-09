@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>util/Category.js - Documentation</title>
+    <title>util/AkairoError.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">util/Category.js</h1>
+    <h1 class="page-title">util/AkairoError.js</h1>
     
 
     
@@ -37,77 +37,48 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const { Collection } = require('discord.js');
+            <pre class="prettyprint source linenums"><code>const Messages = {
+    // Client building
+    BUILD_ONCE: 'Client handlers can only built once',
+    LOAD_ONCE: 'Client handlers can only load all modules once',
 
-/** @extends Collection */
-class Category extends Collection {
+    // Module-related
+    FILE_NOT_FOUND: filename => `File '${filename}' not found`,
+    MODULE_NOT_FOUND: (constructor, id) => `${constructor} '${id}' does not exist`,
+    ALREADY_LOADED: (constructor, id) => `${constructor} '${id}' is already loaded`,
+    NOT_RELOADABLE: (constructor, id) => `${constructor} '${id}' is not reloadable`,
+
+    // Command-related
+    ALIAS_CONFLICT: (alias, id, conflict) => `Alias '${alias}' of '${id}' already exists on '${conflict}'`,
+
+    // Generic errors
+    NOT_IMPLEMENTED: (constructor, method) => `${constructor}#${method} has not been implemented`,
+    INVALID_TYPE: (name, expected, vowel = false) => `Value of '${name}' was not ${vowel ? 'an' : 'a'} ${expected}`
+};
+
+/** @extends Error */
+class AkairoError extends Error {
     /**
-     * A group of modules.
-     * @param {string} id - ID of the category.
-     * @param {Iterable} [iterable] - Entries to set.
+     * Creates an error for Akairo
+     * @param {string} key - Error key.
+     * @param {...any} args - Arguments.
      */
-    constructor(id, iterable) {
-        super(iterable);
+    constructor(key, ...args) {
+        if (Messages[key] == null) throw new TypeError(`Error key '${key}' does not exist`);
+        const message = typeof Messages[key] === 'function'
+            ? Messages[key](...args)
+            : Messages[key];
 
-        /**
-         * ID of the category.
-         * @type {string}
-         */
-        this.id = id;
+        super(message);
+        this.code = key;
     }
 
-    /**
-     * Calls `reload()` on all items in this category.
-     * @returns {Category}
-     */
-    reloadAll() {
-        for (const m of Array.from(this.values())) {
-            if (m.filepath) m.reload();
-        }
-
-        return this;
-    }
-
-    /**
-     * Calls `remove()` on all items in this category.
-     * @returns {Category}
-     */
-    removeAll() {
-        for (const m of Array.from(this.values())) {
-            if (m.filepath) m.remove();
-        }
-
-        return this;
-    }
-
-    /**
-     * Calls `enable()` on all items in this category.
-     * @returns {Category}
-     */
-    enableAll() {
-        for (const m of this.values()) m.enable();
-        return this;
-    }
-
-    /**
-     * Calls `disable()` on all items in this category.
-     * @returns {Category}
-     */
-    disableAll() {
-        for (const m of this.values()) m.disable();
-        return this;
-    }
-
-    /**
-     * Returns the ID.
-     * @returns {string}
-     */
-    toString() {
-        return this.id;
+    get name() {
+        return `AkairoError [${this.code}]`;
     }
 }
 
-module.exports = Category;
+module.exports = AkairoError;
 </code></pre>
         </article>
     </section>
