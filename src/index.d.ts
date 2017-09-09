@@ -14,6 +14,10 @@ declare module 'discord-akairo' {
         }
     }
 
+    export class AkairoError extends Error {
+        public code: string;
+    }
+
     export class AkairoClient extends Client {
         public constructor(options?: AkairoOptions & ClientOptions, clientOptions?: ClientOptions);
 
@@ -92,9 +96,9 @@ declare module 'discord-akairo' {
         public type: ArgumentType | ArgumentTypeFunction;
 
         public cast(word: string, message: Message, args?: any): Promise<any>;
+        public collect(message: Message, args?: any, commandInput?: string): Promise<any>;
         public default(message: Message, args: any): any;
         public process(word: string, message: Message, args?: any): Promise<any>;
-        public collect(message: Message, args?: any, commandInput?: string): Promise<any>;
     }
 
     export class Category<K, V> extends Collection<K, V> {
@@ -208,8 +212,8 @@ declare module 'discord-akairo' {
         protected _removeAliases(command: Command): void;
         protected _runInhibitors(message: Message, command: Command): boolean;
 
-        protected _register(command: Command, filepath?: string): void;
         protected _deregister(command: Command): void;
+        protected _register(command: Command, filepath?: string): void;
 
         public add(filename: string): Command;
         public addPrompt(message: Message): void;
@@ -288,8 +292,8 @@ declare module 'discord-akairo' {
         public readonly directory: string;
         public modules: Collection<string, Inhibitor>;
 
-        protected _register(inhibitor: Inhibitor, filepath?: string): void;
         protected _deregister(inhibitor: Inhibitor): void;
+        protected _register(inhibitor: Inhibitor, filepath?: string): void;
 
         public add(filename: string): Inhibitor;
         public findCategory(name: string): Category<string, Inhibitor>;
@@ -333,8 +337,8 @@ declare module 'discord-akairo' {
         public emitters: Collection<string, EventEmitter>;
         public modules: Collection<string, Listener>;
 
-        protected _register(listener: Listener, filepath?: string): void;
         protected _deregister(listener: Listener): void;
+        protected _register(listener: Listener, filepath?: string): void;
 
         public add(filename: string): Listener;
         public deregister(id: string): Listener;
@@ -411,24 +415,24 @@ declare module 'discord-akairo' {
     }
 
     export type AkairoOptions = {
-        ownerID?: string | string[];
-        selfbot?: boolean;
-        commandDirectory?: string;
-        prefix?: string | string[] | PrefixFunction;
         allowMention?: boolean | AllowMentionFunction;
-        handleEdits?: boolean;
+        automateCategories?: boolean;
+        blockBots?: boolean;
+        blockClient?: boolean;
+        blockNotSelf?: boolean;
+        commandDirectory?: string;
         commandUtil?: boolean;
         commandUtilLifetime?: number;
-        fetchMembers?: boolean;
         defaultCooldown?: number;
         defaultPrompt?: ArgumentPromptOptions;
-        inhibitorDirectory?: string;
-        blockNotSelf?: boolean;
-        blockClient?: boolean;
-        blockBots?: boolean;
-        listenerDirectory?: string;
         emitters?: { [x: string]: EventEmitter };
-        automateCategories?: boolean;
+        fetchMembers?: boolean;
+        handleEdits?: boolean;
+        inhibitorDirectory?: string;
+        listenerDirectory?: string;
+        prefix?: string | string[] | PrefixFunction;
+        selfbot?: boolean;
+        ownerID?: string | string[];
     };
 
     export type AllowMentionFunction = (message: Message) => boolean;
@@ -442,40 +446,40 @@ declare module 'discord-akairo' {
     export type ArgumentMatchFunction = (message: Message, args: any) => ArgumentMatch;
 
     export type ArgumentOptions = {
-        id: string;
-        match?: ArgumentMatch | ArgumentMatchFunction;
-        type?: ArgumentType | ArgumentTypeFunction;
-        prefix?: string | string[];
-        index?: number;
-        limit?: number;
+        allow?: ArgumentAllowFunction;
         default?: ArgumentDefaultFunction | any;
         description?: string | string[];
+        id: string;
+        index?: number;
+        limit?: number;
+        match?: ArgumentMatch | ArgumentMatchFunction;
+        prefix?: string | string[];
         prompt?: ArgumentPromptOptions;
-        allow?: ArgumentAllowFunction;
+        type?: ArgumentType | ArgumentTypeFunction;
     };
 
     export type ArgumentPromptData = {
-        retries: number;
         infinite: boolean;
         message: Message;
+        retries: number;
         word: string;
     };
 
     export type ArgumentPromptFunction = (message: Message, args: any, data: ArgumentPromptData) => string | string[] | MessageOptions;
 
     export type ArgumentPromptOptions = {
-        retries?: number;
-        time?: number;
+        cancel?: string | string[] | ArgumentPromptFunction;
         cancelWord?: string;
-        stopWord?: string;
-        optional?: boolean;
+        ended?: string | string[] | ArgumentPromptFunction;
         infinite?: boolean;
         limit?: number;
-        start?: string | string[] | ArgumentPromptFunction;
+        optional?: boolean;
+        retries?: number;
         retry?: string | string[] | ArgumentPromptFunction;
+        start?: string | string[] | ArgumentPromptFunction;
+        stopWord?: string;
+        time?: number;
         timeout?: string | string[] | ArgumentPromptFunction;
-        ended?: string | string[] | ArgumentPromptFunction;
-        cancel?: string | string[] | ArgumentPromptFunction;
     };
 
     export type ArgumentSplit = 'plain' | 'split' | 'quoted' | 'sticky' | 'none' | string | RegExp;
@@ -489,38 +493,38 @@ declare module 'discord-akairo' {
     export type CommandOptions = {
         aliases?: string[];
         args?: (ArgumentOptions | ArgumentOptions[])[];
-        split?: ArgumentSplit | ArgumentSplitFunction;
-        channel?: string;
         category?: string;
-        ownerOnly?: boolean;
-        protected?: boolean;
-        typing?: boolean;
-        editable?: boolean;
-        cooldown?: number;
-        ratelimit?: number;
-        prefix?: string | string[] | PrefixFunction;
-        userPermissions?: PermissionResolvable | PermissionResolvable[] | PermissionFunction;
+        channel?: string;
         clientPermissions?: PermissionResolvable | PermissionResolvable[] | PermissionFunction;
-        trigger?: RegExp | TriggerFunction;
         condition?: ConditionFunction;
+        cooldown?: number;
         defaultPrompt?: ArgumentPromptOptions;
-        options?: any;
         description?: string | string[];
+        editable?: boolean;
+        options?: any;
+        ownerOnly?: boolean;
+        prefix?: string | string[] | PrefixFunction;
+        protected?: boolean;
+        ratelimit?: number;
+        split?: ArgumentSplit | ArgumentSplitFunction;
+        trigger?: RegExp | TriggerFunction;
+        typing?: boolean;
+        userPermissions?: PermissionResolvable | PermissionResolvable[] | PermissionFunction;
     };
 
     export type ConditionFunction = (message: Message) => boolean;
 
     export type InhibitorOptions = {
+        category?: string;
         reason?: string;
         type?: string;
-        category?: string;
     };
 
     export type ListenerOptions = {
+        category?: string;
         emitter?: string | EventEmitter;
         event?: string;
         type?: string;
-        category?: string;
     };
 
     export type ModuleOptions = {
@@ -532,8 +536,8 @@ declare module 'discord-akairo' {
     export type PrefixFunction = (message: Message) => string | string[];
 
     export type ProviderOptions = {
-        idColumn?: string;
         dataColumn?: string;
+        idColumn?: string;
     };
 
     export type TriggerFunction = (message: Message) => RegExp;

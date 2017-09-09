@@ -1,3 +1,4 @@
+const AkairoError = require('../util/AkairoError');
 const { Collection } = require('discord.js');
 
 /**
@@ -29,7 +30,7 @@ class Provider {
      * @returns {any}
      */
     init() {
-        throw new TypeError(`${this.constructor.name}#init has not been implemented`);
+        throw new AkairoError('NOT_IMPLEMENTED', this.constructor.name, 'init');
     }
 
     /**
@@ -41,7 +42,7 @@ class Provider {
      * @returns {any}
      */
     get() {
-        throw new TypeError(`${this.constructor.name}#get has not been implemented`);
+        throw new AkairoError('NOT_IMPLEMENTED', this.constructor.name, 'get');
     }
 
     /**
@@ -53,7 +54,7 @@ class Provider {
      * @returns {any}
      */
     set() {
-        throw new TypeError(`${this.constructor.name}#set has not been implemented`);
+        throw new AkairoError('NOT_IMPLEMENTED', this.constructor.name, 'set');
     }
 
     /**
@@ -64,7 +65,7 @@ class Provider {
      * @returns {any}
      */
     delete() {
-        throw new TypeError(`${this.constructor.name}#delete has not been implemented`);
+        throw new AkairoError('NOT_IMPLEMENTED', this.constructor.name, 'delete');
     }
 
     /**
@@ -74,7 +75,7 @@ class Provider {
      * @returns {any}
      */
     clear() {
-        throw new TypeError(`${this.constructor.name}#clear has not been implemented`);
+        throw new AkairoError('NOT_IMPLEMENTED', this.constructor.name, 'clear');
     }
 }
 

@@ -1,10 +1,11 @@
+const AkairoError = require('../util/AkairoError');
 const AkairoHandler = require('./AkairoHandler');
 const { BuiltInReasons, CommandHandlerEvents, Symbols } = require('../util/Constants');
 const { Collection } = require('discord.js');
 const Command = require('./Command');
 const CommandUtil = require('./CommandUtil');
-const TypeResolver = require('./TypeResolver');
 const { isPromise } = require('../util/Util');
+const TypeResolver = require('./TypeResolver');
 
 /** @extends AkairoHandler */
 class CommandHandler extends AkairoHandler {
@@ -195,7 +196,7 @@ class CommandHandler extends AkairoHandler {
     _addAliases(command) {
         for (const alias of command.aliases) {
             const conflict = this.aliases.get(alias.toLowerCase());
-            if (conflict) throw new Error(`Alias ${alias} of ${command.id} already exists on ${conflict}.`);
+            if (conflict) throw new AkairoError('ALIAS_CONFLICT', alias, command.id, conflict);
 
             this.aliases.set(alias.toLowerCase(), command.id);
         }

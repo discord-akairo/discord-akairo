@@ -146,7 +146,7 @@ class CommandUtil {
      * @returns {Array}
      */
     static swapOptions(content, options) {
-        if (!options && Object(content) === content && !Array.isArray(content)) {
+        if (!options && typeof content === 'object' && !Array.isArray(content)) {
             options = content;
             content = options.content || '';
         } else

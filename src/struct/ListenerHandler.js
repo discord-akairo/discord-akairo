@@ -1,7 +1,8 @@
+const AkairoError = require('../util/AkairoError');
 const AkairoHandler = require('./AkairoHandler');
 const { Collection } = require('discord.js');
-const Listener = require('./Listener');
 const { isEventEmitter } = require('../util/Util');
+const Listener = require('./Listener');
 
 /** @extends AkairoHandler */
 class ListenerHandler extends AkairoHandler {
@@ -20,15 +21,15 @@ class ListenerHandler extends AkairoHandler {
          * @type {Collection<string, EventEmitter>}
          */
         this.emitters = new Collection();
+
         this.emitters.set('client', this.client);
-        this.emitters.set('commandHandler', this.client.commandHandler);
-        this.emitters.set('inhibitorHandler', this.client.inhibitorHandler);
-        this.emitters.set('listenerHandler', this.client.listenerHandler);
+        if (this.client.commandHandler) this.emitters.set('commandHandler', this.client.commandHandler);
+        if (this.client.inhibitorHandler) this.emitters.set('inhibitorHandler', this.client.inhibitorHandler);
+        if (this.client.listenerHandler) this.emitters.set('listenerHandler', this.client.listenerHandler);
 
         if (emitters) {
             for (const [key, value] of Object.entries(emitters)) {
-                if (this.emitters.has(key)) continue;
-                if (!isEventEmitter(value)) throw new Error(`Emitter ${key} is not an EventEmitter`);
+                if (!isEventEmitter(value)) throw new AkairoError('INVALID_TYPE', key, 'EventEmitter', true);
                 this.emitters.set(key, value);
             }
         }
@@ -78,10 +79,10 @@ class ListenerHandler extends AkairoHandler {
      */
     register(id) {
         const listener = this.modules.get(id.toString());
-        if (!listener) throw new Error(`Listener ${id} does not exist.`);
+        if (!listener) throw new AkairoError('MODULE_NOT_FOUND', this.classToHandle.name, id);
 
         const emitter = isEventEmitter(listener.emitter) ? listener.emitter : this.emitters.get(listener.emitter);
-        if (!isEventEmitter(emitter)) throw new Error('Listener\'s emitter is not an EventEmitter');
+        if (!isEventEmitter(emitter)) throw new AkairoError('INVALID_TYPE', 'emitter', 'EventEmitter', true);
 
         if (listener.type === 'once') {
             emitter.once(listener.event, listener.exec);
@@ -99,10 +100,10 @@ class ListenerHandler extends AkairoHandler {
      */
     deregister(id) {
         const listener = this.modules.get(id.toString());
-        if (!listener) throw new Error(`Listener ${id} does not exist.`);
+        if (!listener) throw new AkairoError('MODULE_NOT_FOUND', this.classToHandle.name, id);
 
         const emitter = isEventEmitter(listener.emitter) ? listener.emitter : this.emitters.get(listener.emitter);
-        if (!isEventEmitter(emitter)) throw new Error('Listener\'s emitter is not an EventEmitter');
+        if (!isEventEmitter(emitter)) throw new AkairoError('INVALID_TYPE', 'emitter', 'EventEmitter', true);
 
         emitter.removeListener(listener.event, listener.exec);
         return listener;

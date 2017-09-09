@@ -3,10 +3,10 @@ module.exports = {
     AkairoClient: require('./struct/AkairoClient'),
     AkairoHandler: require('./struct/AkairoHandler'),
     AkairoModule: require('./struct/AkairoModule'),
-    ClientUtil: require('./struct/ClientUtil'),
 
     // Commands
     Argument: require('./struct/Argument'),
+    ClientUtil: require('./struct/ClientUtil'),
     Command: require('./struct/Command'),
     CommandHandler: require('./struct/CommandHandler'),
     CommandUtil: require('./struct/CommandUtil'),
@@ -26,6 +26,7 @@ module.exports = {
     SQLiteProvider: require('./providers/SQLiteProvider'),
 
     // Utilities
+    AkairoError: require('./util/AkairoError'),
     Category: require('./util/Category'),
     Constants: require('./util/Constants'),
     Util: require('./util/Util'),

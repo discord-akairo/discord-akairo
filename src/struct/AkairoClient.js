@@ -1,3 +1,4 @@
+const AkairoError = require('../util/AkairoError');
 const { Client } = require('discord.js');
 const ClientUtil = require('./ClientUtil');
 const CommandHandler = require('./CommandHandler');
@@ -20,13 +21,13 @@ const ListenerHandler = require('./ListenerHandler');
  * @prop {boolean} [fetchMembers=false] - Whether or not to fetch member on each message from a guild.
  * @prop {number} [defaultCooldown=0] - The default cooldown for commands.
  * @prop {ArgumentPromptOptions} [defaultPrompt] - The default prompt options.
+ * @prop {boolean} [automateCategories=false] - Whether or not to set each module's category to its parent directory name.
  * @prop {string} [inhibitorDirectory] - Directory to inhibitors.
  * @prop {boolean} [blockNotSelf=true] - Whether or not to block others, if a selfbot.
  * @prop {boolean} [blockClient=true] - Whether or not to block self, if not a selfbot.
  * @prop {boolean} [blockBots=true] - Whether or not to block bots.
  * @prop {string} [listenerDirectory] - Directory to listeners.
  * @prop {Object} [emitters={}] - Emitters to load onto the listener handler.
- * @prop {boolean} [automateCategories=false] - Whether or not to set each module's category to its parent directory name.
  */
 
 /**
@@ -104,7 +105,7 @@ class AkairoClient extends Client {
      */
     build() {
         if (this._built) {
-            throw new Error('Client handlers can only be built once.');
+            throw new AkairoError('BUILD_ONCE');
         }
 
         this._built = true;
@@ -142,7 +143,7 @@ class AkairoClient extends Client {
      */
     loadAll() {
         if (this._loaded) {
-            throw new Error('Client modules can only be loaded once.');
+            throw new AkairoError('LOAD_ONCE');
         }
 
         this._loaded = true;

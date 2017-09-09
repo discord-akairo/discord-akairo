@@ -1,4 +1,4 @@
-const { Collection, Permissions, MessageEmbed } = require('discord.js');
+const { Collection, MessageEmbed, Permissions } = require('discord.js');
 
 /**
  * Function used to check if a response should pass for the prompt.
