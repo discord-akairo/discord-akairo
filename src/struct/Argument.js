@@ -300,7 +300,11 @@ class Argument {
     async process(word, message, args = {}) {
         word = word.trim();
 
-        if (!word && this.prompt && this.prompt.optional) {
+        const isOptional = (this.prompt && this.prompt.optional)
+            || (this.command.defaultPrompt && this.command.defaultPrompt.optional)
+            || (this.handler.defaultPrompt && this.handler.defaultPrompt.optional);
+
+        if (!word && isOptional) {
             let res = this.default(message, args);
             if (isPromise(res)) res = await res;
             return res;
@@ -394,6 +398,7 @@ class Argument {
 
         const matchType = typeof this.match === 'function' ? this.match(message, args) : this.match;
         const isInfinite = prompt.infinite && (matchType === ArgumentMatches.SEPARATE ? !commandInput : true);
+        const additionalRetry = prompt.optional ? 0 : Number(Boolean(commandInput));
 
         const values = isInfinite ? [] : null;
         if (isInfinite) args[this.id] = values;
@@ -444,7 +449,7 @@ class Argument {
 
             if (shouldSend) {
                 let prevInput;
-                if (retryCount <= 1 + Number(Boolean(commandInput))) {
+                if (retryCount <= 1 + additionalRetry) {
                     prevInput = commandInput || '';
                 } else {
                     prevInput = prevMessage.content;
@@ -527,7 +532,7 @@ class Argument {
             }
         };
 
-        const returnValue = await promptOne(message, 1 + Number(Boolean(commandInput)));
+        const returnValue = await promptOne(message, 1 + additionalRetry);
         if (this.handler.commandUtil) message.util.shouldEdit = false;
         this.handler.removePrompt(message);
         return returnValue;
