@@ -536,6 +536,15 @@ class CommandHandler extends AkairoHandler {
         let start;
 
         if (Array.isArray(prefix)) {
+            prefix.sort((a, b) => {
+                if (a === '' && b === '') return 0;
+                if (a === '') return 1;
+                if (a === '') return -1;
+                return a.length === b.length
+                    ? a.localeCompare(b)
+                    : b.length - a.length;
+            });
+
             const content = message.content.toLowerCase();
             const match = prefix.find(p => {
                 return content.startsWith(p.toLowerCase());
