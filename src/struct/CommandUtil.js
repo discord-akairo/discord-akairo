@@ -85,8 +85,8 @@ class CommandUtil {
 
     /**
      * Sends a response or edits an old response if available.
-     * @param {string|MessageOptions|MessageEditOptions} content - Content to send.
-     * @param {MessageOptions|MessageEditOptions} [options] - Options to use.
+     * @param {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|MessageEditOptions} content - Content to send.
+     * @param {MessageOptions|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageEditOptions} [options] - Options to use.
      * @returns {Promise<Message|Message[]>}
      */
     async send(content, options) {
@@ -105,8 +105,8 @@ class CommandUtil {
 
     /**
      * Sends a response, overwriting the last response.
-     * @param {string|MessageOptions} content - Content to send.
-     * @param {MessageOptions} [options] - Options to use.
+     * @param {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions} content - Content to send.
+     * @param {MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions} [options] - Options to use.
      * @returns {Promise<Message|Message[]>}
      */
     async sendNew(content, options) {
@@ -120,8 +120,8 @@ class CommandUtil {
 
     /**
      * Sends a response with a mention concantenated to it.
-     * @param {string|MessageOptions|MessageEditOptions} content - Content to send.
-     * @param {MessageOptions|MessageEditOptions} [options] - Options to use.
+     * @param {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|MessageEditOptions} content - Content to send.
+     * @param {MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|MessageEditOptions} [options] - Options to use.
      * @returns {Promise<Message|Message[]>}
      */
     reply(content, options) {
@@ -131,8 +131,8 @@ class CommandUtil {
 
     /**
      * Edits the last response.
-     * @param {string|MessageEditOptions} content - Content to send.
-     * @param {MessageEditOptions} [options] - Options to use.
+     * @param {string|string[]|MessageEmbed|MessageEditOptions} content - Content to send.
+     * @param {MessageEmbed|MessageEditOptions} [options] - Options to use.
      * @returns {Promise<Message>}
      */
     edit(content, options) {
@@ -141,14 +141,14 @@ class CommandUtil {
 
     /**
      * Swaps and cleans up content and options.
-     * @param {string|MessageOptions|MessageEditOptions} content - Content to send.
-     * @param {MessageOptions} [options] - Options to use.
+     * @param {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|MessageEditOptions} content - Content to send.
+     * @param {MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions} [options] - Options to use.
      * @returns {Array}
      */
     static swapOptions(content, options) {
         if (!options && typeof content === 'object' && !Array.isArray(content)) {
             options = content;
-            content = options.content || '';
+            content = '';
         } else
         if (!options) {
             options = {};

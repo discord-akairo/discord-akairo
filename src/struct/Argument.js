@@ -110,11 +110,11 @@ const { isPromise } = require('../util/Util');
  * Note that the retry count resets back to one on each valid entry.
  * The final evaluated argument will be an array of the inputs.
  * @prop {number} [limit=Infinity] - Amount of inputs allowed for an infinite prompt before finishing.
- * @prop {string|string[]|MessageOptions|ArgumentPromptFunction} [start] - Text sent on start of prompt.
- * @prop {string|string[]|MessageOptions|ArgumentPromptFunction} [retry] - Text sent on a retry (failure to cast type).
- * @prop {string|string[]|MessageOptions|ArgumentPromptFunction} [timeout] - Text sent on collector time out.
- * @prop {string|string[]|MessageOptions|ArgumentPromptFunction} [ended] - Text sent on amount of tries reaching the max.
- * @prop {string|string[]|MessageOptions|ArgumentPromptFunction} [cancel] - Text sent on cancellation of command.
+ * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|ArgumentPromptFunction} [start] - Text sent on start of prompt.
+ * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|ArgumentPromptFunction} [retry] - Text sent on a retry (failure to cast type).
+ * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|ArgumentPromptFunction} [timeout] - Text sent on collector time out.
+ * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|ArgumentPromptFunction} [ended] - Text sent on amount of tries reaching the max.
+ * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|ArgumentPromptFunction} [cancel] - Text sent on cancellation of command.
  * @prop {ArgumentPromptModifyFunction} [modifyStart] - Function to modify start prompts.
  * @prop {ArgumentPromptModifyFunction} [modifyRetry] - Function to modify retry prompts.
  * @prop {ArgumentPromptModifyFunction} [modifyTimeout] - Function to modify timeout messages.
@@ -123,22 +123,22 @@ const { isPromise } = require('../util/Util');
  */
 
 /**
- * A function returning text for the prompt or a `MessageOptions` object.
+ * A function returning text for the prompt.
  * @typedef {Function} ArgumentPromptFunction
  * @param {Message} message - Message that triggered the command.
  * @param {Object} prevArgs - Previous arguments.
  * @param {ArgumentPromptData} data - Miscellaneous data.
- * @returns {string|string[]|MessageOptions}
+ * @returns {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions}
  */
 
 /**
  * A function modifying a prompt text.
  * @typedef {Function} ArgumentPromptModifyFunction
- * @param {string|string[]|MessageOptions} text - Text from the prompt to modify.
+ * @param {string|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions} text - Text from the prompt to modify.
  * @param {Message} message - Message that triggered the command.
  * @param {Object} prevArgs - Previous arguments.
  * @param {ArgumentPromptData} data - Miscellaneous data.
- * @returns {string|string[]|MessageOptions}
+ * @returns {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions}
  */
 
 /**
@@ -415,8 +415,8 @@ class Argument {
                 });
             }
 
-            if (Array.isArray(prompter)) {
-                text = prompter.join('\n');
+            if (Array.isArray(text)) {
+                text = text.join('\n');
             }
 
             const modifier = {
@@ -434,6 +434,10 @@ class Argument {
                     message: inputMessage,
                     word: inputWord
                 });
+            }
+
+            if (Array.isArray(text)) {
+                text = text.join('\n');
             }
 
             return text;

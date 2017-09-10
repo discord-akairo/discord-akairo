@@ -1,6 +1,6 @@
 declare module 'discord-akairo' {
     import {
-        Client, ClientOptions, Collection, Message, MessageEmbed, MessageOptions, MessageEditOptions,
+        Client, ClientOptions, Collection, Message, MessageAttachment, MessageEmbed, MessageOptions, MessageEditOptions,
         User, GuildMember, Channel, Role, Emoji, Guild, PermissionResolvable, Snowflake
     } from 'discord.js';
 
@@ -255,12 +255,12 @@ declare module 'discord-akairo' {
         public prefix?: string;
         public shouldEdit: boolean;
 
-        public static swapOptions(content: string | MessageOptions | MessageEditOptions, options?: MessageOptions | MessageEditOptions): any[];
+        public static swapOptions(content: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | MessageEditOptions, options?: MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | MessageEditOptions): any[];
 
-        public edit(content: string | string[] | MessageEditOptions, options?: MessageEditOptions): Promise<Message>;
-        public reply(content: string | string[] | MessageOptions | MessageEditOptions, options?: MessageOptions | MessageEditOptions): Promise<Message | Message[]>;
-        public send(content: string | string[] | MessageOptions | MessageEditOptions, options?: MessageOptions | MessageEditOptions): Promise<Message | Message[]>;
-        public sendNew(content: string | string[] | MessageOptions, options?: MessageOptions): Promise<Message | Message[]>;
+        public edit(content: string | string[] | MessageEmbed | MessageEditOptions, options?: MessageEmbed | MessageEditOptions): Promise<Message>;
+        public reply(content: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | MessageEditOptions, options?: MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | MessageEditOptions): Promise<Message | Message[]>;
+        public send(content: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | MessageEditOptions, options?: MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | MessageEditOptions): Promise<Message | Message[]>;
+        public sendNew(content: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions, options?: MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions): Promise<Message | Message[]>;
         public setLastResponse(message: Message | Message[]): Message;
     }
 
@@ -439,7 +439,7 @@ declare module 'discord-akairo' {
 
     export type ArgumentAllowFunction = (message: Message, args: any) => boolean;
 
-    export type ArgumentCancelFunction = (message: Message, args: any) => boolean | Promise<boolean>;
+    export type ArgumentCancelFunction = (message: Message, args: any) => string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions;
 
     export type ArgumentDefaultFunction = (message: Message, args: any) => any;
 
@@ -472,9 +472,9 @@ declare module 'discord-akairo' {
     export type ArgumentPromptModifyFunction = (text: string, message: Message, args: any, data: ArgumentPromptData) => string | string[] | MessageOptions;
 
     export type ArgumentPromptOptions = {
-        cancel?: string | string[] | MessageOptions | ArgumentPromptFunction;
+        cancel?: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | ArgumentPromptFunction;
         cancelWord?: string;
-        ended?: string | string[] | MessageOptions | ArgumentPromptFunction;
+        ended?: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | ArgumentPromptFunction;
         infinite?: boolean;
         limit?: number;
         modifyCancel?: ArgumentPromptModifyFunction;
@@ -484,11 +484,11 @@ declare module 'discord-akairo' {
         modifyTimeout?: ArgumentPromptModifyFunction;
         optional?: boolean;
         retries?: number;
-        retry?: string | string[] | MessageOptions | ArgumentPromptFunction;
-        start?: string | string[] | MessageOptions | ArgumentPromptFunction;
+        retry?: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | ArgumentPromptFunction;
+        start?: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | ArgumentPromptFunction;
         stopWord?: string;
         time?: number;
-        timeout?: string | string[] | MessageOptions | ArgumentPromptFunction;
+        timeout?: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | ArgumentPromptFunction;
     };
 
     export type ArgumentSplit = 'plain' | 'split' | 'quoted' | 'sticky' | 'none' | string | RegExp;
