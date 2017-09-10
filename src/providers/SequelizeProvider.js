@@ -20,7 +20,7 @@ class SequelizeProvider extends Provider {
          * Column for ID.
          * @type {string}
          */
-        this.idColumn = idColumn || 'id';
+        this.idColumn = idColumn;
 
         /**
          * Column for JSON data.
