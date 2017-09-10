@@ -38,8 +38,9 @@ declare module 'discord-akairo' {
     }
 
     export class AkairoHandler {
-        public constructor(client: AkairoClient, directory: string, classToHandle: Function);
+        public constructor(client: AkairoClient, options: AkairoHandlerOptions);
 
+        public extensions: Set<string>;
         public categories: Collection<string, Category<string, AkairoModule>>;
         public readonly classToHandle: Function;
         public readonly client: AkairoClient;
@@ -166,6 +167,9 @@ declare module 'discord-akairo' {
         public split: ArgumentSplit | ArgumentSplitFunction;
         public typing: boolean;
         public userPermissions: PermissionResolvable | PermissionResolvable[] | PermissionFunction;
+
+        protected _splitText(content: string, message: Message): string[];
+        protected _getPrefixes(): any[];
 
         public condition(message): boolean;
         public disable(): boolean;
@@ -433,6 +437,12 @@ declare module 'discord-akairo' {
         prefix?: string | string[] | PrefixFunction;
         selfbot?: boolean;
         ownerID?: string | string[];
+    };
+
+    export type AkairoHandlerOptions = {
+        directory?: string;
+        classToHandle?: string;
+        extenstions?: string[] | Set<string>;
     };
 
     export type AllowMentionFunction = (message: Message) => boolean;

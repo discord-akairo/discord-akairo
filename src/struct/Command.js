@@ -448,6 +448,13 @@ class Command extends AkairoModule {
         return process(0);
     }
 
+    /**
+     * Splits text into arguments.
+     * @protected
+     * @param {string} content - String to parse.
+     * @param {Message} [message] - Message to use.
+     * @returns {string[]}
+     */
     _splitText(content, message) {
         const splitFuncs = {
             [ArgumentSplits.PLAIN]: c => c.match(/\S+\s?/g),
@@ -464,6 +471,11 @@ class Command extends AkairoModule {
                 : content.split(this.split);
     }
 
+    /**
+     * Gets the prefixes that are used in all args.
+     * @protected
+     * @returns {Object[]}
+     */
     _getPrefixes() {
         const prefixes = [];
         const pushPrefix = arg => {
