@@ -146,7 +146,7 @@ declare module 'discord-akairo' {
         public constructor(id: string, exec: ((message: Message, args: any) => any) | CommandOptions, options?: CommandOptions);
 
         public aliases: string[];
-        public args: Array<Argument | Argument[]>;
+        public args: (Argument | Argument[] | ArgumentCancelFunction)[];
         public category: Category<string, Command>;
         public channel?: string;
         public readonly client: AkairoClient;
@@ -439,6 +439,8 @@ declare module 'discord-akairo' {
 
     export type ArgumentAllowFunction = (message: Message, args: any) => boolean;
 
+    export type ArgumentCancelFunction = (message: Message, args: any) => boolean | Promise<boolean>;
+
     export type ArgumentDefaultFunction = (message: Message, args: any) => any;
 
     export type ArgumentMatch = 'word' | 'rest' | 'separate' | 'prefix' | 'flag' | 'text' | 'content' | 'none';
@@ -499,7 +501,7 @@ declare module 'discord-akairo' {
 
     export type CommandOptions = {
         aliases?: string[];
-        args?: (ArgumentOptions | ArgumentOptions[])[];
+        args?: (ArgumentOptions | ArgumentOptions[] | ArgumentCancelFunction)[];
         category?: string;
         channel?: string;
         clientPermissions?: PermissionResolvable | PermissionResolvable[] | PermissionFunction;

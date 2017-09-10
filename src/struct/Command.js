@@ -1,12 +1,13 @@
 const AkairoModule = require('./AkairoModule');
 const Argument = require('./Argument');
-const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
+const { ArgumentMatches, ArgumentSplits, Symbols } = require('../util/Constants');
+const { isPromise } = require('../util/Util');
 
 /**
  * Options to use for command execution behavior.
  * @typedef {Object} CommandOptions
  * @prop {string[]} [aliases=[]] - Command names.
- * @prop {ArgumentOptions[]|ArgumentOptions[][]} [args=[]] - Arguments to parse.
+ * @prop {ArgumentOptions[]|ArgumentOptions[][]|ArgumentCancelFunction} [args=[]] - Arguments to parse.
  * When an item is an array of arguments, the first argument that is allowed to run will be ran.
  * @prop {ArgumentSplit|ArgumentSplitFunction} [split='plain'] - Method to split text into words.
  * @prop {string} [channel] - Restricts channel to either 'guild' or 'dm'.
@@ -26,6 +27,16 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * @prop {ArgumentPromptOptions} [defaultPrompt={}] - The default prompt options.
  * @prop {Object} [options={}] - An object for custom options.
  * @prop {string|string[]} [description=''] - Description of the command.
+ */
+
+/**
+ * A function used to cancel argument parsing midway.
+ * A return value of true or Promise resolving to true will cancel the command.
+ * This behavior can be done manually anywhere else by throwing Constants.Symbols.COMMAND_CANCELLED.
+ * @typedef {Function} ArgumentCancelFunction
+ * @param {Message} message - Message that triggered the command.
+ * @param {Object} prevArgs - Previous arguments.
+ * @returns {boolean|Promise<boolean>}
  */
 
 /**
@@ -129,7 +140,16 @@ class Command extends AkairoModule {
          * Arguments for the command.
          * @type {Argument[]}
          */
-        this.args = args.map(arg => Array.isArray(arg) ? arg.map(a => new Argument(this, a)) : new Argument(this, arg));
+        this.args = [];
+        for (const arg of args) {
+            const val = Array.isArray(arg)
+                ? arg.map(a => new Argument(this, a))
+                : typeof arg === 'function'
+                    ? arg.bind(this)
+                    : new Argument(this, arg);
+
+            this.args.push(val);
+        }
 
         /**
          * The command split method.
@@ -395,8 +415,17 @@ class Command extends AkairoModule {
 
         const process = async i => {
             if (i === this.args.length) return processed;
-
             let arg = this.args[i];
+
+            if (typeof arg === 'function') {
+                let cancel = arg(message, processed);
+                if (isPromise(cancel)) cancel = await cancel;
+                if (cancel === true) {
+                    throw Symbols.COMMAND_CANCELLED;
+                }
+
+                return process(i + 1);
+            } else
             if (Array.isArray(arg)) {
                 arg = arg.find(a => a.allow(message, processed));
                 if (!arg) return process(i + 1);
