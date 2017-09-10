@@ -1,13 +1,5 @@
 const { Collection, MessageEmbed, Permissions } = require('discord.js');
 
-/**
- * Function used to check if a response should pass for the prompt.
- * @typedef {Function} PromptCheckFunction
- * @param {Message} message - Message to check.
- * @param {Message} [sent] - The prompt's sent message.
- * @returns {boolean}
- */
-
 class ClientUtil {
     /**
      * Client utilities to help with common tasks.

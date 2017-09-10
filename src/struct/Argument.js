@@ -269,7 +269,7 @@ class Argument {
          * @param {Object} args - Previous arguments from command.
          * @returns {boolean}
          */
-        this.allow = allow;
+        this.allow = allow.bind(this);
     }
 
     /**

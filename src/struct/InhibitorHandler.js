@@ -9,7 +9,10 @@ class InhibitorHandler extends AkairoHandler {
      * @param {AkairoClient} client - The Akairo client.
      */
     constructor(client) {
-        super(client, client.akairoOptions.inhibitorDirectory, Inhibitor);
+        super(client, {
+            directory: client.akairoOptions.inhibitorDirectory,
+            classToHandle: Inhibitor
+        });
 
         /**
          * Directory to inhibitors.

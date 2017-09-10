@@ -12,7 +12,10 @@ class ListenerHandler extends AkairoHandler {
      */
     constructor(client) {
         const { listenerDirectory, emitters } = client.akairoOptions;
-        super(client, listenerDirectory, Listener);
+        super(client, {
+            directory: listenerDirectory,
+            classToHandle: Listener
+        });
 
         /**
          * EventEmitters for use, mapped by name to EventEmitter.

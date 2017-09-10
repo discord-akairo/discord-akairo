@@ -29,7 +29,10 @@ class CommandHandler extends AkairoHandler {
             allowMention = false
         } = client.akairoOptions;
 
-        super(client, commandDirectory, Command);
+        super(client, {
+            directory: commandDirectory,
+            classToHandle: Command
+        });
 
         /**
          * The type resolver.

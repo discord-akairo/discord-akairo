@@ -7,16 +7,24 @@ const EventEmitter = require('events');
 const fs = require('fs');
 const path = require('path');
 
+/**
+ * Options for module loading and handling.
+ * @typedef {Object} AkairoHandlerOptions
+ * @prop {string} [directory] - Directory to modules.
+ * @prop {Function} [classToHandle=AkairoModule] - Only instances of this can be handled.
+ * Modules not instance of this class are ignored.
+ * @prop {string[]|Set<string>} [extensions] - File extensions to load.
+ * By default this is .js, .json, and .ts files.
+ */
+
 /** @extends EventEmitter */
 class AkairoHandler extends EventEmitter {
     /**
      * Handles module loading.
      * @param {AkairoClient} client - The Akairo client.
-     * @param {string} directory - Directory to modules.
-     * @param {class} classToHandle - Only instances of this can be handled.
-     * Exports not instance of this class are ignored.
+     * @param {AkairoHandlerOptions} options - Options for module loading and handling.
      */
-    constructor(client, directory, classToHandle) {
+    constructor(client, { directory, classToHandle = AkairoModule, extensions = ['.js', '.json', '.ts'] }) {
         super();
 
         /**
@@ -48,9 +56,15 @@ class AkairoHandler extends EventEmitter {
                 value: path.resolve(directory)
             },
             classToHandle: {
-                value: classToHandle || AkairoModule
+                value: classToHandle
             }
         });
+
+        /**
+         * File extensions to load.
+         * @type {Set<string>}
+         */
+        this.extensions = new Set(extensions);
 
         /**
          * Modules loaded, mapped by ID to AkairoModule.
@@ -118,6 +132,7 @@ class AkairoHandler extends EventEmitter {
      */
     load(thing, isReload = false) {
         const isObj = typeof thing === 'object';
+        if (!isObj && !this.extensions.has(path.extname(thing))) return undefined;
 
         const findExport = m => {
             if (!m) return null;
