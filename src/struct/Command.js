@@ -263,50 +263,9 @@ class Command extends AkairoModule {
     parse(content, message) {
         if (!this.args.length) return Promise.resolve({});
 
-        const splitFuncs = {
-            [ArgumentSplits.PLAIN]: c => c.match(/\S+\s?/g),
-            [ArgumentSplits.SPLIT]: c => c.split(' '),
-            [ArgumentSplits.QUOTED]: c => c.match(/"[^]*?"\s?|\S+\s?|"/g),
-            [ArgumentSplits.STICKY]: c => c.match(/[^\s"]*?"[^]*?"\s?|\S+\s?|"/g),
-            [ArgumentSplits.NONE]: c => [c]
-        };
-
-        const words = typeof this.split === 'function'
-            ? this.split(content, message) || []
-            : splitFuncs[this.split]
-                ? splitFuncs[this.split](content) || []
-                : content.split(this.split);
-
+        const words = this._splitText(content, message);
         const isQuoted = this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY || words.isQuoted;
-
-        const prefixes = [];
-        const pushPrefix = arg => {
-            if (arg.match === ArgumentMatches.PREFIX || arg.match === ArgumentMatches.FLAG) {
-                if (Array.isArray(arg.prefix)) {
-                    for (const p of arg.prefix) {
-                        prefixes.push({
-                            value: p.toLowerCase(),
-                            flag: arg.match === ArgumentMatches.FLAG
-                        });
-                    }
-                } else {
-                    prefixes.push({
-                        value: arg.prefix.toLowerCase(),
-                        flag: arg.match === ArgumentMatches.FLAG
-                    });
-                }
-            }
-        };
-
-        for (const arg of this.args) {
-            if (Array.isArray(arg)) {
-                for (const a of arg) {
-                    pushPrefix(a);
-                }
-            } else {
-                pushPrefix(arg);
-            }
-        }
+        const prefixes = this._getPrefixes();
 
         const noPrefixWords = words.filter(w => {
             w = w.trim();
@@ -449,7 +408,9 @@ class Command extends AkairoModule {
             const matchType = typeof arg.match === 'function' ? arg.match(message, processed) : arg.match;
             const processFunc = parseFuncs[matchType](arg, wordIndex);
 
-            if (matchType === ArgumentMatches.WORD || matchType === ArgumentMatches.REST) wordIndex++;
+            if ([ArgumentMatches.WORD, ArgumentMatches.REST, ArgumentMatches.SEPARATE].includes(matchType)) {
+                wordIndex++;
+            }
 
             const res = await processFunc(message, processed);
             processed[arg.id] = res;
@@ -457,6 +418,55 @@ class Command extends AkairoModule {
         };
 
         return process(0);
+    }
+
+    _splitText(content, message) {
+        const splitFuncs = {
+            [ArgumentSplits.PLAIN]: c => c.match(/\S+\s?/g),
+            [ArgumentSplits.SPLIT]: c => c.split(' '),
+            [ArgumentSplits.QUOTED]: c => c.match(/"[^]*?"\s?|\S+\s?|"/g),
+            [ArgumentSplits.STICKY]: c => c.match(/[^\s"]*?"[^]*?"\s?|\S+\s?|"/g),
+            [ArgumentSplits.NONE]: c => [c]
+        };
+
+        return typeof this.split === 'function'
+            ? this.split(content, message) || []
+            : splitFuncs[this.split]
+                ? splitFuncs[this.split](content) || []
+                : content.split(this.split);
+    }
+
+    _getPrefixes() {
+        const prefixes = [];
+        const pushPrefix = arg => {
+            if (arg.match === ArgumentMatches.PREFIX || arg.match === ArgumentMatches.FLAG) {
+                if (Array.isArray(arg.prefix)) {
+                    for (const p of arg.prefix) {
+                        prefixes.push({
+                            value: p.toLowerCase(),
+                            flag: arg.match === ArgumentMatches.FLAG
+                        });
+                    }
+                } else {
+                    prefixes.push({
+                        value: arg.prefix.toLowerCase(),
+                        flag: arg.match === ArgumentMatches.FLAG
+                    });
+                }
+            }
+        };
+
+        for (const arg of this.args) {
+            if (Array.isArray(arg)) {
+                for (const a of arg) {
+                    pushPrefix(a);
+                }
+            } else {
+                pushPrefix(arg);
+            }
+        }
+
+        return prefixes;
     }
 
     /**
