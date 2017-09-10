@@ -69,11 +69,12 @@ const { ArgumentMatches, ArgumentSplits, Symbols } = require('../util/Constants'
 
 /**
  * A function used to cancel argument parsing midway.
+ * The text returned will be sent.
  * This behavior can be done manually anywhere else by throwing Constants.Symbols.COMMAND_CANCELLED.
  * @typedef {Function} ArgumentCancelFunction
  * @param {Message} message - Message that triggered the command.
  * @param {Object} prevArgs - Previous arguments.
- * @returns {string|string[]|MessageOptions}
+ * @returns {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions}
  */
 
 /**

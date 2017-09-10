@@ -1410,7 +1410,7 @@
 
     
 
-    <h4 class="name" id="ArgumentCancelFunction"><span class="type-signature"></span>ArgumentCancelFunction<span class="signature">(message, prevArgs)</span><span class="type-signature"> &rarr; {string|Array.&lt;string>|MessageOptions}</span></h4>
+    <h4 class="name" id="ArgumentCancelFunction"><span class="type-signature"></span>ArgumentCancelFunction<span class="signature">(message, prevArgs)</span><span class="type-signature"> &rarr; {string|Array.&lt;string>|MessageEmbed|MessageAttachment|Array.&lt;MessageAttachment>|MessageOptions}</span></h4>
 
     
 
@@ -1462,7 +1462,7 @@
 
 
 <div class="description">
-    <p>A function used to cancel argument parsing midway.<br>This behavior can be done manually anywhere else by throwing Constants.Symbols.COMMAND_CANCELLED.</p>
+    <p>A function used to cancel argument parsing midway.<br>The text returned will be sent.<br>This behavior can be done manually anywhere else by throwing Constants.Symbols.COMMAND_CANCELLED.</p>
 </div>
 
 
@@ -1569,6 +1569,15 @@
 |
 
 <span class="param-type">Array.&lt;string></span>
+|
+
+<span class="param-type">MessageEmbed</span>
+|
+
+<span class="param-type">MessageAttachment</span>
+|
+
+<span class="param-type">Array.&lt;MessageAttachment></span>
 |
 
 <span class="param-type">MessageOptions</span>
@@ -3911,7 +3920,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line61">line 61</a>
+        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line62">line 62</a>
     </li></ul></dd>
     
 
@@ -3995,7 +4004,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line78">line 78</a>
+        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line79">line 79</a>
     </li></ul></dd>
     
 
@@ -4464,7 +4473,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line86">line 86</a>
+        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line87">line 87</a>
     </li></ul></dd>
     
 
@@ -5454,7 +5463,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line54">line 54</a>
+        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line55">line 55</a>
     </li></ul></dd>
     
 
@@ -6834,7 +6843,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line40">line 40</a>
+        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line41">line 41</a>
     </li></ul></dd>
     
 
@@ -7301,7 +7310,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line47">line 47</a>
+        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line48">line 48</a>
     </li></ul></dd>
     
 
