@@ -449,7 +449,7 @@ declare module 'discord-akairo' {
 
     export type ArgumentAllowFunction = (message: Message, args: any) => boolean;
 
-    export type ArgumentCancelFunction = (message: Message, args: any) => string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions;
+    export type ArgumentCancelFunction = (message: Message, args: any) => void | string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | Promise<void | string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions>;
 
     export type ArgumentDefaultFunction = (message: Message, args: any) => any;
 
