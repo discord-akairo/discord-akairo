@@ -135,7 +135,7 @@ class Command extends AkairoModule {
          * The command split method.
          * @type {ArgumentSplit|ArgumentSplitFunction}
          */
-        this.split = split;
+        this.split = typeof split === 'function' ? split.bind(this) : split;
 
         /**
          * Usable only in this channel type.
@@ -207,13 +207,13 @@ class Command extends AkairoModule {
          * Permissions required to run command by the client.
          * @type {PermissionResolvable|PermissionResolvable[]|PermissionFunction}
          */
-        this.clientPermissions = clientPermissions;
+        this.clientPermissions = typeof clientPermissions === 'function' ? clientPermissions.bind(this) : clientPermissions;
 
         /**
          * Permissions required to run command by the user.
          * @type {PermissionResolvable|PermissionResolvable[]|PermissionFunction}
          */
-        this.userPermissions = userPermissions;
+        this.userPermissions = typeof userPermissions === 'function' ? userPermissions.bind(this) : userPermissions;
 
         /**
          * Gets the regex trigger, if specified.
@@ -221,7 +221,7 @@ class Command extends AkairoModule {
          * @param {Message} message - Message being handled.
          * @returns {RegExp}
          */
-        this.trigger = typeof trigger === 'function' ? trigger : () => trigger;
+        this.trigger = typeof trigger === 'function' ? trigger.bind(this) : () => trigger;
 
         /**
          * Gets the condition trigger, if specified.
@@ -229,7 +229,7 @@ class Command extends AkairoModule {
          * @param {Message} message - Message being handled.
          * @returns {boolean}
          */
-        this.condition = typeof condition === 'function' ? condition : () => Boolean(condition);
+        this.condition = typeof condition === 'function' ? condition.bind(this) : () => Boolean(condition);
 
         /**
          * The ID of this command.

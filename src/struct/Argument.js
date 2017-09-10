@@ -213,13 +213,13 @@ class Argument {
          * The method to match text.
          * @type {ArgumentMatch|ArgumentMatchFunction}
          */
-        this.match = match;
+        this.match = typeof match === 'function' ? match.bind(this) : match;
 
         /**
          * The type to cast to.
          * @type {ArgumentType|ArgumentTypeFunction}
          */
-        this.type = type;
+        this.type = typeof type === 'function' ? type.bind(this) : type;
 
         /**
          * The prefix to use for flag or prefix args.
@@ -259,7 +259,7 @@ class Argument {
          * @param {Object} args - Previous arguments from command.
          * @returns {any}
          */
-        this.default = typeof defaultValue === 'function' ? defaultValue : () => defaultValue;
+        this.default = typeof defaultValue === 'function' ? defaultValue.bind(this) : () => defaultValue;
 
         /**
          * Checks if the argument is allowed to run.

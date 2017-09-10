@@ -140,7 +140,7 @@ class CommandHandler extends AkairoHandler {
          * @param {Message} message - Message being handled.
          * @returns {string}
          */
-        this.prefix = typeof prefix === 'function' ? prefix : () => prefix;
+        this.prefix = typeof prefix === 'function' ? prefix.bind(this) : () => prefix;
 
         /**
          * Gets if mentions are allowed for prefixing.
@@ -148,7 +148,7 @@ class CommandHandler extends AkairoHandler {
          * @param {Message} message - Message being handled.
          * @returns {boolean}
          */
-        this.allowMention = typeof allowMention === 'function' ? allowMention : () => Boolean(allowMention);
+        this.allowMention = typeof allowMention === 'function' ? allowMention.bind(this) : () => Boolean(allowMention);
 
         /**
          * Directory to commands.

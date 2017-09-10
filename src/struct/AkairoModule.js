@@ -73,7 +73,7 @@ class AkairoModule {
          * @param {...any} args - Arguments.
          * @returns {any}
          */
-        this.exec = exec || this.exec;
+        this.exec = exec ? exec.bind(this) : this.exec;
     }
 
     /**
