@@ -708,6 +708,11 @@ class CommandHandler extends AkairoHandler {
                     this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, args, ret);
                     if (command.typing) message.channel.stopTyping();
                 } catch (err) {
+                    if (err === Symbols.COMMAND_CANCELLED) {
+                        this.emit(CommandHandlerEvents.COMMAND_CANCELLED, message, command);
+                        return;
+                    }
+
                     this._handleError(err, message, command);
                 }
             })());
@@ -763,6 +768,11 @@ class CommandHandler extends AkairoHandler {
                     this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, args, ret);
                     if (command.typing) message.channel.stopTyping();
                 } catch (err) {
+                    if (err === Symbols.COMMAND_CANCELLED) {
+                        this.emit(CommandHandlerEvents.COMMAND_CANCELLED, message, command);
+                        return;
+                    }
+
                     this._handleError(err, message, command);
                 }
             })());
@@ -936,6 +946,13 @@ module.exports = CommandHandler;
  * @param {Command} command - Command executed.
  * @param {Object} args - The args passed to the command.
  * @param {any} returnValue - The command's return value.
+ */
+
+/**
+ * Emitted when a command is cancelled via prompt or argument cancel.
+ * @event CommandHandler#commandCancelled
+ * @param {Message} message - Message sent.
+ * @param {Command} command - Command executed.
  */
 
 /**

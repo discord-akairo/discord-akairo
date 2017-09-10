@@ -16,13 +16,12 @@ class TestCommand extends Command {
                         retry: 'Please type a valid number.'
                     }
                 },
-                async (msg, { number }) => {
+                (msg, { number }) => {
                     if (number > 10) {
-                        await msg.reply('Nope');
-                        return true;
+                        return 'Nope';
                     }
 
-                    return false;
+                    return null;
                 }
             ]
         });
