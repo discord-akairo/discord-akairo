@@ -11,19 +11,11 @@ class TestCommand extends Command {
                 {
                     id: 'number',
                     type: 'number',
-                    prompt: {
-                        start: 'Type a number!',
-                        retry: 'Please type a valid number.'
-                    },
-                    cancel: value => value > 10 ? 'Value is over 10' : null
+                    cancel: 'Not a number'
                 },
                 {
                     id: 'number2',
-                    type: 'number',
-                    prompt: {
-                        start: 'Type a number!',
-                        retry: 'Please type a valid number.'
-                    }
+                    type: 'number'
                 }
             ]
         });

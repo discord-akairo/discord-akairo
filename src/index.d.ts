@@ -85,6 +85,7 @@ declare module 'discord-akairo' {
         public constructor(command: Command, options: ArgumentOptions);
 
         public readonly client: AkairoClient;
+        public cancel: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | ArgumentCancelFunction;
         public command: Command;
         public description: string;
         public readonly handler: CommandHandler;
@@ -96,7 +97,6 @@ declare module 'discord-akairo' {
         public prompt?: ArgumentPromptOptions;
         public type: ArgumentType | ArgumentTypeFunction;
 
-        public cancel(value: any, message: Message, args: any): void | string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | Promise<void | string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions>;
         public cast(word: string, message: Message, args?: any): Promise<any>;
         public collect(message: Message, args?: any, commandInput?: string): Promise<any>;
         public default(message: Message, args: any): any;
@@ -460,7 +460,7 @@ declare module 'discord-akairo' {
 
     export type ArgumentOptions = {
         allow?: ArgumentAllowFunction;
-        cancel?: ArgumentCancelFunction;
+        cancel?: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | ArgumentCancelFunction;
         default?: ArgumentDefaultFunction | any;
         description?: string | string[];
         id: string;

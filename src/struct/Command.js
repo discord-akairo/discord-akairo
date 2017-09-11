@@ -127,7 +127,7 @@ class Command extends AkairoModule {
             clientPermissions = this.clientPermissions,
             userPermissions = this.userPermissions,
             trigger = this.trigger,
-            condition = this.condition
+            condition = this.condition || (() => true)
         } = options;
 
         /**
@@ -445,7 +445,12 @@ class Command extends AkairoModule {
             const res = await processFunc(message, processed);
             processed[arg.id] = res;
 
-            let cancel = arg.cancel(res, message, processed);
+            let cancel = typeof arg.cancel === 'function'
+                ? arg.cancel(res, message, processed)
+                : res == null
+                    ? arg.cancel
+                    : null;
+
             if (isPromise(cancel)) cancel = await cancel;
             if (cancel != null) {
                 if (cancel) await message.channel.send(cancel);

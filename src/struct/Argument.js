@@ -179,7 +179,9 @@ const { isPromise } = require('../util/Util');
  * @prop {ArgumentPromptOptions} [prompt] - Prompt options for when user does not provide input.
  * @prop {ArgumentAllowFunction} [allow] - A function that checks if this argument should be ran.
  * If not provided, this argument will always be ran.
- * @prop {ArgumentCancelFunction} [cancel] - A function checking the value of the argument for cancellation.
+ * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|ArgumentCancelFunction} [cancel] - Text to send if the command should be cancelled.
+ * The command is to be cancelled if this option is provided and the value of the argument is null or undefined.
+ * A function can be provided to check for cancellation and for the text to send.
  */
 
 /**
@@ -205,9 +207,9 @@ class Argument {
         limit = Infinity,
         description = '',
         prompt,
+        cancel = null,
         default: defaultValue = null,
-        allow = () => true,
-        cancel = () => null
+        allow = () => true
     } = {}) {
         /**
          * The ID of the argument.
@@ -264,6 +266,12 @@ class Argument {
         this.prompt = prompt;
 
         /**
+         * The text or condition for when the command should be cancelled.
+         * @type {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|ArgumentCancelFunction}
+         */
+        this.cancel = typeof cancel === 'function' ? cancel.bind(this) : cancel;
+
+        /**
          * The default value.
          * @method
          * @name Argument#default
@@ -282,17 +290,6 @@ class Argument {
          * @returns {boolean}
          */
         this.allow = allow.bind(this);
-
-        /**
-         * Gets the text for when the command should be cancelled.
-         * @method
-         * @name Argument#cancel
-         * @param {any} value - The value to check.
-         * @param {Message} message - The message that called the command.
-         * @param {Object} args - Previous arguments from command.
-         * @returns {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|Promise<string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions>}
-         */
-        this.cancel = cancel.bind(this);
     }
 
     /**
