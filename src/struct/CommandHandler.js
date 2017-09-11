@@ -655,7 +655,7 @@ class CommandHandler extends AkairoHandler {
 
         for (const command of this.modules.values()) {
             if ((message.edited ? command.editable : true) && command.enabled) {
-                const regex = command.trigger(message);
+                const regex = typeof command.trigger === 'function' ? command.trigger(message) : command.trigger;
                 if (regex) matchedCommands.push({ command, regex });
             }
         }

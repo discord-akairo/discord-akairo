@@ -169,6 +169,7 @@ declare module 'discord-akairo' {
         public typing: boolean;
         public userPermissions: PermissionResolvable | PermissionResolvable[] | PermissionFunction;
 
+        protected _buildArgs(args: (ArgumentOptions | ArgumentOptions[] | CommandCancelFunction)[]): (Argument | Argument[] | CommandCancelFunction)[];
         protected _splitText(content: string, message: Message): string[];
         protected _getPrefixes(): any[];
 

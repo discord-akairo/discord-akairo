@@ -272,7 +272,7 @@ class Argument {
         this.cancel = typeof cancel === 'function' ? cancel.bind(this) : cancel;
 
         /**
-         * The default value.
+         * Gets the default value.
          * @method
          * @name Argument#default
          * @param {Message} message - The message that called the command.

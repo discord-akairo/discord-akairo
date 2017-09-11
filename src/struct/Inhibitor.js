@@ -46,7 +46,7 @@ class Inhibitor extends AkairoModule {
         this.reason = reason;
 
         /**
-         * When the inhibitor is ran.
+         * The type of the inhibitor for when it should run.
          * @type {string}
          */
         this.type = type;

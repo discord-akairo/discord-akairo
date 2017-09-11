@@ -7,7 +7,7 @@ const { isPromise } = require('../util/Util');
  * Options to use for command execution behavior.
  * @typedef {Object} CommandOptions
  * @prop {string[]} [aliases=[]] - Command names.
- * @prop {ArgumentOptions[]|ArgumentOptions[][]|CommandCancelFunction} [args=[]] - Arguments to parse.
+ * @prop {Array<ArgumentOptions|ArgumentOptions[]|CommandCancelFunction>} [args=[]] - Arguments to parse.
  * When an item is an array of arguments, the first argument that is allowed to run will be ran.
  * @prop {ArgumentSplit|ArgumentSplitFunction} [split='plain'] - Method to split text into words.
  * @prop {string} [channel] - Restricts channel to either 'guild' or 'dm'.
@@ -138,18 +138,9 @@ class Command extends AkairoModule {
 
         /**
          * Arguments for the command.
-         * @type {Argument[]}
+         * @type {Array<Argument|Argument[]|CommandCancelFunction>}
          */
-        this.args = [];
-        for (const arg of args) {
-            const val = Array.isArray(arg)
-                ? arg.map(a => new Argument(this, a))
-                : typeof arg === 'function'
-                    ? arg.bind(this)
-                    : new Argument(this, arg);
-
-            this.args.push(val);
-        }
+        this.args = this._buildArgs(args);
 
         /**
          * The command split method.
@@ -236,7 +227,7 @@ class Command extends AkairoModule {
         this.userPermissions = typeof userPermissions === 'function' ? userPermissions.bind(this) : userPermissions;
 
         /**
-         * Gets the regex trigger, if specified.
+         * Gets the regex trigger for this command.
          * @method
          * @param {Message} message - Message being handled.
          * @returns {RegExp}
@@ -244,7 +235,7 @@ class Command extends AkairoModule {
         this.trigger = typeof trigger === 'function' ? trigger.bind(this) : () => trigger;
 
         /**
-         * Gets the condition trigger, if specified.
+         * Checks if the command should be ran by condition.
          * @method
          * @param {Message} message - Message being handled.
          * @returns {boolean}
@@ -461,6 +452,30 @@ class Command extends AkairoModule {
         };
 
         return process(0);
+    }
+
+    /**
+     * Builds arguments from options.
+     * @protected
+     * @param {Array<ArgumentOptions|ArgumentOptions[]|CommandCancelFunction>} args - Argument options to build.
+     * @returns {Array<Argument|Argument[]|CommandCancelFunction>}
+     */
+    _buildArgs(args) {
+        const res = [];
+        for (let arg of args) {
+            if (Array.isArray(arg)) {
+                arg = arg.map(a => new Argument(this, a));
+            } else
+            if (typeof arg === 'function') {
+                arg = arg.bind(this);
+            } else {
+                arg = new Argument(this, arg);
+            }
+
+            res.push(arg);
+        }
+
+        return res;
     }
 
     /**
