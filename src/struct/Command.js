@@ -420,8 +420,8 @@ class Command extends AkairoModule {
             if (typeof arg === 'function') {
                 let cancel = arg.call(this, message, processed);
                 if (isPromise(cancel)) cancel = await cancel;
-                if (cancel != null && cancel !== false) {
-                    if (cancel && cancel !== true) await message.channel.send(cancel);
+                if (cancel != null) {
+                    if (cancel) await message.channel.send(cancel);
                     throw Symbols.COMMAND_CANCELLED;
                 }
 
