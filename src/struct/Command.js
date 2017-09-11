@@ -7,7 +7,7 @@ const { isPromise } = require('../util/Util');
  * Options to use for command execution behavior.
  * @typedef {Object} CommandOptions
  * @prop {string[]} [aliases=[]] - Command names.
- * @prop {ArgumentOptions[]|ArgumentOptions[][]|ArgumentCancelFunction} [args=[]] - Arguments to parse.
+ * @prop {ArgumentOptions[]|ArgumentOptions[][]|CommandCancelFunction} [args=[]] - Arguments to parse.
  * When an item is an array of arguments, the first argument that is allowed to run will be ran.
  * @prop {ArgumentSplit|ArgumentSplitFunction} [split='plain'] - Method to split text into words.
  * @prop {string} [channel] - Restricts channel to either 'guild' or 'dm'.
@@ -31,9 +31,9 @@ const { isPromise } = require('../util/Util');
 
 /**
  * A function used to cancel argument parsing midway.
- * The text returned will be sent.
+ * If text is returned it will be sent and the command will be cancelled.
  * This behavior can be done manually anywhere else by throwing Constants.Symbols.COMMAND_CANCELLED.
- * @typedef {Function} ArgumentCancelFunction
+ * @typedef {Function} CommandCancelFunction
  * @param {Message} message - Message that triggered the command.
  * @param {Object} prevArgs - Previous arguments.
  * @returns {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|Promise<string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions>}
@@ -444,6 +444,14 @@ class Command extends AkairoModule {
 
             const res = await processFunc(message, processed);
             processed[arg.id] = res;
+
+            let cancel = arg.cancel(res, message, processed);
+            if (isPromise(cancel)) cancel = await cancel;
+            if (cancel != null) {
+                if (cancel) await message.channel.send(cancel);
+                throw Symbols.COMMAND_CANCELLED;
+            }
+
             return process(i + 1);
         };
 

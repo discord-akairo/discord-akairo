@@ -14,14 +14,16 @@ class TestCommand extends Command {
                     prompt: {
                         start: 'Type a number!',
                         retry: 'Please type a valid number.'
-                    }
+                    },
+                    cancel: value => value > 10 ? 'Value is over 10' : null
                 },
-                (msg, { number }) => {
-                    if (number > 10) {
-                        return 'Nope';
+                {
+                    id: 'number2',
+                    type: 'number',
+                    prompt: {
+                        start: 'Type a number!',
+                        retry: 'Please type a valid number.'
                     }
-
-                    return null;
                 }
             ]
         });
