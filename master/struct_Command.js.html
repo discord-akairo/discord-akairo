@@ -40,6 +40,7 @@
             <pre class="prettyprint source linenums"><code>const AkairoModule = require('./AkairoModule');
 const Argument = require('./Argument');
 const { ArgumentMatches, ArgumentSplits, Symbols } = require('../util/Constants');
+const { isPromise } = require('../util/Util');
 
 /**
  * Options to use for command execution behavior.
@@ -74,7 +75,7 @@ const { ArgumentMatches, ArgumentSplits, Symbols } = require('../util/Constants'
  * @typedef {Function} ArgumentCancelFunction
  * @param {Message} message - Message that triggered the command.
  * @param {Object} prevArgs - Previous arguments.
- * @returns {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions}
+ * @returns {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|Promise&lt;string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions>}
  */
 
 /**
@@ -456,9 +457,10 @@ class Command extends AkairoModule {
             let arg = this.args[i];
 
             if (typeof arg === 'function') {
-                const cancel = arg.call(this, message, processed);
-                if (cancel != null &amp;&amp; cancel !== false) {
-                    if (cancel &amp;&amp; cancel !== true) await message.channel.send(cancel);
+                let cancel = arg.call(this, message, processed);
+                if (isPromise(cancel)) cancel = await cancel;
+                if (cancel != null) {
+                    if (cancel) await message.channel.send(cancel);
                     throw Symbols.COMMAND_CANCELLED;
                 }
 
