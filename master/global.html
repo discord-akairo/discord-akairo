@@ -1630,7 +1630,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line186">line 186</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line187">line 187</a>
     </li></ul></dd>
     
 
@@ -2356,7 +2356,7 @@
             
                 <td class="default">
                 
-                    <code>''</code>
+                    <code>null</code>
                 
                 </td>
             
@@ -2436,7 +2436,7 @@
                 </td>
             
 
-            <td class="description last"><p>Prompt options for when user does not provide input.<br>Must not have a default value for this to work.</p></td>
+            <td class="description last"><p>Prompt options for when user does not provide input.</p></td>
         </tr>
 
     
@@ -2484,6 +2484,24 @@
             <td class="type">
             
                 
+<span class="param-type">string</span>
+|
+
+<span class="param-type">Array.&lt;string></span>
+|
+
+<span class="param-type">MessageEmbed</span>
+|
+
+<span class="param-type">MessageAttachment</span>
+|
+
+<span class="param-type">Array.&lt;MessageAttachment></span>
+|
+
+<span class="param-type">MessageOptions</span>
+|
+
 <span class="param-type"><a href="global.html#ArgumentCancelFunction">ArgumentCancelFunction</a></span>
 
 
@@ -2506,7 +2524,7 @@
                 </td>
             
 
-            <td class="description last"><p>A function checking the value of the argument for cancellation.</p></td>
+            <td class="description last"><p>Text to send if the command should be cancelled.<br>The command is to be cancelled if this option is provided and the value of the argument is null or undefined.<br>A function can be provided to check for cancellation and for the text to send.</p></td>
         </tr>
 
     
@@ -4992,13 +5010,7 @@
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;<a href="global.html#ArgumentOptions">ArgumentOptions</a>></span>
-|
-
-<span class="param-type">Array.&lt;Array.&lt;<a href="global.html#ArgumentOptions">ArgumentOptions</a>>></span>
-|
-
-<span class="param-type"><a href="global.html#CommandCancelFunction">CommandCancelFunction</a></span>
+<span class="param-type">Array.&lt;(<a href="global.html#ArgumentOptions">ArgumentOptions</a>|Array.&lt;<a href="global.html#ArgumentOptions">ArgumentOptions</a>>|<a href="global.html#CommandCancelFunction">CommandCancelFunction</a>)></span>
 
 
             
