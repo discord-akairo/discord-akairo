@@ -249,7 +249,7 @@ class Command extends AkairoModule {
          * @param {Message} message - Message being handled.
          * @returns {boolean}
          */
-        this.condition = typeof condition === 'function' ? condition.bind(this) : () => Boolean(condition);
+        this.condition = condition.bind(this);
 
         /**
          * The ID of this command.

@@ -173,11 +173,10 @@ const { isPromise } = require('../util/Util');
  * Applicable to word, text, content, rest, or separate match only.
  * @prop {number} [limit=Infinity] - Amount of words to match when matching more than one.
  * Applicable to text, content, rest, or separate match only.
- * @prop {any|ArgumentDefaultFunction} [default=''] - Default value if text does not parse or cast correctly.
+ * @prop {any|ArgumentDefaultFunction} [default=null] - Default value if text does not parse or cast correctly.
  * If using a flag arg, setting the default value to a non-null/undefined value inverses the result.
  * @prop {string|string[]} [description=''] - A description of the argument.
  * @prop {ArgumentPromptOptions} [prompt] - Prompt options for when user does not provide input.
- * Must not have a default value for this to work.
  * @prop {ArgumentAllowFunction} [allow] - A function that checks if this argument should be ran.
  * If not provided, this argument will always be ran.
  * @prop {ArgumentCancelFunction} [cancel] - A function checking the value of the argument for cancellation.
@@ -206,7 +205,7 @@ class Argument {
         limit = Infinity,
         description = '',
         prompt,
-        default: defaultValue = '',
+        default: defaultValue = null,
         allow = () => true,
         cancel = () => null
     } = {}) {
