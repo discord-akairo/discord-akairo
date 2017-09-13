@@ -831,7 +831,7 @@ class CommandHandler extends AkairoHandler {
      * @returns {boolean}
      */
     hasPrompt(channel, user) {
-        const users = this.prompts.get(user.id);
+        const users = this.prompts.get(channel.id);
         if (!users) return false;
         return users.has(user.id);
     }
