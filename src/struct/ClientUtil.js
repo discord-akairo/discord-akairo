@@ -371,7 +371,7 @@ class ClientUtil {
      * @param {boolean} cache - Whether or not to add to cache.
      * @returns {Promise<GuildMember>}
      */
-    async fetchMemberIn(guild, id, cache) {
+    async fetchMember(guild, id, cache) {
         const user = await this.client.users.fetch(id, cache);
         return guild.members.fetch(user, cache);
     }

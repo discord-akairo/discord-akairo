@@ -128,7 +128,7 @@ declare module 'discord-akairo' {
         public collection<K, V>(iterable: Iterable<[K, V][]>): Collection<K, V>;
         public compareStreaming(oldMember: GuildMember, newMember: GuildMember): number;
         public embed(data?: any): MessageEmbed;
-        public fetchMemberIn(guild: Guild, id: string, cache?: boolean): Promise<GuildMember>;
+        public fetchMember(guild: Guild, id: string, cache?: boolean): Promise<GuildMember>;
         public resolveChannel(text: string, channels: Collection<Snowflake, Channel>, caseSensitive?: boolean, wholeWord?: boolean): Channel;
         public resolveChannels(text: string, channels: Collection<Snowflake, Channel>, caseSensitive?: boolean, wholeWord?: boolean): Collection<Snowflake, Channel>;
         public resolveEmoji(text: string, emojis: Collection<Snowflake, Emoji>, caseSensitive?: boolean, wholeWord?: boolean): Emoji;
