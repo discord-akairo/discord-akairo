@@ -84,6 +84,16 @@ class CommandUtil {
     }
 
     /**
+     * Changes if the message should be edited.
+     * @param {boolean} state - Change to editable or not.
+     * @returns {CommandUtil}
+     */
+    setEditable(state) {
+        this.shouldEdit = Boolean(state);
+        return this;
+    }
+
+    /**
      * Sends a response or edits an old response if available.
      * @param {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|MessageEditOptions} content - Content to send.
      * @param {MessageOptions|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageEditOptions} [options] - Options to use.
@@ -99,7 +109,7 @@ class CommandUtil {
 
         const sent = await this.message.channel.send(content, options);
         const lastSent = this.setLastResponse(sent);
-        this.shouldEdit = !lastSent.attachments.size;
+        this.setEditable(!lastSent.attachments.size);
         return sent;
     }
 
@@ -114,7 +124,7 @@ class CommandUtil {
         const sent = await this.message.channel.send(content, options);
 
         const lastSent = this.setLastResponse(sent);
-        this.shouldEdit = !lastSent.attachments.size;
+        this.setEditable(!lastSent.attachments.size);
         return sent;
     }
 

@@ -267,6 +267,7 @@ declare module 'discord-akairo' {
         public reply(content: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | MessageEditOptions, options?: MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | MessageEditOptions): Promise<Message | Message[]>;
         public send(content: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | MessageEditOptions, options?: MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | MessageEditOptions): Promise<Message | Message[]>;
         public sendNew(content: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions, options?: MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions): Promise<Message | Message[]>;
+        public setEditable(state: boolean): this;
         public setLastResponse(message: Message | Message[]): Message;
     }
 

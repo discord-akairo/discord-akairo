@@ -486,7 +486,7 @@ class Argument {
                 if (startText) {
                     sent = await (message.util || message.channel).send(startText);
                     if (this.handler.commandUtil) {
-                        message.util.shouldEdit = false;
+                        message.util.setEditable(false);
                         message.util.setLastResponse(sent);
                     }
                 }
@@ -557,7 +557,7 @@ class Argument {
         };
 
         const returnValue = await promptOne(message, 1 + additionalRetry);
-        if (this.handler.commandUtil) message.util.shouldEdit = false;
+        if (this.handler.commandUtil) message.util.setEditable(false);
         this.handler.removePrompt(message);
         return returnValue;
     }
