@@ -16,7 +16,7 @@ class CommandHandler extends AkairoHandler {
     constructor(client) {
         const {
             commandDirectory,
-            blockNotSelf = true,
+            blockOthers = true,
             blockClient = true,
             blockBots = true,
             fetchMembers = false,
@@ -56,7 +56,7 @@ class CommandHandler extends AkairoHandler {
          * Whether or not to block others, if a selfbot.
          * @type {boolean}
          */
-        this.blockNotSelf = Boolean(blockNotSelf);
+        this.blockOthers = Boolean(blockOthers);
 
         /**
          * Whether or not to block self, if not a selfbot.
@@ -293,8 +293,8 @@ class CommandHandler extends AkairoHandler {
                 return;
             }
 
-            if (this.blockNotSelf && message.author.id !== this.client.user.id && this.client.selfbot) {
-                this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.NOT_SELF);
+            if (this.blockOthers && message.author.id !== this.client.user.id && this.client.selfbot) {
+                this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.OTHERS);
                 return;
             }
 
@@ -903,7 +903,7 @@ module.exports = CommandHandler;
 
 /**
  * Emitted when a message is blocked by a pre-message inhibitor.
- * The built-in inhibitors are 'notSelf' (for selfbots), 'client', and 'bot'.
+ * The built-in inhibitors are 'others' (for selfbots), 'client', and 'bot'.
  * @event CommandHandler#messageBlocked
  * @param {Message} message - Message sent.
  * @param {string} reason - Reason for the block.

@@ -189,7 +189,7 @@ declare module 'discord-akairo' {
         public aliases: Collection<string, string>;
         public blockBots: boolean;
         public blockClient: boolean;
-        public blockNotSelf: boolean;
+        public blockOthers: boolean;
         public categories: Collection<string, Category<string, Command>>;
         public readonly classToHandle: Function;
         public readonly client: AkairoClient;
@@ -426,7 +426,7 @@ declare module 'discord-akairo' {
         automateCategories?: boolean;
         blockBots?: boolean;
         blockClient?: boolean;
-        blockNotSelf?: boolean;
+        blockOthers?: boolean;
         commandDirectory?: string;
         commandUtil?: boolean;
         commandUtilLifetime?: number;
@@ -646,7 +646,7 @@ declare module 'discord-akairo' {
             ERROR: 'error'
         },
         BuiltInReasons: {
-            NOT_SELF: 'notSelf',
+            OTHERS: 'others',
             CLIENT: 'client',
             BOT: 'bot',
             OWNER: 'owner',

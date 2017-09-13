@@ -77,7 +77,7 @@ module.exports = {
         ERROR: 'error'
     },
     BuiltInReasons: {
-        NOT_SELF: 'notSelf',
+        OTHERS: 'others',
         CLIENT: 'client',
         BOT: 'bot',
         OWNER: 'owner',
