@@ -127,7 +127,7 @@ class Command extends AkairoModule {
             clientPermissions = this.clientPermissions,
             userPermissions = this.userPermissions,
             trigger = this.trigger,
-            condition = this.condition || (() => true)
+            condition = this.condition || (() => false)
         } = options;
 
         /**
