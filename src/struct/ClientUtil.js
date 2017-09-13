@@ -127,24 +127,24 @@ class ClientUtil {
     }
 
     /**
-     * Resolves a guild channel from a string, such as an ID, a name, or a mention.
+     * Resolves a channel from a string, such as an ID, a name, or a mention.
      * @param {string} text - Text to resolve.
      * @param {Collection} channels - Collection of channels to find in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
-     * @returns {GuildChannel}
+     * @returns {Channel}
      */
     resolveChannel(text, channels, caseSensitive = false, wholeWord = false) {
         return channels.find(channel => this.checkChannel(text, channel, caseSensitive, wholeWord));
     }
 
     /**
-     * Resolves multiple guild channels from a string, such as an ID, a name, or a mention.
+     * Resolves multiple channels from a string, such as an ID, a name, or a mention.
      * @param {string} text - Text to resolve.
      * @param {Collection} channels - Collection of channels to find in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
-     * @returns {Collection<string, GuildChannel>}
+     * @returns {Collection<string, Channel>}
      */
     resolveChannels(text, channels, caseSensitive = false, wholeWord = false) {
         return channels.filter(channel => this.checkChannel(text, channel, caseSensitive, wholeWord));
