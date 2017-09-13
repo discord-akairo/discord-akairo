@@ -114,7 +114,7 @@ class CommandHandler extends AkairoHandler {
 
         /**
          * Collection of sets of ongoing argument prompts.
-         * @type {Collection<string, Set>}
+         * @type {Collection<string, Set<string>>}
          */
         this.prompts = new Collection();
 
@@ -330,7 +330,7 @@ class CommandHandler extends AkairoHandler {
                 return;
             }
 
-            if (this.hasPrompt(message)) {
+            if (this.hasPrompt(message.channel, message.author)) {
                 this.emit(CommandHandlerEvents.IN_PROMPT, message);
                 return;
             }
@@ -800,39 +800,40 @@ class CommandHandler extends AkairoHandler {
 
     /**
      * Adds an ongoing prompt in order to prevent command usage in the channel.
-     * @param {Message} message - Message to use.
+     * @param {Channel} channel - Channel to add to.
+     * @param {User} user - User to add.
      * @returns {void}
      */
-    addPrompt(message) {
-        let channels = this.prompts.get(message.author.id);
-        if (!channels) this.prompts.set(message.author.id, new Set());
-
-        channels = this.prompts.get(message.author.id);
-        channels.add(message.channel.id);
+    addPrompt(channel, user) {
+        let users = this.prompts.get(channel.id);
+        if (!users) this.prompts.set(channel.id, new Set());
+        users = this.prompts.get(channel.id);
+        users.add(user.id);
     }
 
     /**
      * Removes an ongoing prompt.
-     * @param {Message} message - Message to use.
+     * @param {Channel} channel - Channel to remove from.
+     * @param {User} user - User to remove.
      * @returns {void}
      */
-    removePrompt(message) {
-        const channels = this.prompts.get(message.author.id);
-        if (!channels) return;
-
-        channels.delete(message.channel.id);
-        if (!channels.size) this.prompts.delete(message.author.id);
+    removePrompt(channel, user) {
+        const users = this.prompts.get(channel.id);
+        if (!users) return;
+        users.delete(user.id);
+        if (!users.size) this.prompts.delete(user.id);
     }
 
     /**
      * Checks if there is an ongoing prompt.
-     * @param {Message} message - Message to use.
+     * @param {Channel} channel - Channel to check.
+     * @param {User} user - User to check.
      * @returns {boolean}
      */
-    hasPrompt(message) {
-        const channels = this.prompts.get(message.author.id);
-        if (!channels) return false;
-        return channels.has(message.channel.id);
+    hasPrompt(channel, user) {
+        const users = this.prompts.get(user.id);
+        if (!users) return false;
+        return users.has(user.id);
     }
 
     /**

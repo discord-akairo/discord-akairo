@@ -204,7 +204,7 @@ declare module 'discord-akairo' {
         public handleEdits: boolean;
         public modules: Collection<string, Command>;
         public prefixes: Collection<string | PrefixFunction, Set<string>>;
-        public prompts: Collection<string, Set<any>>;
+        public prompts: Collection<string, Set<string>>;
         public resolver: TypeResolver;
 
         protected _addAliases(command: Command): void;
@@ -222,12 +222,12 @@ declare module 'discord-akairo' {
         protected _register(command: Command, filepath?: string): void;
 
         public add(filename: string): Command;
-        public addPrompt(message: Message): void;
+        public addPrompt(channel: Channel, user: User): void;
         public allowMention(message: Message): boolean;
         public findCategory(name: string): Category<string, Command>;
         public findCommand(name: string): Command;
         public handle(message: Message): Promise<void>;
-        public hasPrompt(message: Message): boolean;
+        public hasPrompt(channel: Channel, user: User): boolean;
         public load(thing: string | Command): Command;
         public loadAll(): this;
         public prefix(message: Message): string | string[];
@@ -235,7 +235,7 @@ declare module 'discord-akairo' {
         public reloadAll(): this;
         public remove(id: string): Command;
         public removeAll(): this;
-        public removePrompt(message: Message): void;
+        public removePrompt(channel: Channel, user: User): void;
         public on(event: 'disable' | 'enable' | 'remove', listener: (command: Command) => any): this;
         public on(event: 'load', listener: (command: Command, isReload: boolean) => any): this;
         public on(event: 'commandBlocked', listener: (message: Message, command: Command, reason: string) => any): this;
