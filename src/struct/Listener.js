@@ -63,6 +63,7 @@ class Listener extends AkairoModule {
          * @param {...args} [args] - Arguments.
          * @returns {any}
          */
+        this.exec = this.exec.bind(this);
 
         /**
          * The ID of this listener.
