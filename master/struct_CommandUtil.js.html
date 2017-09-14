@@ -41,7 +41,7 @@
  * Extra properties applied to the Discord.js message object.
  * @typedef {Object} MessageExtensions
  * @prop {?CommandUtil} util - Utilities for command responding.
- * Available on all messages after 'all' inhibitors and built-in inhibitors (bot, client, notSelf).
+ * Available on all messages after 'all' inhibitors and built-in inhibitors (bot, client, others).
  * Not all properties of the util are available, depending on the input.
  */
 
@@ -123,6 +123,16 @@ class CommandUtil {
     }
 
     /**
+     * Changes if the message should be edited.
+     * @param {boolean} state - Change to editable or not.
+     * @returns {CommandUtil}
+     */
+    setEditable(state) {
+        this.shouldEdit = Boolean(state);
+        return this;
+    }
+
+    /**
      * Sends a response or edits an old response if available.
      * @param {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|MessageEditOptions} content - Content to send.
      * @param {MessageOptions|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageEditOptions} [options] - Options to use.
@@ -138,7 +148,7 @@ class CommandUtil {
 
         const sent = await this.message.channel.send(content, options);
         const lastSent = this.setLastResponse(sent);
-        this.shouldEdit = !lastSent.attachments.size;
+        this.setEditable(!lastSent.attachments.size);
         return sent;
     }
 
@@ -153,7 +163,7 @@ class CommandUtil {
         const sent = await this.message.channel.send(content, options);
 
         const lastSent = this.setLastResponse(sent);
-        this.shouldEdit = !lastSent.attachments.size;
+        this.setEditable(!lastSent.attachments.size);
         return sent;
     }
 

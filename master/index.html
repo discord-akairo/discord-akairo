@@ -48,11 +48,12 @@
     <section class="readme">
         <article><p align="center"><a href=https://github.com/1Computer1/discord-akairo><img src="https://a.safe.moe/PwUgW.png"/></a></p><p align="center"><a href=https://www.npmjs.com/package/discord-akairo><img src="https://img.shields.io/npm/v/discord-akairo.svg?maxAge=3600"/></a> <a href=https://david-dm.org/1computer1/discord-akairo><img src="https://david-dm.org/1computer1/discord-akairo.svg"/></a> <a href=https://travis-ci.org/1Computer1/discord-akairo><img src="https://travis-ci.org/1Computer1/discord-akairo.svg?branch=indev"/></a></p><p align="center"><a href=https://nodei.co/npm/discord-akairo><img src="https://nodei.co/npm/discord-akairo.png?downloads=true"/></a></p><p align="center">A modular and highly customizable bot framework for Discord.js v12</p>
 
-<h2>Example</h2><pre class="prettyprint source lang-js"><code>const { AkairoClient } = require('discord-akairo');
+<h2>Examples</h2><pre class="prettyprint source lang-js"><code>const { AkairoClient } = require('discord-akairo');
 
 const client = new AkairoClient({
-    ownerID: '9876543210',
-    prefix: '$',
+    ownerID: '123992700587343872',
+    prefix: '!',
+    allowMentions: true,
     commandDirectory: './src/commands/',
     inhibitorDirectory: './src/inhibitors/',
     listenerDirectory: './src/listeners/'
@@ -62,48 +63,63 @@ client.login('TOKEN').then(() => {
     console.log('Started up!');
 });</code></pre><pre class="prettyprint source lang-js"><code>const { Command } = require('discord-akairo');
 
-class PingCommand extends Command {
+class BanCommand extends Command {
     constructor() {
-        super('ping', {
-            aliases: ['ping']
+        super('ban', {
+            aliases: ['ban'],
+            channel: 'guild',
+            clientPermissions: ['BAN_MEMBERS'],
+            userPermissions: ['BAN_MEMBERS'],
+            args: [
+                {
+                    id: 'member',
+                    type: 'member',
+                    prompt: {
+                        start: 'Who would you like to ban?',
+                        retry: 'Please input a valid user!'
+                    }
+                }
+            ]
         });
     }
 
-    exec(message) {
-        return message.reply('Pong!');
+    async exec(message, { member }) {
+        if (member.bannable) {
+            await member.ban();
+            return message.reply(`I have banned ${member}!`);
+        }
+
+        return message.reply(`I cannot ban ${member}!`);
     }
 }
 
-module.exports = Command;</code></pre><h2>Features</h2><h4>Completely modular commands, inhibitors, and listeners.</h4><ul>
+module.exports = BanCommand;</code></pre><h2>Features</h2><h4>Completely modular commands, inhibitors, and listeners.</h4><ul>
 <li>Reading files recursively from directories.</li>
 <li>Adding, removing, and reloading modules.</li>
 <li>Categorization for modules.</li>
-<li>Working with both object and class export.</li>
 <li>Almost everything is optional or modifiable.</li>
 <li>Creating your own handlers and module types.</li>
 </ul>
 <h4>Flexible command handling and creation.</h4><ul>
 <li>Command aliases.</li>
-<li>Command cooldowns.</li>
+<li>Command throttling and cooldowns.</li>
 <li>Client and user permission checks.</li>
 <li>Running commands on edits and editing previous responses.</li>
 <li>A dynamic command prefixing system.<ul>
-<li>Multiple prefixes.</li>
-<li>Variable prefixes per message.</li>
+<li>Multiple prefixes and mention prefixes.</li>
 <li>Overwriting prefixes for commands.</li>
-<li>Using mentions as a prefix.</li>
 </ul>
 </li>
 <li>Different ways to trigger a command.<ul>
-<li>Regular expression triggers.</li>
-<li>Conditional triggers.</li>
-<li>From somewhere else in the bot.</li>
+<li>Regular expression and conditional triggers.</li>
+<li>Programmatically triggering a command.</li>
 </ul>
 </li>
 </ul>
 <h4>Complex and highly customizable arguments.</h4><ul>
 <li>Support for quoted arguments.</li>
 <li>Arguments based on previous arguments.</li>
+<li>Argument swapping and command cancelling.</li>
 <li>Several ways to match arguments, such as flag arguments.</li>
 <li>Casting input into certain types.<ul>
 <li>Simple types such as string, integer, float, url, date, etc.</li>
@@ -113,10 +129,11 @@ module.exports = Command;</code></pre><h2>Features</h2><h4>Completely modular co
 <li>Asynchronous type casting.</li>
 </ul>
 </li>
-<li>Argument prompting.<ul>
-<li>Can also be based on previous arguments.</li>
+<li>Prompting for input for arguments.<ul>
 <li>Customizable prompts with embeds, files, etc.</li>
+<li>Easily include dynamic data such as the incorrect input.</li>
 <li>Infinite argument prompting.</li>
+<li>Can also be based on previous arguments.</li>
 </ul>
 </li>
 </ul>
@@ -129,20 +146,32 @@ module.exports = Command;</code></pre><h2>Features</h2><h4>Completely modular co
 </ul>
 </li>
 </ul>
-<h4>Modular listeners.</h4><ul>
-<li>No more gigantic main files with listeners.</li>
-<li>Adding your own emitters.</li>
+<h4>Helpful events and modular listeners.</h4><ul>
+<li>Events for handlers, such as loading modules.</li>
+<li>Events for various stages of command handling.<ul>
+<li>For when commands start or finish.</li>
+<li>For when commands are blocked or cancelled.</li>
 </ul>
-<h4>Useful utility methods available.</h4><ul>
+</li>
+<li>Modular listeners to easily separate your event handling.<ul>
+<li>Completely reloadable.</li>
+<li>Adding your own emitters to listen to.</li>
+</ul>
+</li>
+</ul>
+<h4>Useful utilities and database providers.</h4><ul>
+<li>A utility class with many methods.<ul>
 <li>Resolvers for members, users, and others that can filter by name.</li>
 <li>Shortcut methods for making embeds and collections.</li>
-<li>And some other useful things.</li>
 </ul>
-<h4>Database providers.</h4><ul>
+</li>
+<li>Simple to use database providers.<ul>
 <li>Built-in support for <code>sqlite</code> and <code>sequelize</code>.</li>
 <li>Works on entire table or single JSON column.</li>
 <li>Caching data from databases.</li>
 <li>Default values.</li>
+</ul>
+</li>
 </ul>
 <h2>Installation</h2><p>Requires Node 8 and Discord.js v12.  </p>
 <p><em>discord-akairo</em><br><code>npm install discord-akairo</code></p>
@@ -150,7 +179,7 @@ module.exports = Command;</code></pre><h2>Features</h2><h4>Completely modular co
 <p><em>sqlite (optional)</em><br><code>npm install sqlite</code></p>
 <p><em>sequelize (optional)</em><br><code>npm install sequelize</code></p>
 <h2>Links</h2><p>Repository: <a href="https://github.com/1Computer1/discord-akairo">https://github.com/1Computer1/discord-akairo</a>.<br>Changelog: <a href="https://github.com/1Computer1/discord-akairo/releases">https://github.com/1Computer1/discord-akairo/releases</a>.<br>Documentation: <a href="https://1computer1.github.io/discord-akairo/">https://1computer1.github.io/discord-akairo</a>.<br>Tutorials: <a href="https://1computer1.gitbooks.io/akairo-tutorials/content/">https://1computer1.gitbooks.io/akairo-tutorials/content</a>.<br>Discord Server: <a href="https://discord.gg/arTauDY">https://discord.gg/arTauDY</a>.  </p>
-<h2>Contributing</h2><p>Open an issue or a pull request!<br>Everyone is welcome to do so.<br>Make sure to run <code>npm run lint</code> before committing.  </p></article>
+<h2>Contributing</h2><p>Open an issue or a pull request!<br>Everyone is welcome to do so.<br>Make sure to run <code>npm test</code> before committing.  </p></article>
     </section>
 
 

@@ -503,7 +503,7 @@ class Argument {
         };
 
         const promptOne = async (prevMessage, retryCount) => {
-            this.handler.addPrompt(message);
+            this.handler.addPrompt(message.channel, message.author);
 
             let sent;
             const shouldSend = retryCount === 1
@@ -525,7 +525,7 @@ class Argument {
                 if (startText) {
                     sent = await (message.util || message.channel).send(startText);
                     if (this.handler.commandUtil) {
-                        message.util.shouldEdit = false;
+                        message.util.setEditable(false);
                         message.util.setLastResponse(sent);
                     }
                 }
@@ -548,7 +548,7 @@ class Argument {
                         await message.channel.send(cancelText);
                     }
 
-                    this.handler.removePrompt(message);
+                    this.handler.removePrompt(message.channel, message.author);
                     throw Symbols.COMMAND_CANCELLED;
                 }
 
@@ -565,7 +565,7 @@ class Argument {
                             await message.channel.send(endedText);
                         }
 
-                        this.handler.removePrompt(message);
+                        this.handler.removePrompt(message.channel, message.author);
                         throw Symbols.COMMAND_CANCELLED;
                     }
 
@@ -582,22 +582,24 @@ class Argument {
 
                 return parsedValue;
             } catch (err) {
-                if (err instanceof Error) throw err;
-                if (err === Symbols.COMMAND_CANCELLED) throw err;
+                if (err instanceof Error || err === Symbols.COMMAND_CANCELLED) {
+                    this.handler.removePrompt(message.channel, message.author);
+                    throw err;
+                }
 
                 const timeoutText = getText('timeout', prompt.timeout, retryCount, prevMessage, '');
                 if (timeoutText) {
                     await message.channel.send(timeoutText);
                 }
 
-                this.handler.removePrompt(message);
+                this.handler.removePrompt(message.channel, message.author);
                 throw Symbols.COMMAND_CANCELLED;
             }
         };
 
         const returnValue = await promptOne(message, 1 + additionalRetry);
-        if (this.handler.commandUtil) message.util.shouldEdit = false;
-        this.handler.removePrompt(message);
+        if (this.handler.commandUtil) message.util.setEditable(false);
+        this.handler.removePrompt(message.channel, message.author);
         return returnValue;
     }
 }
