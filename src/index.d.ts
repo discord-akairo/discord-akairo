@@ -33,7 +33,7 @@ declare module 'discord-akairo' {
         public util: ClientUtil;
 
         public build(): this;
-        public loadAll(): void;
+        public loadAll(directory?: string): void;
         public login(token: string): Promise<string>;
     }
 
@@ -229,7 +229,7 @@ declare module 'discord-akairo' {
         public handle(message: Message): Promise<void>;
         public hasPrompt(channel: Channel, user: User): boolean;
         public load(thing: string | Command): Command;
-        public loadAll(): this;
+        public loadAll(directory?: string): this;
         public prefix(message: Message): string | string[];
         public reload(id: string): Command;
         public reloadAll(): this;
@@ -305,7 +305,7 @@ declare module 'discord-akairo' {
         public add(filename: string): Inhibitor;
         public findCategory(name: string): Category<string, Inhibitor>;
         public load(thing: string | Inhibitor): Inhibitor;
-        public loadAll(): this;
+        public loadAll(directory?: string): this;
         public reload(id: string): Inhibitor;
         public reloadAll(): this;
         public remove(id: string): Inhibitor;
@@ -351,7 +351,7 @@ declare module 'discord-akairo' {
         public deregister(id: string): Listener;
         public findCategory(name: string): Category<string, Listener>;
         public load(thing: string | Listener): Listener;
-        public loadAll(): this;
+        public loadAll(directory?: string): this;
         public register(id: string): Listener;
         public reload(id: string): Listener;
         public reloadAll(): this;

@@ -488,7 +488,7 @@ class CommandHandler extends AkairoHandler {
             ? this.client.ownerID.includes(message.author.id)
             : message.author.id === this.client.ownerID;
 
-        if (isOwner) return false;
+        // if (isOwner) return false;
 
         const time = command.cooldown != null ? command.cooldown : this.defaultCooldown;
         if (!time) return false;
@@ -863,6 +863,8 @@ class CommandHandler extends AkairoHandler {
      * Reads all commands from the directory and loads them.
      * @method
      * @name CommandHandler#loadAll
+     * @param {string} [directory] - Directory to load from.
+     * Defaults to the directory passed in to the constructor.
      * @returns {CommandHandler}
      */
 

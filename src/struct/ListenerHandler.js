@@ -124,6 +124,8 @@ class ListenerHandler extends AkairoHandler {
      * Reads all listeners from the directory and loads them.
      * @method
      * @name ListenerHandler#loadAll
+     * @param {string} [directory] - Directory to load from.
+     * Defaults to the directory passed in to the constructor.
      * @returns {ListenerHandler}
      */
 
