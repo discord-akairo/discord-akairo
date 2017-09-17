@@ -118,7 +118,7 @@ class Command extends AkairoModule {
             protect = false,
             editable = true,
             typing = false,
-            cooldown,
+            cooldown = null,
             ratelimit = 1,
             defaultPrompt = {},
             options: opts = {},
