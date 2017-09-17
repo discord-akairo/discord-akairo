@@ -488,7 +488,7 @@ class CommandHandler extends AkairoHandler {
             ? this.client.ownerID.includes(message.author.id)
             : message.author.id === this.client.ownerID;
 
-        // if (isOwner) return false;
+        if (isOwner) return false;
 
         const time = command.cooldown != null ? command.cooldown : this.defaultCooldown;
         if (!time) return false;
