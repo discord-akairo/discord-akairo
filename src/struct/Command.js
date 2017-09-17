@@ -113,7 +113,7 @@ class Command extends AkairoModule {
             aliases = [],
             args = [],
             split = this.split || ArgumentSplits.PLAIN,
-            channel,
+            channel = null,
             ownerOnly = false,
             protect = false,
             editable = true,

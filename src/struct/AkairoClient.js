@@ -56,7 +56,7 @@ class AkairoClient extends Client {
         super(clientOptions || options);
 
         const {
-            ownerID,
+            ownerID = '',
             selfbot = false
         } = options;
 
