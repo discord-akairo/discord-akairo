@@ -1,3 +1,13 @@
+declare module 'sqlite' {
+    export interface Database {}
+    export interface Statement {}
+}
+
+declare module 'sequelize' {
+    export interface Model<K, V> {}
+    export interface Promise<T> {}
+}
+
 declare module 'discord-akairo' {
     import {
         Client, ClientOptions, Collection, Message, MessageAttachment, MessageEmbed, MessageOptions, MessageEditOptions,
@@ -66,7 +76,7 @@ declare module 'discord-akairo' {
 
     export class AkairoModule {
         public constructor(id: string, exec: (...args: any[]) => any, options?: ModuleOptions);
-        
+
         public category: Category<string, AkairoModule>;
         public readonly client: AkairoClient;
         public enabled: boolean;
@@ -173,7 +183,7 @@ declare module 'discord-akairo' {
         protected _splitText(content: string, message: Message): string[];
         protected _getPrefixes(): any[];
 
-        public condition(message): boolean;
+        public condition(message: Message): boolean;
         public disable(): boolean;
         public enable(): boolean;
         public exec(message: Message, args: any): any;
@@ -654,7 +664,7 @@ declare module 'discord-akairo' {
             DM: 'dm'
         },
         Symbols: {
-            COMMAND_CANCELLED: Symbol
+            COMMAND_CANCELLED: symbol
         }
     };
 
