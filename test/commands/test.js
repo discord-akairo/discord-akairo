@@ -7,17 +7,12 @@ class TestCommand extends Command {
     constructor() {
         super('test', {
             aliases: ['test'],
-            args: [
-                {
-                    id: 'number',
-                    type: 'number',
-                    cancel: 'Not a number'
-                },
-                {
-                    id: 'number2',
-                    type: 'number'
-                }
-            ]
+            args: (message, words) => {
+                const args = {};
+                args.x = parseInt(words[0]);
+                args.y = parseInt(words[1]);
+                return args;
+            }
         });
     }
 

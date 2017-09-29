@@ -7,7 +7,7 @@ const { isPromise } = require('../util/Util');
  * Options to use for command execution behavior.
  * @typedef {Object} CommandOptions
  * @prop {string[]} [aliases=[]] - Command names.
- * @prop {Array<ArgumentOptions|ArgumentOptions[]|CommandCancelFunction>} [args=[]] - Arguments to parse.
+ * @prop {Array<ArgumentOptions|ArgumentOptions[]|CommandCancelFunction>|ArgumentFunction} [args=[]] - Arguments to parse.
  * When an item is an array of arguments, the first argument that is allowed to run will be ran.
  * @prop {ArgumentSplit|ArgumentSplitFunction} [split='plain'] - Method to split text into words.
  * @prop {string} [channel] - Restricts channel to either 'guild' or 'dm'.
@@ -57,6 +57,14 @@ const { isPromise } = require('../util/Util');
  * A function used to check if the command should run.
  * @typedef {Function} ConditionFunction
  * @param {Message} message - Message to check.
+ * @returns {boolean}
+ */
+
+/**
+ * A function to replace Akairo's argument handler.
+ * @typedef {Function} ArgumentFunction
+ * @param {Message} message - Message that triggered the command.
+ * @param {string[]} words - Words matched.
  * @returns {boolean}
  */
 
@@ -111,7 +119,7 @@ class Command extends AkairoModule {
 
         const {
             aliases = [],
-            args = [],
+            args = this.args,
             split = this.split || ArgumentSplits.PLAIN,
             channel = null,
             ownerOnly = false,
@@ -138,9 +146,9 @@ class Command extends AkairoModule {
 
         /**
          * Arguments for the command.
-         * @type {Array<Argument|Argument[]|CommandCancelFunction>}
+         * @type {Array<Argument|Argument[]|CommandCancelFunction>|ArgumentFunction}
          */
-        this.args = this._buildArgs(args);
+        this.args = typeof args === 'function' ? args.bind(this) : this._buildArgs(args);
 
         /**
          * The command split method.
@@ -270,10 +278,22 @@ class Command extends AkairoModule {
      * @returns {Promise<Object>}
      */
     parse(content, message) {
-        if (!this.args.length) return Promise.resolve({});
+        if (!this.args.length && typeof this.args !== 'function') return Promise.resolve({});
 
         const words = this._splitText(content, message);
         const isQuoted = this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY || words.isQuoted;
+
+        if (typeof this.args === 'function') {
+            return this.args(message, words.map(word => {
+                word = word.trim();
+                if (isQuoted && /^"[^]+"$/.test(word)) {
+                    word = word.slice(1, -1);
+                }
+
+                return word;
+            }));
+        }
+
         const prefixes = this._getPrefixes();
 
         const noPrefixWords = words.filter(w => {
@@ -458,6 +478,8 @@ class Command extends AkairoModule {
      * @returns {Array<Argument|Argument[]|CommandCancelFunction>}
      */
     _buildArgs(args) {
+        if (args == null) return [];
+
         const res = [];
         for (let arg of args) {
             if (Array.isArray(arg)) {
