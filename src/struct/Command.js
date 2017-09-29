@@ -378,9 +378,8 @@ class Command extends AkairoModule {
                     }
                 }
 
-                return async (msg, processed) => {
-                    const inverse = !await (typeof arg.default === 'function' ? arg.default(msg, processed) : arg.default);
-                    return inverse ? flagFound : !flagFound;
+                return () => {
+                    return arg.default == null ? flagFound : !flagFound;
                 };
             },
             [ArgumentMatches.TEXT]: arg => {
