@@ -8,7 +8,7 @@ const { AkairoClient } = require('discord-akairo');
 const client = new AkairoClient({
     ownerID: '123992700587343872',
     prefix: '!',
-    allowMentions: true,
+    allowMention: true,
     commandDirectory: './src/commands/',
     inhibitorDirectory: './src/inhibitors/',
     listenerDirectory: './src/listeners/'
