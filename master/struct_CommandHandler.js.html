@@ -177,20 +177,16 @@ class CommandHandler extends AkairoHandler {
         }, defaultPrompt);
 
         /**
-         * Gets the prefix.
-         * @method
-         * @param {Message} message - Message being handled.
-         * @returns {string}
+         * The prefix(es) for command parsing.
+         * @type {string|string[]|PrefixFunction}
          */
-        this.prefix = typeof prefix === 'function' ? prefix.bind(this) : () => prefix;
+        this.prefix = typeof prefix === 'function' ? prefix.bind(this) : prefix;
 
         /**
-         * Gets if mentions are allowed for prefixing.
-         * @method
-         * @param {Message} message - Message being handled.
-         * @returns {boolean}
+         * Whether or not mentions are allowed for prefixing.
+         * @type {boolean|AllowMentionFunction}
          */
-        this.allowMention = typeof allowMention === 'function' ? allowMention.bind(this) : () => Boolean(allowMention);
+        this.allowMention = typeof allowMention === 'function' ? allowMention.bind(this) : Boolean(allowMention);
 
         /**
          * Directory to commands.
@@ -523,13 +519,19 @@ class CommandHandler extends AkairoHandler {
      * @returns {boolean}
      */
     _handleCooldowns(message, command) {
-        if (!command.cooldown) return false;
+        const isOwner = Array.isArray(this.client.ownerID)
+            ? this.client.ownerID.includes(message.author.id)
+            : message.author.id === this.client.ownerID;
+
+        if (isOwner) return false;
+
+        const time = command.cooldown != null ? command.cooldown : this.defaultCooldown;
+        if (!time) return false;
+
+        const endTime = message.createdTimestamp + time;
 
         const id = message.author.id;
         if (!this.cooldowns.has(id)) this.cooldowns.set(id, {});
-
-        const time = command.cooldown || this.defaultCooldown;
-        const endTime = message.createdTimestamp + time;
 
         if (!this.cooldowns.get(id)[command.id]) {
             this.cooldowns.get(id)[command.id] = {
@@ -567,9 +569,9 @@ class CommandHandler extends AkairoHandler {
      * @returns {Object}
      */
     _parseCommand(message) {
-        let prefix = this.prefix(message);
+        let prefix = typeof this.prefix === 'function' ? this.prefix(message) : this.prefix;
 
-        if (this.allowMention(message)) {
+        if (typeof this.allowMention === 'function' ? this.allowMention(message) : this.allowMention) {
             prefix = Array.isArray(prefix)
                 ? [`&lt;@${this.client.user.id}>`, `&lt;@!${this.client.user.id}>`, ...prefix]
                 : [`&lt;@${this.client.user.id}>`, `&lt;@!${this.client.user.id}>`, prefix];
@@ -896,6 +898,8 @@ class CommandHandler extends AkairoHandler {
      * Reads all commands from the directory and loads them.
      * @method
      * @name CommandHandler#loadAll
+     * @param {string} [directory] - Directory to load from.
+     * Defaults to the directory passed in to the constructor.
      * @returns {CommandHandler}
      */
 
