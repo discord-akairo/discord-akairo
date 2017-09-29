@@ -138,20 +138,16 @@ class CommandHandler extends AkairoHandler {
         }, defaultPrompt);
 
         /**
-         * Gets the prefix.
-         * @method
-         * @param {Message} message - Message being handled.
-         * @returns {string}
+         * The prefix(es) for command parsing.
+         * @type {string|string[]|PrefixFunction}
          */
-        this.prefix = typeof prefix === 'function' ? prefix.bind(this) : () => prefix;
+        this.prefix = typeof prefix === 'function' ? prefix.bind(this) : prefix;
 
         /**
-         * Gets if mentions are allowed for prefixing.
-         * @method
-         * @param {Message} message - Message being handled.
-         * @returns {boolean}
+         * Whether or not mentions are allowed for prefixing.
+         * @type {boolean|AllowMentionFunction}
          */
-        this.allowMention = typeof allowMention === 'function' ? allowMention.bind(this) : () => Boolean(allowMention);
+        this.allowMention = typeof allowMention === 'function' ? allowMention.bind(this) : Boolean(allowMention);
 
         /**
          * Directory to commands.
@@ -534,9 +530,9 @@ class CommandHandler extends AkairoHandler {
      * @returns {Object}
      */
     _parseCommand(message) {
-        let prefix = this.prefix(message);
+        let prefix = typeof this.prefix === 'function' ? this.prefix(message) : this.prefix;
 
-        if (this.allowMention(message)) {
+        if (typeof this.allowMention === 'function' ? this.allowMention(message) : this.allowMention) {
             prefix = Array.isArray(prefix)
                 ? [`<@${this.client.user.id}>`, `<@!${this.client.user.id}>`, ...prefix]
                 : [`<@${this.client.user.id}>`, `<@!${this.client.user.id}>`, prefix];

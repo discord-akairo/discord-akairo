@@ -227,12 +227,10 @@ class Command extends AkairoModule {
         this.userPermissions = typeof userPermissions === 'function' ? userPermissions.bind(this) : userPermissions;
 
         /**
-         * Gets the regex trigger for this command.
-         * @method
-         * @param {Message} message - Message being handled.
-         * @returns {RegExp}
+         * The regex trigger for this command.
+         * @type {RegExp|TriggerFunction}
          */
-        this.trigger = typeof trigger === 'function' ? trigger.bind(this) : () => trigger;
+        this.trigger = typeof trigger === 'function' ? trigger.bind(this) : trigger;
 
         /**
          * Checks if the command should be ran by condition.
@@ -381,7 +379,7 @@ class Command extends AkairoModule {
                 }
 
                 return async (msg, processed) => {
-                    const inverse = !await arg.default(msg, processed);
+                    const inverse = !await (typeof arg.default === 'function' ? arg.default(msg, processed) : arg.default);
                     return inverse ? flagFound : !flagFound;
                 };
             },

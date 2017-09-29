@@ -97,6 +97,7 @@ declare module 'discord-akairo' {
         public readonly client: AkairoClient;
         public cancel: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | ArgumentCancelFunction;
         public command: Command;
+        public default: any | ArgumentDefaultFunction;
         public description: string;
         public readonly handler: CommandHandler;
         public id: string;
@@ -107,9 +108,9 @@ declare module 'discord-akairo' {
         public prompt?: ArgumentPromptOptions;
         public type: ArgumentType | ArgumentTypeFunction;
 
+        public allow(message: Message, args: any): boolean;
         public cast(word: string, message: Message, args?: any): Promise<any>;
         public collect(message: Message, args?: any, commandInput?: string): Promise<any>;
-        public default(message: Message, args: any): any;
         public process(word: string, message: Message, args?: any): Promise<any>;
     }
 
@@ -176,6 +177,7 @@ declare module 'discord-akairo' {
         public protected: boolean;
         public ratelimit: number;
         public split: ArgumentSplit | ArgumentSplitFunction;
+        public trigger: RegExp | TriggerFunction;
         public typing: boolean;
         public userPermissions: PermissionResolvable | PermissionResolvable[] | PermissionFunction;
 
@@ -190,13 +192,13 @@ declare module 'discord-akairo' {
         public parse(content: string, message: Message): Promise<any>;
         public reload(): this;
         public remove(): this;
-        public trigger(message: Message): RegExp;
     }
 
     export class CommandHandler extends AkairoHandler {
         public constructor(client: AkairoClient);
 
         public aliases: Collection<string, string>;
+        public allowMention: boolean | AllowMentionFunction;
         public blockBots: boolean;
         public blockClient: boolean;
         public blockOthers: boolean;
@@ -213,6 +215,7 @@ declare module 'discord-akairo' {
         public fetchMembers: boolean;
         public handleEdits: boolean;
         public modules: Collection<string, Command>;
+        public prefix: string | string[] | PrefixFunction;
         public prefixes: Collection<string | PrefixFunction, Set<string>>;
         public prompts: Collection<string, Set<string>>;
         public resolver: TypeResolver;
@@ -233,14 +236,12 @@ declare module 'discord-akairo' {
 
         public add(filename: string): Command;
         public addPrompt(channel: Channel, user: User): void;
-        public allowMention(message: Message): boolean;
         public findCategory(name: string): Category<string, Command>;
         public findCommand(name: string): Command;
         public handle(message: Message): Promise<void>;
         public hasPrompt(channel: Channel, user: User): boolean;
         public load(thing: string | Command): Command;
         public loadAll(directory?: string): this;
-        public prefix(message: Message): string | string[];
         public reload(id: string): Command;
         public reloadAll(): this;
         public remove(id: string): Command;

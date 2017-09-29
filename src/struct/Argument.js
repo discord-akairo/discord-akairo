@@ -272,14 +272,10 @@ class Argument {
         this.cancel = typeof cancel === 'function' ? cancel.bind(this) : cancel;
 
         /**
-         * Gets the default value.
-         * @method
-         * @name Argument#default
-         * @param {Message} message - The message that called the command.
-         * @param {Object} args - Previous arguments from command.
-         * @returns {any}
+         * The default value of the argument.
+         * @type {any|ArgumentDefaultFunction}
          */
-        this.default = typeof defaultValue === 'function' ? defaultValue.bind(this) : () => defaultValue;
+        this.default = typeof defaultValue === 'function' ? defaultValue.bind(this) : defaultValue;
 
         /**
          * Checks if the argument is allowed to run.
@@ -325,7 +321,7 @@ class Argument {
             || (this.handler.defaultPrompt && this.handler.defaultPrompt.optional);
 
         if (!word && isOptional) {
-            let res = this.default(message, args);
+            let res = typeof this.default === 'function' ? this.default(message, args) : this.default;
             if (isPromise(res)) res = await res;
             return res;
         }
@@ -335,7 +331,7 @@ class Argument {
         if (res == null) {
             if (this.prompt) return this.collect(message, args, word);
 
-            res = this.default(message, args);
+            res = typeof this.default === 'function' ? this.default(message, args) : this.default;
             if (isPromise(res)) res = await res;
             return res;
         }
