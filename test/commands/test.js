@@ -7,8 +7,8 @@ class TestCommand extends Command {
     constructor() {
         super('test', {
             aliases: ['test'],
-            args: (message, words) => {
-                const args = {};
+            args: (message, content, words) => {
+                const args = { content, words };
                 args.x = parseInt(words[0]);
                 args.y = parseInt(words[1]);
                 return args;

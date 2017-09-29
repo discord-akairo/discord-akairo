@@ -64,6 +64,7 @@ const { isPromise } = require('../util/Util');
  * A function to replace Akairo's argument handler.
  * @typedef {Function} ArgumentFunction
  * @param {Message} message - Message that triggered the command.
+ * @param {string} content - The content of the message.
  * @param {string[]} words - Words matched.
  * @returns {boolean}
  */
@@ -284,7 +285,7 @@ class Command extends AkairoModule {
         const isQuoted = this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY || words.isQuoted;
 
         if (typeof this.args === 'function') {
-            return this.args(message, words.map(word => {
+            return this.args(message, content, words.map(word => {
                 word = word.trim();
                 if (isQuoted && /^"[^]+"$/.test(word)) {
                     word = word.slice(1, -1);

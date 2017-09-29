@@ -467,7 +467,7 @@ declare module 'discord-akairo' {
 
     export type ArgumentDefaultFunction = (message: Message, args: any) => any;
 
-    export type ArgumentFunction = (message: Message, words: string[]) => any;
+    export type ArgumentFunction = (message: Message, content: string, words: string[]) => any;
 
     export type ArgumentMatch = 'word' | 'rest' | 'separate' | 'prefix' | 'flag' | 'text' | 'content' | 'none';
 
