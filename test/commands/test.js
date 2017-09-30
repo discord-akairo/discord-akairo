@@ -7,12 +7,15 @@ class TestCommand extends Command {
     constructor() {
         super('test', {
             aliases: ['test'],
-            args: (message, content, words) => {
-                const args = { content, words };
-                args.x = parseInt(words[0]);
-                args.y = parseInt(words[1]);
-                return args;
-            }
+            split: 'quoted',
+            args: [
+                { id: 'word', match: 'word' },
+                { id: 'rest', match: 'rest' },
+                { id: 'content', match: 'content' },
+                { id: 'text', match: 'text' },
+                { id: 'prefix', match: 'prefix', prefix: '-p:' },
+                { id: 'flag', match: 'flag', prefix: '-f' }
+            ]
         });
     }
 

@@ -52,7 +52,6 @@ module.exports = {
     },
     ArgumentSplits: {
         PLAIN: 'plain',
-        SPLIT: 'split',
         QUOTED: 'quoted',
         STICKY: 'sticky',
         NONE: 'none'

@@ -518,7 +518,7 @@ declare module 'discord-akairo' {
         timeout?: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | ArgumentPromptFunction;
     };
 
-    export type ArgumentSplit = 'plain' | 'split' | 'quoted' | 'sticky' | 'none' | string | RegExp;
+    export type ArgumentSplit = 'plain' | 'quoted' | 'sticky' | 'none' | string | RegExp;
 
     export type ArgumentSplitFunction = (content: string, message: Message) => string[];
 
@@ -634,7 +634,6 @@ declare module 'discord-akairo' {
         },
         ArgumentSplits: {
             PLAIN: 'plain',
-            SPLIT: 'split',
             QUOTED: 'quoted',
             STICKY: 'sticky',
             NONE: 'none'

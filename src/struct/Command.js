@@ -73,14 +73,10 @@ const { isPromise } = require('../util/Util');
  * The method to split text into words.
  * - `plain` splits word separated by whitespace.
  * Extra whitespace between words are ignored.
- * - `split` splits word separated by whitespace.
- * Should not be used due to possible inconsistent whitespace.
  * - `quoted` is similar to plain, but counts text inside double quotes as one word.
  * - `sticky` is similar to quoted, but makes it so that quoted text must have a whitespace or another double quote before it.
  * This means that `thing="hello world"` would be one, rather than two like when using `quoted`.
  * - `none` gives the entire content.
- *
- * It is recommended that you use either `plain` or `sticky` for your commands.
  *
  * A regex or a character can be used instead (for example, a comma) to split the message by that regex or character.
  * @typedef {string|RegExp} ArgumentSplit
@@ -309,17 +305,16 @@ class Command extends AkairoModule {
         const parseFuncs = {
             [ArgumentMatches.WORD]: (arg, index) => {
                 index = arg.index != null ? arg.index : index;
-                let word = noPrefixWords[index] || '';
-                if (isQuoted && /^"[^]+"$/.test(word.trim())) {
-                    word = word.trim().slice(1, -1);
+                let word = (noPrefixWords[index] || '').trim();
+                if (isQuoted && /^"[^]+"$/.test(word)) {
+                    word = word.slice(1, -1);
                 }
 
                 return arg.process.bind(arg, word);
             },
             [ArgumentMatches.REST]: (arg, index) => {
                 index = arg.index != null ? arg.index : index;
-                const joiner = this.split === ArgumentSplits.SPLIT ? ' ' : '';
-                const word = noPrefixWords.slice(index, index + arg.limit).join(joiner) || '';
+                const word = noPrefixWords.slice(index, index + arg.limit).join('') || '';
                 return arg.process.bind(arg, word);
             },
             [ArgumentMatches.SEPARATE]: (arg, index) => {
@@ -355,7 +350,7 @@ class Command extends AkairoModule {
                         for (const prefix of arg.prefix) {
                             if (word.startsWith(prefix.toLowerCase())) {
                                 prefixUsed = prefix;
-                                wordFound = word;
+                                wordFound = words[i];
                                 found = true;
                                 break;
                             }
@@ -365,15 +360,15 @@ class Command extends AkairoModule {
                     } else
                     if (word.startsWith(arg.prefix.toLowerCase())) {
                         prefixUsed = arg.prefix;
-                        wordFound = word;
+                        wordFound = words[i];
                         break;
                     }
                 }
 
                 if (wordFound && prefixUsed) {
-                    wordFound = wordFound.replace(prefixUsed, '');
-                    if (isQuoted && /^"[^]+"$/.test(wordFound.trim())) {
-                        wordFound = wordFound.trim().slice(1, -1);
+                    wordFound = wordFound.replace(prefixUsed, '').trim();
+                    if (isQuoted && /^"[^]+"$/.test(wordFound)) {
+                        wordFound = wordFound.slice(1, -1);
                     }
                 }
 
@@ -404,14 +399,13 @@ class Command extends AkairoModule {
                 };
             },
             [ArgumentMatches.TEXT]: arg => {
-                const joiner = this.split === ArgumentSplits.SPLIT ? ' ' : '';
                 const index = arg.index == null ? 0 : arg.index;
-                const word = noPrefixWords.slice(index, index + arg.limit).join(joiner);
+                const word = noPrefixWords.slice(index, index + arg.limit).join('');
                 return arg.process.bind(arg, word);
             },
             [ArgumentMatches.CONTENT]: arg => {
                 const index = arg.index == null ? 0 : arg.index;
-                const word = content.split(' ').slice(index, index + arg.limit).join(' ');
+                const word = words.slice(index, index + arg.limit).join('');
                 return arg.process.bind(arg, word);
             },
             [ArgumentMatches.NONE]: arg => {
@@ -507,10 +501,9 @@ class Command extends AkairoModule {
      */
     _splitText(content, message) {
         const splitFuncs = {
-            [ArgumentSplits.PLAIN]: c => c.match(/\S+\s?/g),
-            [ArgumentSplits.SPLIT]: c => c.split(' '),
-            [ArgumentSplits.QUOTED]: c => c.match(/"[^]*?"\s?|\S+\s?|"/g),
-            [ArgumentSplits.STICKY]: c => c.match(/[^\s"]*?"[^]*?"\s?|\S+\s?|"/g),
+            [ArgumentSplits.PLAIN]: c => c.match(/\S+\s*/g),
+            [ArgumentSplits.QUOTED]: c => c.match(/"[^]*?"\s*|\S+\s*|"/g),
+            [ArgumentSplits.STICKY]: c => c.match(/[^\s"]*?"[^]*?"\s*|\S+\s*|"/g),
             [ArgumentSplits.NONE]: c => [c]
         };
 
