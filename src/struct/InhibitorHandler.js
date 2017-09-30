@@ -37,10 +37,10 @@ class InhibitorHandler extends AkairoHandler {
      * @returns {Promise<string|void>}
      */
     async test(type, message, command) {
-        if (!this.modules.size) return Promise.resolve(null);
+        if (!this.modules.size) return null;
 
         const inhibitors = this.modules.filter(i => i.type === type && i.enabled);
-        if (!inhibitors.size) return Promise.resolve(null);
+        if (!inhibitors.size) return null;
 
         const promises = [];
 
@@ -50,15 +50,18 @@ class InhibitorHandler extends AkairoHandler {
                 if (isPromise(inhibited)) inhibited = await inhibited;
 
                 if (inhibited === true) {
-                    return inhibitor.reason;
+                    return { reason: inhibitor.reason, priority: inhibitor.priority };
                 }
 
                 return null;
             })());
         }
 
-        const reason = (await Promise.all(promises)).find(r => r != null);
-        return reason === undefined ? null : reason;
+        const reasons = (await Promise.all(promises)).filter(r => r);
+        if (!reasons.length) return null;
+
+        reasons.sort((a, b) => b.priority - a.priority);
+        return reasons[0].reason;
     }
 
     /**

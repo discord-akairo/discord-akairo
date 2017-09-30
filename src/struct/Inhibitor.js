@@ -5,6 +5,8 @@ const AkairoModule = require('./AkairoModule');
  * @typedef {Object} InhibitorOptions
  * @prop {string} [reason=''] - Reason emitted when command or message is blocked.
  * @prop {boolean} [type='post'] - Can be 'all' to run on all messages, 'pre' to run on messages not blocked by the built-in inhibitors, or 'post' to run on messages that are commands.
+ * @prop {number} [priority=0] - Priority for the inhibitor for when more than one inhibitors block a message.
+ * The inhibitor with the highest priority is the one that is used for the block reason.
  * @prop {string} [category='default'] - Category ID for organization purposes.
  */
 
@@ -36,7 +38,8 @@ class Inhibitor extends AkairoModule {
 
         const {
             reason = '',
-            type = 'post'
+            type = 'post',
+            priority = 0
         } = options;
 
         /**
@@ -50,6 +53,12 @@ class Inhibitor extends AkairoModule {
          * @type {string}
          */
         this.type = type;
+
+        /**
+         * The priority of the inhibitor.
+         * @type {number}
+         */
+        this.priority = priority;
 
         /**
          * The ID of this inhibitor.
