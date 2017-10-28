@@ -792,6 +792,7 @@ class CommandHandler extends AkairoHandler {
      * @returns {Promise<void>}
      */
     _handleError(err, message, command) {
+        if (command && command.typing) message.channel.stopTyping();
         if (this.listenerCount(CommandHandlerEvents.ERROR)) {
             this.emit(CommandHandlerEvents.ERROR, err, message, command);
             return;
