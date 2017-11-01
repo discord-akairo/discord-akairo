@@ -143,11 +143,11 @@ Requires Node 8 and Discord.js v12.
 
 ## Links
 
-Repository: [https://github.com/1Computer1/discord-akairo](https://github.com/1Computer1/discord-akairo).  
-Changelog: [https://github.com/1Computer1/discord-akairo/releases](https://github.com/1Computer1/discord-akairo/releases).  
-Documentation: [https://1computer1.github.io/discord-akairo](https://1computer1.github.io/discord-akairo/).  
-Tutorials: [https://1computer1.gitbooks.io/akairo-tutorials/content](https://1computer1.gitbooks.io/akairo-tutorials/content/).  
-Discord Server: [https://discord.gg/arTauDY](https://discord.gg/arTauDY).  
+Repository: [https://github.com/1Computer1/discord-akairo](https://github.com/1Computer1/discord-akairo)  
+Changelog: [https://github.com/1Computer1/discord-akairo/releases](https://github.com/1Computer1/discord-akairo/releases)  
+Documentation: [https://1computer1.github.io/discord-akairo](https://1computer1.github.io/discord-akairo/) ([master](https://1computer1.github.io/discord-akairo/master))  
+Tutorials: [https://1computer1.gitbooks.io/akairo-tutorials/content](https://1computer1.gitbooks.io/akairo-tutorials/content/) ([master](https://1computer1.gitbooks.io/akairo-tutorials/content/v/v8/))  
+Discord Server: [https://discord.gg/arTauDY](https://discord.gg/arTauDY)  
 
 ## Contributing
 
