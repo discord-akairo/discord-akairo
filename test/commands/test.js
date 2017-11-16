@@ -9,18 +9,22 @@ class TestCommand extends Command {
             aliases: ['test'],
             split: 'quoted',
             args: [
-                { id: 'word', match: 'word' },
-                { id: 'rest', match: 'rest' },
-                { id: 'content', match: 'content' },
-                { id: 'text', match: 'text' },
-                { id: 'prefix', match: 'prefix', prefix: '-p:' },
-                { id: 'flag', match: 'flag', prefix: '-f' }
+                {
+                    id: 'role',
+                    type: 'role',
+                    unordered: true
+                },
+                {
+                    id: 'member',
+                    type: 'member',
+                    unordered: true
+                }
             ]
         });
     }
 
     exec(message, args) {
-        message.channel.send(util.inspect(args), { code: 'js' });
+        message.channel.send(util.inspect(args, { depth: 1 }), { code: 'js' });
     }
 }
 

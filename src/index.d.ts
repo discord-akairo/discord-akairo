@@ -102,6 +102,7 @@ declare module 'discord-akairo' {
         public readonly handler: CommandHandler;
         public id: string;
         public index?: number;
+        public unordered: boolean | number[];
         public limit: number;
         public match: ArgumentMatch | ArgumentMatchFunction;
         public prefix?: string | string[];
@@ -112,6 +113,10 @@ declare module 'discord-akairo' {
         public cast(word: string, message: Message, args?: any): Promise<any>;
         public collect(message: Message, args?: any, commandInput?: string): Promise<any>;
         public process(word: string, message: Message, args?: any): Promise<any>;
+
+        public static cast(type: ArgumentType | ArgumentTypeFunction, resolver: TypeResolver, word: string, message: Message, args?: any): Promise<any>;
+        public static some(...types: (ArgumentType | ArgumentTypeFunction)[]): ArgumentTypeFunction;
+        public static every(...types: (ArgumentType | ArgumentTypeFunction)[]): ArgumentTypeFunction;
     }
 
     export class Category<K, V> extends Collection<K, V> {
@@ -272,14 +277,14 @@ declare module 'discord-akairo' {
         public prefix?: string;
         public shouldEdit: boolean;
 
-        public static swapOptions(content: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | MessageEditOptions, options?: MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | MessageEditOptions): any[];
-
         public edit(content: string | string[] | MessageEmbed | MessageEditOptions, options?: MessageEmbed | MessageEditOptions): Promise<Message>;
         public reply(content: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | MessageEditOptions, options?: MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | MessageEditOptions): Promise<Message | Message[]>;
         public send(content: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | MessageEditOptions, options?: MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | MessageEditOptions): Promise<Message | Message[]>;
         public sendNew(content: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions, options?: MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions): Promise<Message | Message[]>;
         public setEditable(state: boolean): this;
         public setLastResponse(message: Message | Message[]): Message;
+
+        public static swapOptions(content: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | MessageEditOptions, options?: MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | MessageEditOptions): any[];
     }
 
     export class Inhibitor extends AkairoModule {
@@ -480,6 +485,7 @@ declare module 'discord-akairo' {
         description?: string | string[];
         id: string;
         index?: number;
+        unordered?: boolean | number[];
         limit?: number;
         match?: ArgumentMatch | ArgumentMatchFunction;
         prefix?: string | string[];
@@ -520,7 +526,7 @@ declare module 'discord-akairo' {
 
     export type ArgumentSplit = 'plain' | 'quoted' | 'sticky' | 'none' | string | RegExp;
 
-    export type ArgumentSplitFunction = (content: string, message: Message) => string[];
+    export type ArgumentSplitFunction = (content: string, message: Message) => string[] & { isQuoted: boolean };
 
     export type ArgumentType = 'string' | 'lowercase' | 'uppercase' | 'charCodes' | 'number' | 'integer' | 'dynamic' | 'dynamicInt' | 'url' | 'date' | 'color' | 'user' | 'users' | 'member' | 'members' | 'relevant' | 'relevants' | 'channel' | 'channels' | 'textChannel' | 'textChannels' | 'voiceChannel' | 'voiceChannels' | 'role' | 'roles' | 'emoji' | 'emojis' | 'guild' | 'guilds' | 'message' | 'invite' | 'memberMention' | 'channelMention' | 'roleMention' | 'emojiMention' | 'commandAlias' | 'command' | 'inhibitor' | 'listener' | (string | string[])[];
 

@@ -171,6 +171,11 @@ const { isPromise } = require('../util/Util');
  * Note that even if the command isn't ran, all prefixes are separated from the content.
  * @prop {number} [index] - Index/word of text to start from.
  * Applicable to word, text, content, rest, or separate match only.
+ * @prop {boolean|number[]} [unordered] - Marks the argument as unordered.
+ * If an array of numbers is passed in, each index is evaluated in order until one matches (true means all indices).
+ * If there is a match, that index is considered used and future unordered args will not check that index again.
+ * If there is no match, then the prompting or default is used.
+ * Applicable to word match only.
  * @prop {number} [limit=Infinity] - Amount of words to match when matching more than one.
  * Applicable to text, content, rest, or separate match only.
  * @prop {any|ArgumentDefaultFunction} [default=null] - Default value if text does not parse or cast correctly.
@@ -204,6 +209,7 @@ class Argument {
         type = ArgumentTypes.STRING,
         prefix = null,
         index = null,
+        unordered = false,
         limit = Infinity,
         description = '',
         prompt = null,
@@ -242,10 +248,16 @@ class Argument {
         this.prefix = prefix;
 
         /**
-         * The index to skip to.
+         * The index to start from.
          * @type {?number}
          */
         this.index = index;
+
+        /**
+         * Whether or not the argument is unordered.
+         * @type {boolean}
+         */
+        this.unordered = unordered;
 
         /**
          * The amount of words to match.
@@ -346,55 +358,8 @@ class Argument {
      * @param {Object} args - Previous arguments from command.
      * @returns {Promise<any>}
      */
-    async cast(word, message, args = {}) {
-        if (Array.isArray(this.type)) {
-            for (const entry of this.type) {
-                if (Array.isArray(entry)) {
-                    if (entry.some(t => t.toLowerCase() === word.toLowerCase())) {
-                        return entry[0];
-                    }
-                } else
-                if (entry.toLowerCase() === word.toLowerCase()) {
-                    return entry;
-                }
-            }
-
-            return null;
-        }
-
-        if (typeof this.type === 'function') {
-            let res = this.type(word, message, args);
-            if (isPromise(res)) res = await res;
-            if (res != null) return res;
-            return null;
-        }
-
-        if (this.type instanceof RegExp) {
-            const match = word.match(this.type);
-            if (!match) return null;
-
-            const matches = [];
-
-            if (this.type.global) {
-                let matched;
-
-                while ((matched = this.type.exec(word)) != null) {
-                    matches.push(matched);
-                }
-            }
-
-            return { match, matches };
-        }
-
-        if (this.handler.resolver.type(this.type)) {
-            let res = this.handler.resolver.type(this.type)(word, message, args);
-            if (isPromise(res)) res = await res;
-            if (res != null) return res;
-            return null;
-        }
-
-        if (word) return word;
-        return null;
+    cast(word, message, args = {}) {
+        return Argument.cast(this.type, this.handler.resolver, word, message, args);
     }
 
     /**
@@ -558,6 +523,104 @@ class Argument {
         if (this.handler.commandUtil) message.util.setEditable(false);
         this.handler.removePrompt(message.channel, message.author);
         return returnValue;
+    }
+
+    /**
+     * Casts a word to the specified type.
+     * @param {ArgumentType|ArgumentTypeFunction} type - Type to use.
+     * @param {TypeResolver} resolver - Type resolver to use.
+     * @param {string} word - Word to process.
+     * @param {Message} message - Message that called the command.
+     * @param {Object} args - Previous arguments from command.
+     * @returns {Promise<any>}
+     */
+    static async cast(type, resolver, word, message, args) {
+        if (Array.isArray(type)) {
+            for (const entry of type) {
+                if (Array.isArray(entry)) {
+                    if (entry.some(t => t.toLowerCase() === word.toLowerCase())) {
+                        return entry[0];
+                    }
+                } else
+                if (entry.toLowerCase() === word.toLowerCase()) {
+                    return entry;
+                }
+            }
+
+            return null;
+        }
+
+        if (typeof type === 'function') {
+            let res = type(word, message, args);
+            if (isPromise(res)) res = await res;
+            if (res != null) return res;
+            return null;
+        }
+
+        if (type instanceof RegExp) {
+            const match = word.match(type);
+            if (!match) return null;
+
+            const matches = [];
+
+            if (type.global) {
+                let matched;
+
+                while ((matched = type.exec(word)) != null) {
+                    matches.push(matched);
+                }
+            }
+
+            return { match, matches };
+        }
+
+        if (resolver.type(type)) {
+            let res = resolver.type(type)(word, message, args);
+            if (isPromise(res)) res = await res;
+            if (res != null) return res;
+            return null;
+        }
+
+        if (word) return word;
+        return null;
+    }
+
+    /**
+     * Creates a type from multiple types (union type).
+     * The first type that resolves to a non-void value is used.
+     * @param {...ArgumentType|ArgumentTypeFunction} types - Types to use.
+     * @returns {ArgumentTypeFunction}
+     */
+    static some(...types) {
+        return async (word, message, args) => {
+            for (const entry of types) {
+                // eslint-disable-next-line no-await-in-loop
+                const res = await Argument.cast(entry, message.client.commandHandler.resolver, word, message, args);
+                if (res != null) return res;
+            }
+
+            return null;
+        };
+    }
+
+    /**
+     * Creates a type from multiple types (intersection type).
+     * Only inputs where each type resolves with a non-void value are valid.
+     * @param {...ArgumentType|ArgumentTypeFunction} types - Types to use.
+     * @returns {ArgumentTypeFunction}
+     */
+    static every(...types) {
+        return async (word, message, args) => {
+            const results = [];
+            for (const entry of types) {
+                // eslint-disable-next-line no-await-in-loop
+                const res = await Argument.cast(entry, message.client.commandHandler.resolver, word, message, args);
+                if (res == null) return null;
+                results.push(res);
+            }
+
+            return results;
+        };
     }
 }
 
