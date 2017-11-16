@@ -105,7 +105,7 @@ const { isPromise } = require('../util/Util');
  * @param {Message} message - Message that triggered the command.
  * @param {string} content - The content of the message.
  * @param {string[]} words - Words matched.
- * @returns {boolean}
+ * @returns {any}
  */
 
 /**
@@ -123,6 +123,7 @@ const { isPromise } = require('../util/Util');
 
 /**
  * A function that returns the words to use for the arguments.
+ * The returned array can have an `isQuoted` boolean property to indicate that words may be in double quotes.
  * @typedef {Function} ArgumentSplitFunction
  * @param {string} content - The message content without the prefix and command.
  * @param {Message} message - Message that triggered the command.
@@ -320,7 +321,7 @@ class Command extends AkairoModule {
         const isQuoted = this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY || words.isQuoted;
 
         if (typeof this.args === 'function') {
-            return this.args(message, content, words.map(word => {
+            const res = this.args(message, content, words.map(word => {
                 word = word.trim();
                 if (isQuoted &amp;&amp; /^"[^]+"$/.test(word)) {
                     word = word.slice(1, -1);
@@ -328,10 +329,12 @@ class Command extends AkairoModule {
 
                 return word;
             }));
+
+            return Promise.resolve(res);
         }
 
+        const usedIndices = new Set();
         const prefixes = this._getPrefixes();
-
         const noPrefixWords = words.filter(w => {
             w = w.trim();
 
@@ -343,6 +346,26 @@ class Command extends AkairoModule {
 
         const parseFuncs = {
             [ArgumentMatches.WORD]: (arg, index) => {
+                if (arg.unordered) {
+                    return async (msg, processed) => {
+                        const indices = Array.isArray(arg.unordered) ? arg.unordered : Array.from(noPrefixWords.keys());
+                        for (const i of indices) {
+                            const word = (noPrefixWords[i] || '').trim();
+                            // eslint-disable-next-line no-await-in-loop
+                            const res = await arg.cast(word, msg, processed);
+                            if (res != null) {
+                                usedIndices.add(i);
+                                return res;
+                            }
+                        }
+
+                        if (arg.prompt) return arg.collect(msg, processed, '');
+                        let res = typeof arg.default === 'function' ? arg.default(msg, processed) : arg.default;
+                        if (isPromise(res)) res = await res;
+                        return res;
+                    };
+                }
+
                 index = arg.index != null ? arg.index : index;
                 let word = (noPrefixWords[index] || '').trim();
                 if (isQuoted &amp;&amp; /^"[^]+"$/.test(word)) {
@@ -360,10 +383,7 @@ class Command extends AkairoModule {
                 index = arg.index != null ? arg.index : index;
                 const wordArr = noPrefixWords.slice(index, index + arg.limit);
 
-                if (!wordArr.length) {
-                    return arg.process.bind(arg, '');
-                }
-
+                if (!wordArr.length) return arg.process.bind(arg, '');
                 return async (msg, processed) => {
                     const res = [];
                     processed[arg.id] = res;
@@ -433,9 +453,7 @@ class Command extends AkairoModule {
                     }
                 }
 
-                return () => {
-                    return arg.default == null ? flagFound : !flagFound;
-                };
+                return () => arg.default == null ? flagFound : !flagFound;
             },
             [ArgumentMatches.TEXT]: arg => {
                 const index = arg.index == null ? 0 : arg.index;

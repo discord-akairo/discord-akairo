@@ -1630,7 +1630,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line187">line 187</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line192">line 192</a>
     </li></ul></dd>
     
 
@@ -1785,7 +1785,7 @@
 
     
 
-    <h4 class="name" id="ArgumentFunction"><span class="type-signature"></span>ArgumentFunction<span class="signature">(message, content, words)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    <h4 class="name" id="ArgumentFunction"><span class="type-signature"></span>ArgumentFunction<span class="signature">(message, content, words)</span><span class="type-signature"> &rarr; {any}</span></h4>
 
     
 
@@ -1963,7 +1963,7 @@
 
 
     
-<span class="param-type">boolean</span>
+<span class="param-type">any</span>
 
 
 
@@ -2475,6 +2475,44 @@
             
 
             <td class="description last"><p>Index/word of text to start from.<br>Applicable to word, text, content, rest, or separate match only.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>unordered</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+|
+
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Marks the argument as unordered.<br>If an array of numbers is passed in, each index is evaluated in order until one matches (true means all indices).<br>If there is a match, that index is considered used and future unordered args will not check that index again.<br>If there is no match, then the prompting or default is used.<br>Applicable to word match only.</p></td>
         </tr>
 
     
@@ -4311,7 +4349,7 @@
 
 
 <div class="description">
-    <p>A function that returns the words to use for the arguments.</p>
+    <p>A function that returns the words to use for the arguments.<br>The returned array can have an <code>isQuoted</code> boolean property to indicate that words may be in double quotes.</p>
 </div>
 
 
@@ -4925,7 +4963,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line93">line 93</a>
+        <a href="struct_Command.js.html">struct/Command.js</a>, <a href="struct_Command.js.html#line94">line 94</a>
     </li></ul></dd>
     
 
@@ -6056,7 +6094,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Inhibitor.js.html">struct/Inhibitor.js</a>, <a href="struct_Inhibitor.js.html#line11">line 11</a>
+        <a href="struct_Inhibitor.js.html">struct/Inhibitor.js</a>, <a href="struct_Inhibitor.js.html#line13">line 13</a>
     </li></ul></dd>
     
 
@@ -6377,6 +6415,43 @@
             
 
             <td class="description last"><p>Can be 'all' to run on all messages, 'pre' to run on messages not blocked by the built-in inhibitors, or 'post' to run on messages that are commands.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>priority</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>0</code>
+                
+                </td>
+            
+
+            <td class="description last"><p>Priority for the inhibitor for when more than one inhibitors block a message.<br>The inhibitor with the highest priority is the one that is used for the block reason.</p></td>
         </tr>
 
     
