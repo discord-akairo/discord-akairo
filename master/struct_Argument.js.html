@@ -210,7 +210,7 @@ const { isPromise } = require('../util/Util');
  * Note that even if the command isn't ran, all prefixes are separated from the content.
  * @prop {number} [index] - Index/word of text to start from.
  * Applicable to word, text, content, rest, or separate match only.
- * @prop {boolean|number[]} [unordered] - Marks the argument as unordered.
+ * @prop {boolean|number[]} [unordered=false] - Marks the argument as unordered.
  * If an array of numbers is passed in, each index is evaluated in order until one matches (true means all indices).
  * If there is a match, that index is considered used and future unordered args will not check that index again.
  * If there is no match, then the prompting or default is used.
