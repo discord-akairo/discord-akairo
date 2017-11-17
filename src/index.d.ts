@@ -1,7 +1,17 @@
+declare module 'sqlite' {
+    export interface Database {}
+    export interface Statement {}
+}
+
+declare module 'sequelize' {
+    export interface Model<K, V> {}
+    export interface Promise<T> {}
+}
+
 declare module 'discord-akairo' {
     import {
         Client, ClientOptions, Collection, Message, MessageOptions, MessageEditOptions,
-        User, GuildChannel, GuildMember, Channel, TextChannel, TextBasedChannel, DMChannel, GroupDMChannel, Role, Emoji, Guild,
+        User, GuildChannel, GuildMember, Channel, TextChannel, DMChannel, GroupDMChannel, Role, Emoji, Guild,
         PermissionResolvable, PermissionOverwrites, RichEmbed
     } from 'discord.js';
 
@@ -126,11 +136,11 @@ declare module 'discord-akairo' {
         public displayRole(member: GuildMember): Role;
         public embed(data?: any): RichEmbed;
         public fetchMemberFrom(guild: Guild, id: string, cache?: boolean): Promise<GuildMember>;
-        public fetchMessage(channel: TextBasedChannel, id: string): Promise<Message>;
+        public fetchMessage(channel: TextChannel | DMChannel | GroupDMChannel, id: string): Promise<Message>;
         public hoistRole(member: GuildMember): Role;
         public permissionNames(): string[];
         public prompt(message: Message, content?: string, check?: RegExp | PromptCheckFunction, time?: number, options?: MessageOptions): Promise<Message>;
-        public promptIn(channel: TextBasedChannel | User, user?: User, content?: string, check?: RegExp | PromptCheckFunction, time?: number, options?: MessageOptions): Promise<Message>;
+        public promptIn(channel: TextChannel | DMChannel | GroupDMChannel | User, user?: User, content?: string, check?: RegExp | PromptCheckFunction, time?: number, options?: MessageOptions): Promise<Message>;
         public resolveChannel(text: string, channels: Collection<any, GuildChannel>, caseSensitive?: boolean, wholeWord?: boolean): GuildChannel;
         public resolveChannels(text: string, channels: Collection<any, GuildChannel>, caseSensitive?: boolean, wholeWord?: boolean): Collection<any, GuildChannel>;
         public resolveEmoji(text: string, emojis: Collection<any, Emoji>, caseSensitive?: boolean, wholeWord?: boolean): Emoji;
