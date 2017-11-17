@@ -526,13 +526,13 @@ class CommandHandler extends AkairoHandler {
      * @returns {boolean}
      */
     _handleCooldowns(message, command) {
-        if (!command.cooldown) return false;
+        const time = command.cooldown || this.defaultCooldown;
+        if (!time) return false;
+
+        const endTime = message.createdTimestamp + time;
 
         const id = message.author.id;
         if (!this.cooldowns.has(id)) this.cooldowns.set(id, {});
-
-        const time = command.cooldown || this.defaultCooldown;
-        const endTime = message.createdTimestamp + time;
 
         if (!this.cooldowns.get(id)[command.id]) {
             this.cooldowns.get(id)[command.id] = {
