@@ -383,11 +383,13 @@ class Command extends AkairoModule {
             },
             [ArgumentMatches.TEXT]: arg => {
                 const joiner = this.split === ArgumentSplits.SPLIT ? ' ' : '';
-                const word = arg.index ? noPrefixWords.join(joiner) : noPrefixWords.slice(arg.index).join(joiner);
+                const index = arg.index == null ? 0 : arg.index;
+                const word = noPrefixWords.slice(index).join(joiner);
                 return arg.cast.bind(arg, word);
             },
             [ArgumentMatches.CONTENT]: arg => {
-                const word = arg.index ? content : content.split(' ').slice(arg.index).join(' ');
+                const index = arg.index == null ? 0 : arg.index;
+                const word = content.split(' ').slice(index).join(' ');
                 return arg.cast.bind(arg, word);
             },
             [ArgumentMatches.NONE]: arg => {
