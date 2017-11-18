@@ -72,7 +72,7 @@ class CommandUtil {
         if (this.client.akairoOptions.storeMessages) {
             /**
              * Messages stored from prompts and prompt replies.
-             * @type {Collection<string, Message>}
+             * @type {Collection<Snowflake, Message>}
              */
             this.messages = new Collection();
         } else {

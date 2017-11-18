@@ -35,7 +35,7 @@ class ClientUtil {
      * @param {Collection} users - Collection of users to find in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
-     * @returns {Collection<string, User>}
+     * @returns {Collection<Snowflake, User>}
      */
     resolveUsers(text, users, caseSensitive = false, wholeWord = false) {
         return users.filter(user => this.checkUser(text, user, caseSensitive, wholeWord));
@@ -88,7 +88,7 @@ class ClientUtil {
      * @param {Collection} members - Collection of members to find in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
-     * @returns {Collection<string, GuildMember>}
+     * @returns {Collection<Snowflake, GuildMember>}
      */
     resolveMembers(text, members, caseSensitive = false, wholeWord = false) {
         return members.filter(member => this.checkMember(text, member, caseSensitive, wholeWord));
@@ -144,7 +144,7 @@ class ClientUtil {
      * @param {Collection} channels - Collection of channels to find in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
-     * @returns {Collection<string, Channel>}
+     * @returns {Collection<Snowflake, Channel>}
      */
     resolveChannels(text, channels, caseSensitive = false, wholeWord = false) {
         return channels.filter(channel => this.checkChannel(text, channel, caseSensitive, wholeWord));
@@ -196,7 +196,7 @@ class ClientUtil {
      * @param {Collection} roles - Collection of roles to find in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
-     * @returns {Collection<string, Role>}
+     * @returns {Collection<Snowflake, Role>}
      */
     resolveRoles(text, roles, caseSensitive = false, wholeWord = false) {
         return roles.filter(role => this.checkRole(text, role, caseSensitive, wholeWord));
@@ -248,7 +248,7 @@ class ClientUtil {
      * @param {Collection} emojis - Collection of emojis to find in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
-     * @returns {Collection<string, Emoji>}
+     * @returns {Collection<Snowflake, Emoji>}
      */
     resolveEmojis(text, emojis, caseSensitive = false, wholeWord = false) {
         return emojis.filter(emoji => this.checkEmoji(text, emoji, caseSensitive, wholeWord));
@@ -300,7 +300,7 @@ class ClientUtil {
      * @param {Collection} guilds - Collection of guilds to find in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
-     * @returns {Collection<string, Guild>}
+     * @returns {Collection<Snowflake, Guild>}
      */
     resolveGuilds(text, guilds, caseSensitive = false, wholeWord = false) {
         return guilds.filter(guild => this.checkGuild(text, guild, caseSensitive, wholeWord));

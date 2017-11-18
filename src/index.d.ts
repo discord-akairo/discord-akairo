@@ -274,7 +274,7 @@ declare module 'discord-akairo' {
         public content?: string;
         public lastResponse?: Message;
         public message: Message;
-        public messages?: Collection<string, Message>;
+        public messages?: Collection<Snowflake, Message>;
         public prefix?: string;
         public shouldEdit: boolean;
 
