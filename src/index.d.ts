@@ -102,12 +102,12 @@ declare module 'discord-akairo' {
         public readonly handler: CommandHandler;
         public id: string;
         public index?: number;
-        public unordered: boolean | number | number[];
         public limit: number;
         public match: ArgumentMatch | ArgumentMatchFunction;
         public prefix?: string | string[];
         public prompt?: ArgumentPromptOptions;
         public type: ArgumentType | ArgumentTypeFunction;
+        public unordered: boolean | number | number[];
 
         public allow(message: Message, args: any): boolean;
         public cast(word: string, message: Message, args?: any): Promise<any>;
@@ -115,8 +115,8 @@ declare module 'discord-akairo' {
         public process(word: string, message: Message, args?: any): Promise<any>;
 
         public static cast(type: ArgumentType | ArgumentTypeFunction, resolver: TypeResolver, word: string, message: Message, args?: any): Promise<any>;
-        public static some(...types: (ArgumentType | ArgumentTypeFunction)[]): ArgumentTypeFunction;
         public static every(...types: (ArgumentType | ArgumentTypeFunction)[]): ArgumentTypeFunction;
+        public static some(...types: (ArgumentType | ArgumentTypeFunction)[]): ArgumentTypeFunction; 
     }
 
     export class Category<K, V> extends Collection<K, V> {
@@ -488,12 +488,12 @@ declare module 'discord-akairo' {
         description?: string | string[];
         id: string;
         index?: number;
-        unordered?: boolean | number | number[];
         limit?: number;
         match?: ArgumentMatch | ArgumentMatchFunction;
         prefix?: string | string[];
         prompt?: ArgumentPromptOptions;
         type?: ArgumentType | ArgumentTypeFunction;
+        unordered?: boolean | number | number[];
     };
 
     export type ArgumentPromptData = {
