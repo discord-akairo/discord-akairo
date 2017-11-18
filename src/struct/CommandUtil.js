@@ -1,3 +1,5 @@
+const { Collection } = require('discord.js');
+
 /**
  * Extra properties applied to the Discord.js message object.
  * @typedef {Object} MessageExtensions
@@ -66,6 +68,16 @@ class CommandUtil {
           * @type {?Message}
          */
         this.lastResponse = null;
+
+        if (this.client.akairoOptions.storeMessages) {
+            /**
+             * Messages stored from prompts and prompt replies.
+             * @type {Collection<string, Message>}
+             */
+            this.messages = new Collection();
+        } else {
+            this.messages = null;
+        }
     }
 
     /**
@@ -81,6 +93,25 @@ class CommandUtil {
         }
 
         return this.lastResponse;
+    }
+
+    /**
+     * Adds client prompt or user reply to messages.
+     * @param {Message|Message[]} message - Message to add.
+     * @returns {Message|Message[]}
+     */
+    addMessage(message) {
+        if (this.client.akairoOptions.storeMessages) {
+            if (Array.isArray(message)) {
+                for (const msg of message) {
+                    this.messages.set(msg.id, msg);
+                }
+            } else {
+                this.messages.set(message.id, message);
+            }
+        }
+
+        return message;
     }
 
     /**

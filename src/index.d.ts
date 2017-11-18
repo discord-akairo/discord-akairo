@@ -274,9 +274,11 @@ declare module 'discord-akairo' {
         public content?: string;
         public lastResponse?: Message;
         public message: Message;
+        public messages?: Collection<string, Message>;
         public prefix?: string;
         public shouldEdit: boolean;
 
+        public addMessage(message: Message | Message[]): Message | Message[];
         public edit(content: string | string[] | MessageEmbed | MessageEditOptions, options?: MessageEmbed | MessageEditOptions): Promise<Message>;
         public reply(content: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | MessageEditOptions, options?: MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | MessageEditOptions): Promise<Message | Message[]>;
         public send(content: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | MessageEditOptions, options?: MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | MessageEditOptions): Promise<Message | Message[]>;
@@ -455,6 +457,7 @@ declare module 'discord-akairo' {
         listenerDirectory?: string;
         prefix?: string | string[] | PrefixFunction;
         selfbot?: boolean;
+        storeMessages?: boolean;
         ownerID?: string | string[];
     };
 

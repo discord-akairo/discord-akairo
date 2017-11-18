@@ -9,6 +9,7 @@ class TestClient extends AkairoClient {
             commandDirectory: './test/commands/',
             handleEdits: true,
             allowMention: true,
+            storeMessages: true,
             defaultPrompt: {
                 start: 'What is thing?',
                 modifyStart: (text, msg) => `${msg.author}, ${text}\nType \`cancel\` to cancel this command.`,

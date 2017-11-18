@@ -427,10 +427,11 @@ class Argument {
             return text;
         };
 
+        // eslint-disable-next-line complexity
         const promptOne = async (prevMessage, retryCount) => {
             this.handler.addPrompt(message.channel, message.author);
 
-            let sent;
+            let sentStart;
             const shouldSend = retryCount === 1
                 ? !isInfinite || (isInfinite && !values.length)
                 : true;
@@ -448,17 +449,18 @@ class Argument {
                 const startText = getText(promptType, prompter, retryCount, prevMessage, prevInput);
 
                 if (startText) {
-                    sent = await (message.util || message.channel).send(startText);
-                    if (this.handler.commandUtil) {
+                    sentStart = await (message.util || message.channel).send(startText);
+                    if (message.util) {
                         message.util.setEditable(false);
-                        message.util.setLastResponse(sent);
+                        message.util.setLastResponse(sentStart);
+                        message.util.addMessage(sentStart);
                     }
                 }
             }
 
             try {
                 const input = (await message.channel.awaitMessages(m => {
-                    if (sent && m.id === sent.id) return false;
+                    if (sentStart && m.id === sentStart.id) return false;
                     if (m.author.id !== message.author.id) return false;
                     return true;
                 }, {
@@ -467,10 +469,13 @@ class Argument {
                     errors: ['time']
                 })).first();
 
+                if (message.util) message.util.addMessage(input);
+
                 if (input.content.toLowerCase() === prompt.cancelWord.toLowerCase()) {
                     const cancelText = getText('cancel', prompt.cancel, retryCount, input, '');
                     if (cancelText) {
-                        await message.channel.send(cancelText);
+                        const sentCancel = await message.channel.send(cancelText);
+                        if (message.util) message.util.addMessage(sentCancel);
                     }
 
                     this.handler.removePrompt(message.channel, message.author);
@@ -484,17 +489,18 @@ class Argument {
 
                 const parsedValue = await this.cast(input.content, input, args);
                 if (parsedValue == null) {
-                    if (retryCount > prompt.retries) {
-                        const endedText = getText('ended', prompt.ended, retryCount, input, input.content);
-                        if (endedText) {
-                            await message.channel.send(endedText);
-                        }
-
-                        this.handler.removePrompt(message.channel, message.author);
-                        throw Symbols.COMMAND_CANCELLED;
+                    if (retryCount <= prompt.retries) {
+                        return promptOne(input, retryCount + 1);
                     }
 
-                    return promptOne(input, retryCount + 1);
+                    const endedText = getText('ended', prompt.ended, retryCount, input, input.content);
+                    if (endedText) {
+                        const sentEnded = await message.channel.send(endedText);
+                        if (message.util) message.util.addMessage(sentEnded);
+                    }
+
+                    this.handler.removePrompt(message.channel, message.author);
+                    throw Symbols.COMMAND_CANCELLED;
                 }
 
                 if (isInfinite) {
@@ -514,7 +520,8 @@ class Argument {
 
                 const timeoutText = getText('timeout', prompt.timeout, retryCount, prevMessage, '');
                 if (timeoutText) {
-                    await message.channel.send(timeoutText);
+                    const sentTimeout = await message.channel.send(timeoutText);
+                    if (message.util) message.util.addMessage(sentTimeout);
                 }
 
                 this.handler.removePrompt(message.channel, message.author);

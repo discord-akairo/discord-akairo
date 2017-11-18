@@ -10,14 +10,20 @@ class TestCommand extends Command {
             split: 'quoted',
             args: [
                 {
-                    id: 'role',
-                    type: 'role',
-                    unordered: true
+                    id: 'integer',
+                    type: 'integer',
+                    prompt: {
+                        start: 'Give me an integer!',
+                        retry: 'That\'s not an integer, try again!'
+                    }
                 },
                 {
-                    id: 'member',
-                    type: 'member',
-                    unordered: true
+                    id: 'number',
+                    type: 'number',
+                    prompt: {
+                        start: 'Give me a number!',
+                        retry: 'That\'s not a number, try again!'
+                    }
                 }
             ]
         });
@@ -25,6 +31,7 @@ class TestCommand extends Command {
 
     exec(message, args) {
         message.channel.send(util.inspect(args, { depth: 1 }), { code: 'js' });
+        console.log(message.util.messages.map(m => m.content));
     }
 }
 

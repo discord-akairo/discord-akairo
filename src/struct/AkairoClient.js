@@ -16,6 +16,7 @@ const ListenerHandler = require('./ListenerHandler');
  * @prop {boolean} [handleEdits=false] - Whether or not to handle edited messages.
  * @prop {boolean} [commandUtil=false] - Whether or not to assign `message.util`.
  * Set to `true` by default if `handleEdits` is on.
+ * @prop {boolean} [storeMessages=false] - Whether or not to have CommandUtil store all prompts and their replies.
  * @prop {number} [commandUtilLifetime=0] - Milliseconds a command util should last before it is removed.
  * If 0, command utils will never be removed.
  * @prop {boolean} [fetchMembers=false] - Whether or not to fetch member on each message from a guild.
