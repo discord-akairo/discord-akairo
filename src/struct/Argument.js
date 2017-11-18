@@ -98,7 +98,7 @@ const { isPromise } = require('../util/Util');
 
 /**
  * A function for processing user input to use as an argument.
- * A `null` or `undefined` return value will use the default value for the argument or start a prompt.
+ * A void return value will use the default value for the argument or start a prompt.
  * Any other truthy return value will be used as the evaluated argument.
  * If returning a Promise, the resolved value will go through the above steps.
  * @typedef {Function} ArgumentTypeFunction
@@ -181,7 +181,7 @@ const { isPromise } = require('../util/Util');
  * @prop {number} [limit=Infinity] - Amount of words to match when matching more than one.
  * Applicable to text, content, rest, or separate match only.
  * @prop {any|ArgumentDefaultFunction} [default=null] - Default value if text does not parse or cast correctly.
- * If using a flag arg, setting the default value to a non-null/undefined value inverses the result.
+ * If using a flag arg, setting the default value to a non-void value inverses the result.
  * @prop {string|string[]} [description=''] - A description of the argument.
  * @prop {ArgumentPromptOptions} [prompt] - Prompt options for when user does not provide input.
  * @prop {ArgumentAllowFunction} [allow] - A function that checks if this argument should be ran.
