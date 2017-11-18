@@ -172,8 +172,9 @@ const { isPromise } = require('../util/Util');
  * @prop {number} [index] - Index/word of text to start from.
  * Applicable to word, text, content, rest, or separate match only.
  * Ignored when used with the unordered option.
- * @prop {boolean|number[]} [unordered=false] - Marks the argument as unordered.
+ * @prop {boolean|number|number[]} [unordered=false] - Marks the argument as unordered.
  * Each word is evaluated in order until one matches (no input at all means no evaluation).
+ * Passing in a number forces evaluation of that index to the last word.
  * Passing in an array of numbers forces evaluation on those indices only.
  * If there is a match, that index is considered used and future unordered args will not check that index again.
  * If there is no match, then the prompting or default value is used.
@@ -257,7 +258,7 @@ class Argument {
 
         /**
          * Whether or not the argument is unordered.
-         * @type {boolean}
+         * @type {boolean|number|number[]}
          */
         this.unordered = unordered;
 

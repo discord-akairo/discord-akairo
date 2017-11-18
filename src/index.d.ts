@@ -102,7 +102,7 @@ declare module 'discord-akairo' {
         public readonly handler: CommandHandler;
         public id: string;
         public index?: number;
-        public unordered: boolean | number[];
+        public unordered: boolean | number | number[];
         public limit: number;
         public match: ArgumentMatch | ArgumentMatchFunction;
         public prefix?: string | string[];
@@ -485,7 +485,7 @@ declare module 'discord-akairo' {
         description?: string | string[];
         id: string;
         index?: number;
-        unordered?: boolean | number[];
+        unordered?: boolean | number | number[];
         limit?: number;
         match?: ArgumentMatch | ArgumentMatchFunction;
         prefix?: string | string[];
