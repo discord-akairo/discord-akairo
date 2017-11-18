@@ -346,9 +346,14 @@ class Command extends AkairoModule {
 
         const parseFuncs = {
             [ArgumentMatches.WORD]: (arg, index) => {
-                if (arg.unordered) {
+                if (arg.unordered || arg.unordered === 0) {
                     return async (msg, processed) => {
-                        const indices = Array.isArray(arg.unordered) ? arg.unordered : Array.from(noPrefixWords.keys());
+                        const indices = typeof arg.unordered === 'number'
+                            ? Array.from(noPrefixWords.keys()).slice(arg.unordered)
+                            : Array.isArray(arg.unordered)
+                                ? arg.unordered
+                                : Array.from(noPrefixWords.keys());
+
                         for (const i of indices) {
                             const word = (noPrefixWords[i] || '').trim();
                             // eslint-disable-next-line no-await-in-loop

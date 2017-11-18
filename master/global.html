@@ -1630,7 +1630,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line192">line 192</a>
+        <a href="struct_Argument.js.html">struct/Argument.js</a>, <a href="struct_Argument.js.html#line195">line 195</a>
     </li></ul></dd>
     
 
@@ -2474,7 +2474,7 @@
                 </td>
             
 
-            <td class="description last"><p>Index/word of text to start from.<br>Applicable to word, text, content, rest, or separate match only.</p></td>
+            <td class="description last"><p>Index/word of text to start from.<br>Applicable to word, text, content, rest, or separate match only.<br>Ignored when used with the unordered option.</p></td>
         </tr>
 
     
@@ -2488,6 +2488,9 @@
             
                 
 <span class="param-type">boolean</span>
+|
+
+<span class="param-type">number</span>
 |
 
 <span class="param-type">Array.&lt;number></span>
@@ -2514,7 +2517,7 @@
                 </td>
             
 
-            <td class="description last"><p>Marks the argument as unordered.<br>If an array of numbers is passed in, each index is evaluated in order until one matches (true means all indices).<br>If there is a match, that index is considered used and future unordered args will not check that index again.<br>If there is no match, then the prompting or default is used.<br>Applicable to word match only.</p></td>
+            <td class="description last"><p>Marks the argument as unordered.<br>Each word is evaluated in order until one matches (no input at all means no evaluation).<br>Passing in a number forces evaluation of that index to the last word.<br>Passing in an array of numbers forces evaluation on those indices only.<br>If there is a match, that index is considered used and future unordered args will not check that index again.<br>If there is no match, then the prompting or default value is used.<br>Applicable to word match only.</p></td>
         </tr>
 
     
@@ -2591,7 +2594,7 @@
                 </td>
             
 
-            <td class="description last"><p>Default value if text does not parse or cast correctly.<br>If using a flag arg, setting the default value to a non-null/undefined value inverses the result.</p></td>
+            <td class="description last"><p>Default value if text does not parse or cast correctly.<br>If using a flag arg, setting the default value to a non-void value inverses the result.</p></td>
         </tr>
 
     
@@ -4630,7 +4633,7 @@
 
 
 <div class="description">
-    <p>A function for processing user input to use as an argument.<br>A <code>null</code> or <code>undefined</code> return value will use the default value for the argument or start a prompt.<br>Any other truthy return value will be used as the evaluated argument.<br>If returning a Promise, the resolved value will go through the above steps.</p>
+    <p>A function for processing user input to use as an argument.<br>A void return value will use the default value for the argument or start a prompt.<br>Any other truthy return value will be used as the evaluated argument.<br>If returning a Promise, the resolved value will go through the above steps.</p>
 </div>
 
 
