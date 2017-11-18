@@ -171,10 +171,12 @@ const { isPromise } = require('../util/Util');
  * Note that even if the command isn't ran, all prefixes are separated from the content.
  * @prop {number} [index] - Index/word of text to start from.
  * Applicable to word, text, content, rest, or separate match only.
+ * Ignored when used with the unordered option.
  * @prop {boolean|number[]} [unordered=false] - Marks the argument as unordered.
- * If an array of numbers is passed in, each index is evaluated in order until one matches (true means all indices).
+ * Each word is evaluated in order until one matches (no input at all means no evaluation).
+ * Passing in an array of numbers forces evaluation on those indices only.
  * If there is a match, that index is considered used and future unordered args will not check that index again.
- * If there is no match, then the prompting or default is used.
+ * If there is no match, then the prompting or default value is used.
  * Applicable to word match only.
  * @prop {number} [limit=Infinity] - Amount of words to match when matching more than one.
  * Applicable to text, content, rest, or separate match only.
@@ -592,8 +594,9 @@ class Argument {
      * @returns {ArgumentTypeFunction}
      */
     static some(...types) {
-        return async (word, message, args) => {
-            for (const entry of types) {
+        return async function type(word, message, args) {
+            for (let entry of types) {
+                if (typeof entry === 'function') entry = entry.bind(this); // eslint-disable-line no-invalid-this
                 // eslint-disable-next-line no-await-in-loop
                 const res = await Argument.cast(entry, message.client.commandHandler.resolver, word, message, args);
                 if (res != null) return res;
