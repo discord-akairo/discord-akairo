@@ -325,7 +325,11 @@ class Command extends AkairoModule {
                             }
                         }
 
-                        if (arg.prompt) return arg.collect(msg, processed, '');
+                        const isOptional = (this.prompt && this.prompt.optional)
+                            || (this.command.defaultPrompt && this.command.defaultPrompt.optional)
+                            || (this.handler.defaultPrompt && this.handler.defaultPrompt.optional);
+
+                        if (!isOptional && arg.prompt) return arg.collect(msg, processed, '');
                         let res = typeof arg.default === 'function' ? arg.default(msg, processed) : arg.default;
                         if (isPromise(res)) res = await res;
                         return res;
