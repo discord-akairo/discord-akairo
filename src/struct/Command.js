@@ -325,14 +325,7 @@ class Command extends AkairoModule {
                             }
                         }
 
-                        const isOptional = (arg.prompt && arg.prompt.optional)
-                            || (arg.command.defaultPrompt && arg.command.defaultPrompt.optional)
-                            || (arg.handler.defaultPrompt && arg.handler.defaultPrompt.optional);
-
-                        if (!isOptional && arg.prompt) return arg.collect(msg, processed, '');
-                        let res = typeof arg.default === 'function' ? arg.default(msg, processed) : arg.default;
-                        if (isPromise(res)) res = await res;
-                        return res;
+                        return arg.process('', msg, processed);
                     };
                 }
 

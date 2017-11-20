@@ -14,16 +14,20 @@ class TestCommand extends Command {
                     type: 'integer',
                     prompt: {
                         start: 'Give me an integer!',
-                        retry: 'That\'s not an integer, try again!'
-                    }
+                        retry: 'That\'s not an integer, try again!',
+                        optional: true
+                    },
+                    default: 1
                 },
                 {
                     id: 'number',
                     type: 'number',
                     prompt: {
                         start: 'Give me a number!',
-                        retry: 'That\'s not a number, try again!'
-                    }
+                        retry: 'That\'s not a number, try again!',
+                        optional: true
+                    },
+                    default: 2
                 }
             ]
         });
