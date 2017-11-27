@@ -8,7 +8,7 @@ const ListenerHandler = require('./ListenerHandler');
 /**
  * Options used to determine how the framework behaves.
  * @typedef {Object} AkairoOptions
- * @prop {string|string[]} [ownerID=''] - Discord ID of the client owner(s).
+ * @prop {Snowflake|Snowflake[]} [ownerID=''] - Discord ID of the client owner(s).
  * @prop {boolean} [selfbot=false] - Whether or not this bot is a selfbot.
  * @prop {string} [commandDirectory] - Directory to commands.
  * @prop {string|string[]|PrefixFunction} [prefix='!'] - Default command prefix(es).
@@ -63,7 +63,7 @@ class AkairoClient extends Client {
 
         /**
          * The ID of the owner.
-         * @type {string}
+         * @type {Snowflake|Snowflake[]}
          */
         this.ownerID = ownerID;
 

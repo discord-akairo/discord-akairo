@@ -38,7 +38,7 @@ declare module 'discord-akairo' {
         public commandHandler: CommandHandler;
         public inhibitorHandler: InhibitorHandler;
         public listenerHandler: ListenerHandler;
-        public ownerID: string | string[];
+        public ownerID: Snowflake | Snowflake[];
         public selfbot: boolean;
         public util: ClientUtil;
 
@@ -458,7 +458,7 @@ declare module 'discord-akairo' {
         prefix?: string | string[] | PrefixFunction;
         selfbot?: boolean;
         storeMessages?: boolean;
-        ownerID?: string | string[];
+        ownerID?: Snowflake | Snowflake[];
     };
 
     export type AkairoHandlerOptions = {
