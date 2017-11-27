@@ -403,16 +403,51 @@
 
         <tr>
             
-                <td class="name"><code>ownerID</code></td>
+                <td class="name"><code>commandDirectory</code></td>
             
 
             <td class="type">
             
                 
 <span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Directory to commands.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ownerID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Snowflake</span>
 |
 
-<span class="param-type">Array.&lt;string></span>
+<span class="param-type">Array.&lt;Snowflake></span>
 
 
             
@@ -474,41 +509,6 @@
             
 
             <td class="description last"><p>Whether or not this bot is a selfbot.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>commandDirectory</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last"><p>Directory to commands.</p></td>
         </tr>
 
     
@@ -592,6 +592,41 @@
             
 
             <td class="description last"><p>Whether or not to allow mentions to the client user as a prefix.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>aliasReplacement</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Regular expression to automatically make command aliases.<br>For example, using <code>/-/g</code> would mean that aliases containing <code>-</code> would be valid with and without it.<br>So, the alias <code>command-name</code> is valid as both <code>command-name</code> and <code>commandname</code>.</p></td>
         </tr>
 
     
@@ -739,7 +774,7 @@
                 </td>
             
 
-            <td class="description last"><p>Milliseconds a command util should last before it is removed.<br>If 0, command utils will never be removed.</p></td>
+            <td class="description last"><p>Milliseconds a command util should last before it is removed.<br>If 0, CommandUtil instances will never be removed.</p></td>
         </tr>
 
     
@@ -820,6 +855,44 @@
 
         <tr>
             
+                <td class="name"><code>ignoreCooldownID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Snowflake</span>
+|
+
+<span class="param-type">Array.&lt;Snowflake></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>ID of user(s) to ignore cooldown.<br>Defaults to the client owner(s) option.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>defaultPrompt</code></td>
             
 
@@ -849,43 +922,6 @@
             
 
             <td class="description last"><p>The default prompt options.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>automateCategories</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    <code>false</code>
-                
-                </td>
-            
-
-            <td class="description last"><p>Whether or not to set each module's category to its parent directory name.</p></td>
         </tr>
 
     
@@ -1107,6 +1143,43 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>automateCategories</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last"><p>Whether or not to set each module's category to its parent directory name.</p></td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -1148,7 +1221,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_AkairoClient.js.html">struct/AkairoClient.js</a>, <a href="struct_AkairoClient.js.html#line41">line 41</a>
+        <a href="struct_AkairoClient.js.html">struct/AkairoClient.js</a>, <a href="struct_AkairoClient.js.html#line46">line 46</a>
     </li></ul></dd>
     
 
@@ -7556,7 +7629,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_AkairoClient.js.html">struct/AkairoClient.js</a>, <a href="struct_AkairoClient.js.html#line34">line 34</a>
+        <a href="struct_AkairoClient.js.html">struct/AkairoClient.js</a>, <a href="struct_AkairoClient.js.html#line39">line 39</a>
     </li></ul></dd>
     
 

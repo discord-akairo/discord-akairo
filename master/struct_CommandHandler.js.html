@@ -63,9 +63,11 @@ class CommandHandler extends AkairoHandler {
             commandUtil = undefined,
             commandUtilLifetime = 0,
             defaultCooldown = 0,
+            ignoreCooldownID = undefined,
             defaultPrompt = {},
-            prefix = '',
-            allowMention = false
+            prefix = '!',
+            allowMention = false,
+            aliasReplacement
         } = client.akairoOptions;
 
         super(client, {
@@ -84,6 +86,12 @@ class CommandHandler extends AkairoHandler {
          * @type {Collection&lt;string, string>}
          */
         this.aliases = new Collection();
+
+        /**
+         * Regular expression to automatically make command aliases for.
+         * @type {?RegExp}
+         */
+        this.aliasReplacement = aliasReplacement;
 
         /**
          * Collection of prefix overwrites to commands.
@@ -150,6 +158,12 @@ class CommandHandler extends AkairoHandler {
          * @type {number}
          */
         this.defaultCooldown = defaultCooldown;
+
+        /**
+         * ID of user(s) to ignore cooldown.
+         * @type {Snowflake|Snowflake[]}
+         */
+        this.ignoreCooldownID = ignoreCooldownID === undefined ? this.client.ownerID : ignoreCooldownID;
 
         /**
          * Collection of sets of ongoing argument prompts.
@@ -232,11 +246,15 @@ class CommandHandler extends AkairoHandler {
      * @returns {void}
      */
     _addAliases(command) {
-        for (const alias of command.aliases) {
+        for (let alias of command.aliases) {
             const conflict = this.aliases.get(alias.toLowerCase());
             if (conflict) throw new AkairoError('ALIAS_CONFLICT', alias, command.id, conflict);
 
-            this.aliases.set(alias.toLowerCase(), command.id);
+            alias = alias.toLowerCase();
+            this.aliases.set(alias, command.id);
+            if (this.aliasReplacement) {
+                this.aliases.set(alias.replace(this.aliasReplacement, ''), command.id);
+            }
         }
 
         if (command.prefix != null) {
@@ -285,7 +303,14 @@ class CommandHandler extends AkairoHandler {
      * @returns {void}
      */
     _removeAliases(command) {
-        for (const alias of command.aliases) this.aliases.delete(alias.toLowerCase());
+        for (let alias of command.aliases) {
+            alias = alias.toLowerCase();
+            this.aliases.delete(alias);
+
+            if (this.aliasReplacement) {
+                this.aliases.delete(alias.replace(this.aliasReplacement, ''));
+            }
+        }
 
         if (command.prefix != null) {
             if (Array.isArray(command.prefix)) {
@@ -519,9 +544,9 @@ class CommandHandler extends AkairoHandler {
      * @returns {boolean}
      */
     _handleCooldowns(message, command) {
-        const isOwner = Array.isArray(this.client.ownerID)
-            ? this.client.ownerID.includes(message.author.id)
-            : message.author.id === this.client.ownerID;
+        const isOwner = Array.isArray(this.ignoreCooldownID)
+            ? this.ignoreCooldownID.includes(message.author.id)
+            : message.author.id === this.ignoreCooldownID;
 
         if (isOwner) return false;
 
