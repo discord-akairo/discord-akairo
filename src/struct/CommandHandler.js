@@ -26,7 +26,7 @@ class CommandHandler extends AkairoHandler {
             defaultCooldown = 0,
             ignoreCooldownID = undefined,
             defaultPrompt = {},
-            prefix = '',
+            prefix = '!',
             allowMention = false,
             aliasReplacement
         } = client.akairoOptions;
