@@ -6,7 +6,7 @@ const util = require('util');
 class TestCommand extends Command {
     constructor() {
         super('test', {
-            aliases: ['test'],
+            aliases: ['test', 'test-a'],
             split: 'quoted',
             args: [
                 {

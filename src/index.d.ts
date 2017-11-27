@@ -202,6 +202,7 @@ declare module 'discord-akairo' {
     export class CommandHandler extends AkairoHandler {
         public constructor(client: AkairoClient);
 
+        public aliasReplacement?: RegExp;
         public aliases: Collection<string, string>;
         public allowMention: boolean | AllowMentionFunction;
         public blockBots: boolean;
@@ -440,6 +441,7 @@ declare module 'discord-akairo' {
     }
 
     export type AkairoOptions = {
+        aliasReplacement?: RegExp;
         allowMention?: boolean | AllowMentionFunction;
         automateCategories?: boolean;
         blockBots?: boolean;

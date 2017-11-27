@@ -26,7 +26,8 @@ class CommandHandler extends AkairoHandler {
             defaultCooldown = 0,
             defaultPrompt = {},
             prefix = '',
-            allowMention = false
+            allowMention = false,
+            aliasReplacement
         } = client.akairoOptions;
 
         super(client, {
@@ -45,6 +46,12 @@ class CommandHandler extends AkairoHandler {
          * @type {Collection<string, string>}
          */
         this.aliases = new Collection();
+
+        /**
+         * Regular expression to automatically make command aliases for.
+         * @type {?RegExp}
+         */
+        this.aliasReplacement = aliasReplacement;
 
         /**
          * Collection of prefix overwrites to commands.
@@ -193,11 +200,15 @@ class CommandHandler extends AkairoHandler {
      * @returns {void}
      */
     _addAliases(command) {
-        for (const alias of command.aliases) {
+        for (let alias of command.aliases) {
             const conflict = this.aliases.get(alias.toLowerCase());
             if (conflict) throw new AkairoError('ALIAS_CONFLICT', alias, command.id, conflict);
 
-            this.aliases.set(alias.toLowerCase(), command.id);
+            alias = alias.toLowerCase();
+            this.aliases.set(alias, command.id);
+            if (this.aliasReplacement) {
+                this.aliases.set(alias.replace(this.aliasReplacement, ''), command.id);
+            }
         }
 
         if (command.prefix != null) {
@@ -246,7 +257,14 @@ class CommandHandler extends AkairoHandler {
      * @returns {void}
      */
     _removeAliases(command) {
-        for (const alias of command.aliases) this.aliases.delete(alias.toLowerCase());
+        for (let alias of command.aliases) {
+            alias = alias.toLowerCase();
+            this.aliases.delete(alias);
+
+            if (this.aliasReplacement) {
+                this.aliases.delete(alias.replace(this.aliasReplacement, ''));
+            }
+        }
 
         if (command.prefix != null) {
             if (Array.isArray(command.prefix)) {
