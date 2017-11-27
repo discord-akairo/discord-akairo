@@ -7,6 +7,7 @@ class TestClient extends AkairoClient {
             prefix: '!!',
             ownerID: '123992700587343872',
             commandDirectory: './test/commands/',
+            ignoreCooldownID: ['132266422679240704'],
             aliasReplacement: /-/g,
             handleEdits: true,
             allowMention: true,

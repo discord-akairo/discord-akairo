@@ -24,6 +24,8 @@ const ListenerHandler = require('./ListenerHandler');
  * If 0, CommandUtil instances will never be removed.
  * @prop {boolean} [fetchMembers=false] - Whether or not to fetch member on each message from a guild.
  * @prop {number} [defaultCooldown=0] - The default cooldown for commands.
+ * @prop {Snowflake|Snowflake[]} [ignoreCooldownID] - ID of user(s) to ignore cooldown.
+ * Defaults to the client owner(s) option.
  * @prop {ArgumentPromptOptions} [defaultPrompt] - The default prompt options.
  * @prop {string} [inhibitorDirectory] - Directory to inhibitors.
  * @prop {boolean} [blockOthers=true] - Whether or not to block others, if a selfbot.

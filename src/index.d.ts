@@ -220,6 +220,7 @@ declare module 'discord-akairo' {
         public readonly directory: string;
         public fetchMembers: boolean;
         public handleEdits: boolean;
+        public ignoreCooldownID: Snowflake | Snowflake[];
         public modules: Collection<string, Command>;
         public prefix: string | string[] | PrefixFunction;
         public prefixes: Collection<string | PrefixFunction, Set<string>>;
@@ -455,6 +456,7 @@ declare module 'discord-akairo' {
         emitters?: { [x: string]: EventEmitter };
         fetchMembers?: boolean;
         handleEdits?: boolean;
+        ignoreCooldownID?: Snowflake | Snowflake[];
         inhibitorDirectory?: string;
         listenerDirectory?: string;
         prefix?: string | string[] | PrefixFunction;

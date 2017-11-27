@@ -8,6 +8,7 @@ class TestCommand extends Command {
         super('test', {
             aliases: ['test', 'test-a'],
             split: 'quoted',
+            cooldown: 5000,
             args: [
                 {
                     id: 'integer',

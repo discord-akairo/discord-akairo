@@ -24,6 +24,7 @@ class CommandHandler extends AkairoHandler {
             commandUtil = undefined,
             commandUtilLifetime = 0,
             defaultCooldown = 0,
+            ignoreCooldownID = undefined,
             defaultPrompt = {},
             prefix = '',
             allowMention = false,
@@ -118,6 +119,12 @@ class CommandHandler extends AkairoHandler {
          * @type {number}
          */
         this.defaultCooldown = defaultCooldown;
+
+        /**
+         * ID of user(s) to ignore cooldown.
+         * @type {Snowflake|Snowflake[]}
+         */
+        this.ignoreCooldownID = ignoreCooldownID === undefined ? this.client.ownerID : ignoreCooldownID;
 
         /**
          * Collection of sets of ongoing argument prompts.
@@ -498,9 +505,9 @@ class CommandHandler extends AkairoHandler {
      * @returns {boolean}
      */
     _handleCooldowns(message, command) {
-        const isOwner = Array.isArray(this.client.ownerID)
-            ? this.client.ownerID.includes(message.author.id)
-            : message.author.id === this.client.ownerID;
+        const isOwner = Array.isArray(this.ignoreCooldownID)
+            ? this.ignoreCooldownID.includes(message.author.id)
+            : message.author.id === this.ignoreCooldownID;
 
         if (isOwner) return false;
 
