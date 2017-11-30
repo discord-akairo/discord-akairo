@@ -7,6 +7,8 @@ const EventEmitter = require('events');
 const fs = require('fs');
 const path = require('path');
 
+let instanceDeprecation = false;
+
 /**
  * Options for module loading and handling.
  * @typedef {Object} AkairoHandlerOptions
@@ -145,6 +147,9 @@ class AkairoHandler extends EventEmitter {
 
         if (mod instanceof this.classToHandle.constructor) {
             mod = new mod(this.client, this); // eslint-disable-line new-cap
+        } else {
+            instanceDeprecation = true;
+            console.error('Akairo: Exports of module instances are deprecated. Consider exporting module classes.'); // eslint-disable-line no-console
         }
 
         if (!(mod instanceof this.classToHandle)) {
