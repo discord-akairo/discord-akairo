@@ -13,8 +13,7 @@ let instanceDeprecation = false;
  * Options for module loading and handling.
  * @typedef {Object} AkairoHandlerOptions
  * @prop {string} [directory] - Directory to modules.
- * @prop {Function} [classToHandle=AkairoModule] - Only instances of this can be handled.
- * Modules not instance of this class are ignored.
+ * @prop {Function} [classToHandle=AkairoModule] - Only classes that extends this class can be handled.
  * @prop {string[]|Set<string>} [extensions] - File extensions to load.
  * By default this is .js, .json, and .ts files.
  */
