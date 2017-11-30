@@ -253,7 +253,10 @@ class CommandHandler extends AkairoHandler {
             alias = alias.toLowerCase();
             this.aliases.set(alias, command.id);
             if (this.aliasReplacement) {
-                this.aliases.set(alias.replace(this.aliasReplacement, ''), command.id);
+                const replacement = alias.replace(this.aliasReplacement, '');
+                const replacementConflict = this.aliases.get(replacement);
+                if (replacementConflict) throw new AkairoError('ALIAS_CONFLICT', replacement, command.id, replacementConflict);
+                this.aliases.set(replacement, command.id);
             }
         }
 

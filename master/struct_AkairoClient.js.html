@@ -52,7 +52,7 @@ const ListenerHandler = require('./ListenerHandler');
  * @prop {boolean} [selfbot=false] - Whether or not this bot is a selfbot.
  * @prop {string|string[]|PrefixFunction} [prefix='!'] - Default command prefix(es).
  * @prop {boolean|AllowMentionFunction} [allowMention=true] - Whether or not to allow mentions to the client user as a prefix.
- * @prop {string} [aliasReplacement] - Regular expression to automatically make command aliases.
+ * @prop {RegExp} [aliasReplacement] - Regular expression to automatically make command aliases.
  * For example, using `/-/g` would mean that aliases containing `-` would be valid with and without it.
  * So, the alias `command-name` is valid as both `command-name` and `commandname`.
  * @prop {boolean} [handleEdits=false] - Whether or not to handle edited messages.
