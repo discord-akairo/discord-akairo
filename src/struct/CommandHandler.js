@@ -215,9 +215,12 @@ class CommandHandler extends AkairoHandler {
             this.aliases.set(alias, command.id);
             if (this.aliasReplacement) {
                 const replacement = alias.replace(this.aliasReplacement, '');
-                const replacementConflict = this.aliases.get(replacement);
-                if (replacementConflict) throw new AkairoError('ALIAS_CONFLICT', replacement, command.id, replacementConflict);
-                this.aliases.set(replacement, command.id);
+
+                if (replacement !== alias) {
+                    const replacementConflict = this.aliases.get(replacement);
+                    if (replacementConflict) throw new AkairoError('ALIAS_CONFLICT', replacement, command.id, replacementConflict);
+                    this.aliases.set(replacement, command.id);
+                }
             }
         }
 
@@ -272,7 +275,8 @@ class CommandHandler extends AkairoHandler {
             this.aliases.delete(alias);
 
             if (this.aliasReplacement) {
-                this.aliases.delete(alias.replace(this.aliasReplacement, ''));
+                const replacement = alias.replace(this.aliasReplacement, '');
+                if (replacement !== alias) this.aliases.delete(replacement);
             }
         }
 
