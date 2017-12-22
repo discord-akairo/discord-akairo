@@ -264,7 +264,7 @@ class TypeResolver {
                 return message.channel.messages.fetch(word).catch(() => null);
             },
 
-            [ArgumentTypes.GUILD_MESSAGES]: async (word, message) => {
+            [ArgumentTypes.GUILD_MESSAGE]: async (word, message) => {
                 if (!word) return null;
                 for (const channel of message.guild.values()) {
                     if (channel.type !== 'text') continue;
