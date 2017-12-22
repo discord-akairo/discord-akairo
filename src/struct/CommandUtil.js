@@ -190,8 +190,7 @@ class CommandUtil {
         if (!options && typeof content === 'object' && !Array.isArray(content)) {
             options = content;
             content = '';
-        } else
-        if (!options) {
+        } else if (!options) {
             options = {};
         }
 

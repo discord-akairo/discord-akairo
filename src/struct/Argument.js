@@ -552,8 +552,7 @@ class Argument {
                     if (entry.some(t => t.toLowerCase() === word.toLowerCase())) {
                         return entry[0];
                     }
-                } else
-                if (entry.toLowerCase() === word.toLowerCase()) {
+                } else if (entry.toLowerCase() === word.toLowerCase()) {
                     return entry;
                 }
             }

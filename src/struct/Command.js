@@ -379,8 +379,7 @@ class Command extends AkairoModule {
                         }
 
                         if (found) break;
-                    } else
-                    if (word.startsWith(arg.prefix.toLowerCase())) {
+                    } else if (word.startsWith(arg.prefix.toLowerCase())) {
                         prefixUsed = arg.prefix;
                         wordFound = words[i];
                         break;
@@ -409,8 +408,7 @@ class Command extends AkairoModule {
                                 break;
                             }
                         }
-                    } else
-                    if (word === arg.prefix.toLowerCase()) {
+                    } else if (word === arg.prefix.toLowerCase()) {
                         flagFound = true;
                         break;
                     }
@@ -449,12 +447,10 @@ class Command extends AkairoModule {
                 }
 
                 return process(i + 1);
-            } else
-            if (Array.isArray(arg)) {
+            } else if (Array.isArray(arg)) {
                 arg = arg.find(a => a.allow(message, processed));
                 if (!arg) return process(i + 1);
-            } else
-            if (!arg.allow(message, processed)) {
+            } else if (!arg.allow(message, processed)) {
                 return process(i + 1);
             }
 
@@ -499,8 +495,7 @@ class Command extends AkairoModule {
         for (let arg of args) {
             if (Array.isArray(arg)) {
                 arg = arg.map(a => new Argument(this, a));
-            } else
-            if (typeof arg === 'function') {
+            } else if (typeof arg === 'function') {
                 arg = arg.bind(this);
             } else {
                 arg = new Argument(this, arg);

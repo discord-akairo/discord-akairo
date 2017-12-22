@@ -470,8 +470,7 @@ class CommandHandler extends AkairoHandler {
                     this.emit(CommandHandlerEvents.MISSING_PERMISSIONS, message, command, 'client', null);
                     return true;
                 }
-            } else
-            if (message.guild) {
+            } else if (message.guild) {
                 const check = Array.isArray(command.clientPermissions) ? command.clientPermissions : [command.clientPermissions];
                 const missing = message.channel.permissionsFor(this.client.user).missing(check);
                 if (missing.length) {
@@ -490,8 +489,7 @@ class CommandHandler extends AkairoHandler {
                     this.emit(CommandHandlerEvents.MISSING_PERMISSIONS, message, command, 'user', null);
                     return true;
                 }
-            } else
-            if (message.guild) {
+            } else if (message.guild) {
                 const check = Array.isArray(command.userPermissions) ? command.userPermissions : [command.userPermissions];
                 const missing = message.channel.permissionsFor(message.author).missing(check);
                 if (missing.length) {
@@ -588,8 +586,7 @@ class CommandHandler extends AkairoHandler {
             });
 
             start = match;
-        } else
-        if (message.content.toLowerCase().startsWith(prefix.toLowerCase())) {
+        } else if (message.content.toLowerCase().startsWith(prefix.toLowerCase())) {
             start = prefix;
         }
 
@@ -646,8 +643,7 @@ class CommandHandler extends AkairoHandler {
                     commands = entry[1];
                     break;
                 }
-            } else
-            if (message.content.toLowerCase().startsWith(prefix.toLowerCase())) {
+            } else if (message.content.toLowerCase().startsWith(prefix.toLowerCase())) {
                 start = prefix;
                 commands = entry[1];
                 break;

@@ -23,10 +23,9 @@ class TestClient extends AkairoClient {
             }
         });
 
-        this.settings = new SQLiteProvider(sqlite.open('./test/db.sqlite')
-        .then(db => db.run('CREATE TABLE IF NOT EXISTS guilds (id TEXT NOT NULL UNIQUE, settings TEXT)')
-        .then(() => db)
-        ), 'guilds', { dataColumn: 'settings' });
+        const db = sqlite.open('./test/db.sqlite')
+            .then(d => d.run('CREATE TABLE IF NOT EXISTS guilds (id TEXT NOT NULL UNIQUE, settings TEXT)').then(() => d));
+        this.settings = new SQLiteProvider(db, 'guilds', { dataColumn: 'settings' });
     }
 
     setup() {

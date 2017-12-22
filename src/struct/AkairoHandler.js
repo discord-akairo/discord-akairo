@@ -146,8 +146,7 @@ class AkairoHandler extends EventEmitter {
 
         if (mod instanceof this.classToHandle.constructor) {
             mod = new mod(this.client, this); // eslint-disable-line new-cap
-        } else
-        if (!instanceDeprecation) {
+        } else if (!instanceDeprecation) {
             instanceDeprecation = true;
             console.error('Akairo: Exports of module instances are deprecated. Consider exporting module classes.'); // eslint-disable-line no-console
         }
