@@ -314,7 +314,7 @@ class TypeResolver {
 
             [ArgumentTypes.EMOJI_MENTION]: (word, message) => {
                 if (!word) return null;
-                const id = word.match(/<:[a-zA-Z0-9_]+:(\d{17,19})>/);
+                const id = word.match(/<a?:[a-zA-Z0-9_]+:(\d{17,19})>/);
                 if (!id) return null;
                 return message.guild.emojis.get(id[1]) || null;
             },

@@ -265,7 +265,7 @@ class ClientUtil {
     checkEmoji(text, emoji, caseSensitive = false, wholeWord = false) {
         if (emoji.id === text) return true;
 
-        const reg = /<:[a-zA-Z0-9_]+:(\d{17,19})>/;
+        const reg = /<a?:[a-zA-Z0-9_]+:(\d{17,19})>/;
         const match = text.match(reg);
 
         if (match && emoji.id === match[1]) return true;
