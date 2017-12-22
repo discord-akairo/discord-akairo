@@ -303,6 +303,21 @@ class TypeResolver {
                 return message.channel.messages.fetch(word).catch(() => null);
             },
 
+            [ArgumentTypes.GUILD_MESSAGE]: async (word, message) => {
+                if (!word) return null;
+                for (const channel of message.guild.values()) {
+                    if (channel.type !== 'text') continue;
+                    try {
+                        // eslint-disable-next-line no-await-in-loop
+                        return await channel.messages.fetch(word);
+                    } catch (err) {
+                        if (/^Invalid Form Body/.test(err.message)) return null;
+                    }
+                }
+
+                return null;
+            },
+
             [ArgumentTypes.INVITE]: word => {
                 if (!word) return null;
                 return this.client.fetchInvite(word).catch(() => null);
@@ -338,7 +353,7 @@ class TypeResolver {
 
             [ArgumentTypes.EMOJI_MENTION]: (word, message) => {
                 if (!word) return null;
-                const id = word.match(/&lt;:[a-zA-Z0-9_]+:(\d{17,19})>/);
+                const id = word.match(/&lt;a?:[a-zA-Z0-9_]+:(\d{17,19})>/);
                 if (!id) return null;
                 return message.guild.emojis.get(id[1]) || null;
             },
