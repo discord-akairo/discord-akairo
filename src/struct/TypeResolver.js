@@ -264,6 +264,21 @@ class TypeResolver {
                 return message.channel.messages.fetch(word).catch(() => null);
             },
 
+            [ArgumentTypes.GUILD_MESSAGES]: async (word, message) => {
+                if (!word) return null;
+                for (const channel of message.guild.values()) {
+                    if (channel.type !== 'text') continue;
+                    try {
+                        // eslint-disable-next-line no-await-in-loop
+                        return await channel.messages.fetch(word);
+                    } catch (err) {
+                        if (/^Invalid Form Body/.test(err.message)) return null;
+                    }
+                }
+
+                return null;
+            },
+
             [ArgumentTypes.INVITE]: word => {
                 if (!word) return null;
                 return this.client.fetchInvite(word).catch(() => null);

@@ -40,6 +40,7 @@ module.exports = {
         GUILD: 'guild',
         GUILDS: 'guilds',
         MESSAGE: 'message',
+        GUILD_MESSAGES: 'messages',
         INVITE: 'invite',
         MEMBER_MENTION: 'memberMention',
         CHANNEL_MENTION: 'channelMention',
