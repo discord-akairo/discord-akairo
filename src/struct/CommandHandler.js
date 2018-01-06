@@ -21,10 +21,10 @@ class CommandHandler extends AkairoHandler {
             blockBots = true,
             fetchMembers = false,
             handleEdits = false,
-            commandUtil = undefined,
+            commandUtil,
             commandUtilLifetime = 0,
             defaultCooldown = 0,
-            ignoreCooldownID = undefined,
+            ignoreCooldownID,
             defaultPrompt = {},
             prefix = '!',
             allowMention = false,
@@ -510,11 +510,11 @@ class CommandHandler extends AkairoHandler {
      * @returns {boolean}
      */
     _handleCooldowns(message, command) {
-        const isOwner = Array.isArray(this.ignoreCooldownID)
+        const isIgnored = Array.isArray(this.ignoreCooldownID)
             ? this.ignoreCooldownID.includes(message.author.id)
             : message.author.id === this.ignoreCooldownID;
 
-        if (isOwner) return false;
+        if (isIgnored) return false;
 
         const time = command.cooldown != null ? command.cooldown : this.defaultCooldown;
         if (!time) return false;
