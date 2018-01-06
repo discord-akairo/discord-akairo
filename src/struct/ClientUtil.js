@@ -1,4 +1,4 @@
-const { Collection, MessageEmbed, Permissions } = require('discord.js');
+const { Collection, MessageAttachment, MessageEmbed, Permissions } = require('discord.js');
 
 class ClientUtil {
     /**
@@ -383,6 +383,16 @@ class ClientUtil {
      */
     embed(data) {
         return new MessageEmbed(data);
+    }
+
+    /**
+     * Makes a MessageAttachment.
+     * @param {BufferResolvable|Stream} file - The file.
+     * @param {string} [name] - The filename.
+     * @returns {MessageAttachment}
+     */
+    attachment(file, name) {
+        return new MessageAttachment(file, name);
     }
 
     /**

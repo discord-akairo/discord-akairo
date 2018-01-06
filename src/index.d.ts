@@ -10,13 +10,15 @@ declare module 'sequelize' {
 
 declare module 'discord-akairo' {
     import {
-        Client, ClientOptions, Collection, Message, MessageAttachment, MessageEmbed, MessageOptions, MessageEditOptions,
+        BufferResolvable, Client, ClientOptions, Collection, Message, MessageAttachment, MessageEmbed, MessageOptions, MessageEditOptions,
         User, GuildMember, Channel, Role, Emoji, Guild, PermissionResolvable, Snowflake
     } from 'discord.js';
 
     import { Database, Statement } from 'sqlite';
     import { Model, Promise as Bluebird } from 'sequelize';
+
     import * as EventEmitter from 'events';
+    import { Stream } from 'stream';
 
     module 'discord.js' {
         export interface Message {
@@ -135,6 +137,7 @@ declare module 'discord-akairo' {
 
         public readonly client: AkairoClient;
 
+        public attachment(file: BufferResolvable | Stream, name?: string): MessageAttachment;
         public checkChannel(text: string, channel: Channel, caseSensitive?: boolean, wholeWord?: boolean): boolean;
         public checkEmoji(text: string, emoji: Emoji, caseSensitive?: boolean, wholeWord?: boolean): boolean;
         public checkGuild(text: string, guild: Guild, caseSensitive?: boolean, wholeWord?: boolean): boolean;
