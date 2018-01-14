@@ -127,7 +127,7 @@ class CommandHandler extends AkairoHandler {
          * @param {Message} message - Message being handled.
          * @returns {string}
          */
-        this.prefix = typeof options.prefix === 'function' ? options.prefix : () => options.prefix;
+        this.prefix = typeof options.prefix === 'function' ? options.prefix : () => options.prefix || '!';
 
         /**
          * Gets if mentions are allowed for prefixing.
