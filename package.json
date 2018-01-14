@@ -1,6 +1,6 @@
 {
   "name": "discord-akairo",
-  "version": "7.5.1",
+  "version": "7.5.2",
   "description": "A highly customizable bot framework for Discord.js.",
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
@@ -19,7 +19,7 @@
   ],
   "dependencies": {},
   "peerDependencies": {
-    "discord.js": "^11.2.1",
+    "discord.js": "^11.3.0",
     "sqlite": "^2.8.0",
     "sequelize": "^4.8.0"
   },
