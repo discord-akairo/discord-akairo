@@ -89,7 +89,7 @@ client.login('TOKEN').then(() => {
 
 ## Installation
 
-Requires Node 6 or higher and Discord.js 11.2 or higher.  
+Requires Node 6 or higher and Discord.js 11.3 or higher.  
 
 *discord-akairo*  
 `npm install discord-akairo`
