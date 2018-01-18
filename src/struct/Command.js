@@ -272,10 +272,10 @@ class Command extends AkairoModule {
         };
 
         const words = typeof this.split === 'function'
-        ? this.split(content, message) || []
-        : splitFuncs[this.split]
-        ? splitFuncs[this.split](content) || []
-        : content.split(this.split);
+            ? this.split(content, message) || []
+            : splitFuncs[this.split]
+                ? splitFuncs[this.split](content) || []
+                : content.split(this.split);
 
         const isQuoted = this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY || words.isQuoted;
 
@@ -339,8 +339,7 @@ class Command extends AkairoModule {
                         }
 
                         if (found) break;
-                    } else
-                    if (w.toLowerCase().startsWith(arg.prefix.toLowerCase())) {
+                    } else if (w.toLowerCase().startsWith(arg.prefix.toLowerCase())) {
                         prefixUsed = arg.prefix;
                         word = w;
                         break;
@@ -372,8 +371,7 @@ class Command extends AkairoModule {
                         }
 
                         if (found) break;
-                    } else
-                    if (w.toLowerCase().startsWith(arg.prefix.toLowerCase())) {
+                    } else if (w.toLowerCase().startsWith(arg.prefix.toLowerCase())) {
                         word = w;
                         break;
                     }

@@ -122,15 +122,15 @@ class TypeResolver {
         if (!word) return null;
 
         const person = message.channel.type === 'text'
-        ? this.client.util.resolveMember(word, message.guild.members)
-        : message.channel.type === 'dm'
-        ? this.client.util.resolveUser(word, new Collection([
-            [message.channel.recipient.id, message.channel.recipient],
-            [this.client.user.id, this.client.user]
-        ]))
-        : this.client.util.resolveUser(word, new Collection([
-            [this.client.user.id, this.client.user]
-        ]).concat(message.channel.recipients));
+            ? this.client.util.resolveMember(word, message.guild.members)
+            : message.channel.type === 'dm'
+                ? this.client.util.resolveUser(word, new Collection([
+                    [message.channel.recipient.id, message.channel.recipient],
+                    [this.client.user.id, this.client.user]
+                ]))
+                : this.client.util.resolveUser(word, new Collection([
+                    [this.client.user.id, this.client.user]
+                ]).concat(message.channel.recipients));
 
         if (!person) return null;
         if (message.channel.type === 'text') return person.user;
@@ -141,15 +141,15 @@ class TypeResolver {
         if (!word) return null;
 
         const persons = message.channel.type === 'text'
-        ? this.client.util.resolveMembers(word, message.guild.members)
-        : message.channel.type === 'dm'
-        ? this.client.util.resolveUsers(word, new Collection([
-            [message.channel.recipient.id, message.channel.recipient],
-            [this.client.user.id, this.client.user]
-        ]))
-        : this.client.util.resolveUsers(word, new Collection([
-            [this.client.user.id, this.client.user]
-        ]).concat(message.channel.recipients));
+            ? this.client.util.resolveMembers(word, message.guild.members)
+            : message.channel.type === 'dm'
+                ? this.client.util.resolveUsers(word, new Collection([
+                    [message.channel.recipient.id, message.channel.recipient],
+                    [this.client.user.id, this.client.user]
+                ]))
+                : this.client.util.resolveUsers(word, new Collection([
+                    [this.client.user.id, this.client.user]
+                ]).concat(message.channel.recipients));
 
         if (!persons.size) return null;
 

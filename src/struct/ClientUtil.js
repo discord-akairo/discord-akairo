@@ -474,8 +474,8 @@ class ClientUtil {
      */
     prompt(message, content, check = () => true, time = 30000, options) {
         const promise = content || options
-        ? message.channel.send(content, options)
-        : Promise.resolve();
+            ? message.channel.send(content, options)
+            : Promise.resolve();
 
         return promise.then(sent => new Promise((resolve, reject) => {
             const collector = message.channel.createMessageCollector(m => {
@@ -523,8 +523,8 @@ class ClientUtil {
             const user = channel; // eslint-disable-line no-shadow
 
             const sendPromise = content || options
-            ? user.send(content, options)
-            : Promise.resolve();
+                ? user.send(content, options)
+                : Promise.resolve();
 
             return sendPromise.then(msg => {
                 const dmChannel = (msg && msg.channel) || user.dmChannel;

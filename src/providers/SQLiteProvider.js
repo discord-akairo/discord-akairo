@@ -85,17 +85,17 @@ class SQLiteProvider extends Provider {
             return this.db.run(exists
                 ? `UPDATE ${this.tableName} SET ${this.dataColumn} = $value WHERE ${this.idColumn} = $id`
                 : `INSERT INTO ${this.tableName} (${this.idColumn}, ${this.dataColumn}) VALUES ($id, $value)`, {
-                    $id: id,
-                    $value: JSON.stringify(data)
-                });
+                $id: id,
+                $value: JSON.stringify(data)
+            });
         }
 
         return this.db.run(exists
             ? `UPDATE ${this.tableName} SET ${key} = $value WHERE ${this.idColumn} = $id`
             : `INSERT INTO ${this.tableName} (${this.idColumn}, ${key}) VALUES ($id, $value)`, {
-                $id: id,
-                $value: value
-            });
+            $id: id,
+            $value: value
+        });
     }
 
     /**

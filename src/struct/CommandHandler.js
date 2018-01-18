@@ -263,15 +263,15 @@ class CommandHandler extends AkairoHandler {
      */
     handle(message, edited) {
         const fetch = this.fetchMembers && message.guild
-        ? message.guild.fetchMember(message.author)
-        : Promise.resolve();
+            ? message.guild.fetchMember(message.author)
+            : Promise.resolve();
 
         return fetch.then(member => {
             if (member) message.member = member;
 
             const allTest = this.client.inhibitorHandler
-            ? this.client.inhibitorHandler.test('all', message)
-            : Promise.resolve();
+                ? this.client.inhibitorHandler.test('all', message)
+                : Promise.resolve();
 
             return allTest;
         }).then(() => {
@@ -304,8 +304,8 @@ class CommandHandler extends AkairoHandler {
             }
 
             const preTest = this.client.inhibitorHandler
-            ? this.client.inhibitorHandler.test('pre', message)
-            : Promise.resolve();
+                ? this.client.inhibitorHandler.test('pre', message)
+                : Promise.resolve();
 
             return preTest.then(() => {
                 if (this.hasPrompt(message)) {
@@ -333,8 +333,8 @@ class CommandHandler extends AkairoHandler {
                 if (this._runInhibitors(message, command)) return undefined;
 
                 const postTest = this.client.inhibitorHandler
-                ? this.client.inhibitorHandler.test('post', message, command)
-                : Promise.resolve();
+                    ? this.client.inhibitorHandler.test('post', message, command)
+                    : Promise.resolve();
 
                 return postTest.then(() => {
                     const onCooldown = this._handleCooldowns(message, command);
@@ -381,8 +381,8 @@ class CommandHandler extends AkairoHandler {
     _runInhibitors(message, command) {
         if (command.ownerOnly) {
             const notOwner = Array.isArray(this.client.ownerID)
-            ? !this.client.ownerID.includes(message.author.id)
-            : message.author.id !== this.client.ownerID;
+                ? !this.client.ownerID.includes(message.author.id)
+                : message.author.id !== this.client.ownerID;
 
             if (notOwner) {
                 this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.OWNER);
@@ -406,8 +406,7 @@ class CommandHandler extends AkairoHandler {
                     this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.CLIENT_PERMISSIONS);
                     return true;
                 }
-            } else
-            if (message.guild && !message.channel.permissionsFor(this.client.user).has(command.clientPermissions)) {
+            } else if (message.guild && !message.channel.permissionsFor(this.client.user).has(command.clientPermissions)) {
                 this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.CLIENT_PERMISSIONS);
                 return true;
             }
@@ -419,8 +418,7 @@ class CommandHandler extends AkairoHandler {
                     this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.USER_PERMISSIONS);
                     return true;
                 }
-            } else
-            if (message.guild && !message.channel.permissionsFor(message.author).has(command.userPermissions)) {
+            } else if (message.guild && !message.channel.permissionsFor(message.author).has(command.userPermissions)) {
                 this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.USER_PERMISSIONS);
                 return true;
             }
@@ -440,8 +438,8 @@ class CommandHandler extends AkairoHandler {
 
         if (this.allowMention(message)) {
             prefix = Array.isArray(prefix)
-            ? [`<@${this.client.user.id}>`, `<@!${this.client.user.id}>`, ...prefix]
-            : [`<@${this.client.user.id}>`, `<@!${this.client.user.id}>`, prefix];
+                ? [`<@${this.client.user.id}>`, `<@!${this.client.user.id}>`, ...prefix]
+                : [`<@${this.client.user.id}>`, `<@!${this.client.user.id}>`, prefix];
         }
 
         let start;
@@ -453,8 +451,7 @@ class CommandHandler extends AkairoHandler {
             });
 
             start = match;
-        } else
-        if (message.content.toLowerCase().startsWith(prefix.toLowerCase())) {
+        } else if (message.content.toLowerCase().startsWith(prefix.toLowerCase())) {
             start = prefix;
         }
 
@@ -506,8 +503,7 @@ class CommandHandler extends AkairoHandler {
                         if (!commandPrefix.some(p => p.toLowerCase() === start.toLowerCase())) {
                             return { prefix: start, alias: name };
                         }
-                    } else
-                    if (commandPrefix.toLowerCase() !== start.toLowerCase()) {
+                    } else if (commandPrefix.toLowerCase() !== start.toLowerCase()) {
                         return { prefix: start, alias: name };
                     }
                 }
@@ -616,8 +612,8 @@ class CommandHandler extends AkairoHandler {
 
         for (const entry of triggered) {
             const postTest = this.client.inhibitorHandler
-            ? this.client.inhibitorHandler.test('post', message, entry.command)
-            : Promise.resolve();
+                ? this.client.inhibitorHandler.test('post', message, entry.command)
+                : Promise.resolve();
 
             promises.push(postTest.then(() => {
                 const onCooldown = this._handleCooldowns(message, entry.command);
@@ -665,8 +661,8 @@ class CommandHandler extends AkairoHandler {
 
         for (const command of trueCommands.values()) {
             const postTest = this.client.inhibitorHandler
-            ? this.client.inhibitorHandler.test('post', message, command)
-            : Promise.resolve();
+                ? this.client.inhibitorHandler.test('post', message, command)
+                : Promise.resolve();
 
             promises.push(postTest.then(() => {
                 const onCooldown = this._handleCooldowns(message, command);

@@ -271,8 +271,7 @@ class Argument {
             for (const entry of this.type) {
                 if (Array.isArray(entry)) {
                     if (entry.some(t => t.toLowerCase() === word.toLowerCase())) return entry[0];
-                } else
-                if (entry.toLowerCase() === word.toLowerCase()) {
+                } else if (entry.toLowerCase() === word.toLowerCase()) {
                     return entry;
                 }
             }
@@ -339,8 +338,8 @@ class Argument {
             let text = i === 1 ? prompt.start : prompt.retry;
 
             text = typeof text === 'function'
-            ? text.call(this, message, args, i)
-            : `${message.author}, ${Array.isArray(text) ? text.join('\n') : text}`;
+                ? text.call(this, message, args, i)
+                : `${message.author}, ${Array.isArray(text) ? text.join('\n') : text}`;
 
             text = Array.isArray(text) ? text.join('\n') : text;
 
@@ -401,8 +400,8 @@ class Argument {
 
                 if (exited) {
                     response = typeof response === 'function'
-                    ? response.call(this, message, args, i)
-                    : `${message.author}, ${Array.isArray(response) ? response.join('\n') : response}`;
+                        ? response.call(this, message, args, i)
+                        : `${message.author}, ${Array.isArray(response) ? response.join('\n') : response}`;
 
                     response = Array.isArray(response) ? response.join('\n') : response;
                     if (!response) return undefined;
