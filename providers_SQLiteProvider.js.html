@@ -115,17 +115,23 @@ class SQLiteProvider extends Provider {
      */
     set(id, key, value) {
         const data = this.items.get(id) || {};
+        const exists = this.items.has(id);
+
         data[key] = value;
         this.items.set(id, data);
 
         if (this.dataColumn) {
-            return this.db.run(`REPLACE INTO ${this.tableName} (${this.idColumn}, ${this.dataColumn}) VALUES ($id, $value)`, {
+            return this.db.run(exists
+                ? `UPDATE ${this.tableName} SET ${this.dataColumn} = $value WHERE ${this.idColumn} = $id`
+                : `INSERT INTO ${this.tableName} (${this.idColumn}, ${this.dataColumn}) VALUES ($id, $value)`, {
                 $id: id,
                 $value: JSON.stringify(data)
             });
         }
 
-        return this.db.run(`REPLACE INTO ${this.tableName} (${this.idColumn}, ${key}) VALUES ($id, $value)`, {
+        return this.db.run(exists
+            ? `UPDATE ${this.tableName} SET ${key} = $value WHERE ${this.idColumn} = $id`
+            : `INSERT INTO ${this.tableName} (${this.idColumn}, ${key}) VALUES ($id, $value)`, {
             $id: id,
             $value: value
         });
@@ -142,13 +148,13 @@ class SQLiteProvider extends Provider {
         delete data[key];
 
         if (this.dataColumn) {
-            return this.db.run(`REPLACE INTO ${this.tableName} (${this.idColumn}, ${this.dataColumn}) VALUES ($id, $value)`, {
+            return this.db.run(`UPDATE ${this.tableName} SET ${this.dataColumn} = $value WHERE ${this.idColumn} = $id`, {
                 $id: id,
                 $value: JSON.stringify(data)
             });
         }
 
-        return this.db.run(`REPLACE INTO ${this.tableName} (${this.idColumn}, ${key}) VALUES ($id, $value)`, {
+        return this.db.run(`UPDATE ${this.tableName} SET ${key} = $value WHERE ${this.idColumn} = $id`, {
             $id: id,
             $value: null
         });
