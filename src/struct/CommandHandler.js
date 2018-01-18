@@ -419,7 +419,7 @@ class CommandHandler extends AkairoHandler {
 
             const args = await command.parse(content, message);
 
-            if (command.typing) message.channel.startTyping();
+            if (command.typing) await message.channel.startTyping();
             this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, args);
 
             const ret = await command.exec(message, args);
@@ -730,7 +730,7 @@ class CommandHandler extends AkairoHandler {
 
                     const args = { match, matches };
 
-                    if (command.typing) message.channel.startTyping();
+                    if (command.typing) await message.channel.startTyping();
                     this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, args);
 
                     const ret = await command.exec(message, args);
@@ -790,7 +790,7 @@ class CommandHandler extends AkairoHandler {
 
                     const args = {};
 
-                    if (command.typing) message.channel.startTyping();
+                    if (command.typing) await message.channel.startTyping();
                     this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command);
 
                     const ret = await command.exec(message, args);
