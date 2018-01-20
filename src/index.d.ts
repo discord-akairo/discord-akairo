@@ -66,7 +66,7 @@ declare module 'discord-akairo' {
 
         public add(filename: string): AkairoModule;
         public findCategory(name: string): Category<string, AkairoModule>;
-        public load(thing: string | AkairoModule, isReload?: boolean): AkairoModule;
+        public load(thing: string | Function, isReload?: boolean): AkairoModule;
         public loadAll(): this;
         public reload(id: string): AkairoModule;
         public reloadAll(): this;
@@ -77,7 +77,7 @@ declare module 'discord-akairo' {
     }
 
     export class AkairoModule {
-        public constructor(id: string, exec: (...args: any[]) => any, options?: ModuleOptions);
+        public constructor(id: string, options?: ModuleOptions);
 
         public category: Category<string, AkairoModule>;
         public readonly client: AkairoClient;
@@ -88,7 +88,6 @@ declare module 'discord-akairo' {
 
         public disable(): boolean;
         public enable(): boolean;
-        public exec(...args: any[]): any;
         public reload(): this;
         public remove(): this;
     }
@@ -164,7 +163,7 @@ declare module 'discord-akairo' {
     }
 
     export class Command extends AkairoModule {
-        public constructor(id: string, exec: ((message: Message, args: any) => any) | CommandOptions, options?: CommandOptions);
+        public constructor(id: string, options?: CommandOptions);
 
         public aliases: string[];
         public args: (Argument | Argument[] | CommandCancelFunction)[] | ArgumentFunction;
@@ -250,7 +249,7 @@ declare module 'discord-akairo' {
         public findCommand(name: string): Command;
         public handle(message: Message): Promise<void>;
         public hasPrompt(channel: Channel, user: User): boolean;
-        public load(thing: string | Command): Command;
+        public load(thing: string | Function): Command;
         public loadAll(directory?: string): this;
         public reload(id: string): Command;
         public reloadAll(): this;
@@ -295,7 +294,7 @@ declare module 'discord-akairo' {
     }
 
     export class Inhibitor extends AkairoModule {
-        public constructor(id: string, exec: ((message: Message, command?: Command) => boolean | Promise<boolean>) | InhibitorOptions, options?: InhibitorOptions);
+        public constructor(id: string, options?: InhibitorOptions);
 
         public category: Category<string, Inhibitor>;
         public readonly client: AkairoClient;
@@ -327,7 +326,7 @@ declare module 'discord-akairo' {
 
         public add(filename: string): Inhibitor;
         public findCategory(name: string): Category<string, Inhibitor>;
-        public load(thing: string | Inhibitor): Inhibitor;
+        public load(thing: string | Function): Inhibitor;
         public loadAll(directory?: string): this;
         public reload(id: string): Inhibitor;
         public reloadAll(): this;
@@ -339,7 +338,7 @@ declare module 'discord-akairo' {
     }
 
     export class Listener extends AkairoModule {
-        public constructor(id: string, exec: ((...args: any[]) => any) | ListenerOptions, options?: ListenerOptions);
+        public constructor(id: string, options?: ListenerOptions);
 
         public category: Category<string, Listener>;
         public readonly client: AkairoClient;
@@ -373,7 +372,7 @@ declare module 'discord-akairo' {
         public add(filename: string): Listener;
         public deregister(id: string): Listener;
         public findCategory(name: string): Category<string, Listener>;
-        public load(thing: string | Listener): Listener;
+        public load(thing: string | Function): Listener;
         public loadAll(directory?: string): this;
         public register(id: string): Listener;
         public reload(id: string): Listener;
