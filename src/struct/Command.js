@@ -1,3 +1,4 @@
+const AkairoError = require('../util/AkairoError');
 const AkairoModule = require('./AkairoModule');
 const Argument = require('./Argument');
 const { ArgumentMatches, ArgumentSplits, Symbols } = require('../util/Constants');
@@ -91,29 +92,15 @@ const { isPromise } = require('../util/Util');
  * @returns {string[]}
  */
 
-/**
- * The command's execution function.
- * @typedef {Function} CommandExecFunction
- * @param {Message} message - Message that triggered the command.
- * @param {Object} args - Evaluated arguments.
- * @returns {any}
- */
-
 /** @extends AkairoModule */
 class Command extends AkairoModule {
     /**
      * Creates a new command.
      * @param {string} id - Command ID.
-     * @param {CommandExecFunction} exec - Function called when command is ran.
      * @param {CommandOptions} [options={}] - Options for the command.
      */
-    constructor(id, exec, options) {
-        if (!options && typeof exec === 'object') {
-            options = exec;
-            exec = null;
-        }
-
-        super(id, exec, options);
+    constructor(id, options = {}) {
+        super(id, options);
 
         const {
             aliases = [],
@@ -253,20 +240,22 @@ class Command extends AkairoModule {
          */
 
         /**
-         * Executes the command.
-         * @method
-         * @name Command#exec
-         * @param {Message} message - Message that triggered the command.
-         * @param {Object} args - Evaluated arguments.
-         * @returns {any}
-         */
-
-        /**
          * The command handler.
          * @readonly
          * @name Command#handler
          * @type {CommandHandler}
          */
+    }
+
+    /**
+     * Executes the command.
+     * @abstract
+     * @param {Message} message - Message that triggered the command.
+     * @param {Object} args - Evaluated arguments.
+     * @returns {any}
+     */
+    exec() {
+        throw new AkairoError('NOT_IMPLEMENTED', this.constructor.name, 'exec');
     }
 
     /**

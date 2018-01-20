@@ -1,3 +1,4 @@
+const AkairoError = require('../util/AkairoError');
 const AkairoModule = require('./AkairoModule');
 
 /**
@@ -10,31 +11,15 @@ const AkairoModule = require('./AkairoModule');
  * @prop {string} [category='default'] - Category ID for organization purposes.
  */
 
-/**
- * Function to check if message should be blocked.
- * A return value of true will block the message.
- * If returning a Promise, a resolved value of true wil block the message.
- * @typedef {Function} InhibitorExecFunction
- * @param {Message} message - Message being handled.
- * @param {Command} [command] - Command to check.
- * @returns {boolean|Promise<any>}
- */
-
 /** @extends AkairoModule */
 class Inhibitor extends AkairoModule {
     /**
      * Creates a new Inhibitor.
      * @param {string} id - Inhibitor ID.
-     * @param {InhibitorExecFunction} exec - Function called before a command is ran.
      * @param {InhibitorOptions} [options={}] - Options for the inhibitor.
      */
-    constructor(id, exec, options) {
-        if (!options && typeof exec === 'object') {
-            options = exec;
-            exec = null;
-        }
-
-        super(id, exec, options);
+    constructor(id, options = {}) {
+        super(id, options);
 
         const {
             reason = '',
@@ -81,6 +66,19 @@ class Inhibitor extends AkairoModule {
          * @name Inhibitor#handler
          * @type {InhibitorHandler}
          */
+    }
+
+    /**
+     * Checks if message should be blocked.
+     * A return value of true will block the message.
+     * If returning a Promise, a resolved value of true will block the message.
+     * @abstract
+     * @param {Message} message - Message being handled.
+     * @param {Command} [command] - Command to check.
+     * @returns {boolean|Promise<any>}
+     */
+    exec() {
+        throw new AkairoError('NOT_IMPLEMENTED', this.constructor.name, 'exec');
     }
 
     /**

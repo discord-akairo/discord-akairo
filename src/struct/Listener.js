@@ -1,3 +1,4 @@
+const AkairoError = require('../util/AkairoError');
 const AkairoModule = require('./AkairoModule');
 
 /**
@@ -9,28 +10,15 @@ const AkairoModule = require('./AkairoModule');
  * @prop {string} [category='default'] - Category ID for organization purposes.
  */
 
-/**
- * Function called when event emitted.
- * @typedef {Function} ListenerExecFunction
- * @param {...args} [args] - Arguments.
- * @returns {any}
- */
-
 /** @extends AkairoModule */
 class Listener extends AkairoModule {
     /**
      * Creates a new Listener.
      * @param {string} id - Listener ID.
-     * @param {ListenerExecFunction} exec - The function called when event emitted.
      * @param {ListenerOptions} [options={}] - Options for the listener.
      */
-    constructor(id, exec, options) {
-        if (!options && typeof exec === 'object') {
-            options = exec;
-            exec = null;
-        }
-
-        super(id, exec, options);
+    constructor(id, options = {}) {
+        super(id, options);
 
         const {
             emitter = 'client',
@@ -57,15 +45,6 @@ class Listener extends AkairoModule {
         this.type = type;
 
         /**
-         * Executes the listener.
-         * @method
-         * @name Listener#exec
-         * @param {...args} [args] - Arguments.
-         * @returns {any}
-         */
-        this.exec = this.exec.bind(this);
-
-        /**
          * The ID of this listener.
          * @name Listener#id
          * @type {string}
@@ -77,6 +56,16 @@ class Listener extends AkairoModule {
          * @name Listener#handler
          * @type {ListenerHandler}
          */
+    }
+
+    /**
+     * Executes the listener.
+     * @abstract
+     * @param {...args} [args] - Arguments.
+     * @returns {any}
+     */
+    exec() {
+        throw new AkairoError('NOT_IMPLEMENTED', this.constructor.name, 'exec');
     }
 
     /**

@@ -7,8 +7,6 @@ const EventEmitter = require('events');
 const fs = require('fs');
 const path = require('path');
 
-let instanceDeprecation = false;
-
 /**
  * Options for module loading and handling.
  * @typedef {Object} AkairoHandlerOptions
@@ -126,8 +124,8 @@ class AkairoHandler extends EventEmitter {
     }
 
     /**
-     * Loads a module, can be a filepath or an object.
-     * @param {string|AkairoModule} thing - Module or path to module.
+     * Loads a module, can be a module class or a filepath.
+     * @param {string|Function} thing - Module class or path to module.
      * @param {boolean} [isReload=false] - Whether this is a reload or not.
      * @returns {AkairoModule}
      */
@@ -137,21 +135,14 @@ class AkairoHandler extends EventEmitter {
 
         const findExport = m => {
             if (!m) return null;
-            if (m instanceof this.classToHandle.constructor) return m;
-            if (m instanceof this.classToHandle) return m;
-            return findExport(m.default);
+            if (m.prototype instanceof this.classToHandle) return m;
+            return m.default ? findExport(m.default) : null;
         };
 
         let mod = isObj ? thing : findExport(require(thing));
-
-        if (mod instanceof this.classToHandle.constructor) {
-            mod = new mod(this.client, this); // eslint-disable-line new-cap
-        } else if (!instanceDeprecation) {
-            instanceDeprecation = true;
-            console.error('Akairo: Exports of module instances are deprecated. Consider exporting module classes.'); // eslint-disable-line no-console
-        }
-
-        if (!(mod instanceof this.classToHandle)) {
+        if (mod && mod.prototype instanceof this.classToHandle) {
+            mod = new mod(this); // eslint-disable-line new-cap
+        } else {
             if (!isObj) delete require.cache[require.resolve(thing)];
             return undefined;
         }
