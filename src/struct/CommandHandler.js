@@ -611,6 +611,8 @@ class CommandHandler extends AkairoHandler {
         const promises = [];
 
         for (const entry of triggered) {
+            if (this._runInhibitors(message, entry.command)) continue;
+
             const postTest = this.client.inhibitorHandler
                 ? this.client.inhibitorHandler.test('post', message, entry.command)
                 : Promise.resolve();
@@ -660,6 +662,8 @@ class CommandHandler extends AkairoHandler {
         const promises = [];
 
         for (const command of trueCommands.values()) {
+            if (this._runInhibitors(message, command)) continue;
+
             const postTest = this.client.inhibitorHandler
                 ? this.client.inhibitorHandler.test('post', message, command)
                 : Promise.resolve();
