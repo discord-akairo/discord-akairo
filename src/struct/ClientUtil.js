@@ -470,6 +470,7 @@ class ClientUtil {
      * @param {RegExp|PromptCheckFunction} [check] - Regex or function to check if message should pass.
      * @param {number} [time=30000] - Time in milliseconds to wait.
      * @param {MessageOptions} [options] - Message options for message.
+     * @deprecated Use message collectors
      * @returns {Promise<Message>}
      */
     prompt(message, content, check = () => true, time = 30000, options) {
@@ -516,6 +517,7 @@ class ClientUtil {
      * @param {RegExp|PromptCheckFunction} [check] - Regex or function to check if message should pass.
      * @param {number} [time=30000] - Time in milliseconds to wait.
      * @param {MessageOptions} [options] - Message options for message.
+     * @deprecated Use message collectors
      * @returns {Promise<Message>}
      */
     promptIn(channel, user, content, check, time, options) {
