@@ -262,7 +262,7 @@ class CommandHandler extends AkairoHandler {
      * @returns {Promise<void>}
      */
     handle(message, edited) {
-        const fetch = this.fetchMembers && message.guild
+        const fetch = this.fetchMembers && message.guild && !message.member && !message.webhookID
             ? message.guild.fetchMember(message.author)
             : Promise.resolve();
 
