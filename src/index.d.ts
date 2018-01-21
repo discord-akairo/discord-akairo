@@ -637,6 +637,7 @@ declare module 'discord-akairo' {
             GUILD: 'guild',
             GUILDS: 'guilds',
             MESSAGE: 'message',
+            GUILD_MESSAGE: 'guildMessage',
             INVITE: 'invite',
             MEMBER_MENTION: 'memberMention',
             CHANNEL_MENTION: 'channelMention',
