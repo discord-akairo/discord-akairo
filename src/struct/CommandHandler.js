@@ -309,7 +309,7 @@ class CommandHandler extends AkairoHandler {
     async handle(message) {
         try {
             if (this.fetchMembers && message.guild && !message.member && !message.webhookID) {
-                message.member = await message.guild.members.fetch(message.author);
+                await message.guild.members.fetch(message.author);
             }
 
             let reason = this.client.inhibitorHandler
