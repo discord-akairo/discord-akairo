@@ -25,7 +25,7 @@ declare module 'discord-akairo' {
         }
     }
 
-    export class AkairoClient {
+    export class AkairoClient extends Client {
         public constructor(options: AkairoOptions, clientOptions: ClientOptions);
 
         public akairoOptions: AkairoOptions;
@@ -44,7 +44,7 @@ declare module 'discord-akairo' {
         public login(token: string): Promise<string>;
     }
 
-    export class AkairoHandler {
+    export class AkairoHandler extends EventEmitter {
         public constructor(client: AkairoClient, directory: string, classToHandle: Function);
 
         public categories: Collection<string, Category<string, AkairoModule>>;
