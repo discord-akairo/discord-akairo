@@ -363,7 +363,7 @@ class CommandHandler extends AkairoHandler {
                 return;
             }
 
-            const parsed = this._parseCommand(message) || {};
+            const parsed = await this._parseCommand(message) || {};
             const { command, content, prefix, alias } = parsed;
 
             if (this.commandUtil) {
@@ -559,8 +559,9 @@ class CommandHandler extends AkairoHandler {
      * @param {Message} message - Message that called the command.
      * @returns {Object}
      */
-    _parseCommand(message) {
+    async _parseCommand(message) {
         let prefix = typeof this.prefix === 'function' ? this.prefix(message) : this.prefix;
+        if (prefix instanceof Promise) prefix = await prefix;
 
         if (typeof this.allowMention === 'function' ? this.allowMention(message) : this.allowMention) {
             prefix = Array.isArray(prefix)
