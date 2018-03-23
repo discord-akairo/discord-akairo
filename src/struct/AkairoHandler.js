@@ -176,7 +176,7 @@ class AkairoHandler extends EventEmitter {
         if (!path.extname(filename)) filename = `${filename}.js`;
 
         const files = this.constructor.readdirRecursive(this.directory);
-        const filepath = files.find(file => path.parse(file).base === filename);
+        const filepath = files.find(file => path.basename(file) === filename);
 
         if (!filepath) throw new AkairoError('FILE_NOT_FOUND', filename);
         return this.load(filepath);
