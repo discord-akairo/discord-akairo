@@ -363,7 +363,7 @@ class CommandHandler extends AkairoHandler {
                 return;
             }
 
-            const parsed = this._parseCommand(message) || {};
+            const parsed = await this._parseCommand(message) || {};
             const { command, content, prefix, alias } = parsed;
 
             if (this.commandUtil) {
@@ -437,7 +437,7 @@ class CommandHandler extends AkairoHandler {
      * @protected
      * @param {Message} message - Message that called the command.
      * @param {Command} command - Command to check.
-     * @returns {boolean}
+     * @returns {Promise<boolean>}
      */
     async _runInhibitors(message, command) {
         if (command.ownerOnly) {
@@ -557,10 +557,18 @@ class CommandHandler extends AkairoHandler {
      * Parses the command and its argument list.
      * @protected
      * @param {Message} message - Message that called the command.
-     * @returns {Object}
+     * @returns {Promise<Object>}
      */
-    _parseCommand(message) {
-        let prefix = typeof this.prefix === 'function' ? this.prefix(message) : this.prefix;
+    async _parseCommand(message) {
+        let prefix;
+        if (typeof this.prefix === 'function') {
+            prefix = this.prefix(message);
+            if (isPromise(prefix)) {
+                prefix = await prefix;
+            }
+        } else {
+            prefix = this.prefix;
+        }
 
         if (typeof this.allowMention === 'function' ? this.allowMention(message) : this.allowMention) {
             prefix = Array.isArray(prefix)
@@ -608,18 +616,25 @@ class CommandHandler extends AkairoHandler {
      * Parses the command and its argument list using prefix overwrites.
      * @protected
      * @param {Message} message - Message that called the command.
-     * @returns {Object}
+     * @returns {Promise<Object>}
      */
-    _parseOverwrittenCommand(message) {
+    async _parseOverwrittenCommand(message) {
         if (!this.prefixes.size) return null;
 
         let start;
         let commands;
 
         for (const entry of this.prefixes) {
-            const prefix = typeof entry[0] === 'function'
-                ? entry[0](message)
-                : entry[0];
+            let prefix;
+            if (typeof entry[0] === 'function') {
+                prefix = entry[0](message);
+                if (isPromise(prefix)) {
+                    // eslint-disable-next-line no-await-in-loop
+                    prefix = await prefix;
+                }
+            } else {
+                prefix = entry[0];
+            }
 
             if (Array.isArray(prefix)) {
                 prefix.sort((a, b) => {

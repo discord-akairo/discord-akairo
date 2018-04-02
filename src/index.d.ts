@@ -235,10 +235,10 @@ declare module 'discord-akairo' {
         protected _handleError(err: Error, message: Message, command?: Command): void;
         protected _handleRegex(message: Message): Promise<void>;
         protected _handleTriggers(message: Message): Promise<void>;
-        protected _parseCommand(message: Message): any;
-        protected _parseOverwrittenCommand(message: Message): any;
+        protected _parseCommand(message: Message): Promise<any>;
+        protected _parseOverwrittenCommand(message: Message): Promise<any>;
         protected _removeAliases(command: Command): void;
-        protected _runInhibitors(message: Message, command: Command): boolean;
+        protected _runInhibitors(message: Message, command: Command): Promise<boolean>;
 
         protected _deregister(command: Command): void;
         protected _register(command: Command, filepath?: string): void;
