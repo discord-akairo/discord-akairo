@@ -16,6 +16,14 @@ const path = require('path');
  * By default this is .js, .json, and .ts files.
  */
 
+/**
+ * Function for filtering files when loading.
+ * True means the file should be loaded.
+ * @typedef {Function} LoadFilterFunction
+ * @param {String} filepath - Filepath of file.
+ * @returns {boolean}
+ */
+
 /** @extends EventEmitter */
 class AkairoHandler extends EventEmitter {
     /**
@@ -158,11 +166,15 @@ class AkairoHandler extends EventEmitter {
      * Reads all modules from a directory and loads them.
      * @param {string} [directory] - Directory to load from.
      * Defaults to the directory passed in to the constructor.
+     * @param {LoadFilterFunction} [filter] - Filter for files, where true means it should be loaded.
+     * Defaults to the filter set in the client options, if there is one.
      * @returns {AkairoHandler}
      */
-    loadAll(directory = this.directory) {
+    loadAll(directory = this.directory, filter = this.client.akairoOptions.loadFilter || (() => true)) {
         const filepaths = this.constructor.readdirRecursive(directory);
-        for (const filepath of filepaths) this.load(filepath);
+        for (const filepath of filepaths) {
+            if (filter(filepath)) this.load(filepath);
+        }
         return this;
     }
 

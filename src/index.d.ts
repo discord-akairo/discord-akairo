@@ -67,7 +67,7 @@ declare module 'discord-akairo' {
         public add(filename: string): AkairoModule;
         public findCategory(name: string): Category<string, AkairoModule>;
         public load(thing: string | Function, isReload?: boolean): AkairoModule;
-        public loadAll(): this;
+        public loadAll(directory?: string, filter?: LoadFilterFunction): this;
         public reload(id: string): AkairoModule;
         public reloadAll(): this;
         public remove(id: string): AkairoModule;
@@ -250,7 +250,7 @@ declare module 'discord-akairo' {
         public handle(message: Message): Promise<void>;
         public hasPrompt(channel: Channel, user: User): boolean;
         public load(thing: string | Function): Command;
-        public loadAll(directory?: string): this;
+        public loadAll(directory?: string, filter?: LoadFilterFunction): this;
         public reload(id: string): Command;
         public reloadAll(): this;
         public remove(id: string): Command;
@@ -327,7 +327,7 @@ declare module 'discord-akairo' {
         public add(filename: string): Inhibitor;
         public findCategory(name: string): Category<string, Inhibitor>;
         public load(thing: string | Function): Inhibitor;
-        public loadAll(directory?: string): this;
+        public loadAll(directory?: string, filter?: LoadFilterFunction): this;
         public reload(id: string): Inhibitor;
         public reloadAll(): this;
         public remove(id: string): Inhibitor;
@@ -373,7 +373,7 @@ declare module 'discord-akairo' {
         public deregister(id: string): Listener;
         public findCategory(name: string): Category<string, Listener>;
         public load(thing: string | Function): Listener;
-        public loadAll(directory?: string): this;
+        public loadAll(directory?: string, filter?: LoadFilterFunction): this;
         public register(id: string): Listener;
         public reload(id: string): Listener;
         public reloadAll(): this;
@@ -460,6 +460,7 @@ declare module 'discord-akairo' {
         handleEdits?: boolean;
         ignoreCooldownID?: Snowflake | Snowflake[];
         inhibitorDirectory?: string;
+        loadFilter?: LoadFilterFunction;
         listenerDirectory?: string;
         prefix?: string | string[] | PrefixFunction;
         selfbot?: boolean;
@@ -579,6 +580,8 @@ declare module 'discord-akairo' {
         event?: string;
         type?: string;
     };
+
+    export type LoadFilterFunction = (filepath: string) => boolean;
 
     export type ModuleOptions = {
         category?: string;

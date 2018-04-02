@@ -97,6 +97,7 @@ class InhibitorHandler extends AkairoHandler {
      * @name InhibitorHandler#loadAll
      * @param {string} [directory] - Directory to load from.
      * Defaults to the directory passed in to the constructor.
+     * @param {LoadFilterFunction} [filter] - Filter for files, where true means it should be loaded.
      * @returns {InhibitorHandler}
      */
 

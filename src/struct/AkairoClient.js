@@ -34,6 +34,8 @@ const ListenerHandler = require('./ListenerHandler');
  * @prop {string} [listenerDirectory] - Directory to listeners.
  * @prop {Object} [emitters={}] - Emitters to load onto the listener handler.
  * @prop {boolean} [automateCategories=false] - Whether or not to set each module's category to its parent directory name.
+ * @prop {LoadFilterFunction} [loadFilter] - Filter for files to be loaded.
+ * Can be set individually for each handler by overriding the `loadAll` method.
  */
 
 /**
