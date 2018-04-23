@@ -113,6 +113,11 @@ class AkairoHandler extends EventEmitter {
             mod.category = dirs[dirs.length - 1];
         }
 
+        if (mod.aliases && mod.aliases.length === 0 && this.client.akairoOptions.automateAliases) {
+            const file = path.basename(filepath).split('.')[0];
+            mod.aliases.push(file);
+        }
+
         if (!this.categories.has(mod.category)) this.categories.set(mod.category, new Category(mod.category));
         const category = this.categories.get(mod.category);
         mod.category = category;
