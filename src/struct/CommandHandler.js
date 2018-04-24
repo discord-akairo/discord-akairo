@@ -6,7 +6,6 @@ const Command = require('./Command');
 const CommandUtil = require('./CommandUtil');
 const { isPromise } = require('../util/Util');
 const TypeResolver = require('./TypeResolver');
-const path = require('path');
 
 /** @extends AkairoHandler */
 class CommandHandler extends AkairoHandler {
@@ -188,10 +187,7 @@ class CommandHandler extends AkairoHandler {
     _register(command, filepath) {
         super._register(command, filepath);
 
-        if (command.aliases.length === 0 && this.client.akairoOptions.automateAliases) {
-            const file = path.basename(filepath).split('.')[0];
-            command.aliases.push(file);
-        }
+        if (command.aliases.length === 0 && this.client.akairoOptions.automateAliases) command.aliases.push(command.id);
 
         this._addAliases(command);
     }
