@@ -557,6 +557,7 @@ declare module 'discord-akairo' {
         description?: string | string[];
         editable?: boolean;
         options?: any;
+        automateAliases?: boolean;
         ownerOnly?: boolean;
         prefix?: string | string[] | PrefixFunction;
         protected?: boolean;
