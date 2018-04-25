@@ -187,7 +187,7 @@ class CommandHandler extends AkairoHandler {
     _register(command, filepath) {
         super._register(command, filepath);
 
-        if (this.client.akairoOptions.automateAliases && this.automateAliases) command.aliases.push(command.id);
+        if (this.client.akairoOptions.automateAliases && command.automateAliases) command.aliases.push(command.id);
 
         this._addAliases(command);
     }
