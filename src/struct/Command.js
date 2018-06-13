@@ -13,6 +13,7 @@ const { isPromise } = require('../util/Util');
  * @prop {ArgumentSplit|ArgumentSplitFunction} [split='plain'] - Method to split text into words.
  * @prop {string} [channel] - Restricts channel to either 'guild' or 'dm'.
  * @prop {string} [category='default'] - Category ID for organization purposes.
+ * @prop {boolean} [automateAliases=true] - Whether or not to add this module's id to it's aliases array.
  * @prop {boolean} [ownerOnly=false] - Whether or not to allow client owner(s) only.
  * @prop {boolean} [protected=false] - Whether or not this command cannot be disabled.
  * @prop {boolean} [typing=false] - Whether or not to type in channel during execution.
@@ -107,6 +108,7 @@ class Command extends AkairoModule {
             args = this.args,
             split = this.split || ArgumentSplits.PLAIN,
             channel = null,
+            automateAliases = true,
             ownerOnly = false,
             protect = false,
             editable = true,
@@ -146,6 +148,12 @@ class Command extends AkairoModule {
          * @type {?string}
          */
         this.channel = channel;
+
+        /**
+         * Manual override for the automateAliases client option per command.
+         * @type {boolean}
+         */
+        this.automateAliases = Boolean(automateAliases);
 
         /**
          * Usable only by the client owner.

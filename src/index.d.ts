@@ -446,6 +446,7 @@ declare module 'discord-akairo' {
     export type AkairoOptions = {
         aliasReplacement?: RegExp;
         allowMention?: boolean | AllowMentionFunction;
+        automateAliases?: boolean;
         automateCategories?: boolean;
         blockBots?: boolean;
         blockClient?: boolean;
@@ -556,6 +557,7 @@ declare module 'discord-akairo' {
         description?: string | string[];
         editable?: boolean;
         options?: any;
+        automateAliases?: boolean;
         ownerOnly?: boolean;
         prefix?: string | string[] | PrefixFunction;
         protected?: boolean;

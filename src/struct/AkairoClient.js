@@ -33,6 +33,7 @@ const ListenerHandler = require('./ListenerHandler');
  * @prop {boolean} [blockBots=true] - Whether or not to block bots.
  * @prop {string} [listenerDirectory] - Directory to listeners.
  * @prop {Object} [emitters={}] - Emitters to load onto the listener handler.
+ * @prop {boolean} [automateAliases=false] - Whether or not to add each module's id to it's aliases array. (Only used if the client option is true)
  * @prop {boolean} [automateCategories=false] - Whether or not to set each module's category to its parent directory name.
  * @prop {LoadFilterFunction} [loadFilter] - Filter for files to be loaded.
  * Can be set individually for each handler by overriding the `loadAll` method.
