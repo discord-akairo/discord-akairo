@@ -25,7 +25,6 @@ const { isPromise } = require('../util/Util');
  * The args object will have `match` and `matches` properties.
  * @prop {ConditionFunction} [condition] - Whether or not to run on messages that are NOT commands.
  * @prop {ArgumentPromptOptions} [defaultPrompt={}] - The default prompt options.
- * @prop {Object} [options={}] - An object for custom options.
  * @prop {string|string[]} [description=''] - Description of the command.
  */
 
@@ -112,7 +111,6 @@ class Command extends AkairoModule {
             cooldown = null,
             ratelimit = 1,
             defaultPrompt = {},
-            options: opts = {},
             description = '',
             prefix = this.prefix,
             clientPermissions = this.clientPermissions,
@@ -180,12 +178,6 @@ class Command extends AkairoModule {
          * @type {ArgumentPromptOptions}
          */
         this.defaultPrompt = defaultPrompt;
-
-        /**
-         * Custom options for the command.
-         * @type {Object}
-         */
-        this.options = opts;
 
         /**
          * Description of the command.
