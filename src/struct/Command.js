@@ -53,7 +53,7 @@ const { isPromise } = require('../util/Util');
  */
 
 /**
- * A function used to check if the command should run.
+ * A function used to check if the command should run arbitrarily.
  * @typedef {Function} ConditionFunction
  * @param {Message} message - Message to check.
  * @returns {boolean}
@@ -210,7 +210,7 @@ class Command extends AkairoModule {
         this.trigger = typeof trigger === 'function' ? trigger.bind(this) : trigger;
 
         /**
-         * Checks if the command should be ran by condition.
+         * Checks if the command should be ran by using an arbitrary condition.
          * @method
          * @param {Message} message - Message being handled.
          * @returns {boolean}
