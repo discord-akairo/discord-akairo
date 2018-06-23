@@ -52,7 +52,6 @@ class Listener extends AkairoModule {
 
         /**
          * The listener handler.
-         * @readonly
          * @name Listener#handler
          * @type {ListenerHandler}
          */
@@ -66,26 +65,6 @@ class Listener extends AkairoModule {
      */
     exec() {
         throw new AkairoError('NOT_IMPLEMENTED', this.constructor.name, 'exec');
-    }
-
-    /**
-     * Enables the listener.
-     * @returns {boolean}
-     */
-    enable() {
-        if (!super.enable()) return false;
-        this.handler.register(this.id);
-        return true;
-    }
-
-    /**
-     * Disables the listener.
-     * @returns {boolean}
-     */
-    disable() {
-        if (!super.disable()) return false;
-        this.handler.deregister(this.id);
-        return true;
     }
 
     /**

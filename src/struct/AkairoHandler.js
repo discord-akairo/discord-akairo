@@ -288,15 +288,3 @@ module.exports = AkairoHandler;
  * @event AkairoHandler#remove
  * @param {AkairoModule} mod - Module removed.
  */
-
-/**
- * Emitted when a module is enabled.
- * @event AkairoHandler#enable
- * @param {AkairoModule} mod - Module enabled.
- */
-
-/**
- * Emitted when a module is disabled.
- * @event AkairoHandler#disable
- * @param {AkairoModule} mod - Module disabled.
- */

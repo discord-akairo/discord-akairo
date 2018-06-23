@@ -42,24 +42,6 @@ class Category extends Collection {
     }
 
     /**
-     * Calls `enable()` on all items in this category.
-     * @returns {Category}
-     */
-    enableAll() {
-        for (const m of this.values()) m.enable();
-        return this;
-    }
-
-    /**
-     * Calls `disable()` on all items in this category.
-     * @returns {Category}
-     */
-    disableAll() {
-        for (const m of this.values()) m.disable();
-        return this;
-    }
-
-    /**
      * Returns the ID.
      * @returns {string}
      */

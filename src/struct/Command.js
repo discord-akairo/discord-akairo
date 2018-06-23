@@ -14,7 +14,6 @@ const { isPromise } = require('../util/Util');
  * @prop {string} [channel] - Restricts channel to either 'guild' or 'dm'.
  * @prop {string} [category='default'] - Category ID for organization purposes.
  * @prop {boolean} [ownerOnly=false] - Whether or not to allow client owner(s) only.
- * @prop {boolean} [protected=false] - Whether or not this command cannot be disabled.
  * @prop {boolean} [typing=false] - Whether or not to type in channel during execution.
  * @prop {boolean} [editable=true] - Whether or not message edits will run this command.
  * @prop {number} [cooldown] - The command cooldown in milliseconds.
@@ -108,7 +107,6 @@ class Command extends AkairoModule {
             split = this.split || ArgumentSplits.PLAIN,
             channel = null,
             ownerOnly = false,
-            protect = false,
             editable = true,
             typing = false,
             cooldown = null,
@@ -152,12 +150,6 @@ class Command extends AkairoModule {
          * @type {boolean}
          */
         this.ownerOnly = Boolean(ownerOnly);
-
-        /**
-         * Whether or not this command cannot be disabled.
-         * @type {boolean}
-         */
-        this.protected = Boolean(protect);
 
         /**
          * Whether or not this command can be ran by an edit.
@@ -241,7 +233,6 @@ class Command extends AkairoModule {
 
         /**
          * The command handler.
-         * @readonly
          * @name Command#handler
          * @type {CommandHandler}
          */
@@ -557,15 +548,6 @@ class Command extends AkairoModule {
     }
 
     /**
-     * Disables the command.
-     * @returns {boolean}
-     */
-    disable() {
-        if (this.protected) return false;
-        return super.disable();
-    }
-
-    /**
      * Reloads the command.
      * @method
      * @name Command#reload
@@ -577,13 +559,6 @@ class Command extends AkairoModule {
      * @method
      * @name Command#remove
      * @returns {Command}
-     */
-
-    /**
-     * Enables the command.
-     * @method
-     * @name Command#enable
-     * @returns {boolean}
      */
 }
 

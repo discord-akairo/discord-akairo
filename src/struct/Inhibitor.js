@@ -52,17 +52,7 @@ class Inhibitor extends AkairoModule {
          */
 
         /**
-         * Executes the inhibitor.
-         * @method
-         * @name Inhibitor#exec
-         * @param {Message} message - Message being handled.
-         * @param {Command} [command] - Command to check.
-         * @returns {boolean|Promise<any>}
-         */
-
-        /**
          * The inhibitor handler.
-         * @readonly
          * @name Inhibitor#handler
          * @type {InhibitorHandler}
          */
@@ -93,20 +83,6 @@ class Inhibitor extends AkairoModule {
      * @method
      * @name Inhibitor#remove
      * @returns {Inhibitor}
-     */
-
-    /**
-     * Enables the inhibitor.
-     * @method
-     * @name Inhibitor#enable
-     * @returns {boolean}
-     */
-
-    /**
-     * Disables the inhibitor.
-     * @method
-     * @name Inhibitor#disable
-     * @returns {boolean}
      */
 }
 

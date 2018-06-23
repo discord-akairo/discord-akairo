@@ -184,15 +184,3 @@ module.exports = ListenerHandler;
  * @event ListenerHandler#remove
  * @param {Listener} listener - Listener removed.
  */
-
-/**
- * Emitted when a listener is enabled.
- * @event ListenerHandler#enable
- * @param {Listener} listener - Listener enabled.
- */
-
-/**
- * Emitted when a listener is disabled.
- * @event ListenerHandler#disable
- * @param {Listener} listener - Listener disabled.
- */

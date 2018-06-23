@@ -54,7 +54,7 @@ class InhibitorHandler extends AkairoHandler {
     async test(type, message, command) {
         if (!this.modules.size) return null;
 
-        const inhibitors = this.modules.filter(i => i.type === type && i.enabled);
+        const inhibitors = this.modules.filter(i => i.type === type);
         if (!inhibitors.size) return null;
 
         const promises = [];
@@ -160,16 +160,4 @@ module.exports = InhibitorHandler;
  * Emitted when an inhibitor is removed.
  * @event InhibitorHandler#remove
  * @param {Inhibitor} inhibitor - Inhibitor removed.
- */
-
-/**
- * Emitted when an inhibitor is enabled.
- * @event InhibitorHandler#enable
- * @param {Inhibitor} inhibitor - Inhibitor enabled.
- */
-
-/**
- * Emitted when an inhibitor is disabled.
- * @event InhibitorHandler#disable
- * @param {Inhibitor} inhibitor - Inhibitor disabled.
  */

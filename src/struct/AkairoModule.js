@@ -1,5 +1,3 @@
-const { AkairoHandlerEvents } = require('../util/Constants');
-
 /**
  * Options for module.
  * @typedef {Object} ModuleOptions
@@ -30,12 +28,6 @@ class AkairoModule {
          * @type {Category}
          */
         this.category = null;
-
-        /**
-         * Whether or not this is enabled.
-         * @type {boolean}
-         */
-        this.enabled = true;
 
         /**
          * The filepath.
@@ -70,28 +62,6 @@ class AkairoModule {
      */
     remove() {
         return this.handler.remove(this.id);
-    }
-
-    /**
-     * Enables the module.
-     * @returns {boolean}
-     */
-    enable() {
-        if (this.enabled) return false;
-        this.enabled = true;
-        this.handler.emit(AkairoHandlerEvents.ENABLE, this);
-        return true;
-    }
-
-    /**
-     * Disables the module.
-     * @returns {boolean}
-     */
-    disable() {
-        if (!this.enabled) return false;
-        this.enabled = false;
-        this.handler.emit(AkairoHandlerEvents.DISABLE, this);
-        return true;
     }
 
     /**

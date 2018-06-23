@@ -473,11 +473,6 @@ class CommandHandler extends AkairoHandler {
      */
     async _handleCommand(message, content, command) {
         try {
-            if (!command.enabled) {
-                this.emit(CommandHandlerEvents.COMMAND_DISABLED, message, command);
-                return;
-            }
-
             if (message.edited && !command.editable) return;
             if (await this._runInhibitors(message, command)) return;
 
@@ -776,7 +771,7 @@ class CommandHandler extends AkairoHandler {
         const matchedCommands = [];
 
         for (const command of this.modules.values()) {
-            if ((message.edited ? command.editable : true) && command.enabled) {
+            if (message.edited ? command.editable : true) {
                 const regex = typeof command.trigger === 'function' ? command.trigger(message) : command.trigger;
                 if (regex) matchedCommands.push({ command, regex });
             }
@@ -852,7 +847,6 @@ class CommandHandler extends AkairoHandler {
     async _handleConditional(message) {
         const trueCommands = this.modules.filter(command =>
             (message.edited ? command.editable : true)
-            && command.enabled
             && command.condition(message)
         );
 
@@ -1125,16 +1119,4 @@ module.exports = CommandHandler;
  * Emitted when a command is removed.
  * @event CommandHandler#remove
  * @param {Command} command - Command removed.
- */
-
-/**
- * Emitted when a command is enabled.
- * @event CommandHandler#enable
- * @param {Command} command - Command enabled.
- */
-
-/**
- * Emitted when a command is disabled.
- * @event CommandHandler#disable
- * @param {Command} command - Command disabled.
  */
