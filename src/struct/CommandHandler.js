@@ -535,16 +535,15 @@ class CommandHandler extends AkairoHandler {
 
         if (command.clientPermissions) {
             if (typeof command.clientPermissions === 'function') {
-                let allowed = command.clientPermissions(message);
-                if (isPromise(allowed)) allowed = await allowed;
+                let missing = command.clientPermissions(message);
+                if (isPromise(missing)) missing = await missing;
 
-                if (!allowed) {
-                    this.emit(CommandHandlerEvents.MISSING_PERMISSIONS, message, command, 'client', null);
+                if (missing != null) {
+                    this.emit(CommandHandlerEvents.MISSING_PERMISSIONS, message, command, 'client', missing);
                     return true;
                 }
             } else if (message.guild) {
-                const check = Array.isArray(command.clientPermissions) ? command.clientPermissions : [command.clientPermissions];
-                const missing = message.channel.permissionsFor(this.client.user).missing(check);
+                const missing = message.channel.permissionsFor(this.client.user).missing(command.clientPermissions);
                 if (missing.length) {
                     this.emit(CommandHandlerEvents.MISSING_PERMISSIONS, message, command, 'client', missing);
                     return true;
@@ -554,16 +553,15 @@ class CommandHandler extends AkairoHandler {
 
         if (command.userPermissions) {
             if (typeof command.userPermissions === 'function') {
-                let allowed = command.userPermissions(message);
-                if (isPromise(allowed)) allowed = await allowed;
+                let missing = command.userPermissions(message);
+                if (isPromise(missing)) missing = await missing;
 
-                if (!allowed) {
-                    this.emit(CommandHandlerEvents.MISSING_PERMISSIONS, message, command, 'user', null);
+                if (missing != null) {
+                    this.emit(CommandHandlerEvents.MISSING_PERMISSIONS, message, command, 'user', missing);
                     return true;
                 }
             } else if (message.guild) {
-                const check = Array.isArray(command.userPermissions) ? command.userPermissions : [command.userPermissions];
-                const missing = message.channel.permissionsFor(message.author).missing(check);
+                const missing = message.channel.permissionsFor(message.author).missing(command.userPermissions);
                 if (missing.length) {
                     this.emit(CommandHandlerEvents.MISSING_PERMISSIONS, message, command, 'user', missing);
                     return true;
@@ -1097,7 +1095,7 @@ module.exports = CommandHandler;
  * @param {Message} message - Message sent.
  * @param {Command} command - Command blocked.
  * @param {string} type - Either 'client' or 'user'.
- * @param {PermissionResolvable[]} missing - The missing permissions if a function was not used for the permissions check.
+ * @param {any} missing - The missing permissions.
  */
 
 /**

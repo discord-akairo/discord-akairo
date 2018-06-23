@@ -40,9 +40,10 @@ const { isPromise } = require('../util/Util');
 
 /**
  * A function used to check if a message has permissions for the command.
+ * A non-null return value signifies the reason for missing permissions.
  * @typedef {Function} PermissionFunction
  * @param {Message} message - Message that triggered the command.
- * @returns {boolean|Promise<boolean>}
+ * @returns {any}
  */
 
 /**
