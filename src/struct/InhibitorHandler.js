@@ -8,7 +8,7 @@ class InhibitorHandler extends AkairoHandler {
     /**
      * Loads inhibitors and checks messages.
      * @param {AkairoClient} client - The Akairo client.
-     * @param {InhibitorHandlerOptions} options - Options;
+     * @param {AkairoHandlerOptions} options - Options.
      */
     constructor(client, {
         directory,
@@ -111,18 +111,9 @@ class InhibitorHandler extends AkairoHandler {
      * @method
      * @name InhibitorHandler#loadAll
      * @param {string} [directory] - Directory to load from.
-     * Defaults to the directory passed in to the constructor.
+     * Defaults to the directory passed in the constructor.
      * @param {LoadFilterFunction} [filter] - Filter for files, where true means it should be loaded.
      * @returns {InhibitorHandler}
-     */
-
-    /**
-     * Adds an inhibitor.
-     * @method
-     * @name InhibitorHandler#add
-     * @param {string} filename - Filename to lookup in the directory.
-     * A .js extension is assumed if one is not given.
-     * @returns {Inhibitor}
      */
 
     /**

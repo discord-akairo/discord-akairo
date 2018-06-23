@@ -14,6 +14,9 @@ const path = require('path');
  * @prop {Function} [classToHandle=AkairoModule] - Only classes that extends this class can be handled.
  * @prop {string[]|Set<string>} [extensions] - File extensions to load.
  * By default this is .js, .json, and .ts files.
+ * @prop {boolean} [automateCategories=false] - Whether or not to set each module's category to its parent directory name.
+ * @prop {LoadFilterFunction} [loadFilter] - Filter for files to be loaded.
+ * Can be set individually for each handler by overriding the `loadAll` method.
  */
 
 /**

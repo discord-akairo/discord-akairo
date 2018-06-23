@@ -7,12 +7,50 @@ const CommandUtil = require('./CommandUtil');
 const { isPromise } = require('../util/Util');
 const TypeResolver = require('./TypeResolver');
 
+/**
+ * Also includes properties from AkairoHandlerOptions.
+ * @typedef {Object} CommandHandlerOptions
+ * @prop {boolean} [blockOthers=true] - Whether or not to block others, if a selfbot.
+ * @prop {boolean} [blockClient=true] - Whether or not to block self, if not a selfbot.
+ * @prop {boolean} [blockBots=true] - Whether or not to block bots.
+ * @prop {string|string[]|PrefixFunction} [prefix='!'] - Default command prefix(es).
+ * @prop {boolean|AllowMentionFunction} [allowMention=true] - Whether or not to allow mentions to the client user as a prefix.
+ * @prop {RegExp} [aliasReplacement] - Regular expression to automatically make command aliases.
+ * For example, using `/-/g` would mean that aliases containing `-` would be valid with and without it.
+ * So, the alias `command-name` is valid as both `command-name` and `commandname`.
+ * @prop {boolean} [handleEdits=false] - Whether or not to handle edited messages.
+ * @prop {boolean} [commandUtil=false] - Whether or not to assign `message.util`.
+ * Set to `true` by default if `handleEdits` is on.
+ * @prop {boolean} [storeMessages=false] - Whether or not to have CommandUtil store all prompts and their replies.
+ * @prop {number} [commandUtilLifetime=0] - Milliseconds a command util should last before it is removed.
+ * If 0, CommandUtil instances will never be removed.
+ * @prop {boolean} [fetchMembers=false] - Whether or not to fetch member on each message from a guild.
+ * @prop {number} [defaultCooldown=0] - The default cooldown for commands.
+ * @prop {Snowflake|Snowflake[]} [ignoreCooldownID] - ID of user(s) to ignore cooldown.
+ * Defaults to the client owner(s) option.
+ * @prop {ArgumentPromptOptions} [defaultPrompt] - The default prompt options.
+ */
+
+/**
+ * A function that returns the prefix(es) to use.
+ * @typedef {Function} PrefixFunction
+ * @param {Message} message - Message to get prefix for.
+ * @returns {string|string[]}
+ */
+
+/**
+ * A function that returns whether mentions can be used as a prefix.
+ * @typedef {Function} AllowMentionFunction
+ * @param {Message} message - Message to option for.
+ * @returns {boolean}
+ */
+
 /** @extends AkairoHandler */
 class CommandHandler extends AkairoHandler {
     /**
      * Loads commands and handles messages.
      * @param {AkairoClient} client - The Akairo client.
-     * @param {CommandHandlerOptions} options - Options for the command handler.
+     * @param {CommandHandlerOptions} options - Options.
      */
     constructor(client, {
         directory,
@@ -952,18 +990,9 @@ class CommandHandler extends AkairoHandler {
      * @method
      * @name CommandHandler#loadAll
      * @param {string} [directory] - Directory to load from.
-     * Defaults to the directory passed in to the constructor.
+     * Defaults to the directory passed in the constructor.
      * @param {LoadFilterFunction} [filter] - Filter for files, where true means it should be loaded.
      * @returns {CommandHandler}
-     */
-
-    /**
-     * Adds a command.
-     * @method
-     * @name CommandHandler#add
-     * @param {string} filename - Filename to lookup in the directory.
-     * A .js extension is assumed if one is not given.
-     * @returns {Command}
      */
 
     /**

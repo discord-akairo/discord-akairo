@@ -9,6 +9,7 @@ class ListenerHandler extends AkairoHandler {
     /**
      * Loads listeners and registers them with EventEmitters.
      * @param {AkairoClient} client - The Akairo client.
+     * @param {AkairoHandlerOptions} options - Options.
      */
     constructor(client, {
         directory,
@@ -133,18 +134,9 @@ class ListenerHandler extends AkairoHandler {
      * @method
      * @name ListenerHandler#loadAll
      * @param {string} [directory] - Directory to load from.
-     * Defaults to the directory passed in to the constructor.
+     * Defaults to the directory passed in the constructor.
      * @param {LoadFilterFunction} [filter] - Filter for files, where true means it should be loaded.
      * @returns {ListenerHandler}
-     */
-
-    /**
-     * Adds a listener.
-     * @method
-     * @name ListenerHandler#add
-     * @param {string} filename - Filename to lookup in the directory.
-     * A .js extension is assumed if one is not given.
-     * @returns {Listener}
      */
 
     /**
