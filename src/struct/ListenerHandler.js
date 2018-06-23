@@ -10,32 +10,32 @@ class ListenerHandler extends AkairoHandler {
      * Loads listeners and registers them with EventEmitters.
      * @param {AkairoClient} client - The Akairo client.
      */
-    constructor(client) {
-        const { listenerDirectory, emitters } = client.akairoOptions;
+    constructor(client, {
+        directory,
+        classToHandle = Listener,
+        extensions = ['.js', '.ts'],
+        automateCategories,
+        loadFilter
+    } = {}) {
+        if (!(classToHandle.prototype instanceof Listener || classToHandle === Listener)) {
+            throw new AkairoError('INVALID_CLASS_TO_HANDLE', classToHandle.name, Listener.name);
+        }
+
         super(client, {
-            directory: listenerDirectory,
-            classToHandle: Listener
+            directory,
+            classToHandle,
+            extensions,
+            automateCategories,
+            loadFilter
         });
 
         /**
          * EventEmitters for use, mapped by name to EventEmitter.
-         * By default, 'client', 'commandHandler', 'inhibitorHandler', 'listenerHandler' are set.
-         * Databases added through the client are also added here.
+         * By default, 'client' is set to the given client.
          * @type {Collection<string, EventEmitter>}
          */
         this.emitters = new Collection();
-
         this.emitters.set('client', this.client);
-        if (this.client.commandHandler) this.emitters.set('commandHandler', this.client.commandHandler);
-        if (this.client.inhibitorHandler) this.emitters.set('inhibitorHandler', this.client.inhibitorHandler);
-        if (this.client.listenerHandler) this.emitters.set('listenerHandler', this.client.listenerHandler);
-
-        if (emitters) {
-            for (const [key, value] of Object.entries(emitters)) {
-                if (!isEventEmitter(value)) throw new AkairoError('INVALID_TYPE', key, 'EventEmitter', true);
-                this.emitters.set(key, value);
-            }
-        }
 
         /**
          * Directory to listeners.
@@ -111,6 +111,13 @@ class ListenerHandler extends AkairoHandler {
 
         emitter.removeListener(listener.event, listener.exec);
         return listener;
+    }
+
+    setEmitters(emitters) {
+        for (const [key, value] of Object.entries(emitters)) {
+            if (!isEventEmitter(value)) throw new AkairoError('INVALID_TYPE', key, 'EventEmitter', true);
+            this.emitters.set(key, value);
+        }
     }
 
     /**

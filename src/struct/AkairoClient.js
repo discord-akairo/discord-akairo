@@ -1,9 +1,5 @@
-const AkairoError = require('../util/AkairoError');
 const { Client } = require('discord.js');
 const ClientUtil = require('./ClientUtil');
-const CommandHandler = require('./CommandHandler');
-const InhibitorHandler = require('./InhibitorHandler');
-const ListenerHandler = require('./ListenerHandler');
 
 /**
  * Options used to determine how the framework behaves.
@@ -85,114 +81,6 @@ class AkairoClient extends Client {
          * @type {ClientUtil}
          */
         this.util = new ClientUtil(this);
-
-        /**
-         * Options for the framework.
-         * @type {AkairoOptions}
-         */
-        this.akairoOptions = options;
-
-        /**
-         * Whether or not handlers are built.
-         * @protected
-         * @type {boolean}
-         */
-        this._built = false;
-
-        /**
-         * Whether or not modules are loaded.
-         * @protected
-         * @type {boolean}
-         */
-        this._loaded = false;
-    }
-
-    /**
-     * Builds the client by creating the handlers.
-     * @returns {AkairoClient}
-     */
-    build() {
-        if (this._built) {
-            throw new AkairoError('BUILD_ONCE');
-        }
-
-        this._built = true;
-
-        if (this.akairoOptions.commandDirectory && !this.commandHandler) {
-            /**
-             * The command handler.
-             * @type {CommandHandler}
-             */
-            this.commandHandler = new CommandHandler(this);
-        }
-
-        if (this.akairoOptions.inhibitorDirectory && !this.inhibitorHandler) {
-            /**
-             * The inhibitor handler.
-             * @type {InhibitorHandler}
-             */
-            this.inhibitorHandler = new InhibitorHandler(this);
-        }
-
-        if (this.akairoOptions.listenerDirectory && !this.listenerHandler) {
-            /**
-             * The listener handler.
-             * @type {ListenerHandler}
-             */
-            this.listenerHandler = new ListenerHandler(this);
-        }
-
-        return this;
-    }
-
-    /**
-     * Calls `loadAll()` on the handlers.
-     * @returns {AkairoClient}
-     */
-    loadAll() {
-        if (this._loaded) {
-            throw new AkairoError('LOAD_ONCE');
-        }
-
-        this._loaded = true;
-
-        if (this.listenerHandler) this.listenerHandler.loadAll();
-        if (this.commandHandler) this.commandHandler.loadAll();
-        if (this.inhibitorHandler) this.inhibitorHandler.loadAll();
-
-        return this;
-    }
-
-    /**
-     * Logins the client and builds the client.
-     * Resolves once client is ready.
-     * @param {string} token - Client token.
-     * @returns {Promise<string>}
-     */
-    login(token) {
-        return new Promise((resolve, reject) => {
-            if (!this._built) this.build();
-            if (!this._loaded) this.loadAll();
-
-            super.login(token).catch(reject);
-
-            this.once('ready', () => {
-                if (this.commandHandler) {
-                    this.on('message', m => {
-                        this.commandHandler.handle(m);
-                    });
-
-                    if (this.commandHandler.handleEdits) {
-                        this.on('messageUpdate', (o, m) => {
-                            if (o.content === m.content) return;
-                            if (this.commandHandler.handleEdits) this.commandHandler.handle(m);
-                        });
-                    }
-                }
-
-                return resolve(token);
-            });
-        });
     }
 }
 

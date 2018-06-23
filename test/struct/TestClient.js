@@ -1,16 +1,18 @@
-const { AkairoClient, SQLiteProvider } = require('../../src/index');
+const { AkairoClient, CommandHandler, InhibitorHandler, ListenerHandler, SQLiteProvider } = require('../../src/index');
 const sqlite = require('sqlite');
 
 class TestClient extends AkairoClient {
     constructor() {
         super({
-            prefix: '!!',
-            ownerID: '123992700587343872',
-            commandDirectory: './test/commands/',
-            listenerDirectory: './test/listeners/',
+            ownerID: '123992700587343872'
+        });
+
+        this.commandHandler = new CommandHandler(this, {
+            directory: './test/commands/',
             ignoreCooldownID: ['132266422679240704'],
             aliasReplacement: /-/g,
             handleEdits: true,
+            prefix: '!!',
             allowMention: true,
             storeMessages: true,
             defaultPrompt: {
@@ -24,12 +26,34 @@ class TestClient extends AkairoClient {
             }
         });
 
+        this.inhibitorHandler = new InhibitorHandler(this, {
+            directory: './test/inhibitors/'
+        });
+
+        this.listenerHandler = new ListenerHandler(this, {
+            directory: './test/listeners/'
+        });
+
         const db = sqlite.open('./test/db.sqlite')
             .then(d => d.run('CREATE TABLE IF NOT EXISTS guilds (id TEXT NOT NULL UNIQUE, settings TEXT)').then(() => d));
         this.settings = new SQLiteProvider(db, 'guilds', { dataColumn: 'settings' });
+
+        this.setup();
     }
 
     setup() {
+        this.commandHandler.inhibitWith(this.inhibitorHandler);
+
+        this.listenerHandler.setEmitters({
+            commandHandler: this.commandHandler,
+            inhibitorHandler: this.inhibitorHandler,
+            listenerHandler: this.listenerHandler
+        });
+
+        this.commandHandler.loadAll();
+        this.inhibitorHandler.loadAll();
+        this.listenerHandler.loadAll();
+
         const resolver = this.commandHandler.resolver;
         resolver.addType('1-10', word => {
             const num = resolver.type('integer')(word);
@@ -40,7 +64,6 @@ class TestClient extends AkairoClient {
     }
 
     async start(token) {
-        this.setup();
         await this.settings.init();
         await this.login(token);
         console.log('Ready!'); // eslint-disable-line no-console

@@ -1,3 +1,4 @@
+const AkairoError = require('../util/AkairoError');
 const AkairoHandler = require('./AkairoHandler');
 const Inhibitor = require('./Inhibitor');
 const { isPromise } = require('../util/Util');
@@ -7,11 +8,25 @@ class InhibitorHandler extends AkairoHandler {
     /**
      * Loads inhibitors and checks messages.
      * @param {AkairoClient} client - The Akairo client.
+     * @param {InhibitorHandlerOptions} options - Options;
      */
-    constructor(client) {
+    constructor(client, {
+        directory,
+        classToHandle = Inhibitor,
+        extensions = ['.js', '.ts'],
+        automateCategories,
+        loadFilter
+    } = {}) {
+        if (!(classToHandle.prototype instanceof Inhibitor || classToHandle === Inhibitor)) {
+            throw new AkairoError('INVALID_CLASS_TO_HANDLE', classToHandle.name, Inhibitor.name);
+        }
+
         super(client, {
-            directory: client.akairoOptions.inhibitorDirectory,
-            classToHandle: Inhibitor
+            directory,
+            classToHandle,
+            extensions,
+            automateCategories,
+            loadFilter
         });
 
         /**

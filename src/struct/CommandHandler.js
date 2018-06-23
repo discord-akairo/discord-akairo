@@ -12,28 +12,39 @@ class CommandHandler extends AkairoHandler {
     /**
      * Loads commands and handles messages.
      * @param {AkairoClient} client - The Akairo client.
+     * @param {CommandHandlerOptions} options - Options for the command handler.
      */
-    constructor(client) {
-        const {
-            commandDirectory,
-            blockOthers = true,
-            blockClient = true,
-            blockBots = true,
-            fetchMembers = false,
-            handleEdits = false,
-            commandUtil,
-            commandUtilLifetime = 0,
-            defaultCooldown = 0,
-            ignoreCooldownID,
-            defaultPrompt = {},
-            prefix = '!',
-            allowMention = false,
-            aliasReplacement
-        } = client.akairoOptions;
+    constructor(client, {
+        directory,
+        classToHandle = Command,
+        extensions = ['.js', '.ts'],
+        automateCategories,
+        loadFilter,
+        blockOthers = true,
+        blockClient = true,
+        blockBots = true,
+        fetchMembers = false,
+        handleEdits = false,
+        commandUtil,
+        commandUtilLifetime = 0,
+        storeMessages = false,
+        defaultCooldown = 0,
+        ignoreCooldownID,
+        defaultPrompt = {},
+        prefix = '!',
+        allowMention = false,
+        aliasReplacement
+    } = {}) {
+        if (!(classToHandle.prototype instanceof Command || classToHandle === Command)) {
+            throw new AkairoError('INVALID_CLASS_TO_HANDLE', classToHandle.name, Command.name);
+        }
 
         super(client, {
-            directory: commandDirectory,
-            classToHandle: Command
+            directory,
+            classToHandle,
+            extensions,
+            automateCategories,
+            loadFilter
         });
 
         /**
@@ -103,6 +114,12 @@ class CommandHandler extends AkairoHandler {
         this.commandUtilLifetime = commandUtilLifetime;
 
         /**
+         * Whether or not to store messages in CommandUtil.
+         * @type {boolean}
+         */
+        this.storeMessages = Boolean(storeMessages);
+
+        /**
          * Collection of CommandUtils.
          * @type {Collection<string, CommandUtil>}
          */
@@ -164,8 +181,13 @@ class CommandHandler extends AkairoHandler {
         this.allowMention = typeof allowMention === 'function' ? allowMention.bind(this) : Boolean(allowMention);
 
         /**
+         * Inhibitor handler to use.
+         * @type {InhibitorHandler}
+         */
+        this.inhibitorHandler = null;
+
+        /**
          * Directory to commands.
-         * @readonly
          * @name CommandHandler#directory
          * @type {string}
          */
@@ -175,6 +197,23 @@ class CommandHandler extends AkairoHandler {
          * @name CommandHandler#modules
          * @type {Collection<string, Command>}
          */
+
+        this.setup();
+    }
+
+    setup() {
+        this.client.once('ready', () => {
+            this.client.on('message', m => {
+                this.handle(m);
+            });
+
+            if (this.handleEdits) {
+                this.on('messageUpdate', (o, m) => {
+                    if (o.content === m.content) return;
+                    if (this.handleEdits) this.handle(m);
+                });
+            }
+        });
     }
 
     /**
@@ -312,8 +351,8 @@ class CommandHandler extends AkairoHandler {
                 await message.guild.members.fetch(message.author);
             }
 
-            let reason = this.client.inhibitorHandler
-                ? await this.client.inhibitorHandler.test('all', message)
+            let reason = this.inhibitorHandler
+                ? await this.inhibitorHandler.test('all', message)
                 : null;
 
             if (reason != null) {
@@ -349,8 +388,8 @@ class CommandHandler extends AkairoHandler {
                 }
             }
 
-            reason = this.client.inhibitorHandler
-                ? await this.client.inhibitorHandler.test('pre', message)
+            reason = this.inhibitorHandler
+                ? await this.inhibitorHandler.test('pre', message)
                 : null;
 
             if (reason != null) {
@@ -404,8 +443,8 @@ class CommandHandler extends AkairoHandler {
             if (message.edited && !command.editable) return;
             if (await this._runInhibitors(message, command)) return;
 
-            const reason = this.client.inhibitorHandler
-                ? await this.client.inhibitorHandler.test('post', message, command)
+            const reason = this.inhibitorHandler
+                ? await this.inhibitorHandler.test('post', message, command)
                 : null;
 
             if (reason != null) {
@@ -731,8 +770,8 @@ class CommandHandler extends AkairoHandler {
                 try {
                     if (await this._runInhibitors(message, command)) return;
 
-                    const reason = this.client.inhibitorHandler
-                        ? await this.client.inhibitorHandler.test('post', message, command)
+                    const reason = this.inhibitorHandler
+                        ? await this.inhibitorHandler.test('post', message, command)
                         : null;
 
                     if (reason != null) {
@@ -791,8 +830,8 @@ class CommandHandler extends AkairoHandler {
                 try {
                     if (await this._runInhibitors(message, command)) return;
 
-                    const reason = this.client.inhibitorHandler
-                        ? await this.client.inhibitorHandler.test('post', message, command)
+                    const reason = this.inhibitorHandler
+                        ? await this.inhibitorHandler.test('post', message, command)
                         : null;
 
                     if (reason != null) {
@@ -889,6 +928,15 @@ class CommandHandler extends AkairoHandler {
      */
     findCommand(name) {
         return this.modules.get(this.aliases.get(name.toLowerCase()));
+    }
+
+    /**
+     * Set the inhibitor handler to use.
+     * @param {InhibitorHandler} inhibitorHandler - The inhibitor handler.
+     * @returns {void}
+     */
+    inhibitWith(inhibitorHandler) {
+        this.inhibitorHandler = inhibitorHandler;
     }
 
     /**

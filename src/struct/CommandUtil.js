@@ -11,21 +11,15 @@ const { Collection } = require('discord.js');
 class CommandUtil {
     /**
      * Command utilies.
-     * @param {AkairoClient} client - The Akairo client.
+     * @param {CommandHandler} handler - The command handler.
      * @param {Message} message - Message that triggered the command.
      */
-    constructor(client, message) {
+    constructor(handler, message) {
         /**
-         * The Akairo client.
-         * @readonly
-         * @name CommandUtil#client
-         * @type {AkairoClient}
+         * The command handler.
+         * @type {CommandHandler}
          */
-        Object.defineProperties(this, {
-            client: {
-                value: client
-            }
-        });
+        this.handler = handler;
 
         /**
          * Message that triggered the command.
@@ -69,7 +63,7 @@ class CommandUtil {
          */
         this.lastResponse = null;
 
-        if (this.client.akairoOptions.storeMessages) {
+        if (this.handler.storeMessages) {
             /**
              * Messages stored from prompts and prompt replies.
              * @type {Collection<Snowflake, Message>}
@@ -101,7 +95,7 @@ class CommandUtil {
      * @returns {Message|Message[]}
      */
     addMessage(message) {
-        if (this.client.akairoOptions.storeMessages) {
+        if (this.handler.storeMessages) {
             if (Array.isArray(message)) {
                 for (const msg of message) {
                     this.messages.set(msg.id, msg);

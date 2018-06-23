@@ -1,5 +1,5 @@
 const TestClient = require('./struct/TestClient');
-const client = new TestClient().build();
+const client = new TestClient();
 
 const { token } = require('./auth.json');
 client.start(token);

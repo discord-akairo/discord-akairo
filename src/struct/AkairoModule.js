@@ -20,10 +20,16 @@ class AkairoModule {
         this.id = id;
 
         /**
+         * ID of the category this belongs to.
+         * @type {string}
+         */
+        this.categoryID = category;
+
+        /**
          * Category this belongs to.
          * @type {Category}
          */
-        this.category = category;
+        this.category = null;
 
         /**
          * Whether or not this is enabled.
@@ -33,21 +39,18 @@ class AkairoModule {
 
         /**
          * The filepath.
-         * @readonly
          * @type {string}
          */
         this.filepath = null;
 
         /**
          * The Akairo client.
-         * @readonly
          * @type {AkairoClient}
          */
         this.client = null;
 
         /**
          * The handler.
-         * @readonly
          * @type {AkairoHandler}
          */
         this.handler = null;

@@ -1,13 +1,10 @@
 const Messages = {
-    // Client building
-    BUILD_ONCE: 'Client handlers can only built once',
-    LOAD_ONCE: 'Client handlers can only load all modules once',
-
     // Module-related
     FILE_NOT_FOUND: filename => `File '${filename}' not found`,
     MODULE_NOT_FOUND: (constructor, id) => `${constructor} '${id}' does not exist`,
     ALREADY_LOADED: (constructor, id) => `${constructor} '${id}' is already loaded`,
     NOT_RELOADABLE: (constructor, id) => `${constructor} '${id}' is not reloadable`,
+    INVALID_CLASS_TO_HANDLE: (given, expected) => `Class to handle ${given} is not a subclass of ${expected}`,
 
     // Command-related
     ALIAS_CONFLICT: (alias, id, conflict) => `Alias '${alias}' of '${id}' already exists on '${conflict}'`,

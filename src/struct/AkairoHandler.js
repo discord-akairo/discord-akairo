@@ -31,47 +31,50 @@ class AkairoHandler extends EventEmitter {
      * @param {AkairoClient} client - The Akairo client.
      * @param {AkairoHandlerOptions} options - Options for module loading and handling.
      */
-    constructor(client, { directory, classToHandle = AkairoModule, extensions = ['.js', '.json', '.ts'] }) {
+    constructor(client, {
+        directory,
+        classToHandle = AkairoModule,
+        extensions = ['.js', '.json', '.ts'],
+        automateCategories = false,
+        loadFilter = (() => true)
+    }) {
         super();
 
         /**
          * The Akairo client.
-         * @readonly
-         * @name AkairoHandler#client
          * @type {AkairoClient}
          */
+        this.client = client;
 
         /**
-         * Directory to modules.
-         * @readonly
-         * @name AkairoHandler#directory
+         * The main directory to modules.
          * @type {string}
          */
+        this.directory = directory;
 
         /**
          * Class to handle.
-         * @readonly
-         * @name AkairoHandler#classToHandle
          * @type {Function}
          */
-
-        Object.defineProperties(this, {
-            client: {
-                value: client
-            },
-            directory: {
-                value: path.resolve(directory)
-            },
-            classToHandle: {
-                value: classToHandle
-            }
-        });
+        this.classToHandle = classToHandle;
 
         /**
          * File extensions to load.
          * @type {Set<string>}
          */
         this.extensions = new Set(extensions);
+
+        /**
+         * Whether or not to automate category names.
+         * @type {boolean}
+         */
+        this.automateCategories = automateCategories;
+
+        /**
+         * Function that filters files when loading.
+         * @type {LoadFilter}
+         */
+        this.loadFilter = loadFilter;
 
         /**
          * Modules loaded, mapped by ID to AkairoModule.
@@ -94,27 +97,21 @@ class AkairoHandler extends EventEmitter {
      * @returns {void}
      */
     _register(mod, filepath) {
-        Object.defineProperties(mod, {
-            filepath: {
-                value: filepath
-            },
-            client: {
-                value: this.client
-            },
-            handler: {
-                value: this
-            }
-        });
-
+        mod.filepath = filepath;
+        mod.client = this.client;
+        mod.handler = this;
         this.modules.set(mod.id, mod);
 
-        if (mod.category === 'default' && this.client.akairoOptions.automateCategories) {
+        if (mod.category === 'default' && this.automateCategories) {
             const dirs = path.dirname(filepath).split(path.sep);
-            mod.category = dirs[dirs.length - 1];
+            mod.categoryID = dirs[dirs.length - 1];
         }
 
-        if (!this.categories.has(mod.category)) this.categories.set(mod.category, new Category(mod.category));
-        const category = this.categories.get(mod.category);
+        if (!this.categories.has(mod.categoryID)) {
+            this.categories.set(mod.categoryID, new Category(mod.categoryID));
+        }
+
+        const category = this.categories.get(mod.categoryID);
         mod.category = category;
         category.set(mod.id, mod);
     }
@@ -141,13 +138,14 @@ class AkairoHandler extends EventEmitter {
         const isObj = typeof thing === 'object';
         if (!isObj && !this.extensions.has(path.extname(thing))) return undefined;
 
-        const findExport = m => {
-            if (!m) return null;
-            if (m.prototype instanceof this.classToHandle) return m;
-            return m.default ? findExport(m.default) : null;
-        };
+        let mod = isObj
+            ? thing
+            : function findExport(m) {
+                if (!m) return null;
+                if (m.prototype instanceof this.classToHandle) return m;
+                return m.default ? findExport(m.default) : null;
+            }.call(this, require(thing));
 
-        let mod = isObj ? thing : findExport(require(thing));
         if (mod && mod.prototype instanceof this.classToHandle) {
             mod = new mod(this); // eslint-disable-line new-cap
         } else {
@@ -165,33 +163,19 @@ class AkairoHandler extends EventEmitter {
     /**
      * Reads all modules from a directory and loads them.
      * @param {string} [directory] - Directory to load from.
-     * Defaults to the directory passed in to the constructor.
+     * Defaults to the directory passed in the constructor.
      * @param {LoadFilterFunction} [filter] - Filter for files, where true means it should be loaded.
-     * Defaults to the filter set in the client options, if there is one.
+     * Defaults to the filter passed in the constructor.
      * @returns {AkairoHandler}
      */
-    loadAll(directory = this.directory, filter = this.client.akairoOptions.loadFilter || (() => true)) {
+    loadAll(directory = this.directory, filter = this.loadFilter || (() => true)) {
         const filepaths = this.constructor.readdirRecursive(directory);
-        for (const filepath of filepaths) {
+        for (let filepath of filepaths) {
+            filepath = path.resolve(filepath);
             if (filter(filepath)) this.load(filepath);
         }
+
         return this;
-    }
-
-    /**
-     * Adds a module.
-     * @param {string} filename - Filename to lookup in the directory.
-     * A .js extension is assumed if one is not given.
-     * @returns {AkairoModule}
-     */
-    add(filename) {
-        if (!path.extname(filename)) filename = `${filename}.js`;
-
-        const files = this.constructor.readdirRecursive(this.directory);
-        const filepath = files.find(file => path.basename(file) === filename);
-
-        if (!filepath) throw new AkairoError('FILE_NOT_FOUND', filename);
-        return this.load(filepath);
     }
 
     /**
