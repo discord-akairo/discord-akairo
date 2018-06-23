@@ -64,7 +64,6 @@ module.exports = {
     CommandHandlerEvents: {
         MESSAGE_BLOCKED: 'messageBlocked',
         MESSAGE_INVALID: 'messageInvalid',
-        COMMAND_DISABLED: 'commandDisabled',
         COMMAND_BLOCKED: 'commandBlocked',
         COMMAND_STARTED: 'commandStarted',
         COMMAND_FINISHED: 'commandFinished',
