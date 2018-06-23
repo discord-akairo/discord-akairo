@@ -63,20 +63,16 @@ class InhibitorHandler extends AkairoHandler {
             promises.push((async () => {
                 let inhibited = inhibitor.exec(message, command);
                 if (isPromise(inhibited)) inhibited = await inhibited;
-
-                if (inhibited === true) {
-                    return { reason: inhibitor.reason, priority: inhibitor.priority };
-                }
-
+                if (inhibited) return inhibitor;
                 return null;
             })());
         }
 
-        const reasons = (await Promise.all(promises)).filter(r => r);
-        if (!reasons.length) return null;
+        const inhibitedInhibitors = (await Promise.all(promises)).filter(r => r);
+        if (!inhibitedInhibitors.length) return null;
 
-        reasons.sort((a, b) => b.priority - a.priority);
-        return reasons[0].reason;
+        inhibitedInhibitors.sort((a, b) => b.priority - a.priority);
+        return inhibitedInhibitors[0].reason;
     }
 
     /**
