@@ -3,14 +3,18 @@ module.exports = {
     AkairoClient: require('./struct/AkairoClient'),
     AkairoHandler: require('./struct/AkairoHandler'),
     AkairoModule: require('./struct/AkairoModule'),
+    ClientUtil: require('./struct/ClientUtil'),
 
     // Commands
-    Argument: require('./struct/Argument'),
-    ClientUtil: require('./struct/ClientUtil'),
-    Command: require('./struct/Command'),
-    CommandHandler: require('./struct/CommandHandler'),
-    CommandUtil: require('./struct/CommandUtil'),
-    TypeResolver: require('./struct/TypeResolver'),
+    Command: require('./struct/commands/Command'),
+    CommandHandler: require('./struct/commands/CommandHandler'),
+    CommandUtil: require('./struct/commands/CommandUtil'),
+
+    // Arguments
+    Argument: require('./struct/commands/arguments/Argument'),
+    Control: require('./struct/commands/arguments/Control'),
+    Parser: require('./struct/commands/arguments/Parser'),
+    TypeResolver: require('./struct/commands/arguments/TypeResolver'),
 
     // Inhibitors
     Inhibitor: require('./struct/Inhibitor'),

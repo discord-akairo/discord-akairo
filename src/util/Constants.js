@@ -54,7 +54,6 @@ module.exports = {
     ArgumentSplits: {
         PLAIN: 'plain',
         QUOTED: 'quoted',
-        STICKY: 'sticky',
         NONE: 'none'
     },
     AkairoHandlerEvents: {

@@ -1,5 +1,5 @@
-const { ArgumentMatches, ArgumentTypes, Symbols } = require('../util/Constants');
-const { isPromise } = require('../util/Util');
+const { ArgumentMatches, ArgumentTypes, Symbols } = require('../../../util/Constants');
+const { isPromise } = require('../../../util/Util');
 
 /**
  * The method to match arguments from text.

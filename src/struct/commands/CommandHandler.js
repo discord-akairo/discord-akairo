@@ -1,11 +1,11 @@
-const AkairoError = require('../util/AkairoError');
-const AkairoHandler = require('./AkairoHandler');
-const { BuiltInReasons, CommandHandlerEvents, Symbols } = require('../util/Constants');
+const AkairoError = require('../../util/AkairoError');
+const AkairoHandler = require('../AkairoHandler');
+const { BuiltInReasons, CommandHandlerEvents, Symbols } = require('../../util/Constants');
 const { Collection } = require('discord.js');
 const Command = require('./Command');
 const CommandUtil = require('./CommandUtil');
-const { isPromise } = require('../util/Util');
-const TypeResolver = require('./TypeResolver');
+const { isPromise } = require('../../util/Util');
+const TypeResolver = require('./arguments/TypeResolver');
 
 /**
  * Also includes properties from AkairoHandlerOptions.

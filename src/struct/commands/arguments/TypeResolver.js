@@ -1,4 +1,4 @@
-const { ArgumentTypes } = require('../util/Constants');
+const { ArgumentTypes } = require('../../../util/Constants');
 const { Collection } = require('discord.js');
 const { URL } = require('url');
 

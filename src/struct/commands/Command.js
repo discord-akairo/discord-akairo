@@ -1,8 +1,9 @@
-const AkairoError = require('../util/AkairoError');
-const AkairoModule = require('./AkairoModule');
-const Argument = require('./Argument');
-const { ArgumentMatches, ArgumentSplits, Symbols } = require('../util/Constants');
-const { isPromise } = require('../util/Util');
+const AkairoError = require('../../util/AkairoError');
+const AkairoModule = require('../AkairoModule');
+const Argument = require('./arguments/Argument');
+const { Control } = require('./arguments/Control');
+const { ArgumentMatches, ArgumentSplits } = require('../../util/Constants');
+const Parser = require('./arguments/Parser');
 
 /**
  * Options to use for command execution behavior.
@@ -128,7 +129,7 @@ class Command extends AkairoModule {
 
         /**
          * Arguments for the command.
-         * @type {Array<Argument|Argument[]|CommandCancelFunction>|ArgumentFunction}
+         * @type {Array<ArgumentNode>|ArgumentFunction}
          */
         this.args = typeof args === 'function' ? args.bind(this) : this.buildArgs(args);
 
@@ -249,49 +250,38 @@ class Command extends AkairoModule {
      * @returns {Promise<Object>}
      */
     parse(content, message) {
-        if (!this.args.length && typeof this.args !== 'function') return Promise.resolve({});
+        if (!this.args.length && typeof this.args !== 'function') {
+            return Promise.resolve({});
+        }
 
-        const words = this.splitText(content, message);
-        const isQuoted = this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY || words.isQuoted;
+        const prefixes = this.getPrefixes();
+        const argumentParts = new Parser({
+            flagWords: prefixes.flagWords,
+            prefixFlagWords: prefixes.prefixFlagWords,
+            quotes: this.split === ArgumentSplits.QUOTED ? ['"'] : [],
+            content
+        }).parse();
 
         if (typeof this.args === 'function') {
-            const res = this.args(message, content, words.map(word => {
-                word = word.trim();
-                if (isQuoted && /^"[^]+"$/.test(word)) {
-                    word = word.slice(1, -1);
-                }
-
-                return word;
-            }));
-
+            const res = this.args(message, content, argumentParts);
             return Promise.resolve(res);
         }
 
         const usedIndices = new Set();
-        const prefixes = this.getPrefixes();
-        const noPrefixWords = words.filter(w => {
-            w = w.trim();
-
-            return !prefixes.some(p => {
-                if (!p.flag) return w.toLowerCase().startsWith(p.value);
-                return w.toLowerCase() === p.value;
-            });
-        });
-
         const parseFuncs = {
             [ArgumentMatches.WORD]: (arg, index) => {
                 if (arg.unordered || arg.unordered === 0) {
                     return async (msg, processed) => {
                         const indices = typeof arg.unordered === 'number'
-                            ? Array.from(noPrefixWords.keys()).slice(arg.unordered)
+                            ? Array.from(argumentParts.phrases.keys()).slice(arg.unordered)
                             : Array.isArray(arg.unordered)
                                 ? arg.unordered
-                                : Array.from(noPrefixWords.keys());
+                                : Array.from(argumentParts.phrases.keys());
 
                         for (const i of indices) {
-                            const word = (noPrefixWords[i] || '').trim();
+                            const phrase = argumentParts.phraseAt(i);
                             // eslint-disable-next-line no-await-in-loop
-                            const res = await arg.cast(word, msg, processed);
+                            const res = await arg.cast(phrase, msg, processed);
                             if (res != null) {
                                 usedIndices.add(i);
                                 return res;
@@ -303,100 +293,46 @@ class Command extends AkairoModule {
                 }
 
                 index = arg.index != null ? arg.index : index;
-                let word = (noPrefixWords[index] || '').trim();
-                if (isQuoted && /^"[^]+"$/.test(word)) {
-                    word = word.slice(1, -1);
-                }
-
-                return arg.process.bind(arg, word);
+                return arg.process.bind(arg, argumentParts.phraseAt(index));
             },
             [ArgumentMatches.REST]: (arg, index) => {
                 index = arg.index != null ? arg.index : index;
-                const word = noPrefixWords.slice(index, index + arg.limit).join('') || '';
-                return arg.process.bind(arg, word);
+                const rest = argumentParts.phrases.slice(index, index + arg.limit).map(ph => ph.value).join('');
+                return arg.process.bind(arg, rest);
             },
             [ArgumentMatches.SEPARATE]: (arg, index) => {
                 index = arg.index != null ? arg.index : index;
-                const wordArr = noPrefixWords.slice(index, index + arg.limit);
+                const phrases = argumentParts.phrases.slice(index, index + arg.limit);
 
-                if (!wordArr.length) return arg.process.bind(arg, '');
+                if (!phrases.length) return arg.process.bind(arg, '');
                 return async (msg, processed) => {
                     const res = [];
                     processed[arg.id] = res;
 
-                    for (const word of wordArr) {
+                    for (const phrase of phrases) {
                         // eslint-disable-next-line no-await-in-loop
-                        res.push(await arg.process(word, msg, processed));
+                        res.push(await arg.process(phrase.value, msg, processed));
                     }
 
                     return res;
                 };
             },
             [ArgumentMatches.PREFIX]: arg => {
-                let prefixUsed;
-                let wordFound;
-
-                for (let i = words.length; i--;) {
-                    const word = words[i].trim().toLowerCase();
-
-                    if (Array.isArray(arg.prefix)) {
-                        let found = false;
-
-                        for (const prefix of arg.prefix) {
-                            if (word.startsWith(prefix.toLowerCase())) {
-                                prefixUsed = prefix;
-                                wordFound = words[i];
-                                found = true;
-                                break;
-                            }
-                        }
-
-                        if (found) break;
-                    } else if (word.startsWith(arg.prefix.toLowerCase())) {
-                        prefixUsed = arg.prefix;
-                        wordFound = words[i];
-                        break;
-                    }
-                }
-
-                if (wordFound && prefixUsed) {
-                    wordFound = wordFound.replace(prefixUsed, '').trim();
-                    if (isQuoted && /^"[^]+"$/.test(wordFound)) {
-                        wordFound = wordFound.slice(1, -1);
-                    }
-                }
-
-                return arg.process.bind(arg, wordFound || '');
+                const flag = argumentParts.prefixFlagWith(Array.isArray(arg.prefix) ? arg.prefix : [arg.prefix]);
+                return arg.process.bind(arg, flag.value);
             },
             [ArgumentMatches.FLAG]: arg => {
-                let flagFound = false;
-
-                for (let i = words.length; i--;) {
-                    const word = words[i].trim().toLowerCase();
-
-                    if (Array.isArray(arg.prefix)) {
-                        for (const prefix of arg.prefix) {
-                            if (word === prefix.toLowerCase()) {
-                                flagFound = true;
-                                break;
-                            }
-                        }
-                    } else if (word === arg.prefix.toLowerCase()) {
-                        flagFound = true;
-                        break;
-                    }
-                }
-
+                const flagFound = argumentParts.flagWith(Array.isArray(arg.prefix) ? arg.prefix : [arg.prefix]) != null;
                 return () => arg.default == null ? flagFound : !flagFound;
             },
             [ArgumentMatches.TEXT]: arg => {
                 const index = arg.index == null ? 0 : arg.index;
-                const word = noPrefixWords.slice(index, index + arg.limit).join('');
+                const word = argumentParts.phrases.slice(index, index + arg.limit).map(ph => ph.value).join('');
                 return arg.process.bind(arg, word);
             },
             [ArgumentMatches.CONTENT]: arg => {
                 const index = arg.index == null ? 0 : arg.index;
-                const word = words.slice(index, index + arg.limit).join('');
+                const word = argumentParts.content.slice(index, index + arg.limit).join('').trim();
                 return arg.process.bind(arg, word);
             },
             [ArgumentMatches.NONE]: arg => {
@@ -405,54 +341,34 @@ class Command extends AkairoModule {
         };
 
         const processed = {};
-        let wordIndex = 0;
+        let phraseIndex = 0;
 
-        const process = async i => {
-            if (i === this.args.length) return processed;
-            let arg = this.args[i];
-
-            if (typeof arg === 'function') {
-                let cancel = arg.call(this, message, processed);
-                if (isPromise(cancel)) cancel = await cancel;
-                if (cancel != null) {
-                    if (cancel) await message.channel.send(cancel);
-                    throw Symbols.COMMAND_CANCELLED;
-                }
-
-                return process(i + 1);
-            } else if (Array.isArray(arg)) {
-                arg = arg.find(a => a.allow(message, processed));
-                if (!arg) return process(i + 1);
-            } else if (!arg.allow(message, processed)) {
-                return process(i + 1);
+        const process = async args => {
+            if (!args.length) return processed;
+            const arg = args[0];
+            if (arg instanceof Control) {
+                return arg.control({
+                    process,
+                    currentArgs: args,
+                    command: this,
+                    message,
+                    processedArgs: processed
+                });
             }
 
             const matchType = typeof arg.match === 'function' ? arg.match(message, processed) : arg.match;
-            const processFunc = parseFuncs[matchType](arg, wordIndex);
+            const processFunc = parseFuncs[matchType](arg, phraseIndex);
 
             if ([ArgumentMatches.WORD, ArgumentMatches.REST, ArgumentMatches.SEPARATE].includes(matchType)) {
-                wordIndex++;
+                phraseIndex++;
             }
 
             const res = await processFunc(message, processed);
             processed[arg.id] = res;
-
-            let cancel = typeof arg.cancel === 'function'
-                ? arg.cancel(res, message, processed)
-                : res == null
-                    ? arg.cancel
-                    : null;
-
-            if (isPromise(cancel)) cancel = await cancel;
-            if (cancel != null) {
-                if (cancel) await message.channel.send(cancel);
-                throw Symbols.COMMAND_CANCELLED;
-            }
-
-            return process(i + 1);
+            return process(args.slice(1));
         };
 
-        return process(0);
+        return process(this.args);
     }
 
     /**
@@ -461,65 +377,41 @@ class Command extends AkairoModule {
      * @returns {Array<Argument|Argument[]|CommandCancelFunction>}
      */
     buildArgs(args) {
+        if (!Array.isArray(args)) return this.buildArgs([args]);
         if (args == null) return [];
 
         const res = [];
-        for (let arg of args) {
-            if (Array.isArray(arg)) {
-                arg = arg.map(a => new Argument(this, a));
-            } else if (typeof arg === 'function') {
-                arg = arg.bind(this);
-            } else {
-                arg = new Argument(this, arg);
+        for (const arg of args) {
+            if (arg instanceof Control) {
+                res.push(arg);
+                continue;
             }
 
-            res.push(arg);
+            res.push(new Argument(this, arg));
         }
 
         return res;
     }
 
     /**
-     * Splits text into arguments.
-     * @param {string} content - String to parse.
-     * @param {Message} [message] - Message to use.
-     * @returns {string[]}
-     */
-    splitText(content, message) {
-        const splitFuncs = {
-            [ArgumentSplits.PLAIN]: c => c.match(/\S+\s*/g),
-            [ArgumentSplits.QUOTED]: c => c.match(/"[^]*?"\s*|\S+\s*|"/g),
-            [ArgumentSplits.STICKY]: c => c.match(/[^\s"]*?"[^]*?"\s*|\S+\s*|"/g),
-            [ArgumentSplits.NONE]: c => [c]
-        };
-
-        return typeof this.split === 'function'
-            ? this.split(content, message) || []
-            : splitFuncs[this.split]
-                ? splitFuncs[this.split](content) || []
-                : content.split(this.split);
-    }
-
-    /**
      * Gets the prefixes that are used in all args.
-     * @returns {Object[]}
+     * @returns {Object}
      */
     getPrefixes() {
-        const prefixes = [];
+        const res = {
+            flagWords: [],
+            prefixFlagWords: []
+        };
+
         const pushPrefix = arg => {
+            const arr = arg.match === ArgumentMatches.FLAG ? 'flagWords' : 'prefixFlagWords';
             if (arg.match === ArgumentMatches.PREFIX || arg.match === ArgumentMatches.FLAG) {
                 if (Array.isArray(arg.prefix)) {
                     for (const p of arg.prefix) {
-                        prefixes.push({
-                            value: p.toLowerCase(),
-                            flag: arg.match === ArgumentMatches.FLAG
-                        });
+                        arr.push(p);
                     }
                 } else {
-                    prefixes.push({
-                        value: arg.prefix.toLowerCase(),
-                        flag: arg.match === ArgumentMatches.FLAG
-                    });
+                    arr.push(arg.prefix);
                 }
             }
         };
@@ -534,7 +426,7 @@ class Command extends AkairoModule {
             }
         }
 
-        return prefixes;
+        return res;
     }
 
     /**
