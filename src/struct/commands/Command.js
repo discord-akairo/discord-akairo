@@ -299,7 +299,7 @@ class Command extends AkairoModule {
             },
             [ArgumentMatches.OPTION]: arg => {
                 const flag = argumentParts.optionFlagWith(Array.isArray(arg.flag) ? arg.flag : [arg.flag]);
-                return arg.process.bind(arg, flag.value);
+                return arg.process.bind(arg, flag ? flag.value : '');
             },
             [ArgumentMatches.TEXT]: arg => {
                 const index = arg.index == null ? 0 : arg.index;
@@ -358,8 +358,21 @@ class Command extends AkairoModule {
             optionFlagWords: []
         };
 
-        const pushFlag = arg => {
-            const arr = arg.match === ArgumentMatches.FLAG ? 'flagWords' : 'optionFlagWords';
+        (function pushFlag(arg) {
+            if (arg instanceof Control) {
+                pushFlag(arg.getArgs());
+                return;
+            }
+
+            if (Array.isArray(arg)) {
+                for (const a of arg) {
+                    pushFlag(a);
+                }
+
+                return;
+            }
+
+            const arr = res[arg.match === ArgumentMatches.FLAG ? 'flagWords' : 'optionFlagWords'];
             if (arg.match === ArgumentMatches.FLAG || arg.match === ArgumentMatches.OPTION) {
                 if (Array.isArray(arg.flag)) {
                     for (const p of arg.flag) {
@@ -369,17 +382,7 @@ class Command extends AkairoModule {
                     arr.push(arg.flag);
                 }
             }
-        };
-
-        for (const arg of this.args) {
-            if (Array.isArray(arg)) {
-                for (const a of arg) {
-                    pushFlag(a);
-                }
-            } else {
-                pushFlag(arg);
-            }
-        }
+        }(this.args));
 
         return res;
     }

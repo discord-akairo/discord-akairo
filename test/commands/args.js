@@ -12,11 +12,19 @@ class ArgsCommand extends Command {
                     id: 'x',
                     type: Argument.every('integer', 'string')
                 },
-                Control.if(() => true, {
-                    id: 'y'
-                }, {
-                    id: 'z'
-                })
+                Control.if((m, args) => args.x[0] === 1, [
+                    {
+                        id: 'y',
+                        match: 'option',
+                        flag: 'y:'
+                    }
+                ], [
+                    {
+                        id: 'z',
+                        match: 'flag',
+                        flag: '--z'
+                    }
+                ])
             ]
         });
     }

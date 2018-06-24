@@ -28,6 +28,14 @@ class Control {
     control({ process, currentArgs, command, message, processedArgs }) {
         throw new AkairoError('NOT_IMPLEMENTED', this.constructor.name, 'control');
     }
+
+    /**
+     * Gets the args contained within the control.
+     * @returns {Array<ArgumentOptions|Control>|ArgumentOptions|Control}
+     */
+    getArgs() {
+        return [];
+    }
 }
 
 class IfControl extends Control {
@@ -62,6 +70,12 @@ class IfControl extends Control {
     control({ process, command, message, processedArgs }) {
         return process(command.buildArgs(this.condition(message, processedArgs) ? this.trueArguments : this.falseArguments));
     }
+
+    getArgs() {
+        return Array.isArray(this.trueArguments)
+            ? this.trueArguments.concat(this.falseArguments)
+            : [this.trueArguments].concat(this.falseArguments);
+    }
 }
 
 class CaseControl extends Control {
@@ -69,7 +83,8 @@ class CaseControl extends Control {
      * Controls branching in arguments parsing.
      * Allows for multiple branches.
      * @param {Array<ControlPredicate|Array<Argument|Control>|Argument|Control>} condArgs - A list of conditions followed by their arguments.
-     * E.g. [() => ..., [args], () => ..., [args]]
+     * E.g. [() => ..., [args], () => ..., [args]].
+     * The last condition argument pair is considered the default case.
      */
     constructor(condArgs) {
         super();
@@ -89,6 +104,10 @@ class CaseControl extends Control {
         }
 
         return process(command.buildArgs(this.condArgs.slice(-1)[0]));
+    }
+
+    getArgs() {
+        return this.condArgs.filter((v, i) => i % 2 === 1);
     }
 }
 
