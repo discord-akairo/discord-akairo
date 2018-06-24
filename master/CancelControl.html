@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>AkairoError - Documentation</title>
+    <title>CancelControl - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">AkairoError</h1>
+    <h1 class="page-title">CancelControl</h1>
     
 
     
@@ -40,7 +40,7 @@
 <header>
     
         <h2>
-        AkairoError
+        CancelControl
         </h2>
         
     
@@ -53,7 +53,7 @@
 
     
 
-    <h4 class="name" id="AkairoError"><span class="type-signature"></span>new AkairoError<span class="signature">(key, &hellip;args)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="CancelControl"><span class="type-signature"></span>new CancelControl<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
 
@@ -65,7 +65,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_AkairoError.js.html">util/AkairoError.js</a>, <a href="util_AkairoError.js.html#line18">line 18</a>
+        <a href="struct_commands_arguments_Control.js.html">struct/commands/arguments/Control.js</a>, <a href="struct_commands_arguments_Control.js.html#line173">line 173</a>
     </li></ul></dd>
     
 
@@ -105,7 +105,7 @@
 
 
 <div class="description">
-    <p>Creates an error for Akairo</p>
+    <p>Cancels the command.</p>
 </div>
 
 
@@ -116,98 +116,6 @@
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>key</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>Error key.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>args</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">any</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                    &lt;repeatable><br>
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>Arguments.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -234,7 +142,7 @@
 
 
     <ul>
-        <li>Error</li>
+        <li><a href="Control.html">Control</a></li>
     </ul>
 
 
@@ -250,6 +158,265 @@
 
     
 
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="control"><span class="type-signature"></span>control<span class="signature">(data)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_commands_arguments_Control.js.html">struct/commands/arguments/Control.js</a>, <a href="struct_commands_arguments_Control.js.html#line187">line 187</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Control.html#control">Control#control</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Cancels the command.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Data for control.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<b>Returns:</b>
+
+        
+
+
+    
+<span class="param-type">Object</span>
+
+
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="getArgs"><span class="type-signature"></span>getArgs<span class="signature">()</span><span class="type-signature"> &rarr; {Array.&lt;(<a href="global.html#ArgumentOptions">ArgumentOptions</a>|<a href="Control.html">Control</a>)>|<a href="global.html#ArgumentOptions">ArgumentOptions</a>|<a href="Control.html">Control</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_commands_arguments_Control.js.html">struct/commands/arguments/Control.js</a>, <a href="struct_commands_arguments_Control.js.html#line36">line 36</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Control.html#getArgs">Control#getArgs</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Gets the args contained within the control.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<b>Returns:</b>
+
+        
+
+
+    
+<span class="param-type">Array.&lt;(<a href="global.html#ArgumentOptions">ArgumentOptions</a>|<a href="Control.html">Control</a>)></span>
+|
+
+<span class="param-type"><a href="global.html#ArgumentOptions">ArgumentOptions</a></span>
+|
+
+<span class="param-type"><a href="Control.html">Control</a></span>
+
+
+
+    
+
+
+        
     
 
     

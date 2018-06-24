@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>struct/commands/arguments/Control.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoError.html">AkairoError</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="CancelControl.html">CancelControl</a></li><li><a href="CaseControl.html">CaseControl</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="CommandUtil.html">CommandUtil</a></li><li><a href="DoControl.html">DoControl</a></li><li><a href="EndControl.html">EndControl</a></li><li><a href="IfControl.html">IfControl</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="Parser.html">Parser</a></li><li><a href="Provider.html">Provider</a></li><li><a href="SequelizeProvider.html">SequelizeProvider</a></li><li><a href="SQLiteProvider.html">SQLiteProvider</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Typedefs</h3><ul><li><a href="global.html#AkairoHandlerOptions">AkairoHandlerOptions</a></li><li><a href="global.html#AkairoOptions">AkairoOptions</a></li><li><a href="global.html#AllowMentionFunction">AllowMentionFunction</a></li><li><a href="global.html#ArgumentDefaultFunction">ArgumentDefaultFunction</a></li><li><a href="global.html#ArgumentFunction">ArgumentFunction</a></li><li><a href="global.html#ArgumentMatch">ArgumentMatch</a></li><li><a href="global.html#ArgumentOptions">ArgumentOptions</a></li><li><a href="global.html#ArgumentPromptData">ArgumentPromptData</a></li><li><a href="global.html#ArgumentPromptFunction">ArgumentPromptFunction</a></li><li><a href="global.html#ArgumentPromptModifyFunction">ArgumentPromptModifyFunction</a></li><li><a href="global.html#ArgumentPromptOptions">ArgumentPromptOptions</a></li><li><a href="global.html#ArgumentType">ArgumentType</a></li><li><a href="global.html#ArgumentTypeFunction">ArgumentTypeFunction</a></li><li><a href="global.html#CommandHandlerOptions">CommandHandlerOptions</a></li><li><a href="global.html#CommandOptions">CommandOptions</a></li><li><a href="global.html#ConditionFunction">ConditionFunction</a></li><li><a href="global.html#ControlFunction">ControlFunction</a></li><li><a href="global.html#ControlPredicate">ControlPredicate</a></li><li><a href="global.html#InhibitorOptions">InhibitorOptions</a></li><li><a href="global.html#ListenerOptions">ListenerOptions</a></li><li><a href="global.html#LoadFilterFunction">LoadFilterFunction</a></li><li><a href="global.html#MessageExtensions">MessageExtensions</a></li><li><a href="global.html#ModuleOptions">ModuleOptions</a></li><li><a href="global.html#ParserOptions">ParserOptions</a></li><li><a href="global.html#PermissionFunction">PermissionFunction</a></li><li><a href="global.html#PrefixFunction">PrefixFunction</a></li><li><a href="global.html#ProviderOptions">ProviderOptions</a></li><li><a href="global.html#RegexFunction">RegexFunction</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">struct/commands/arguments/Control.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const AkairoError = require('../../../util/AkairoError');
+const { Symbols } = require('../../../util/Constants');
+
+/**
+ * Function as part of a conditional in a control.
+ * @typedef {Function} ControlPredicate
+ * @param {Message} message - Message that triggered the command.
+ * @param {Object} prevArgs - Previous arguments.
+ * @returns {boolean}
+ */
+
+/**
+ * General function in a control.
+ * @typedef {Function} ControlFunction
+ * @param {Message} message - Message that triggered the command.
+ * @param {Object} prevArgs - Previous arguments.
+ * @returns {void}
+ */
+
+class Control {
+    /**
+     * Changes the control flow of the arguments parsing.
+     * @param {Object} data - Data for control.
+     * @returns {Object}
+     * @abstract
+     */
+    // eslint-disable-next-line no-unused-vars
+    control({ process, currentArgs, command, message, processedArgs }) {
+        throw new AkairoError('NOT_IMPLEMENTED', this.constructor.name, 'control');
+    }
+
+    /**
+     * Gets the args contained within the control.
+     * @returns {Array&lt;ArgumentOptions|Control>|ArgumentOptions|Control}
+     */
+    getArgs() {
+        return [];
+    }
+}
+
+/** @extends Control */
+class IfControl extends Control {
+    /**
+     * Controls branching in arguments parsing.
+     * @param {ControlPredicate} condition - Condition to check.
+     * @param {Array&lt;Argument|Control>|Argument|Control} trueArguments - Arguments to run if true.
+     * @param {Array&lt;Argument|Control>|Argument|Control} falseArguments - Arguments to run if false.
+     */
+    constructor(condition, trueArguments = [], falseArguments = []) {
+        super();
+
+        /**
+         * Condition to check.
+         * @type {ControlPredicate}
+         */
+        this.condition = condition;
+
+        /**
+         * Arguments to run if true.
+         * @type {Array&lt;Argument|Control>|Argument|Control}
+         */
+        this.trueArguments = trueArguments;
+
+        /**
+         * Arguments to run if false.
+         * @type {Array&lt;Argument|Control>|Argument|Control}
+         */
+        this.falseArguments = falseArguments;
+    }
+
+    /**
+     * Branches the flow.
+     * @param {Object} data - Data for control.
+     * @returns {Object}
+     */
+    control({ process, command, message, processedArgs }) {
+        return process(command.buildArgs(this.condition(message, processedArgs) ? this.trueArguments : this.falseArguments));
+    }
+
+    getArgs() {
+        return Array.isArray(this.trueArguments)
+            ? this.trueArguments.concat(this.falseArguments)
+            : [this.trueArguments].concat(this.falseArguments);
+    }
+}
+
+/** @extends Control */
+class CaseControl extends Control {
+    /**
+     * Controls branching in arguments parsing.
+     * Allows for multiple branches.
+     * @param {Array&lt;ControlPredicate|Array&lt;Argument|Control>|Argument|Control>} condArgs - A list of conditions followed by their arguments.
+     * E.g. [() => ..., [args], () => ..., [args]].
+     */
+    constructor(condArgs) {
+        super();
+
+        /**
+         * A list of conditions followed by their arguments.
+         * @type {Array&lt;ControlPredicate|Array&lt;Argument|Control>|Argument|Control>}
+         */
+        this.condArgs = condArgs;
+    }
+
+    /**
+     * Branches the flow.
+     * @param {Object} data - Data for control.
+     * @returns {Object}
+     */
+    control({ process, currentArgs, command, message, processedArgs }) {
+        for (let i = 0; i &lt; this.condArgs.length; i += 2) {
+            if (this.condArgs[i](message, processedArgs)) {
+                return process(command.buildArgs(this.condArgs[i + 1]));
+            }
+        }
+
+        return process(currentArgs.slice(1));
+    }
+
+    getArgs() {
+        return this.condArgs.filter((v, i) => i % 2 === 1);
+    }
+}
+
+/** @extends Control */
+class DoControl extends Control {
+    /**
+     * Runs a function when the control is reached.
+     * @param {ControlFunction} fn - Function to run.
+     */
+    constructor(fn) {
+        super();
+
+        /**
+         * Function to run.
+         * @type {ControlFunction}
+         */
+        this.fn = fn;
+    }
+
+    /**
+     * Does some operation.
+     * @param {Object} data - Data for control.
+     * @returns {Object}
+     */
+    control({ process, currentArgs, command, message, processedArgs }) {
+        this.fn.call(command, message, processedArgs);
+        return process(currentArgs.slice(1));
+    }
+}
+
+/** @extends Control */
+class EndControl extends Control {
+    /**
+     * Ends parsing prematurely.
+     */
+    // eslint-disable-next-line no-useless-constructor
+    constructor() {
+        super();
+    }
+
+    /**
+     * Ends parsing.
+     * @param {Object} data - Data for control.
+     * @returns {Object}
+     */
+    control({ processedArgs }) {
+        return processedArgs;
+    }
+}
+
+/** @extends Control */
+class CancelControl extends Control {
+    /**
+     * Cancels the command.
+     */
+    // eslint-disable-next-line no-useless-constructor
+    constructor() {
+        super();
+    }
+
+    /**
+     * Cancels the command.
+     * @param {Object} data - Data for control.
+     * @returns {Object}
+     */
+    control() {
+        return Symbols.COMMAND_CANCELLED;
+    }
+}
+
+module.exports = {
+    Control,
+    IfControl,
+    CaseControl,
+    DoControl,
+    EndControl,
+    CancelControl,
+    if(condition, trueArguments, falseArguments) {
+        return new IfControl(condition, trueArguments, falseArguments);
+    },
+    case(...condArgs) {
+        return new CaseControl(condArgs);
+    },
+    do(fn) {
+        return new DoControl(fn);
+    },
+    end() {
+        return new EndControl();
+    },
+    cancel() {
+        return new CancelControl();
+    }
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>util/Category.js - Documentation</title>
+    <title>EndControl - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,72 +27,404 @@
 
 <div id="main">
     
-    <h1 class="page-title">util/Category.js</h1>
+    <h1 class="page-title">EndControl</h1>
     
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>const { Collection } = require('discord.js');
+        <h2>
+        EndControl
+        </h2>
+        
+    
+</header>
 
-/** @extends Collection */
-class Category extends Collection {
-    /**
-     * A group of modules.
-     * @param {string} id - ID of the category.
-     * @param {Iterable} [iterable] - Entries to set.
-     */
-    constructor(id, iterable) {
-        super(iterable);
+<article>
+    <div class="container-overview">
+    
+        
 
-        /**
-         * ID of the category.
-         * @type {string}
-         */
-        this.id = id;
-    }
+    
 
-    /**
-     * Calls `reload()` on all items in this category.
-     * @returns {Category}
-     */
-    reloadAll() {
-        for (const m of Array.from(this.values())) {
-            if (m.filepath) m.reload();
-        }
+    <h4 class="name" id="EndControl"><span class="type-signature"></span>new EndControl<span class="signature">()</span><span class="type-signature"></span></h4>
 
-        return this;
-    }
+    
 
-    /**
-     * Calls `remove()` on all items in this category.
-     * @returns {Category}
-     */
-    removeAll() {
-        for (const m of Array.from(this.values())) {
-            if (m.filepath) m.remove();
-        }
 
-        return this;
-    }
 
-    /**
-     * Returns the ID.
-     * @returns {string}
-     */
-    toString() {
-        return this.id;
-    }
-}
 
-module.exports = Category;
-</code></pre>
-        </article>
-    </section>
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_commands_arguments_Control.js.html">struct/commands/arguments/Control.js</a>, <a href="struct_commands_arguments_Control.js.html#line153">line 153</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Ends parsing prematurely.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li><a href="Control.html">Control</a></li>
+    </ul>
+
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="control"><span class="type-signature"></span>control<span class="signature">(data)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_commands_arguments_Control.js.html">struct/commands/arguments/Control.js</a>, <a href="struct_commands_arguments_Control.js.html#line167">line 167</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Control.html#control">Control#control</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Ends parsing.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Data for control.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<b>Returns:</b>
+
+        
+
+
+    
+<span class="param-type">Object</span>
+
+
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="getArgs"><span class="type-signature"></span>getArgs<span class="signature">()</span><span class="type-signature"> &rarr; {Array.&lt;(<a href="global.html#ArgumentOptions">ArgumentOptions</a>|<a href="Control.html">Control</a>)>|<a href="global.html#ArgumentOptions">ArgumentOptions</a>|<a href="Control.html">Control</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_commands_arguments_Control.js.html">struct/commands/arguments/Control.js</a>, <a href="struct_commands_arguments_Control.js.html#line36">line 36</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Control.html#getArgs">Control#getArgs</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Gets the args contained within the control.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<b>Returns:</b>
+
+        
+
+
+    
+<span class="param-type">Array.&lt;(<a href="global.html#ArgumentOptions">ArgumentOptions</a>|<a href="Control.html">Control</a>)></span>
+|
+
+<span class="param-type"><a href="global.html#ArgumentOptions">ArgumentOptions</a></span>
+|
+
+<span class="param-type"><a href="Control.html">Control</a></span>
+
+
+
+    
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
