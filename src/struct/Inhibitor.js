@@ -18,14 +18,13 @@ class Inhibitor extends AkairoModule {
      * @param {string} id - Inhibitor ID.
      * @param {InhibitorOptions} [options={}] - Options for the inhibitor.
      */
-    constructor(id, options = {}) {
-        super(id, options);
-
-        const {
-            reason = '',
-            type = 'post',
-            priority = 0
-        } = options;
+    constructor(id, {
+        category,
+        reason = '',
+        type = 'post',
+        priority = 0
+    } = {}) {
+        super(id, { category });
 
         /**
          * Reason emitted when command is inhibited.
@@ -65,7 +64,7 @@ class Inhibitor extends AkairoModule {
      * @abstract
      * @param {Message} message - Message being handled.
      * @param {Command} [command] - Command to check.
-     * @returns {boolean|Promise<any>}
+     * @returns {boolean|Promise<boolean>}
      */
     exec() {
         throw new AkairoError('NOT_IMPLEMENTED', this.constructor.name, 'exec');

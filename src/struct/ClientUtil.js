@@ -8,13 +8,9 @@ class ClientUtil {
     constructor(client) {
         /**
          * The Akairo client.
-         * @readonly
-         * @name ClientUtil#client
          * @type {AkairoClient}
          */
-        Object.defineProperty(this, 'client', {
-            value: client
-        });
+        this.client = client;
     }
 
     /**

@@ -66,7 +66,7 @@ class Command extends AkairoModule {
      * @param {CommandOptions} [options={}] - Options for the command.
      */
     constructor(id, options = {}) {
-        super(id, options);
+        super(id, { category: options.category });
 
         const {
             aliases = [],

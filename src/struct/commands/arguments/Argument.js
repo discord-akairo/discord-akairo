@@ -257,7 +257,6 @@ class Argument {
 
     /**
      * The client.
-     * @readonly
      * @type {AkairoClient}
      */
     get client() {
@@ -266,7 +265,6 @@ class Argument {
 
     /**
      * The command handler.
-     * @readonly
      * @type {CommandHandler}
      */
     get handler() {

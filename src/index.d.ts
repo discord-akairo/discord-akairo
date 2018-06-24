@@ -33,61 +33,49 @@ declare module 'discord-akairo' {
     export class AkairoClient extends Client {
         public constructor(options?: AkairoOptions & ClientOptions, clientOptions?: ClientOptions);
 
-        protected _built: boolean;
-        protected _loaded: boolean;
-
-        public akairoOptions: AkairoOptions;
-        public commandHandler: CommandHandler;
-        public inhibitorHandler: InhibitorHandler;
-        public listenerHandler: ListenerHandler;
         public ownerID: Snowflake | Snowflake[];
         public selfbot: boolean;
         public util: ClientUtil;
-
-        public build(): this;
-        public loadAll(directory?: string): void;
-        public login(token: string): Promise<string>;
     }
 
     export class AkairoHandler {
         public constructor(client: AkairoClient, options: AkairoHandlerOptions);
 
+        public automateCategories: boolean;
         public extensions: Set<string>;
         public categories: Collection<string, Category<string, AkairoModule>>;
-        public readonly classToHandle: Function;
-        public readonly client: AkairoClient;
-        public readonly directory: string;
+        public classToHandle: Function;
+        public client: AkairoClient;
+        public directory: string;
+        public loadFiler: LoadFilterFunction;
         public modules: Collection<string, AkairoModule>;
 
-        public static readdirRecursive(directory: string): string[];
-
-        protected _register(mod: AkairoModule, filepath?: string): void;
-        protected _deregister(mod: AkairoModule): void;
-
-        public add(filename: string): AkairoModule;
+        public deregister(mod: AkairoModule): void;
         public findCategory(name: string): Category<string, AkairoModule>;
         public load(thing: string | Function, isReload?: boolean): AkairoModule;
         public loadAll(directory?: string, filter?: LoadFilterFunction): this;
+        public register(mod: AkairoModule, filepath?: string): void;
         public reload(id: string): AkairoModule;
         public reloadAll(): this;
         public remove(id: string): AkairoModule;
         public removeAll(): this;
-        public on(event: 'disable' | 'enable' | 'remove', listener: (mod: AkairoModule) => any): this;
+        public on(event: 'remove', listener: (mod: AkairoModule) => any): this;
         public on(event: 'load', listener: (mod: AkairoModule, isReload: boolean) => any): this;
+
+        public static readdirRecursive(directory: string): string[];
     }
 
     export class AkairoModule {
-        public constructor(id: string, options?: ModuleOptions);
+        public constructor(id: string, options?: AkairoModuleOptions);
 
         public category: Category<string, AkairoModule>;
-        public readonly client: AkairoClient;
+        public categoryID: string;
+        public client: AkairoClient;
         public enabled: boolean;
-        public readonly filepath: string;
-        public readonly handler: AkairoHandler;
+        public filepath: string;
+        public handler: AkairoHandler;
         public id: string;
 
-        public disable(): boolean;
-        public enable(): boolean;
         public reload(): this;
         public remove(): this;
     }
@@ -96,7 +84,6 @@ declare module 'discord-akairo' {
         public constructor(command: Command, options: ArgumentOptions);
 
         public readonly client: AkairoClient;
-        public cancel: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | ArgumentCancelFunction;
         public command: Command;
         public default: any | ArgumentDefaultFunction;
         public description: string;
@@ -104,29 +91,27 @@ declare module 'discord-akairo' {
         public id: string;
         public index?: number;
         public limit: number;
-        public match: ArgumentMatch | ArgumentMatchFunction;
+        public match: ArgumentMatch;
         public prefix?: string | string[];
         public prompt?: ArgumentPromptOptions;
         public type: ArgumentType | ArgumentTypeFunction;
         public unordered: boolean | number | number[];
 
         public allow(message: Message, args: any): boolean;
-        public cast(word: string, message: Message, args?: any): Promise<any>;
+        public cast(phrase: string, message: Message, args?: any): Promise<any>;
         public collect(message: Message, args?: any, commandInput?: string): Promise<any>;
-        public process(word: string, message: Message, args?: any): Promise<any>;
+        public process(phrase: string, message: Message, args?: any): Promise<any>;
 
-        public static cast(type: ArgumentType | ArgumentTypeFunction, resolver: TypeResolver, word: string, message: Message, args?: any): Promise<any>;
+        public static cast(type: ArgumentType | ArgumentTypeFunction, resolver: TypeResolver, phrase: string, message: Message, args?: any): Promise<any>;
         public static every(...types: (ArgumentType | ArgumentTypeFunction)[]): ArgumentTypeFunction;
         public static some(...types: (ArgumentType | ArgumentTypeFunction)[]): ArgumentTypeFunction; 
     }
 
     export class Category<K, V> extends Collection<K, V> {
-        public constructor(id: string, iterable: Iterable<[K, V][]>);
+        public constructor(id: string, iterable?: Iterable<[K, V][]>);
 
         public id: string;
 
-        public disableAll(): this;
-        public enableAll(): this;
         public reloadAll(): this;
         public removeAll(): this;
     }
@@ -163,46 +148,40 @@ declare module 'discord-akairo' {
     }
 
     export class Command extends AkairoModule {
-        public constructor(id: string, options?: CommandOptions);
+        public constructor(id: string, options?: CommandOptions & AkairoModuleOptions);
 
         public aliases: string[];
-        public args: (Argument | Argument[] | CommandCancelFunction)[] | ArgumentFunction;
+        public args: (Argument | Control)[] | ArgumentFunction;
+        public quoted: boolean;
         public category: Category<string, Command>;
         public channel?: string;
-        public readonly client: AkairoClient;
+        public client: AkairoClient;
         public clientPermissions: PermissionResolvable | PermissionResolvable[] | PermissionFunction;
         public cooldown?: number;
         public defaultPrompt: ArgumentPromptOptions;
         public description: string;
         public editable: boolean;
-        public readonly filepath: string;
-        public readonly handler: CommandHandler;
+        public filepath: string;
+        public handler: CommandHandler;
         public id: string;
-        public options: any;
         public ownerOnly: boolean;
         public prefix?: string | string[] | PrefixFunction;
-        public protected: boolean;
         public ratelimit: number;
-        public split: ArgumentSplit | ArgumentSplitFunction;
-        public trigger: RegExp | TriggerFunction;
+        public regex: RegExp | RegexFunction;
         public typing: boolean;
         public userPermissions: PermissionResolvable | PermissionResolvable[] | PermissionFunction;
 
-        protected _buildArgs(args: (ArgumentOptions | ArgumentOptions[] | CommandCancelFunction)[]): (Argument | Argument[] | CommandCancelFunction)[];
-        protected _splitText(content: string, message: Message): string[];
-        protected _getPrefixes(): any[];
-
+        public buildArgs(args: (ArgumentOptions | Control)[] | Argument | Control): (Argument | Control)[];
         public condition(message: Message): boolean;
-        public disable(): boolean;
-        public enable(): boolean;
         public exec(message: Message, args: any): any;
+        public getPrefixes(): any[];
         public parse(content: string, message: Message): Promise<any>;
         public reload(): this;
         public remove(): this;
     }
 
     export class CommandHandler extends AkairoHandler {
-        public constructor(client: AkairoClient);
+        public constructor(client: AkairoClient, options: CommandHandlerOptions & AkairoModuleOptions);
 
         public aliasReplacement?: RegExp;
         public aliases: Collection<string, string>;
@@ -211,69 +190,73 @@ declare module 'discord-akairo' {
         public blockClient: boolean;
         public blockOthers: boolean;
         public categories: Collection<string, Category<string, Command>>;
-        public readonly classToHandle: Function;
-        public readonly client: AkairoClient;
+        public classToHandle: typeof Command;
+        public client: AkairoClient;
         public commandUtil: boolean;
         public commandUtilLifetime: number;
         public commandUtils: Collection<string, CommandUtil>;
         public cooldowns: Collection<string, any>;
         public defaultCooldown: number;
         public defaultPrompt: ArgumentPromptOptions;
-        public readonly directory: string;
+        public directory: string;
         public fetchMembers: boolean;
         public handleEdits: boolean;
         public ignoreCooldownID: Snowflake | Snowflake[];
+        public inhibitorHandler?: InhibitorHandler;
         public modules: Collection<string, Command>;
         public prefix: string | string[] | PrefixFunction;
         public prefixes: Collection<string | PrefixFunction, Set<string>>;
         public prompts: Collection<string, Set<string>>;
         public resolver: TypeResolver;
-
-        protected _addAliases(command: Command): void;
-        protected _handleConditional(message: Message): Promise<void>;
-        protected _handleCooldowns(message: Message, command: Command): boolean;
-        protected _handleError(err: Error, message: Message, command?: Command): void;
-        protected _handleRegex(message: Message): Promise<void>;
-        protected _handleTriggers(message: Message): Promise<void>;
-        protected _parseCommand(message: Message): Promise<any>;
-        protected _parseOverwrittenCommand(message: Message): Promise<any>;
-        protected _removeAliases(command: Command): void;
-        protected _runInhibitors(message: Message, command: Command): Promise<boolean>;
-
-        protected _deregister(command: Command): void;
-        protected _register(command: Command, filepath?: string): void;
+        public storeMessage: boolean;
 
         public add(filename: string): Command;
         public addPrompt(channel: Channel, user: User): void;
+        public deregister(command: Command): void;
+        public emitError(err: Error, message: Message, command: Command): void;
         public findCategory(name: string): Category<string, Command>;
         public findCommand(name: string): Command;
         public handle(message: Message): Promise<void>;
+        public handleDirectCommand(message: Message, content: string, command: Command): Promise<void>;
+        public handleRegexAndConditionalCommands(message: Message): Promise<void>;
+        public handleRegexCommands(message: Message): Promise<void>;
+        public handleConditionalCommands(message: Message): Promise<void>;
         public hasPrompt(channel: Channel, user: User): boolean;
         public load(thing: string | Function): Command;
         public loadAll(directory?: string, filter?: LoadFilterFunction): this;
+        public parseCommand(message: Message): Promise<any>;
+        public parseCommandWithOverwrittenPrefixes(message: Message): Promise<any>;
+        public register(command: Command, filepath?: string): void;
         public reload(id: string): Command;
         public reloadAll(): this;
         public remove(id: string): Command;
         public removeAll(): this;
         public removePrompt(channel: Channel, user: User): void;
-        public on(event: 'disable' | 'enable' | 'remove', listener: (command: Command) => any): this;
+        public runAllTypeInhibitors(message: Message): Promise<boolean>;
+        public runPreTypeInhibitors(message: Message): Promise<boolean>;
+        public runPostTypeInhibitors(message: Message, command: Command): Promise<boolean>;
+        public runCooldowns(message: Message, command: Command): boolean;
+        public runCommand(message: Message, command: Command, args: any): Promise<void>;
+        public useInhibitorHandler(inhibitorHandler: InhibitorHandler): void;
+        public useListenerHandler(ListenerHandler: ListenerHandler): void;
+        public on(event: 'remove', listener: (command: Command) => any): this;
         public on(event: 'load', listener: (command: Command, isReload: boolean) => any): this;
         public on(event: 'commandBlocked', listener: (message: Message, command: Command, reason: string) => any): this;
-        public on(event: 'commandCancelled' | 'commandDisabled', listener: (message: Message, command: Command) => any): this;
+        public on(event: 'commandCancelled', listener: (message: Message, command: Command) => any): this;
         public on(event: 'commandFinished', listener: (message: Message, command: Command, args: any, returnValue: any) => any): this;
         public on(event: 'commandStarted', listener: (message: Message, command: Command, args: any) => any): this;
         public on(event: 'cooldown', listener: (message: Message, command: Command, remaining: number) => any): this;
         public on(event: 'error', listener: (error: Error, message: Message, command: Command) => any): this;
         public on(event: 'inPrompt' | 'messageInvalid', listener: (message: Message) => any): this;
         public on(event: 'messageBlocked', listener: (message: Message, reason: string) => any): this;
-        public on(event: 'missingPermissions', listener: (message: Message, command: Command, type: 'client' | 'user', missing?: PermissionResolvable[]) => any): this;
+        public on(event: 'missingPermissions', listener: (message: Message, command: Command, type: 'client' | 'user', missing?: any) => any): this;
     }
 
     export class CommandUtil {
-        public constructor(client: AkairoClient, message: Message);
+        public constructor(handler: CommandHandler, message: Message);
 
         public alias?: string;
-        public readonly client: AkairoClient;
+        public handler: CommandHandler;
         public command?: Command;
         public content?: string;
         public lastResponse?: Message;
@@ -294,92 +277,86 @@ declare module 'discord-akairo' {
     }
 
     export class Inhibitor extends AkairoModule {
-        public constructor(id: string, options?: InhibitorOptions);
+        public constructor(id: string, options?: InhibitorOptions & AkairoModuleOptions);
 
         public category: Category<string, Inhibitor>;
-        public readonly client: AkairoClient;
+        public client: AkairoClient;
         public enabled: boolean;
-        public readonly filepath: string;
-        public readonly handler: InhibitorHandler;
+        public filepath: string;
+        public handler: InhibitorHandler;
         public id: string;
         public reason: string;
         public type: string;
 
-        public disable(): boolean;
-        public enable(): boolean;
         public exec(message: Message, command?: Command): boolean | Promise<boolean>;
         public reload(): this;
         public remove(): this;
     }
 
     export class InhibitorHandler extends AkairoHandler {
-        public constructor(client: AkairoClient);
+        public constructor(client: AkairoClient, options: AkairoHandlerOptions);
 
         public categories: Collection<string, Category<string, Inhibitor>>;
-        public readonly classToHandle: Function;
-        public readonly client: AkairoClient;
-        public readonly directory: string;
+        public classToHandle: typeof Inhibitor;
+        public client: AkairoClient;
+        public directory: string;
         public modules: Collection<string, Inhibitor>;
 
-        protected _deregister(inhibitor: Inhibitor): void;
-        protected _register(inhibitor: Inhibitor, filepath?: string): void;
-
-        public add(filename: string): Inhibitor;
+        public deregister(inhibitor: Inhibitor): void;
         public findCategory(name: string): Category<string, Inhibitor>;
         public load(thing: string | Function): Inhibitor;
         public loadAll(directory?: string, filter?: LoadFilterFunction): this;
+        public register(inhibitor: Inhibitor, filepath?: string): void;
         public reload(id: string): Inhibitor;
         public reloadAll(): this;
         public remove(id: string): Inhibitor;
         public removeAll(): this;
         public test(type: 'all' | 'pre' | 'post', message: Message, command?: Command): Promise<string | void>;
-        public on(event: 'disable' | 'enable' | 'remove', listener: (inhibitor: Inhibitor) => any): this;
+        public on(event: 'remove', listener: (inhibitor: Inhibitor) => any): this;
         public on(event: 'load', listener: (inhibitor: Inhibitor, isReload: boolean) => any): this;
     }
 
     export class Listener extends AkairoModule {
-        public constructor(id: string, options?: ListenerOptions);
+        public constructor(id: string, options?: ListenerOptions & AkairoModuleOptions);
 
         public category: Category<string, Listener>;
-        public readonly client: AkairoClient;
+        public client: AkairoClient;
         public emitter: string | EventEmitter;
         public enabled: boolean;
         public event: string;
-        public readonly filepath: string;
-        public readonly handler: InhibitorHandler;
+        public filepath: string;
+        public handler: ListenerHandler;
         public type: string;
 
-        public disable(): boolean;
-        public enable(): boolean;
         public exec(...args: any[]): any;
         public reload(): this;
         public remove(): this;
     }
 
     export class ListenerHandler extends AkairoHandler {
-        public constructor(client: AkairoClient);
+        public constructor(client: AkairoClient, options: AkairoHandlerOptions);
 
         public categories: Collection<string, Category<string, Listener>>;
-        public readonly classToHandle: Function;
-        public readonly client: AkairoClient;
-        public readonly directory: string;
+        public classToHandle: typeof Listener;
+        public client: AkairoClient;
+        public directory: string;
         public emitters: Collection<string, EventEmitter>;
         public modules: Collection<string, Listener>;
 
-        protected _deregister(listener: Listener): void;
-        protected _register(listener: Listener, filepath?: string): void;
-
         public add(filename: string): Listener;
-        public deregister(id: string): Listener;
+        public addToEmitter(id: string): Listener;
+        public deregister(listener: Listener): void;
         public findCategory(name: string): Category<string, Listener>;
         public load(thing: string | Function): Listener;
         public loadAll(directory?: string, filter?: LoadFilterFunction): this;
-        public register(id: string): Listener;
+        public register(listener: Listener, filepath?: string): void;
         public reload(id: string): Listener;
         public reloadAll(): this;
         public remove(id: string): Listener;
         public removeAll(): this;
-        public on(event: 'disable' | 'enable' | 'remove', listener: (listener: Listener) => any): this;
+        public removeFromEmitter(id: string): Listener;
+        public setEmitters(emitters: { [x: string]: EventEmitter }): void;
+        public on(event: 'remove', listener: (listener: Listener) => any): this;
         public on(event: 'load', listener: (listener: Listener, isReload: boolean) => any): this;
     }
 
@@ -427,12 +404,13 @@ declare module 'discord-akairo' {
     export class TypeResolver {
         public constructor(handler: CommandHandler);
 
-        public readonly client: AkairoClient;
-        public handler: CommandHandler;
+        public client: AkairoClient;
+        public commandHandler: CommandHandler;
+        public inhibitorHandler?: InhibitorHandler;
+        public listenerHandler?: ListenerHandler;
         public types: Collection<string, ArgumentTypeFunction>;
 
-        protected _addBuiltInTypes(): void;
-
+        public addBuiltInTypes(): void;
         public addType(name: string, resolver: ArgumentTypeFunction): this;
         public addTypes(types: { [x: string]: ArgumentTypeFunction }): this;
         public type(name: string): ArgumentTypeFunction;
@@ -444,59 +422,33 @@ declare module 'discord-akairo' {
     }
 
     export type AkairoOptions = {
-        aliasReplacement?: RegExp;
-        allowMention?: boolean | AllowMentionFunction;
-        automateCategories?: boolean;
-        blockBots?: boolean;
-        blockClient?: boolean;
-        blockOthers?: boolean;
-        commandDirectory?: string;
-        commandUtil?: boolean;
-        commandUtilLifetime?: number;
-        defaultCooldown?: number;
-        defaultPrompt?: ArgumentPromptOptions;
-        emitters?: { [x: string]: EventEmitter };
-        fetchMembers?: boolean;
-        handleEdits?: boolean;
-        ignoreCooldownID?: Snowflake | Snowflake[];
-        inhibitorDirectory?: string;
-        loadFilter?: LoadFilterFunction;
-        listenerDirectory?: string;
-        prefix?: string | string[] | PrefixFunction;
         selfbot?: boolean;
-        storeMessages?: boolean;
         ownerID?: Snowflake | Snowflake[];
     };
 
     export type AkairoHandlerOptions = {
-        directory?: string;
+        automateCategories?: boolean;
         classToHandle?: string;
-        extenstions?: string[] | Set<string>;
+        directory?: string;
+        extensions?: string[] | Set<string>;
+        loadFilter?: LoadFilterFunction;
     };
 
     export type AllowMentionFunction = (message: Message) => boolean;
 
-    export type ArgumentAllowFunction = (message: Message, args: any) => boolean;
-
-    export type ArgumentCancelFunction = (value: any, message: Message, args: any) => void | string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | Promise<void | string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions>;
-
     export type ArgumentDefaultFunction = (message: Message, args: any) => any;
 
-    export type ArgumentFunction = (message: Message, content: string, words: string[]) => any;
+    export type ArgumentFunction = (message: Message, content: string) => any;
 
     export type ArgumentMatch = 'word' | 'rest' | 'separate' | 'prefix' | 'flag' | 'text' | 'content' | 'none';
 
-    export type ArgumentMatchFunction = (message: Message, args: any) => ArgumentMatch;
-
     export type ArgumentOptions = {
-        allow?: ArgumentAllowFunction;
-        cancel?: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | ArgumentCancelFunction;
         default?: ArgumentDefaultFunction | any;
         description?: string | string[];
         id: string;
         index?: number;
         limit?: number;
-        match?: ArgumentMatch | ArgumentMatchFunction;
+        match?: ArgumentMatch;
         prefix?: string | string[];
         prompt?: ArgumentPromptOptions;
         type?: ArgumentType | ArgumentTypeFunction;
@@ -507,7 +459,7 @@ declare module 'discord-akairo' {
         infinite: boolean;
         message: Message;
         retries: number;
-        word: string;
+        phrase: string;
     };
 
     export type ArgumentPromptFunction = (message: Message, args: any, data: ArgumentPromptData) => string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions;
@@ -534,20 +486,11 @@ declare module 'discord-akairo' {
         timeout?: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | ArgumentPromptFunction;
     };
 
-    export type ArgumentSplit = 'plain' | 'quoted' | 'sticky' | 'none' | string | RegExp;
-
-    export type ArgumentSplitFunction = (content: string, message: Message) => string[] & { isQuoted: boolean };
-
     export type ArgumentType = 'string' | 'lowercase' | 'uppercase' | 'charCodes' | 'number' | 'integer' | 'dynamic' | 'dynamicInt' | 'url' | 'date' | 'color' | 'user' | 'users' | 'member' | 'members' | 'relevant' | 'relevants' | 'channel' | 'channels' | 'textChannel' | 'textChannels' | 'voiceChannel' | 'voiceChannels' | 'role' | 'roles' | 'emoji' | 'emojis' | 'guild' | 'guilds' | 'message' | 'invite' | 'memberMention' | 'channelMention' | 'roleMention' | 'emojiMention' | 'commandAlias' | 'command' | 'inhibitor' | 'listener' | (string | string[])[];
-
-    export type ArgumentTypeFunction = (word: string, message: Message, args: any) => any;
-
-    export type CommandCancelFunction = (message: Message, args: any) => void | string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | Promise<void | string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions>;
 
     export type CommandOptions = {
         aliases?: string[];
-        args?: (ArgumentOptions | ArgumentOptions[] | CommandCancelFunction)[];
-        category?: string;
+        args?: (ArgumentOptions | Control)[] | ArgumentOptions | Control | ArgumentFunction;
         channel?: string;
         clientPermissions?: PermissionResolvable | PermissionResolvable[] | PermissionFunction;
         condition?: ConditionFunction;
@@ -555,27 +498,39 @@ declare module 'discord-akairo' {
         defaultPrompt?: ArgumentPromptOptions;
         description?: string | string[];
         editable?: boolean;
-        options?: any;
         ownerOnly?: boolean;
         prefix?: string | string[] | PrefixFunction;
-        protected?: boolean;
         ratelimit?: number;
-        split?: ArgumentSplit | ArgumentSplitFunction;
-        trigger?: RegExp | TriggerFunction;
+        regex?: RegExp | TriggerFunction;
         typing?: boolean;
         userPermissions?: PermissionResolvable | PermissionResolvable[] | PermissionFunction;
+    };
+
+    export type CommandHandlerOptions = {
+        aliasReplacement?: RegExp;
+        allowMention?: boolean | AllowMentionFunction;
+        blockBots?: boolean;
+        blockClient?: boolean;
+        blockOthers?: boolean;
+        commandUtil?: boolean;
+        commandUtilLifetime?: number;
+        defaultCooldown?: number;
+        defaultPrompt?: ArgumentPromptOptions;
+        fetchMembers?: boolean;
+        handleEdits?: boolean;
+        ignoreCooldownID?: Snowflake | Snowflake[];
+        prefix?: string | string[] | PrefixFunction;
+        storeMessages?: boolean;
     };
 
     export type ConditionFunction = (message: Message) => boolean;
 
     export type InhibitorOptions = {
-        category?: string;
         reason?: string;
         type?: string;
     };
 
     export type ListenerOptions = {
-        category?: string;
         emitter?: string | EventEmitter;
         event?: string;
         type?: string;
@@ -583,11 +538,11 @@ declare module 'discord-akairo' {
 
     export type LoadFilterFunction = (filepath: string) => boolean;
 
-    export type ModuleOptions = {
+    export type AkairoModuleOptions = {
         category?: string;
     };
 
-    export type PermissionFunction = (message: Message) => boolean | Promise<boolean>;
+    export type PermissionFunction = (message: Message) => any | Promise<any>;
 
     export type PrefixFunction = (message: Message) => string | string[];
 
@@ -596,11 +551,11 @@ declare module 'discord-akairo' {
         idColumn?: string;
     };
 
-    export type TriggerFunction = (message: Message) => RegExp;
+    export type RegexFunction = (message: Message) => RegExp;
 
     export const Constants: {
         ArgumentMatches: {
-            WORD: 'word',
+            PHRASE: 'phrase',
             PREFIX: 'prefix',
             FLAG: 'flag',
             TEXT: 'text',
@@ -651,22 +606,13 @@ declare module 'discord-akairo' {
             INHIBITOR: 'inhibitor',
             LISTENER: 'listener'
         },
-        ArgumentSplits: {
-            PLAIN: 'plain',
-            QUOTED: 'quoted',
-            STICKY: 'sticky',
-            NONE: 'none'
-        },
         AkairoHandlerEvents: {
             LOAD: 'load',
-            REMOVE: 'remove',
-            ENABLE: 'enable',
-            DISABLE: 'disable'
+            REMOVE: 'remove'
         },
         CommandHandlerEvents: {
             MESSAGE_BLOCKED: 'messageBlocked',
             MESSAGE_INVALID: 'messageInvalid',
-            COMMAND_DISABLED: 'commandDisabled',
             COMMAND_BLOCKED: 'commandBlocked',
             COMMAND_STARTED: 'commandStarted',
             COMMAND_FINISHED: 'commandFinished',

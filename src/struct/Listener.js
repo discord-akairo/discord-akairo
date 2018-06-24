@@ -17,14 +17,13 @@ class Listener extends AkairoModule {
      * @param {string} id - Listener ID.
      * @param {ListenerOptions} [options={}] - Options for the listener.
      */
-    constructor(id, options = {}) {
-        super(id, options);
-
-        const {
-            emitter = 'client',
-            event = 'ready',
-            type = 'on'
-        } = options;
+    constructor(id, {
+        category,
+        emitter = 'client',
+        event = 'ready',
+        type = 'on'
+    } = {}) {
+        super(id, { category });
 
         /**
          * The event emitter.

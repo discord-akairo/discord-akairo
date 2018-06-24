@@ -71,11 +71,11 @@ class AkairoHandler extends EventEmitter {
          * Whether or not to automate category names.
          * @type {boolean}
          */
-        this.automateCategories = automateCategories;
+        this.automateCategories = Boolean(automateCategories);
 
         /**
          * Function that filters files when loading.
-         * @type {LoadFilter}
+         * @type {LoadFilterFunction}
          */
         this.loadFilter = loadFilter;
 

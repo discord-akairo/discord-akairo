@@ -220,7 +220,7 @@ class CommandHandler extends AkairoHandler {
 
         /**
          * Inhibitor handler to use.
-         * @type {InhibitorHandler}
+         * @type {?InhibitorHandler}
          */
         this.inhibitorHandler = null;
 
@@ -830,7 +830,7 @@ class CommandHandler extends AkairoHandler {
      * @param {Error} err - The error.
      * @param {Message} message - Message that called the command.
      * @param {Command} [command] - Command that errored.
-     * @returns {Promise<void>}
+     * @returns {void}
      */
     emitError(err, message, command) {
         if (command && command.typing) message.channel.stopTyping();
