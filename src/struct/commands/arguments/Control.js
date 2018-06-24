@@ -40,7 +40,7 @@ class CaseControl extends Control {
     }
 }
 
-class TapControl extends Control {
+class DoControl extends Control {
     constructor(fn) {
         super();
 
@@ -69,7 +69,7 @@ module.exports = {
     Control,
     IfControl,
     CaseControl,
-    TapControl,
+    DoControl,
     EndControl,
     CancelControl,
     if(condition, trueArguments, falseArguments) {
@@ -78,8 +78,8 @@ module.exports = {
     case(...condArgs) {
         return new CaseControl(condArgs);
     },
-    tap(fn) {
-        return new TapControl(fn);
+    do(fn) {
+        return new DoControl(fn);
     },
     end() {
         return new EndControl();
