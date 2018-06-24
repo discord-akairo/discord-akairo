@@ -38,6 +38,7 @@ class Control {
     }
 }
 
+/** @extends Control */
 class IfControl extends Control {
     /**
      * Controls branching in arguments parsing.
@@ -67,6 +68,11 @@ class IfControl extends Control {
         this.falseArguments = falseArguments;
     }
 
+    /**
+     * Branches the flow.
+     * @param {Object} data - Data for control.
+     * @returns {Object}
+     */
     control({ process, command, message, processedArgs }) {
         return process(command.buildArgs(this.condition(message, processedArgs) ? this.trueArguments : this.falseArguments));
     }
@@ -78,6 +84,7 @@ class IfControl extends Control {
     }
 }
 
+/** @extends Control */
 class CaseControl extends Control {
     /**
      * Controls branching in arguments parsing.
@@ -96,6 +103,11 @@ class CaseControl extends Control {
         this.condArgs = condArgs;
     }
 
+    /**
+     * Branches the flow.
+     * @param {Object} data - Data for control.
+     * @returns {Object}
+     */
     control({ process, command, message, processedArgs }) {
         for (let i = 0; i < this.condArgs.length; i += 2) {
             if (this.condArgs[i](message, processedArgs)) {
@@ -111,6 +123,7 @@ class CaseControl extends Control {
     }
 }
 
+/** @extends Control */
 class DoControl extends Control {
     /**
      * Runs a function when the control is reached.
@@ -126,12 +139,18 @@ class DoControl extends Control {
         this.fn = fn;
     }
 
+    /**
+     * Does some operation.
+     * @param {Object} data - Data for control.
+     * @returns {Object}
+     */
     control({ process, currentArgs, command, message, processedArgs }) {
         this.fn.call(command, message, processedArgs);
         return process(currentArgs.slice(1));
     }
 }
 
+/** @extends Control */
 class EndControl extends Control {
     /**
      * Ends parsing prematurely.
@@ -141,11 +160,17 @@ class EndControl extends Control {
         super();
     }
 
+    /**
+     * Ends parsing.
+     * @param {Object} data - Data for control.
+     * @returns {Object}
+     */
     control({ processedArgs }) {
         return processedArgs;
     }
 }
 
+/** @extends Control */
 class CancelControl extends Control {
     /**
      * Cancels the command.
@@ -155,6 +180,11 @@ class CancelControl extends Control {
         super();
     }
 
+    /**
+     * Cancels the command.
+     * @param {Object} data - Data for control.
+     * @returns {Object}
+     */
     control() {
         return Symbols.COMMAND_CANCELLED;
     }
