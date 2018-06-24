@@ -528,6 +528,11 @@ class CommandHandler extends AkairoHandler {
         await Promise.all(promises);
     }
 
+    /**
+     * Runs inhibitors with the all type.
+     * @param {Message} message - Message to handle.
+     * @returns {Promise<boolean>}
+     */
     async runAllTypeInhibitors(message) {
         const reason = this.inhibitorHandler
             ? await this.inhibitorHandler.test('all', message)
@@ -548,6 +553,11 @@ class CommandHandler extends AkairoHandler {
         return true;
     }
 
+    /**
+     * Runs inhibitors with the pre type.
+     * @param {Message} message - Message to handle.
+     * @returns {Promise<boolean>}
+     */
     async runPreTypeInhibitors(message) {
         const reason = this.inhibitorHandler
             ? await this.inhibitorHandler.test('pre', message)
@@ -564,6 +574,12 @@ class CommandHandler extends AkairoHandler {
         return true;
     }
 
+    /**
+     * Runs inhibitors with the post type.
+     * @param {Message} message - Message to handle.
+     * @param {Command} command - Command to handle.
+     * @returns {Promise<boolean>}
+     */
     async runPostTypeInhibitors(message, command) {
         if (command.ownerOnly) {
             const notOwner = Array.isArray(this.client.ownerID)
@@ -689,6 +705,13 @@ class CommandHandler extends AkairoHandler {
         return false;
     }
 
+    /**
+     * Runs a command.
+     * @param {Message} message - Message to handle.
+     * @param {Command} command - Command to handle.
+     * @param {Object} args - Arguments to use.
+     * @returns {Promise<void>}
+     */
     async runCommand(message, command, args) {
         if (command.typing) {
             message.channel.startTyping();

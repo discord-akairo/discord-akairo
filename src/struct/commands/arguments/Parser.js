@@ -28,21 +28,66 @@
  * EOF = /^$/
  */
 
+/**
+ * @typedef {Object} ParserOptions
+ * @prop {string[]} [flagWords=[]] - Flags considered to be part of a flag arg.
+ * @prop {string[]} [optionFlagWords=[]] - Flags considered to be part of an option flag arg.
+ * @prop {boolean} [quoted=true] - Whether or not to consider quotes.
+ * @prop {string} [content=''] - Content to parse.
+ */
+
 class Parser {
+    /**
+     * Parser for arguments.
+     * @param {ParserOptions} options - Options for the parser.
+     */
     constructor({
         flagWords = [],
         optionFlagWords = [],
         quoted = true,
         content = ''
     } = {}) {
+        /**
+         * Flags considered to be part of a flag arg.
+         * @type {string[]}
+         */
         this.flagWords = flagWords;
+
+        /**
+         * Flags considered to be part of an option flag arg.
+         * @type {string[]}
+         */
         this.optionFlagWords = optionFlagWords;
+
+        /**
+         * Whether or not to consider quotes.
+         * @type {boolean}
+         */
         this.quoted = quoted;
+
+        /**
+         * Content to parse.
+         * @type {string}
+         */
         this.content = content;
+
+        /**
+         * List of tokens.
+         * @type {Object[]}
+         */
         this.tokens = this.tokenize();
+
+        /**
+         * Position in the tokens.
+         * @type {number}
+         */
         this.position = 0;
     }
 
+    /**
+     * Tokenizes the content.
+     * @returns {Object[]}
+     */
     tokenize() {
         const tokens = [];
         let content = this.content;
@@ -118,14 +163,27 @@ class Parser {
         return tokens;
     }
 
+    /**
+     * Gets the current token.
+     * @type {Object}
+     */
     get token() {
         return this.tokens[this.position];
     }
 
+    /**
+     * Increments position by 1.
+     * @returns {void}
+     */
     next() {
         this.position++;
     }
 
+    /**
+     * Matches the current token.
+     * @param {string[]} types - Types of tokens to match.
+     * @returns {Object}
+     */
     match(types) {
         if (types.includes(this.tokens[this.position].t)) {
             this.next();
@@ -135,6 +193,10 @@ class Parser {
         throw new Error('Parsing did not match something (this should never happen)');
     }
 
+    /**
+     * Parses the tokens into an object with representations of the original content.
+     * @returns {Object}
+     */
     parse() {
         const args = {
             content: [],
@@ -171,6 +233,11 @@ class Parser {
         return args;
     }
 
+    /**
+     * Parses one argument.
+     * @param {Object} args - Current representation of content.
+     * @returns {void}
+     */
     parseArgument(args) {
         if (['FlagWord', 'OptionFlagWord'].includes(this.token.t)) {
             this.parseFlag(args);
@@ -179,6 +246,11 @@ class Parser {
         }
     }
 
+    /**
+     * Parses one flag.
+     * @param {Object} args - Current representation of content.
+     * @returns {void}
+     */
     parseFlag(args) {
         if (this.token.t === 'FlagWord') {
             args.previous = 1;
@@ -196,6 +268,11 @@ class Parser {
         args.flags.push(flag);
     }
 
+    /**
+     * Parses one phrase.
+     * @param {Object} args - Current representation of content.
+     * @returns {void}
+     */
     parsePhrase(args) {
         args.previous = 0;
         if (this.token.t === 'Quote') {
