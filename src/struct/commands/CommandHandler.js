@@ -425,13 +425,13 @@ class CommandHandler extends AkairoHandler {
             if (message.edited && !command.editable) return;
             if (await this.runPostTypeInhibitors(message, command)) return;
             const args = await command.parse(content, message);
-            await this.runCommand(message, command, args);
-        } catch (err) {
-            if (err === Symbols.COMMAND_CANCELLED) {
+            if (args === Symbols.COMMAND_CANCELLED) {
                 this.emit(CommandHandlerEvents.COMMAND_CANCELLED, message, command);
                 return;
             }
 
+            await this.runCommand(message, command, args);
+        } catch (err) {
             this.emitError(err, message, command);
         }
     }
@@ -488,11 +488,6 @@ class CommandHandler extends AkairoHandler {
                     if (await this.runPostTypeInhibitors(message, command)) return;
                     await this.runCommand(message, command, { match, matches });
                 } catch (err) {
-                    if (err === Symbols.COMMAND_CANCELLED) {
-                        this.emit(CommandHandlerEvents.COMMAND_CANCELLED, message, command);
-                        return;
-                    }
-
                     this.emitError(err, message, command);
                 }
             })());
@@ -525,11 +520,6 @@ class CommandHandler extends AkairoHandler {
                     if (await this.runPostTypeInhibitors(message, command)) return;
                     await this.runCommand(message, command, {});
                 } catch (err) {
-                    if (err === Symbols.COMMAND_CANCELLED) {
-                        this.emit(CommandHandlerEvents.COMMAND_CANCELLED, message, command);
-                        return;
-                    }
-
                     this.emitError(err, message, command);
                 }
             })());

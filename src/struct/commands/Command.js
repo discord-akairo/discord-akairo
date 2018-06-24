@@ -1,15 +1,15 @@
 const AkairoError = require('../../util/AkairoError');
 const AkairoModule = require('../AkairoModule');
 const Argument = require('./arguments/Argument');
+const { ArgumentMatches, ArgumentSplits, Symbols } = require('../../util/Constants');
 const { Control } = require('./arguments/Control');
-const { ArgumentMatches, ArgumentSplits } = require('../../util/Constants');
 const Parser = require('./arguments/Parser');
 
 /**
  * Options to use for command execution behavior.
  * @typedef {Object} CommandOptions
  * @prop {string[]} [aliases=[]] - Command names.
- * @prop {Array<ArgumentOptions|ArgumentOptions[]|CommandCancelFunction>|ArgumentFunction} [args=[]] - Arguments to parse.
+ * @prop {Array<Argument|Control>|ArgumentFunction} [args=[]] - Arguments to parse.
  * When an item is an array of arguments, the first argument that is allowed to run will be ran.
  * @prop {ArgumentSplit|ArgumentSplitFunction} [split='plain'] - Method to split text into words.
  * @prop {string} [channel] - Restricts channel to either 'guild' or 'dm'.
@@ -27,16 +27,6 @@ const Parser = require('./arguments/Parser');
  * @prop {ConditionFunction} [condition] - Whether or not to run on messages that are NOT commands.
  * @prop {ArgumentPromptOptions} [defaultPrompt={}] - The default prompt options.
  * @prop {string|string[]} [description=''] - Description of the command.
- */
-
-/**
- * A function used to cancel argument parsing midway.
- * If text is returned it will be sent and the command will be cancelled.
- * This behavior can be done manually anywhere else by throwing Constants.Symbols.COMMAND_CANCELLED.
- * @typedef {Function} CommandCancelFunction
- * @param {Message} message - Message that triggered the command.
- * @param {Object} prevArgs - Previous arguments.
- * @returns {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|Promise<string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions>}
  */
 
 /**
@@ -364,6 +354,7 @@ class Command extends AkairoModule {
             }
 
             const res = await processFunc(message, processed);
+            if (res === Symbols.COMMAND_CANCELLED) return res;
             processed[arg.id] = res;
             return process(args.slice(1));
         };
@@ -373,8 +364,8 @@ class Command extends AkairoModule {
 
     /**
      * Builds arguments from options.
-     * @param {Array<ArgumentOptions|ArgumentOptions[]|CommandCancelFunction>} args - Argument options to build.
-     * @returns {Array<Argument|Argument[]|CommandCancelFunction>}
+     * @param {Array<ArgumentOptions|Control>|ArgumentOptions|Control} args - Argument options to build.
+     * @returns {Array<Argument|Control>}
      */
     buildArgs(args) {
         if (!Array.isArray(args)) return this.buildArgs([args]);

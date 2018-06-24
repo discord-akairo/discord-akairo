@@ -1,4 +1,5 @@
 const AkairoError = require('../../../util/AkairoError');
+const { Symbols } = require('../../../util/Constants');
 
 class Control {
     // eslint-disable-next-line no-unused-vars
@@ -39,12 +40,6 @@ class CaseControl extends Control {
     }
 }
 
-class EndControl extends Control {
-    control({ processedArgs }) {
-        return processedArgs;
-    }
-}
-
 class TapControl extends Control {
     constructor(fn) {
         super();
@@ -58,22 +53,38 @@ class TapControl extends Control {
     }
 }
 
+class EndControl extends Control {
+    control({ processedArgs }) {
+        return processedArgs;
+    }
+}
+
+class CancelControl extends Control {
+    control() {
+        return Symbols.COMMAND_CANCELLED;
+    }
+}
+
 module.exports = {
     Control,
     IfControl,
     CaseControl,
-    EndControl,
     TapControl,
+    EndControl,
+    CancelControl,
     if(condition, trueArguments, falseArguments) {
         return new IfControl(condition, trueArguments, falseArguments);
     },
     case(...condArgs) {
         return new CaseControl(condArgs);
     },
+    tap(fn) {
+        return new TapControl(fn);
+    },
     end() {
         return new EndControl();
     },
-    tap(fn) {
-        return new TapControl(fn);
+    cancel() {
+        return new CancelControl();
     }
 };

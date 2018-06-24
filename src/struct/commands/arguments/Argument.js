@@ -79,17 +79,6 @@ const { isPromise } = require('../../../util/Util');
  */
 
 /**
- * A function that checks the value of the argument.
- * If text is returned it will be sent and the command will be cancelled.
- * This behavior can be done manually anywhere else by throwing Constants.Symbols.COMMAND_CANCELLED.
- * @typedef {Function} ArgumentCancelFunction
- * @param {any} value - The value of the processed argument.
- * @param {Message} message - Message that triggered the command.
- * @param {Object} prevArgs - Previous arguments.
- * @returns {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|Promise<string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions>}
- */
-
-/**
  * A function for processing user input to use as an argument.
  * A void return value will use the default value for the argument or start a prompt.
  * Any other truthy return value will be used as the evaluated argument.
@@ -178,9 +167,6 @@ const { isPromise } = require('../../../util/Util');
  * If using a flag arg, setting the default value to a non-void value inverses the result.
  * @prop {string|string[]} [description=''] - A description of the argument.
  * @prop {ArgumentPromptOptions} [prompt] - Prompt options for when user does not provide input.
- * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|ArgumentCancelFunction} [cancel] - Text to send if the command should be cancelled.
- * The command is to be cancelled if this option is provided and the value of the argument is null or undefined.
- * A function can be provided to check for cancellation and for the text to send.
  */
 
 /**
@@ -207,7 +193,6 @@ class Argument {
         limit = Infinity,
         description = '',
         prompt = null,
-        cancel = null,
         default: defaultValue = null
     } = {}) {
         /**
@@ -269,12 +254,6 @@ class Argument {
          * @type {?ArgumentPromptOptions}
          */
         this.prompt = prompt;
-
-        /**
-         * The text or condition for when the command should be cancelled.
-         * @type {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|ArgumentCancelFunction}
-         */
-        this.cancel = typeof cancel === 'function' ? cancel.bind(this) : cancel;
 
         /**
          * The default value of the argument.
@@ -438,8 +417,9 @@ class Argument {
                 }
             }
 
+            let input;
             try {
-                const input = (await message.channel.awaitMessages(m => {
+                input = (await message.channel.awaitMessages(m => {
                     if (sentStart && m.id === sentStart.id) return false;
                     if (m.author.id !== message.author.id) return false;
                     return true;
@@ -448,65 +428,57 @@ class Argument {
                     time: prompt.time,
                     errors: ['time']
                 })).first();
-
-                if (message.util) message.util.addMessage(input);
-
-                if (input.content.toLowerCase() === prompt.cancelWord.toLowerCase()) {
-                    const cancelText = getText('cancel', prompt.cancel, retryCount, input, '');
-                    if (cancelText) {
-                        const sentCancel = await message.channel.send(cancelText);
-                        if (message.util) message.util.addMessage(sentCancel);
-                    }
-
-                    this.handler.removePrompt(message.channel, message.author);
-                    throw Symbols.COMMAND_CANCELLED;
-                }
-
-                if (isInfinite && input.content.toLowerCase() === prompt.stopWord.toLowerCase()) {
-                    if (!values.length) return promptOne(input, retryCount + 1);
-                    return values;
-                }
-
-                const parsedValue = await this.cast(input.content, input, args);
-                if (parsedValue == null) {
-                    if (retryCount <= prompt.retries) {
-                        return promptOne(input, retryCount + 1);
-                    }
-
-                    const endedText = getText('ended', prompt.ended, retryCount, input, input.content);
-                    if (endedText) {
-                        const sentEnded = await message.channel.send(endedText);
-                        if (message.util) message.util.addMessage(sentEnded);
-                    }
-
-                    this.handler.removePrompt(message.channel, message.author);
-                    throw Symbols.COMMAND_CANCELLED;
-                }
-
-                if (isInfinite) {
-                    values.push(parsedValue);
-                    const limit = prompt.limit;
-                    if (values.length < limit) return promptOne(message, 1);
-
-                    return values;
-                }
-
-                return parsedValue;
             } catch (err) {
-                if (err instanceof Error || err === Symbols.COMMAND_CANCELLED) {
-                    this.handler.removePrompt(message.channel, message.author);
-                    throw err;
-                }
-
                 const timeoutText = getText('timeout', prompt.timeout, retryCount, prevMessage, '');
                 if (timeoutText) {
                     const sentTimeout = await message.channel.send(timeoutText);
                     if (message.util) message.util.addMessage(sentTimeout);
                 }
 
-                this.handler.removePrompt(message.channel, message.author);
-                throw Symbols.COMMAND_CANCELLED;
+                return Symbols.COMMAND_CANCELLED;
             }
+
+            if (message.util) message.util.addMessage(input);
+
+            if (input.content.toLowerCase() === prompt.cancelWord.toLowerCase()) {
+                const cancelText = getText('cancel', prompt.cancel, retryCount, input, '');
+                if (cancelText) {
+                    const sentCancel = await message.channel.send(cancelText);
+                    if (message.util) message.util.addMessage(sentCancel);
+                }
+
+                return Symbols.COMMAND_CANCELLED;
+            }
+
+            if (isInfinite && input.content.toLowerCase() === prompt.stopWord.toLowerCase()) {
+                if (!values.length) return promptOne(input, retryCount + 1);
+                return values;
+            }
+
+            const parsedValue = await this.cast(input.content, input, args);
+            if (parsedValue == null) {
+                if (retryCount <= prompt.retries) {
+                    return promptOne(input, retryCount + 1);
+                }
+
+                const endedText = getText('ended', prompt.ended, retryCount, input, input.content);
+                if (endedText) {
+                    const sentEnded = await message.channel.send(endedText);
+                    if (message.util) message.util.addMessage(sentEnded);
+                }
+
+                return Symbols.COMMAND_CANCELLED;
+            }
+
+            if (isInfinite) {
+                values.push(parsedValue);
+                const limit = prompt.limit;
+                if (values.length < limit) return promptOne(message, 1);
+
+                return values;
+            }
+
+            return parsedValue;
         };
 
         const returnValue = await promptOne(message, 1 + additionalRetry);

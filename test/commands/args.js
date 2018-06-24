@@ -11,7 +11,8 @@ class ArgsCommand extends Command {
             args: [
                 {
                     id: 'a',
-                    match: 'content'
+                    match: 'content',
+                    prompt: true
                 },
                 Control.tap((m, args) => console.log(args))
             ]
