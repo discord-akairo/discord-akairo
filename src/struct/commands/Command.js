@@ -72,7 +72,7 @@ class Command extends AkairoModule {
 
         const {
             aliases = [],
-            args = this.args,
+            args = this.args || [],
             parser = Parser,
             quoted = true,
             channel = null,
