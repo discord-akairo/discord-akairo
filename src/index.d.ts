@@ -1,3 +1,5 @@
+import { endianness } from 'os';
+
 declare module 'sqlite' {
     export interface Database {}
     export interface Statement {}
@@ -361,6 +363,28 @@ declare module 'discord-akairo' {
         public on(event: 'load', listener: (listener: Listener, isReload: boolean) => any): this;
     }
 
+    export class Parser {
+        public constructor(options?: ParserOptions);
+
+        public content: string;
+        public flagWords: string[];
+        public optionFlagWords: string[];
+        public position: number;
+        public quoted: boolean;
+        public token: any;
+        public tokens: any[];
+
+        public check(...types: string): boolean;
+        public createToken(type: string, value: string): any;
+        public match(...types: string): any;
+        public next(): void;
+        public parse(): any;
+        public parseArgument(): any;
+        public parseFlag(): any;
+        public parsePhrase(): any;
+        public tokenize(): any[];
+    }
+
     export abstract class Provider {
         public items: Collection<string, any>;
 
@@ -422,9 +446,47 @@ declare module 'discord-akairo' {
         public static isPromise(value: any): boolean;
     }
 
-    export type AkairoOptions = {
-        selfbot?: boolean;
-        ownerID?: Snowflake | Snowflake[];
+    class ControlClass {
+        public control(data: any): any;
+        public getArgs(): (Argument | Control)[] | Argument | Control;
+    }
+
+    class IfControl extends ControlClass {
+        public constructor(condition: ControlPredicate, trueArguments: (Argument | Control)[] | Argument | Control, falseArguments: (Argument | Control)[] | Argument | Control);
+
+        public condition: ControlPredicate;
+        public trueArguments: (Argument | Control)[] | Argument | Control;
+        public falseArguments: (Argument | Control)[] | Argument | Control;
+    }
+
+    class CaseControl extends ControlClass {
+        public constructor(condArgs: (ControlPredicate | (Argument | Control)[] | Argument | Control)[]);
+
+        public condArgs: (ControlPredicate | (Argument | Control)[] | Argument | Control)[];
+    }
+
+    class DoControl extends ControlClass {
+        public constructor(fn: ControlFunction);
+
+        public fn: ControlFunction;
+    }
+
+    class EndControl extends ControlClass {}
+
+    class CancelControl extends ControlClass {}
+
+    export interface Control {
+        Control: typeof ControlClass;
+        IfControl: typeof IfControl;
+        CaseControl: typeof CaseControl;
+        DoControl: typeof DoControl;
+        EndControl: typeof EndControl;
+        CancelControl: typeof CancelControl;
+        public if(condition: ControlPredicate, trueArguments: (Argument | Control)[] | Argument | Control, falseArguments: (Argument | Control)[] | Argument | Control): IfControl;
+        public case(...condArgs: ControlPredicate | (Argument | Control)[] | Argument | Control): CaseControl;
+        public do(fn: ControlFunction): DoControl;
+        public end(): EndControl;
+        public cancel(): CancelControl;
     };
 
     export type AkairoHandlerOptions = {
@@ -433,6 +495,15 @@ declare module 'discord-akairo' {
         directory?: string;
         extensions?: string[] | Set<string>;
         loadFilter?: LoadFilterFunction;
+    };
+
+    export type AkairoModuleOptions = {
+        category?: string;
+    };
+
+    export type AkairoOptions = {
+        selfbot?: boolean;
+        ownerID?: Snowflake | Snowflake[];
     };
 
     export type AllowMentionFunction = (message: Message) => boolean;
@@ -527,6 +598,10 @@ declare module 'discord-akairo' {
 
     export type ConditionFunction = (message: Message) => boolean;
 
+    export type ControlFunction = (message: Message, args: any) => any;
+
+    export type ControlPredicate = (message: Message, args: any) => boolean;
+
     export type InhibitorOptions = {
         reason?: string;
         type?: string;
@@ -540,9 +615,12 @@ declare module 'discord-akairo' {
 
     export type LoadFilterFunction = (filepath: string) => boolean;
 
-    export type AkairoModuleOptions = {
-        category?: string;
-    };
+    export type ParserOptions = {
+        content?: string;
+        flagWords?: string[];
+        optionFlagWords?: string[];
+        quoted?: boolean;
+    }
 
     export type PermissionFunction = (message: Message) => any | Promise<any>;
 
