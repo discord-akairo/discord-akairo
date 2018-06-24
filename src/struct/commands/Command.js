@@ -10,6 +10,8 @@ const Parser = require('./arguments/Parser');
  * @typedef {Object} CommandOptions
  * @prop {string[]} [aliases=[]] - Command names.
  * @prop {Array<Argument|Control>|Argument|Control|ArgumentFunction} [args=[]] - Arguments to parse.
+ * @prop {Object} [parser=Parser] - A custom parser.
+ * Note that this must have the same interface as the built-in parser.
  * @prop {boolean} [quoted=true] - Whether or not to consider quotes.
  * @prop {string} [channel] - Restricts channel to either 'guild' or 'dm'.
  * @prop {string} [category='default'] - Category ID for organization purposes.
@@ -71,6 +73,7 @@ class Command extends AkairoModule {
         const {
             aliases = [],
             args = this.args,
+            parser = Parser,
             quoted = true,
             channel = null,
             ownerOnly = false,
@@ -98,6 +101,12 @@ class Command extends AkairoModule {
          * @type {Array<Argument|Control>|ArgumentFunction}
          */
         this.args = typeof args === 'function' ? args.bind(this) : this.buildArgs(args);
+
+        /**
+         * The parser to use.
+         * @type {Object}
+         */
+        this.parser = parser;
 
         /**
          * Whether or not to consider quotes.
@@ -226,7 +235,8 @@ class Command extends AkairoModule {
         }
 
         const flags = this.getFlags();
-        const argumentParts = new Parser({
+        // eslint-disable-next-line new-cap
+        const argumentParts = new this.parser({
             flagWords: flags.flagWords,
             optionFlagWords: flags.optionFlagWords,
             quoted: this.quoted,

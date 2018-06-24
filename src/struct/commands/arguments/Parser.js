@@ -28,7 +28,7 @@
  * EOF = /^$/
  */
 
-class ArgumentsParser {
+class Parser {
     constructor({
         flagWords = [],
         optionFlagWords = [],
@@ -255,4 +255,4 @@ class ArgumentsParser {
     }
 }
 
-module.exports = ArgumentsParser;
+module.exports = Parser;

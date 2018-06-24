@@ -165,6 +165,7 @@ declare module 'discord-akairo' {
         public handler: CommandHandler;
         public id: string;
         public ownerOnly: boolean;
+        public parser: any;
         public prefix?: string | string[] | PrefixFunction;
         public ratelimit: number;
         public regex: RegExp | RegexFunction;
@@ -499,6 +500,7 @@ declare module 'discord-akairo' {
         description?: string | string[];
         editable?: boolean;
         ownerOnly?: boolean;
+        parser?: any;
         prefix?: string | string[] | PrefixFunction;
         ratelimit?: number;
         regex?: RegExp | TriggerFunction;
