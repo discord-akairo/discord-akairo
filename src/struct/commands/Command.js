@@ -56,7 +56,6 @@ const Parser = require('./arguments/Parser');
  * @typedef {Function} ArgumentFunction
  * @param {Message} message - Message that triggered the command.
  * @param {string} content - The content of the message.
- * @param {string[]} words - Words matched.
  * @returns {any}
  */
 
@@ -223,7 +222,7 @@ class Command extends AkairoModule {
         }
 
         if (typeof this.args === 'function') {
-            const res = this.args(message, content, new Parser({ quoted: this.quoted, content }).parse());
+            const res = this.args(message, content);
             return Promise.resolve(res);
         }
 
@@ -295,13 +294,13 @@ class Command extends AkairoModule {
             },
             [ArgumentMatches.TEXT]: arg => {
                 const index = arg.index == null ? 0 : arg.index;
-                const word = argumentParts.phrases.slice(index, index + arg.limit).map(ph => ph.value).join('');
-                return arg.process.bind(arg, word);
+                const text = argumentParts.phrases.slice(index, index + arg.limit).map(ph => ph.value).join('');
+                return arg.process.bind(arg, text);
             },
             [ArgumentMatches.CONTENT]: arg => {
                 const index = arg.index == null ? 0 : arg.index;
-                const word = argumentParts.content.slice(index, index + arg.limit).join('').trim();
-                return arg.process.bind(arg, word);
+                const text = argumentParts.content.slice(index, index + arg.limit).join('').trim();
+                return arg.process.bind(arg, text);
             },
             [ArgumentMatches.NONE]: arg => {
                 return arg.process.bind(arg, '');

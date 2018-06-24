@@ -55,8 +55,8 @@ class TestClient extends AkairoClient {
         this.listenerHandler.loadAll();
 
         const resolver = this.commandHandler.resolver;
-        resolver.addType('1-10', word => {
-            const num = resolver.type('integer')(word);
+        resolver.addType('1-10', phrase => {
+            const num = resolver.type('integer')(phrase);
             if (num == null) return null;
             if (num < 1 || num > 10) return null;
             return num;

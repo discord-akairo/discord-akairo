@@ -3,20 +3,21 @@ const { isPromise } = require('../../../util/Util');
 
 /**
  * The method to match arguments from text.
- * - `word` matches by the order of the words inputted.
- * It ignores words that matches a prefix or a flag.
- * - `rest` matches the rest of the words in order.
- * It ignores words that matches a prefix or a flag.
- * - `separate` matches the rest of the words in order.
- * Unlike rest, each word is processed separately.
- * It ignores words that matches a prefix or a flag.
- * - `prefix` matches words that starts with the prefix.
- * The word after the prefix is the evaluated argument.
- * - `flag` matches words that are the same as its prefix.
+ * - `phrase` matches by the order of the phrases inputted.
+ * It ignores phrases that matches a prefix or a flag.
+ * - `rest` matches the rest of the phrases in order.
+ * It ignores phrases that matches a prefix or a flag.
+ * - `separate` matches the rest of the phrases in order.
+ * Unlike rest, each phrase is processed separately.
+ * It ignores phrases that matches a prefix or a flag.
+ * - `prefix` matches phrases that starts with the prefix.
+ * The phrase after the prefix is the evaluated argument.
+ * - `flag` matches phrases that are the same as its prefix.
  * The evaluated argument is either true or false.
  * - `text` matches the entire text, except for the command.
- * It ignores words that matches a prefix or a flag.
+ * It ignores phrases that matches a prefix or a flag.
  * - `content` matches the entire text as it was inputted, except for the command.
+ * It also preserves the original whitespace between phrases.
  * - `none` matches nothing at all and an empty string will be used for type operations.
  * @typedef {string} ArgumentMatch
  */
@@ -76,7 +77,7 @@ const { isPromise } = require('../../../util/Util');
  * Any other truthy return value will be used as the evaluated argument.
  * If returning a Promise, the resolved value will go through the above steps.
  * @typedef {Function} ArgumentTypeFunction
- * @param {string} word - The user input.
+ * @param {string} phrase - The user input.
  * @param {Message} message - Message that triggered the command.
  * @param {Object} prevArgs - Previous arguments.
  * @returns {any}
@@ -132,28 +133,28 @@ const { isPromise } = require('../../../util/Util');
  * @prop {number} retries - Amount of retries.
  * @prop {boolean} infinite - Whether the prompt is infinite or not.
  * @prop {Message} message - The message that caused the prompt.
- * @prop {string} word - The input word that caused the prompt if there was one.
+ * @prop {string} phrase - The input phrase that caused the prompt if there was one.
  */
 
 /**
  * Options for how an argument parses text.
  * @typedef {Object} ArgumentOptions
  * @prop {string} id - ID of the argument for use in the args object.
- * @prop {ArgumentMatch} [match='word'] - Method to match text.
+ * @prop {ArgumentMatch} [match='phrase'] - Method to match text.
  * @prop {ArgumentType|ArgumentTypeFunction} [type='string'] - Type to cast to.
  * @prop {string|string[]} [prefix] - The string(s) to use as the flag for prefix and flag args.
  * Note that even if the command isn't ran, all prefixes are separated from the content.
- * @prop {number} [index] - Index/word of text to start from.
- * Applicable to word, text, content, rest, or separate match only.
+ * @prop {number} [index] - Index of phrase to start from.
+ * Applicable to phrase, text, content, rest, or separate match only.
  * Ignored when used with the unordered option.
  * @prop {boolean|number|number[]} [unordered=false] - Marks the argument as unordered.
- * Each word is evaluated in order until one matches (no input at all means no evaluation).
- * Passing in a number forces evaluation of that index to the last word.
+ * Each phrase is evaluated in order until one matches (no input at all means no evaluation).
+ * Passing in a number forces evaluation from that index onwards.
  * Passing in an array of numbers forces evaluation on those indices only.
  * If there is a match, that index is considered used and future unordered args will not check that index again.
  * If there is no match, then the prompting or default value is used.
- * Applicable to word match only.
- * @prop {number} [limit=Infinity] - Amount of words to match when matching more than one.
+ * Applicable to phrase match only.
+ * @prop {number} [limit=Infinity] - Amount of phrases to match when matching more than one.
  * Applicable to text, content, rest, or separate match only.
  * @prop {any|ArgumentDefaultFunction} [default=null] - Default value if text does not parse or cast correctly.
  * If using a flag arg, setting the default value to a non-void value inverses the result.
@@ -230,7 +231,7 @@ class Argument {
         this.unordered = unordered;
 
         /**
-         * The amount of words to match.
+         * The amount of phrases to match.
          * @type {number}
          */
         this.limit = limit;
@@ -273,29 +274,29 @@ class Argument {
     }
 
     /**
-     * Processes the type casting and prompting of the argument for a word.
-     * @param {string} word - The word to process.
+     * Processes the type casting and prompting of the argument for a phrase.
+     * @param {string} phrase - The phrase to process.
      * @param {Message} message - The message that called the command.
      * @param {Object} args - Previous arguments from command.
      * @returns {Promise<any>}
      */
-    async process(word, message, args = {}) {
-        word = word.trim();
+    async process(phrase, message, args = {}) {
+        phrase = phrase.trim();
 
         const isOptional = (this.prompt && this.prompt.optional)
             || (this.command.defaultPrompt && this.command.defaultPrompt.optional)
             || (this.handler.defaultPrompt && this.handler.defaultPrompt.optional);
 
-        if (!word && isOptional) {
+        if (!phrase && isOptional) {
             let res = typeof this.default === 'function' ? this.default(message, args) : this.default;
             if (isPromise(res)) res = await res;
             return res;
         }
 
-        let res = await this.cast(word, message, args);
+        let res = await this.cast(phrase, message, args);
 
         if (res == null) {
-            if (this.prompt) return this.collect(message, args, word);
+            if (this.prompt) return this.collect(message, args, phrase);
 
             res = typeof this.default === 'function' ? this.default(message, args) : this.default;
             if (isPromise(res)) res = await res;
@@ -306,19 +307,19 @@ class Argument {
     }
 
     /**
-     * Casts a word to the argument's type.
-     * @param {string} word - Word to process.
+     * Casts a phrase to the argument's type.
+     * @param {string} phrase - Phrase to process.
      * @param {Message} message - Message that called the command.
      * @param {Object} args - Previous arguments from command.
      * @returns {Promise<any>}
      */
-    cast(word, message, args = {}) {
-        return Argument.cast(this.type, this.handler.resolver, word, message, args);
+    cast(phrase, message, args = {}) {
+        return Argument.cast(this.type, this.handler.resolver, phrase, message, args);
     }
 
     /**
      * Collects input from the user by prompting.
-     * Throws a Symbol if the command was cancelled via timeout or user cancel.
+     * Returns a certain Symbol if command is to be cancelled.
      * @param {Message} message - Message to prompt.
      * @param {Object} args - Previous arguments from command.
      * @param {string} [commandInput] - Previous input from command if there was one.
@@ -338,7 +339,7 @@ class Argument {
         const values = isInfinite ? [] : null;
         if (isInfinite) args[this.id] = values;
 
-        const getText = (promptType, prompter, retryCount, inputMessage, inputWord) => {
+        const getText = (promptType, prompter, retryCount, inputMessage, inputPhrase) => {
             let text = prompter;
 
             if (typeof prompter === 'function') {
@@ -346,7 +347,7 @@ class Argument {
                     retries: retryCount,
                     infinite: isInfinite,
                     message: inputMessage,
-                    word: inputWord
+                    phrase: inputPhrase
                 });
             }
 
@@ -367,7 +368,7 @@ class Argument {
                     retries: retryCount,
                     infinite: isInfinite,
                     message: inputMessage,
-                    word: inputWord
+                    phrase: inputPhrase
                 });
             }
 
@@ -480,22 +481,22 @@ class Argument {
     }
 
     /**
-     * Casts a word to the specified type.
+     * Casts a phrase to the specified type.
      * @param {ArgumentType|ArgumentTypeFunction} type - Type to use.
      * @param {TypeResolver} resolver - Type resolver to use.
-     * @param {string} word - Word to process.
+     * @param {string} phrase - Phrase to process.
      * @param {Message} message - Message that called the command.
      * @param {Object} args - Previous arguments from command.
      * @returns {Promise<any>}
      */
-    static async cast(type, resolver, word, message, args) {
+    static async cast(type, resolver, phrase, message, args) {
         if (Array.isArray(type)) {
             for (const entry of type) {
                 if (Array.isArray(entry)) {
-                    if (entry.some(t => t.toLowerCase() === word.toLowerCase())) {
+                    if (entry.some(t => t.toLowerCase() === phrase.toLowerCase())) {
                         return entry[0];
                     }
-                } else if (entry.toLowerCase() === word.toLowerCase()) {
+                } else if (entry.toLowerCase() === phrase.toLowerCase()) {
                     return entry;
                 }
             }
@@ -504,14 +505,14 @@ class Argument {
         }
 
         if (typeof type === 'function') {
-            let res = type(word, message, args);
+            let res = type(phrase, message, args);
             if (isPromise(res)) res = await res;
             if (res != null) return res;
             return null;
         }
 
         if (type instanceof RegExp) {
-            const match = word.match(type);
+            const match = phrase.match(type);
             if (!match) return null;
 
             const matches = [];
@@ -519,7 +520,7 @@ class Argument {
             if (type.global) {
                 let matched;
 
-                while ((matched = type.exec(word)) != null) {
+                while ((matched = type.exec(phrase)) != null) {
                     matches.push(matched);
                 }
             }
@@ -528,28 +529,28 @@ class Argument {
         }
 
         if (resolver.type(type)) {
-            let res = resolver.type(type)(word, message, args);
+            let res = resolver.type(type)(phrase, message, args);
             if (isPromise(res)) res = await res;
             if (res != null) return res;
             return null;
         }
 
-        if (word) return word;
+        if (phrase) return phrase;
         return null;
     }
 
     /**
-     * Creates a type from multiple types (union type).
+     * Creates a type from multiple types (sum type).
      * The first type that resolves to a non-void value is used.
      * @param {...ArgumentType|ArgumentTypeFunction} types - Types to use.
      * @returns {ArgumentTypeFunction}
      */
     static some(...types) {
-        return async function type(word, message, args) {
+        return async function type(phrase, message, args) {
             for (let entry of types) {
                 if (typeof entry === 'function') entry = entry.bind(this); // eslint-disable-line no-invalid-this
                 // eslint-disable-next-line no-await-in-loop
-                const res = await Argument.cast(entry, message.client.commandHandler.resolver, word, message, args);
+                const res = await Argument.cast(entry, message.client.commandHandler.resolver, phrase, message, args);
                 if (res != null) return res;
             }
 
@@ -558,17 +559,17 @@ class Argument {
     }
 
     /**
-     * Creates a type from multiple types (intersection type).
+     * Creates a type from multiple types (product type).
      * Only inputs where each type resolves with a non-void value are valid.
      * @param {...ArgumentType|ArgumentTypeFunction} types - Types to use.
      * @returns {ArgumentTypeFunction}
      */
     static every(...types) {
-        return async (word, message, args) => {
+        return async (phrase, message, args) => {
             const results = [];
             for (const entry of types) {
                 // eslint-disable-next-line no-await-in-loop
-                const res = await Argument.cast(entry, message.client.commandHandler.resolver, word, message, args);
+                const res = await Argument.cast(entry, message.client.commandHandler.resolver, phrase, message, args);
                 if (res == null) return null;
                 results.push(res);
             }
