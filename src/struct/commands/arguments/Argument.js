@@ -545,12 +545,13 @@ class Argument {
      * @param {...ArgumentType|ArgumentTypeFunction} types - Types to use.
      * @returns {ArgumentTypeFunction}
      */
+    /* eslint-disable no-invalid-this */
     static some(...types) {
         return async function type(phrase, message, args) {
             for (let entry of types) {
-                if (typeof entry === 'function') entry = entry.bind(this); // eslint-disable-line no-invalid-this
+                if (typeof entry === 'function') entry = entry.bind(this);
                 // eslint-disable-next-line no-await-in-loop
-                const res = await Argument.cast(entry, message.client.commandHandler.resolver, phrase, message, args);
+                const res = await Argument.cast(entry, this.handler.resolver, phrase, message, args);
                 if (res != null) return res;
             }
 
@@ -565,11 +566,11 @@ class Argument {
      * @returns {ArgumentTypeFunction}
      */
     static every(...types) {
-        return async (phrase, message, args) => {
+        return async function type(phrase, message, args) {
             const results = [];
             for (const entry of types) {
                 // eslint-disable-next-line no-await-in-loop
-                const res = await Argument.cast(entry, message.client.commandHandler.resolver, phrase, message, args);
+                const res = await Argument.cast(entry, this.handler.resolver, phrase, message, args);
                 if (res == null) return null;
                 results.push(res);
             }
@@ -577,6 +578,7 @@ class Argument {
             return results;
         };
     }
+    /* eslint-enable no-invalid-this */
 }
 
 module.exports = Argument;

@@ -1,13 +1,18 @@
 /* eslint-disable no-console */
 
-const { Command } = require('../..');
+const { Command, Argument } = require('../..');
 const util = require('util');
 
 class ArgsCommand extends Command {
     constructor() {
         super('args', {
             aliases: ['args'],
-            args: (m, c, p) => console.log(p)
+            args: [
+                {
+                    id: 'x',
+                    type: Argument.every('integer', 'string')
+                }
+            ]
         });
     }
 

@@ -42,7 +42,8 @@ class TestClient extends AkairoClient {
     }
 
     setup() {
-        this.commandHandler.inhibitWith(this.inhibitorHandler);
+        this.commandHandler.useInhibitorHandler(this.inhibitorHandler);
+        this.commandHandler.useListenerHandler(this.inhibitorHandler);
 
         this.listenerHandler.setEmitters({
             commandHandler: this.commandHandler,

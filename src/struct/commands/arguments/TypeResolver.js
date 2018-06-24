@@ -19,7 +19,19 @@ class TypeResolver {
          * The command handler.
          * @type {CommandHandler}
          */
-        this.handler = handler;
+        this.commandHandler = handler;
+
+        /**
+         * The inhibitor handler.
+         * @type {InhibitorHandler}
+         */
+        this.inhibitorHandler = null;
+
+        /**
+         * The listener handler.
+         * @type {ListenerHandler}
+         */
+        this.listenerHandler = null;
 
         /**
          * Collection of types.
@@ -316,22 +328,22 @@ class TypeResolver {
 
             [ArgumentTypes.COMMAND_ALIAS]: phrase => {
                 if (!phrase) return null;
-                return this.client.commandHandler.findCommand(phrase) || null;
+                return this.commandHandler.findCommand(phrase) || null;
             },
 
             [ArgumentTypes.COMMAND]: phrase => {
                 if (!phrase) return null;
-                return this.client.commandHandler.modules.get(phrase) || null;
+                return this.commandHandler.modules.get(phrase) || null;
             },
 
             [ArgumentTypes.INHIBITOR]: phrase => {
                 if (!phrase) return null;
-                return this.client.inhibitorHandler.modules.get(phrase) || null;
+                return this.inhibitorHandler.modules.get(phrase) || null;
             },
 
             [ArgumentTypes.LISTENER]: phrase => {
                 if (!phrase) return null;
-                return this.client.listenerHandler.modules.get(phrase) || null;
+                return this.listenerHandler.modules.get(phrase) || null;
             }
         };
 
