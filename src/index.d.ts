@@ -151,7 +151,7 @@ declare module 'discord-akairo' {
         public constructor(id: string, options?: CommandOptions & AkairoModuleOptions);
 
         public aliases: string[];
-        public args: (Argument | Control)[] | ArgumentFunction;
+        public args: (Argument | Control)[] | Argument | Control | ArgumentFunction;
         public quoted: boolean;
         public category: Category<string, Command>;
         public channel?: string;

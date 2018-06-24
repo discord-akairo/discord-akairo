@@ -98,9 +98,9 @@ class Command extends AkairoModule {
 
         /**
          * Arguments for the command.
-         * @type {Array<Argument|Control>|ArgumentFunction}
+         * @type {Array<Argument|Control>|Argument|Control|ArgumentFunction}
          */
-        this.args = typeof args === 'function' ? args.bind(this) : this.buildArgs(args);
+        this.args = typeof args === 'function' ? args.bind(this) : args;
 
         /**
          * The parser to use.
@@ -345,29 +345,7 @@ class Command extends AkairoModule {
             return process(args.slice(1));
         };
 
-        return process(this.args);
-    }
-
-    /**
-     * Builds arguments from options.
-     * @param {Array<ArgumentOptions|Control>|ArgumentOptions|Control} args - Argument options to build.
-     * @returns {Array<Argument|Control>}
-     */
-    buildArgs(args) {
-        if (!Array.isArray(args)) return this.buildArgs([args]);
-        if (args == null) return [];
-
-        const res = [];
-        for (const arg of args) {
-            if (arg instanceof Control) {
-                res.push(arg);
-                continue;
-            }
-
-            res.push(new Argument(this, arg));
-        }
-
-        return res;
+        return process(this.buildArgs(this.args));
     }
 
     /**
@@ -401,6 +379,28 @@ class Command extends AkairoModule {
             } else {
                 pushFlag(arg);
             }
+        }
+
+        return res;
+    }
+
+    /**
+     * Builds arguments from options.
+     * @param {Array<ArgumentOptions|Control>|ArgumentOptions|Control} args - Argument options to build.
+     * @returns {Array<Argument|Control>}
+     */
+    buildArgs(args) {
+        if (!Array.isArray(args)) return this.buildArgs([args]);
+        if (args == null) return [];
+
+        const res = [];
+        for (const arg of args) {
+            if (arg instanceof Control) {
+                res.push(arg);
+                continue;
+            }
+
+            res.push(new Argument(this, arg));
         }
 
         return res;
