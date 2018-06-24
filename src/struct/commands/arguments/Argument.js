@@ -79,14 +79,6 @@ const { isPromise } = require('../../../util/Util');
  */
 
 /**
- * A function that checks if the argument should be allowed to run.
- * @typedef {Function} ArgumentAllowFunction
- * @param {Message} message - Message that triggered the command.
- * @param {Object} prevArgs - Previous arguments.
- * @returns {boolean}
- */
-
-/**
  * A function that checks the value of the argument.
  * If text is returned it will be sent and the command will be cancelled.
  * This behavior can be done manually anywhere else by throwing Constants.Symbols.COMMAND_CANCELLED.
@@ -186,8 +178,6 @@ const { isPromise } = require('../../../util/Util');
  * If using a flag arg, setting the default value to a non-void value inverses the result.
  * @prop {string|string[]} [description=''] - A description of the argument.
  * @prop {ArgumentPromptOptions} [prompt] - Prompt options for when user does not provide input.
- * @prop {ArgumentAllowFunction} [allow] - A function that checks if this argument should be ran.
- * If not provided, this argument will always be ran.
  * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|ArgumentCancelFunction} [cancel] - Text to send if the command should be cancelled.
  * The command is to be cancelled if this option is provided and the value of the argument is null or undefined.
  * A function can be provided to check for cancellation and for the text to send.
@@ -218,8 +208,7 @@ class Argument {
         description = '',
         prompt = null,
         cancel = null,
-        default: defaultValue = null,
-        allow = () => true
+        default: defaultValue = null
     } = {}) {
         /**
          * The ID of the argument.
@@ -292,16 +281,6 @@ class Argument {
          * @type {any|ArgumentDefaultFunction}
          */
         this.default = typeof defaultValue === 'function' ? defaultValue.bind(this) : defaultValue;
-
-        /**
-         * Checks if the argument is allowed to run.
-         * @method
-         * @name Argument#allow
-         * @param {Message} message - The message that called the command.
-         * @param {Object} args - Previous arguments from command.
-         * @returns {boolean}
-         */
-        this.allow = allow.bind(this);
     }
 
     /**
