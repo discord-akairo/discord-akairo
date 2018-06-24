@@ -91,7 +91,6 @@ class CaseControl extends Control {
      * Allows for multiple branches.
      * @param {Array<ControlPredicate|Array<Argument|Control>|Argument|Control>} condArgs - A list of conditions followed by their arguments.
      * E.g. [() => ..., [args], () => ..., [args]].
-     * The last condition argument pair is considered the default case.
      */
     constructor(condArgs) {
         super();
@@ -108,14 +107,14 @@ class CaseControl extends Control {
      * @param {Object} data - Data for control.
      * @returns {Object}
      */
-    control({ process, command, message, processedArgs }) {
+    control({ process, currentArgs, command, message, processedArgs }) {
         for (let i = 0; i < this.condArgs.length; i += 2) {
             if (this.condArgs[i](message, processedArgs)) {
                 return process(command.buildArgs(this.condArgs[i + 1]));
             }
         }
 
-        return process(command.buildArgs(this.condArgs.slice(-1)[0]));
+        return process(currentArgs.slice(1));
     }
 
     getArgs() {
