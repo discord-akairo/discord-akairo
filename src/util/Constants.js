@@ -51,11 +51,6 @@ module.exports = {
         INHIBITOR: 'inhibitor',
         LISTENER: 'listener'
     },
-    ArgumentSplits: {
-        PLAIN: 'plain',
-        QUOTED: 'quoted',
-        NONE: 'none'
-    },
     AkairoHandlerEvents: {
         LOAD: 'load',
         REMOVE: 'remove'

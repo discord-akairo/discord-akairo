@@ -14,11 +14,15 @@
  *
  * Phrase
  *  = Quote (Word | WS)* Quote?
+ *  | OpenQuote (Word | OpenQuote | Quote | WS)* EndQuote?
+ *  | EndQuote
  *  | Word
  *
  * FlagWord = Given
  * PrefixFlagWord = Given
- * Quote = Given (default ")
+ * Quote = "
+ * OpenQuote = “
+ * EndQuote = ”
  * Word = /^\S+/ (and not in FlagWord or PrefixFlagWord)
  * WS = /^\s+/
  * EOF = /^$/
@@ -28,12 +32,12 @@ class ArgumentsParser {
     constructor({
         flagWords = [],
         prefixFlagWords = [],
-        quotes = ['"'],
+        quoted = true,
         content = ''
     } = {}) {
         this.flagWords = flagWords;
         this.prefixFlagWords = prefixFlagWords;
-        this.quotes = quotes;
+        this.quoted = quoted;
         this.content = content;
         this.tokens = this.tokenize();
         this.position = 0;
@@ -42,9 +46,9 @@ class ArgumentsParser {
     tokenize() {
         const tokens = [];
         let content = this.content;
-        let stringState = false;
+        let state = 0;
         outer: while (content.length) {
-            if (!stringState) {
+            if (state === 0) {
                 for (const word of this.flagWords) {
                     if (content.toLowerCase().startsWith(word.toLowerCase())) {
                         tokens.push({ t: 'FlagWord', v: content.slice(0, word.length) });
@@ -62,19 +66,41 @@ class ArgumentsParser {
                 }
             }
 
-            for (const quote of this.quotes) {
-                if (content.toLowerCase().startsWith(quote.toLowerCase())) {
-                    stringState = !stringState;
-                    tokens.push({ t: 'Quote', v: content.slice(0, quote.length) });
-                    content = content.slice(quote.length);
-                    continue outer;
+            if (this.quoted && content.toLowerCase().startsWith('"')) {
+                if (state === 1) {
+                    state = 0;
+                } else if (state === 0) {
+                    state = 1;
                 }
+
+                tokens.push({ t: 'Quote', v: '"' });
+                content = content.slice(1);
+                continue outer;
             }
 
-            const wordMatch = content.match(/^\S+/);
+            if (this.quoted && content.toLowerCase().startsWith('“')) {
+                if (state === 0) {
+                    state = 2;
+                }
+
+                tokens.push({ t: 'OpenQuote', v: '“' });
+                content = content.slice(1);
+                continue outer;
+            }
+
+            if (this.quoted && content.toLowerCase().startsWith('”')) {
+                if (state === 2) {
+                    state = 0;
+                }
+
+                tokens.push({ t: 'EndQuote', v: '”' });
+                content = content.slice(1);
+                continue outer;
+            }
+
+            const wordRe = state === 0 ? /^\S+/ : state === 1 ? /^[^\s"]+/ : /^[^\s”]+/;
+            const wordMatch = content.match(wordRe);
             if (wordMatch) {
-                const cutoff = Math.min(...this.quotes.map(q => wordMatch[0].indexOf(q)));
-                if (cutoff >= 0) wordMatch[0] = wordMatch[0].slice(0, cutoff);
                 tokens.push({ t: 'Word', v: wordMatch[0] });
                 content = content.slice(wordMatch[0].length);
                 continue;
@@ -191,6 +217,35 @@ class ArgumentsParser {
 
             args.content.push(`${phrase.openQuote}${phrase.items.join('')}${phrase.endQuote}`);
             args.phrases.push(phrase);
+            return;
+        }
+
+        if (this.token.t === 'OpenQuote') {
+            const phrase = {
+                openQuote: this.match('OpenQuote'),
+                items: [],
+                value: ''
+            };
+
+            while (['Word', 'OpenQuote', 'Quote', 'WS'].includes(this.token.t)) {
+                const match = this.match(['Word', 'OpenQuote', 'Quote', 'WS']);
+                phrase.items.push(match.v);
+                phrase.value += match.v;
+            }
+
+            if (this.token.t === 'EndQuote') {
+                phrase.endQuote = this.match('EndQuote');
+            }
+
+            args.content.push(`${phrase.openQuote}${phrase.items.join('')}${phrase.endQuote}`);
+            args.phrases.push(phrase);
+            return;
+        }
+
+        if (this.token.t === 'EndQuote') {
+            this.match('EndQuote');
+            args.content.push('”');
+            args.phrases.push({ value: '”' });
             return;
         }
 

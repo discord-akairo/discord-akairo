@@ -1,7 +1,7 @@
 const AkairoError = require('../../util/AkairoError');
 const AkairoModule = require('../AkairoModule');
 const Argument = require('./arguments/Argument');
-const { ArgumentMatches, ArgumentSplits, Symbols } = require('../../util/Constants');
+const { ArgumentMatches, Symbols } = require('../../util/Constants');
 const { Control } = require('./arguments/Control');
 const Parser = require('./arguments/Parser');
 
@@ -9,9 +9,9 @@ const Parser = require('./arguments/Parser');
  * Options to use for command execution behavior.
  * @typedef {Object} CommandOptions
  * @prop {string[]} [aliases=[]] - Command names.
- * @prop {Array<Argument|Control>|ArgumentFunction} [args=[]] - Arguments to parse.
+ * @prop {Array<Argument|Control>|Argument|Control|ArgumentFunction} [args=[]] - Arguments to parse.
  * When an item is an array of arguments, the first argument that is allowed to run will be ran.
- * @prop {ArgumentSplit|ArgumentSplitFunction} [split='plain'] - Method to split text into words.
+ * @prop {boolean} [quoted=true] - Whether or not to consider quotes.
  * @prop {string} [channel] - Restricts channel to either 'guild' or 'dm'.
  * @prop {string} [category='default'] - Category ID for organization purposes.
  * @prop {boolean} [ownerOnly=false] - Whether or not to allow client owner(s) only.
@@ -60,28 +60,6 @@ const Parser = require('./arguments/Parser');
  * @returns {any}
  */
 
-/**
- * The method to split text into words.
- * - `plain` splits word separated by whitespace.
- * Extra whitespace between words are ignored.
- * - `quoted` is similar to plain, but counts text inside double quotes as one word.
- * - `sticky` is similar to quoted, but makes it so that quoted text must have a whitespace or another double quote before it.
- * This means that `thing="hello world"` would be one, rather than two like when using `quoted`.
- * - `none` gives the entire content.
- *
- * A regex or a character can be used instead (for example, a comma) to split the message by that regex or character.
- * @typedef {string|RegExp} ArgumentSplit
- */
-
-/**
- * A function that returns the words to use for the arguments.
- * The returned array can have an `isQuoted` boolean property to indicate that words may be in double quotes.
- * @typedef {Function} ArgumentSplitFunction
- * @param {string} content - The message content without the prefix and command.
- * @param {Message} message - Message that triggered the command.
- * @returns {string[]}
- */
-
 /** @extends AkairoModule */
 class Command extends AkairoModule {
     /**
@@ -95,7 +73,7 @@ class Command extends AkairoModule {
         const {
             aliases = [],
             args = this.args,
-            split = this.split || ArgumentSplits.PLAIN,
+            quoted = true,
             channel = null,
             ownerOnly = false,
             editable = true,
@@ -119,15 +97,15 @@ class Command extends AkairoModule {
 
         /**
          * Arguments for the command.
-         * @type {Array<ArgumentNode>|ArgumentFunction}
+         * @type {Array<Argument|Control>|ArgumentFunction}
          */
         this.args = typeof args === 'function' ? args.bind(this) : this.buildArgs(args);
 
         /**
-         * The command split method.
-         * @type {ArgumentSplit|ArgumentSplitFunction}
+         * Whether or not to consider quotes.
+         * @type {boolean}
          */
-        this.split = typeof split === 'function' ? split.bind(this) : split;
+        this.quoted = Boolean(quoted);
 
         /**
          * Usable only in this channel type.
@@ -248,7 +226,7 @@ class Command extends AkairoModule {
         const argumentParts = new Parser({
             flagWords: prefixes.flagWords,
             prefixFlagWords: prefixes.prefixFlagWords,
-            quotes: this.split === ArgumentSplits.QUOTED ? ['"'] : [],
+            quoted: this.quoted,
             content
         }).parse();
 

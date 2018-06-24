@@ -7,7 +7,7 @@ class EvalCommand extends Command {
             aliases: ['eval', 'e'],
             category: 'owner',
             ownerOnly: true,
-            protected: true,
+            quoted: false,
             args: [
                 {
                     id: 'code',

@@ -1,20 +1,17 @@
 /* eslint-disable no-console */
 
-const { Command, Control } = require('../..');
+const { Command } = require('../..');
 const util = require('util');
 
 class ArgsCommand extends Command {
     constructor() {
         super('args', {
             aliases: ['args'],
-            split: 'quoted',
             args: [
                 {
                     id: 'a',
-                    match: 'content',
-                    prompt: true
-                },
-                Control.tap((m, args) => console.log(args))
+                    match: 'separate'
+                }
             ]
         });
     }

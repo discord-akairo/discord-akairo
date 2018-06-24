@@ -7,7 +7,6 @@ class TestCommand extends Command {
     constructor() {
         super('test', {
             aliases: ['test', 'test-a'],
-            split: 'quoted',
             cooldown: 5000,
             args: [
                 {
