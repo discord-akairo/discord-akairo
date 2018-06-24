@@ -1,8 +1,8 @@
 module.exports = {
     ArgumentMatches: {
         PHRASE: 'phrase',
-        PREFIX: 'prefix',
         FLAG: 'flag',
+        OPTION: 'option',
         TEXT: 'text',
         CONTENT: 'content',
         REST: 'rest',

@@ -225,10 +225,10 @@ class Command extends AkairoModule {
             return Promise.resolve(res);
         }
 
-        const prefixes = this.getPrefixes();
+        const flags = this.getFlags();
         const argumentParts = new Parser({
-            flagWords: prefixes.flagWords,
-            prefixFlagWords: prefixes.prefixFlagWords,
+            flagWords: flags.flagWords,
+            optionFlagWords: flags.optionFlagWords,
             quoted: this.quoted,
             content
         }).parse();
@@ -283,13 +283,13 @@ class Command extends AkairoModule {
                     return res;
                 };
             },
-            [ArgumentMatches.PREFIX]: arg => {
-                const flag = argumentParts.prefixFlagWith(Array.isArray(arg.prefix) ? arg.prefix : [arg.prefix]);
-                return arg.process.bind(arg, flag.value);
-            },
             [ArgumentMatches.FLAG]: arg => {
-                const flagFound = argumentParts.flagWith(Array.isArray(arg.prefix) ? arg.prefix : [arg.prefix]) != null;
+                const flagFound = argumentParts.flagWith(Array.isArray(arg.flag) ? arg.flag : [arg.flag]) != null;
                 return () => arg.default == null ? flagFound : !flagFound;
+            },
+            [ArgumentMatches.OPTION]: arg => {
+                const flag = argumentParts.optionFlagWith(Array.isArray(arg.flag) ? arg.flag : [arg.flag]);
+                return arg.process.bind(arg, flag.value);
             },
             [ArgumentMatches.TEXT]: arg => {
                 const index = arg.index == null ? 0 : arg.index;
@@ -361,24 +361,24 @@ class Command extends AkairoModule {
     }
 
     /**
-     * Gets the prefixes that are used in all args.
+     * Gets the flags that are used in all args.
      * @returns {Object}
      */
-    getPrefixes() {
+    getFlags() {
         const res = {
             flagWords: [],
-            prefixFlagWords: []
+            optionFlagWords: []
         };
 
-        const pushPrefix = arg => {
-            const arr = arg.match === ArgumentMatches.FLAG ? 'flagWords' : 'prefixFlagWords';
-            if (arg.match === ArgumentMatches.PREFIX || arg.match === ArgumentMatches.FLAG) {
-                if (Array.isArray(arg.prefix)) {
-                    for (const p of arg.prefix) {
+        const pushFlag = arg => {
+            const arr = arg.match === ArgumentMatches.FLAG ? 'flagWords' : 'optionFlagWords';
+            if (arg.match === ArgumentMatches.FLAG || arg.match === ArgumentMatches.OPTION) {
+                if (Array.isArray(arg.flag)) {
+                    for (const p of arg.flag) {
                         arr.push(p);
                     }
                 } else {
-                    arr.push(arg.prefix);
+                    arr.push(arg.flag);
                 }
             }
         };
@@ -386,10 +386,10 @@ class Command extends AkairoModule {
         for (const arg of this.args) {
             if (Array.isArray(arg)) {
                 for (const a of arg) {
-                    pushPrefix(a);
+                    pushFlag(a);
                 }
             } else {
-                pushPrefix(arg);
+                pushFlag(arg);
             }
         }
 

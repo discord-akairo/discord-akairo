@@ -10,7 +10,7 @@
  *
  * Flag
  *  = FlagWord
- *  | PrefixFlagWord WS? Phrase?
+ *  | OptionFlagWord WS? Phrase?
  *
  * Phrase
  *  = Quote (Word | WS)* Quote?
@@ -19,11 +19,11 @@
  *  | Word
  *
  * FlagWord = Given
- * PrefixFlagWord = Given
+ * OptionFlagWord = Given
  * Quote = "
  * OpenQuote = “
  * EndQuote = ”
- * Word = /^\S+/ (and not in FlagWord or PrefixFlagWord)
+ * Word = /^\S+/ (and not in FlagWord or OptionFlagWord)
  * WS = /^\s+/
  * EOF = /^$/
  */
@@ -31,12 +31,12 @@
 class ArgumentsParser {
     constructor({
         flagWords = [],
-        prefixFlagWords = [],
+        optionFlagWords = [],
         quoted = true,
         content = ''
     } = {}) {
         this.flagWords = flagWords;
-        this.prefixFlagWords = prefixFlagWords;
+        this.optionFlagWords = optionFlagWords;
         this.quoted = quoted;
         this.content = content;
         this.tokens = this.tokenize();
@@ -57,9 +57,9 @@ class ArgumentsParser {
                     }
                 }
 
-                for (const word of this.prefixFlagWords) {
+                for (const word of this.optionFlagWords) {
                     if (content.toLowerCase().startsWith(word.toLowerCase())) {
-                        tokens.push({ t: 'PrefixFlagWord', v: content.slice(0, word.length) });
+                        tokens.push({ t: 'OptionFlagWord', v: content.slice(0, word.length) });
                         content = content.slice(word.length);
                         continue outer;
                     }
@@ -140,7 +140,7 @@ class ArgumentsParser {
             content: [],
             phrases: [],
             flags: [],
-            prefixFlags: [],
+            optionFlags: [],
             previous: 0,
             phraseAt(i) {
                 return this.phrases[i] ? this.phrases[i].value : '';
@@ -148,8 +148,8 @@ class ArgumentsParser {
             flagWith(names) {
                 return this.flags.find(flag => names.some(name => name.toLowerCase() === flag.key.toLowerCase()));
             },
-            prefixFlagWith(names) {
-                return this.prefixFlags.find(flag => names.some(name => name.toLowerCase() === flag.key.toLowerCase()));
+            optionFlagWith(names) {
+                return this.optionFlags.find(flag => names.some(name => name.toLowerCase() === flag.key.toLowerCase()));
             }
         };
 
@@ -157,7 +157,7 @@ class ArgumentsParser {
             this.parseArgument(args);
             while (this.token.t !== 'EOF') {
                 if (this.token.t === 'WS') {
-                    const arr = args[args.previous === 0 ? 'phrases' : args.previous === 1 ? 'flags' : 'prefixFlags'];
+                    const arr = args[args.previous === 0 ? 'phrases' : args.previous === 1 ? 'flags' : 'optionFlags'];
                     const ws = this.match('WS').v;
                     arr.slice(-1)[0].trailing = ws;
                     args.content[args.content.length - 1] += ws;
@@ -172,7 +172,7 @@ class ArgumentsParser {
     }
 
     parseArgument(args) {
-        if (['FlagWord', 'PrefixFlagWord'].includes(this.token.t)) {
+        if (['FlagWord', 'OptionFlagWord'].includes(this.token.t)) {
             this.parseFlag(args);
         } else {
             this.parsePhrase(args);
@@ -189,7 +189,7 @@ class ArgumentsParser {
         }
 
         args.previous = 2;
-        const flag = { key: this.match('PrefixFlagWord').v };
+        const flag = { key: this.match('OptionFlagWord').v };
         if (this.token.t === 'WS') flag.separation = this.match('WS').v;
         if (this.token.t === 'Word') flag.value = this.match('Word').v;
         args.content.push(`${flag.key}${flag.separation}${flag.value}`);

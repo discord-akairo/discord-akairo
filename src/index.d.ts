@@ -92,7 +92,7 @@ declare module 'discord-akairo' {
         public index?: number;
         public limit: number;
         public match: ArgumentMatch;
-        public prefix?: string | string[];
+        public flag?: string | string[];
         public prompt?: ArgumentPromptOptions;
         public type: ArgumentType | ArgumentTypeFunction;
         public unordered: boolean | number | number[];
@@ -174,7 +174,7 @@ declare module 'discord-akairo' {
         public buildArgs(args: (ArgumentOptions | Control)[] | Argument | Control): (Argument | Control)[];
         public condition(message: Message): boolean;
         public exec(message: Message, args: any): any;
-        public getPrefixes(): any[];
+        public getFlags(): any[];
         public parse(content: string, message: Message): Promise<any>;
         public reload(): this;
         public remove(): this;
@@ -440,7 +440,7 @@ declare module 'discord-akairo' {
 
     export type ArgumentFunction = (message: Message, content: string) => any;
 
-    export type ArgumentMatch = 'phrase' | 'rest' | 'separate' | 'prefix' | 'flag' | 'text' | 'content' | 'none';
+    export type ArgumentMatch = 'phrase' | 'rest' | 'separate' | 'flag' | 'option' | 'text' | 'content' | 'none';
 
     export type ArgumentOptions = {
         default?: ArgumentDefaultFunction | any;
@@ -449,7 +449,7 @@ declare module 'discord-akairo' {
         index?: number;
         limit?: number;
         match?: ArgumentMatch;
-        prefix?: string | string[];
+        flag?: string | string[];
         prompt?: ArgumentPromptOptions;
         type?: ArgumentType | ArgumentTypeFunction;
         unordered?: boolean | number | number[];
@@ -556,8 +556,8 @@ declare module 'discord-akairo' {
     export const Constants: {
         ArgumentMatches: {
             PHRASE: 'phrase',
-            PREFIX: 'prefix',
             FLAG: 'flag',
+            OPTION: 'option',
             TEXT: 'text',
             CONTENT: 'content',
             REST: 'rest',

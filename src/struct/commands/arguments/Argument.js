@@ -4,18 +4,18 @@ const { isPromise } = require('../../../util/Util');
 /**
  * The method to match arguments from text.
  * - `phrase` matches by the order of the phrases inputted.
- * It ignores phrases that matches a prefix or a flag.
+ * It ignores phrases that matches a flag.
  * - `rest` matches the rest of the phrases in order.
- * It ignores phrases that matches a prefix or a flag.
+ * It ignores phrases that matches a flag.
  * - `separate` matches the rest of the phrases in order.
  * Unlike rest, each phrase is processed separately.
- * It ignores phrases that matches a prefix or a flag.
- * - `prefix` matches phrases that starts with the prefix.
- * The phrase after the prefix is the evaluated argument.
- * - `flag` matches phrases that are the same as its prefix.
+ * It ignores phrases that matches a flag.
+ * - `flag` matches phrases that are the same as its flag.
  * The evaluated argument is either true or false.
+ * - `option` matches phrases that starts with the flag.
+ * The phrase after the flag is the evaluated argument.
  * - `text` matches the entire text, except for the command.
- * It ignores phrases that matches a prefix or a flag.
+ * It ignores phrases that matches a flag.
  * - `content` matches the entire text as it was inputted, except for the command.
  * It also preserves the original whitespace between phrases.
  * - `none` matches nothing at all and an empty string will be used for type operations.
@@ -142,8 +142,7 @@ const { isPromise } = require('../../../util/Util');
  * @prop {string} id - ID of the argument for use in the args object.
  * @prop {ArgumentMatch} [match='phrase'] - Method to match text.
  * @prop {ArgumentType|ArgumentTypeFunction} [type='string'] - Type to cast to.
- * @prop {string|string[]} [prefix] - The string(s) to use as the flag for prefix and flag args.
- * Note that even if the command isn't ran, all prefixes are separated from the content.
+ * @prop {string|string[]} [flag] - The string(s) to use as the flag for flag and option args.
  * @prop {number} [index] - Index of phrase to start from.
  * Applicable to phrase, text, content, rest, or separate match only.
  * Ignored when used with the unordered option.
@@ -180,7 +179,7 @@ class Argument {
         id,
         match = ArgumentMatches.PHRASE,
         type = ArgumentTypes.STRING,
-        prefix = null,
+        flag = null,
         index = null,
         unordered = false,
         limit = Infinity,
@@ -213,10 +212,10 @@ class Argument {
         this.type = typeof type === 'function' ? type.bind(this) : type;
 
         /**
-         * The prefix to use for flag or prefix args.
+         * The string(s) to use for flag and option args.
          * @type {?string|string[]}
          */
-        this.prefix = prefix;
+        this.flag = flag;
 
         /**
          * The index to start from.
