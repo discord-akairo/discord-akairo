@@ -10,7 +10,6 @@ const Parser = require('./arguments/Parser');
  * @typedef {Object} CommandOptions
  * @prop {string[]} [aliases=[]] - Command names.
  * @prop {Array<Argument|Control>|Argument|Control|ArgumentFunction} [args=[]] - Arguments to parse.
- * When an item is an array of arguments, the first argument that is allowed to run will be ran.
  * @prop {boolean} [quoted=true] - Whether or not to consider quotes.
  * @prop {string} [channel] - Restricts channel to either 'guild' or 'dm'.
  * @prop {string} [category='default'] - Category ID for organization purposes.
@@ -22,9 +21,9 @@ const Parser = require('./arguments/Parser');
  * @prop {string|string[]|PrefixFunction} [prefix] - The prefix(es) to overwrite the global one for this command.
  * @prop {PermissionResolvable|PermissionResolvable[]|PermissionFunction} [userPermissions] - Permissions required by the user to run this command.
  * @prop {PermissionResolvable|PermissionResolvable[]|PermissionFunction} [clientPermissions] - Permissions required by the client to run this command.
- * @prop {RegExp|TriggerFunction} [trigger] - A regex to match in messages that are NOT commands.
+ * @prop {RegExp|RegexFunction} [regex] - A regex to match in messages that are not directly commands.
  * The args object will have `match` and `matches` properties.
- * @prop {ConditionFunction} [condition] - Whether or not to run on messages that are NOT commands.
+ * @prop {ConditionFunction} [condition] - Whether or not to run on messages that are not directly commands.
  * @prop {ArgumentPromptOptions} [defaultPrompt={}] - The default prompt options.
  * @prop {string|string[]} [description=''] - Description of the command.
  */
@@ -39,7 +38,7 @@ const Parser = require('./arguments/Parser');
 
 /**
  * A function used to return a regular expression.
- * @typedef {Function} TriggerFunction
+ * @typedef {Function} RegexFunction
  * @param {Message} message - Message to get regex for.
  * @returns {RegExp}
  */
@@ -84,7 +83,7 @@ class Command extends AkairoModule {
             prefix = this.prefix,
             clientPermissions = this.clientPermissions,
             userPermissions = this.userPermissions,
-            trigger = this.trigger,
+            regex = this.regex,
             condition = this.condition || (() => false)
         } = options;
 
@@ -176,7 +175,7 @@ class Command extends AkairoModule {
          * The regex trigger for this command.
          * @type {RegExp|TriggerFunction}
          */
-        this.trigger = typeof trigger === 'function' ? trigger.bind(this) : trigger;
+        this.regex = typeof trigger === 'function' ? regex.bind(this) : regex;
 
         /**
          * Checks if the command should be ran by using an arbitrary condition.
