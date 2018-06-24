@@ -1,56 +1,5 @@
 <p align="center"><a href=https://github.com/1Computer1/discord-akairo><img src="https://a.safe.moe/PwUgW.png"/></a></p><p align="center"><a href=https://www.npmjs.com/package/discord-akairo><img src="https://img.shields.io/npm/v/discord-akairo.svg?maxAge=3600"/></a> <a href=https://david-dm.org/1computer1/discord-akairo><img src="https://david-dm.org/1computer1/discord-akairo.svg"/></a> <a href=https://travis-ci.org/1Computer1/discord-akairo><img src="https://travis-ci.org/1Computer1/discord-akairo.svg?branch=indev"/></a></p><p align="center"><a href=https://nodei.co/npm/discord-akairo><img src="https://nodei.co/npm/discord-akairo.png?downloads=true"/></a></p><p align="center">A modular and highly customizable bot framework for Discord.js v12</p>
 
-## Examples
-
-```js
-const { AkairoClient } = require('discord-akairo');
-
-const client = new AkairoClient({
-    ownerID: '123992700587343872',
-    prefix: '!',
-    allowMention: true,
-    commandDirectory: './src/commands/',
-    inhibitorDirectory: './src/inhibitors/',
-    listenerDirectory: './src/listeners/'
-});
-
-client.login('TOKEN').then(() => {
-    console.log('Logged in!');
-});
-```
-
-```js
-const { Command } = require('discord-akairo');
-
-class BanCommand extends Command {
-    constructor() {
-        super('ban', {
-            aliases: ['ban'],
-            channel: 'guild',
-            clientPermissions: ['BAN_MEMBERS'],
-            userPermissions: ['BAN_MEMBERS'],
-            args: [
-                {
-                    id: 'member',
-                    type: 'member'
-                }
-            ]
-        });
-    }
-
-    async exec(message, { member }) {
-        if (member.bannable) {
-            await member.ban();
-            return message.reply(`I have banned ${member}!`);
-        }
-
-        return message.reply(`I cannot ban ${member}!`);
-    }
-}
-
-module.exports = BanCommand;
-```
-
 ## Features
 
 #### Completely modular commands, inhibitors, and listeners.
@@ -107,7 +56,7 @@ module.exports = BanCommand;
 
 ## Installation
 
-Requires Node 8 and Discord.js v12.  
+Requires Node 10 and Discord.js v12.  
 
 *discord-akairo*  
 `npm install discord-akairo`
