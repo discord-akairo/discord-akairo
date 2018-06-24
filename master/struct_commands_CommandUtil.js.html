@@ -165,7 +165,7 @@ class CommandUtil {
      */
     async send(content, options) {
         [content, options] = this.constructor.swapOptions(content, options);
-        const hasFiles = options.files || (options.embed &amp;&amp; options.embed.files);
+        const hasFiles = (options.files &amp;&amp; options.files.length > 0) || (options.embed &amp;&amp; options.embed.files.length > 0);
 
         if (this.shouldEdit &amp;&amp; (this.command ? this.command.editable : true) &amp;&amp; !hasFiles &amp;&amp; !this.lastResponse.attachments.size) {
             return this.lastResponse.edit(content, options);
