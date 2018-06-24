@@ -31,15 +31,14 @@ class TypeResolver {
          */
         this.types = new Collection();
 
-        this._addBuiltInTypes();
+        this.addBuiltInTypes();
     }
 
     /**
      * Adds built-in types.
-     * @protected
      * @returns {void}
      */
-    _addBuiltInTypes() {
+    addBuiltInTypes() {
         const builtins = {
             [ArgumentTypes.STRING]: word => {
                 return word || null;

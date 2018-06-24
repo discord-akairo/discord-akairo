@@ -256,34 +256,13 @@ class CommandHandler extends AkairoHandler {
 
     /**
      * Registers a module.
-     * @protected
      * @param {Command} command - Module to use.
      * @param {string} [filepath] - Filepath of module.
      * @returns {void}
      */
-    _register(command, filepath) {
-        super._register(command, filepath);
-        this._addAliases(command);
-    }
+    register(command, filepath) {
+        super.register(command, filepath);
 
-    /**
-     * Deregisters a module.
-     * @protected
-     * @param {Command} command - Module to use.
-     * @returns {void}
-     */
-    _deregister(command) {
-        this._removeAliases(command);
-        super._deregister(command);
-    }
-
-    /**
-     * Adds aliases of a command.
-     * @protected
-     * @param {Command} command - Command to use.
-     * @returns {void}
-     */
-    _addAliases(command) {
         for (let alias of command.aliases) {
             const conflict = this.aliases.get(alias.toLowerCase());
             if (conflict) throw new AkairoError('ALIAS_CONFLICT', alias, command.id, conflict);
@@ -341,12 +320,11 @@ class CommandHandler extends AkairoHandler {
     }
 
     /**
-     * Removes aliases of a command.
-     * @protected
-     * @param {Command} command - Command to use.
+     * Deregisters a module.
+     * @param {Command} command - Module to use.
      * @returns {void}
      */
-    _removeAliases(command) {
+    deregister(command) {
         for (let alias of command.aliases) {
             alias = alias.toLowerCase();
             this.aliases.delete(alias);
@@ -376,6 +354,8 @@ class CommandHandler extends AkairoHandler {
                 }
             }
         }
+
+        super.deregister(command);
     }
 
     /**
@@ -389,27 +369,7 @@ class CommandHandler extends AkairoHandler {
                 await message.guild.members.fetch(message.author);
             }
 
-            let reason = this.inhibitorHandler
-                ? await this.inhibitorHandler.test('all', message)
-                : null;
-
-            if (reason != null) {
-                this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, reason);
-                return;
-            }
-
-            if (this.blockOthers && message.author.id !== this.client.user.id && this.client.selfbot) {
-                this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.OTHERS);
-                return;
-            }
-
-            if (this.blockClient && message.author.id === this.client.user.id && !this.client.selfbot) {
-                this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.CLIENT);
-                return;
-            }
-
-            if (this.blockBots && message.author.bot) {
-                this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.BOT);
+            if (await this.runAllTypeInhibitors(message)) {
                 return;
             }
 
@@ -426,21 +386,11 @@ class CommandHandler extends AkairoHandler {
                 }
             }
 
-            reason = this.inhibitorHandler
-                ? await this.inhibitorHandler.test('pre', message)
-                : null;
-
-            if (reason != null) {
-                this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, reason);
+            if (await this.runPreTypeInhibitors(message)) {
                 return;
             }
 
-            if (this.hasPrompt(message.channel, message.author)) {
-                this.emit(CommandHandlerEvents.IN_PROMPT, message);
-                return;
-            }
-
-            const parsed = await this._parseCommand(message) || {};
+            const parsed = await this.parseCommand(message) || {};
             const { command, content, prefix, alias } = parsed;
 
             if (this.commandUtil) {
@@ -453,65 +403,178 @@ class CommandHandler extends AkairoHandler {
             }
 
             if (!parsed.command) {
-                this._handleTriggers(message);
+                this.handleRegexAndConditionalCommands(message);
                 return;
             }
 
-            this._handleCommand(message, content, command);
+            this.handleDirectCommand(message, content, command);
         } catch (err) {
-            this._handleError(err, message);
+            this.emitError(err, message);
         }
     }
 
     /**
      * Handles normal commands.
-     * @protected
      * @param {Message} message - Message to handle.
      * @param {string} content - Content of message without command.
      * @param {Command} command - Command instance.
      * @returns {Promise<void>}
      */
-    async _handleCommand(message, content, command) {
+    async handleDirectCommand(message, content, command) {
         try {
             if (message.edited && !command.editable) return;
-            if (await this._runInhibitors(message, command)) return;
-
-            const reason = this.inhibitorHandler
-                ? await this.inhibitorHandler.test('post', message, command)
-                : null;
-
-            if (reason != null) {
-                if (command.typing) message.channel.stopTyping();
-                this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
+            if (await this.runPostTypeInhibitors(message, command)) return;
+            const args = await command.parse(content, message);
+            await this.runCommand(message, command, args);
+        } catch (err) {
+            if (err === Symbols.COMMAND_CANCELLED) {
+                this.emit(CommandHandlerEvents.COMMAND_CANCELLED, message, command);
                 return;
             }
 
-            const onCooldown = this._handleCooldowns(message, command);
-            if (onCooldown) return;
-
-            const args = await command.parse(content, message);
-
-            if (command.typing) message.channel.startTyping();
-            this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, args);
-
-            const ret = await command.exec(message, args);
-
-            this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, args, ret);
-            if (command.typing) message.channel.stopTyping();
-        } catch (err) {
-            if (err === Symbols.COMMAND_CANCELLED) return;
-            this._handleError(err, message, command);
+            this.emitError(err, message, command);
         }
     }
 
     /**
-     * Runs built in command inhibitors.
-     * @protected
-     * @param {Message} message - Message that called the command.
-     * @param {Command} command - Command to check.
-     * @returns {Promise<boolean>}
+     * Handles regex and conditional commands.
+     * @param {Message} message - Message to handle.
+     * @returns {Promise<void>}
      */
-    async _runInhibitors(message, command) {
+    async handleRegexAndConditionalCommands(message) {
+        await this.handleRegexCommands(message);
+        await this.handleConditionalCommands(message);
+    }
+
+    /**
+     * Handles regex commands.
+     * @param {Message} message - Message to handle.
+     * @returns {Promise<void>}
+     */
+    async handleRegexCommands(message) {
+        const matchedCommands = [];
+
+        for (const command of this.modules.values()) {
+            if (message.edited ? command.editable : true) {
+                const regex = typeof command.trigger === 'function' ? command.trigger(message) : command.trigger;
+                if (regex) matchedCommands.push({ command, regex });
+            }
+        }
+
+        const triggered = [];
+
+        for (const entry of matchedCommands) {
+            const match = message.content.match(entry.regex);
+            if (!match) continue;
+
+            const matches = [];
+
+            if (entry.regex.global) {
+                let matched;
+
+                while ((matched = entry.regex.exec(message.content)) != null) {
+                    matches.push(matched);
+                }
+            }
+
+            triggered.push({ command: entry.command, match, matches });
+        }
+
+        const promises = [];
+
+        for (const { command, match, matches } of triggered) {
+            promises.push((async () => {
+                try {
+                    if (await this.runPostTypeInhibitors(message, command)) return;
+                    await this.runCommand(message, command, { match, matches });
+                } catch (err) {
+                    if (err === Symbols.COMMAND_CANCELLED) {
+                        this.emit(CommandHandlerEvents.COMMAND_CANCELLED, message, command);
+                        return;
+                    }
+
+                    this.emitError(err, message, command);
+                }
+            })());
+        }
+
+        await Promise.all(promises);
+    }
+
+    /**
+     * Handles conditional commands.
+     * @param {Message} message - Message to handle.
+     * @returns {Promise<void>}
+     */
+    async handleConditionalCommands(message) {
+        const trueCommands = this.modules.filter(command =>
+            (message.edited ? command.editable : true)
+            && command.condition(message)
+        );
+
+        if (!trueCommands.size) {
+            this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
+            return;
+        }
+
+        const promises = [];
+
+        for (const command of trueCommands.values()) {
+            promises.push((async () => {
+                try {
+                    if (await this.runPostTypeInhibitors(message, command)) return;
+                    await this.runCommand(message, command, {});
+                } catch (err) {
+                    if (err === Symbols.COMMAND_CANCELLED) {
+                        this.emit(CommandHandlerEvents.COMMAND_CANCELLED, message, command);
+                        return;
+                    }
+
+                    this.emitError(err, message, command);
+                }
+            })());
+        }
+
+        await Promise.all(promises);
+    }
+
+    async runAllTypeInhibitors(message) {
+        const reason = this.inhibitorHandler
+            ? await this.inhibitorHandler.test('all', message)
+            : null;
+
+        if (reason != null) {
+            this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, reason);
+        } else if (this.blockOthers && message.author.id !== this.client.user.id && this.client.selfbot) {
+            this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.OTHERS);
+        } else if (this.blockClient && message.author.id === this.client.user.id && !this.client.selfbot) {
+            this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.CLIENT);
+        } else if (this.blockBots && message.author.bot) {
+            this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.BOT);
+        } else {
+            return false;
+        }
+
+        return true;
+    }
+
+    async runPreTypeInhibitors(message) {
+        const reason = this.inhibitorHandler
+            ? await this.inhibitorHandler.test('pre', message)
+            : null;
+
+        if (reason != null) {
+            this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, reason);
+        } else if (this.hasPrompt(message.channel, message.author)) {
+            this.emit(CommandHandlerEvents.IN_PROMPT, message);
+        } else {
+            return false;
+        }
+
+        return true;
+    }
+
+    async runPostTypeInhibitors(message, command) {
         if (command.ownerOnly) {
             const notOwner = Array.isArray(this.client.ownerID)
                 ? !this.client.ownerID.includes(message.author.id)
@@ -569,17 +632,30 @@ class CommandHandler extends AkairoHandler {
             }
         }
 
+        const reason = this.inhibitorHandler
+            ? await this.inhibitorHandler.test('post', message, command)
+            : null;
+
+        if (reason != null) {
+            if (command.typing) message.channel.stopTyping();
+            this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
+            return true;
+        }
+
+        if (this.runCooldowns(message, command)) {
+            return true;
+        }
+
         return false;
     }
 
     /**
-     * Handles cooldowns and checks if a user is under cooldown.
-     * @protected
+     * Runs cooldowns and checks if a user is under cooldown.
      * @param {Message} message - Message that called the command.
      * @param {Command} command - Command to cooldown.
      * @returns {boolean}
      */
-    _handleCooldowns(message, command) {
+    runCooldowns(message, command) {
         const isIgnored = Array.isArray(this.ignoreCooldownID)
             ? this.ignoreCooldownID.includes(message.author.id)
             : message.author.id === this.ignoreCooldownID;
@@ -623,13 +699,25 @@ class CommandHandler extends AkairoHandler {
         return false;
     }
 
+    async runCommand(message, command, args) {
+        if (command.typing) {
+            message.channel.startTyping();
+        }
+
+        this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, args);
+        const ret = await command.exec(message, args);
+        this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, args, ret);
+        if (command.typing) {
+            message.channel.stopTyping();
+        }
+    }
+
     /**
      * Parses the command and its argument list.
-     * @protected
      * @param {Message} message - Message that called the command.
      * @returns {Promise<Object>}
      */
-    async _parseCommand(message) {
+    async parseCommand(message) {
         let prefix;
         if (typeof this.prefix === 'function') {
             prefix = this.prefix(message);
@@ -668,15 +756,15 @@ class CommandHandler extends AkairoHandler {
             start = prefix;
         }
 
-        if (start === undefined) return this._parseOverwrittenCommand(message);
+        if (start === undefined) return this.parseCommandWithOverwrittenPrefixes(message);
 
         const startIndex = message.content.indexOf(start) + start.length;
         const argsIndex = message.content.slice(startIndex).search(/\S/) + start.length;
         const name = message.content.slice(argsIndex).split(/\s{1,}|\n{1,}/)[0];
         const command = this.findCommand(name);
 
-        if (!command) return this._parseOverwrittenCommand(message) || { prefix: start, alias: name };
-        if (command.prefix != null) return this._parseOverwrittenCommand(message);
+        if (!command) return this.parseCommandWithOverwrittenPrefixes(message) || { prefix: start, alias: name };
+        if (command.prefix != null) return this.parseCommandWithOverwrittenPrefixes(message);
 
         const content = message.content.slice(argsIndex + name.length + 1);
         return { command, content, prefix: start, alias: name };
@@ -684,11 +772,10 @@ class CommandHandler extends AkairoHandler {
 
     /**
      * Parses the command and its argument list using prefix overwrites.
-     * @protected
      * @param {Message} message - Message that called the command.
      * @returns {Promise<Object>}
      */
-    async _parseOverwrittenCommand(message) {
+    async parseCommandWithOverwrittenPrefixes(message) {
         if (!this.prefixes.size) return null;
 
         let start;
@@ -749,161 +836,13 @@ class CommandHandler extends AkairoHandler {
     }
 
     /**
-     * Handles regex and conditional commands.
-     * @protected
-     * @param {Message} message - Message to handle.
-     * @returns {Promise<void>}
-     */
-    async _handleTriggers(message) {
-        await this._handleRegex(message);
-        await this._handleConditional(message);
-    }
-
-    /**
-     * Handles regex commands.
-     * @protected
-     * @param {Message} message - Message to handle.
-     * @returns {Promise<void>}
-     */
-    async _handleRegex(message) {
-        const matchedCommands = [];
-
-        for (const command of this.modules.values()) {
-            if (message.edited ? command.editable : true) {
-                const regex = typeof command.trigger === 'function' ? command.trigger(message) : command.trigger;
-                if (regex) matchedCommands.push({ command, regex });
-            }
-        }
-
-        const triggered = [];
-
-        for (const entry of matchedCommands) {
-            const match = message.content.match(entry.regex);
-            if (!match) continue;
-
-            const matches = [];
-
-            if (entry.regex.global) {
-                let matched;
-
-                while ((matched = entry.regex.exec(message.content)) != null) {
-                    matches.push(matched);
-                }
-            }
-
-            triggered.push({ command: entry.command, match, matches });
-        }
-
-        const promises = [];
-
-        for (const { command, match, matches } of triggered) {
-            promises.push((async () => {
-                try {
-                    if (await this._runInhibitors(message, command)) return;
-
-                    const reason = this.inhibitorHandler
-                        ? await this.inhibitorHandler.test('post', message, command)
-                        : null;
-
-                    if (reason != null) {
-                        this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
-                        return;
-                    }
-
-                    const onCooldown = this._handleCooldowns(message, command);
-                    if (onCooldown) return;
-
-                    const args = { match, matches };
-
-                    if (command.typing) message.channel.startTyping();
-                    this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, args);
-
-                    const ret = await command.exec(message, args);
-
-                    this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, args, ret);
-                    if (command.typing) message.channel.stopTyping();
-                } catch (err) {
-                    if (err === Symbols.COMMAND_CANCELLED) {
-                        this.emit(CommandHandlerEvents.COMMAND_CANCELLED, message, command);
-                        return;
-                    }
-
-                    this._handleError(err, message, command);
-                }
-            })());
-        }
-
-        await Promise.all(promises);
-    }
-
-    /**
-     * Handles conditional commands.
-     * @protected
-     * @param {Message} message - Message to handle.
-     * @returns {Promise<void>}
-     */
-    async _handleConditional(message) {
-        const trueCommands = this.modules.filter(command =>
-            (message.edited ? command.editable : true)
-            && command.condition(message)
-        );
-
-        if (!trueCommands.size) {
-            this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
-            return;
-        }
-
-        const promises = [];
-
-        for (const command of trueCommands.values()) {
-            promises.push((async () => {
-                try {
-                    if (await this._runInhibitors(message, command)) return;
-
-                    const reason = this.inhibitorHandler
-                        ? await this.inhibitorHandler.test('post', message, command)
-                        : null;
-
-                    if (reason != null) {
-                        this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
-                        return;
-                    }
-
-                    const onCooldown = this._handleCooldowns(message, command);
-                    if (onCooldown) return;
-
-                    const args = {};
-
-                    if (command.typing) message.channel.startTyping();
-                    this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command);
-
-                    const ret = await command.exec(message, args);
-
-                    this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, args, ret);
-                    if (command.typing) message.channel.stopTyping();
-                } catch (err) {
-                    if (err === Symbols.COMMAND_CANCELLED) {
-                        this.emit(CommandHandlerEvents.COMMAND_CANCELLED, message, command);
-                        return;
-                    }
-
-                    this._handleError(err, message, command);
-                }
-            })());
-        }
-
-        await Promise.all(promises);
-    }
-
-    /**
      * Handles errors from the handling.
-     * @protected
      * @param {Error} err - The error.
      * @param {Message} message - Message that called the command.
      * @param {Command} [command] - Command that errored.
      * @returns {Promise<void>}
      */
-    _handleError(err, message, command) {
+    emitError(err, message, command) {
         if (command && command.typing) message.channel.stopTyping();
         if (this.listenerCount(CommandHandlerEvents.ERROR)) {
             this.emit(CommandHandlerEvents.ERROR, err, message, command);

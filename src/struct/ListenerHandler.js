@@ -40,7 +40,6 @@ class ListenerHandler extends AkairoHandler {
 
         /**
          * Directory to listeners.
-         * @readonly
          * @name ListenerHandler#directory
          * @type {string}
          */
@@ -54,27 +53,25 @@ class ListenerHandler extends AkairoHandler {
 
     /**
      * Registers a module.
-     * @protected
      * @param {Listener} listener - Module to use.
      * @param {string} [filepath] - Filepath of module.
      * @returns {void}
      */
-    _register(listener, filepath) {
-        super._register(listener, filepath);
+    register(listener, filepath) {
+        super.register(listener, filepath);
         listener.exec = listener.exec.bind(listener);
-        this.register(listener.id);
+        this.addToEmitter(listener.id);
         return listener;
     }
 
     /**
      * Deregisters a module.
-     * @protected
      * @param {Listener} listener - Module to use.
      * @returns {void}
      */
-    _deregister(listener) {
-        this.deregister(listener.id);
-        super._deregister(listener);
+    deregister(listener) {
+        this.removeFromEmitter(listener.id);
+        super.deregister(listener);
     }
 
     /**
@@ -82,7 +79,7 @@ class ListenerHandler extends AkairoHandler {
      * @param {string} id - ID of the listener.
      * @returns {Listener}
      */
-    register(id) {
+    addToEmitter(id) {
         const listener = this.modules.get(id.toString());
         if (!listener) throw new AkairoError('MODULE_NOT_FOUND', this.classToHandle.name, id);
 
@@ -103,7 +100,7 @@ class ListenerHandler extends AkairoHandler {
      * @param {string} id - ID of the listener.
      * @returns {Listener}
      */
-    deregister(id) {
+    removeFromEmitter(id) {
         const listener = this.modules.get(id.toString());
         if (!listener) throw new AkairoError('MODULE_NOT_FOUND', this.classToHandle.name, id);
 

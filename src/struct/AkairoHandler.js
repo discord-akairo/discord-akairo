@@ -94,12 +94,11 @@ class AkairoHandler extends EventEmitter {
 
     /**
      * Registers a module.
-     * @protected
      * @param {AkairoModule} mod - Module to use.
      * @param {string} [filepath] - Filepath of module.
      * @returns {void}
      */
-    _register(mod, filepath) {
+    register(mod, filepath) {
         mod.filepath = filepath;
         mod.client = this.client;
         mod.handler = this;
@@ -121,11 +120,10 @@ class AkairoHandler extends EventEmitter {
 
     /**
      * Deregisters a module.
-     * @protected
      * @param {AkairoModule} mod - Module to use.
      * @returns {void}
      */
-    _deregister(mod) {
+    deregister(mod) {
         if (mod.filepath) delete require.cache[require.resolve(mod.filepath)];
         this.modules.delete(mod.id);
         mod.category.delete(mod.id);
@@ -158,7 +156,7 @@ class AkairoHandler extends EventEmitter {
 
         if (this.modules.has(mod.id)) throw new AkairoError('ALREADY_LOADED', this.classToHandle.name, mod.id);
 
-        this._register(mod, isObj ? null : thing);
+        this.register(mod, isObj ? null : thing);
         this.emit(AkairoHandlerEvents.LOAD, mod, isReload);
         return mod;
     }
@@ -190,7 +188,7 @@ class AkairoHandler extends EventEmitter {
         const mod = this.modules.get(id.toString());
         if (!mod) throw new AkairoError('MODULE_NOT_FOUND', this.classToHandle.name, id);
 
-        this._deregister(mod);
+        this.deregister(mod);
 
         this.emit(AkairoHandlerEvents.REMOVE, mod);
         return mod;
@@ -218,7 +216,7 @@ class AkairoHandler extends EventEmitter {
         if (!mod) throw new AkairoError('MODULE_NOT_FOUND', this.classToHandle.name, id);
         if (!mod.filepath) throw new AkairoError('NOT_RELOADABLE', this.classToHandle.name, id);
 
-        this._deregister(mod);
+        this.deregister(mod);
 
         const filepath = mod.filepath;
         const newMod = this.load(filepath, true);

@@ -130,7 +130,7 @@ class Command extends AkairoModule {
          * Arguments for the command.
          * @type {Array<Argument|Argument[]|CommandCancelFunction>|ArgumentFunction}
          */
-        this.args = typeof args === 'function' ? args.bind(this) : this._buildArgs(args);
+        this.args = typeof args === 'function' ? args.bind(this) : this.buildArgs(args);
 
         /**
          * The command split method.
@@ -251,7 +251,7 @@ class Command extends AkairoModule {
     parse(content, message) {
         if (!this.args.length && typeof this.args !== 'function') return Promise.resolve({});
 
-        const words = this._splitText(content, message);
+        const words = this.splitText(content, message);
         const isQuoted = this.split === ArgumentSplits.QUOTED || this.split === ArgumentSplits.STICKY || words.isQuoted;
 
         if (typeof this.args === 'function') {
@@ -268,7 +268,7 @@ class Command extends AkairoModule {
         }
 
         const usedIndices = new Set();
-        const prefixes = this._getPrefixes();
+        const prefixes = this.getPrefixes();
         const noPrefixWords = words.filter(w => {
             w = w.trim();
 
@@ -457,11 +457,10 @@ class Command extends AkairoModule {
 
     /**
      * Builds arguments from options.
-     * @protected
      * @param {Array<ArgumentOptions|ArgumentOptions[]|CommandCancelFunction>} args - Argument options to build.
      * @returns {Array<Argument|Argument[]|CommandCancelFunction>}
      */
-    _buildArgs(args) {
+    buildArgs(args) {
         if (args == null) return [];
 
         const res = [];
@@ -482,12 +481,11 @@ class Command extends AkairoModule {
 
     /**
      * Splits text into arguments.
-     * @protected
      * @param {string} content - String to parse.
      * @param {Message} [message] - Message to use.
      * @returns {string[]}
      */
-    _splitText(content, message) {
+    splitText(content, message) {
         const splitFuncs = {
             [ArgumentSplits.PLAIN]: c => c.match(/\S+\s*/g),
             [ArgumentSplits.QUOTED]: c => c.match(/"[^]*?"\s*|\S+\s*|"/g),
@@ -504,10 +502,9 @@ class Command extends AkairoModule {
 
     /**
      * Gets the prefixes that are used in all args.
-     * @protected
      * @returns {Object[]}
      */
-    _getPrefixes() {
+    getPrefixes() {
         const prefixes = [];
         const pushPrefix = arg => {
             if (arg.match === ArgumentMatches.PREFIX || arg.match === ArgumentMatches.FLAG) {

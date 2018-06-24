@@ -31,7 +31,6 @@ class InhibitorHandler extends AkairoHandler {
 
         /**
          * Directory to inhibitors.
-         * @readonly
          * @name InhibitorHandler#directory
          * @type {string}
          */
@@ -77,18 +76,16 @@ class InhibitorHandler extends AkairoHandler {
 
     /**
      * Deregisters a module.
-     * @protected
      * @method
-     * @name InhibitorHandler#_deregister
+     * @name InhibitorHandler#deregister
      * @param {Inhibitor} inhibitor - Module to use.
      * @returns {void}
      */
 
     /**
      * Registers a module.
-     * @protected
      * @method
-     * @name InhibitorHandler#_register
+     * @name InhibitorHandler#register
      * @param {Inhibitor} inhibitor - Module to use.
      * @param {string} [filepath] - Filepath of module.
      * @returns {void}
