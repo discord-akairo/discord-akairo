@@ -440,7 +440,7 @@ declare module 'discord-akairo' {
 
     export type ArgumentFunction = (message: Message, content: string) => any;
 
-    export type ArgumentMatch = 'word' | 'rest' | 'separate' | 'prefix' | 'flag' | 'text' | 'content' | 'none';
+    export type ArgumentMatch = 'phrase' | 'rest' | 'separate' | 'prefix' | 'flag' | 'text' | 'content' | 'none';
 
     export type ArgumentOptions = {
         default?: ArgumentDefaultFunction | any;

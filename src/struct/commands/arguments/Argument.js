@@ -178,7 +178,7 @@ class Argument {
      */
     constructor(command, {
         id,
-        match = ArgumentMatches.WORD,
+        match = ArgumentMatches.PHRASE,
         type = ArgumentTypes.STRING,
         prefix = null,
         index = null,

@@ -235,7 +235,7 @@ class Command extends AkairoModule {
 
         const usedIndices = new Set();
         const parseFuncs = {
-            [ArgumentMatches.WORD]: (arg, index) => {
+            [ArgumentMatches.PHRASE]: (arg, index) => {
                 if (arg.unordered || arg.unordered === 0) {
                     return async (msg, processed) => {
                         const indices = typeof arg.unordered === 'number'
@@ -325,7 +325,7 @@ class Command extends AkairoModule {
             const matchType = typeof arg.match === 'function' ? arg.match(message, processed) : arg.match;
             const processFunc = parseFuncs[matchType](arg, phraseIndex);
 
-            if ([ArgumentMatches.WORD, ArgumentMatches.REST, ArgumentMatches.SEPARATE].includes(matchType)) {
+            if ([ArgumentMatches.PHRASE, ArgumentMatches.REST, ArgumentMatches.SEPARATE].includes(matchType)) {
                 phraseIndex++;
             }
 
