@@ -200,7 +200,7 @@ class ArgumentsParser {
         args.previous = 0;
         if (this.token.t === 'Quote') {
             const phrase = {
-                openQuote: this.match('Quote'),
+                openQuote: this.match('Quote').v,
                 items: [],
                 value: ''
             };
@@ -212,7 +212,7 @@ class ArgumentsParser {
             }
 
             if (this.token.t === 'Quote') {
-                phrase.endQuote = this.match('Quote');
+                phrase.endQuote = this.match('Quote').v;
             }
 
             args.content.push(`${phrase.openQuote}${phrase.items.join('')}${phrase.endQuote}`);
@@ -222,7 +222,7 @@ class ArgumentsParser {
 
         if (this.token.t === 'OpenQuote') {
             const phrase = {
-                openQuote: this.match('OpenQuote'),
+                openQuote: this.match('OpenQuote').v,
                 items: [],
                 value: ''
             };
@@ -234,7 +234,7 @@ class ArgumentsParser {
             }
 
             if (this.token.t === 'EndQuote') {
-                phrase.endQuote = this.match('EndQuote');
+                phrase.endQuote = this.match('EndQuote').v;
             }
 
             args.content.push(`${phrase.openQuote}${phrase.items.join('')}${phrase.endQuote}`);

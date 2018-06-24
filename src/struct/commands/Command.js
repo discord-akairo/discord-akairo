@@ -222,6 +222,11 @@ class Command extends AkairoModule {
             return Promise.resolve({});
         }
 
+        if (typeof this.args === 'function') {
+            const res = this.args(message, content, new Parser({ quoted: this.quoted, content }).parse());
+            return Promise.resolve(res);
+        }
+
         const prefixes = this.getPrefixes();
         const argumentParts = new Parser({
             flagWords: prefixes.flagWords,
@@ -229,11 +234,6 @@ class Command extends AkairoModule {
             quoted: this.quoted,
             content
         }).parse();
-
-        if (typeof this.args === 'function') {
-            const res = this.args(message, content, argumentParts);
-            return Promise.resolve(res);
-        }
 
         const usedIndices = new Set();
         const parseFuncs = {

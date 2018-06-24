@@ -7,12 +7,7 @@ class ArgsCommand extends Command {
     constructor() {
         super('args', {
             aliases: ['args'],
-            args: [
-                {
-                    id: 'a',
-                    match: 'separate'
-                }
-            ]
+            args: (m, c, p) => console.log(p)
         });
     }
 
