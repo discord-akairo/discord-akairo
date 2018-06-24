@@ -22,14 +22,6 @@ const { isPromise } = require('../../../util/Util');
  */
 
 /**
- * A function returning a method to match arguments.
- * @typedef {Function} ArgumentMatchFunction
- * @param {Message} message - Message that triggered the command.
- * @param {Object} prevArgs - Previous arguments.
- * @returns {ArgumentMatch}
- */
-
-/**
  * The type that the argument should be cast to.
  * - `string` does not cast to any type.
  * - `lowercase` makes the input lowercase.
@@ -147,7 +139,7 @@ const { isPromise } = require('../../../util/Util');
  * Options for how an argument parses text.
  * @typedef {Object} ArgumentOptions
  * @prop {string} id - ID of the argument for use in the args object.
- * @prop {ArgumentMatch|ArgumentMatchFunction} [match='word'] - Method to match text.
+ * @prop {ArgumentMatch} [match='word'] - Method to match text.
  * @prop {ArgumentType|ArgumentTypeFunction} [type='string'] - Type to cast to.
  * @prop {string|string[]} [prefix] - The string(s) to use as the flag for prefix and flag args.
  * Note that even if the command isn't ran, all prefixes are separated from the content.
@@ -209,9 +201,9 @@ class Argument {
 
         /**
          * The method to match text.
-         * @type {ArgumentMatch|ArgumentMatchFunction}
+         * @type {ArgumentMatch}
          */
-        this.match = typeof match === 'function' ? match.bind(this) : match;
+        this.match = match;
 
         /**
          * The type to cast to.
