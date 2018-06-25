@@ -268,16 +268,16 @@ class Command extends AkairoModule {
                     };
                 }
 
-                index = arg.index != null ? arg.index : index;
+                index = arg.index == null ? index : arg.index;
                 return arg.process.bind(arg, argumentParts.phraseAt(index));
             },
             [ArgumentMatches.REST]: (arg, index) => {
-                index = arg.index != null ? arg.index : index;
-                const rest = argumentParts.phrases.slice(index, index + arg.limit).map(ph => ph.value).join('');
+                index = arg.index == null ? index : arg.index;
+                const rest = argumentParts.phrases.slice(index, index + arg.limit).map(ph => ph.value).join(' ');
                 return arg.process.bind(arg, rest);
             },
             [ArgumentMatches.SEPARATE]: (arg, index) => {
-                index = arg.index != null ? arg.index : index;
+                index = arg.index == null ? index : arg.index;
                 const phrases = argumentParts.phrases.slice(index, index + arg.limit);
 
                 if (!phrases.length) return arg.process.bind(arg, '');
@@ -303,7 +303,7 @@ class Command extends AkairoModule {
             },
             [ArgumentMatches.TEXT]: arg => {
                 const index = arg.index == null ? 0 : arg.index;
-                const text = argumentParts.phrases.slice(index, index + arg.limit).map(ph => ph.value).join('');
+                const text = argumentParts.phrases.slice(index, index + arg.limit).map(ph => ph.value).join(' ');
                 return arg.process.bind(arg, text);
             },
             [ArgumentMatches.CONTENT]: arg => {

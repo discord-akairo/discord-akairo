@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-const { Command, Argument, Control } = require('../..');
+const { Command } = require('../..');
 const util = require('util');
 
 class ArgsCommand extends Command {
@@ -9,22 +9,12 @@ class ArgsCommand extends Command {
             aliases: ['args'],
             args: [
                 {
-                    id: 'x',
-                    type: Argument.every('integer', 'string')
+                    id: 'x'
                 },
-                Control.if((m, args) => args.x[0] === 1, [
-                    {
-                        id: 'y',
-                        match: 'option',
-                        flag: 'y:'
-                    }
-                ], [
-                    {
-                        id: 'z',
-                        match: 'flag',
-                        flag: '--z'
-                    }
-                ])
+                {
+                    id: 'y',
+                    match: 'rest'
+                }
             ]
         });
     }
