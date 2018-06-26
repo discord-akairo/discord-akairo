@@ -221,16 +221,7 @@ class Parser {
             content: [],
             phrases: [],
             flags: [],
-            optionFlags: [],
-            phraseAt(i) {
-                return this.phrases[i] ? this.phrases[i].value : '';
-            },
-            flagWith(names) {
-                return this.flags.find(flag => names.some(name => name.toLowerCase() === flag.key.toLowerCase()));
-            },
-            optionFlagWith(names) {
-                return this.optionFlags.find(flag => names.some(name => name.toLowerCase() === flag.key.toLowerCase()));
-            }
+            optionFlags: []
         };
 
         if (!this.check('EOF')) {
@@ -247,6 +238,7 @@ class Parser {
                 }
 
                 prev = this.parseArgument(args);
+                prev.trailing = '';
                 args[prev.type === 'Flag' ? 'flags' : prev.type === 'OptionFlag' ? 'optionFlags' : 'phrases'].push(prev);
                 args.content.push(prev.content);
             }

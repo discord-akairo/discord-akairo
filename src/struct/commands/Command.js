@@ -255,7 +255,7 @@ class Command extends AkairoModule {
                                 : Array.from(argumentParts.phrases.keys());
 
                         for (const i of indices) {
-                            const phrase = argumentParts.phraseAt(i);
+                            const phrase = argumentParts.phrases[i] ? argumentParts.phrases[i].value : '';
                             // eslint-disable-next-line no-await-in-loop
                             const res = await arg.cast(phrase, msg, processed);
                             if (res != null) {
@@ -269,11 +269,11 @@ class Command extends AkairoModule {
                 }
 
                 index = arg.index == null ? index : arg.index;
-                return arg.process.bind(arg, argumentParts.phraseAt(index));
+                return arg.process.bind(arg, argumentParts.phrases[index] ? argumentParts.phrases[index].value : '');
             },
             [ArgumentMatches.REST]: (arg, index) => {
                 index = arg.index == null ? index : arg.index;
-                const rest = argumentParts.phrases.slice(index, index + arg.limit).map(ph => ph.value).join(' ');
+                const rest = argumentParts.phrases.slice(index, index + arg.limit).map(ph => ph.content).join('').trim();
                 return arg.process.bind(arg, rest);
             },
             [ArgumentMatches.SEPARATE]: (arg, index) => {
@@ -294,16 +294,18 @@ class Command extends AkairoModule {
                 };
             },
             [ArgumentMatches.FLAG]: arg => {
-                const flagFound = argumentParts.flagWith(Array.isArray(arg.flag) ? arg.flag : [arg.flag]) != null;
+                const names = Array.isArray(arg.flag) ? arg.flag : [arg.flag];
+                const flagFound = argumentParts.flags.some(f => names.some(name => name.toLowerCase() === f.key.toLowerCase()));
                 return () => arg.default == null ? flagFound : !flagFound;
             },
             [ArgumentMatches.OPTION]: arg => {
-                const flag = argumentParts.optionFlagWith(Array.isArray(arg.flag) ? arg.flag : [arg.flag]);
+                const names = Array.isArray(arg.flag) ? arg.flag : [arg.flag];
+                const flag = argumentParts.optionFlags.find(f => names.some(name => name.toLowerCase() === f.key.toLowerCase()));
                 return arg.process.bind(arg, flag ? flag.value : '');
             },
             [ArgumentMatches.TEXT]: arg => {
                 const index = arg.index == null ? 0 : arg.index;
-                const text = argumentParts.phrases.slice(index, index + arg.limit).map(ph => ph.value).join(' ');
+                const text = argumentParts.phrases.slice(index, index + arg.limit).map(ph => ph.content).join('').trim();
                 return arg.process.bind(arg, text);
             },
             [ArgumentMatches.CONTENT]: arg => {
