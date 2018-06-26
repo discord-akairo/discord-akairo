@@ -153,7 +153,7 @@ declare module 'discord-akairo' {
         public constructor(id: string, options?: CommandOptions & AkairoModuleOptions);
 
         public aliases: string[];
-        public args: (Argument | Control)[] | Argument | Control | ArgumentFunction;
+        public args: (ArgumentOptions | Control)[] | ArgumentFunction;
         public quoted: boolean;
         public category: Category<string, Command>;
         public channel?: string;
@@ -174,7 +174,7 @@ declare module 'discord-akairo' {
         public typing: boolean;
         public userPermissions: PermissionResolvable | PermissionResolvable[] | PermissionFunction;
 
-        public buildArgs(args: (ArgumentOptions | Control)[] | Argument | Control): (Argument | Control)[];
+        public buildArgs(args: (ArgumentOptions | Control)[]): (Argument | Control)[];
         public condition(message: Message): boolean;
         public exec(message: Message, args: any): any;
         public getFlags(): any[];
@@ -278,6 +278,48 @@ declare module 'discord-akairo' {
 
         public static swapOptions(content: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | MessageEditOptions, options?: MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | MessageEditOptions): any[];
     }
+
+    export class Control {
+        public control(data: any): any;
+        public getArgs(): (ArgumentOptions | Control)[];
+
+        public static Control: typeof ControlClass;
+        public static IfControl: typeof IfControl;
+        public static CaseControl: typeof CaseControl;
+        public static DoControl: typeof DoControl;
+        public static EndControl: typeof EndControl;
+        public static CancelControl: typeof CancelControl;
+
+        public static if(condition: ControlPredicate, trueArguments?: (ArgumentOptions | Control)[], falseArguments?: (ArgumentOptions | Control)[]): IfControl;
+        public static case(...condArgs: ControlPredicate | (ArgumentOptions | Control)[]): CaseControl;
+        public static do(fn: ControlFunction): DoControl;
+        public static end(): EndControl;
+        public static cancel(): CancelControl;
+    }
+
+    class IfControl extends ControlClass {
+        public constructor(condition: ControlPredicate, trueArguments?: (ArgumentOptions | Control)[], falseArguments?: (ArgumentOptions | Control)[]);
+
+        public condition: ControlPredicate;
+        public trueArguments: (ArgumentOptions | Control)[];
+        public falseArguments: (ArgumentOptions | Control)[];
+    }
+
+    class CaseControl extends ControlClass {
+        public constructor(condArgs: (ControlPredicate | (ArgumentOptions | Control)[])[]);
+
+        public condArgs: (ControlPredicate | (ArgumentOptions | Control)[])[];
+    }
+
+    class DoControl extends ControlClass {
+        public constructor(fn: ControlFunction);
+
+        public fn: ControlFunction;
+    }
+
+    class EndControl extends ControlClass {}
+
+    class CancelControl extends ControlClass {}
 
     export class Inhibitor extends AkairoModule {
         public constructor(id: string, options?: InhibitorOptions & AkairoModuleOptions);
@@ -445,49 +487,6 @@ declare module 'discord-akairo' {
         public static isEventEmitter(value: any): boolean;
         public static isPromise(value: any): boolean;
     }
-
-    class ControlClass {
-        public control(data: any): any;
-        public getArgs(): (Argument | Control)[] | Argument | Control;
-    }
-
-    class IfControl extends ControlClass {
-        public constructor(condition: ControlPredicate, trueArguments: (Argument | Control)[] | Argument | Control, falseArguments: (Argument | Control)[] | Argument | Control);
-
-        public condition: ControlPredicate;
-        public trueArguments: (Argument | Control)[] | Argument | Control;
-        public falseArguments: (Argument | Control)[] | Argument | Control;
-    }
-
-    class CaseControl extends ControlClass {
-        public constructor(condArgs: (ControlPredicate | (Argument | Control)[] | Argument | Control)[]);
-
-        public condArgs: (ControlPredicate | (Argument | Control)[] | Argument | Control)[];
-    }
-
-    class DoControl extends ControlClass {
-        public constructor(fn: ControlFunction);
-
-        public fn: ControlFunction;
-    }
-
-    class EndControl extends ControlClass {}
-
-    class CancelControl extends ControlClass {}
-
-    export interface Control {
-        Control: typeof ControlClass;
-        IfControl: typeof IfControl;
-        CaseControl: typeof CaseControl;
-        DoControl: typeof DoControl;
-        EndControl: typeof EndControl;
-        CancelControl: typeof CancelControl;
-        public if(condition: ControlPredicate, trueArguments: (Argument | Control)[] | Argument | Control, falseArguments: (Argument | Control)[] | Argument | Control): IfControl;
-        public case(...condArgs: ControlPredicate | (Argument | Control)[] | Argument | Control): CaseControl;
-        public do(fn: ControlFunction): DoControl;
-        public end(): EndControl;
-        public cancel(): CancelControl;
-    };
 
     export type AkairoHandlerOptions = {
         automateCategories?: boolean;

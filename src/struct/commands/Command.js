@@ -2,14 +2,14 @@ const AkairoError = require('../../util/AkairoError');
 const AkairoModule = require('../AkairoModule');
 const Argument = require('./arguments/Argument');
 const { ArgumentMatches, Symbols } = require('../../util/Constants');
-const { Control } = require('./arguments/Control');
+const Control = require('./arguments/Control');
 const Parser = require('./arguments/Parser');
 
 /**
  * Options to use for command execution behavior.
  * @typedef {Object} CommandOptions
  * @prop {string[]} [aliases=[]] - Command names.
- * @prop {Array<Argument|Control>|Argument|Control|ArgumentFunction} [args=[]] - Arguments to parse.
+ * @prop {Array<ArgumentOptions|Control>|ArgumentFunction} [args=[]] - Arguments to parse.
  * @prop {Object} [parser=Parser] - A custom parser.
  * Note that this must have the same interface as the built-in parser.
  * @prop {boolean} [quoted=true] - Whether or not to consider quotes.
@@ -98,7 +98,7 @@ class Command extends AkairoModule {
 
         /**
          * Arguments for the command.
-         * @type {Array<Argument|Control>|Argument|Control|ArgumentFunction}
+         * @type {Array<ArgumentOptions|Control>|ArgumentFunction}
          */
         this.args = typeof args === 'function' ? args.bind(this) : args;
 
@@ -359,16 +359,16 @@ class Command extends AkairoModule {
         };
 
         (function pushFlag(arg) {
-            if (arg instanceof Control) {
-                pushFlag(arg.getArgs());
-                return;
-            }
-
             if (Array.isArray(arg)) {
                 for (const a of arg) {
                     pushFlag(a);
                 }
 
+                return;
+            }
+
+            if (arg instanceof Control) {
+                pushFlag(arg.getArgs());
                 return;
             }
 
@@ -389,11 +389,10 @@ class Command extends AkairoModule {
 
     /**
      * Builds arguments from options.
-     * @param {Array<ArgumentOptions|Control>|ArgumentOptions|Control} args - Argument options to build.
+     * @param {Array<ArgumentOptions|Control>} args - Argument options to build.
      * @returns {Array<Argument|Control>}
      */
     buildArgs(args) {
-        if (!Array.isArray(args)) return this.buildArgs([args]);
         if (args == null) return [];
 
         const res = [];

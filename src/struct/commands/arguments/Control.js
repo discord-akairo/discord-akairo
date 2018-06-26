@@ -19,6 +19,12 @@ const { Symbols } = require('../../../util/Constants');
 
 class Control {
     /**
+     * A control for argument parsing.
+     */
+    // eslint-disable-next-line no-useless-constructor, no-empty-function
+    constructor() {}
+
+    /**
      * Changes the control flow of the arguments parsing.
      * @param {Object} data - Data for control.
      * @returns {Object}
@@ -31,10 +37,57 @@ class Control {
 
     /**
      * Gets the args contained within the control.
-     * @returns {Array<ArgumentOptions|Control>|ArgumentOptions|Control}
+     * @returns {Array<ArgumentOptions|Control>}
      */
     getArgs() {
         return [];
+    }
+
+    /**
+     * Creates a control for branching in arguments parsing.
+     * @param {ControlPredicate} condition - Condition to check.
+     * @param {Array<ArgumentOptions|Control>} [trueArguments=[]] - Arguments to run if true.
+     * @param {Array<ArgumentOptions|Control>} [falseArguments=[]] - Arguments to run if false.
+     * @returns {IfControl}
+     */
+    static if(condition, trueArguments = [], falseArguments = []) {
+        return new IfControl(condition, trueArguments, falseArguments);
+    }
+
+    /**
+     * Creates a control for branching in arguments parsing.
+     * Allows for multiple branches.
+     * @param {Array<ControlPredicate|Array<ArgumentOptions|Control>>} condArgs - A list of conditions followed by their arguments.
+     * E.g. [() => ..., [args], () => ..., [args]].
+     * @returns {CaseControl}
+     */
+    static case(...condArgs) {
+        return new CaseControl(condArgs);
+    }
+
+    /**
+     * Creates a control that runs a function when the control is reached.
+     * @param {ControlFunction} fn - Function to run.
+     * @returns {DoControl}
+     */
+    static do(fn) {
+        return new DoControl(fn);
+    }
+
+    /**
+     * Creates a control that ends parsing prematurely.
+     * @returns {EndControl}
+     */
+    static end() {
+        return new EndControl();
+    }
+
+    /**
+     * Creates a control that cancels the command.
+     * @returns {CancelControl}
+     */
+    static cancel() {
+        return new CancelControl();
     }
 }
 
@@ -43,8 +96,8 @@ class IfControl extends Control {
     /**
      * Controls branching in arguments parsing.
      * @param {ControlPredicate} condition - Condition to check.
-     * @param {Array<Argument|Control>|Argument|Control} trueArguments - Arguments to run if true.
-     * @param {Array<Argument|Control>|Argument|Control} falseArguments - Arguments to run if false.
+     * @param {Array<ArgumentOptions|Control>} [trueArguments=[]] - Arguments to run if true.
+     * @param {Array<ArgumentOptions|Control>} [falseArguments=[]] - Arguments to run if false.
      */
     constructor(condition, trueArguments = [], falseArguments = []) {
         super();
@@ -57,13 +110,13 @@ class IfControl extends Control {
 
         /**
          * Arguments to run if true.
-         * @type {Array<Argument|Control>|Argument|Control}
+         * @type {Array<ArgumentOptions|Control>}
          */
         this.trueArguments = trueArguments;
 
         /**
          * Arguments to run if false.
-         * @type {Array<Argument|Control>|Argument|Control}
+         * @type {Array<ArgumentOptions|Control>}
          */
         this.falseArguments = falseArguments;
     }
@@ -73,14 +126,13 @@ class IfControl extends Control {
      * @param {Object} data - Data for control.
      * @returns {Object}
      */
-    control({ process, command, message, processedArgs }) {
-        return process(command.buildArgs(this.condition(message, processedArgs) ? this.trueArguments : this.falseArguments));
+    control({ process, currentArgs, command, message, processedArgs }) {
+        const branch = (this.condition(message, processedArgs) ? this.trueArguments : this.falseArguments).concat(currentArgs.slice(1));
+        return process(command.buildArgs(branch));
     }
 
     getArgs() {
-        return Array.isArray(this.trueArguments)
-            ? this.trueArguments.concat(this.falseArguments)
-            : [this.trueArguments].concat(this.falseArguments);
+        return this.trueArguments.concat(this.falseArguments);
     }
 }
 
@@ -89,7 +141,7 @@ class CaseControl extends Control {
     /**
      * Controls branching in arguments parsing.
      * Allows for multiple branches.
-     * @param {Array<ControlPredicate|Array<Argument|Control>|Argument|Control>} condArgs - A list of conditions followed by their arguments.
+     * @param {Array<ControlPredicate|Array<ArgumentOptions|Control>>} condArgs - A list of conditions followed by their arguments.
      * E.g. [() => ..., [args], () => ..., [args]].
      */
     constructor(condArgs) {
@@ -97,7 +149,7 @@ class CaseControl extends Control {
 
         /**
          * A list of conditions followed by their arguments.
-         * @type {Array<ControlPredicate|Array<Argument|Control>|Argument|Control>}
+         * @type {Array<ControlPredicate|Array<ArgumentOptions|Control>>}
          */
         this.condArgs = condArgs;
     }
@@ -110,11 +162,11 @@ class CaseControl extends Control {
     control({ process, currentArgs, command, message, processedArgs }) {
         for (let i = 0; i < this.condArgs.length; i += 2) {
             if (this.condArgs[i](message, processedArgs)) {
-                return process(command.buildArgs(this.condArgs[i + 1]));
+                return process(command.buildArgs(this.condArgs[i + 1].concat(currentArgs.slice(1))));
             }
         }
 
-        return process(currentArgs.slice(1));
+        return process(command.buildArgs(currentArgs.slice(1)));
     }
 
     getArgs() {
@@ -189,26 +241,12 @@ class CancelControl extends Control {
     }
 }
 
-module.exports = {
-    Control,
+Object.assign(Control, {
     IfControl,
     CaseControl,
     DoControl,
     EndControl,
-    CancelControl,
-    if(condition, trueArguments, falseArguments) {
-        return new IfControl(condition, trueArguments, falseArguments);
-    },
-    case(...condArgs) {
-        return new CaseControl(condArgs);
-    },
-    do(fn) {
-        return new DoControl(fn);
-    },
-    end() {
-        return new EndControl();
-    },
-    cancel() {
-        return new CancelControl();
-    }
-};
+    CancelControl
+});
+
+module.exports = Control;
