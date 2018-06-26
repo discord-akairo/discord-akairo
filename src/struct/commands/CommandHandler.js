@@ -779,7 +779,7 @@ class CommandHandler extends AkairoHandler {
         if (!command) return this.parseCommandWithOverwrittenPrefixes(message) || { prefix: start, alias: name };
         if (command.prefix != null) return this.parseCommandWithOverwrittenPrefixes(message);
 
-        const content = message.content.slice(argsIndex + name.length + 1);
+        const content = message.content.slice(argsIndex + name.length + 1).trim();
         return { command, content, prefix: start, alias: name };
     }
 
@@ -844,7 +844,7 @@ class CommandHandler extends AkairoHandler {
 
         if (!command || !commands.has(command.id)) return { prefix: start, alias: name };
 
-        const content = message.content.slice(argsIndex + name.length + 1);
+        const content = message.content.slice(argsIndex + name.length + 1).trim();
         return { command, content, prefix: start, alias: name };
     }
 
