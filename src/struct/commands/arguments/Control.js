@@ -126,9 +126,9 @@ class IfControl extends Control {
      * @param {Object} data - Data for control.
      * @returns {Object}
      */
-    control({ process, currentArgs, command, message, processedArgs }) {
+    control({ process, currentArgs, args, message, processedArgs }) {
         const branch = (this.condition(message, processedArgs) ? this.trueArguments : this.falseArguments).concat(currentArgs.slice(1));
-        return process(command.buildArgs(branch));
+        return process(args.buildArgs(branch));
     }
 
     getArgs() {
@@ -159,14 +159,14 @@ class CaseControl extends Control {
      * @param {Object} data - Data for control.
      * @returns {Object}
      */
-    control({ process, currentArgs, command, message, processedArgs }) {
+    control({ process, currentArgs, args, message, processedArgs }) {
         for (let i = 0; i < this.condArgs.length; i += 2) {
             if (this.condArgs[i](message, processedArgs)) {
-                return process(command.buildArgs(this.condArgs[i + 1].concat(currentArgs.slice(1))));
+                return process(args.buildArgs(this.condArgs[i + 1].concat(currentArgs.slice(1))));
             }
         }
 
-        return process(command.buildArgs(currentArgs.slice(1)));
+        return process(args.buildArgs(currentArgs.slice(1)));
     }
 
     getArgs() {
@@ -195,9 +195,9 @@ class DoControl extends Control {
      * @param {Object} data - Data for control.
      * @returns {Object}
      */
-    control({ process, currentArgs, command, message, processedArgs }) {
+    control({ process, currentArgs, args, command, message, processedArgs }) {
         this.fn.call(command, message, processedArgs);
-        return process(currentArgs.slice(1));
+        return process(args.buildArgs(currentArgs.slice(1)));
     }
 }
 

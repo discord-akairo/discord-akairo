@@ -424,7 +424,7 @@ class CommandHandler extends AkairoHandler {
         try {
             if (message.edited && !command.editable) return;
             if (await this.runPostTypeInhibitors(message, command)) return;
-            const args = await command.parse(content, message);
+            const args = await command.parse(message, content);
             if (args === Symbols.COMMAND_CANCELLED) {
                 this.emit(CommandHandlerEvents.COMMAND_CANCELLED, message, command);
                 return;

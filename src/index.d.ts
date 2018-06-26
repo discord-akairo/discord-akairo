@@ -109,6 +109,18 @@ declare module 'discord-akairo' {
         public static some(...types: (ArgumentType | ArgumentTypeFunction)[]): ArgumentTypeFunction; 
     }
 
+    export class ArgumentParser {
+        public constructor(command: Command, parser: Function, args: (ArgumentOptions | Control)[]);
+
+        public command: Command;
+        public parser: Function;
+        public args: (ArgumentOptions | Control)[];
+
+        public buildArgs(args: (ArgumentOptions | Control)[]): (Argument | Control)[];
+        public getFlags(): any[];
+        public parse(message: Message, content: string): Promise<any>;
+    }
+
     export class Category<K, V> extends Collection<K, V> {
         public constructor(id: string, iterable?: Iterable<[K, V][]>);
 
@@ -153,7 +165,7 @@ declare module 'discord-akairo' {
         public constructor(id: string, options?: CommandOptions & AkairoModuleOptions);
 
         public aliases: string[];
-        public args: (ArgumentOptions | Control)[] | ArgumentFunction;
+        public args: ArgumentParser | ArgumentFunction;
         public quoted: boolean;
         public category: Category<string, Command>;
         public channel?: string;
@@ -167,18 +179,15 @@ declare module 'discord-akairo' {
         public handler: CommandHandler;
         public id: string;
         public ownerOnly: boolean;
-        public parser: any;
         public prefix?: string | string[] | PrefixFunction;
         public ratelimit: number;
         public regex: RegExp | RegexFunction;
         public typing: boolean;
         public userPermissions: PermissionResolvable | PermissionResolvable[] | PermissionFunction;
 
-        public buildArgs(args: (ArgumentOptions | Control)[]): (Argument | Control)[];
         public condition(message: Message): boolean;
         public exec(message: Message, args: any): any;
-        public getFlags(): any[];
-        public parse(content: string, message: Message): Promise<any>;
+        public parse(message: Message, content: string): Promise<any>;
         public reload(): this;
         public remove(): this;
     }
@@ -277,6 +286,28 @@ declare module 'discord-akairo' {
         public setLastResponse(message: Message | Message[]): Message;
 
         public static swapOptions(content: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | MessageEditOptions, options?: MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | MessageEditOptions): any[];
+    }
+
+    export class ContentParser {
+        public constructor(options?: ContentParserOptions);
+
+        public content: string;
+        public flagWords: string[];
+        public optionFlagWords: string[];
+        public position: number;
+        public quoted: boolean;
+        public token: any;
+        public tokens: any[];
+
+        public check(...types: string): boolean;
+        public createToken(type: string, value: string): any;
+        public match(...types: string): any;
+        public next(): void;
+        public parse(): any;
+        public parseArgument(): any;
+        public parseFlag(): any;
+        public parsePhrase(): any;
+        public tokenize(): any[];
     }
 
     export class Control {
@@ -403,28 +434,6 @@ declare module 'discord-akairo' {
         public setEmitters(emitters: { [x: string]: EventEmitter }): void;
         public on(event: 'remove', listener: (listener: Listener) => any): this;
         public on(event: 'load', listener: (listener: Listener, isReload: boolean) => any): this;
-    }
-
-    export class Parser {
-        public constructor(options?: ParserOptions);
-
-        public content: string;
-        public flagWords: string[];
-        public optionFlagWords: string[];
-        public position: number;
-        public quoted: boolean;
-        public token: any;
-        public tokens: any[];
-
-        public check(...types: string): boolean;
-        public createToken(type: string, value: string): any;
-        public match(...types: string): any;
-        public next(): void;
-        public parse(): any;
-        public parseArgument(): any;
-        public parseFlag(): any;
-        public parsePhrase(): any;
-        public tokenize(): any[];
     }
 
     export abstract class Provider {
@@ -561,7 +570,7 @@ declare module 'discord-akairo' {
 
     export type CommandOptions = {
         aliases?: string[];
-        args?: (ArgumentOptions | Control)[] | ArgumentOptions | Control | ArgumentFunction;
+        args?: (ArgumentOptions | Control)[] | ArgumentFunction;
         channel?: string;
         clientPermissions?: PermissionResolvable | PermissionResolvable[] | PermissionFunction;
         condition?: ConditionFunction;
@@ -570,7 +579,7 @@ declare module 'discord-akairo' {
         description?: string | string[];
         editable?: boolean;
         ownerOnly?: boolean;
-        parser?: any;
+        parser?: Function;
         prefix?: string | string[] | PrefixFunction;
         ratelimit?: number;
         regex?: RegExp | TriggerFunction;
@@ -597,6 +606,13 @@ declare module 'discord-akairo' {
 
     export type ConditionFunction = (message: Message) => boolean;
 
+    export type ContentParserOptions = {
+        content?: string;
+        flagWords?: string[];
+        optionFlagWords?: string[];
+        quoted?: boolean;
+    }
+
     export type ControlFunction = (message: Message, args: any) => any;
 
     export type ControlPredicate = (message: Message, args: any) => boolean;
@@ -613,13 +629,6 @@ declare module 'discord-akairo' {
     };
 
     export type LoadFilterFunction = (filepath: string) => boolean;
-
-    export type ParserOptions = {
-        content?: string;
-        flagWords?: string[];
-        optionFlagWords?: string[];
-        quoted?: boolean;
-    }
 
     export type PermissionFunction = (message: Message) => any | Promise<any>;
 

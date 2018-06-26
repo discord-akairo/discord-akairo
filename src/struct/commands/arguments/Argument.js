@@ -331,8 +331,7 @@ class Argument {
         Object.assign(prompt, this.command.defaultPrompt);
         Object.assign(prompt, this.prompt || {});
 
-        const matchType = typeof this.match === 'function' ? this.match(message, args) : this.match;
-        const isInfinite = prompt.infinite && (matchType === ArgumentMatches.SEPARATE ? !commandInput : true);
+        const isInfinite = prompt.infinite && (this.match === ArgumentMatches.SEPARATE ? !commandInput : true);
         const additionalRetry = prompt.optional ? 0 : Number(Boolean(commandInput));
 
         const values = isInfinite ? [] : null;

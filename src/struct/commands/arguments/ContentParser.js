@@ -29,17 +29,17 @@
  */
 
 /**
- * @typedef {Object} ParserOptions
+ * @typedef {Object} ContentParserOptions
  * @prop {string[]} [flagWords=[]] - Flags considered to be part of a flag arg.
  * @prop {string[]} [optionFlagWords=[]] - Flags considered to be part of an option flag arg.
  * @prop {boolean} [quoted=true] - Whether or not to consider quotes.
  * @prop {string} [content=''] - Content to parse.
  */
 
-class Parser {
+class ContentParser {
     /**
-     * Parser for arguments.
-     * @param {ParserOptions} options - Options for the parser.
+     * Parser for getting phrases and flags out of content.
+     * @param {ContentParserOptions} options - Options for the parser.
      */
     constructor({
         flagWords = [],
@@ -335,4 +335,4 @@ class Parser {
     }
 }
 
-module.exports = Parser;
+module.exports = ContentParser;

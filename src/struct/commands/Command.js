@@ -1,16 +1,14 @@
 const AkairoError = require('../../util/AkairoError');
 const AkairoModule = require('../AkairoModule');
-const Argument = require('./arguments/Argument');
-const { ArgumentMatches, Symbols } = require('../../util/Constants');
-const Control = require('./arguments/Control');
-const Parser = require('./arguments/Parser');
+const ArgumentParser = require('./arguments/ArgumentParser');
+const ContentParser = require('./arguments/ContentParser');
 
 /**
  * Options to use for command execution behavior.
  * @typedef {Object} CommandOptions
  * @prop {string[]} [aliases=[]] - Command names.
- * @prop {Array<ArgumentOptions|Control>|ArgumentFunction} [args=[]] - Arguments to parse.
- * @prop {Object} [parser=Parser] - A custom parser.
+ * @prop {Array<ArgumentOptions|Control>|ArgumentFunction} [args=[]] - Argument options to use.
+ * @prop {Object} [parser=Parser] - A custom content parser class.
  * Note that this must have the same interface as the built-in parser.
  * @prop {boolean} [quoted=true] - Whether or not to consider quotes.
  * @prop {string} [channel] - Restricts channel to either 'guild' or 'dm'.
@@ -73,7 +71,7 @@ class Command extends AkairoModule {
         const {
             aliases = [],
             args = this.args || [],
-            parser = Parser,
+            parser = ContentParser,
             quoted = true,
             channel = null,
             ownerOnly = false,
@@ -97,16 +95,10 @@ class Command extends AkairoModule {
         this.aliases = aliases;
 
         /**
-         * Arguments for the command.
-         * @type {Array<ArgumentOptions|Control>|ArgumentFunction}
+         * The argument parser.
+         * @type {ArgumentParser|ArgumentFunction}
          */
-        this.args = typeof args === 'function' ? args.bind(this) : args;
-
-        /**
-         * The parser to use.
-         * @type {Object}
-         */
-        this.parser = parser;
+        this.args = typeof args === 'function' ? args.bind(this) : new ArgumentParser(this, parser, args);
 
         /**
          * Whether or not to consider quotes.
@@ -219,195 +211,18 @@ class Command extends AkairoModule {
     }
 
     /**
-     * Parses text based on this command's args.
+     * Parses content using the command's argument options.
+     * @param {Message} message - Message to use.
      * @param {string} content - String to parse.
-     * @param {Message} [message] - Message to use.
      * @returns {Promise<Object>}
      */
-    parse(content, message) {
-        if (!this.args.length && typeof this.args !== 'function') {
-            return Promise.resolve({});
-        }
-
+    parse(message, content) {
         if (typeof this.args === 'function') {
             const res = this.args(message, content);
             return Promise.resolve(res);
         }
 
-        const flags = this.getFlags();
-        // eslint-disable-next-line new-cap
-        const argumentParts = new this.parser({
-            flagWords: flags.flagWords,
-            optionFlagWords: flags.optionFlagWords,
-            quoted: this.quoted,
-            content
-        }).parse();
-
-        const usedIndices = new Set();
-        const parseFuncs = {
-            [ArgumentMatches.PHRASE]: (arg, index) => {
-                if (arg.unordered || arg.unordered === 0) {
-                    return async (msg, processed) => {
-                        const indices = typeof arg.unordered === 'number'
-                            ? Array.from(argumentParts.phrases.keys()).slice(arg.unordered)
-                            : Array.isArray(arg.unordered)
-                                ? arg.unordered
-                                : Array.from(argumentParts.phrases.keys());
-
-                        for (const i of indices) {
-                            const phrase = argumentParts.phrases[i] ? argumentParts.phrases[i].value : '';
-                            // eslint-disable-next-line no-await-in-loop
-                            const res = await arg.cast(phrase, msg, processed);
-                            if (res != null) {
-                                usedIndices.add(i);
-                                return res;
-                            }
-                        }
-
-                        return arg.process('', msg, processed);
-                    };
-                }
-
-                index = arg.index == null ? index : arg.index;
-                return arg.process.bind(arg, argumentParts.phrases[index] ? argumentParts.phrases[index].value : '');
-            },
-            [ArgumentMatches.REST]: (arg, index) => {
-                index = arg.index == null ? index : arg.index;
-                const rest = argumentParts.phrases.slice(index, index + arg.limit).map(ph => ph.content).join('').trim();
-                return arg.process.bind(arg, rest);
-            },
-            [ArgumentMatches.SEPARATE]: (arg, index) => {
-                index = arg.index == null ? index : arg.index;
-                const phrases = argumentParts.phrases.slice(index, index + arg.limit);
-
-                if (!phrases.length) return arg.process.bind(arg, '');
-                return async (msg, processed) => {
-                    const res = [];
-                    processed[arg.id] = res;
-
-                    for (const phrase of phrases) {
-                        // eslint-disable-next-line no-await-in-loop
-                        res.push(await arg.process(phrase.value, msg, processed));
-                    }
-
-                    return res;
-                };
-            },
-            [ArgumentMatches.FLAG]: arg => {
-                const names = Array.isArray(arg.flag) ? arg.flag : [arg.flag];
-                const flagFound = argumentParts.flags.some(f => names.some(name => name.toLowerCase() === f.key.toLowerCase()));
-                return () => arg.default == null ? flagFound : !flagFound;
-            },
-            [ArgumentMatches.OPTION]: arg => {
-                const names = Array.isArray(arg.flag) ? arg.flag : [arg.flag];
-                const flag = argumentParts.optionFlags.find(f => names.some(name => name.toLowerCase() === f.key.toLowerCase()));
-                return arg.process.bind(arg, flag ? flag.value : '');
-            },
-            [ArgumentMatches.TEXT]: arg => {
-                const index = arg.index == null ? 0 : arg.index;
-                const text = argumentParts.phrases.slice(index, index + arg.limit).map(ph => ph.content).join('').trim();
-                return arg.process.bind(arg, text);
-            },
-            [ArgumentMatches.CONTENT]: arg => {
-                const index = arg.index == null ? 0 : arg.index;
-                const text = argumentParts.content.slice(index, index + arg.limit).join('').trim();
-                return arg.process.bind(arg, text);
-            },
-            [ArgumentMatches.NONE]: arg => {
-                return arg.process.bind(arg, '');
-            }
-        };
-
-        const processed = {};
-        let phraseIndex = 0;
-
-        const process = async args => {
-            if (!args.length) return processed;
-            const arg = args[0];
-            if (arg instanceof Control) {
-                return arg.control({
-                    process,
-                    currentArgs: args,
-                    command: this,
-                    message,
-                    processedArgs: processed
-                });
-            }
-
-            const matchType = typeof arg.match === 'function' ? arg.match(message, processed) : arg.match;
-            const processFunc = parseFuncs[matchType](arg, phraseIndex);
-
-            if ([ArgumentMatches.PHRASE, ArgumentMatches.REST, ArgumentMatches.SEPARATE].includes(matchType)) {
-                phraseIndex++;
-            }
-
-            const res = await processFunc(message, processed);
-            if (res === Symbols.COMMAND_CANCELLED) return res;
-            processed[arg.id] = res;
-            return process(args.slice(1));
-        };
-
-        return process(this.buildArgs(this.args));
-    }
-
-    /**
-     * Gets the flags that are used in all args.
-     * @returns {Object}
-     */
-    getFlags() {
-        const res = {
-            flagWords: [],
-            optionFlagWords: []
-        };
-
-        (function pushFlag(arg) {
-            if (Array.isArray(arg)) {
-                for (const a of arg) {
-                    pushFlag(a);
-                }
-
-                return;
-            }
-
-            if (arg instanceof Control) {
-                pushFlag(arg.getArgs());
-                return;
-            }
-
-            const arr = res[arg.match === ArgumentMatches.FLAG ? 'flagWords' : 'optionFlagWords'];
-            if (arg.match === ArgumentMatches.FLAG || arg.match === ArgumentMatches.OPTION) {
-                if (Array.isArray(arg.flag)) {
-                    for (const p of arg.flag) {
-                        arr.push(p);
-                    }
-                } else {
-                    arr.push(arg.flag);
-                }
-            }
-        }(this.args));
-
-        return res;
-    }
-
-    /**
-     * Builds arguments from options.
-     * @param {Array<ArgumentOptions|Control>} args - Argument options to build.
-     * @returns {Array<Argument|Control>}
-     */
-    buildArgs(args) {
-        if (args == null) return [];
-
-        const res = [];
-        for (const arg of args) {
-            if (arg instanceof Control) {
-                res.push(arg);
-                continue;
-            }
-
-            res.push(new Argument(this, arg));
-        }
-
-        return res;
+        return this.args.parse(message, content);
     }
 
     /**

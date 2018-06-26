@@ -12,8 +12,9 @@ module.exports = {
 
     // Arguments
     Argument: require('./struct/commands/arguments/Argument'),
+    ArgumentParser: require('./struct/commands/arguments/ArgumentParser'),
+    ContentParser: require('./struct/commands/arguments/ContentParser'),
     Control: require('./struct/commands/arguments/Control'),
-    Parser: require('./struct/commands/arguments/Parser'),
     TypeResolver: require('./struct/commands/arguments/TypeResolver'),
 
     // Inhibitors
