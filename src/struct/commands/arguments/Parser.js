@@ -52,14 +52,14 @@ class Parser {
          * @type {string[]}
          */
         this.flagWords = flagWords;
-        this.flagWords.sort();
+        this.flagWords.sort((a, b) => b.length - a.length);
 
         /**
          * Flags considered to be part of an option flag arg.
          * @type {string[]}
          */
         this.optionFlagWords = optionFlagWords;
-        this.optionFlagWords.sort();
+        this.optionFlagWords.sort((a, b) => b.length - a.length);
 
         /**
          * Whether or not to consider quotes.
