@@ -193,7 +193,7 @@ declare module 'discord-akairo' {
     }
 
     export class CommandHandler extends AkairoHandler {
-        public constructor(client: AkairoClient, options: CommandHandlerOptions & AkairoModuleOptions);
+        public constructor(client: AkairoClient, options: CommandHandlerOptions & AkairoHandlerOptions);
 
         public aliasReplacement?: RegExp;
         public aliases: Collection<string, string>;
