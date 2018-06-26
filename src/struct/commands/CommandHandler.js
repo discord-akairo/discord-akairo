@@ -643,7 +643,6 @@ class CommandHandler extends AkairoHandler {
             : null;
 
         if (reason != null) {
-            if (command.typing) message.channel.stopTyping();
             this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
             return true;
         }
