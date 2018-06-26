@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>CaseControl - Documentation</title>
+    <title>ArgumentParser - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">CaseControl</h1>
+    <h1 class="page-title">ArgumentParser</h1>
     
 
     
@@ -40,7 +40,7 @@
 <header>
     
         <h2>
-        CaseControl
+        ArgumentParser
         </h2>
         
     
@@ -53,7 +53,7 @@
 
     
 
-    <h4 class="name" id="CaseControl"><span class="type-signature"></span>new CaseControl<span class="signature">(condArgs)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="ArgumentParser"><span class="type-signature"></span>new ArgumentParser<span class="signature">(command, parser, args)</span><span class="type-signature"></span></h4>
 
     
 
@@ -65,7 +65,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_commands_arguments_Control.js.html">struct/commands/arguments/Control.js</a>, <a href="struct_commands_arguments_Control.js.html#line140">line 140</a>
+        <a href="struct_commands_arguments_ArgumentParser.js.html">struct/commands/arguments/ArgumentParser.js</a>, <a href="struct_commands_arguments_ArgumentParser.js.html#line12">line 12</a>
     </li></ul></dd>
     
 
@@ -105,7 +105,7 @@
 
 
 <div class="description">
-    <p>Controls branching in arguments parsing.<br>Allows for multiple branches.</p>
+    <p>Parser for processing content into arguments.</p>
 </div>
 
 
@@ -143,13 +143,13 @@
 
         <tr>
             
-                <td class="name"><code>condArgs</code></td>
+                <td class="name"><code>command</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;(<a href="global.html#ControlPredicate">ControlPredicate</a>|Array.&lt;(<a href="global.html#ArgumentOptions">ArgumentOptions</a>|<a href="Control.html">Control</a>)>)></span>
+<span class="param-type"><a href="Command.html">Command</a></span>
 
 
             
@@ -159,7 +159,53 @@
 
             
 
-            <td class="description last"><p>A list of conditions followed by their arguments.<br>E.g. [() =&gt; ..., [args], () =&gt; ..., [args]].</p></td>
+            <td class="description last"><p>Command to use.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>parser</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Content parser class to use.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>args</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;(<a href="global.html#ArgumentOptions">ArgumentOptions</a>|<a href="Control.html">Control</a>)></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Argument options to use.</p></td>
         </tr>
 
     
@@ -185,17 +231,6 @@
     </div>
 
     
-        <h3 class="subsection-title">Extends</h3>
-
-        
-
-
-    <ul>
-        <li><a href="Control.html">Control</a></li>
-    </ul>
-
-
-    
 
     
 
@@ -206,78 +241,6 @@
     
 
     
-        <h3 class="subsection-title">Properties</h3>
-
-        
-            
-<h4 class="name" id="condArgs"><span class="type-signature"></span>condArgs<span class="type-signature"> :Array.&lt;(<a href="global.html#ControlPredicate">ControlPredicate</a>|Array.&lt;(<a href="global.html#ArgumentOptions">ArgumentOptions</a>|<a href="Control.html">Control</a>)>)></span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_commands_arguments_Control.js.html">struct/commands/arguments/Control.js</a>, <a href="struct_commands_arguments_Control.js.html#line154">line 154</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    <p>A list of conditions followed by their arguments.</p>
-</div>
-
-
-
-    <b>Type:</b> 
-<span class="param-type">Array.&lt;(<a href="global.html#ControlPredicate">ControlPredicate</a>|Array.&lt;(<a href="global.html#ArgumentOptions">ArgumentOptions</a>|<a href="Control.html">Control</a>)>)></span>
-
-
-
-
-
-
-
-
-        
-    
 
     
         <h3 class="subsection-title">Methods</h3>
@@ -287,7 +250,7 @@
 
     
 
-    <h4 class="name" id="control"><span class="type-signature"></span>control<span class="signature">(data)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    <h4 class="name" id="buildArgs"><span class="type-signature"></span>buildArgs<span class="signature">(args)</span><span class="type-signature"> &rarr; {Array.&lt;(<a href="Argument.html">Argument</a>|<a href="Control.html">Control</a>)>}</span></h4>
 
     
 
@@ -299,7 +262,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_commands_arguments_Control.js.html">struct/commands/arguments/Control.js</a>, <a href="struct_commands_arguments_Control.js.html#line162">line 162</a>
+        <a href="struct_commands_arguments_ArgumentParser.js.html">struct/commands/arguments/ArgumentParser.js</a>, <a href="struct_commands_arguments_ArgumentParser.js.html#line188">line 188</a>
     </li></ul></dd>
     
 
@@ -309,11 +272,6 @@
 
     
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="Control.html#control">Control#control</a>
-    </li></ul></dd>
     
 
     
@@ -344,7 +302,7 @@
 
 
 <div class="description">
-    <p>Branches the flow.</p>
+    <p>Builds Argument instances from argument options.</p>
 </div>
 
 
@@ -382,13 +340,13 @@
 
         <tr>
             
-                <td class="name"><code>data</code></td>
+                <td class="name"><code>args</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type">Array.&lt;(<a href="global.html#ArgumentOptions">ArgumentOptions</a>|<a href="Control.html">Control</a>)></span>
 
 
             
@@ -398,7 +356,7 @@
 
             
 
-            <td class="description last"><p>Data for control.</p></td>
+            <td class="description last"><p>Argument options to build.</p></td>
         </tr>
 
     
@@ -424,7 +382,7 @@
 
 
     
-<span class="param-type">Object</span>
+<span class="param-type">Array.&lt;(<a href="Argument.html">Argument</a>|<a href="Control.html">Control</a>)></span>
 
 
 
@@ -436,7 +394,7 @@
 
     
 
-    <h4 class="name" id="getArgs"><span class="type-signature"></span>getArgs<span class="signature">()</span><span class="type-signature"> &rarr; {Array.&lt;(<a href="global.html#ArgumentOptions">ArgumentOptions</a>|<a href="Control.html">Control</a>)>}</span></h4>
+    <h4 class="name" id="getFlags"><span class="type-signature"></span>getFlags<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
 
     
 
@@ -448,7 +406,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="struct_commands_arguments_Control.js.html">struct/commands/arguments/Control.js</a>, <a href="struct_commands_arguments_Control.js.html#line42">line 42</a>
+        <a href="struct_commands_arguments_ArgumentParser.js.html">struct/commands/arguments/ArgumentParser.js</a>, <a href="struct_commands_arguments_ArgumentParser.js.html#line148">line 148</a>
     </li></ul></dd>
     
 
@@ -458,11 +416,6 @@
 
     
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="Control.html#getArgs">Control#getArgs</a>
-    </li></ul></dd>
     
 
     
@@ -493,7 +446,7 @@
 
 
 <div class="description">
-    <p>Gets the args contained within the control.</p>
+    <p>Gets the flags that are used in all args.</p>
 </div>
 
 
@@ -524,7 +477,174 @@
 
 
     
-<span class="param-type">Array.&lt;(<a href="global.html#ArgumentOptions">ArgumentOptions</a>|<a href="Control.html">Control</a>)></span>
+<span class="param-type">Object</span>
+
+
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="parse"><span class="type-signature"></span>parse<span class="signature">(message, content)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_commands_arguments_ArgumentParser.js.html">struct/commands/arguments/ArgumentParser.js</a>, <a href="struct_commands_arguments_ArgumentParser.js.html#line24">line 24</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Parses content.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Message</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Message to use.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>content</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>String to parse.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<b>Returns:</b>
+
+        
+
+
+    
+<span class="param-type">Promise.&lt;Object></span>
 
 
 

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>struct/commands/arguments/ArgumentParser.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AkairoClient.html">AkairoClient</a></li><li><a href="AkairoError.html">AkairoError</a></li><li><a href="AkairoHandler.html">AkairoHandler</a></li><li><a href="AkairoModule.html">AkairoModule</a></li><li><a href="Argument.html">Argument</a></li><li><a href="ArgumentParser.html">ArgumentParser</a></li><li><a href="CancelControl.html">CancelControl</a></li><li><a href="CaseControl.html">CaseControl</a></li><li><a href="Category.html">Category</a></li><li><a href="ClientUtil.html">ClientUtil</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandHandler.html">CommandHandler</a></li><li><a href="CommandUtil.html">CommandUtil</a></li><li><a href="ContentParser.html">ContentParser</a></li><li><a href="Control.html">Control</a></li><li><a href="DoControl.html">DoControl</a></li><li><a href="EndControl.html">EndControl</a></li><li><a href="IfControl.html">IfControl</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorHandler.html">InhibitorHandler</a></li><li><a href="Listener.html">Listener</a></li><li><a href="ListenerHandler.html">ListenerHandler</a></li><li><a href="Provider.html">Provider</a></li><li><a href="SequelizeProvider.html">SequelizeProvider</a></li><li><a href="SQLiteProvider.html">SQLiteProvider</a></li><li><a href="TypeResolver.html">TypeResolver</a></li></ul><h3>Typedefs</h3><ul><li><a href="global.html#AkairoHandlerOptions">AkairoHandlerOptions</a></li><li><a href="global.html#AkairoOptions">AkairoOptions</a></li><li><a href="global.html#AllowMentionFunction">AllowMentionFunction</a></li><li><a href="global.html#ArgumentDefaultFunction">ArgumentDefaultFunction</a></li><li><a href="global.html#ArgumentFunction">ArgumentFunction</a></li><li><a href="global.html#ArgumentMatch">ArgumentMatch</a></li><li><a href="global.html#ArgumentOptions">ArgumentOptions</a></li><li><a href="global.html#ArgumentPromptData">ArgumentPromptData</a></li><li><a href="global.html#ArgumentPromptFunction">ArgumentPromptFunction</a></li><li><a href="global.html#ArgumentPromptModifyFunction">ArgumentPromptModifyFunction</a></li><li><a href="global.html#ArgumentPromptOptions">ArgumentPromptOptions</a></li><li><a href="global.html#ArgumentType">ArgumentType</a></li><li><a href="global.html#ArgumentTypeFunction">ArgumentTypeFunction</a></li><li><a href="global.html#CommandHandlerOptions">CommandHandlerOptions</a></li><li><a href="global.html#CommandOptions">CommandOptions</a></li><li><a href="global.html#ConditionFunction">ConditionFunction</a></li><li><a href="global.html#ContentParserOptions">ContentParserOptions</a></li><li><a href="global.html#ControlFunction">ControlFunction</a></li><li><a href="global.html#ControlPredicate">ControlPredicate</a></li><li><a href="global.html#InhibitorOptions">InhibitorOptions</a></li><li><a href="global.html#ListenerOptions">ListenerOptions</a></li><li><a href="global.html#LoadFilterFunction">LoadFilterFunction</a></li><li><a href="global.html#MessageExtensions">MessageExtensions</a></li><li><a href="global.html#ModuleOptions">ModuleOptions</a></li><li><a href="global.html#PermissionFunction">PermissionFunction</a></li><li><a href="global.html#PrefixFunction">PrefixFunction</a></li><li><a href="global.html#ProviderOptions">ProviderOptions</a></li><li><a href="global.html#RegexFunction">RegexFunction</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">struct/commands/arguments/ArgumentParser.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const Argument = require('./Argument');
+const { ArgumentMatches, Symbols } = require('../../../util/Constants');
+const Control = require('./Control');
+
+class ArgumentParser {
+    /**
+     * Parser for processing content into arguments.
+     * @param {Command} command - Command to use.
+     * @param {Function} parser - Content parser class to use.
+     * @param {Array&lt;ArgumentOptions|Control>} args - Argument options to use.
+     */
+    constructor(command, parser, args) {
+        this.command = command;
+        this.parser = parser;
+        this.args = args;
+    }
+
+    /**
+     * Parses content.
+     * @param {Message} message - Message to use.
+     * @param {string} content - String to parse.
+     * @returns {Promise&lt;Object>}
+     */
+    parse(message, content) {
+        if (!this.args.length) return Promise.resolve({});
+
+        const flags = this.getFlags();
+        // eslint-disable-next-line new-cap
+        const parts = new this.parser({
+            flagWords: flags.flagWords,
+            optionFlagWords: flags.optionFlagWords,
+            quoted: this.quoted,
+            content
+        }).parse();
+
+        const usedIndices = new Set();
+        const parseFuncs = {
+            [ArgumentMatches.PHRASE]: (arg, index) => {
+                if (arg.unordered || arg.unordered === 0) {
+                    return async (msg, processed) => {
+                        const indices = typeof arg.unordered === 'number'
+                            ? Array.from(parts.phrases.keys()).slice(arg.unordered)
+                            : Array.isArray(arg.unordered)
+                                ? arg.unordered
+                                : Array.from(parts.phrases.keys());
+
+                        for (const i of indices) {
+                            const phrase = parts.phrases[i] ? parts.phrases[i].value : '';
+                            // eslint-disable-next-line no-await-in-loop
+                            const res = await arg.cast(phrase, msg, processed);
+                            if (res != null) {
+                                usedIndices.add(i);
+                                return res;
+                            }
+                        }
+
+                        return arg.process('', msg, processed);
+                    };
+                }
+
+                index = arg.index == null ? index : arg.index;
+                return arg.process.bind(arg, parts.phrases[index] ? parts.phrases[index].value : '');
+            },
+            [ArgumentMatches.REST]: (arg, index) => {
+                index = arg.index == null ? index : arg.index;
+                const rest = parts.phrases.slice(index, index + arg.limit).map(ph => ph.content).join('').trim();
+                return arg.process.bind(arg, rest);
+            },
+            [ArgumentMatches.SEPARATE]: (arg, index) => {
+                index = arg.index == null ? index : arg.index;
+                const phrases = parts.phrases.slice(index, index + arg.limit);
+
+                if (!phrases.length) return arg.process.bind(arg, '');
+                return async (msg, processed) => {
+                    const res = [];
+                    processed[arg.id] = res;
+
+                    for (const phrase of phrases) {
+                        // eslint-disable-next-line no-await-in-loop
+                        res.push(await arg.process(phrase.value, msg, processed));
+                    }
+
+                    return res;
+                };
+            },
+            [ArgumentMatches.FLAG]: arg => {
+                const names = Array.isArray(arg.flag) ? arg.flag : [arg.flag];
+                const flagFound = parts.flags.some(f => names.some(name => name.toLowerCase() === f.key.toLowerCase()));
+                return () => arg.default == null ? flagFound : !flagFound;
+            },
+            [ArgumentMatches.OPTION]: arg => {
+                const names = Array.isArray(arg.flag) ? arg.flag : [arg.flag];
+                const flag = parts.optionFlags.find(f => names.some(name => name.toLowerCase() === f.key.toLowerCase()));
+                return arg.process.bind(arg, flag ? flag.value : '');
+            },
+            [ArgumentMatches.TEXT]: arg => {
+                const index = arg.index == null ? 0 : arg.index;
+                const text = parts.phrases.slice(index, index + arg.limit).map(ph => ph.content).join('').trim();
+                return arg.process.bind(arg, text);
+            },
+            [ArgumentMatches.CONTENT]: arg => {
+                const index = arg.index == null ? 0 : arg.index;
+                const text = parts.content.slice(index, index + arg.limit).join('').trim();
+                return arg.process.bind(arg, text);
+            },
+            [ArgumentMatches.NONE]: arg => {
+                return arg.process.bind(arg, '');
+            }
+        };
+
+        const processed = {};
+        let phraseIndex = 0;
+
+        const process = async args => {
+            if (!args.length) return processed;
+            const arg = args[0];
+            if (arg instanceof Control) {
+                return arg.control({
+                    process,
+                    currentArgs: args,
+                    args: this,
+                    command: this.command,
+                    message,
+                    processedArgs: processed
+                });
+            }
+
+            const matchType = typeof arg.match === 'function' ? arg.match(message, processed) : arg.match;
+            const processFunc = parseFuncs[matchType](arg, phraseIndex);
+
+            if ([ArgumentMatches.PHRASE, ArgumentMatches.REST, ArgumentMatches.SEPARATE].includes(matchType)) {
+                phraseIndex++;
+            }
+
+            const res = await processFunc(message, processed);
+            if (res === Symbols.COMMAND_CANCELLED) return res;
+            processed[arg.id] = res;
+            return process(args.slice(1));
+        };
+
+        return process(this.buildArgs(this.args));
+    }
+
+    /**
+     * Gets the flags that are used in all args.
+     * @returns {Object}
+     */
+    getFlags() {
+        const res = {
+            flagWords: [],
+            optionFlagWords: []
+        };
+
+        (function pushFlag(arg) {
+            if (Array.isArray(arg)) {
+                for (const a of arg) {
+                    pushFlag(a);
+                }
+
+                return;
+            }
+
+            if (arg instanceof Control) {
+                pushFlag(arg.getArgs());
+                return;
+            }
+
+            const arr = res[arg.match === ArgumentMatches.FLAG ? 'flagWords' : 'optionFlagWords'];
+            if (arg.match === ArgumentMatches.FLAG || arg.match === ArgumentMatches.OPTION) {
+                if (Array.isArray(arg.flag)) {
+                    for (const p of arg.flag) {
+                        arr.push(p);
+                    }
+                } else {
+                    arr.push(arg.flag);
+                }
+            }
+        }(this.args));
+
+        return res;
+    }
+
+    /**
+     * Builds Argument instances from argument options.
+     * @param {Array&lt;ArgumentOptions|Control>} args - Argument options to build.
+     * @returns {Array&lt;Argument|Control>}
+     */
+    buildArgs(args) {
+        if (args == null) return [];
+
+        const res = [];
+        for (const arg of args) {
+            if (arg instanceof Control) {
+                res.push(arg);
+                continue;
+            }
+
+            res.push(new Argument(this.command, arg));
+        }
+
+        return res;
+    }
+}
+
+module.exports = ArgumentParser;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
