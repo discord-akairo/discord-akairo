@@ -1,5 +1,5 @@
-const AkairoError = require('../util/AkairoError');
-const AkairoModule = require('./AkairoModule');
+const AkairoError = require('../../util/AkairoError');
+const AkairoModule = require('../AkairoModule');
 
 /**
  * Options to use for listener execution behavior.

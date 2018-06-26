@@ -18,12 +18,12 @@ module.exports = {
     TypeResolver: require('./struct/commands/arguments/TypeResolver'),
 
     // Inhibitors
-    Inhibitor: require('./struct/Inhibitor'),
-    InhibitorHandler: require('./struct/InhibitorHandler'),
+    Inhibitor: require('./struct/inhibitors/Inhibitor'),
+    InhibitorHandler: require('./struct/inhibitors/InhibitorHandler'),
 
     // Listeners
-    Listener: require('./struct/Listener'),
-    ListenerHandler: require('./struct/ListenerHandler'),
+    Listener: require('./struct/listeners/Listener'),
+    ListenerHandler: require('./struct/listeners/ListenerHandler'),
 
     // Providers
     Provider: require('./providers/Provider'),

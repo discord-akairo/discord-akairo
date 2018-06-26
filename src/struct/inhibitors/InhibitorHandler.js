@@ -1,7 +1,7 @@
-const AkairoError = require('../util/AkairoError');
-const AkairoHandler = require('./AkairoHandler');
+const AkairoError = require('../../util/AkairoError');
+const AkairoHandler = require('../AkairoHandler');
 const Inhibitor = require('./Inhibitor');
-const { isPromise } = require('../util/Util');
+const { isPromise } = require('../../util/Util');
 
 /** @extends AkairoHandler */
 class InhibitorHandler extends AkairoHandler {
