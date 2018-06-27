@@ -33,7 +33,7 @@
  * @prop {string[]} [flagWords=[]] - Flags considered to be part of a flag arg.
  * @prop {string[]} [optionFlagWords=[]] - Flags considered to be part of an option flag arg.
  * @prop {boolean} [quoted=true] - Whether or not to consider quotes.
- * @prop {string} [content=''] - Content to parse.
+ * @prop {string} [separator] - A custom separator.
  */
 
 class ContentParser {
@@ -45,7 +45,7 @@ class ContentParser {
         flagWords = [],
         optionFlagWords = [],
         quoted = true,
-        content = ''
+        separator
     } = {}) {
         /**
          * Flags considered to be part of a flag arg.
@@ -65,7 +65,95 @@ class ContentParser {
          * Whether or not to consider quotes.
          * @type {boolean}
          */
-        this.quoted = quoted;
+        this.quoted = Boolean(quoted);
+
+        /**
+         * A custom separator.
+         * @type {string}
+         */
+        this.separator = separator;
+    }
+
+    parse(content) {
+        if (this.separator != null) {
+            const parts = {
+                content: [],
+                phrases: [],
+                flags: [],
+                optionFlags: []
+            };
+
+            const sep = this.separator.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const matches = content.match(new RegExp(`((?!${sep}).)+|(${sep})`, 'gi'));
+
+            if (!matches) return parts;
+            let prev;
+            outer: for (const match of matches) {
+                if (match.toLowerCase() === sep.toLowerCase()) {
+                    prev.content += match;
+                    parts.content[parts.content.length - 1] += match;
+                    continue;
+                }
+
+                const trimmed = match.trim();
+                for (const word of this.flagWords) {
+                    if (trimmed.toLowerCase() === word.toLowerCase()) {
+                        prev = {
+                            type: 'Flag',
+                            key: trimmed,
+                            content: match
+                        };
+
+                        parts.flags.push(prev);
+                        parts.content.push(match);
+                        continue outer;
+                    }
+                }
+
+                for (const word of this.optionFlagWords) {
+                    if (trimmed.toLowerCase().startsWith(word.toLowerCase())) {
+                        prev = {
+                            type: 'OptionFlag',
+                            key: trimmed.slice(0, word.length),
+                            value: trimmed.slice(word.length).trim(),
+                            content: match
+                        };
+
+                        parts.optionFlags.push(prev);
+                        parts.content.push(match);
+                        continue outer;
+                    }
+                }
+
+                prev = {
+                    type: 'Phrase',
+                    value: trimmed,
+                    content: match
+                };
+
+                parts.phrases.push(prev);
+                parts.content.push(match);
+            }
+
+            return parts;
+        }
+
+        return new ContentParserState(this, content).parse();
+    }
+}
+
+class ContentParserState {
+    /**
+     * The ongoing parsing (without separators).
+     * @param {ContentParser} parser - The content parser.
+     * @param {string} content - Content to parse.
+     */
+    constructor(parser, content) {
+        /**
+         * The content parser.
+         * @type {ContentParser}
+         */
+        this.parser = parser;
 
         /**
          * Content to parse.
@@ -96,7 +184,7 @@ class ContentParser {
         let state = 0;
         outer: while (content.length) {
             if (state === 0) {
-                for (const word of this.flagWords) {
+                for (const word of this.parser.flagWords) {
                     if (content.toLowerCase().startsWith(word.toLowerCase())) {
                         tokens.push(this.createToken('FlagWord', content.slice(0, word.length)));
                         content = content.slice(word.length);
@@ -104,7 +192,7 @@ class ContentParser {
                     }
                 }
 
-                for (const word of this.optionFlagWords) {
+                for (const word of this.parser.optionFlagWords) {
                     if (content.toLowerCase().startsWith(word.toLowerCase())) {
                         tokens.push(this.createToken('OptionFlagWord', content.slice(0, word.length)));
                         content = content.slice(word.length);
@@ -113,7 +201,7 @@ class ContentParser {
                 }
             }
 
-            if (this.quoted && content.toLowerCase().startsWith('"')) {
+            if (this.parser.quoted && content.toLowerCase().startsWith('"')) {
                 if (state === 1) {
                     state = 0;
                 } else if (state === 0) {
@@ -125,7 +213,7 @@ class ContentParser {
                 continue outer;
             }
 
-            if (this.quoted && content.toLowerCase().startsWith('“')) {
+            if (this.parser.quoted && content.toLowerCase().startsWith('“')) {
                 if (state === 0) {
                     state = 2;
                 }
@@ -135,7 +223,7 @@ class ContentParser {
                 continue outer;
             }
 
-            if (this.quoted && content.toLowerCase().startsWith('”')) {
+            if (this.parser.quoted && content.toLowerCase().startsWith('”')) {
                 if (state === 2) {
                     state = 0;
                 }
@@ -219,7 +307,7 @@ class ContentParser {
      * @returns {Object}
      */
     parse() {
-        const args = {
+        const parts = {
             content: [],
             phrases: [],
             flags: [],
@@ -227,27 +315,25 @@ class ContentParser {
         };
 
         if (!this.check('EOF')) {
-            let prev = this.parseArgument(args);
-            args[prev.type === 'Flag' ? 'flags' : prev.type === 'OptionFlag' ? 'optionFlags' : 'phrases'].push(prev);
-            args.content.push(prev.content);
+            let prev = this.parseArgument();
+            parts[prev.type === 'Flag' ? 'flags' : prev.type === 'OptionFlag' ? 'optionFlags' : 'phrases'].push(prev);
+            parts.content.push(prev.content);
 
             while (!this.check('EOF')) {
                 if (this.check('WS')) {
                     const ws = this.match('WS').value;
-                    prev.trailing = ws;
                     prev.content += ws;
-                    args.content[args.content.length - 1] += ws;
+                    parts.content[parts.content.length - 1] += ws;
                 }
 
-                prev = this.parseArgument(args);
-                prev.trailing = '';
-                args[prev.type === 'Flag' ? 'flags' : prev.type === 'OptionFlag' ? 'optionFlags' : 'phrases'].push(prev);
-                args.content.push(prev.content);
+                prev = this.parseArgument();
+                parts[prev.type === 'Flag' ? 'flags' : prev.type === 'OptionFlag' ? 'optionFlags' : 'phrases'].push(prev);
+                parts.content.push(prev.content);
             }
         }
 
         this.match('EOF');
-        return args;
+        return parts;
     }
 
     /**
@@ -274,9 +360,9 @@ class ContentParser {
         }
 
         const flag = { type: 'OptionFlag', key: this.match('OptionFlagWord').value };
-        flag.separation = this.check('WS') ? this.match('WS').value : '';
+        const separation = this.check('WS') ? this.match('WS').value : '';
         flag.value = this.check('Quote', 'OpenQuote', 'EndQuote', 'Word') ? this.parsePhrase().value : '';
-        flag.content = `${flag.key}${flag.separation}${flag.value}`;
+        flag.content = `${flag.key}${separation}${flag.value}`;
         return flag;
     }
 
@@ -288,38 +374,34 @@ class ContentParser {
         if (this.check('Quote')) {
             const phrase = {
                 type: 'Phrase',
-                openQuote: this.match('Quote').value,
-                items: [],
                 value: ''
             };
 
+            const openQuote = this.match('Quote').value;
             while (this.check('Word', 'WS')) {
                 const match = this.match('Word', 'WS');
-                phrase.items.push(match.value);
                 phrase.value += match.value;
             }
 
-            phrase.endQuote = this.check('Quote') ? this.match('Quote').value : '';
-            phrase.content = `${phrase.openQuote}${phrase.items.join('')}${phrase.endQuote}`;
+            const endQuote = this.check('Quote') ? this.match('Quote').value : '';
+            phrase.content = `${openQuote}${phrase.value}${endQuote}`;
             return phrase;
         }
 
         if (this.check('OpenQuote')) {
             const phrase = {
                 type: 'Phrase',
-                openQuote: this.match('OpenQuote').value,
-                items: [],
                 value: ''
             };
 
+            const openQuote = this.match('OpenQuote').value;
             while (this.check('Word', 'OpenQuote', 'Quote', 'WS')) {
                 const match = this.match('Word', 'OpenQuote', 'Quote', 'WS');
-                phrase.items.push(match.v);
                 phrase.value += match.v;
             }
 
-            phrase.endQuote = this.check('EndQuote') ? this.match('EndQuote').value : '';
-            phrase.content = `${phrase.openQuote}${phrase.items.join('')}${phrase.endQuote}`;
+            const endQuote = this.check('EndQuote') ? this.match('EndQuote').value : '';
+            phrase.content = `${openQuote}${phrase.value}${endQuote}`;
             return phrase;
         }
 
@@ -335,4 +417,5 @@ class ContentParser {
     }
 }
 
+Object.assign(ContentParser, { ContentParserState });
 module.exports = ContentParser;

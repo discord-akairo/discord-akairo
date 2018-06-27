@@ -24,15 +24,7 @@ class ArgumentParser {
     parse(message, content) {
         if (!this.args.length) return Promise.resolve({});
 
-        const flags = this.getFlags();
-        // eslint-disable-next-line new-cap
-        const parts = new this.parser({
-            flagWords: flags.flagWords,
-            optionFlagWords: flags.optionFlagWords,
-            quoted: this.quoted,
-            content
-        }).parse();
-
+        const parts = this.parser.parse(content);
         const usedIndices = new Set();
         const parseFuncs = {
             [ArgumentMatches.PHRASE]: (arg, index) => {
@@ -143,9 +135,10 @@ class ArgumentParser {
 
     /**
      * Gets the flags that are used in all args.
+     * @param {Array<ArgumentOptions|Control>} args - Argument to use.
      * @returns {Object}
      */
-    getFlags() {
+    static getFlags(args) {
         const res = {
             flagWords: [],
             optionFlagWords: []
@@ -175,7 +168,7 @@ class ArgumentParser {
                     arr.push(arg.flag);
                 }
             }
-        }(this.args));
+        }(args));
 
         return res;
     }

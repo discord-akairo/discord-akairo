@@ -8,9 +8,8 @@ const ContentParser = require('./arguments/ContentParser');
  * @typedef {Object} CommandOptions
  * @prop {string[]} [aliases=[]] - Command names.
  * @prop {Array<ArgumentOptions|Control>|ArgumentFunction} [args=[]] - Argument options to use.
- * @prop {Object} [parser=Parser] - A custom content parser class.
- * Note that this must have the same interface as the built-in parser.
  * @prop {boolean} [quoted=true] - Whether or not to consider quotes.
+ * @prop {string} [separator] - Custom separator for argument input.
  * @prop {string} [channel] - Restricts channel to either 'guild' or 'dm'.
  * @prop {string} [category='default'] - Category ID for organization purposes.
  * @prop {boolean} [ownerOnly=false] - Whether or not to allow client owner(s) only.
@@ -71,8 +70,8 @@ class Command extends AkairoModule {
         const {
             aliases = [],
             args = this.args || [],
-            parser = ContentParser,
             quoted = true,
+            separator,
             channel = null,
             ownerOnly = false,
             editable = true,
@@ -95,16 +94,25 @@ class Command extends AkairoModule {
         this.aliases = aliases;
 
         /**
+         * The content parser.
+         * @type {ContentParser}
+         */
+        this.parser = null;
+        if (typeof args !== 'function') {
+            const flags = ArgumentParser.getFlags(args);
+            this.parser = new ContentParser({
+                flagWords: flags.flagWords,
+                optionFlagWords: flags.optionFlagWords,
+                quoted,
+                separator
+            });
+        }
+
+        /**
          * The argument parser.
          * @type {ArgumentParser|ArgumentFunction}
          */
-        this.args = typeof args === 'function' ? args.bind(this) : new ArgumentParser(this, parser, args);
-
-        /**
-         * Whether or not to consider quotes.
-         * @type {boolean}
-         */
-        this.quoted = Boolean(quoted);
+        this.args = typeof args === 'function' ? args.bind(this) : new ArgumentParser(this, this.parser, args);
 
         /**
          * Usable only in this channel type.

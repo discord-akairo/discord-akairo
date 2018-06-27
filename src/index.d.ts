@@ -110,15 +110,16 @@ declare module 'discord-akairo' {
     }
 
     export class ArgumentParser {
-        public constructor(command: Command, parser: Function, args: (ArgumentOptions | Control)[]);
+        public constructor(command: Command, parser: ContentParser, args: (ArgumentOptions | Control)[]);
 
         public command: Command;
-        public parser: Function;
+        public parser: ContentParser;
         public args: (ArgumentOptions | Control)[];
 
         public buildArgs(args: (ArgumentOptions | Control)[]): (Argument | Control)[];
-        public getFlags(): any[];
         public parse(message: Message, content: string): Promise<any>;
+
+        public static getFlags(args: (ArgumentOptions | Control)[]): any;
     }
 
     export class Category<K, V> extends Collection<K, V> {
@@ -179,6 +180,7 @@ declare module 'discord-akairo' {
         public handler: CommandHandler;
         public id: string;
         public ownerOnly: boolean;
+        public parser?: ContentParser;
         public prefix?: string | string[] | PrefixFunction;
         public ratelimit: number;
         public regex: RegExp | RegexFunction;
@@ -291,11 +293,20 @@ declare module 'discord-akairo' {
     export class ContentParser {
         public constructor(options?: ContentParserOptions);
 
-        public content: string;
         public flagWords: string[];
         public optionFlagWords: string[];
-        public position: number;
         public quoted: boolean;
+        public separator?: string;
+
+        public parse(content: string): any;
+    }
+
+    class ContentParserState {
+        public constructor(parser: ContentParser, content: string);
+
+        public content: string;
+        public parser: ContentParser;
+        public position: number;
         public token: any;
         public tokens: any[];
 
@@ -579,10 +590,10 @@ declare module 'discord-akairo' {
         description?: string | string[];
         editable?: boolean;
         ownerOnly?: boolean;
-        parser?: Function;
         prefix?: string | string[] | PrefixFunction;
         ratelimit?: number;
         regex?: RegExp | TriggerFunction;
+        separator?: string;
         typing?: boolean;
         userPermissions?: PermissionResolvable | PermissionResolvable[] | PermissionFunction;
     };
@@ -607,10 +618,10 @@ declare module 'discord-akairo' {
     export type ConditionFunction = (message: Message) => boolean;
 
     export type ContentParserOptions = {
-        content?: string;
         flagWords?: string[];
         optionFlagWords?: string[];
         quoted?: boolean;
+        separator?: string;
     }
 
     export type ControlFunction = (message: Message, args: any) => any;
