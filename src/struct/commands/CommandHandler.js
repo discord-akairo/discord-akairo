@@ -246,7 +246,7 @@ class CommandHandler extends AkairoHandler {
             });
 
             if (this.handleEdits) {
-                this.on('messageUpdate', (o, m) => {
+                this.client.on('messageUpdate', (o, m) => {
                     if (o.content === m.content) return;
                     if (this.handleEdits) this.handle(m);
                 });
