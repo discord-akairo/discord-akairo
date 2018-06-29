@@ -68,7 +68,6 @@ module.exports = {
         ERROR: 'error'
     },
     BuiltInReasons: {
-        OTHERS: 'others',
         CLIENT: 'client',
         BOT: 'bot',
         OWNER: 'owner',

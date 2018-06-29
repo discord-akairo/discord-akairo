@@ -5,7 +5,6 @@ const ClientUtil = require('./ClientUtil');
  * Options for the client.
  * @typedef {Object} AkairoOptions
  * @prop {Snowflake|Snowflake[]} [ownerID=''] - Discord ID of the client owner(s).
- * @prop {boolean} [selfbot=false] - Whether or not this bot is a selfbot.
  */
 
 class AkairoClient extends Client {
@@ -19,22 +18,13 @@ class AkairoClient extends Client {
     constructor(options = {}, clientOptions) {
         super(clientOptions || options);
 
-        const {
-            ownerID = '',
-            selfbot = false
-        } = options;
+        const { ownerID = '' } = options;
 
         /**
          * The ID of the owner(s).
          * @type {Snowflake|Snowflake[]}
          */
         this.ownerID = ownerID;
-
-        /**
-         * Whether or not this is a selfbot.
-         * @type {boolean}
-         */
-        this.selfbot = Boolean(selfbot);
 
         /**
          * Utility methods.

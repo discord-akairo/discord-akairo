@@ -10,8 +10,7 @@ const TypeResolver = require('./arguments/TypeResolver');
 /**
  * Also includes properties from AkairoHandlerOptions.
  * @typedef {AkairoHandlerOptions} CommandHandlerOptions
- * @prop {boolean} [blockOthers=true] - Whether or not to block others, if a selfbot.
- * @prop {boolean} [blockClient=true] - Whether or not to block self, if not a selfbot.
+ * @prop {boolean} [blockClient=true] - Whether or not to block self.
  * @prop {boolean} [blockBots=true] - Whether or not to block bots.
  * @prop {string|string[]|PrefixFunction} [prefix='!'] - Default command prefix(es).
  * @prop {boolean|AllowMentionFunction} [allowMention=true] - Whether or not to allow mentions to the client user as a prefix.
@@ -58,7 +57,6 @@ class CommandHandler extends AkairoHandler {
         extensions = ['.js', '.ts'],
         automateCategories,
         loadFilter,
-        blockOthers = true,
         blockClient = true,
         blockBots = true,
         fetchMembers = false,
@@ -110,13 +108,7 @@ class CommandHandler extends AkairoHandler {
         this.prefixes = new Collection();
 
         /**
-         * Whether or not to block others, if a selfbot.
-         * @type {boolean}
-         */
-        this.blockOthers = Boolean(blockOthers);
-
-        /**
-         * Whether or not to block self, if not a selfbot.
+         * Whether or not to block self.
          * @type {boolean}
          */
         this.blockClient = Boolean(blockClient);
@@ -540,9 +532,7 @@ class CommandHandler extends AkairoHandler {
 
         if (reason != null) {
             this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, reason);
-        } else if (this.blockOthers && message.author.id !== this.client.user.id && this.client.selfbot) {
-            this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.OTHERS);
-        } else if (this.blockClient && message.author.id === this.client.user.id && !this.client.selfbot) {
+        } else if (this.blockClient && message.author.id === this.client.user.id) {
             this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.CLIENT);
         } else if (this.blockBots && message.author.bot) {
             this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.BOT);
@@ -983,7 +973,7 @@ module.exports = CommandHandler;
 
 /**
  * Emitted when a message is blocked by a pre-message inhibitor.
- * The built-in inhibitors are 'others' (for selfbots), 'client', and 'bot'.
+ * The built-in inhibitors are 'client' and 'bot'.
  * @event CommandHandler#messageBlocked
  * @param {Message} message - Message sent.
  * @param {string} reason - Reason for the block.

@@ -36,7 +36,6 @@ declare module 'discord-akairo' {
         public constructor(options?: AkairoOptions & ClientOptions, clientOptions?: ClientOptions);
 
         public ownerID: Snowflake | Snowflake[];
-        public selfbot: boolean;
         public util: ClientUtil;
     }
 
@@ -202,7 +201,6 @@ declare module 'discord-akairo' {
         public allowMention: boolean | AllowMentionFunction;
         public blockBots: boolean;
         public blockClient: boolean;
-        public blockOthers: boolean;
         public categories: Collection<string, Category<string, Command>>;
         public classToHandle: typeof Command;
         public client: AkairoClient;
@@ -521,7 +519,6 @@ declare module 'discord-akairo' {
     };
 
     export type AkairoOptions = {
-        selfbot?: boolean;
         ownerID?: Snowflake | Snowflake[];
     };
 
@@ -603,7 +600,6 @@ declare module 'discord-akairo' {
         allowMention?: boolean | AllowMentionFunction;
         blockBots?: boolean;
         blockClient?: boolean;
-        blockOthers?: boolean;
         commandUtil?: boolean;
         commandUtilLifetime?: number;
         defaultCooldown?: number;
@@ -722,7 +718,6 @@ declare module 'discord-akairo' {
             ERROR: 'error'
         },
         BuiltInReasons: {
-            OTHERS: 'others',
             CLIENT: 'client',
             BOT: 'bot',
             OWNER: 'owner',
