@@ -1,9 +1,10 @@
 const AkairoError = require('../../util/AkairoError');
 const AkairoHandler = require('../AkairoHandler');
-const { BuiltInReasons, CommandHandlerEvents, Symbols } = require('../../util/Constants');
+const { BuiltInReasons, CommandHandlerEvents } = require('../../util/Constants');
 const { Collection } = require('discord.js');
 const Command = require('./Command');
 const CommandUtil = require('./CommandUtil');
+const InternalFlag = require('./InternalFlag');
 const { isPromise } = require('../../util/Util');
 const TypeResolver = require('./arguments/TypeResolver');
 
@@ -195,7 +196,8 @@ class CommandHandler extends AkairoHandler {
             stopWord: 'stop',
             optional: false,
             infinite: false,
-            limit: Infinity
+            limit: Infinity,
+            breakout: true
         }, defaultPrompt);
 
         /**
@@ -417,8 +419,11 @@ class CommandHandler extends AkairoHandler {
             if (message.edited && !command.editable) return;
             if (await this.runPostTypeInhibitors(message, command)) return;
             const args = await command.parse(message, content);
-            if (args === Symbols.COMMAND_CANCELLED) {
+            if (args instanceof InternalFlag.CommandCancel) {
                 this.emit(CommandHandlerEvents.COMMAND_CANCELLED, message, command);
+                return;
+            } else if (args instanceof InternalFlag.CommandRetry) {
+                this.handle(args.message);
                 return;
             }
 
@@ -536,6 +541,8 @@ class CommandHandler extends AkairoHandler {
             this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.CLIENT);
         } else if (this.blockBots && message.author.bot) {
             this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.BOT);
+        } else if (this.hasPrompt(message.channel, message.author)) {
+            this.emit(CommandHandlerEvents.IN_PROMPT, message);
         } else {
             return false;
         }
@@ -555,8 +562,6 @@ class CommandHandler extends AkairoHandler {
 
         if (reason != null) {
             this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, reason);
-        } else if (this.hasPrompt(message.channel, message.author)) {
-            this.emit(CommandHandlerEvents.IN_PROMPT, message);
         } else {
             return false;
         }

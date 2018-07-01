@@ -1,5 +1,5 @@
 const AkairoError = require('../../../util/AkairoError');
-const { Symbols } = require('../../../util/Constants');
+const InternalFlag = require('../InternalFlag');
 
 /**
  * Function as part of a conditional in a control.
@@ -36,7 +36,7 @@ class Control {
     }
 
     /**
-     * Gets the args contained within the control.
+     * Gets the argument options contained within the control.
      * @returns {Array<ArgumentOptions|Control>}
      */
     getArgs() {
@@ -237,7 +237,7 @@ class CancelControl extends Control {
      * @returns {Object}
      */
     control() {
-        return Symbols.COMMAND_CANCELLED;
+        return InternalFlag.cancel();
     }
 }
 

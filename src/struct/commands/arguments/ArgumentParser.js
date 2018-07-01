@@ -1,18 +1,49 @@
 const Argument = require('./Argument');
-const { ArgumentMatches, Symbols } = require('../../../util/Constants');
+const { ArgumentMatches } = require('../../../util/Constants');
 const Control = require('./Control');
+const InternalFlag = require('../InternalFlag');
 
 class ArgumentParser {
     /**
      * Parser for processing content into arguments.
      * @param {Command} command - Command to use.
-     * @param {Function} parser - Content parser class to use.
+     * @param {ContentParser} parser - Content parser to use.
      * @param {Array<ArgumentOptions|Control>} args - Argument options to use.
      */
     constructor(command, parser, args) {
+        /**
+         * The command this argument parser belongs to.
+         * @type {Command}
+         */
         this.command = command;
+
+        /**
+         * Content parser to use.
+         * @type {ContentParser}
+         */
         this.parser = parser;
+
+        /**
+         * Argument options to use.
+         * @type {Array<ArgumentOptions|Control>}
+         */
         this.args = args;
+    }
+
+    /**
+     * The client.
+     * @type {AkairoClient}
+     */
+    get client() {
+        return this.command.client;
+    }
+
+    /**
+     * The command handler.
+     * @type {CommandHandler}
+     */
+    get handler() {
+        return this.command.handler;
     }
 
     /**
@@ -125,12 +156,33 @@ class ArgumentParser {
             }
 
             const res = await processFunc(message, processed);
-            if (res === Symbols.COMMAND_CANCELLED) return res;
+            if (res instanceof InternalFlag) return res;
             processed[arg.id] = res;
             return process(args.slice(1));
         };
 
         return process(this.buildArgs(this.args));
+    }
+
+    /**
+     * Builds Argument instances from argument options.
+     * @param {Array<ArgumentOptions|Control>} args - Argument options to build.
+     * @returns {Array<Argument|Control>}
+     */
+    buildArgs(args) {
+        if (args == null) return [];
+
+        const res = [];
+        for (const arg of args) {
+            if (arg instanceof Control) {
+                res.push(arg);
+                continue;
+            }
+
+            res.push(new Argument(this.command, arg));
+        }
+
+        return res;
     }
 
     /**
@@ -169,27 +221,6 @@ class ArgumentParser {
                 }
             }
         }(args));
-
-        return res;
-    }
-
-    /**
-     * Builds Argument instances from argument options.
-     * @param {Array<ArgumentOptions|Control>} args - Argument options to build.
-     * @returns {Array<Argument|Control>}
-     */
-    buildArgs(args) {
-        if (args == null) return [];
-
-        const res = [];
-        for (const arg of args) {
-            if (arg instanceof Control) {
-                res.push(arg);
-                continue;
-            }
-
-            res.push(new Argument(this.command, arg));
-        }
 
         return res;
     }

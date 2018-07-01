@@ -73,8 +73,5 @@ module.exports = {
         OWNER: 'owner',
         GUILD: 'guild',
         DM: 'dm'
-    },
-    Symbols: {
-        COMMAND_CANCELLED: Symbol('commandCancelled')
     }
 };

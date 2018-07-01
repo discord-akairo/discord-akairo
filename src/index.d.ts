@@ -723,9 +723,6 @@ declare module 'discord-akairo' {
             OWNER: 'owner',
             GUILD: 'guild',
             DM: 'dm'
-        },
-        Symbols: {
-            COMMAND_CANCELLED: symbol
         }
     };
 
