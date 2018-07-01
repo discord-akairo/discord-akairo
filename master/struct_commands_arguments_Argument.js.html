@@ -37,7 +37,8 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const { ArgumentMatches, ArgumentTypes, Symbols } = require('../../../util/Constants');
+            <pre class="prettyprint source linenums"><code>const { ArgumentMatches, ArgumentTypes } = require('../../../util/Constants');
+const InternalFlag = require('../InternalFlag');
 const { isPromise } = require('../../../util/Util');
 
 /**
@@ -137,6 +138,8 @@ const { isPromise } = require('../../../util/Util');
  * Note that the retry count resets back to one on each valid entry.
  * The final evaluated argument will be an array of the inputs.
  * @prop {number} [limit=Infinity] - Amount of inputs allowed for an infinite prompt before finishing.
+ * @prop {boolean} [breakout=true] - Whenever an input matches the format of a command, this option controls whether or not to cancel this command and run that command.
+ * The command to be run may be the same command or some other command.
  * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|ArgumentPromptFunction} [start] - Text sent on start of prompt.
  * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|ArgumentPromptFunction} [retry] - Text sent on a retry (failure to cast type).
  * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|ArgumentPromptFunction} [timeout] - Text sent on collector time out.
@@ -357,21 +360,20 @@ class Argument {
 
     /**
      * Collects input from the user by prompting.
-     * Returns a certain Symbol if command is to be cancelled.
      * @param {Message} message - Message to prompt.
      * @param {Object} args - Previous arguments from command.
      * @param {string} [commandInput] - Previous input from command if there was one.
      * @returns {Promise&lt;any>}
      */
     async collect(message, args = {}, commandInput = '') {
-        const prompt = {};
+        const promptOptions = {};
 
-        Object.assign(prompt, this.handler.defaultPrompt);
-        Object.assign(prompt, this.command.defaultPrompt);
-        Object.assign(prompt, this.prompt || {});
+        Object.assign(promptOptions, this.handler.defaultPrompt);
+        Object.assign(promptOptions, this.command.defaultPrompt);
+        Object.assign(promptOptions, this.prompt || {});
 
-        const isInfinite = prompt.infinite &amp;&amp; (this.match === ArgumentMatches.SEPARATE ? !commandInput : true);
-        const additionalRetry = prompt.optional ? 0 : Number(Boolean(commandInput));
+        const isInfinite = promptOptions.infinite &amp;&amp; (this.match === ArgumentMatches.SEPARATE ? !commandInput : true);
+        const additionalRetry = promptOptions.optional ? 0 : Number(Boolean(commandInput));
 
         const values = isInfinite ? [] : null;
         if (isInfinite) args[this.id] = values;
@@ -393,11 +395,11 @@ class Argument {
             }
 
             const modifier = {
-                start: prompt.modifyStart,
-                retry: prompt.modifyRetry,
-                timeout: prompt.modifyTimeout,
-                ended: prompt.modifyEnded,
-                cancel: prompt.modifyCancel
+                start: promptOptions.modifyStart,
+                retry: promptOptions.modifyRetry,
+                timeout: promptOptions.modifyTimeout,
+                ended: promptOptions.modifyEnded,
+                cancel: promptOptions.modifyCancel
             }[promptType];
 
             if (modifier) {
@@ -418,8 +420,6 @@ class Argument {
 
         // eslint-disable-next-line complexity
         const promptOne = async (prevMessage, retryCount) => {
-            this.handler.addPrompt(message.channel, message.author);
-
             let sentStart;
             const shouldSend = retryCount === 1
                 ? !isInfinite || (isInfinite &amp;&amp; !values.length)
@@ -434,7 +434,7 @@ class Argument {
                 }
 
                 const promptType = retryCount === 1 ? 'start' : 'retry';
-                const prompter = retryCount === 1 ? prompt.start : prompt.retry;
+                const prompter = retryCount === 1 ? promptOptions.start : promptOptions.retry;
                 const startText = getText(promptType, prompter, retryCount, prevMessage, prevInput);
 
                 if (startText) {
@@ -455,54 +455,58 @@ class Argument {
                     return true;
                 }, {
                     max: 1,
-                    time: prompt.time,
+                    time: promptOptions.time,
                     errors: ['time']
                 })).first();
             } catch (err) {
-                const timeoutText = getText('timeout', prompt.timeout, retryCount, prevMessage, '');
+                const timeoutText = getText('timeout', promptOptions.timeout, retryCount, prevMessage, '');
                 if (timeoutText) {
                     const sentTimeout = await message.channel.send(timeoutText);
                     if (message.util) message.util.addMessage(sentTimeout);
                 }
 
-                return Symbols.COMMAND_CANCELLED;
+                return InternalFlag.cancel();
             }
 
-            if (message.util) message.util.addMessage(input);
+            if (promptOptions.breakout) {
+                const looksLike = await this.handler.parseCommand(input);
+                if (looksLike &amp;&amp; looksLike.command) return InternalFlag.retry(input);
+                if (message.util) message.util.addMessage(input);
+            }
 
-            if (input.content.toLowerCase() === prompt.cancelWord.toLowerCase()) {
-                const cancelText = getText('cancel', prompt.cancel, retryCount, input, '');
+            if (input.content.toLowerCase() === promptOptions.cancelWord.toLowerCase()) {
+                const cancelText = getText('cancel', promptOptions.cancel, retryCount, input, '');
                 if (cancelText) {
                     const sentCancel = await message.channel.send(cancelText);
                     if (message.util) message.util.addMessage(sentCancel);
                 }
 
-                return Symbols.COMMAND_CANCELLED;
+                return InternalFlag.cancel();
             }
 
-            if (isInfinite &amp;&amp; input.content.toLowerCase() === prompt.stopWord.toLowerCase()) {
+            if (isInfinite &amp;&amp; input.content.toLowerCase() === promptOptions.stopWord.toLowerCase()) {
                 if (!values.length) return promptOne(input, retryCount + 1);
                 return values;
             }
 
             const parsedValue = await this.cast(input.content, input, args);
             if (parsedValue == null) {
-                if (retryCount &lt;= prompt.retries) {
+                if (retryCount &lt;= promptOptions.retries) {
                     return promptOne(input, retryCount + 1);
                 }
 
-                const endedText = getText('ended', prompt.ended, retryCount, input, input.content);
+                const endedText = getText('ended', promptOptions.ended, retryCount, input, input.content);
                 if (endedText) {
                     const sentEnded = await message.channel.send(endedText);
                     if (message.util) message.util.addMessage(sentEnded);
                 }
 
-                return Symbols.COMMAND_CANCELLED;
+                return InternalFlag.cancel();
             }
 
             if (isInfinite) {
                 values.push(parsedValue);
-                const limit = prompt.limit;
+                const limit = promptOptions.limit;
                 if (values.length &lt; limit) return promptOne(message, 1);
 
                 return values;
@@ -511,6 +515,7 @@ class Argument {
             return parsedValue;
         };
 
+        this.handler.addPrompt(message.channel, message.author);
         const returnValue = await promptOne(message, 1 + additionalRetry);
         if (this.handler.commandUtil) message.util.setEditable(false);
         this.handler.removePrompt(message.channel, message.author);
