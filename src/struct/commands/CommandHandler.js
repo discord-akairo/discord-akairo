@@ -909,20 +909,24 @@ class CommandHandler extends AkairoHandler {
     /**
      * Set the inhibitor handler to use.
      * @param {InhibitorHandler} inhibitorHandler - The inhibitor handler.
-     * @returns {void}
+     * @returns {CommandHandler}
      */
     useInhibitorHandler(inhibitorHandler) {
         this.inhibitorHandler = inhibitorHandler;
         this.resolver.inhibitorHandler = inhibitorHandler;
+
+        return this;
     }
 
     /**
      * Set the listener handler to use.
      * @param {ListenerHandler} listenerHandler - The listener handler.
-     * @returns {void}
+     * @returns {CommandHandler}
      */
     useListenerHandler(listenerHandler) {
         this.resolver.listenerHandler = listenerHandler;
+
+        return this;
     }
 
     /**
