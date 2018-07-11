@@ -1,5 +1,3 @@
-import { endianness } from 'os';
-
 declare module 'sqlite' {
     export interface Database {}
     export interface Statement {}
