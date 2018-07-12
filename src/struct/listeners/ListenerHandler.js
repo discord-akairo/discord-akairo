@@ -111,6 +111,12 @@ class ListenerHandler extends AkairoHandler {
         return listener;
     }
 
+    /**
+     * Sets custom emitters.
+     * @param {Object} emitters - Emitters to use.
+     * The key is the name and value is the emitter.
+     * @returns {ListenerHandler}
+     */
     setEmitters(emitters) {
         for (const [key, value] of Object.entries(emitters)) {
             if (!isEventEmitter(value)) throw new AkairoError('INVALID_TYPE', key, 'EventEmitter', true);
