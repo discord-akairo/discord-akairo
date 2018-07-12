@@ -574,7 +574,7 @@ declare module 'discord-akairo' {
 
     export type ArgumentType = 'string' | 'lowercase' | 'uppercase' | 'charCodes' | 'number' | 'integer' | 'dynamic' | 'dynamicInt' | 'url' | 'date' | 'color' | 'user' | 'users' | 'member' | 'members' | 'relevant' | 'relevants' | 'channel' | 'channels' | 'textChannel' | 'textChannels' | 'voiceChannel' | 'voiceChannels' | 'role' | 'roles' | 'emoji' | 'emojis' | 'guild' | 'guilds' | 'message' | 'invite' | 'memberMention' | 'channelMention' | 'roleMention' | 'emojiMention' | 'commandAlias' | 'command' | 'inhibitor' | 'listener' | (string | string[])[];
 
-		export type ArgumentTypeFunction = (phrase: string, message: Message, prevArgs: any) => any;
+    export type ArgumentTypeFunction = (phrase: string, message: Message, prevArgs: any) => any;
 
     export type CommandOptions = {
         aliases?: string[];
