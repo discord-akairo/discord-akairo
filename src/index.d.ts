@@ -1,21 +1,13 @@
-declare module 'sqlite' {
-    export interface Database {}
-    export interface Statement {}
-}
-
-declare module 'sequelize' {
-    export interface Model<K, V> {}
-    export interface Promise<T> {}
-}
-
 declare module 'discord-akairo' {
     import {
         BufferResolvable, Client, ClientOptions, Collection, Message, MessageAttachment, MessageEmbed, MessageOptions, MessageEditOptions,
         User, GuildMember, Channel, Role, Emoji, Guild, PermissionResolvable, Snowflake
     } from 'discord.js';
 
-    import { Database, Statement } from 'sqlite';
-    import { Model, Promise as Bluebird } from 'sequelize';
+    interface Database {}
+    interface Statement {}
+    interface Model<K, V> {}
+    interface Bluebird<T> {}
 
     import * as EventEmitter from 'events';
     import { Stream } from 'stream';
