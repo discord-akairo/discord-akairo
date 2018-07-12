@@ -116,6 +116,8 @@ class ListenerHandler extends AkairoHandler {
             if (!isEventEmitter(value)) throw new AkairoError('INVALID_TYPE', key, 'EventEmitter', true);
             this.emitters.set(key, value);
         }
+
+        return this;
     }
 
     /**
