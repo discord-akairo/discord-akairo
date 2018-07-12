@@ -35,10 +35,6 @@ declare module 'discord-akairo' {
 
         public ownerID: Snowflake | Snowflake[];
         public util: ClientUtil;
-	    
-	public commandHandler: CommandHandler;
-	public inhibitorHandler: InhibitorHandler;
-	public listenerHandler: ListenerHandler;
     }
 
     export class AkairoHandler {
@@ -321,16 +317,11 @@ declare module 'discord-akairo' {
         public tokenize(): any[];
     }
 
-    class ControlClass {
-		public control(data: any): any;
-		public getArgs(): (Argument | Control)[] | Argument | Control;
-	}
-
     export class Control {
         public control(data: any): any;
         public getArgs(): (ArgumentOptions | Control)[];
 
-        public static Control: typeof ControlClass;
+        public static Control: typeof Control;
         public static IfControl: typeof IfControl;
         public static CaseControl: typeof CaseControl;
         public static DoControl: typeof DoControl;
@@ -338,13 +329,13 @@ declare module 'discord-akairo' {
         public static CancelControl: typeof CancelControl;
 
         public static if(condition: ControlPredicate, trueArguments?: (ArgumentOptions | Control)[], falseArguments?: (ArgumentOptions | Control)[]): IfControl;
-        public static case(...condArgs: (ControlPredicate | ArgumentOptions | Control)[]): CaseControl;
+        public static case(...condArgs: (ControlPredicate | (ArgumentOptions | Control)[])[]): CaseControl;
         public static do(fn: ControlFunction): DoControl;
         public static end(): EndControl;
         public static cancel(): CancelControl;
     }
 
-    class IfControl extends ControlClass {
+    class IfControl extends Control {
         public constructor(condition: ControlPredicate, trueArguments?: (ArgumentOptions | Control)[], falseArguments?: (ArgumentOptions | Control)[]);
 
         public condition: ControlPredicate;
@@ -352,21 +343,21 @@ declare module 'discord-akairo' {
         public falseArguments: (ArgumentOptions | Control)[];
     }
 
-    class CaseControl extends ControlClass {
+    class CaseControl extends Control {
         public constructor(condArgs: (ControlPredicate | (ArgumentOptions | Control)[])[]);
 
         public condArgs: (ControlPredicate | (ArgumentOptions | Control)[])[];
     }
 
-    class DoControl extends ControlClass {
+    class DoControl extends Control {
         public constructor(fn: ControlFunction);
 
         public fn: ControlFunction;
     }
 
-    class EndControl extends ControlClass {}
+    class EndControl extends Control {}
 
-    class CancelControl extends ControlClass {}
+    class CancelControl extends Control {}
 
     export class Inhibitor extends AkairoModule {
         public constructor(id: string, options?: InhibitorOptions & AkairoModuleOptions);
@@ -583,7 +574,7 @@ declare module 'discord-akairo' {
 
     export type ArgumentType = 'string' | 'lowercase' | 'uppercase' | 'charCodes' | 'number' | 'integer' | 'dynamic' | 'dynamicInt' | 'url' | 'date' | 'color' | 'user' | 'users' | 'member' | 'members' | 'relevant' | 'relevants' | 'channel' | 'channels' | 'textChannel' | 'textChannels' | 'voiceChannel' | 'voiceChannels' | 'role' | 'roles' | 'emoji' | 'emojis' | 'guild' | 'guilds' | 'message' | 'invite' | 'memberMention' | 'channelMention' | 'roleMention' | 'emojiMention' | 'commandAlias' | 'command' | 'inhibitor' | 'listener' | (string | string[])[];
 
-	export type ArgumentTypeFunction = (phrase: string, message: Message, prevArgs: Object) => any;
+	export type ArgumentTypeFunction = (phrase: string, message: Message, prevArgs: any) => any;
 
     export type CommandOptions = {
         aliases?: string[];
