@@ -306,9 +306,9 @@ declare module 'discord-akairo' {
         public token: any;
         public tokens: any[];
 
-        public check(...types: string): boolean;
+        public check(...types: string[]): boolean;
         public createToken(type: string, value: string): any;
-        public match(...types: string): any;
+        public match(...types: string[]): any;
         public next(): void;
         public parse(): any;
         public parseArgument(): any;
@@ -316,6 +316,11 @@ declare module 'discord-akairo' {
         public parsePhrase(): any;
         public tokenize(): any[];
     }
+
+    class ControlClass {
+		public control(data: any): any;
+		public getArgs(): (Argument | Control)[] | Argument | Control;
+	}
 
     export class Control {
         public control(data: any): any;
@@ -329,7 +334,7 @@ declare module 'discord-akairo' {
         public static CancelControl: typeof CancelControl;
 
         public static if(condition: ControlPredicate, trueArguments?: (ArgumentOptions | Control)[], falseArguments?: (ArgumentOptions | Control)[]): IfControl;
-        public static case(...condArgs: ControlPredicate | (ArgumentOptions | Control)[]): CaseControl;
+        public static case(...condArgs: (ControlPredicate | ArgumentOptions | Control)[]): CaseControl;
         public static do(fn: ControlFunction): DoControl;
         public static end(): EndControl;
         public static cancel(): CancelControl;
@@ -574,6 +579,8 @@ declare module 'discord-akairo' {
 
     export type ArgumentType = 'string' | 'lowercase' | 'uppercase' | 'charCodes' | 'number' | 'integer' | 'dynamic' | 'dynamicInt' | 'url' | 'date' | 'color' | 'user' | 'users' | 'member' | 'members' | 'relevant' | 'relevants' | 'channel' | 'channels' | 'textChannel' | 'textChannels' | 'voiceChannel' | 'voiceChannels' | 'role' | 'roles' | 'emoji' | 'emojis' | 'guild' | 'guilds' | 'message' | 'invite' | 'memberMention' | 'channelMention' | 'roleMention' | 'emojiMention' | 'commandAlias' | 'command' | 'inhibitor' | 'listener' | (string | string[])[];
 
+	export type ArgumentTypeFunction = (phrase: string, message: Message, prevArgs: Object) => any;
+
     export type CommandOptions = {
         aliases?: string[];
         args?: (ArgumentOptions | Control)[] | ArgumentFunction;
@@ -587,7 +594,7 @@ declare module 'discord-akairo' {
         ownerOnly?: boolean;
         prefix?: string | string[] | PrefixFunction;
         ratelimit?: number;
-        regex?: RegExp | TriggerFunction;
+        regex?: RegExp | RegexFunction;
         separator?: string;
         typing?: boolean;
         userPermissions?: PermissionResolvable | PermissionResolvable[] | PermissionFunction;
