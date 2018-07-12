@@ -35,6 +35,10 @@ declare module 'discord-akairo' {
 
         public ownerID: Snowflake | Snowflake[];
         public util: ClientUtil;
+	    
+	public commandHandler: CommandHandler;
+	public inhibitorHandler: InhibitorHandler;
+	public listenerHandler: ListenerHandler;
     }
 
     export class AkairoHandler {
