@@ -639,7 +639,7 @@ declare module 'discord-akairo' {
 
     export type PermissionFunction = (message: Message) => any | Promise<any>;
 
-    export type PrefixFunction = (message: Message) => string | string[];
+    export type PrefixFunction = (message: Message) => string | string[] | Promise<string | string[]>;
 
     export type ProviderOptions = {
         dataColumn?: string;
