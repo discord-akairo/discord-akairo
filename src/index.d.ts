@@ -28,7 +28,7 @@ declare module 'discord-akairo' {
         public util: ClientUtil;
     }
 
-    export class AkairoHandler {
+    export class AkairoHandler extends EventEmitter {
         public constructor(client: AkairoClient, options: AkairoHandlerOptions);
 
         public automateCategories: boolean;
