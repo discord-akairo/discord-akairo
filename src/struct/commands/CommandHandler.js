@@ -770,8 +770,8 @@ class CommandHandler extends AkairoHandler {
         const name = message.content.slice(argsIndex).split(/\s{1,}|\n{1,}/)[0];
         const command = this.findCommand(name);
 
-        if (!command) return this.parseCommandWithOverwrittenPrefixes(message) || { prefix: start, alias: name };
-        if (command.prefix != null) return this.parseCommandWithOverwrittenPrefixes(message) || { prefix: start, alias: name };
+        if (!command) return await this.parseCommandWithOverwrittenPrefixes(message) || { prefix: start, alias: name };
+        if (command.prefix != null) return await this.parseCommandWithOverwrittenPrefixes(message) || { prefix: start, alias: name };
 
         const content = message.content.slice(argsIndex + name.length + 1).trim();
         return { command, content, prefix: start, alias: name };
