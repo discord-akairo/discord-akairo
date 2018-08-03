@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 const { Listener } = require('../..');
 
 class InvalidMessageListener extends Listener {

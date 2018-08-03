@@ -184,7 +184,7 @@ class Command extends AkairoModule {
          * The regex trigger for this command.
          * @type {RegExp|TriggerFunction}
          */
-        this.regex = typeof trigger === 'function' ? regex.bind(this) : regex;
+        this.regex = typeof regex === 'function' ? regex.bind(this) : regex;
 
         /**
          * Checks if the command should be ran by using an arbitrary condition.

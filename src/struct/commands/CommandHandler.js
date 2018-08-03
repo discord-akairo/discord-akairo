@@ -397,7 +397,7 @@ class CommandHandler extends AkairoHandler {
             }
 
             if (!parsed.command) {
-                this.handleRegexAndConditionalCommands(message);
+                await this.handleRegexAndConditionalCommands(message);
                 return;
             }
 
@@ -449,18 +449,16 @@ class CommandHandler extends AkairoHandler {
      * @returns {Promise<void>}
      */
     async handleRegexCommands(message) {
-        const matchedCommands = [];
-
+        const hasRegexCommands = [];
         for (const command of this.modules.values()) {
             if (message.edited ? command.editable : true) {
-                const regex = typeof command.trigger === 'function' ? command.trigger(message) : command.trigger;
-                if (regex) matchedCommands.push({ command, regex });
+                const regex = typeof command.regex === 'function' ? command.regex(message) : command.regex;
+                if (regex) hasRegexCommands.push({ command, regex });
             }
         }
 
-        const triggered = [];
-
-        for (const entry of matchedCommands) {
+        const matchedCommands = [];
+        for (const entry of hasRegexCommands) {
             const match = message.content.match(entry.regex);
             if (!match) continue;
 
@@ -474,12 +472,11 @@ class CommandHandler extends AkairoHandler {
                 }
             }
 
-            triggered.push({ command: entry.command, match, matches });
+            matchedCommands.push({ command: entry.command, match, matches });
         }
 
         const promises = [];
-
-        for (const { command, match, matches } of triggered) {
+        for (const { command, match, matches } of matchedCommands) {
             promises.push((async () => {
                 try {
                     if (await this.runPostTypeInhibitors(message, command)) return;
@@ -510,7 +507,6 @@ class CommandHandler extends AkairoHandler {
         }
 
         const promises = [];
-
         for (const command of trueCommands.values()) {
             promises.push((async () => {
                 try {
