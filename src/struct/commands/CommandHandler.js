@@ -355,7 +355,7 @@ class CommandHandler extends AkairoHandler {
     /**
      * Handles a message.
      * @param {Message} message - Message to handle.
-     * @returns {Promise<void>}
+     * @returns {Promise<?boolean>}
      */
     async handle(message) {
         try {
@@ -364,7 +364,7 @@ class CommandHandler extends AkairoHandler {
             }
 
             if (await this.runAllTypeInhibitors(message)) {
-                return;
+                return false;
             }
 
             if (this.commandUtil) {
@@ -381,7 +381,7 @@ class CommandHandler extends AkairoHandler {
             }
 
             if (await this.runPreTypeInhibitors(message)) {
-                return;
+                return false;
             }
 
             const parsed = await this.parseCommand(message) || {};
@@ -398,9 +398,13 @@ class CommandHandler extends AkairoHandler {
 
             if (ran === false) {
                 this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
+                return false;
             }
+
+            return ran;
         } catch (err) {
             this.emitError(err, message);
+            return null;
         }
     }
 
@@ -420,8 +424,7 @@ class CommandHandler extends AkairoHandler {
                 this.emit(CommandHandlerEvents.COMMAND_CANCELLED, message, command);
                 return false;
             } else if (args instanceof InternalFlag.CommandRetry) {
-                this.handle(args.message);
-                return false;
+                return this.handle(args.message);
             }
 
             return this.runCommand(message, command, args);
