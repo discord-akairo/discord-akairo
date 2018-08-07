@@ -1,4 +1,13 @@
-<p align="center"><a href=https://github.com/1Computer1/discord-akairo><img src="https://a.safe.moe/PwUgW.png"/></a></p><p align="center"><a href=https://www.npmjs.com/package/discord-akairo><img src="https://img.shields.io/npm/v/discord-akairo.svg?maxAge=3600"/></a> <a href=https://david-dm.org/1computer1/discord-akairo><img src="https://david-dm.org/1computer1/discord-akairo.svg"/></a> <a href=https://travis-ci.org/1Computer1/discord-akairo><img src="https://travis-ci.org/1Computer1/discord-akairo.svg?branch=indev"/></a></p><p align="center"><a href=https://nodei.co/npm/discord-akairo><img src="https://nodei.co/npm/discord-akairo.png?downloads=true"/></a></p><p align="center">A modular and highly customizable bot framework for Discord.js v12</p>
+[![logo](./da.png)](https://github.com/1Computer1/discord-akairo)
+
+A modular and highly customizable bot framework for Discord.js v12.
+
+[![npm](https://nodei.co/npm/discord-akairo.png?downloads=true)](https://nodei.co/npm/discord-akairo)
+
+[![deps](https://david-dm.org/1computer1/discord-akairo.svg)](https://david-dm.org/1computer1/discord-akairo)
+[![travis](https://travis-ci.org/1Computer1/discord-akairo.svg?branch=indev)](https://travis-ci.org/1Computer1/discord-akairo)
+
+-----
 
 ## Features
 
@@ -75,7 +84,7 @@ Requires Node 10 and Discord.js v12.
 Repository: [https://github.com/1Computer1/discord-akairo](https://github.com/1Computer1/discord-akairo)  
 Changelog: [https://github.com/1Computer1/discord-akairo/releases](https://github.com/1Computer1/discord-akairo/releases)  
 Documentation: [https://1computer1.github.io/discord-akairo](https://1computer1.github.io/discord-akairo/) ([master](https://1computer1.github.io/discord-akairo/master))  
-Tutorials: [https://1computer1.gitbooks.io/akairo-tutorials/content](https://1computer1.gitbooks.io/akairo-tutorials/content/) ([master](https://1computer1.gitbooks.io/akairo-tutorials/content/v/v8/))  
+Tutorials: [https://1computer1.gitbooks.io/akairo-tutorials/content](https://1computer1.gitbooks.io/akairo-tutorials/content/) ([master](https://1computer1.gitbooks.io/akairo-tutorials/content/v/formaster/))  
 Discord Server: [https://discord.gg/arTauDY](https://discord.gg/arTauDY)  
 
 ## Contributing
