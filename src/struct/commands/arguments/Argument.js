@@ -86,6 +86,16 @@ const { isPromise } = require('../../../util/Util');
  */
 
 /**
+ * A function for validating parsed arguments.
+ * @typedef {Function} ArgumentPredicate
+ * @param {any} value - The parsed value.
+ * @param {string} phrase - The user input.
+ * @param {Message} message - Message that triggered the command.
+ * @param {Object} prevArgs - Previous arguments.
+ * @returns {boolean}
+ */
+
+/**
  * A prompt to run if the user did not input the argument correctly.
  * Can only be used if there is not a default value (unless optional is true).
  * @typedef {Object} ArgumentPromptOptions
