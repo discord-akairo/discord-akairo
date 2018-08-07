@@ -8,6 +8,16 @@ const { Collection } = require('discord.js');
  * Not all properties of the util are available, depending on the input.
  */
 
+/**
+ * Various parsed components of the message.
+ * @typedef {Object} ParsedComponents
+ * @prop {?Command} command - The command used.
+ * @prop {?string} prefix - The prefix used.
+ * @prop {?string} alias - The alias used.
+ * @prop {?string} content - The content to the right of the alias.
+ * @prop {?string} afterPrefix - The content to the right of the prefix.
+ */
+
 class CommandUtil {
     /**
      * Command utilies.
@@ -28,28 +38,10 @@ class CommandUtil {
         this.message = message;
 
         /**
-         * Command used.
-         * @type {?Command}
+         * The parsed components.
+         * @type {?ParsedComponents}
          */
-        this.command = null;
-
-        /**
-         * The prefix used.
-         * @type {?string}
-         */
-        this.prefix = null;
-
-        /**
-         * The alias used.
-         * @type {?string}
-         */
-        this.alias = null;
-
-        /**
-         * The parsed content.
-         * @type {?string}
-         */
-        this.content = null;
+        this.parsed = null;
 
         /**
          * Whether or not the last response should be edited.

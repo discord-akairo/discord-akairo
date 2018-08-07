@@ -385,15 +385,8 @@ class CommandHandler extends AkairoHandler {
             }
 
             const parsed = await this.parseCommand(message) || {};
-            const { command, content, prefix, alias } = parsed;
-
             if (this.commandUtil) {
-                Object.assign(message.util, {
-                    command,
-                    prefix,
-                    alias,
-                    content
-                });
+                message.util.parsed = parsed;
             }
 
             if (!parsed.command) {
@@ -401,7 +394,7 @@ class CommandHandler extends AkairoHandler {
                 return;
             }
 
-            this.handleDirectCommand(message, content, command);
+            this.handleDirectCommand(message, parsed.content, parsed.command);
         } catch (err) {
             this.emitError(err, message);
         }
@@ -765,12 +758,15 @@ class CommandHandler extends AkairoHandler {
         const argsIndex = message.content.slice(startIndex).search(/\S/) + start.length;
         const name = message.content.slice(argsIndex).split(/\s{1,}|\n{1,}/)[0];
         const command = this.findCommand(name);
-
-        if (!command) return await this.parseCommandWithOverwrittenPrefixes(message) || { prefix: start, alias: name };
-        if (command.prefix != null) return await this.parseCommandWithOverwrittenPrefixes(message) || { prefix: start, alias: name };
-
         const content = message.content.slice(argsIndex + name.length + 1).trim();
-        return { command, content, prefix: start, alias: name };
+        const afterPrefix = message.content.slice(start.length).trim();
+
+        if (!command || command.prefix != null) {
+            return await this.parseCommandWithOverwrittenPrefixes(message)
+            || { prefix: start, alias: name, content, afterPrefix };
+        }
+
+        return { command, prefix: start, alias: name, content, afterPrefix };
     }
 
     /**
@@ -831,11 +827,14 @@ class CommandHandler extends AkairoHandler {
         const argsIndex = message.content.slice(startIndex).search(/\S/) + start.length;
         const name = message.content.slice(argsIndex).split(/\s{1,}|\n{1,}/)[0];
         const command = this.findCommand(name);
-
-        if (!command || !commands.has(command.id)) return { prefix: start, alias: name };
-
         const content = message.content.slice(argsIndex + name.length + 1).trim();
-        return { command, content, prefix: start, alias: name };
+        const afterPrefix = message.content.slice(start.length).trim();
+
+        if (!command || !commands.has(command.id)) {
+            return { prefix: start, alias: name, content, afterPrefix };
+        }
+
+        return { command, prefix: start, alias: name, content, afterPrefix };
     }
 
     /**
