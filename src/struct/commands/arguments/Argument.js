@@ -550,7 +550,7 @@ class Argument {
      */
     /* eslint-disable no-invalid-this */
     static some(...types) {
-        return async function type(phrase, message, args) {
+        return async function typeFn(phrase, message, args) {
             for (let entry of types) {
                 if (typeof entry === 'function') entry = entry.bind(this);
                 // eslint-disable-next-line no-await-in-loop
@@ -569,7 +569,7 @@ class Argument {
      * @returns {ArgumentTypeFunction}
      */
     static every(...types) {
-        return async function type(phrase, message, args) {
+        return async function typeFn(phrase, message, args) {
             const results = [];
             for (const entry of types) {
                 // eslint-disable-next-line no-await-in-loop
@@ -581,7 +581,35 @@ class Argument {
             return results;
         };
     }
+
+    /**
+     * Creates a type with extra validation.
+     * If the predicate is not true, the value is considered invalid.
+     * @param {ArgumentType|ArgumentTypeFunction} type - The type to use.
+     * @param {ArgumentPredicate} predicate - The predicate function.
+     * @returns {ArgumentTypeFunction}
+     */
+    static validate(type, predicate) {
+        return async function typeFn(phrase, message, args) {
+            const res = await Argument.cast(type, this.handler.resolver, phrase, message, args);
+            if (res == null) return null;
+            if (!predicate(res, phrase, message, args)) return null;
+            return res;
+        };
+    }
     /* eslint-enable no-invalid-this */
+
+    /**
+     * Creates a type where the parsed value must be within a range.
+     * @param {ArgumentType|ArgumentTypeFunction} type - The type to use
+     * @param {number} min - Minimum value.
+     * @param {number} max - Maximum value.
+     * @param {boolean} [inclusive=false] - Whether or not to be inclusive on the upper bound.
+     * @returns {ArgumentTypeFunction}
+     */
+    static range(type, min, max, inclusive = false) {
+        return Argument.validate(type, x => x >= min && (inclusive ? x <= max : x < max));
+    }
 }
 
 module.exports = Argument;

@@ -94,7 +94,9 @@ declare module 'discord-akairo' {
 
         public static cast(type: ArgumentType | ArgumentTypeFunction, resolver: TypeResolver, phrase: string, message: Message, args?: any): Promise<any>;
         public static every(...types: (ArgumentType | ArgumentTypeFunction)[]): ArgumentTypeFunction;
-        public static some(...types: (ArgumentType | ArgumentTypeFunction)[]): ArgumentTypeFunction; 
+        public static range(type: ArgumentType | ArgumentTypeFunction, min: number | bigint, max: number | bigint, inclusive?: boolean): ArgumentTypeFunction;
+        public static some(...types: (ArgumentType | ArgumentTypeFunction)[]): ArgumentTypeFunction;
+        public static validate(type: ArgumentType | ArgumentTypeFunction, predicate: ArgumentPredicate): ArgumentTypeFunction;
     }
 
     export class ArgumentParser {
@@ -528,6 +530,8 @@ declare module 'discord-akairo' {
         type?: ArgumentType | ArgumentTypeFunction;
         unordered?: boolean | number | number[];
     };
+
+    export type ArgumentPredicate = (value: any, phrase: string, message: Message, args: any) => boolean;
 
     export type ArgumentPromptData = {
         infinite: boolean;
