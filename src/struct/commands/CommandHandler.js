@@ -389,12 +389,16 @@ class CommandHandler extends AkairoHandler {
                 message.util.parsed = parsed;
             }
 
+            let ran;
             if (!parsed.command) {
-                await this.handleRegexAndConditionalCommands(message);
-                return;
+                ran = await this.handleRegexAndConditionalCommands(message);
+            } else {
+                ran = await this.handleDirectCommand(message, parsed.content, parsed.command);
             }
 
-            this.handleDirectCommand(message, parsed.content, parsed.command);
+            if (ran === false) {
+                this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
+            }
         } catch (err) {
             this.emitError(err, message);
         }
@@ -405,41 +409,43 @@ class CommandHandler extends AkairoHandler {
      * @param {Message} message - Message to handle.
      * @param {string} content - Content of message without command.
      * @param {Command} command - Command instance.
-     * @returns {Promise<void>}
+     * @returns {Promise<?boolean>}
      */
     async handleDirectCommand(message, content, command) {
         try {
-            if (message.edited && !command.editable) return;
-            if (await this.runPostTypeInhibitors(message, command)) return;
+            if (message.edited && !command.editable) return false;
+            if (await this.runPostTypeInhibitors(message, command)) return false;
             const args = await command.parse(message, content);
             if (args instanceof InternalFlag.CommandCancel) {
                 this.emit(CommandHandlerEvents.COMMAND_CANCELLED, message, command);
-                return;
+                return false;
             } else if (args instanceof InternalFlag.CommandRetry) {
                 this.handle(args.message);
-                return;
+                return false;
             }
 
-            await this.runCommand(message, command, args);
+            return this.runCommand(message, command, args);
         } catch (err) {
             this.emitError(err, message, command);
+            return null;
         }
     }
 
     /**
      * Handles regex and conditional commands.
      * @param {Message} message - Message to handle.
-     * @returns {Promise<void>}
+     * @returns {Promise<boolean>}
      */
     async handleRegexAndConditionalCommands(message) {
-        await this.handleRegexCommands(message);
-        await this.handleConditionalCommands(message);
+        const ran1 = await this.handleRegexCommands(message);
+        const ran2 = await this.handleConditionalCommands(message);
+        return ran1 || ran2;
     }
 
     /**
      * Handles regex commands.
      * @param {Message} message - Message to handle.
-     * @returns {Promise<void>}
+     * @returns {Promise<boolean>}
      */
     async handleRegexCommands(message) {
         const hasRegexCommands = [];
@@ -468,6 +474,10 @@ class CommandHandler extends AkairoHandler {
             matchedCommands.push({ command: entry.command, match, matches });
         }
 
+        if (!matchedCommands.length) {
+            return false;
+        }
+
         const promises = [];
         for (const { command, match, matches } of matchedCommands) {
             promises.push((async () => {
@@ -481,12 +491,13 @@ class CommandHandler extends AkairoHandler {
         }
 
         await Promise.all(promises);
+        return true;
     }
 
     /**
      * Handles conditional commands.
      * @param {Message} message - Message to handle.
-     * @returns {Promise<void>}
+     * @returns {Promise<boolean>}
      */
     async handleConditionalCommands(message) {
         const trueCommands = this.modules.filter(command =>
@@ -495,8 +506,7 @@ class CommandHandler extends AkairoHandler {
         );
 
         if (!trueCommands.size) {
-            this.emit(CommandHandlerEvents.MESSAGE_INVALID, message);
-            return;
+            return false;
         }
 
         const promises = [];
@@ -512,6 +522,7 @@ class CommandHandler extends AkairoHandler {
         }
 
         await Promise.all(promises);
+        return true;
     }
 
     /**
