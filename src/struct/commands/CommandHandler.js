@@ -413,12 +413,16 @@ class CommandHandler extends AkairoHandler {
      * @param {Message} message - Message to handle.
      * @param {string} content - Content of message without command.
      * @param {Command} command - Command instance.
+     * @param {boolean} [ignore=false] - Ignore inhibitors and other checks.
      * @returns {Promise<?boolean>}
      */
-    async handleDirectCommand(message, content, command) {
+    async handleDirectCommand(message, content, command, ignore = false) {
         try {
-            if (message.edited && !command.editable) return false;
-            if (await this.runPostTypeInhibitors(message, command)) return false;
+            if (!ignore) {
+                if (message.edited && !command.editable) return false;
+                if (await this.runPostTypeInhibitors(message, command)) return false;
+            }
+
             const args = await command.parse(message, content);
             if (args instanceof InternalFlag.CommandCancel) {
                 this.emit(CommandHandlerEvents.COMMAND_CANCELLED, message, command);
