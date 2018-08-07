@@ -18,10 +18,10 @@ const TypeResolver = require('./arguments/TypeResolver');
  * @prop {RegExp} [aliasReplacement] - Regular expression to automatically make command aliases.
  * For example, using `/-/g` would mean that aliases containing `-` would be valid with and without it.
  * So, the alias `command-name` is valid as both `command-name` and `commandname`.
- * @prop {boolean} [handleEdits=false] - Whether or not to handle edited messages.
- * @prop {boolean} [commandUtil=false] - Whether or not to assign `message.util`.
- * Set to `true` by default if `handleEdits` is on.
+ * @prop {boolean} [handleEdits=false] - Whether or not to handle edited messages using CommandUtil.
  * @prop {boolean} [storeMessages=false] - Whether or not to have CommandUtil store all prompts and their replies.
+ * @prop {boolean} [commandUtil=false] - Whether or not to assign `message.util`.
+ * Set to `true` by default if `handleEdits` or `storeMessages` is on.
  * @prop {number} [commandUtilLifetime=0] - Milliseconds a command util should last before it is removed.
  * If 0, CommandUtil instances will never be removed.
  * @prop {boolean} [fetchMembers=false] - Whether or not to fetch member on each message from a guild.
@@ -62,9 +62,9 @@ class CommandHandler extends AkairoHandler {
         blockBots = true,
         fetchMembers = false,
         handleEdits = false,
+        storeMessages = false,
         commandUtil,
         commandUtilLifetime = 0,
-        storeMessages = false,
         defaultCooldown = 0,
         ignoreCooldownID,
         defaultPrompt = {},
@@ -133,22 +133,22 @@ class CommandHandler extends AkairoHandler {
         this.handleEdits = Boolean(handleEdits);
 
         /**
+         * Whether or not to store messages in CommandUtil.
+         * @type {boolean}
+         */
+        this.storeMessages = Boolean(storeMessages);
+
+        /**
          * Whether or not `message.util` is assigned.
          * @type {boolean}
          */
-        this.commandUtil = commandUtil !== undefined ? Boolean(commandUtil) : this.handleEdits;
+        this.commandUtil = commandUtil !== undefined ? Boolean(commandUtil) : this.handleEdits || this.storeMessages;
 
         /**
          * How long a command util will last in milliseconds before it is removed.
          * @type {number}
          */
         this.commandUtilLifetime = commandUtilLifetime;
-
-        /**
-         * Whether or not to store messages in CommandUtil.
-         * @type {boolean}
-         */
-        this.storeMessages = Boolean(storeMessages);
 
         /**
          * Collection of CommandUtils.
