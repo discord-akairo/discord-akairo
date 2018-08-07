@@ -559,7 +559,7 @@ class Argument {
      * @returns {ArgumentTypeFunction}
      */
     /* eslint-disable no-invalid-this */
-    static some(...types) {
+    static union(...types) {
         return async function typeFn(phrase, message, args) {
             for (let entry of types) {
                 if (typeof entry === 'function') entry = entry.bind(this);
@@ -578,7 +578,7 @@ class Argument {
      * @param {...ArgumentType|ArgumentTypeFunction} types - Types to use.
      * @returns {ArgumentTypeFunction}
      */
-    static every(...types) {
+    static tuple(...types) {
         return async function typeFn(phrase, message, args) {
             const results = [];
             for (const entry of types) {
