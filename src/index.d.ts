@@ -105,9 +105,9 @@ declare module 'discord-akairo' {
         public args: (ArgumentOptions | Control)[];
 
         public buildArgs(args: (ArgumentOptions | Control)[]): (Argument | Control)[];
-        public parse(message: Message, content: string): Promise<any>;
+        public parse(message: Message, content: string): Promise<object>;
 
-        public static getFlags(args: (ArgumentOptions | Control)[]): any;
+        public static getFlags(args: (ArgumentOptions | Control)[]): object;
     }
 
     export class Category<K, V> extends Collection<K, V> {
@@ -133,7 +133,7 @@ declare module 'discord-akairo' {
         public checkUser(text: string, user: User, caseSensitive?: boolean, wholeWord?: boolean): boolean;
         public collection<K, V>(iterable: Iterable<[K, V][]>): Collection<K, V>;
         public compareStreaming(oldMember: GuildMember, newMember: GuildMember): number;
-        public embed(data?: any): MessageEmbed;
+        public embed(data?: object): MessageEmbed;
         public fetchMember(guild: Guild, id: string, cache?: boolean): Promise<GuildMember>;
         public resolveChannel(text: string, channels: Collection<Snowflake, Channel>, caseSensitive?: boolean, wholeWord?: boolean): Channel;
         public resolveChannels(text: string, channels: Collection<Snowflake, Channel>, caseSensitive?: boolean, wholeWord?: boolean): Collection<Snowflake, Channel>;
@@ -177,7 +177,7 @@ declare module 'discord-akairo' {
 
         public condition(message: Message): boolean;
         public exec(message: Message, args: any): any;
-        public parse(message: Message, content: string): Promise<any>;
+        public parse(message: Message, content: string): Promise<object>;
         public reload(): this;
         public remove(): this;
     }
@@ -196,7 +196,7 @@ declare module 'discord-akairo' {
         public commandUtil: boolean;
         public commandUtilLifetime: number;
         public commandUtils: Collection<string, CommandUtil>;
-        public cooldowns: Collection<string, any>;
+        public cooldowns: Collection<string, object>;
         public defaultCooldown: number;
         public defaultPrompt: ArgumentPromptOptions;
         public directory: string;
@@ -217,16 +217,16 @@ declare module 'discord-akairo' {
         public emitError(err: Error, message: Message, command: Command): void;
         public findCategory(name: string): Category<string, Command>;
         public findCommand(name: string): Command;
-        public handle(message: Message): Promise<void>;
-        public handleDirectCommand(message: Message, content: string, command: Command): Promise<void>;
-        public handleRegexAndConditionalCommands(message: Message): Promise<void>;
-        public handleRegexCommands(message: Message): Promise<void>;
-        public handleConditionalCommands(message: Message): Promise<void>;
+        public handle(message: Message): Promise<boolean | null>;
+        public handleDirectCommand(message: Message, content: string, command: Command, ignore?: boolean): Promise<boolean | null>;
+        public handleRegexAndConditionalCommands(message: Message): Promise<boolean>;
+        public handleRegexCommands(message: Message): Promise<boolean>;
+        public handleConditionalCommands(message: Message): Promise<boolean>;
         public hasPrompt(channel: Channel, user: User): boolean;
         public load(thing: string | Function): Command;
         public loadAll(directory?: string, filter?: LoadFilterFunction): this;
-        public parseCommand(message: Message): Promise<any>;
-        public parseCommandWithOverwrittenPrefixes(message: Message): Promise<any>;
+        public parseCommand(message: Message): Promise<object | null>;
+        public parseCommandWithOverwrittenPrefixes(message: Message): Promise<object | null>;
         public register(command: Command, filepath?: string): void;
         public reload(id: string): Command;
         public reloadAll(): this;
@@ -282,7 +282,7 @@ declare module 'discord-akairo' {
         public quoted: boolean;
         public separator?: string;
 
-        public parse(content: string): any;
+        public parse(content: string): object;
     }
 
     class ContentParserState {
@@ -291,22 +291,22 @@ declare module 'discord-akairo' {
         public content: string;
         public parser: ContentParser;
         public position: number;
-        public token: any;
-        public tokens: any[];
+        public token: object;
+        public tokens: object[];
 
         public check(...types: string[]): boolean;
-        public createToken(type: string, value: string): any;
-        public match(...types: string[]): any;
+        public createToken(type: string, value: string): object;
+        public match(...types: string[]): object;
         public next(): void;
-        public parse(): any;
-        public parseArgument(): any;
-        public parseFlag(): any;
-        public parsePhrase(): any;
-        public tokenize(): any[];
+        public parse(): object;
+        public parseArgument(): object;
+        public parseFlag(): object;
+        public parsePhrase(): object;
+        public tokenize(): object[];
     }
 
     export class Control {
-        public control(data: any): any;
+        public control(data: object): any;
         public getArgs(): (ArgumentOptions | Control)[];
 
         public static Control: typeof Control;

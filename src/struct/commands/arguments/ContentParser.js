@@ -368,7 +368,7 @@ class ContentParserState {
 
     /**
      * Parses one phrase.
-     * @returns {void}
+     * @returns {Object}
      */
     parsePhrase() {
         if (this.check('Quote')) {
