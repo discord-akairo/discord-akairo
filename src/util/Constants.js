@@ -16,6 +16,7 @@ module.exports = {
         CHAR_CODES: 'charCodes',
         NUMBER: 'number',
         INTEGER: 'integer',
+        BIGINT: 'bigint',
         URL: 'url',
         DATE: 'date',
         COLOR: 'color',

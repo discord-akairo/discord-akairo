@@ -10,7 +10,7 @@ class PCommand extends Command {
             args: [
                 {
                     id: 'integer',
-                    type: 'integer',
+                    type: 'bigint',
                     prompt: {
                         start: 'Give me an integer!',
                         retry: 'That\'s not an integer, try again!'

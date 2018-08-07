@@ -77,6 +77,11 @@ class TypeResolver {
                 return parseInt(phrase);
             },
 
+            [ArgumentTypes.BIGINT]: phrase => {
+                if (!phrase || isNaN(phrase)) return null;
+                return BigInt(phrase); // eslint-disable-line no-undef, new-cap
+            },
+
             [ArgumentTypes.URL]: phrase => {
                 if (!phrase) return null;
                 if (/^<.+>$/.test(phrase)) phrase = phrase.slice(1, -1);

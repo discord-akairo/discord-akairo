@@ -31,8 +31,9 @@ const { isPromise } = require('../../../util/Util');
  * - `lowercase` makes the input lowercase.
  * - `uppercase` makes the input uppercase.
  * - `charCodes` transforms the input to an array of char codes.
- * - `number` casts to an number with `parseFloat()`.
- * - `integer` casts to an integer with `parseInt()`.
+ * - `number` casts to a number.
+ * - `integer` casts to an integer.
+ * - `bigint` casts to a big integer.
  * - `url` casts to an `URL` object.
  * - `date` casts to a `Date` object.
  * - `color` casts a hex code to an integer.
