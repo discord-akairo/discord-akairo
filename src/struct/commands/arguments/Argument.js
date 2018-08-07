@@ -419,6 +419,8 @@ class Argument {
                     time: promptOptions.time,
                     errors: ['time']
                 })).first();
+
+                if (message.util) message.util.addMessage(input);
             } catch (err) {
                 const timeoutText = getText('timeout', promptOptions.timeout, retryCount, prevMessage, '');
                 if (timeoutText) {
@@ -432,7 +434,6 @@ class Argument {
             if (promptOptions.breakout) {
                 const looksLike = await this.handler.parseCommand(input);
                 if (looksLike && looksLike.command) return InternalFlag.retry(input);
-                if (message.util) message.util.addMessage(input);
             }
 
             if (input.content.toLowerCase() === promptOptions.cancelWord.toLowerCase()) {
