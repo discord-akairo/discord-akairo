@@ -553,7 +553,7 @@ class Argument {
     }
 
     /**
-     * Creates a type from multiple types (sum type).
+     * Creates a type from multiple types (union type).
      * The first type that resolves to a non-void value is used.
      * @param {...ArgumentType|ArgumentTypeFunction} types - Types to use.
      * @returns {ArgumentTypeFunction}
@@ -573,7 +573,7 @@ class Argument {
     }
 
     /**
-     * Creates a type from multiple types (product type).
+     * Creates a type from multiple types (tuple type).
      * Only inputs where each type resolves with a non-void value are valid.
      * @param {...ArgumentType|ArgumentTypeFunction} types - Types to use.
      * @returns {ArgumentTypeFunction}
