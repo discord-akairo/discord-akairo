@@ -77,18 +77,6 @@ class TypeResolver {
                 return parseInt(phrase);
             },
 
-            [ArgumentTypes.DYNAMIC]: phrase => {
-                if (!phrase) return null;
-                if (isNaN(phrase)) return phrase;
-                return parseFloat(phrase);
-            },
-
-            [ArgumentTypes.DYNAMIC_INT]: phrase => {
-                if (!phrase) return null;
-                if (isNaN(phrase)) return phrase;
-                return parseInt(phrase);
-            },
-
             [ArgumentTypes.URL]: phrase => {
                 if (!phrase) return null;
                 if (/^<.+>$/.test(phrase)) phrase = phrase.slice(1, -1);

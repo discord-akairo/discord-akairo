@@ -16,8 +16,6 @@ module.exports = {
         CHAR_CODES: 'charCodes',
         NUMBER: 'number',
         INTEGER: 'integer',
-        DYNAMIC: 'dynamic',
-        DYNAMIC_INT: 'dynamicInt',
         URL: 'url',
         DATE: 'date',
         COLOR: 'color',

@@ -33,8 +33,6 @@ const { isPromise } = require('../../../util/Util');
  * - `charCodes` transforms the input to an array of char codes.
  * - `number` casts to an number with `parseFloat()`.
  * - `integer` casts to an integer with `parseInt()`.
- * - `dynamic` casts to a number with `parseFloat()` or a trimmed input if not a number.
- * - `dynamicInt` casts to an integer with `parseInt()` or a trimmed input if not a number.
  * - `url` casts to an `URL` object.
  * - `date` casts to a `Date` object.
  * - `color` casts a hex code to an integer.
