@@ -195,8 +195,8 @@ class DoControl extends Control {
      * @param {Object} data - Data for control.
      * @returns {Object}
      */
-    control({ process, currentArgs, args, command, message, processedArgs }) {
-        this.fn.call(command, message, processedArgs);
+    async control({ process, currentArgs, args, command, message, processedArgs }) {
+        await this.fn.call(command, message, processedArgs);
         return process(args.buildArgs(currentArgs.slice(1)));
     }
 }
