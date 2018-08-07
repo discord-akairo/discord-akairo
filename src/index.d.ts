@@ -256,14 +256,11 @@ declare module 'discord-akairo' {
     export class CommandUtil {
         public constructor(handler: CommandHandler, message: Message);
 
-        public alias?: string;
         public handler: CommandHandler;
-        public command?: Command;
-        public content?: string;
         public lastResponse?: Message;
         public message: Message;
         public messages?: Collection<Snowflake, Message>;
-        public prefix?: string;
+        public parsed?: ParsedComponents;
         public shouldEdit: boolean;
 
         public addMessage(message: Message | Message[]): Message | Message[];
@@ -627,6 +624,14 @@ declare module 'discord-akairo' {
     };
 
     export type LoadFilterFunction = (filepath: string) => boolean;
+
+    export type ParsedComponents = {
+        afterContent?: string;
+        alias?: string;
+        command?: Command;
+        content?: string;
+        prefix?: string;
+    };
 
     export type PermissionFunction = (message: Message) => any | Promise<any>;
 
