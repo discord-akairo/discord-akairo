@@ -56,7 +56,7 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * Extra whitespace between words are ignored.
  * - `split` splits word separated by whitespace.
  * Should not be used due to possible inconsistent whitespace.
- * Deprecated.
+ * DEPRECATED: no alternatives.
  * - `quoted` is similar to plain, but counts text inside double quotes as one word.
  * - `sticky` is similar to quoted, but makes it so that quoted text must have a whitespace or another double quote before it.
  * This means that `thing="hello world"` would be one, rather than two like when using `quoted`.
@@ -82,7 +82,7 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * @param {Message} message - Message that triggered the command.
  * @param {Object} args - Evaluated arguments.
  * @param {boolean} edited - Whether the user's message was edited.
- * Deprecated.
+ * DEPRECATED: Use Messaged#edited.
  * @returns {any}
  */
 
@@ -93,7 +93,7 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * @param {any} match - The results from `string.match()` with the regex.
  * @param {string[]} groups - The matched groups if a global regex.
  * @param {boolean} edited - Whether the user's message was edited.
- * Deprecated.
+ * DEPRECATED: Use Messaged#edited.
  * @returns {any}
  */
 
@@ -102,7 +102,7 @@ const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
  * @typedef {Function} ConditionalCommandExecFunction
  * @param {Message} message - Message that triggered the command.
  * @param {boolean} edited - Whether the user's message was edited.
- * Deprecated.
+ * DEPRECATED: Use Messaged#edited.
  * @returns {any}
  */
 
@@ -190,6 +190,7 @@ class Command extends AkairoModule {
 
         /**
          * Custom options for the command.
+         * @deprecated Extend the class.
          * @type {Object}
          */
         this.options = options.custom || options.options || {};

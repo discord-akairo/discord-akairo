@@ -161,6 +161,7 @@ class AkairoHandler extends EventEmitter {
 
     /**
      * Adds a module.
+     * @deprecated Use AkairoHandler#load
      * @param {string} filename - Filename to lookup in the directory.
      * A .js extension is assumed.
      * @returns {AkairoModule}
