@@ -6,7 +6,6 @@ const Command = require('./Command');
 const CommandUtil = require('./CommandUtil');
 const InternalFlag = require('./InternalFlag');
 const { isPromise } = require('../../util/Util');
-const TypeResolver = require('./arguments/TypeResolver');
 
 /**
  * Also includes properties from AkairoHandlerOptions.
@@ -83,12 +82,6 @@ class CommandHandler extends AkairoHandler {
             automateCategories,
             loadFilter
         });
-
-        /**
-         * The type resolver.
-         * @type {TypeResolver}
-         */
-        this.resolver = new TypeResolver(this);
 
         /**
          * Collecion of command aliases.
@@ -217,6 +210,12 @@ class CommandHandler extends AkairoHandler {
          * @type {?InhibitorHandler}
          */
         this.inhibitorHandler = null;
+
+        /**
+         * Type handler to use.
+         * @type {?TypeHandler}
+         */
+        this.typeHandler = null;
 
         /**
          * Directory to commands.
@@ -920,25 +919,24 @@ class CommandHandler extends AkairoHandler {
     }
 
     /**
-     * Set the inhibitor handler to use.
+     * Sets the inhibitor handler to use.
+     * Used for inhibiting messages.
      * @param {InhibitorHandler} inhibitorHandler - The inhibitor handler.
      * @returns {CommandHandler}
      */
     useInhibitorHandler(inhibitorHandler) {
         this.inhibitorHandler = inhibitorHandler;
-        this.resolver.inhibitorHandler = inhibitorHandler;
-
         return this;
     }
 
     /**
-     * Set the listener handler to use.
-     * @param {ListenerHandler} listenerHandler - The listener handler.
+     * Sets the type handler to use.
+     * Used for resolving argument types.
+     * @param {TypeHandler} typeHandler - The type handler.
      * @returns {CommandHandler}
      */
-    useListenerHandler(listenerHandler) {
-        this.resolver.listenerHandler = listenerHandler;
-
+    useTypeHandler(typeHandler) {
+        this.typeHandler = typeHandler;
         return this;
     }
 

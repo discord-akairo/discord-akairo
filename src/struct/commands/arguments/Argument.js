@@ -325,7 +325,7 @@ class Argument {
      * @returns {Promise<any>}
      */
     cast(phrase, message, args = {}) {
-        return Argument.cast(this.type, this.handler.resolver, phrase, message, args);
+        return Argument.cast(this.type, this.handler.typeHandler, phrase, message, args);
     }
 
     /**
@@ -496,13 +496,13 @@ class Argument {
     /**
      * Casts a phrase to the specified type.
      * @param {ArgumentType|ArgumentTypeFunction} type - Type to use.
-     * @param {TypeResolver} resolver - Type resolver to use.
+     * @param {TypeHandler} handler - Type handler to use.
      * @param {string} phrase - Phrase to process.
      * @param {Message} message - Message that called the command.
      * @param {Object} args - Previous arguments from command.
      * @returns {Promise<any>}
      */
-    static async cast(type, resolver, phrase, message, args) {
+    static async cast(type, handler, phrase, message, args) {
         if (Array.isArray(type)) {
             for (const entry of type) {
                 if (Array.isArray(entry)) {
@@ -541,8 +541,8 @@ class Argument {
             return { match, matches };
         }
 
-        if (resolver.type(type)) {
-            let res = resolver.type(type)(phrase, message, args);
+        if (handler.modules.has(type)) {
+            let res = handler.modules.get(type).exec(phrase, message, args);
             if (isPromise(res)) res = await res;
             if (res != null) return res;
             return null;
@@ -564,7 +564,7 @@ class Argument {
             for (let entry of types) {
                 if (typeof entry === 'function') entry = entry.bind(this);
                 // eslint-disable-next-line no-await-in-loop
-                const res = await Argument.cast(entry, this.handler.resolver, phrase, message, args);
+                const res = await Argument.cast(entry, this.handler.typeHandler, phrase, message, args);
                 if (res != null) return res;
             }
 
@@ -583,7 +583,7 @@ class Argument {
             const results = [];
             for (const entry of types) {
                 // eslint-disable-next-line no-await-in-loop
-                const res = await Argument.cast(entry, this.handler.resolver, phrase, message, args);
+                const res = await Argument.cast(entry, this.handler.typeHandler, phrase, message, args);
                 if (res == null) return null;
                 results.push(res);
             }
@@ -601,7 +601,7 @@ class Argument {
      */
     static validate(type, predicate) {
         return async function typeFn(phrase, message, args) {
-            const res = await Argument.cast(type, this.handler.resolver, phrase, message, args);
+            const res = await Argument.cast(type, this.handler.typeHandler, phrase, message, args);
             if (res == null) return null;
             if (!predicate(res, phrase, message, args)) return null;
             return res;
