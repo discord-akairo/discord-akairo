@@ -61,7 +61,6 @@ declare module 'discord-akairo' {
         public category: Category<string, AkairoModule>;
         public categoryID: string;
         public client: AkairoClient;
-        public enabled: boolean;
         public filepath: string;
         public handler: AkairoHandler;
         public id: string;
@@ -354,7 +353,6 @@ declare module 'discord-akairo' {
 
         public category: Category<string, Inhibitor>;
         public client: AkairoClient;
-        public enabled: boolean;
         public filepath: string;
         public handler: InhibitorHandler;
         public id: string;
@@ -395,7 +393,6 @@ declare module 'discord-akairo' {
         public category: Category<string, Listener>;
         public client: AkairoClient;
         public emitter: string | EventEmitter;
-        public enabled: boolean;
         public event: string;
         public filepath: string;
         public handler: ListenerHandler;
