@@ -136,10 +136,10 @@ class AkairoHandler extends EventEmitter {
      * @returns {AkairoModule}
      */
     load(thing, isReload = false) {
-        const isObj = typeof thing === 'object';
-        if (!isObj && !this.extensions.has(path.extname(thing))) return undefined;
+        const isClass = typeof thing === 'function';
+        if (!isClass && !this.extensions.has(path.extname(thing))) return undefined;
 
-        let mod = isObj
+        let mod = isClass
             ? thing
             : function findExport(m) {
                 if (!m) return null;
@@ -150,13 +150,13 @@ class AkairoHandler extends EventEmitter {
         if (mod && mod.prototype instanceof this.classToHandle) {
             mod = new mod(this); // eslint-disable-line new-cap
         } else {
-            if (!isObj) delete require.cache[require.resolve(thing)];
+            if (!isClass) delete require.cache[require.resolve(thing)];
             return undefined;
         }
 
         if (this.modules.has(mod.id)) throw new AkairoError('ALREADY_LOADED', this.classToHandle.name, mod.id);
 
-        this.register(mod, isObj ? null : thing);
+        this.register(mod, isClass ? null : thing);
         this.emit(AkairoHandlerEvents.LOAD, mod, isReload);
         return mod;
     }
