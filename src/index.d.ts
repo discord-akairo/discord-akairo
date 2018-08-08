@@ -483,7 +483,7 @@ declare module 'discord-akairo' {
         public reload(): this;
         public remove(): this;
 
-        public static create(id: string, fn: ArgumentTypeFunction): Type;
+        public static create(id: string, fn: ArgumentTypeFunction): typeof Type;
     }
 
     export class TypeHandler extends AkairoHandler {

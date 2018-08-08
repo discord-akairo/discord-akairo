@@ -37,6 +37,12 @@ class Type extends AkairoModule {
         throw new AkairoError('NOT_IMPLEMENTED', this.constructor.name, 'exec');
     }
 
+    /**
+     * Creates a type class from a function.
+     * @param {string} id - ID of the type.
+     * @param {ArgumentTypeFunction} fn - The argument function.
+     * @returns {Function}
+     */
     static create(id, fn) {
         return class extends Type {
             constructor() {
