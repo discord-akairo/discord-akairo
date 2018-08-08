@@ -61,7 +61,6 @@ declare module 'discord-akairo' {
         public category: Category<string, AkairoModule>;
         public categoryID: string;
         public client: AkairoClient;
-        public enabled: boolean;
         public filepath: string;
         public handler: AkairoHandler;
         public id: string;
@@ -93,7 +92,7 @@ declare module 'discord-akairo' {
         public process(phrase: string, message: Message, args?: any): Promise<any>;
 
         public static cast(type: ArgumentType | ArgumentTypeFunction, handler: TypeHandler, phrase: string, message: Message, args?: any): Promise<any>;
-        public static range(type: ArgumentType | ArgumentTypeFunction, min: number | bigint, max: number | bigint, inclusive?: boolean): ArgumentTypeFunction;
+        public static range(type: ArgumentType | ArgumentTypeFunction, min: number, max: number, inclusive?: boolean): ArgumentTypeFunction;
         public static tuple(...types: (ArgumentType | ArgumentTypeFunction)[]): ArgumentTypeFunction;
         public static union(...types: (ArgumentType | ArgumentTypeFunction)[]): ArgumentTypeFunction;
         public static validate(type: ArgumentType | ArgumentTypeFunction, predicate: ArgumentPredicate): ArgumentTypeFunction;
@@ -354,7 +353,6 @@ declare module 'discord-akairo' {
 
         public category: Category<string, Inhibitor>;
         public client: AkairoClient;
-        public enabled: boolean;
         public filepath: string;
         public handler: InhibitorHandler;
         public id: string;
@@ -395,7 +393,6 @@ declare module 'discord-akairo' {
         public category: Category<string, Listener>;
         public client: AkairoClient;
         public emitter: string | EventEmitter;
-        public enabled: boolean;
         public event: string;
         public filepath: string;
         public handler: ListenerHandler;
