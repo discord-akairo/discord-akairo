@@ -92,10 +92,6 @@ declare module 'discord-akairo' {
         public process(phrase: string, message: Message, args?: any): Promise<any>;
 
         public static cast(type: ArgumentType | ArgumentTypeFunction, handler: TypeHandler, phrase: string, message: Message, args?: any): Promise<any>;
-        public static range(type: ArgumentType | ArgumentTypeFunction, min: number, max: number, inclusive?: boolean): ArgumentTypeFunction;
-        public static tuple(...types: (ArgumentType | ArgumentTypeFunction)[]): ArgumentTypeFunction;
-        public static union(...types: (ArgumentType | ArgumentTypeFunction)[]): ArgumentTypeFunction;
-        public static validate(type: ArgumentType | ArgumentTypeFunction, predicate: ArgumentPredicate): ArgumentTypeFunction;
     }
 
     export class ArgumentParser {
@@ -484,6 +480,10 @@ declare module 'discord-akairo' {
         public remove(): this;
 
         public static create(id: string, fn: ArgumentTypeFunction): typeof Type;
+        public static range(type: ArgumentType | ArgumentTypeFunction, min: number, max: number, inclusive?: boolean): ArgumentTypeFunction;
+        public static tuple(...types: (ArgumentType | ArgumentTypeFunction)[]): ArgumentTypeFunction;
+        public static union(...types: (ArgumentType | ArgumentTypeFunction)[]): ArgumentTypeFunction;
+        public static validate(type: ArgumentType | ArgumentTypeFunction, predicate: ArgumentPredicate): ArgumentTypeFunction;
     }
 
     export class TypeHandler extends AkairoHandler {
