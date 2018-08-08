@@ -1,13 +1,3 @@
-declare module 'sqlite' {
-    export interface Database {}
-    export interface Statement {}
-}
-
-declare module 'sequelize' {
-    export interface Model<K, V> {}
-    export interface Promise<T> {}
-}
-
 declare module 'discord-akairo' {
     import {
         Client, ClientOptions, Collection, Message, MessageOptions, MessageEditOptions,
