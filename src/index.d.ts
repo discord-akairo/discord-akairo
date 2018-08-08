@@ -92,7 +92,7 @@ declare module 'discord-akairo' {
         public process(phrase: string, message: Message, args?: any): Promise<any>;
 
         public static cast(type: ArgumentType | ArgumentTypeFunction, resolver: TypeResolver, phrase: string, message: Message, args?: any): Promise<any>;
-        public static range(type: ArgumentType | ArgumentTypeFunction, min: number | bigint, max: number | bigint, inclusive?: boolean): ArgumentTypeFunction;
+        public static range(type: ArgumentType | ArgumentTypeFunction, min: number, max: number, inclusive?: boolean): ArgumentTypeFunction;
         public static tuple(...types: (ArgumentType | ArgumentTypeFunction)[]): ArgumentTypeFunction;
         public static union(...types: (ArgumentType | ArgumentTypeFunction)[]): ArgumentTypeFunction;
         public static validate(type: ArgumentType | ArgumentTypeFunction, predicate: ArgumentPredicate): ArgumentTypeFunction;
