@@ -5,7 +5,7 @@ A modular and highly customizable bot framework for Discord.js v12.
 [![npm](https://nodei.co/npm/discord-akairo.png?downloads=true)](https://nodei.co/npm/discord-akairo)
 
 [![deps](https://david-dm.org/1computer1/discord-akairo.svg)](https://david-dm.org/1computer1/discord-akairo)
-[![travis](https://travis-ci.org/1Computer1/discord-akairo.svg?branch=indev)](https://travis-ci.org/1Computer1/discord-akairo)
+[![travis](https://travis-ci.org/1Computer1/discord-akairo.svg?branch=master)](https://travis-ci.org/1Computer1/discord-akairo)
 
 -----
 
