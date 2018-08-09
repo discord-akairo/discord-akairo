@@ -275,22 +275,22 @@ const types = {
 
     [ArgumentTypes.COMMAND_ALIAS](phrase) {
         if (!phrase) return null;
-        return this.commandHandler.findCommand(phrase) || null;
+        return this.handler.commandHandler.findCommand(phrase) || null;
     },
 
     [ArgumentTypes.COMMAND](phrase) {
         if (!phrase) return null;
-        return this.commandHandler.modules.get(phrase) || null;
+        return this.handler.commandHandler.modules.get(phrase) || null;
     },
 
     [ArgumentTypes.INHIBITOR](phrase) {
         if (!phrase) return null;
-        return this.inhibitorHandler.modules.get(phrase) || null;
+        return this.handler.inhibitorHandler.modules.get(phrase) || null;
     },
 
     [ArgumentTypes.LISTENER](phrase) {
         if (!phrase) return null;
-        return this.listenerHandler.modules.get(phrase) || null;
+        return this.handler.listenerHandler.modules.get(phrase) || null;
     }
 };
 
