@@ -294,4 +294,4 @@ const types = {
     }
 };
 
-module.exports = Object.entries(types).map((k, v) => Type.create(k, v));
+module.exports = Object.entries(types).map(([k, v]) => Type.create(k, v));
