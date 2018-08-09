@@ -10,7 +10,9 @@ class PCommand extends Command {
             args: [
                 {
                     id: 'integer',
-                    type: 'bigint',
+                    type: phrase => {
+                        return this.handler.typeHandler.modules.get('bigint').exec(phrase);
+                    },
                     prompt: {
                         start: 'Give me an integer!',
                         retry: 'That\'s not an integer, try again!',

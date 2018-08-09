@@ -1,4 +1,4 @@
-const { AkairoClient, CommandHandler, InhibitorHandler, ListenerHandler, SQLiteProvider } = require('../../src/index');
+const { AkairoClient, CommandHandler, InhibitorHandler, ListenerHandler, SQLiteProvider, TypeHandler } = require('../../src/index');
 const sqlite = require('sqlite');
 
 class TestClient extends AkairoClient {
@@ -35,6 +35,10 @@ class TestClient extends AkairoClient {
             directory: './test/listeners/'
         });
 
+        this.typeHandler = new TypeHandler(this, {
+            directory: './test/types/'
+        });
+
         const db = sqlite.open('./test/db.sqlite')
             .then(d => d.run('CREATE TABLE IF NOT EXISTS guilds (id TEXT NOT NULL UNIQUE, settings TEXT)').then(() => d));
         this.settings = new SQLiteProvider(db, 'guilds', { dataColumn: 'settings' });
@@ -43,8 +47,14 @@ class TestClient extends AkairoClient {
     }
 
     setup() {
-        this.commandHandler.useInhibitorHandler(this.inhibitorHandler);
-        this.commandHandler.useListenerHandler(this.inhibitorHandler);
+        this.commandHandler
+            .useInhibitorHandler(this.inhibitorHandler)
+            .useTypeHandler(this.typeHandler);
+
+        this.typeHandler
+            .useCommandHandler(this.commandHandler)
+            .useInhibitorHandler(this.inhibitorHandler)
+            .useListenerHandler(this.listenerHandler);
 
         this.listenerHandler.setEmitters({
             commandHandler: this.commandHandler,
@@ -55,14 +65,7 @@ class TestClient extends AkairoClient {
         this.commandHandler.loadAll();
         this.inhibitorHandler.loadAll();
         this.listenerHandler.loadAll();
-
-        const resolver = this.commandHandler.resolver;
-        resolver.addType('1-10', phrase => {
-            const num = resolver.type('integer')(phrase);
-            if (num == null) return null;
-            if (num < 1 || num > 10) return null;
-            return num;
-        });
+        this.typeHandler.loadAll();
     }
 
     async start(token) {

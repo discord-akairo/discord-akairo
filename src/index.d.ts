@@ -91,11 +91,7 @@ declare module 'discord-akairo' {
         public collect(message: Message, args?: any, commandInput?: string): Promise<any>;
         public process(phrase: string, message: Message, args?: any): Promise<any>;
 
-        public static cast(type: ArgumentType | ArgumentTypeFunction, resolver: TypeResolver, phrase: string, message: Message, args?: any): Promise<any>;
-        public static range(type: ArgumentType | ArgumentTypeFunction, min: number, max: number, inclusive?: boolean): ArgumentTypeFunction;
-        public static tuple(...types: (ArgumentType | ArgumentTypeFunction)[]): ArgumentTypeFunction;
-        public static union(...types: (ArgumentType | ArgumentTypeFunction)[]): ArgumentTypeFunction;
-        public static validate(type: ArgumentType | ArgumentTypeFunction, predicate: ArgumentPredicate): ArgumentTypeFunction;
+        public static cast(type: ArgumentType | ArgumentTypeFunction, handler: TypeHandler, phrase: string, message: Message, args?: any): Promise<any>;
     }
 
     export class ArgumentParser {
@@ -209,8 +205,8 @@ declare module 'discord-akairo' {
         public prefix: string | string[] | PrefixFunction;
         public prefixes: Collection<string | PrefixFunction, Set<string>>;
         public prompts: Collection<string, Set<string>>;
-        public resolver: TypeResolver;
         public storeMessage: boolean;
+        public typeHandler?: TypeHandler;
 
         public add(filename: string): Command;
         public addPrompt(channel: Channel, user: User): void;
@@ -240,7 +236,7 @@ declare module 'discord-akairo' {
         public runCooldowns(message: Message, command: Command): boolean;
         public runCommand(message: Message, command: Command, args: any): Promise<void>;
         public useInhibitorHandler(inhibitorHandler: InhibitorHandler): void;
-        public useListenerHandler(ListenerHandler: ListenerHandler): void;
+        public useTypeHandler(typeHandler: TypeHandler): void;
         public on(event: 'remove', listener: (command: Command) => any): this;
         public on(event: 'load', listener: (command: Command, isReload: boolean) => any): this;
         public on(event: 'commandBlocked', listener: (message: Message, command: Command, reason: string) => any): this;
@@ -471,19 +467,52 @@ declare module 'discord-akairo' {
         public set(id: string, key: string, value: any): Promise<SQLite.Statement>;
     }
 
-    export class TypeResolver {
-        public constructor(handler: CommandHandler);
+    export class Type extends AkairoModule {
+        public constructor(id: string, options?: AkairoModuleOptions);
 
+        public category: Category<string, Type>;
         public client: AkairoClient;
-        public commandHandler: CommandHandler;
-        public inhibitorHandler?: InhibitorHandler;
-        public listenerHandler?: ListenerHandler;
-        public types: Collection<string, ArgumentTypeFunction>;
+        public filepath: string;
+        public handler: TypeHandler;
 
-        public addBuiltInTypes(): void;
-        public addType(name: string, resolver: ArgumentTypeFunction): this;
-        public addTypes(types: { [x: string]: ArgumentTypeFunction }): this;
-        public type(name: string): ArgumentTypeFunction;
+        public exec(phrase: string, message: Message, args: any): any;
+        public reload(): this;
+        public remove(): this;
+
+        public static create(id: string, fn: ArgumentTypeFunction): typeof Type;
+        public static range(type: ArgumentType | ArgumentTypeFunction, min: number, max: number, inclusive?: boolean): ArgumentTypeFunction;
+        public static tuple(...types: (ArgumentType | ArgumentTypeFunction)[]): ArgumentTypeFunction;
+        public static union(...types: (ArgumentType | ArgumentTypeFunction)[]): ArgumentTypeFunction;
+        public static validate(type: ArgumentType | ArgumentTypeFunction, predicate: ArgumentPredicate): ArgumentTypeFunction;
+    }
+
+    export class TypeHandler extends AkairoHandler {
+        public constructor(client: AkairoClient, options: TypeHandlerOptions & AkairoHandlerOptions);
+
+        public categories: Collection<string, Category<string, Type>>;
+        public classToHandle: typeof Type;
+        public client: AkairoClient;
+        public directory: string;
+        public modules: Collection<string, Type>;
+
+        public add(filename: string): Type;
+        public addToEmitter(id: string): Type;
+        public deregister(type: Type): void;
+        public findCategory(name: string): Category<string, Type>;
+        public load(thing: string | Function): Type;
+        public loadAll(directory?: string, filter?: LoadFilterFunction): this;
+        public register(type: Type, filepath?: string): void;
+        public reload(id: string): Type;
+        public reloadAll(): this;
+        public remove(id: string): Type;
+        public removeAll(): this;
+        public removeFromEmitter(id: string): Type;
+        public setEmitters(emitters: { [x: string]: EventEmitter }): void;
+        public useCommandHandler(commandHandler: CommandHandler): void;
+        public useInhibitorHandler(inhibitorHandler: InhibitorHandler): void;
+        public useListenerHandler(listenerHandler: ListenerHandler): void;
+        public on(event: 'remove', type: (type: Type) => any): this;
+        public on(event: 'load', type: (type: Type, isReload: boolean) => any): this;
     }
 
     export class Util {
@@ -653,6 +682,10 @@ declare module 'discord-akairo' {
     };
 
     export type RegexFunction = (message: Message) => RegExp;
+
+    export type TypeHandlerOptions = {
+        includeBuiltin?: boolean
+    };
 
     export const Constants: {
         ArgumentMatches: {
