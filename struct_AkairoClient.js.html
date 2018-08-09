@@ -104,11 +104,14 @@ class AkairoClient extends Client {
          * @type {boolean}
          */
         this.selfbot = !!options.selfbot;
+        if (this.selfbot) {
+            console.log('Akairo: Selfbots are no longer supported.'); // eslint-disable-line no-console
+        }
 
         /**
          * An empty object.
          * Useful for storing things.
-         * @deprecated No alternatives
+         * @deprecated Extend the class
          * @type {Object}
          */
         this.mem = {};
