@@ -13,7 +13,8 @@ class PCommand extends Command {
                     type: 'bigint',
                     prompt: {
                         start: 'Give me an integer!',
-                        retry: 'That\'s not an integer, try again!'
+                        retry: 'That\'s not an integer, try again!',
+                        optional: true
                     }
                 }
             ]

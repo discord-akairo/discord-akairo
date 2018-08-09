@@ -22,7 +22,8 @@ class TestClient extends AkairoClient {
                 modifyRetry: (text, msg) => `${msg.author}, ${text}\nType \`cancel\` to cancel this command.`,
                 timeout: 'Out of time.',
                 ended: 'No more tries.',
-                cancel: 'Cancelled.'
+                cancel: 'Cancelled.',
+                retries: 5
             }
         });
 
