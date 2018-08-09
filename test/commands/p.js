@@ -15,7 +15,8 @@ class PCommand extends Command {
                     },
                     prompt: {
                         start: 'Give me an integer!',
-                        retry: 'That\'s not an integer, try again!'
+                        retry: 'That\'s not an integer, try again!',
+                        optional: true
                     }
                 }
             ]
