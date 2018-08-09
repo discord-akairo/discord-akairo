@@ -19,7 +19,7 @@
   ],
   "dependencies": {},
   "peerDependencies": {
-    "discord.js": "^11.3.0",
+    "discord.js": "^11.4.0",
     "sqlite": "^2.9.1",
     "sequelize": "^4.31.2"
   },
