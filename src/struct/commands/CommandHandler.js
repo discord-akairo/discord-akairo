@@ -772,7 +772,7 @@ class CommandHandler extends AkairoHandler {
 
         if (start === undefined) return this.parseCommandWithOverwrittenPrefixes(message);
 
-        const startIndex = message.content.indexOf(start) + start.length;
+        const startIndex = message.content.toLowerCase().indexOf(start) + start.length;
         const argsIndex = message.content.slice(startIndex).search(/\S/) + start.length;
         const name = message.content.slice(argsIndex).split(/\s{1,}|\n{1,}/)[0];
         const command = this.findCommand(name);
@@ -841,7 +841,7 @@ class CommandHandler extends AkairoHandler {
 
         if (start === undefined) return null;
 
-        const startIndex = message.content.indexOf(start) + start.length;
+        const startIndex = message.content.toLowerCase().indexOf(start) + start.length;
         const argsIndex = message.content.slice(startIndex).search(/\S/) + start.length;
         const name = message.content.slice(argsIndex).split(/\s{1,}|\n{1,}/)[0];
         const command = this.findCommand(name);
