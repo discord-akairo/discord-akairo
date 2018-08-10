@@ -71,6 +71,18 @@ class AkairoClient extends Client {
          */
         this.util = new ClientUtil(this);
     }
+
+    /**
+     * Checks if a user is the owner of this bot.
+     * @param {UserResolvable} user - User to check.
+     * @returns {boolean}
+     */
+    isOwner(user) {
+        const id = this.users.resolveID(user);
+        return Array.isArray(this.ownerID)
+            ? this.ownerID.includes(id)
+            : id === this.ownerID;
+    }
 }
 
 module.exports = AkairoClient;

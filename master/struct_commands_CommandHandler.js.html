@@ -623,11 +623,8 @@ class CommandHandler extends AkairoHandler {
      */
     async runPostTypeInhibitors(message, command) {
         if (command.ownerOnly) {
-            const notOwner = Array.isArray(this.client.ownerID)
-                ? !this.client.ownerID.includes(message.author.id)
-                : message.author.id !== this.client.ownerID;
-
-            if (notOwner) {
+            const isOwner = this.client.isOwner(message.author);
+            if (!isOwner) {
                 this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.OWNER);
                 return true;
             }
@@ -811,7 +808,7 @@ class CommandHandler extends AkairoHandler {
 
         if (start === undefined) return this.parseCommandWithOverwrittenPrefixes(message);
 
-        const startIndex = message.content.indexOf(start) + start.length;
+        const startIndex = message.content.toLowerCase().indexOf(start) + start.length;
         const argsIndex = message.content.slice(startIndex).search(/\S/) + start.length;
         const name = message.content.slice(argsIndex).split(/\s{1,}|\n{1,}/)[0];
         const command = this.findCommand(name);
@@ -880,7 +877,7 @@ class CommandHandler extends AkairoHandler {
 
         if (start === undefined) return null;
 
-        const startIndex = message.content.indexOf(start) + start.length;
+        const startIndex = message.content.toLowerCase().indexOf(start) + start.length;
         const argsIndex = message.content.slice(startIndex).search(/\S/) + start.length;
         const name = message.content.slice(argsIndex).split(/\s{1,}|\n{1,}/)[0];
         const command = this.findCommand(name);
