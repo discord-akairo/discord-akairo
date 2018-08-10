@@ -148,10 +148,8 @@ class ArgumentParser {
                 });
             }
 
-            const matchType = typeof arg.match === 'function' ? arg.match(message, processed) : arg.match;
-            const processFunc = parseFuncs[matchType](arg, phraseIndex);
-
-            if ([ArgumentMatches.PHRASE, ArgumentMatches.REST, ArgumentMatches.SEPARATE].includes(matchType)) {
+            const processFunc = parseFuncs[arg.match](arg, phraseIndex);
+            if ([ArgumentMatches.PHRASE, ArgumentMatches.REST, ArgumentMatches.SEPARATE].includes(arg.match)) {
                 phraseIndex++;
             }
 
