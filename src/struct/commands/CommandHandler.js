@@ -69,7 +69,7 @@ class CommandHandler extends AkairoHandler {
         ignoreCooldownID,
         defaultPrompt = {},
         prefix = '!',
-        allowMention = false,
+        allowMention = true,
         aliasReplacement
     } = {}) {
         if (!(classToHandle.prototype instanceof Command || classToHandle === Command)) {
