@@ -584,11 +584,8 @@ class CommandHandler extends AkairoHandler {
      */
     async runPostTypeInhibitors(message, command) {
         if (command.ownerOnly) {
-            const notOwner = Array.isArray(this.client.ownerID)
-                ? !this.client.ownerID.includes(message.author.id)
-                : message.author.id !== this.client.ownerID;
-
-            if (notOwner) {
+            const isOwner = this.client.isOwner(message.author);
+            if (!isOwner) {
                 this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.OWNER);
                 return true;
             }

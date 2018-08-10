@@ -1,7 +1,7 @@
 declare module 'discord-akairo' {
     import {
         BufferResolvable, Client, ClientOptions, Collection, Message, MessageAttachment, MessageEmbed, MessageOptions, MessageEditOptions,
-        User, GuildMember, Channel, Role, Emoji, Guild, PermissionResolvable, Snowflake
+        User, UserResolvable, GuildMember, Channel, Role, Emoji, Guild, PermissionResolvable, Snowflake
     } from 'discord.js';
 
     import * as SQLite from 'sqlite';
@@ -26,6 +26,8 @@ declare module 'discord-akairo' {
 
         public ownerID: Snowflake | Snowflake[];
         public util: ClientUtil;
+
+        public isOwner(user: UserResolvable): boolean;
     }
 
     export class AkairoHandler extends EventEmitter {
