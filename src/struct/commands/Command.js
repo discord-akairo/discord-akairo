@@ -23,6 +23,7 @@ const ContentParser = require('./arguments/ContentParser');
  * @prop {RegExp|RegexFunction} [regex] - A regex to match in messages that are not directly commands.
  * The args object will have `match` and `matches` properties.
  * @prop {ConditionFunction} [condition] - Whether or not to run on messages that are not directly commands.
+ * @prop {BeforeFunction} [before] - Function to run before argument parsing and execution.
  * @prop {ArgumentPromptOptions} [defaultPrompt={}] - The default prompt options.
  * @prop {string|string[]} [description=''] - Description of the command.
  */
@@ -57,6 +58,13 @@ const ContentParser = require('./arguments/ContentParser');
  * @returns {any}
  */
 
+/**
+ * A function to run before argument parsing and execution.
+ * @typedef {Function} BeforeFunction
+ * @param {Message} message - Message that triggered the command.
+ * @returns {any}
+ */
+
 /** @extends AkairoModule */
 class Command extends AkairoModule {
     /**
@@ -84,7 +92,8 @@ class Command extends AkairoModule {
             clientPermissions = this.clientPermissions,
             userPermissions = this.userPermissions,
             regex = this.regex,
-            condition = this.condition || (() => false)
+            condition = this.condition || (() => false),
+            before = this.before || (() => undefined)
         } = options;
 
         /**
@@ -193,6 +202,14 @@ class Command extends AkairoModule {
          * @returns {boolean}
          */
         this.condition = condition.bind(this);
+
+        /**
+         * Runs before argument parsing and execution.
+         * @method
+         * @param {Message} message - Message being handled.
+         * @returns {any}
+         */
+        this.before = before.bind(this);
 
         /**
          * The ID of this command.

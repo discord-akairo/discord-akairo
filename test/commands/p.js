@@ -21,6 +21,10 @@ class PCommand extends Command {
         });
     }
 
+    before() {
+        console.log(1);
+    }
+
     exec(message, args) {
         message.channel.send(util.inspect(args, { depth: 1 }), { code: 'js' });
     }

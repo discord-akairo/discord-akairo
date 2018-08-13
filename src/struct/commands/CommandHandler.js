@@ -423,6 +423,9 @@ class CommandHandler extends AkairoHandler {
                 if (await this.runPostTypeInhibitors(message, command)) return false;
             }
 
+            const before = command.before(message);
+            if (isPromise(before)) await before;
+
             const args = await command.parse(message, content);
             if (args instanceof InternalFlag.CommandCancel) {
                 this.emit(CommandHandlerEvents.COMMAND_CANCELLED, message, command);
@@ -490,6 +493,8 @@ class CommandHandler extends AkairoHandler {
             promises.push((async () => {
                 try {
                     if (await this.runPostTypeInhibitors(message, command)) return;
+                    const before = command.before(message);
+                    if (isPromise(before)) await before;
                     await this.runCommand(message, command, { match, matches });
                 } catch (err) {
                     this.emitError(err, message, command);
@@ -521,6 +526,8 @@ class CommandHandler extends AkairoHandler {
             promises.push((async () => {
                 try {
                     if (await this.runPostTypeInhibitors(message, command)) return;
+                    const before = command.before(message);
+                    if (isPromise(before)) await before;
                     await this.runCommand(message, command, {});
                 } catch (err) {
                     this.emitError(err, message, command);

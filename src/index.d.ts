@@ -178,6 +178,7 @@ declare module 'discord-akairo' {
         public typing: boolean;
         public userPermissions: PermissionResolvable | PermissionResolvable[] | PermissionFunction;
 
+        public before(message: Message): any;
         public condition(message: Message): boolean;
         public exec(message: Message, args: any): any;
         public parse(message: Message, content: string): Promise<object>;
@@ -576,9 +577,12 @@ declare module 'discord-akairo' {
 
     export type ArgumentTypeFunction = (phrase: string, message: Message, prevArgs: any) => any;
 
+    export type BeforeFunction = (message: Message) => any;
+
     export type CommandOptions = {
         aliases?: string[];
         args?: (ArgumentOptions | Control)[] | ArgumentFunction;
+        before?: BeforeFunction;
         channel?: string;
         clientPermissions?: PermissionResolvable | PermissionResolvable[] | PermissionFunction;
         condition?: ConditionFunction;
