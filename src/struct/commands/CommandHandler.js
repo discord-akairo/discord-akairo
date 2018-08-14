@@ -28,6 +28,7 @@ const TypeResolver = require('./arguments/TypeResolver');
  * @prop {number} [defaultCooldown=0] - The default cooldown for commands.
  * @prop {Snowflake|Snowflake[]} [ignoreCooldownID] - ID of user(s) to ignore cooldown.
  * Defaults to the client owner(s) option.
+ * @prop {Snowflake|Snowflake[]} [ignorePermissionsID=[]] - ID of user(s) to ignore `userPermissions` checks.
  * @prop {ArgumentPromptOptions} [defaultPrompt] - The default prompt options.
  */
 
@@ -67,6 +68,7 @@ class CommandHandler extends AkairoHandler {
         commandUtilLifetime = 0,
         defaultCooldown = 0,
         ignoreCooldownID,
+        ignorePermissionsID = [],
         defaultPrompt = {},
         prefix = '!',
         allowMention = true,
@@ -173,6 +175,12 @@ class CommandHandler extends AkairoHandler {
          * @type {Snowflake|Snowflake[]}
          */
         this.ignoreCooldownID = ignoreCooldownID === undefined ? this.client.ownerID : ignoreCooldownID;
+
+        /**
+         * ID of user(s) to ignore `userPermissions` checks.
+         * @type {Snowflake|Snowflake[]}
+         */
+        this.ignorePermissionsID = ignorePermissionsID;
 
         /**
          * Collection of sets of ongoing argument prompts.
@@ -627,19 +635,25 @@ class CommandHandler extends AkairoHandler {
         }
 
         if (command.userPermissions) {
-            if (typeof command.userPermissions === 'function') {
-                let missing = command.userPermissions(message);
-                if (isPromise(missing)) missing = await missing;
+            const isIgnored = Array.isArray(this.ignorePermissionsID)
+                ? this.ignorePermissionsID.includes(message.author.id)
+                : message.author.id === this.ignorePermissionsID;
 
-                if (missing != null) {
-                    this.emit(CommandHandlerEvents.MISSING_PERMISSIONS, message, command, 'user', missing);
-                    return true;
-                }
-            } else if (message.guild) {
-                const missing = message.channel.permissionsFor(message.author).missing(command.userPermissions);
-                if (missing.length) {
-                    this.emit(CommandHandlerEvents.MISSING_PERMISSIONS, message, command, 'user', missing);
-                    return true;
+            if (!isIgnored) {
+                if (typeof command.userPermissions === 'function') {
+                    let missing = command.userPermissions(message);
+                    if (isPromise(missing)) missing = await missing;
+
+                    if (missing != null) {
+                        this.emit(CommandHandlerEvents.MISSING_PERMISSIONS, message, command, 'user', missing);
+                        return true;
+                    }
+                } else if (message.guild) {
+                    const missing = message.channel.permissionsFor(message.author).missing(command.userPermissions);
+                    if (missing.length) {
+                        this.emit(CommandHandlerEvents.MISSING_PERMISSIONS, message, command, 'user', missing);
+                        return true;
+                    }
                 }
             }
         }

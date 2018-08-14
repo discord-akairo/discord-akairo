@@ -207,6 +207,7 @@ declare module 'discord-akairo' {
         public fetchMembers: boolean;
         public handleEdits: boolean;
         public ignoreCooldownID: Snowflake | Snowflake[];
+        public ignorePermissionsID: Snowflake | Snowflake[];
         public inhibitorHandler?: InhibitorHandler;
         public modules: Collection<string, Command>;
         public prefix: string | string[] | PrefixFunction;
@@ -611,6 +612,7 @@ declare module 'discord-akairo' {
         fetchMembers?: boolean;
         handleEdits?: boolean;
         ignoreCooldownID?: Snowflake | Snowflake[];
+        ignorePermissionsID?: Snowflake | Snowflake[];
         prefix?: string | string[] | PrefixFunction;
         storeMessages?: boolean;
     };
