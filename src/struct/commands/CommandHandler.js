@@ -26,9 +26,9 @@ const TypeResolver = require('./arguments/TypeResolver');
  * If 0, CommandUtil instances will never be removed.
  * @prop {boolean} [fetchMembers=false] - Whether or not to fetch member on each message from a guild.
  * @prop {number} [defaultCooldown=0] - The default cooldown for commands.
- * @prop {Snowflake|Snowflake[]} [ignoreCooldownID] - ID of user(s) to ignore cooldown.
- * Defaults to the client owner(s) option.
- * @prop {Snowflake|Snowflake[]} [ignorePermissionsID=[]] - ID of user(s) to ignore `userPermissions` checks.
+ * @prop {Snowflake|Snowflake[]|IgnoreFunction} [ignoreCooldown] - ID of user(s) to ignore cooldown or a function to ignore.
+ * Defaults to the client owner(s).
+ * @prop {Snowflake|Snowflake[]|IgnoreFunction} [ignorePermissions=[]] - ID of user(s) to ignore `userPermissions` checks or a function to ignore.
  * @prop {ArgumentPromptOptions} [defaultPrompt] - The default prompt options.
  */
 
@@ -43,6 +43,14 @@ const TypeResolver = require('./arguments/TypeResolver');
  * A function that returns whether mentions can be used as a prefix.
  * @typedef {Function} AllowMentionFunction
  * @param {Message} message - Message to option for.
+ * @returns {boolean}
+ */
+
+/**
+ * A function that returns whether this message should be ignored for a certain check.
+ * @typedef {Function} IgnoreFunction
+ * @param {Message} message - Message to check.
+ * @param {Command} command - Command to check.
  * @returns {boolean}
  */
 
@@ -67,8 +75,8 @@ class CommandHandler extends AkairoHandler {
         commandUtil,
         commandUtilLifetime = 0,
         defaultCooldown = 0,
-        ignoreCooldownID,
-        ignorePermissionsID = [],
+        ignoreCooldown = client.ownerID,
+        ignorePermissions = [],
         defaultPrompt = {},
         prefix = '!',
         allowMention = true,
@@ -171,16 +179,16 @@ class CommandHandler extends AkairoHandler {
         this.defaultCooldown = defaultCooldown;
 
         /**
-         * ID of user(s) to ignore cooldown.
-         * @type {Snowflake|Snowflake[]}
+         * ID of user(s) to ignore cooldown or a function to ignore.
+         * @type {Snowflake|Snowflake[]|IgnoreFunction}
          */
-        this.ignoreCooldownID = ignoreCooldownID === undefined ? this.client.ownerID : ignoreCooldownID;
+        this.ignoreCooldown = typeof ignoreCooldown === 'function' ? ignoreCooldown.bind(this) : ignoreCooldown;
 
         /**
-         * ID of user(s) to ignore `userPermissions` checks.
-         * @type {Snowflake|Snowflake[]}
+         * ID of user(s) to ignore `userPermissions` checks or a function to ignore.
+         * @type {Snowflake|Snowflake[]|IgnoreFunction}
          */
-        this.ignorePermissionsID = ignorePermissionsID;
+        this.ignorePermissions = typeof ignorePermissions === 'function' ? ignorePermissions.bind(this) : ignorePermissions;
 
         /**
          * Collection of sets of ongoing argument prompts.
@@ -616,6 +624,33 @@ class CommandHandler extends AkairoHandler {
             return true;
         }
 
+        if (await this.runPermissionChecks(message, command)) {
+            return true;
+        }
+
+        const reason = this.inhibitorHandler
+            ? await this.inhibitorHandler.test('post', message, command)
+            : null;
+
+        if (reason != null) {
+            this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
+            return true;
+        }
+
+        if (this.runCooldowns(message, command)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Runs permission checks.
+     * @param {Message} message - Message that called the command.
+     * @param {Command} command - Command to cooldown.
+     * @returns {Promise<boolean>}
+     */
+    async runPermissionChecks(message, command) {
         if (command.clientPermissions) {
             if (typeof command.clientPermissions === 'function') {
                 let missing = command.clientPermissions(message);
@@ -635,9 +670,12 @@ class CommandHandler extends AkairoHandler {
         }
 
         if (command.userPermissions) {
-            const isIgnored = Array.isArray(this.ignorePermissionsID)
-                ? this.ignorePermissionsID.includes(message.author.id)
-                : message.author.id === this.ignorePermissionsID;
+            const ignorer = command.ignorePermissions || this.ignorePermissions;
+            const isIgnored = Array.isArray(ignorer)
+                ? ignorer.includes(message.author.id)
+                : typeof ignorer === 'function'
+                    ? ignorer(message, command)
+                    : message.author.id === ignorer;
 
             if (!isIgnored) {
                 if (typeof command.userPermissions === 'function') {
@@ -658,19 +696,6 @@ class CommandHandler extends AkairoHandler {
             }
         }
 
-        const reason = this.inhibitorHandler
-            ? await this.inhibitorHandler.test('post', message, command)
-            : null;
-
-        if (reason != null) {
-            this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, reason);
-            return true;
-        }
-
-        if (this.runCooldowns(message, command)) {
-            return true;
-        }
-
         return false;
     }
 
@@ -681,9 +706,12 @@ class CommandHandler extends AkairoHandler {
      * @returns {boolean}
      */
     runCooldowns(message, command) {
-        const isIgnored = Array.isArray(this.ignoreCooldownID)
-            ? this.ignoreCooldownID.includes(message.author.id)
-            : message.author.id === this.ignoreCooldownID;
+        const ignorer = command.ignoreCooldown || this.ignoreCooldown;
+        const isIgnored = Array.isArray(ignorer)
+            ? ignorer.includes(message.author.id)
+            : typeof ignorer === 'function'
+                ? ignorer(message, command)
+                : message.author.id === ignorer;
 
         if (isIgnored) return false;
 

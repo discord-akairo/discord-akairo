@@ -24,6 +24,8 @@ const ContentParser = require('./arguments/ContentParser');
  * The args object will have `match` and `matches` properties.
  * @prop {ConditionFunction} [condition] - Whether or not to run on messages that are not directly commands.
  * @prop {BeforeFunction} [before] - Function to run before argument parsing and execution.
+ * @prop {Snowflake|Snowflake[]|IgnoreFunction} [ignoreCooldown] - ID of user(s) to ignore cooldown or a function to ignore.
+ * @prop {Snowflake|Snowflake[]|IgnoreFunction} [ignorePermissions] - ID of user(s) to ignore `userPermissions` checks or a function to ignore.
  * @prop {ArgumentPromptOptions} [defaultPrompt={}] - The default prompt options.
  * @prop {string|string[]} [description=''] - Description of the command.
  */
@@ -93,7 +95,9 @@ class Command extends AkairoModule {
             userPermissions = this.userPermissions,
             regex = this.regex,
             condition = this.condition || (() => false),
-            before = this.before || (() => undefined)
+            before = this.before || (() => undefined),
+            ignoreCooldown,
+            ignorePermissions
         } = options;
 
         /**
@@ -210,6 +214,18 @@ class Command extends AkairoModule {
          * @returns {any}
          */
         this.before = before.bind(this);
+
+        /**
+         * ID of user(s) to ignore cooldown or a function to ignore.
+         * @type {?Snowflake|Snowflake[]|IgnoreFunction}
+         */
+        this.ignoreCooldown = typeof ignoreCooldown === 'function' ? ignoreCooldown.bind(this) : ignoreCooldown;
+
+        /**
+         * ID of user(s) to ignore `userPermissions` checks or a function to ignore.
+         * @type {?Snowflake|Snowflake[]|IgnoreFunction}
+         */
+        this.ignorePermissions = typeof ignorePermissions === 'function' ? ignorePermissions.bind(this) : ignorePermissions;
 
         /**
          * The ID of this command.

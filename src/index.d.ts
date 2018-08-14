@@ -170,6 +170,8 @@ declare module 'discord-akairo' {
         public filepath: string;
         public handler: CommandHandler;
         public id: string;
+        public ignoreCooldown?: Snowflake | Snowflake[] | IgnoreFunction;
+        public ignorePermissions?: Snowflake | Snowflake[] | IgnoreFunction;
         public ownerOnly: boolean;
         public parser?: ContentParser;
         public prefix?: string | string[] | PrefixFunction;
@@ -206,8 +208,8 @@ declare module 'discord-akairo' {
         public directory: string;
         public fetchMembers: boolean;
         public handleEdits: boolean;
-        public ignoreCooldownID: Snowflake | Snowflake[];
-        public ignorePermissionsID: Snowflake | Snowflake[];
+        public ignoreCooldown: Snowflake | Snowflake[] | IgnoreFunction;
+        public ignorePermissions: Snowflake | Snowflake[] | IgnoreFunction;
         public inhibitorHandler?: InhibitorHandler;
         public modules: Collection<string, Command>;
         public prefix: string | string[] | PrefixFunction;
@@ -239,6 +241,7 @@ declare module 'discord-akairo' {
         public removeAll(): this;
         public removePrompt(channel: Channel, user: User): void;
         public runAllTypeInhibitors(message: Message): Promise<boolean>;
+        public runPermissionChecks(message: Message, command: Command): Promise<boolean>;
         public runPreTypeInhibitors(message: Message): Promise<boolean>;
         public runPostTypeInhibitors(message: Message, command: Command): Promise<boolean>;
         public runCooldowns(message: Message, command: Command): boolean;
@@ -591,6 +594,8 @@ declare module 'discord-akairo' {
         defaultPrompt?: ArgumentPromptOptions;
         description?: string | string[];
         editable?: boolean;
+        ignoreCooldown?: Snowflake | Snowflake[] | IgnoreFunction;
+        ignorePermissions?: Snowflake | Snowflake[] | IgnoreFunction;
         ownerOnly?: boolean;
         prefix?: string | string[] | PrefixFunction;
         ratelimit?: number;
@@ -611,8 +616,8 @@ declare module 'discord-akairo' {
         defaultPrompt?: ArgumentPromptOptions;
         fetchMembers?: boolean;
         handleEdits?: boolean;
-        ignoreCooldownID?: Snowflake | Snowflake[];
-        ignorePermissionsID?: Snowflake | Snowflake[];
+        ignoreCooldown?: Snowflake | Snowflake[] | IgnoreFunction;
+        ignorePermissions?: Snowflake | Snowflake[] | IgnoreFunction;
         prefix?: string | string[] | PrefixFunction;
         storeMessages?: boolean;
     };
