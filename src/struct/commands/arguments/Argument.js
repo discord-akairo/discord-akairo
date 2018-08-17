@@ -96,6 +96,16 @@ const { isPromise } = require('../../../util/Util');
  */
 
 /**
+ * A function for mapping parsed arguments.
+ * @typedef {Function} ArgumentMapFunction
+ * @param {any} value - The parsed value.
+ * @param {string} phrase - The user input.
+ * @param {Message} message - Message that triggered the command.
+ * @param {Object} prevArgs - Previous arguments.
+ * @returns {any}
+ */
+
+/**
  * A prompt to run if the user did not input the argument correctly.
  * Can only be used if there is not a default value (unless optional is true).
  * @typedef {Object} ArgumentPromptOptions
@@ -607,7 +617,6 @@ class Argument {
             return res;
         };
     }
-    /* eslint-enable no-invalid-this */
 
     /**
      * Creates a type where the parsed value must be within a range.
@@ -620,6 +629,22 @@ class Argument {
     static range(type, min, max, inclusive = false) {
         return Argument.validate(type, x => x >= min && (inclusive ? x <= max : x < max));
     }
+
+    /**
+     * Creates a type that uses the parsed value to create a new value.
+     * If the value of the dependant type is void, the result is null.
+     * @param {ArgumentType|ArgumentTypeFunction} type - The type to use.
+     * @param {ArgumentMapFunction} fn - The mapping function.
+     * @returns {ArgumentTypeFunction}
+     */
+    static map(type, fn) {
+        return async function typeFn(phrase, message, args) {
+            const res = await Argument.cast(type, this.handler.resolver, phrase, message, args);
+            if (res == null) return null;
+            return fn(res, phrase, message, args);
+        };
+    }
+    /* eslint-enable no-invalid-this */
 }
 
 module.exports = Argument;

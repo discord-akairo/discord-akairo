@@ -94,6 +94,7 @@ declare module 'discord-akairo' {
         public process(phrase: string, message: Message, args?: any): Promise<any>;
 
         public static cast(type: ArgumentType | ArgumentTypeFunction, resolver: TypeResolver, phrase: string, message: Message, args?: any): Promise<any>;
+        public static map(type: ArgumentType | ArgumentTypeFunction, fn: ArgumentMapFunction): ArgumentTypeFunction;
         public static range(type: ArgumentType | ArgumentTypeFunction, min: number, max: number, inclusive?: boolean): ArgumentTypeFunction;
         public static tuple(...types: (ArgumentType | ArgumentTypeFunction)[]): ArgumentTypeFunction;
         public static union(...types: (ArgumentType | ArgumentTypeFunction)[]): ArgumentTypeFunction;
@@ -519,6 +520,8 @@ declare module 'discord-akairo' {
     export type ArgumentDefaultFunction = (message: Message, args: any) => any;
 
     export type ArgumentFunction = (message: Message, content: string) => any;
+
+    export type ArgumentMapFunction = (value: any, phrase: string, message: Message, args: any) => any;
 
     export type ArgumentMatch = 'phrase' | 'rest' | 'separate' | 'flag' | 'option' | 'text' | 'content' | 'none';
 
