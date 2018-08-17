@@ -1,23 +1,5 @@
 const { Collection } = require('discord.js');
 
-/**
- * Extra properties applied to the Discord.js message object.
- * @typedef {Object} MessageExtensions
- * @prop {?CommandUtil} util - Utilities for command responding.
- * Available on all messages after 'all' inhibitors and built-in inhibitors (bot, client).
- * Not all properties of the util are available, depending on the input.
- */
-
-/**
- * Various parsed components of the message.
- * @typedef {Object} ParsedComponentData
- * @prop {?Command} command - The command used.
- * @prop {?string} prefix - The prefix used.
- * @prop {?string} alias - The alias used.
- * @prop {?string} content - The content to the right of the alias.
- * @prop {?string} afterPrefix - The content to the right of the prefix.
- */
-
 class CommandUtil {
     /**
      * Command utilies.
@@ -186,3 +168,21 @@ class CommandUtil {
 }
 
 module.exports = CommandUtil;
+
+/**
+ * Extra properties applied to the Discord.js message object.
+ * @typedef {Object} MessageExtensions
+ * @prop {?CommandUtil} util - Utilities for command responding.
+ * Available on all messages after 'all' inhibitors and built-in inhibitors (bot, client).
+ * Not all properties of the util are available, depending on the input.
+ */
+
+/**
+ * Various parsed components of the message.
+ * @typedef {Object} ParsedComponentData
+ * @prop {?Command} command - The command used.
+ * @prop {?string} prefix - The prefix used.
+ * @prop {?string} alias - The alias used.
+ * @prop {?string} content - The content to the right of the alias.
+ * @prop {?string} afterPrefix - The content to the right of the prefix.
+ */

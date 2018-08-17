@@ -1,22 +1,6 @@
 const AkairoError = require('../../../util/AkairoError');
 const InternalFlag = require('../InternalFlag');
 
-/**
- * Function as part of a conditional in a control.
- * @typedef {Function} ControlPredicate
- * @param {Message} message - Message that triggered the command.
- * @param {Object} prevArgs - Previous arguments.
- * @returns {boolean}
- */
-
-/**
- * General function in a control.
- * @typedef {Function} ControlAction
- * @param {Message} message - Message that triggered the command.
- * @param {Object} prevArgs - Previous arguments.
- * @returns {void}
- */
-
 class Control {
     /**
      * A control for argument parsing.
@@ -250,3 +234,19 @@ Object.assign(Control, {
 });
 
 module.exports = Control;
+
+/**
+ * General function in a control.
+ * @typedef {Function} ControlAction
+ * @param {Message} message - Message that triggered the command.
+ * @param {Object} prevArgs - Previous arguments.
+ * @returns {void}
+ */
+
+/**
+ * Function as part of a conditional in a control.
+ * @typedef {Function} ControlPredicate
+ * @param {Message} message - Message that triggered the command.
+ * @param {Object} prevArgs - Previous arguments.
+ * @returns {boolean}
+ */

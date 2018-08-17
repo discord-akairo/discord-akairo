@@ -28,14 +28,6 @@
  * EOF = /^$/
  */
 
-/**
- * @typedef {Object} ContentParserOptions
- * @prop {string[]} [flagWords=[]] - Flags considered to be part of a flag arg.
- * @prop {string[]} [optionFlagWords=[]] - Flags considered to be part of an option flag arg.
- * @prop {boolean} [quoted=true] - Whether or not to consider quotes.
- * @prop {string} [separator] - A custom separator.
- */
-
 class ContentParser {
     /**
      * Parser for getting phrases and flags out of content.
@@ -419,3 +411,11 @@ class ContentParserState {
 
 Object.assign(ContentParser, { ContentParserState });
 module.exports = ContentParser;
+
+/**
+ * @typedef {Object} ContentParserOptions
+ * @prop {string[]} [flagWords=[]] - Flags considered to be part of a flag arg.
+ * @prop {string[]} [optionFlagWords=[]] - Flags considered to be part of an option flag arg.
+ * @prop {boolean} [quoted=true] - Whether or not to consider quotes.
+ * @prop {string} [separator] - A custom separator.
+ */

@@ -3,70 +3,6 @@ const AkairoModule = require('../AkairoModule');
 const ArgumentParser = require('./arguments/ArgumentParser');
 const ContentParser = require('./arguments/ContentParser');
 
-/**
- * Options to use for command execution behavior.
- * @typedef {Object} CommandOptions
- * @prop {string[]} [aliases=[]] - Command names.
- * @prop {Array<ArgumentOptions|Control>|ArgumentProvider} [args=[]] - Argument options to use.
- * @prop {boolean} [quoted=true] - Whether or not to consider quotes.
- * @prop {string} [separator] - Custom separator for argument input.
- * @prop {string} [channel] - Restricts channel to either 'guild' or 'dm'.
- * @prop {string} [category='default'] - Category ID for organization purposes.
- * @prop {boolean} [ownerOnly=false] - Whether or not to allow client owner(s) only.
- * @prop {boolean} [typing=false] - Whether or not to type in channel during execution.
- * @prop {boolean} [editable=true] - Whether or not message edits will run this command.
- * @prop {number} [cooldown] - The command cooldown in milliseconds.
- * @prop {number} [ratelimit=1] - Amount of command uses allowed until cooldown.
- * @prop {string|string[]|PrefixSupplier} [prefix] - The prefix(es) to overwrite the global one for this command.
- * @prop {PermissionResolvable|PermissionResolvable[]|MissingPermissionSupplier} [userPermissions] - Permissions required by the user to run this command.
- * @prop {PermissionResolvable|PermissionResolvable[]|MissingPermissionSupplier} [clientPermissions] - Permissions required by the client to run this command.
- * @prop {RegExp|RegexSupplier} [regex] - A regex to match in messages that are not directly commands.
- * The args object will have `match` and `matches` properties.
- * @prop {ExecutionPredicate} [condition] - Whether or not to run on messages that are not directly commands.
- * @prop {BeforeAction} [before] - Function to run before argument parsing and execution.
- * @prop {Snowflake|Snowflake[]|IgnoreCheckPredicate} [ignoreCooldown] - ID of user(s) to ignore cooldown or a function to ignore.
- * @prop {Snowflake|Snowflake[]|IgnoreCheckPredicate} [ignorePermissions] - ID of user(s) to ignore `userPermissions` checks or a function to ignore.
- * @prop {ArgumentPromptOptions} [defaultPrompt={}] - The default prompt options.
- * @prop {string|string[]} [description=''] - Description of the command.
- */
-
-/**
- * A function used to check if a message has permissions for the command.
- * A non-null return value signifies the reason for missing permissions.
- * @typedef {Function} MissingPermissionSupplier
- * @param {Message} message - Message that triggered the command.
- * @returns {any}
- */
-
-/**
- * A function used to return a regular expression.
- * @typedef {Function} RegexSupplier
- * @param {Message} message - Message to get regex for.
- * @returns {RegExp}
- */
-
-/**
- * A function used to check if the command should run arbitrarily.
- * @typedef {Function} ExecutionPredicate
- * @param {Message} message - Message to check.
- * @returns {boolean}
- */
-
-/**
- * A function to replace Akairo's argument handler.
- * @typedef {Function} ArgumentProvider
- * @param {Message} message - Message that triggered the command.
- * @param {string} content - The content of the message.
- * @returns {any}
- */
-
-/**
- * A function to run before argument parsing and execution.
- * @typedef {Function} BeforeAction
- * @param {Message} message - Message that triggered the command.
- * @returns {any}
- */
-
 /** @extends AkairoModule */
 class Command extends AkairoModule {
     /**
@@ -282,3 +218,67 @@ class Command extends AkairoModule {
 }
 
 module.exports = Command;
+
+/**
+ * Options to use for command execution behavior.
+ * @typedef {Object} CommandOptions
+ * @prop {string[]} [aliases=[]] - Command names.
+ * @prop {Array<ArgumentOptions|Control>|ArgumentProvider} [args=[]] - Argument options to use.
+ * @prop {boolean} [quoted=true] - Whether or not to consider quotes.
+ * @prop {string} [separator] - Custom separator for argument input.
+ * @prop {string} [channel] - Restricts channel to either 'guild' or 'dm'.
+ * @prop {string} [category='default'] - Category ID for organization purposes.
+ * @prop {boolean} [ownerOnly=false] - Whether or not to allow client owner(s) only.
+ * @prop {boolean} [typing=false] - Whether or not to type in channel during execution.
+ * @prop {boolean} [editable=true] - Whether or not message edits will run this command.
+ * @prop {number} [cooldown] - The command cooldown in milliseconds.
+ * @prop {number} [ratelimit=1] - Amount of command uses allowed until cooldown.
+ * @prop {string|string[]|PrefixSupplier} [prefix] - The prefix(es) to overwrite the global one for this command.
+ * @prop {PermissionResolvable|PermissionResolvable[]|MissingPermissionSupplier} [userPermissions] - Permissions required by the user to run this command.
+ * @prop {PermissionResolvable|PermissionResolvable[]|MissingPermissionSupplier} [clientPermissions] - Permissions required by the client to run this command.
+ * @prop {RegExp|RegexSupplier} [regex] - A regex to match in messages that are not directly commands.
+ * The args object will have `match` and `matches` properties.
+ * @prop {ExecutionPredicate} [condition] - Whether or not to run on messages that are not directly commands.
+ * @prop {BeforeAction} [before] - Function to run before argument parsing and execution.
+ * @prop {Snowflake|Snowflake[]|IgnoreCheckPredicate} [ignoreCooldown] - ID of user(s) to ignore cooldown or a function to ignore.
+ * @prop {Snowflake|Snowflake[]|IgnoreCheckPredicate} [ignorePermissions] - ID of user(s) to ignore `userPermissions` checks or a function to ignore.
+ * @prop {ArgumentPromptOptions} [defaultPrompt={}] - The default prompt options.
+ * @prop {string|string[]} [description=''] - Description of the command.
+ */
+
+/**
+ * A function to replace Akairo's argument handler.
+ * @typedef {Function} ArgumentProvider
+ * @param {Message} message - Message that triggered the command.
+ * @param {string} content - The content of the message.
+ * @returns {any}
+ */
+
+/**
+ * A function to run before argument parsing and execution.
+ * @typedef {Function} BeforeAction
+ * @param {Message} message - Message that triggered the command.
+ * @returns {any}
+ */
+
+/**
+ * A function used to check if the command should run arbitrarily.
+ * @typedef {Function} ExecutionPredicate
+ * @param {Message} message - Message to check.
+ * @returns {boolean}
+ */
+
+/**
+ * A function used to check if a message has permissions for the command.
+ * A non-null return value signifies the reason for missing permissions.
+ * @typedef {Function} MissingPermissionSupplier
+ * @param {Message} message - Message that triggered the command.
+ * @returns {any}
+ */
+
+/**
+ * A function used to return a regular expression.
+ * @typedef {Function} RegexSupplier
+ * @param {Message} message - Message to get regex for.
+ * @returns {RegExp}
+ */

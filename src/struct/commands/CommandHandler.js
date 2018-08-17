@@ -8,52 +8,6 @@ const InternalFlag = require('./InternalFlag');
 const { isPromise } = require('../../util/Util');
 const TypeResolver = require('./arguments/TypeResolver');
 
-/**
- * Also includes properties from AkairoHandlerOptions.
- * @typedef {AkairoHandlerOptions} CommandHandlerOptions
- * @prop {boolean} [blockClient=true] - Whether or not to block self.
- * @prop {boolean} [blockBots=true] - Whether or not to block bots.
- * @prop {string|string[]|PrefixSupplier} [prefix='!'] - Default command prefix(es).
- * @prop {boolean|MentionPrefixPredicate} [allowMention=true] - Whether or not to allow mentions to the client user as a prefix.
- * @prop {RegExp} [aliasReplacement] - Regular expression to automatically make command aliases.
- * For example, using `/-/g` would mean that aliases containing `-` would be valid with and without it.
- * So, the alias `command-name` is valid as both `command-name` and `commandname`.
- * @prop {boolean} [handleEdits=false] - Whether or not to handle edited messages using CommandUtil.
- * @prop {boolean} [storeMessages=false] - Whether or not to have CommandUtil store all prompts and their replies.
- * @prop {boolean} [commandUtil=false] - Whether or not to assign `message.util`.
- * Set to `true` by default if `handleEdits` or `storeMessages` is on.
- * @prop {number} [commandUtilLifetime=0] - Milliseconds a command util should last before it is removed.
- * If 0, CommandUtil instances will never be removed.
- * @prop {boolean} [fetchMembers=false] - Whether or not to fetch member on each message from a guild.
- * @prop {number} [defaultCooldown=0] - The default cooldown for commands.
- * @prop {Snowflake|Snowflake[]|IgnoreCheckPredicate} [ignoreCooldown] - ID of user(s) to ignore cooldown or a function to ignore.
- * Defaults to the client owner(s).
- * @prop {Snowflake|Snowflake[]|IgnoreCheckPredicate} [ignorePermissions=[]] - ID of user(s) to ignore `userPermissions` checks or a function to ignore.
- * @prop {ArgumentPromptOptions} [defaultPrompt] - The default prompt options.
- */
-
-/**
- * A function that returns the prefix(es) to use.
- * @typedef {Function} PrefixSupplier
- * @param {Message} message - Message to get prefix for.
- * @returns {string|string[]}
- */
-
-/**
- * A function that returns whether mentions can be used as a prefix.
- * @typedef {Function} MentionPrefixPredicate
- * @param {Message} message - Message to option for.
- * @returns {boolean}
- */
-
-/**
- * A function that returns whether this message should be ignored for a certain check.
- * @typedef {Function} IgnoreCheckPredicate
- * @param {Message} message - Message to check.
- * @param {Command} command - Command to check.
- * @returns {boolean}
- */
-
 /** @extends AkairoHandler */
 class CommandHandler extends AkairoHandler {
     /**
@@ -1136,4 +1090,50 @@ module.exports = CommandHandler;
  * Emitted when a command is removed.
  * @event CommandHandler#remove
  * @param {Command} command - Command removed.
+ */
+
+/**
+ * Also includes properties from AkairoHandlerOptions.
+ * @typedef {AkairoHandlerOptions} CommandHandlerOptions
+ * @prop {boolean} [blockClient=true] - Whether or not to block self.
+ * @prop {boolean} [blockBots=true] - Whether or not to block bots.
+ * @prop {string|string[]|PrefixSupplier} [prefix='!'] - Default command prefix(es).
+ * @prop {boolean|MentionPrefixPredicate} [allowMention=true] - Whether or not to allow mentions to the client user as a prefix.
+ * @prop {RegExp} [aliasReplacement] - Regular expression to automatically make command aliases.
+ * For example, using `/-/g` would mean that aliases containing `-` would be valid with and without it.
+ * So, the alias `command-name` is valid as both `command-name` and `commandname`.
+ * @prop {boolean} [handleEdits=false] - Whether or not to handle edited messages using CommandUtil.
+ * @prop {boolean} [storeMessages=false] - Whether or not to have CommandUtil store all prompts and their replies.
+ * @prop {boolean} [commandUtil=false] - Whether or not to assign `message.util`.
+ * Set to `true` by default if `handleEdits` or `storeMessages` is on.
+ * @prop {number} [commandUtilLifetime=0] - Milliseconds a command util should last before it is removed.
+ * If 0, CommandUtil instances will never be removed.
+ * @prop {boolean} [fetchMembers=false] - Whether or not to fetch member on each message from a guild.
+ * @prop {number} [defaultCooldown=0] - The default cooldown for commands.
+ * @prop {Snowflake|Snowflake[]|IgnoreCheckPredicate} [ignoreCooldown] - ID of user(s) to ignore cooldown or a function to ignore.
+ * Defaults to the client owner(s).
+ * @prop {Snowflake|Snowflake[]|IgnoreCheckPredicate} [ignorePermissions=[]] - ID of user(s) to ignore `userPermissions` checks or a function to ignore.
+ * @prop {ArgumentPromptOptions} [defaultPrompt] - The default prompt options.
+ */
+
+/**
+ * A function that returns whether this message should be ignored for a certain check.
+ * @typedef {Function} IgnoreCheckPredicate
+ * @param {Message} message - Message to check.
+ * @param {Command} command - Command to check.
+ * @returns {boolean}
+ */
+
+/**
+ * A function that returns whether mentions can be used as a prefix.
+ * @typedef {Function} MentionPrefixPredicate
+ * @param {Message} message - Message to option for.
+ * @returns {boolean}
+ */
+
+/**
+ * A function that returns the prefix(es) to use.
+ * @typedef {Function} PrefixSupplier
+ * @param {Message} message - Message to get prefix for.
+ * @returns {string|string[]}
  */

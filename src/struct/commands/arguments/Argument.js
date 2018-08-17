@@ -2,197 +2,6 @@ const { ArgumentMatches, ArgumentTypes } = require('../../../util/Constants');
 const InternalFlag = require('../InternalFlag');
 const { isPromise } = require('../../../util/Util');
 
-/**
- * The method to match arguments from text.
- * - `phrase` matches by the order of the phrases inputted.
- * It ignores phrases that matches a flag.
- * - `rest` matches the rest of the phrases in order.
- * It ignores phrases that matches a flag.
- * It also tries to preserve the original whitespace between phrases and the quotes around phrases.
- * - `separate` matches the rest of the phrases in order.
- * Unlike rest, each phrase is processed separately.
- * It ignores phrases that matches a flag.
- * - `flag` matches phrases that are the same as its flag.
- * The evaluated argument is either true or false.
- * - `option` matches phrases that starts with the flag.
- * The phrase after the flag is the evaluated argument.
- * - `text` matches the entire text, except for the command.
- * It also tries to preserve the original whitespace between phrases and the quotes around phrases.
- * It ignores phrases that matches a flag.
- * - `content` matches the entire text as it was inputted, except for the command.
- * It also preserves the original whitespace between phrases and the quotes around phrases.
- * - `none` matches nothing at all and an empty string will be used for type operations.
- * @typedef {string} ArgumentMatch
- */
-
-/**
- * The type that the argument should be cast to.
- * - `string` does not cast to any type.
- * - `lowercase` makes the input lowercase.
- * - `uppercase` makes the input uppercase.
- * - `charCodes` transforms the input to an array of char codes.
- * - `number` casts to a number.
- * - `integer` casts to an integer.
- * - `bigint` casts to a big integer.
- * - `url` casts to an `URL` object.
- * - `date` casts to a `Date` object.
- * - `color` casts a hex code to an integer.
- * - `commandAlias` tries to resolve to a command from an alias.
- * - `command` matches the ID of a command.
- * - `inhibitor` matches the ID of an inhibitor.
- * - `listener` matches the ID of a listener.
- *
- * Possible Discord-related types.
- * These types can be plural (add an 's' to the end) and a collection of matching objects will be used.
- * - `user` tries to resolve to a user.
- * - `member` tries to resolve to a member.
- * - `relevant` tries to resolve to a relevant user, works in both guilds and DMs.
- * - `channel` tries to resolve to a channel.
- * - `textChannel` tries to resolve to a text channel.
- * - `voiceChannel` tries to resolve to a voice channel.
- * - `role` tries to resolve to a role.
- * - `emoji` tries to resolve to a custom emoji.
- * - `guild` tries to resolve to a guild.
- *
- * Other Discord-related types:
- * - `message` tries to fetch a message from an ID within the channel.
- * - `guildMessage` tries to fetch a message from an ID within the guild.
- * - `invite` tries to fetch an invite object from a link.
- * - `userMention` matches a mention of a user.
- * - `memberMention` matches a mention of a guild member.
- * - `channelMention` matches a mention of a channel.
- * - `roleMention` matches a mention of a role.
- * - `emojiMention` matches a mention of an emoji.
- *
- * An array of strings can be used to restrict input to only those strings, case insensitive.
- * The array can also contain an inner array of strings, for aliases.
- * If so, the first entry of the array will be used as the final argument.
- *
- * A regular expression can also be used.
- * The evaluated argument will be an object containing the `match` and `matches` if global.
- * @typedef {string|string[]} ArgumentType
- */
-
-/**
- * A function for processing user input to use as an argument.
- * A void return value will use the default value for the argument or start a prompt.
- * Any other truthy return value will be used as the evaluated argument.
- * If returning a Promise, the resolved value will go through the above steps.
- * @typedef {Function} ArgumentTypeCaster
- * @param {string} phrase - The user input.
- * @param {Message} message - Message that triggered the command.
- * @param {Object} prevArgs - Previous arguments.
- * @returns {any}
- */
-
-/**
- * A function for validating parsed arguments.
- * @typedef {Function} ParsedValuePredicate
- * @param {any} value - The parsed value.
- * @param {string} phrase - The user input.
- * @param {Message} message - Message that triggered the command.
- * @param {Object} prevArgs - Previous arguments.
- * @returns {boolean}
- */
-
-/**
- * A function for mapping parsed arguments.
- * @typedef {Function} ParsedValueMapper
- * @param {any} value - The parsed value.
- * @param {string} phrase - The user input.
- * @param {Message} message - Message that triggered the command.
- * @param {Object} prevArgs - Previous arguments.
- * @returns {any}
- */
-
-/**
- * A prompt to run if the user did not input the argument correctly.
- * Can only be used if there is not a default value (unless optional is true).
- * @typedef {Object} ArgumentPromptOptions
- * @prop {number} [retries=1] - Amount of times allowed to retries.
- * @prop {number} [time=30000] - Time to wait for input.
- * @prop {string} [cancelWord='cancel'] - Word to use for cancelling the command.
- * @prop {string} [stopWord='stop'] - Word to use for ending infinite prompts.
- * @prop {boolean} [optional=false] - Prompts only when argument is provided but was not of the right type.
- * @prop {boolean} [infinite=false] - Prompts forever until the stop word, cancel word, time limit, or retry limit.
- * Note that the retry count resets back to one on each valid entry.
- * The final evaluated argument will be an array of the inputs.
- * @prop {number} [limit=Infinity] - Amount of inputs allowed for an infinite prompt before finishing.
- * @prop {boolean} [breakout=true] - Whenever an input matches the format of a command, this option controls whether or not to cancel this command and run that command.
- * The command to be run may be the same command or some other command.
- * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|PromptContentSupplier} [start] - Text sent on start of prompt.
- * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|PromptContentSupplier} [retry] - Text sent on a retry (failure to cast type).
- * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|PromptContentSupplier} [timeout] - Text sent on collector time out.
- * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|PromptContentSupplier} [ended] - Text sent on amount of tries reaching the max.
- * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|PromptContentSupplier} [cancel] - Text sent on cancellation of command.
- * @prop {PromptContentModifier} [modifyStart] - Function to modify start prompts.
- * @prop {PromptContentModifier} [modifyRetry] - Function to modify retry prompts.
- * @prop {PromptContentModifier} [modifyTimeout] - Function to modify timeout messages.
- * @prop {PromptContentModifier} [modifyEnded] - Function to modify out of tries messages.
- * @prop {PromptContentModifier} [modifyCancel] - Function to modify cancel messages.
- */
-
-/**
- * A function returning text for the prompt.
- * @typedef {Function} PromptContentSupplier
- * @param {Message} message - Message that triggered the command.
- * @param {Object} prevArgs - Previous arguments.
- * @param {ArgumentPromptData} data - Miscellaneous data.
- * @returns {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions}
- */
-
-/**
- * A function modifying a prompt text.
- * @typedef {Function} PromptContentModifier
- * @param {string|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions} text - Text from the prompt to modify.
- * @param {Message} message - Message that triggered the command.
- * @param {Object} prevArgs - Previous arguments.
- * @param {ArgumentPromptData} data - Miscellaneous data.
- * @returns {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions}
- */
-
-/**
- * Data passed to argument prompt functions.
- * @typedef {Object} ArgumentPromptData
- * @prop {number} retries - Amount of retries.
- * @prop {boolean} infinite - Whether the prompt is infinite or not.
- * @prop {Message} message - The message that caused the prompt.
- * @prop {string} phrase - The input phrase that caused the prompt if there was one.
- */
-
-/**
- * Options for how an argument parses text.
- * @typedef {Object} ArgumentOptions
- * @prop {string} id - ID of the argument for use in the args object.
- * @prop {ArgumentMatch} [match='phrase'] - Method to match text.
- * @prop {ArgumentType|ArgumentTypeCaster} [type='string'] - Type to cast to.
- * @prop {string|string[]} [flag] - The string(s) to use as the flag for flag and option args.
- * @prop {number} [index] - Index of phrase to start from.
- * Applicable to phrase, text, content, rest, or separate match only.
- * Ignored when used with the unordered option.
- * @prop {boolean|number|number[]} [unordered=false] - Marks the argument as unordered.
- * Each phrase is evaluated in order until one matches (no input at all means no evaluation).
- * Passing in a number forces evaluation from that index onwards.
- * Passing in an array of numbers forces evaluation on those indices only.
- * If there is a match, that index is considered used and future unordered args will not check that index again.
- * If there is no match, then the prompting or default value is used.
- * Applicable to phrase match only.
- * @prop {number} [limit=Infinity] - Amount of phrases to match when matching more than one.
- * Applicable to text, content, rest, or separate match only.
- * @prop {any|DefaultValueSupplier} [default=null] - Default value if text does not parse or cast correctly.
- * If using a flag arg, setting the default value to a non-void value inverses the result.
- * @prop {string|string[]} [description=''] - A description of the argument.
- * @prop {ArgumentPromptOptions} [prompt] - Prompt options for when user does not provide input.
- */
-
-/**
- * Function get the default value of the argument.
- * @typedef {Function} DefaultValueSupplier
- * @param {Message} message - Message that triggered the command.
- * @param {Object} prevArgs - Previous arguments.
- * @returns {any}
- */
-
 class Argument {
     /**
      * An argument for a command.
@@ -648,3 +457,194 @@ class Argument {
 }
 
 module.exports = Argument;
+
+/**
+ * Options for how an argument parses text.
+ * @typedef {Object} ArgumentOptions
+ * @prop {string} id - ID of the argument for use in the args object.
+ * @prop {ArgumentMatch} [match='phrase'] - Method to match text.
+ * @prop {ArgumentType|ArgumentTypeCaster} [type='string'] - Type to cast to.
+ * @prop {string|string[]} [flag] - The string(s) to use as the flag for flag and option args.
+ * @prop {number} [index] - Index of phrase to start from.
+ * Applicable to phrase, text, content, rest, or separate match only.
+ * Ignored when used with the unordered option.
+ * @prop {boolean|number|number[]} [unordered=false] - Marks the argument as unordered.
+ * Each phrase is evaluated in order until one matches (no input at all means no evaluation).
+ * Passing in a number forces evaluation from that index onwards.
+ * Passing in an array of numbers forces evaluation on those indices only.
+ * If there is a match, that index is considered used and future unordered args will not check that index again.
+ * If there is no match, then the prompting or default value is used.
+ * Applicable to phrase match only.
+ * @prop {number} [limit=Infinity] - Amount of phrases to match when matching more than one.
+ * Applicable to text, content, rest, or separate match only.
+ * @prop {any|DefaultValueSupplier} [default=null] - Default value if text does not parse or cast correctly.
+ * If using a flag arg, setting the default value to a non-void value inverses the result.
+ * @prop {string|string[]} [description=''] - A description of the argument.
+ * @prop {ArgumentPromptOptions} [prompt] - Prompt options for when user does not provide input.
+ */
+
+/**
+ * Data passed to argument prompt functions.
+ * @typedef {Object} ArgumentPromptData
+ * @prop {number} retries - Amount of retries.
+ * @prop {boolean} infinite - Whether the prompt is infinite or not.
+ * @prop {Message} message - The message that caused the prompt.
+ * @prop {string} phrase - The input phrase that caused the prompt if there was one.
+ */
+
+/**
+ * A prompt to run if the user did not input the argument correctly.
+ * Can only be used if there is not a default value (unless optional is true).
+ * @typedef {Object} ArgumentPromptOptions
+ * @prop {number} [retries=1] - Amount of times allowed to retries.
+ * @prop {number} [time=30000] - Time to wait for input.
+ * @prop {string} [cancelWord='cancel'] - Word to use for cancelling the command.
+ * @prop {string} [stopWord='stop'] - Word to use for ending infinite prompts.
+ * @prop {boolean} [optional=false] - Prompts only when argument is provided but was not of the right type.
+ * @prop {boolean} [infinite=false] - Prompts forever until the stop word, cancel word, time limit, or retry limit.
+ * Note that the retry count resets back to one on each valid entry.
+ * The final evaluated argument will be an array of the inputs.
+ * @prop {number} [limit=Infinity] - Amount of inputs allowed for an infinite prompt before finishing.
+ * @prop {boolean} [breakout=true] - Whenever an input matches the format of a command, this option controls whether or not to cancel this command and run that command.
+ * The command to be run may be the same command or some other command.
+ * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|PromptContentSupplier} [start] - Text sent on start of prompt.
+ * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|PromptContentSupplier} [retry] - Text sent on a retry (failure to cast type).
+ * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|PromptContentSupplier} [timeout] - Text sent on collector time out.
+ * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|PromptContentSupplier} [ended] - Text sent on amount of tries reaching the max.
+ * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|PromptContentSupplier} [cancel] - Text sent on cancellation of command.
+ * @prop {PromptContentModifier} [modifyStart] - Function to modify start prompts.
+ * @prop {PromptContentModifier} [modifyRetry] - Function to modify retry prompts.
+ * @prop {PromptContentModifier} [modifyTimeout] - Function to modify timeout messages.
+ * @prop {PromptContentModifier} [modifyEnded] - Function to modify out of tries messages.
+ * @prop {PromptContentModifier} [modifyCancel] - Function to modify cancel messages.
+ */
+
+/**
+ * The method to match arguments from text.
+ * - `phrase` matches by the order of the phrases inputted.
+ * It ignores phrases that matches a flag.
+ * - `rest` matches the rest of the phrases in order.
+ * It ignores phrases that matches a flag.
+ * It also tries to preserve the original whitespace between phrases and the quotes around phrases.
+ * - `separate` matches the rest of the phrases in order.
+ * Unlike rest, each phrase is processed separately.
+ * It ignores phrases that matches a flag.
+ * - `flag` matches phrases that are the same as its flag.
+ * The evaluated argument is either true or false.
+ * - `option` matches phrases that starts with the flag.
+ * The phrase after the flag is the evaluated argument.
+ * - `text` matches the entire text, except for the command.
+ * It also tries to preserve the original whitespace between phrases and the quotes around phrases.
+ * It ignores phrases that matches a flag.
+ * - `content` matches the entire text as it was inputted, except for the command.
+ * It also preserves the original whitespace between phrases and the quotes around phrases.
+ * - `none` matches nothing at all and an empty string will be used for type operations.
+ * @typedef {string} ArgumentMatch
+ */
+
+/**
+ * The type that the argument should be cast to.
+ * - `string` does not cast to any type.
+ * - `lowercase` makes the input lowercase.
+ * - `uppercase` makes the input uppercase.
+ * - `charCodes` transforms the input to an array of char codes.
+ * - `number` casts to a number.
+ * - `integer` casts to an integer.
+ * - `bigint` casts to a big integer.
+ * - `url` casts to an `URL` object.
+ * - `date` casts to a `Date` object.
+ * - `color` casts a hex code to an integer.
+ * - `commandAlias` tries to resolve to a command from an alias.
+ * - `command` matches the ID of a command.
+ * - `inhibitor` matches the ID of an inhibitor.
+ * - `listener` matches the ID of a listener.
+ *
+ * Possible Discord-related types.
+ * These types can be plural (add an 's' to the end) and a collection of matching objects will be used.
+ * - `user` tries to resolve to a user.
+ * - `member` tries to resolve to a member.
+ * - `relevant` tries to resolve to a relevant user, works in both guilds and DMs.
+ * - `channel` tries to resolve to a channel.
+ * - `textChannel` tries to resolve to a text channel.
+ * - `voiceChannel` tries to resolve to a voice channel.
+ * - `role` tries to resolve to a role.
+ * - `emoji` tries to resolve to a custom emoji.
+ * - `guild` tries to resolve to a guild.
+ *
+ * Other Discord-related types:
+ * - `message` tries to fetch a message from an ID within the channel.
+ * - `guildMessage` tries to fetch a message from an ID within the guild.
+ * - `invite` tries to fetch an invite object from a link.
+ * - `userMention` matches a mention of a user.
+ * - `memberMention` matches a mention of a guild member.
+ * - `channelMention` matches a mention of a channel.
+ * - `roleMention` matches a mention of a role.
+ * - `emojiMention` matches a mention of an emoji.
+ *
+ * An array of strings can be used to restrict input to only those strings, case insensitive.
+ * The array can also contain an inner array of strings, for aliases.
+ * If so, the first entry of the array will be used as the final argument.
+ *
+ * A regular expression can also be used.
+ * The evaluated argument will be an object containing the `match` and `matches` if global.
+ * @typedef {string|string[]} ArgumentType
+ */
+
+/**
+ * A function for processing user input to use as an argument.
+ * A void return value will use the default value for the argument or start a prompt.
+ * Any other truthy return value will be used as the evaluated argument.
+ * If returning a Promise, the resolved value will go through the above steps.
+ * @typedef {Function} ArgumentTypeCaster
+ * @param {string} phrase - The user input.
+ * @param {Message} message - Message that triggered the command.
+ * @param {Object} prevArgs - Previous arguments.
+ * @returns {any}
+ */
+
+/**
+ * Function get the default value of the argument.
+ * @typedef {Function} DefaultValueSupplier
+ * @param {Message} message - Message that triggered the command.
+ * @param {Object} prevArgs - Previous arguments.
+ * @returns {any}
+ */
+
+/**
+ * A function for mapping parsed arguments.
+ * @typedef {Function} ParsedValueMapper
+ * @param {any} value - The parsed value.
+ * @param {string} phrase - The user input.
+ * @param {Message} message - Message that triggered the command.
+ * @param {Object} prevArgs - Previous arguments.
+ * @returns {any}
+ */
+
+/**
+ * A function for validating parsed arguments.
+ * @typedef {Function} ParsedValuePredicate
+ * @param {any} value - The parsed value.
+ * @param {string} phrase - The user input.
+ * @param {Message} message - Message that triggered the command.
+ * @param {Object} prevArgs - Previous arguments.
+ * @returns {boolean}
+ */
+
+/**
+ * A function modifying a prompt text.
+ * @typedef {Function} PromptContentModifier
+ * @param {string|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions} text - Text from the prompt to modify.
+ * @param {Message} message - Message that triggered the command.
+ * @param {Object} prevArgs - Previous arguments.
+ * @param {ArgumentPromptData} data - Miscellaneous data.
+ * @returns {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions}
+ */
+
+/**
+ * A function returning text for the prompt.
+ * @typedef {Function} PromptContentSupplier
+ * @param {Message} message - Message that triggered the command.
+ * @param {Object} prevArgs - Previous arguments.
+ * @param {ArgumentPromptData} data - Miscellaneous data.
+ * @returns {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions}
+ */

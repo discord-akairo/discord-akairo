@@ -1,9 +1,3 @@
-/**
- * Options for module.
- * @typedef {Object} ModuleOptions
- * @prop {string} [category='default'] - Category ID for organization purposes.
- */
-
 class AkairoModule {
     /**
      * Creates a new module.
@@ -74,3 +68,9 @@ class AkairoModule {
 }
 
 module.exports = AkairoModule;
+
+/**
+ * Options for module.
+ * @typedef {Object} ModuleOptions
+ * @prop {string} [category='default'] - Category ID for organization purposes.
+ */

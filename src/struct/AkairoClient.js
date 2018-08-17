@@ -1,12 +1,6 @@
 const { Client } = require('discord.js');
 const ClientUtil = require('./ClientUtil');
 
-/**
- * Options for the client.
- * @typedef {Object} AkairoOptions
- * @prop {Snowflake|Snowflake[]} [ownerID=''] - Discord ID of the client owner(s).
- */
-
 class AkairoClient extends Client {
     /**
      * The Akairo framework client.
@@ -47,3 +41,9 @@ class AkairoClient extends Client {
 }
 
 module.exports = AkairoClient;
+
+/**
+ * Options for the client.
+ * @typedef {Object} AkairoOptions
+ * @prop {Snowflake|Snowflake[]} [ownerID=''] - Discord ID of the client owner(s).
+ */

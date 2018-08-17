@@ -7,26 +7,6 @@ const EventEmitter = require('events');
 const fs = require('fs');
 const path = require('path');
 
-/**
- * Options for module loading and handling.
- * @typedef {Object} AkairoHandlerOptions
- * @prop {string} [directory] - Directory to modules.
- * @prop {Function} [classToHandle=AkairoModule] - Only classes that extends this class can be handled.
- * @prop {string[]|Set<string>} [extensions] - File extensions to load.
- * By default this is .js, .json, and .ts files.
- * @prop {boolean} [automateCategories=false] - Whether or not to set each module's category to its parent directory name.
- * @prop {LoadPredicate} [loadFilter] - Filter for files to be loaded.
- * Can be set individually for each handler by overriding the `loadAll` method.
- */
-
-/**
- * Function for filtering files when loading.
- * True means the file should be loaded.
- * @typedef {Function} LoadPredicate
- * @param {String} filepath - Filepath of file.
- * @returns {boolean}
- */
-
 /** @extends EventEmitter */
 class AkairoHandler extends EventEmitter {
     /**
@@ -286,3 +266,23 @@ module.exports = AkairoHandler;
  * @event AkairoHandler#remove
  * @param {AkairoModule} mod - Module removed.
  */
+
+/**
+ * Options for module loading and handling.
+ * @typedef {Object} AkairoHandlerOptions
+ * @prop {string} [directory] - Directory to modules.
+ * @prop {Function} [classToHandle=AkairoModule] - Only classes that extends this class can be handled.
+ * @prop {string[]|Set<string>} [extensions] - File extensions to load.
+ * By default this is .js, .json, and .ts files.
+ * @prop {boolean} [automateCategories=false] - Whether or not to set each module's category to its parent directory name.
+ * @prop {LoadPredicate} [loadFilter] - Filter for files to be loaded.
+ * Can be set individually for each handler by overriding the `loadAll` method.
+ */
+
+/**
+ * Function for filtering files when loading.
+ * True means the file should be loaded.
+ * @typedef {Function} LoadPredicate
+ * @param {String} filepath - Filepath of file.
+ * @returns {boolean}
+*/
