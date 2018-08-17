@@ -515,16 +515,6 @@ declare module 'discord-akairo' {
         ownerID?: Snowflake | Snowflake[];
     };
 
-    export type MentionPrefixPredicate = (message: Message) => boolean;
-
-    export type DefaultValueSupplier = (message: Message, args: any) => any;
-
-    export type ArgumentProvider = (message: Message, content: string) => any;
-
-    export type ParsedValueMapper = (value: any, phrase: string, message: Message, args: any) => any;
-
-    export type ArgumentMatch = 'phrase' | 'rest' | 'separate' | 'flag' | 'option' | 'text' | 'content' | 'none';
-
     export type ArgumentOptions = {
         default?: DefaultValueSupplier | any;
         description?: string | string[];
@@ -538,18 +528,12 @@ declare module 'discord-akairo' {
         unordered?: boolean | number | number[];
     };
 
-    export type ParsedValuePredicate = (value: any, phrase: string, message: Message, args: any) => boolean;
-
     export type ArgumentPromptData = {
         infinite: boolean;
         message: Message;
         retries: number;
         phrase: string;
     };
-
-    export type PromptContentSupplier = (message: Message, args: any, data: ArgumentPromptData) => string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions;
-
-    export type PromptContentModifier = (text: string, message: Message, args: any, data: ArgumentPromptData) => string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions;
 
     export type ArgumentPromptOptions = {
         cancel?: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | PromptContentSupplier;
@@ -570,21 +554,6 @@ declare module 'discord-akairo' {
         time?: number;
         timeout?: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | PromptContentSupplier;
     };
-
-    export type ArgumentType = 'string' | 'lowercase' | 'uppercase' | 'charCodes'
-        | 'number' | 'integer' | 'bigint'
-        | 'url' | 'date' | 'color'
-        | 'user' | 'users' | 'member' | 'members' | 'relevant' | 'relevants'
-        | 'channel' | 'channels' | 'textChannel' | 'textChannels' | 'voiceChannel' | 'voiceChannels'
-        | 'role' | 'roles' | 'emoji' | 'emojis' | 'guild' | 'guilds'
-        | 'message' | 'guildMessage' | 'invite'
-        | 'memberMention' | 'channelMention' | 'roleMention' | 'emojiMention'
-        | 'commandAlias' | 'command' | 'inhibitor' | 'listener'
-        | (string | string[])[];
-
-    export type ArgumentTypeCaster = (phrase: string, message: Message, prevArgs: any) => any;
-
-    export type BeforeAction = (message: Message) => any;
 
     export type CommandOptions = {
         aliases?: string[];
@@ -625,18 +594,12 @@ declare module 'discord-akairo' {
         storeMessages?: boolean;
     };
 
-    export type ExecutionPredicate = (message: Message) => boolean;
-
     export type ContentParserOptions = {
         flagWords?: string[];
         optionFlagWords?: string[];
         quoted?: boolean;
         separator?: string;
     }
-
-    export type ControlAction = (message: Message, args: any) => any;
-
-    export type ControlPredicate = (message: Message, args: any) => boolean;
 
     export type InhibitorOptions = {
         reason?: string;
@@ -649,8 +612,6 @@ declare module 'discord-akairo' {
         type?: string;
     };
 
-    export type LoadPredicate = (filepath: string) => boolean;
-
     export type ParsedComponents = {
         afterContent?: string;
         alias?: string;
@@ -659,14 +620,53 @@ declare module 'discord-akairo' {
         prefix?: string;
     };
 
-    export type MissingPermissionSupplier = (message: Message) => any | Promise<any>;
-
-    export type PrefixSupplier = (message: Message) => string | string[] | Promise<string | string[]>;
-
     export type ProviderOptions = {
         dataColumn?: string;
         idColumn?: string;
     };
+
+    export type ArgumentMatch = 'phrase' | 'rest' | 'separate' | 'flag' | 'option' | 'text' | 'content' | 'none';
+
+    export type ArgumentType = 'string' | 'lowercase' | 'uppercase' | 'charCodes'
+        | 'number' | 'integer' | 'bigint'
+        | 'url' | 'date' | 'color'
+        | 'user' | 'users' | 'member' | 'members' | 'relevant' | 'relevants'
+        | 'channel' | 'channels' | 'textChannel' | 'textChannels' | 'voiceChannel' | 'voiceChannels'
+        | 'role' | 'roles' | 'emoji' | 'emojis' | 'guild' | 'guilds'
+        | 'message' | 'guildMessage' | 'invite'
+        | 'memberMention' | 'channelMention' | 'roleMention' | 'emojiMention'
+        | 'commandAlias' | 'command' | 'inhibitor' | 'listener'
+        | (string | string[])[];
+
+    export type ArgumentProvider = (message: Message, content: string) => any;
+
+    export type ArgumentTypeCaster = (phrase: string, message: Message, prevArgs: any) => any;
+
+    export type BeforeAction = (message: Message) => any;
+
+    export type ControlAction = (message: Message, args: any) => any;
+
+    export type ControlPredicate = (message: Message, args: any) => boolean;
+
+    export type DefaultValueSupplier = (message: Message, args: any) => any;
+
+    export type ExecutionPredicate = (message: Message) => boolean;
+
+    export type LoadPredicate = (filepath: string) => boolean;
+
+    export type MentionPrefixPredicate = (message: Message) => boolean;
+
+    export type MissingPermissionSupplier = (message: Message) => any | Promise<any>;
+
+    export type ParsedValueMapper = (value: any, phrase: string, message: Message, args: any) => any;
+
+    export type ParsedValuePredicate = (value: any, phrase: string, message: Message, args: any) => boolean;
+
+    export type PrefixSupplier = (message: Message) => string | string[] | Promise<string | string[]>;
+
+    export type PromptContentSupplier = (message: Message, args: any, data: ArgumentPromptData) => string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions;
+
+    export type PromptContentModifier = (text: string, message: Message, args: any, data: ArgumentPromptData) => string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions;
 
     export type RegexSupplier = (message: Message) => RegExp;
 
