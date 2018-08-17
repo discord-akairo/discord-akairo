@@ -11,7 +11,7 @@ const InternalFlag = require('../InternalFlag');
 
 /**
  * General function in a control.
- * @typedef {Function} ControlFunction
+ * @typedef {Function} ControlAction
  * @param {Message} message - Message that triggered the command.
  * @param {Object} prevArgs - Previous arguments.
  * @returns {void}
@@ -67,7 +67,7 @@ class Control {
 
     /**
      * Creates a control that runs a function when the control is reached.
-     * @param {ControlFunction} fn - Function to run.
+     * @param {ControlAction} fn - Function to run.
      * @returns {DoControl}
      */
     static do(fn) {
@@ -178,14 +178,14 @@ class CaseControl extends Control {
 class DoControl extends Control {
     /**
      * Runs a function when the control is reached.
-     * @param {ControlFunction} fn - Function to run.
+     * @param {ControlAction} fn - Function to run.
      */
     constructor(fn) {
         super();
 
         /**
          * Function to run.
-         * @type {ControlFunction}
+         * @type {ControlAction}
          */
         this.fn = fn;
     }

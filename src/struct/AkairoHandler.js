@@ -15,14 +15,14 @@ const path = require('path');
  * @prop {string[]|Set<string>} [extensions] - File extensions to load.
  * By default this is .js, .json, and .ts files.
  * @prop {boolean} [automateCategories=false] - Whether or not to set each module's category to its parent directory name.
- * @prop {LoadFilterFunction} [loadFilter] - Filter for files to be loaded.
+ * @prop {LoadPredicate} [loadFilter] - Filter for files to be loaded.
  * Can be set individually for each handler by overriding the `loadAll` method.
  */
 
 /**
  * Function for filtering files when loading.
  * True means the file should be loaded.
- * @typedef {Function} LoadFilterFunction
+ * @typedef {Function} LoadPredicate
  * @param {String} filepath - Filepath of file.
  * @returns {boolean}
  */
@@ -75,7 +75,7 @@ class AkairoHandler extends EventEmitter {
 
         /**
          * Function that filters files when loading.
-         * @type {LoadFilterFunction}
+         * @type {LoadPredicate}
          */
         this.loadFilter = loadFilter;
 
@@ -165,7 +165,7 @@ class AkairoHandler extends EventEmitter {
      * Reads all modules from a directory and loads them.
      * @param {string} [directory] - Directory to load from.
      * Defaults to the directory passed in the constructor.
-     * @param {LoadFilterFunction} [filter] - Filter for files, where true means it should be loaded.
+     * @param {LoadPredicate} [filter] - Filter for files, where true means it should be loaded.
      * Defaults to the filter passed in the constructor.
      * @returns {AkairoHandler}
      */

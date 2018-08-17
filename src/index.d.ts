@@ -39,13 +39,13 @@ declare module 'discord-akairo' {
         public classToHandle: Function;
         public client: AkairoClient;
         public directory: string;
-        public loadFiler: LoadFilterFunction;
+        public loadFiler: LoadPredicate;
         public modules: Collection<string, AkairoModule>;
 
         public deregister(mod: AkairoModule): void;
         public findCategory(name: string): Category<string, AkairoModule>;
         public load(thing: string | Function, isReload?: boolean): AkairoModule;
-        public loadAll(directory?: string, filter?: LoadFilterFunction): this;
+        public loadAll(directory?: string, filter?: LoadPredicate): this;
         public register(mod: AkairoModule, filepath?: string): void;
         public reload(id: string): AkairoModule;
         public reloadAll(): this;
@@ -76,7 +76,7 @@ declare module 'discord-akairo' {
 
         public readonly client: AkairoClient;
         public command: Command;
-        public default: any | ArgumentDefaultFunction;
+        public default: any | DefaultValueSupplier;
         public description: string;
         public readonly handler: CommandHandler;
         public id: string;
@@ -85,7 +85,7 @@ declare module 'discord-akairo' {
         public match: ArgumentMatch;
         public flag?: string | string[];
         public prompt?: ArgumentPromptOptions;
-        public type: ArgumentType | ArgumentTypeFunction;
+        public type: ArgumentType | ArgumentTypeCaster;
         public unordered: boolean | number | number[];
 
         public allow(message: Message, args: any): boolean;
@@ -93,12 +93,12 @@ declare module 'discord-akairo' {
         public collect(message: Message, args?: any, commandInput?: string): Promise<any>;
         public process(phrase: string, message: Message, args?: any): Promise<any>;
 
-        public static cast(type: ArgumentType | ArgumentTypeFunction, resolver: TypeResolver, phrase: string, message: Message, args?: any): Promise<any>;
-        public static map(type: ArgumentType | ArgumentTypeFunction, fn: ArgumentMapFunction): ArgumentTypeFunction;
-        public static range(type: ArgumentType | ArgumentTypeFunction, min: number, max: number, inclusive?: boolean): ArgumentTypeFunction;
-        public static tuple(...types: (ArgumentType | ArgumentTypeFunction)[]): ArgumentTypeFunction;
-        public static union(...types: (ArgumentType | ArgumentTypeFunction)[]): ArgumentTypeFunction;
-        public static validate(type: ArgumentType | ArgumentTypeFunction, predicate: ArgumentPredicate): ArgumentTypeFunction;
+        public static cast(type: ArgumentType | ArgumentTypeCaster, resolver: TypeResolver, phrase: string, message: Message, args?: any): Promise<any>;
+        public static map(type: ArgumentType | ArgumentTypeCaster, fn: ParsedValueMapper): ArgumentTypeCaster;
+        public static range(type: ArgumentType | ArgumentTypeCaster, min: number, max: number, inclusive?: boolean): ArgumentTypeCaster;
+        public static tuple(...types: (ArgumentType | ArgumentTypeCaster)[]): ArgumentTypeCaster;
+        public static union(...types: (ArgumentType | ArgumentTypeCaster)[]): ArgumentTypeCaster;
+        public static validate(type: ArgumentType | ArgumentTypeCaster, predicate: ParsedValuePredicate): ArgumentTypeCaster;
     }
 
     export class ArgumentParser {
@@ -158,12 +158,12 @@ declare module 'discord-akairo' {
         public constructor(id: string, options?: CommandOptions & AkairoModuleOptions);
 
         public aliases: string[];
-        public args: ArgumentParser | ArgumentFunction;
+        public args: ArgumentParser | ArgumentProvider;
         public quoted: boolean;
         public category: Category<string, Command>;
         public channel?: string;
         public client: AkairoClient;
-        public clientPermissions: PermissionResolvable | PermissionResolvable[] | PermissionFunction;
+        public clientPermissions: PermissionResolvable | PermissionResolvable[] | MissingPermissionSupplier;
         public cooldown?: number;
         public defaultPrompt: ArgumentPromptOptions;
         public description: string;
@@ -171,15 +171,15 @@ declare module 'discord-akairo' {
         public filepath: string;
         public handler: CommandHandler;
         public id: string;
-        public ignoreCooldown?: Snowflake | Snowflake[] | IgnoreFunction;
-        public ignorePermissions?: Snowflake | Snowflake[] | IgnoreFunction;
+        public ignoreCooldown?: Snowflake | Snowflake[] | IgnoreCheckPredicate;
+        public ignorePermissions?: Snowflake | Snowflake[] | IgnoreCheckPredicate;
         public ownerOnly: boolean;
         public parser?: ContentParser;
-        public prefix?: string | string[] | PrefixFunction;
+        public prefix?: string | string[] | PrefixSupplier;
         public ratelimit: number;
-        public regex: RegExp | RegexFunction;
+        public regex: RegExp | RegexSupplier;
         public typing: boolean;
-        public userPermissions: PermissionResolvable | PermissionResolvable[] | PermissionFunction;
+        public userPermissions: PermissionResolvable | PermissionResolvable[] | MissingPermissionSupplier;
 
         public before(message: Message): any;
         public condition(message: Message): boolean;
@@ -194,7 +194,7 @@ declare module 'discord-akairo' {
 
         public aliasReplacement?: RegExp;
         public aliases: Collection<string, string>;
-        public allowMention: boolean | AllowMentionFunction;
+        public allowMention: boolean | MentionPrefixPredicate;
         public blockBots: boolean;
         public blockClient: boolean;
         public categories: Collection<string, Category<string, Command>>;
@@ -209,12 +209,12 @@ declare module 'discord-akairo' {
         public directory: string;
         public fetchMembers: boolean;
         public handleEdits: boolean;
-        public ignoreCooldown: Snowflake | Snowflake[] | IgnoreFunction;
-        public ignorePermissions: Snowflake | Snowflake[] | IgnoreFunction;
+        public ignoreCooldown: Snowflake | Snowflake[] | IgnoreCheckPredicate;
+        public ignorePermissions: Snowflake | Snowflake[] | IgnoreCheckPredicate;
         public inhibitorHandler?: InhibitorHandler;
         public modules: Collection<string, Command>;
-        public prefix: string | string[] | PrefixFunction;
-        public prefixes: Collection<string | PrefixFunction, Set<string>>;
+        public prefix: string | string[] | PrefixSupplier;
+        public prefixes: Collection<string | PrefixSupplier, Set<string>>;
         public prompts: Collection<string, Set<string>>;
         public resolver: TypeResolver;
         public storeMessage: boolean;
@@ -232,7 +232,7 @@ declare module 'discord-akairo' {
         public handleConditionalCommands(message: Message): Promise<boolean>;
         public hasPrompt(channel: Channel, user: User): boolean;
         public load(thing: string | Function): Command;
-        public loadAll(directory?: string, filter?: LoadFilterFunction): this;
+        public loadAll(directory?: string, filter?: LoadPredicate): this;
         public parseCommand(message: Message): Promise<object | null>;
         public parseCommandWithOverwrittenPrefixes(message: Message): Promise<object | null>;
         public register(command: Command, filepath?: string): void;
@@ -327,7 +327,7 @@ declare module 'discord-akairo' {
 
         public static if(condition: ControlPredicate, trueArguments?: (ArgumentOptions | Control)[], falseArguments?: (ArgumentOptions | Control)[]): IfControl;
         public static case(...condArgs: (ControlPredicate | (ArgumentOptions | Control)[])[]): CaseControl;
-        public static do(fn: ControlFunction): DoControl;
+        public static do(fn: ControlAction): DoControl;
         public static end(): EndControl;
         public static cancel(): CancelControl;
     }
@@ -347,9 +347,9 @@ declare module 'discord-akairo' {
     }
 
     class DoControl extends Control {
-        public constructor(fn: ControlFunction);
+        public constructor(fn: ControlAction);
 
-        public fn: ControlFunction;
+        public fn: ControlAction;
     }
 
     class EndControl extends Control {}
@@ -384,7 +384,7 @@ declare module 'discord-akairo' {
         public deregister(inhibitor: Inhibitor): void;
         public findCategory(name: string): Category<string, Inhibitor>;
         public load(thing: string | Function): Inhibitor;
-        public loadAll(directory?: string, filter?: LoadFilterFunction): this;
+        public loadAll(directory?: string, filter?: LoadPredicate): this;
         public register(inhibitor: Inhibitor, filepath?: string): void;
         public reload(id: string): Inhibitor;
         public reloadAll(): this;
@@ -426,7 +426,7 @@ declare module 'discord-akairo' {
         public deregister(listener: Listener): void;
         public findCategory(name: string): Category<string, Listener>;
         public load(thing: string | Function): Listener;
-        public loadAll(directory?: string, filter?: LoadFilterFunction): this;
+        public loadAll(directory?: string, filter?: LoadPredicate): this;
         public register(listener: Listener, filepath?: string): void;
         public reload(id: string): Listener;
         public reloadAll(): this;
@@ -486,12 +486,12 @@ declare module 'discord-akairo' {
         public commandHandler: CommandHandler;
         public inhibitorHandler?: InhibitorHandler;
         public listenerHandler?: ListenerHandler;
-        public types: Collection<string, ArgumentTypeFunction>;
+        public types: Collection<string, ArgumentTypeCaster>;
 
         public addBuiltInTypes(): void;
-        public addType(name: string, resolver: ArgumentTypeFunction): this;
-        public addTypes(types: { [x: string]: ArgumentTypeFunction }): this;
-        public type(name: string): ArgumentTypeFunction;
+        public addType(name: string, resolver: ArgumentTypeCaster): this;
+        public addTypes(types: { [x: string]: ArgumentTypeCaster }): this;
+        public type(name: string): ArgumentTypeCaster;
     }
 
     export class Util {
@@ -504,7 +504,7 @@ declare module 'discord-akairo' {
         classToHandle?: string;
         directory?: string;
         extensions?: string[] | Set<string>;
-        loadFilter?: LoadFilterFunction;
+        loadFilter?: LoadPredicate;
     };
 
     export type AkairoModuleOptions = {
@@ -515,18 +515,18 @@ declare module 'discord-akairo' {
         ownerID?: Snowflake | Snowflake[];
     };
 
-    export type AllowMentionFunction = (message: Message) => boolean;
+    export type MentionPrefixPredicate = (message: Message) => boolean;
 
-    export type ArgumentDefaultFunction = (message: Message, args: any) => any;
+    export type DefaultValueSupplier = (message: Message, args: any) => any;
 
-    export type ArgumentFunction = (message: Message, content: string) => any;
+    export type ArgumentProvider = (message: Message, content: string) => any;
 
-    export type ArgumentMapFunction = (value: any, phrase: string, message: Message, args: any) => any;
+    export type ParsedValueMapper = (value: any, phrase: string, message: Message, args: any) => any;
 
     export type ArgumentMatch = 'phrase' | 'rest' | 'separate' | 'flag' | 'option' | 'text' | 'content' | 'none';
 
     export type ArgumentOptions = {
-        default?: ArgumentDefaultFunction | any;
+        default?: DefaultValueSupplier | any;
         description?: string | string[];
         id: string;
         index?: number;
@@ -534,11 +534,11 @@ declare module 'discord-akairo' {
         match?: ArgumentMatch;
         flag?: string | string[];
         prompt?: ArgumentPromptOptions;
-        type?: ArgumentType | ArgumentTypeFunction;
+        type?: ArgumentType | ArgumentTypeCaster;
         unordered?: boolean | number | number[];
     };
 
-    export type ArgumentPredicate = (value: any, phrase: string, message: Message, args: any) => boolean;
+    export type ParsedValuePredicate = (value: any, phrase: string, message: Message, args: any) => boolean;
 
     export type ArgumentPromptData = {
         infinite: boolean;
@@ -547,28 +547,28 @@ declare module 'discord-akairo' {
         phrase: string;
     };
 
-    export type ArgumentPromptFunction = (message: Message, args: any, data: ArgumentPromptData) => string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions;
+    export type PromptContentSupplier = (message: Message, args: any, data: ArgumentPromptData) => string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions;
 
-    export type ArgumentPromptModifyFunction = (text: string, message: Message, args: any, data: ArgumentPromptData) => string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions;
+    export type PromptContentModifier = (text: string, message: Message, args: any, data: ArgumentPromptData) => string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions;
 
     export type ArgumentPromptOptions = {
-        cancel?: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | ArgumentPromptFunction;
+        cancel?: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | PromptContentSupplier;
         cancelWord?: string;
-        ended?: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | ArgumentPromptFunction;
+        ended?: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | PromptContentSupplier;
         infinite?: boolean;
         limit?: number;
-        modifyCancel?: ArgumentPromptModifyFunction;
-        modifyEnded?: ArgumentPromptModifyFunction;
-        modifyRetry?: ArgumentPromptModifyFunction;
-        modifyStart?: ArgumentPromptModifyFunction;
-        modifyTimeout?: ArgumentPromptModifyFunction;
+        modifyCancel?: PromptContentModifier;
+        modifyEnded?: PromptContentModifier;
+        modifyRetry?: PromptContentModifier;
+        modifyStart?: PromptContentModifier;
+        modifyTimeout?: PromptContentModifier;
         optional?: boolean;
         retries?: number;
-        retry?: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | ArgumentPromptFunction;
-        start?: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | ArgumentPromptFunction;
+        retry?: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | PromptContentSupplier;
+        start?: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | PromptContentSupplier;
         stopWord?: string;
         time?: number;
-        timeout?: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | ArgumentPromptFunction;
+        timeout?: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | PromptContentSupplier;
     };
 
     export type ArgumentType = 'string' | 'lowercase' | 'uppercase' | 'charCodes'
@@ -582,35 +582,35 @@ declare module 'discord-akairo' {
         | 'commandAlias' | 'command' | 'inhibitor' | 'listener'
         | (string | string[])[];
 
-    export type ArgumentTypeFunction = (phrase: string, message: Message, prevArgs: any) => any;
+    export type ArgumentTypeCaster = (phrase: string, message: Message, prevArgs: any) => any;
 
-    export type BeforeFunction = (message: Message) => any;
+    export type BeforeAction = (message: Message) => any;
 
     export type CommandOptions = {
         aliases?: string[];
-        args?: (ArgumentOptions | Control)[] | ArgumentFunction;
-        before?: BeforeFunction;
+        args?: (ArgumentOptions | Control)[] | ArgumentProvider;
+        before?: BeforeAction;
         channel?: string;
-        clientPermissions?: PermissionResolvable | PermissionResolvable[] | PermissionFunction;
-        condition?: ConditionFunction;
+        clientPermissions?: PermissionResolvable | PermissionResolvable[] | MissingPermissionSupplier;
+        condition?: ExecutionPredicate;
         cooldown?: number;
         defaultPrompt?: ArgumentPromptOptions;
         description?: string | string[];
         editable?: boolean;
-        ignoreCooldown?: Snowflake | Snowflake[] | IgnoreFunction;
-        ignorePermissions?: Snowflake | Snowflake[] | IgnoreFunction;
+        ignoreCooldown?: Snowflake | Snowflake[] | IgnoreCheckPredicate;
+        ignorePermissions?: Snowflake | Snowflake[] | IgnoreCheckPredicate;
         ownerOnly?: boolean;
-        prefix?: string | string[] | PrefixFunction;
+        prefix?: string | string[] | PrefixSupplier;
         ratelimit?: number;
-        regex?: RegExp | RegexFunction;
+        regex?: RegExp | RegexSupplier;
         separator?: string;
         typing?: boolean;
-        userPermissions?: PermissionResolvable | PermissionResolvable[] | PermissionFunction;
+        userPermissions?: PermissionResolvable | PermissionResolvable[] | MissingPermissionSupplier;
     };
 
     export type CommandHandlerOptions = {
         aliasReplacement?: RegExp;
-        allowMention?: boolean | AllowMentionFunction;
+        allowMention?: boolean | MentionPrefixPredicate;
         blockBots?: boolean;
         blockClient?: boolean;
         commandUtil?: boolean;
@@ -619,13 +619,13 @@ declare module 'discord-akairo' {
         defaultPrompt?: ArgumentPromptOptions;
         fetchMembers?: boolean;
         handleEdits?: boolean;
-        ignoreCooldown?: Snowflake | Snowflake[] | IgnoreFunction;
-        ignorePermissions?: Snowflake | Snowflake[] | IgnoreFunction;
-        prefix?: string | string[] | PrefixFunction;
+        ignoreCooldown?: Snowflake | Snowflake[] | IgnoreCheckPredicate;
+        ignorePermissions?: Snowflake | Snowflake[] | IgnoreCheckPredicate;
+        prefix?: string | string[] | PrefixSupplier;
         storeMessages?: boolean;
     };
 
-    export type ConditionFunction = (message: Message) => boolean;
+    export type ExecutionPredicate = (message: Message) => boolean;
 
     export type ContentParserOptions = {
         flagWords?: string[];
@@ -634,7 +634,7 @@ declare module 'discord-akairo' {
         separator?: string;
     }
 
-    export type ControlFunction = (message: Message, args: any) => any;
+    export type ControlAction = (message: Message, args: any) => any;
 
     export type ControlPredicate = (message: Message, args: any) => boolean;
 
@@ -649,7 +649,7 @@ declare module 'discord-akairo' {
         type?: string;
     };
 
-    export type LoadFilterFunction = (filepath: string) => boolean;
+    export type LoadPredicate = (filepath: string) => boolean;
 
     export type ParsedComponents = {
         afterContent?: string;
@@ -659,16 +659,16 @@ declare module 'discord-akairo' {
         prefix?: string;
     };
 
-    export type PermissionFunction = (message: Message) => any | Promise<any>;
+    export type MissingPermissionSupplier = (message: Message) => any | Promise<any>;
 
-    export type PrefixFunction = (message: Message) => string | string[] | Promise<string | string[]>;
+    export type PrefixSupplier = (message: Message) => string | string[] | Promise<string | string[]>;
 
     export type ProviderOptions = {
         dataColumn?: string;
         idColumn?: string;
     };
 
-    export type RegexFunction = (message: Message) => RegExp;
+    export type RegexSupplier = (message: Message) => RegExp;
 
     export const Constants: {
         ArgumentMatches: {

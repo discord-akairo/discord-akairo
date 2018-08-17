@@ -13,8 +13,8 @@ const TypeResolver = require('./arguments/TypeResolver');
  * @typedef {AkairoHandlerOptions} CommandHandlerOptions
  * @prop {boolean} [blockClient=true] - Whether or not to block self.
  * @prop {boolean} [blockBots=true] - Whether or not to block bots.
- * @prop {string|string[]|PrefixFunction} [prefix='!'] - Default command prefix(es).
- * @prop {boolean|AllowMentionFunction} [allowMention=true] - Whether or not to allow mentions to the client user as a prefix.
+ * @prop {string|string[]|PrefixSupplier} [prefix='!'] - Default command prefix(es).
+ * @prop {boolean|MentionPrefixPredicate} [allowMention=true] - Whether or not to allow mentions to the client user as a prefix.
  * @prop {RegExp} [aliasReplacement] - Regular expression to automatically make command aliases.
  * For example, using `/-/g` would mean that aliases containing `-` would be valid with and without it.
  * So, the alias `command-name` is valid as both `command-name` and `commandname`.
@@ -26,29 +26,29 @@ const TypeResolver = require('./arguments/TypeResolver');
  * If 0, CommandUtil instances will never be removed.
  * @prop {boolean} [fetchMembers=false] - Whether or not to fetch member on each message from a guild.
  * @prop {number} [defaultCooldown=0] - The default cooldown for commands.
- * @prop {Snowflake|Snowflake[]|IgnoreFunction} [ignoreCooldown] - ID of user(s) to ignore cooldown or a function to ignore.
+ * @prop {Snowflake|Snowflake[]|IgnoreCheckPredicate} [ignoreCooldown] - ID of user(s) to ignore cooldown or a function to ignore.
  * Defaults to the client owner(s).
- * @prop {Snowflake|Snowflake[]|IgnoreFunction} [ignorePermissions=[]] - ID of user(s) to ignore `userPermissions` checks or a function to ignore.
+ * @prop {Snowflake|Snowflake[]|IgnoreCheckPredicate} [ignorePermissions=[]] - ID of user(s) to ignore `userPermissions` checks or a function to ignore.
  * @prop {ArgumentPromptOptions} [defaultPrompt] - The default prompt options.
  */
 
 /**
  * A function that returns the prefix(es) to use.
- * @typedef {Function} PrefixFunction
+ * @typedef {Function} PrefixSupplier
  * @param {Message} message - Message to get prefix for.
  * @returns {string|string[]}
  */
 
 /**
  * A function that returns whether mentions can be used as a prefix.
- * @typedef {Function} AllowMentionFunction
+ * @typedef {Function} MentionPrefixPredicate
  * @param {Message} message - Message to option for.
  * @returns {boolean}
  */
 
 /**
  * A function that returns whether this message should be ignored for a certain check.
- * @typedef {Function} IgnoreFunction
+ * @typedef {Function} IgnoreCheckPredicate
  * @param {Message} message - Message to check.
  * @param {Command} command - Command to check.
  * @returns {boolean}
@@ -114,7 +114,7 @@ class CommandHandler extends AkairoHandler {
 
         /**
          * Collection of prefix overwrites to commands.
-         * @type {Collection<string|PrefixFunction, Set<string>>}
+         * @type {Collection<string|PrefixSupplier, Set<string>>}
          */
         this.prefixes = new Collection();
 
@@ -180,13 +180,13 @@ class CommandHandler extends AkairoHandler {
 
         /**
          * ID of user(s) to ignore cooldown or a function to ignore.
-         * @type {Snowflake|Snowflake[]|IgnoreFunction}
+         * @type {Snowflake|Snowflake[]|IgnoreCheckPredicate}
          */
         this.ignoreCooldown = typeof ignoreCooldown === 'function' ? ignoreCooldown.bind(this) : ignoreCooldown;
 
         /**
          * ID of user(s) to ignore `userPermissions` checks or a function to ignore.
-         * @type {Snowflake|Snowflake[]|IgnoreFunction}
+         * @type {Snowflake|Snowflake[]|IgnoreCheckPredicate}
          */
         this.ignorePermissions = typeof ignorePermissions === 'function' ? ignorePermissions.bind(this) : ignorePermissions;
 
@@ -218,13 +218,13 @@ class CommandHandler extends AkairoHandler {
 
         /**
          * The prefix(es) for command parsing.
-         * @type {string|string[]|PrefixFunction}
+         * @type {string|string[]|PrefixSupplier}
          */
         this.prefix = typeof prefix === 'function' ? prefix.bind(this) : prefix;
 
         /**
          * Whether or not mentions are allowed for prefixing.
-         * @type {boolean|AllowMentionFunction}
+         * @type {boolean|MentionPrefixPredicate}
          */
         this.allowMention = typeof allowMention === 'function' ? allowMention.bind(this) : Boolean(allowMention);
 
@@ -1002,7 +1002,7 @@ class CommandHandler extends AkairoHandler {
      * @name CommandHandler#loadAll
      * @param {string} [directory] - Directory to load from.
      * Defaults to the directory passed in the constructor.
-     * @param {LoadFilterFunction} [filter] - Filter for files, where true means it should be loaded.
+     * @param {LoadPredicate} [filter] - Filter for files, where true means it should be loaded.
      * @returns {CommandHandler}
      */
 

@@ -7,7 +7,7 @@ const ContentParser = require('./arguments/ContentParser');
  * Options to use for command execution behavior.
  * @typedef {Object} CommandOptions
  * @prop {string[]} [aliases=[]] - Command names.
- * @prop {Array<ArgumentOptions|Control>|ArgumentFunction} [args=[]] - Argument options to use.
+ * @prop {Array<ArgumentOptions|Control>|ArgumentProvider} [args=[]] - Argument options to use.
  * @prop {boolean} [quoted=true] - Whether or not to consider quotes.
  * @prop {string} [separator] - Custom separator for argument input.
  * @prop {string} [channel] - Restricts channel to either 'guild' or 'dm'.
@@ -17,15 +17,15 @@ const ContentParser = require('./arguments/ContentParser');
  * @prop {boolean} [editable=true] - Whether or not message edits will run this command.
  * @prop {number} [cooldown] - The command cooldown in milliseconds.
  * @prop {number} [ratelimit=1] - Amount of command uses allowed until cooldown.
- * @prop {string|string[]|PrefixFunction} [prefix] - The prefix(es) to overwrite the global one for this command.
- * @prop {PermissionResolvable|PermissionResolvable[]|PermissionFunction} [userPermissions] - Permissions required by the user to run this command.
- * @prop {PermissionResolvable|PermissionResolvable[]|PermissionFunction} [clientPermissions] - Permissions required by the client to run this command.
- * @prop {RegExp|RegexFunction} [regex] - A regex to match in messages that are not directly commands.
+ * @prop {string|string[]|PrefixSupplier} [prefix] - The prefix(es) to overwrite the global one for this command.
+ * @prop {PermissionResolvable|PermissionResolvable[]|MissingPermissionSupplier} [userPermissions] - Permissions required by the user to run this command.
+ * @prop {PermissionResolvable|PermissionResolvable[]|MissingPermissionSupplier} [clientPermissions] - Permissions required by the client to run this command.
+ * @prop {RegExp|RegexSupplier} [regex] - A regex to match in messages that are not directly commands.
  * The args object will have `match` and `matches` properties.
- * @prop {ConditionFunction} [condition] - Whether or not to run on messages that are not directly commands.
- * @prop {BeforeFunction} [before] - Function to run before argument parsing and execution.
- * @prop {Snowflake|Snowflake[]|IgnoreFunction} [ignoreCooldown] - ID of user(s) to ignore cooldown or a function to ignore.
- * @prop {Snowflake|Snowflake[]|IgnoreFunction} [ignorePermissions] - ID of user(s) to ignore `userPermissions` checks or a function to ignore.
+ * @prop {ExecutionPredicate} [condition] - Whether or not to run on messages that are not directly commands.
+ * @prop {BeforeAction} [before] - Function to run before argument parsing and execution.
+ * @prop {Snowflake|Snowflake[]|IgnoreCheckPredicate} [ignoreCooldown] - ID of user(s) to ignore cooldown or a function to ignore.
+ * @prop {Snowflake|Snowflake[]|IgnoreCheckPredicate} [ignorePermissions] - ID of user(s) to ignore `userPermissions` checks or a function to ignore.
  * @prop {ArgumentPromptOptions} [defaultPrompt={}] - The default prompt options.
  * @prop {string|string[]} [description=''] - Description of the command.
  */
@@ -33,28 +33,28 @@ const ContentParser = require('./arguments/ContentParser');
 /**
  * A function used to check if a message has permissions for the command.
  * A non-null return value signifies the reason for missing permissions.
- * @typedef {Function} PermissionFunction
+ * @typedef {Function} MissingPermissionSupplier
  * @param {Message} message - Message that triggered the command.
  * @returns {any}
  */
 
 /**
  * A function used to return a regular expression.
- * @typedef {Function} RegexFunction
+ * @typedef {Function} RegexSupplier
  * @param {Message} message - Message to get regex for.
  * @returns {RegExp}
  */
 
 /**
  * A function used to check if the command should run arbitrarily.
- * @typedef {Function} ConditionFunction
+ * @typedef {Function} ExecutionPredicate
  * @param {Message} message - Message to check.
  * @returns {boolean}
  */
 
 /**
  * A function to replace Akairo's argument handler.
- * @typedef {Function} ArgumentFunction
+ * @typedef {Function} ArgumentProvider
  * @param {Message} message - Message that triggered the command.
  * @param {string} content - The content of the message.
  * @returns {any}
@@ -62,7 +62,7 @@ const ContentParser = require('./arguments/ContentParser');
 
 /**
  * A function to run before argument parsing and execution.
- * @typedef {Function} BeforeFunction
+ * @typedef {Function} BeforeAction
  * @param {Message} message - Message that triggered the command.
  * @returns {any}
  */
@@ -123,7 +123,7 @@ class Command extends AkairoModule {
 
         /**
          * The argument parser.
-         * @type {ArgumentParser|ArgumentFunction}
+         * @type {ArgumentParser|ArgumentProvider}
          */
         this.args = typeof args === 'function' ? args.bind(this) : new ArgumentParser(this, this.parser, args);
 
@@ -177,19 +177,19 @@ class Command extends AkairoModule {
 
         /**
          * Command prefix overwrite.
-         * @type {?string|string[]|PrefixFunction}
+         * @type {?string|string[]|PrefixSupplier}
          */
         this.prefix = typeof prefix === 'function' ? prefix.bind(this) : prefix;
 
         /**
          * Permissions required to run command by the client.
-         * @type {PermissionResolvable|PermissionResolvable[]|PermissionFunction}
+         * @type {PermissionResolvable|PermissionResolvable[]|MissingPermissionSupplier}
          */
         this.clientPermissions = typeof clientPermissions === 'function' ? clientPermissions.bind(this) : clientPermissions;
 
         /**
          * Permissions required to run command by the user.
-         * @type {PermissionResolvable|PermissionResolvable[]|PermissionFunction}
+         * @type {PermissionResolvable|PermissionResolvable[]|MissingPermissionSupplier}
          */
         this.userPermissions = typeof userPermissions === 'function' ? userPermissions.bind(this) : userPermissions;
 
@@ -217,13 +217,13 @@ class Command extends AkairoModule {
 
         /**
          * ID of user(s) to ignore cooldown or a function to ignore.
-         * @type {?Snowflake|Snowflake[]|IgnoreFunction}
+         * @type {?Snowflake|Snowflake[]|IgnoreCheckPredicate}
          */
         this.ignoreCooldown = typeof ignoreCooldown === 'function' ? ignoreCooldown.bind(this) : ignoreCooldown;
 
         /**
          * ID of user(s) to ignore `userPermissions` checks or a function to ignore.
-         * @type {?Snowflake|Snowflake[]|IgnoreFunction}
+         * @type {?Snowflake|Snowflake[]|IgnoreCheckPredicate}
          */
         this.ignorePermissions = typeof ignorePermissions === 'function' ? ignorePermissions.bind(this) : ignorePermissions;
 

@@ -78,7 +78,7 @@ const { isPromise } = require('../../../util/Util');
  * A void return value will use the default value for the argument or start a prompt.
  * Any other truthy return value will be used as the evaluated argument.
  * If returning a Promise, the resolved value will go through the above steps.
- * @typedef {Function} ArgumentTypeFunction
+ * @typedef {Function} ArgumentTypeCaster
  * @param {string} phrase - The user input.
  * @param {Message} message - Message that triggered the command.
  * @param {Object} prevArgs - Previous arguments.
@@ -87,7 +87,7 @@ const { isPromise } = require('../../../util/Util');
 
 /**
  * A function for validating parsed arguments.
- * @typedef {Function} ArgumentPredicate
+ * @typedef {Function} ParsedValuePredicate
  * @param {any} value - The parsed value.
  * @param {string} phrase - The user input.
  * @param {Message} message - Message that triggered the command.
@@ -97,7 +97,7 @@ const { isPromise } = require('../../../util/Util');
 
 /**
  * A function for mapping parsed arguments.
- * @typedef {Function} ArgumentMapFunction
+ * @typedef {Function} ParsedValueMapper
  * @param {any} value - The parsed value.
  * @param {string} phrase - The user input.
  * @param {Message} message - Message that triggered the command.
@@ -120,21 +120,21 @@ const { isPromise } = require('../../../util/Util');
  * @prop {number} [limit=Infinity] - Amount of inputs allowed for an infinite prompt before finishing.
  * @prop {boolean} [breakout=true] - Whenever an input matches the format of a command, this option controls whether or not to cancel this command and run that command.
  * The command to be run may be the same command or some other command.
- * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|ArgumentPromptFunction} [start] - Text sent on start of prompt.
- * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|ArgumentPromptFunction} [retry] - Text sent on a retry (failure to cast type).
- * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|ArgumentPromptFunction} [timeout] - Text sent on collector time out.
- * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|ArgumentPromptFunction} [ended] - Text sent on amount of tries reaching the max.
- * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|ArgumentPromptFunction} [cancel] - Text sent on cancellation of command.
- * @prop {ArgumentPromptModifyFunction} [modifyStart] - Function to modify start prompts.
- * @prop {ArgumentPromptModifyFunction} [modifyRetry] - Function to modify retry prompts.
- * @prop {ArgumentPromptModifyFunction} [modifyTimeout] - Function to modify timeout messages.
- * @prop {ArgumentPromptModifyFunction} [modifyEnded] - Function to modify out of tries messages.
- * @prop {ArgumentPromptModifyFunction} [modifyCancel] - Function to modify cancel messages.
+ * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|PromptContentSupplier} [start] - Text sent on start of prompt.
+ * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|PromptContentSupplier} [retry] - Text sent on a retry (failure to cast type).
+ * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|PromptContentSupplier} [timeout] - Text sent on collector time out.
+ * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|PromptContentSupplier} [ended] - Text sent on amount of tries reaching the max.
+ * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|PromptContentSupplier} [cancel] - Text sent on cancellation of command.
+ * @prop {PromptContentModifier} [modifyStart] - Function to modify start prompts.
+ * @prop {PromptContentModifier} [modifyRetry] - Function to modify retry prompts.
+ * @prop {PromptContentModifier} [modifyTimeout] - Function to modify timeout messages.
+ * @prop {PromptContentModifier} [modifyEnded] - Function to modify out of tries messages.
+ * @prop {PromptContentModifier} [modifyCancel] - Function to modify cancel messages.
  */
 
 /**
  * A function returning text for the prompt.
- * @typedef {Function} ArgumentPromptFunction
+ * @typedef {Function} PromptContentSupplier
  * @param {Message} message - Message that triggered the command.
  * @param {Object} prevArgs - Previous arguments.
  * @param {ArgumentPromptData} data - Miscellaneous data.
@@ -143,7 +143,7 @@ const { isPromise } = require('../../../util/Util');
 
 /**
  * A function modifying a prompt text.
- * @typedef {Function} ArgumentPromptModifyFunction
+ * @typedef {Function} PromptContentModifier
  * @param {string|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions} text - Text from the prompt to modify.
  * @param {Message} message - Message that triggered the command.
  * @param {Object} prevArgs - Previous arguments.
@@ -165,7 +165,7 @@ const { isPromise } = require('../../../util/Util');
  * @typedef {Object} ArgumentOptions
  * @prop {string} id - ID of the argument for use in the args object.
  * @prop {ArgumentMatch} [match='phrase'] - Method to match text.
- * @prop {ArgumentType|ArgumentTypeFunction} [type='string'] - Type to cast to.
+ * @prop {ArgumentType|ArgumentTypeCaster} [type='string'] - Type to cast to.
  * @prop {string|string[]} [flag] - The string(s) to use as the flag for flag and option args.
  * @prop {number} [index] - Index of phrase to start from.
  * Applicable to phrase, text, content, rest, or separate match only.
@@ -179,7 +179,7 @@ const { isPromise } = require('../../../util/Util');
  * Applicable to phrase match only.
  * @prop {number} [limit=Infinity] - Amount of phrases to match when matching more than one.
  * Applicable to text, content, rest, or separate match only.
- * @prop {any|ArgumentDefaultFunction} [default=null] - Default value if text does not parse or cast correctly.
+ * @prop {any|DefaultValueSupplier} [default=null] - Default value if text does not parse or cast correctly.
  * If using a flag arg, setting the default value to a non-void value inverses the result.
  * @prop {string|string[]} [description=''] - A description of the argument.
  * @prop {ArgumentPromptOptions} [prompt] - Prompt options for when user does not provide input.
@@ -187,7 +187,7 @@ const { isPromise } = require('../../../util/Util');
 
 /**
  * Function get the default value of the argument.
- * @typedef {Function} ArgumentDefaultFunction
+ * @typedef {Function} DefaultValueSupplier
  * @param {Message} message - Message that triggered the command.
  * @param {Object} prevArgs - Previous arguments.
  * @returns {any}
@@ -231,7 +231,7 @@ class Argument {
 
         /**
          * The type to cast to.
-         * @type {ArgumentType|ArgumentTypeFunction}
+         * @type {ArgumentType|ArgumentTypeCaster}
          */
         this.type = typeof type === 'function' ? type.bind(this) : type;
 
@@ -273,7 +273,7 @@ class Argument {
 
         /**
          * The default value of the argument.
-         * @type {any|ArgumentDefaultFunction}
+         * @type {any|DefaultValueSupplier}
          */
         this.default = typeof defaultValue === 'function' ? defaultValue.bind(this) : defaultValue;
     }
@@ -505,7 +505,7 @@ class Argument {
 
     /**
      * Casts a phrase to the specified type.
-     * @param {ArgumentType|ArgumentTypeFunction} type - Type to use.
+     * @param {ArgumentType|ArgumentTypeCaster} type - Type to use.
      * @param {TypeResolver} resolver - Type resolver to use.
      * @param {string} phrase - Phrase to process.
      * @param {Message} message - Message that called the command.
@@ -565,8 +565,8 @@ class Argument {
     /**
      * Creates a type from multiple types (union type).
      * The first type that resolves to a non-void value is used.
-     * @param {...ArgumentType|ArgumentTypeFunction} types - Types to use.
-     * @returns {ArgumentTypeFunction}
+     * @param {...ArgumentType|ArgumentTypeCaster} types - Types to use.
+     * @returns {ArgumentTypeCaster}
      */
     /* eslint-disable no-invalid-this */
     static union(...types) {
@@ -585,8 +585,8 @@ class Argument {
     /**
      * Creates a type from multiple types (tuple type).
      * Only inputs where each type resolves with a non-void value are valid.
-     * @param {...ArgumentType|ArgumentTypeFunction} types - Types to use.
-     * @returns {ArgumentTypeFunction}
+     * @param {...ArgumentType|ArgumentTypeCaster} types - Types to use.
+     * @returns {ArgumentTypeCaster}
      */
     static tuple(...types) {
         return async function typeFn(phrase, message, args) {
@@ -605,9 +605,9 @@ class Argument {
     /**
      * Creates a type with extra validation.
      * If the predicate is not true, the value is considered invalid.
-     * @param {ArgumentType|ArgumentTypeFunction} type - The type to use.
-     * @param {ArgumentPredicate} predicate - The predicate function.
-     * @returns {ArgumentTypeFunction}
+     * @param {ArgumentType|ArgumentTypeCaster} type - The type to use.
+     * @param {ParsedValuePredicate} predicate - The predicate function.
+     * @returns {ArgumentTypeCaster}
      */
     static validate(type, predicate) {
         return async function typeFn(phrase, message, args) {
@@ -620,11 +620,11 @@ class Argument {
 
     /**
      * Creates a type where the parsed value must be within a range.
-     * @param {ArgumentType|ArgumentTypeFunction} type - The type to use
+     * @param {ArgumentType|ArgumentTypeCaster} type - The type to use
      * @param {number} min - Minimum value.
      * @param {number} max - Maximum value.
      * @param {boolean} [inclusive=false] - Whether or not to be inclusive on the upper bound.
-     * @returns {ArgumentTypeFunction}
+     * @returns {ArgumentTypeCaster}
      */
     static range(type, min, max, inclusive = false) {
         return Argument.validate(type, x => x >= min && (inclusive ? x <= max : x < max));
@@ -633,9 +633,9 @@ class Argument {
     /**
      * Creates a type that uses the parsed value to create a new value.
      * If the value of the dependant type is void, the result is null.
-     * @param {ArgumentType|ArgumentTypeFunction} type - The type to use.
-     * @param {ArgumentMapFunction} fn - The mapping function.
-     * @returns {ArgumentTypeFunction}
+     * @param {ArgumentType|ArgumentTypeCaster} type - The type to use.
+     * @param {ParsedValueMapper} fn - The mapping function.
+     * @returns {ArgumentTypeCaster}
      */
     static map(type, fn) {
         return async function typeFn(phrase, message, args) {
