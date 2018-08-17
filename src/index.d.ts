@@ -665,9 +665,9 @@ declare module 'discord-akairo' {
 
     export type PrefixSupplier = (message: Message) => string | string[] | Promise<string | string[]>;
 
-    export type PromptContentSupplier = (message: Message, args: any, data: ArgumentPromptData) => string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions;
-
     export type PromptContentModifier = (text: string, message: Message, args: any, data: ArgumentPromptData) => string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions;
+
+    export type PromptContentSupplier = (message: Message, args: any, data: ArgumentPromptData) => string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions;
 
     export type RegexSupplier = (message: Message) => RegExp;
 
