@@ -10,7 +10,7 @@ const { Collection } = require('discord.js');
 
 /**
  * Various parsed components of the message.
- * @typedef {Object} ParsedComponents
+ * @typedef {Object} ParsedComponentData
  * @prop {?Command} command - The command used.
  * @prop {?string} prefix - The prefix used.
  * @prop {?string} alias - The alias used.
@@ -39,7 +39,7 @@ class CommandUtil {
 
         /**
          * The parsed components.
-         * @type {?ParsedComponents}
+         * @type {?ParsedComponentData}
          */
         this.parsed = null;
 

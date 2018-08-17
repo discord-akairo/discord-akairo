@@ -269,7 +269,7 @@ declare module 'discord-akairo' {
         public lastResponse?: Message;
         public message: Message;
         public messages?: Collection<Snowflake, Message>;
-        public parsed?: ParsedComponents;
+        public parsed?: ParsedComponentData;
         public shouldEdit: boolean;
 
         public addMessage(message: Message | Message[]): Message | Message[];
@@ -612,7 +612,7 @@ declare module 'discord-akairo' {
         type?: string;
     };
 
-    export type ParsedComponents = {
+    export type ParsedComponentData = {
         afterContent?: string;
         alias?: string;
         command?: Command;
