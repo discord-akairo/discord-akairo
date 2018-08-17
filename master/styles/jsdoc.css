@@ -19,6 +19,10 @@ body {
   line-height: 160%;
 }
 
+img {
+  max-width: 100%;
+}
+
 a,
 a:active {
   color: #265ba0;
@@ -60,6 +64,7 @@ h1 {
 h1.page-title {
   font-size: 48px;
   margin: 1em 30px;
+  line-height: 100%;
 }
 
 h2 {
@@ -167,6 +172,17 @@ nav {
   height: 100%;
 }
 
+nav #nav-search{
+  width: 210px;
+  height: 30px;
+  padding: 5px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 3px;
+  margin-right: 20px;
+  margin-top: 20px;
+}
+
 nav h3 {
   margin-top: 12px;
   font-size: 13px;
@@ -208,15 +224,16 @@ nav > ul {
 
 nav > ul > li > a {
   color: #265ba0;
+  /* margin-top: 10px; */
 }
 
-nav ul ul {
+/* nav ul ul {
   margin-bottom: 10px
 }
 
 nav ul ul + ul {
   margin-top: -10px;
-}
+} */
 
 nav ul ul a {
   color: hsl(207, 1%, 60%);
@@ -405,7 +422,7 @@ div.description {
    user-select: text;
 }
 
-.params, .props {
+table {
   border-spacing: 0;
   border: 1px solid #ddd;
   border-collapse: collapse;
@@ -414,6 +431,20 @@ div.description {
   width: 100%;
   font-size: 14px;
   margin: 1em 0;
+}
+
+td, th {
+  margin: 0px;
+  text-align: left;
+  vertical-align: top;
+  padding: 10px;
+  display: table-cell;
+}
+
+thead tr, thead tr {
+  background-color: #fff;
+  font-weight: bold;
+  border-bottom: 1px solid #ddd;
 }
 
 .params .type {
@@ -463,7 +494,7 @@ div.description {
 }
 
 span.param-type, .params td .param-type, .param-type dd {
-   color: #4d4e53;
+  color: #4d4e53;
   font-family: Consolas, Monaco, 'Andale Mono', monospace
 }
 
@@ -656,4 +687,8 @@ span.param-type, .params td .param-type, .param-type dd {
   display: inline-block;
   margin-left: -14px;
   margin-right: 5px;
+}
+
+#disqus_thread{
+  margin-left: 30px;
 }
