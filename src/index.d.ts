@@ -155,7 +155,7 @@ declare module 'discord-akairo' {
     }
 
     export class Command extends AkairoModule {
-        public constructor(id: string, options?: CommandOptions & AkairoModuleOptions);
+        public constructor(id: string, options?: CommandOptions);
 
         public aliases: string[];
         public args: ArgumentParser | ArgumentProvider;
@@ -190,7 +190,7 @@ declare module 'discord-akairo' {
     }
 
     export class CommandHandler extends AkairoHandler {
-        public constructor(client: AkairoClient, options: CommandHandlerOptions & AkairoHandlerOptions);
+        public constructor(client: AkairoClient, options: CommandHandlerOptions);
 
         public aliasReplacement?: RegExp;
         public aliases: Collection<string, string>;
@@ -357,7 +357,7 @@ declare module 'discord-akairo' {
     class CancelControl extends Control {}
 
     export class Inhibitor extends AkairoModule {
-        public constructor(id: string, options?: InhibitorOptions & AkairoModuleOptions);
+        public constructor(id: string, options?: InhibitorOptions);
 
         public category: Category<string, Inhibitor>;
         public client: AkairoClient;
@@ -396,7 +396,7 @@ declare module 'discord-akairo' {
     }
 
     export class Listener extends AkairoModule {
-        public constructor(id: string, options?: ListenerOptions & AkairoModuleOptions);
+        public constructor(id: string, options?: ListenerOptions);
 
         public category: Category<string, Listener>;
         public client: AkairoClient;
@@ -489,7 +489,7 @@ declare module 'discord-akairo' {
         public types: Collection<string, ArgumentTypeCaster>;
 
         public addBuiltInTypes(): void;
-        public addType(name: string, resolver: ArgumentTypeCaster): this;
+        public addType(name: string, fn: ArgumentTypeCaster): this;
         public addTypes(types: { [x: string]: ArgumentTypeCaster }): this;
         public type(name: string): ArgumentTypeCaster;
     }
@@ -575,7 +575,7 @@ declare module 'discord-akairo' {
         separator?: string;
         typing?: boolean;
         userPermissions?: PermissionResolvable | PermissionResolvable[] | MissingPermissionSupplier;
-    };
+    } & AkairoModuleOptions;
 
     export type CommandHandlerOptions = {
         aliasReplacement?: RegExp;
@@ -592,7 +592,7 @@ declare module 'discord-akairo' {
         ignorePermissions?: Snowflake | Snowflake[] | IgnoreCheckPredicate;
         prefix?: string | string[] | PrefixSupplier;
         storeMessages?: boolean;
-    };
+    } & AkairoHandlerOptions;
 
     export type ContentParserOptions = {
         flagWords?: string[];
@@ -604,13 +604,13 @@ declare module 'discord-akairo' {
     export type InhibitorOptions = {
         reason?: string;
         type?: string;
-    };
+    } & AkairoModuleOptions;
 
     export type ListenerOptions = {
         emitter?: string | EventEmitter;
         event?: string;
         type?: string;
-    };
+    } & AkairoModuleOptions;
 
     export type ParsedComponentData = {
         afterContent?: string;

@@ -221,13 +221,13 @@ module.exports = Command;
 
 /**
  * Options to use for command execution behavior.
- * @typedef {Object} CommandOptions
+ * Also includes properties from AkairoModuleOptions.
+ * @typedef {AkairoModuleOptions} CommandOptions
  * @prop {string[]} [aliases=[]] - Command names.
  * @prop {Array<ArgumentOptions|Control>|ArgumentProvider} [args=[]] - Argument options to use.
  * @prop {boolean} [quoted=true] - Whether or not to consider quotes.
  * @prop {string} [separator] - Custom separator for argument input.
  * @prop {string} [channel] - Restricts channel to either 'guild' or 'dm'.
- * @prop {string} [category='default'] - Category ID for organization purposes.
  * @prop {boolean} [ownerOnly=false] - Whether or not to allow client owner(s) only.
  * @prop {boolean} [typing=false] - Whether or not to type in channel during execution.
  * @prop {boolean} [editable=true] - Whether or not message edits will run this command.

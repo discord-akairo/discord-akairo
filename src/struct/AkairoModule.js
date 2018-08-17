@@ -2,7 +2,7 @@ class AkairoModule {
     /**
      * Creates a new module.
      * @param {string} id - ID of module.
-     * @param {ModuleOptions} [options={}] - Options.
+     * @param {AkairoModuleOptions} [options={}] - Options.
      */
     constructor(id, { category = 'default' } = {}) {
         /**
@@ -71,6 +71,6 @@ module.exports = AkairoModule;
 
 /**
  * Options for module.
- * @typedef {Object} ModuleOptions
+ * @typedef {Object} AkairoModuleOptions
  * @prop {string} [category='default'] - Category ID for organization purposes.
  */

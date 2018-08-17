@@ -39,13 +39,13 @@ class Argument {
         this.match = match;
 
         /**
-         * The type to cast to.
+         * The type to cast to or a function to use to cast.
          * @type {ArgumentType|ArgumentTypeCaster}
          */
         this.type = typeof type === 'function' ? type.bind(this) : type;
 
         /**
-         * The string(s) to use for flag and option args.
+         * The string(s) to use for flag or option match.
          * @type {?string|string[]}
          */
         this.flag = flag;
@@ -63,13 +63,13 @@ class Argument {
         this.unordered = unordered;
 
         /**
-         * The amount of phrases to match.
+         * The amount of phrases to match for rest, separate, content, or text match.
          * @type {number}
          */
         this.limit = limit;
 
         /**
-         * The description.
+         * The description of the argument.
          * @type {string}
          */
         this.description = Array.isArray(description) ? description.join('\n') : description;
@@ -81,7 +81,7 @@ class Argument {
         this.prompt = prompt;
 
         /**
-         * The default value of the argument.
+         * The default value of the argument or a function supplying the default value.
          * @type {any|DefaultValueSupplier}
          */
         this.default = typeof defaultValue === 'function' ? defaultValue.bind(this) : defaultValue;
@@ -137,7 +137,7 @@ class Argument {
     }
 
     /**
-     * Casts a phrase to the argument's type.
+     * Casts a phrase to this argument's type.
      * @param {string} phrase - Phrase to process.
      * @param {Message} message - Message that called the command.
      * @param {Object} args - Previous arguments from command.
@@ -464,7 +464,7 @@ module.exports = Argument;
  * @prop {string} id - ID of the argument for use in the args object.
  * @prop {ArgumentMatch} [match='phrase'] - Method to match text.
  * @prop {ArgumentType|ArgumentTypeCaster} [type='string'] - Type to cast to.
- * @prop {string|string[]} [flag] - The string(s) to use as the flag for flag and option args.
+ * @prop {string|string[]} [flag] - The string(s) to use as the flag for flag or option match.
  * @prop {number} [index] - Index of phrase to start from.
  * Applicable to phrase, text, content, rest, or separate match only.
  * Ignored when used with the unordered option.
@@ -477,8 +477,8 @@ module.exports = Argument;
  * Applicable to phrase match only.
  * @prop {number} [limit=Infinity] - Amount of phrases to match when matching more than one.
  * Applicable to text, content, rest, or separate match only.
- * @prop {any|DefaultValueSupplier} [default=null] - Default value if text does not parse or cast correctly.
- * If using a flag arg, setting the default value to a non-void value inverses the result.
+ * @prop {any|DefaultValueSupplier} [default=null] - Default value if no input or did not cast correctly.
+ * If using a flag match, setting the default value to a non-void value inverses the result.
  * @prop {string|string[]} [description=''] - A description of the argument.
  * @prop {ArgumentPromptOptions} [prompt] - Prompt options for when user does not provide input.
  */
@@ -486,7 +486,7 @@ module.exports = Argument;
 /**
  * Data passed to argument prompt functions.
  * @typedef {Object} ArgumentPromptData
- * @prop {number} retries - Amount of retries.
+ * @prop {number} retries - Amount of retries so far.
  * @prop {boolean} infinite - Whether the prompt is infinite or not.
  * @prop {Message} message - The message that caused the prompt.
  * @prop {string} phrase - The input phrase that caused the prompt if there was one.

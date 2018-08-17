@@ -79,10 +79,10 @@ module.exports = Inhibitor;
 
 /**
  * Options to use for inhibitor execution behavior.
- * @typedef {Object} InhibitorOptions
+ * Also includes properties from AkairoModuleOptions.
+ * @typedef {AkairoModuleOptions}  InhibitorOptions
  * @prop {string} [reason=''] - Reason emitted when command or message is blocked.
  * @prop {boolean} [type='post'] - Can be 'all' to run on all messages, 'pre' to run on messages not blocked by the built-in inhibitors, or 'post' to run on messages that are commands.
  * @prop {number} [priority=0] - Priority for the inhibitor for when more than one inhibitors block a message.
  * The inhibitor with the highest priority is the one that is used for the block reason.
- * @prop {string} [category='default'] - Category ID for organization purposes.
  */

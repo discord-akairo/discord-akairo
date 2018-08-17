@@ -355,17 +355,17 @@ class TypeResolver {
     /**
      * Adds a new type.
      * @param {string} name - Name of the type.
-     * @param {ArgumentTypeCaster} resolver - Function that resolves the type.
+     * @param {ArgumentTypeCaster} fn - Function that casts the type.
      * @returns {TypeResolver}
      */
-    addType(name, resolver) {
-        this.types.set(name, resolver);
+    addType(name, fn) {
+        this.types.set(name, fn);
         return this;
     }
 
     /**
      * Adds multiple new types.
-     * @param {Object} types  - Object with keys as the type name and values as the resolver function.
+     * @param {Object} types  - Object with keys as the type name and values as the cast function.
      * @returns {TypeResolver}
      */
     addTypes(types) {

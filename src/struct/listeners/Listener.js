@@ -76,9 +76,9 @@ module.exports = Listener;
 
 /**
  * Options to use for listener execution behavior.
- * @typedef {Object} ListenerOptions
+ * Also includes properties from AkairoModuleOptions.
+ * @typedef {AkairoModuleOptions} ListenerOptions
  * @prop {string|EventEmitter} [emitter='client'] - The event emitter, either a key from `ListenerHandler#emitters` or an EventEmitter.
  * @prop {string} [event='ready'] - Event name to listen to.
  * @prop {string} [type='on'] - Type of listener, either 'on' or 'once'.
- * @prop {string} [category='default'] - Category ID for organization purposes.
  */
