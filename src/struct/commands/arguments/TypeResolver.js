@@ -359,7 +359,7 @@ class TypeResolver {
      * @returns {TypeResolver}
      */
     addType(name, resolver) {
-        this.types.set(name, resolver.bind(this));
+        this.types.set(name, resolver);
         return this;
     }
 

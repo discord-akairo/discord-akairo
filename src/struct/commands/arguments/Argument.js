@@ -542,7 +542,7 @@ class Argument {
         }
 
         if (resolver.type(type)) {
-            let res = resolver.type(type)(phrase, message, args);
+            let res = resolver.type(type).call(this, phrase, message, args);
             if (isPromise(res)) res = await res;
             if (res != null) return res;
             return null;
