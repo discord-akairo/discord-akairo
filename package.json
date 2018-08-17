@@ -26,7 +26,7 @@
   "devDependencies": {
     "@types/node": "^8.0.26",
     "@types/sequelize": "^4.27.23",
-    "docdash": "^0.4.0",
+    "docdash": "github:1computer1/docdash",
     "eslint": "^4.3.0",
     "jsdoc": "^3.5.4",
     "jsdoc-strip-async-await": "^0.1.0"
