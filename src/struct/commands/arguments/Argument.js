@@ -441,7 +441,7 @@ class Argument {
 
     /**
      * Creates a type that uses the parsed value to create a new value.
-     * If the value of the dependant type is void, the result is null.
+     * If the value of the dependent type is void, the result is null.
      * @param {ArgumentType|ArgumentTypeCaster} type - The type to use.
      * @param {ParsedValueMapper} fn - The mapping function.
      * @returns {ArgumentTypeCaster}
