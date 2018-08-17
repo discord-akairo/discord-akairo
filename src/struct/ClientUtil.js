@@ -46,7 +46,7 @@ class ClientUtil {
      * @returns {boolean}
      */
     checkUser(text, user, caseSensitive = false, wholeWord = false) {
-        if (user.id !== '1' && user.id === text) return true;
+        if (user.id === text) return true;
 
         const reg = /<@!?(\d{17,19})>/;
         const match = text.match(reg);
@@ -99,7 +99,7 @@ class ClientUtil {
      * @returns {boolean}
      */
     checkMember(text, member, caseSensitive = false, wholeWord = false) {
-        if (member.id !== '1' && member.id === text) return true;
+        if (member.id === text) return true;
 
         const reg = /<@!?(\d{17,19})>/;
         const match = text.match(reg);
