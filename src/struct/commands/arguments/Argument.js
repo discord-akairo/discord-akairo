@@ -371,13 +371,13 @@ class Argument {
         return null;
     }
 
+    /* eslint-disable no-invalid-this */
     /**
      * Creates a type from multiple types (union type).
      * The first type that resolves to a non-void value is used.
      * @param {...ArgumentType|ArgumentTypeCaster} types - Types to use.
      * @returns {ArgumentTypeCaster}
      */
-    /* eslint-disable no-invalid-this */
     static union(...types) {
         return async function typeFn(phrase, message, args) {
             for (let entry of types) {
