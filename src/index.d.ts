@@ -252,7 +252,7 @@ declare module 'discord-akairo' {
         public on(event: 'remove', listener: (command: Command) => any): this;
         public on(event: 'load', listener: (command: Command, isReload: boolean) => any): this;
         public on(event: 'commandBlocked', listener: (message: Message, command: Command, reason: string) => any): this;
-        public on(event: 'commandCancelled', listener: (message: Message, command: Command) => any): this;
+        public on(event: 'commandCancelled', listener: (message: Message, command: Command, retryMessage?: Message) => any): this;
         public on(event: 'commandFinished', listener: (message: Message, command: Command, args: any, returnValue: any) => any): this;
         public on(event: 'commandStarted', listener: (message: Message, command: Command, args: any) => any): this;
         public on(event: 'cooldown', listener: (message: Message, command: Command, remaining: number) => any): this;
@@ -554,6 +554,7 @@ declare module 'discord-akairo' {
     };
 
     export type ArgumentPromptOptions = {
+        breakout?: boolean;
         cancel?: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | PromptContentSupplier;
         cancelWord?: string;
         ended?: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | PromptContentSupplier;

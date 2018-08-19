@@ -401,6 +401,7 @@ class CommandHandler extends AkairoHandler {
                 this.emit(CommandHandlerEvents.COMMAND_CANCELLED, message, command);
                 return false;
             } else if (args instanceof ParsingFlag.CommandRetry) {
+                this.emit(CommandHandlerEvents.COMMAND_BREAKOUT, message, command, args.message);
                 return this.handle(args.message);
             }
 
@@ -1045,6 +1046,8 @@ module.exports = CommandHandler;
  * @event CommandHandler#commandCancelled
  * @param {Message} message - Message sent.
  * @param {Command} command - Command executed.
+ * @param {?Message} retryMessage - Message to retry with.
+ * This is passed when a prompt was broken out of with a message that looks like a command.
  */
 
 /**
