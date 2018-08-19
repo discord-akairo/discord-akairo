@@ -9,6 +9,7 @@ module.exports = {
     Command: require('./struct/commands/Command'),
     CommandHandler: require('./struct/commands/CommandHandler'),
     CommandUtil: require('./struct/commands/CommandUtil'),
+    ParsingFlag: require('./struct/commands/ParsingFlag'),
 
     // Arguments
     Argument: require('./struct/commands/arguments/Argument'),

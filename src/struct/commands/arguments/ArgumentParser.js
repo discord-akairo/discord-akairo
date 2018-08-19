@@ -1,7 +1,7 @@
 const Argument = require('./Argument');
 const { ArgumentMatches } = require('../../../util/Constants');
 const Control = require('./Control');
-const InternalFlag = require('../InternalFlag');
+const ParsingFlag = require('../ParsingFlag');
 
 class ArgumentParser {
     /**
@@ -50,7 +50,7 @@ class ArgumentParser {
      * Parses content.
      * @param {Message} message - Message to use.
      * @param {string} content - String to parse.
-     * @returns {Promise<Object>}
+     * @returns {Promise<Object|ParsingFlag>}
      */
     parse(message, content) {
         if (!this.args.length) return Promise.resolve({});
@@ -154,7 +154,7 @@ class ArgumentParser {
             }
 
             const res = await processFunc(message, processed);
-            if (res instanceof InternalFlag) return res;
+            if (res instanceof ParsingFlag) return res;
             processed[arg.id] = res;
             return process(args.slice(1));
         };

@@ -90,7 +90,7 @@ declare module 'discord-akairo' {
 
         public allow(message: Message, args: any): boolean;
         public cast(phrase: string, message: Message, args?: any): Promise<any>;
-        public collect(message: Message, args?: any, commandInput?: string): Promise<any>;
+        public collect(message: Message, args?: any, commandInput?: string): Promise<any|ParsingFlag>;
         public process(phrase: string, message: Message, args?: any): Promise<any>;
 
         public static cast(type: ArgumentType | ArgumentTypeCaster, resolver: TypeResolver, phrase: string, message: Message, args?: any): Promise<any>;
@@ -109,7 +109,7 @@ declare module 'discord-akairo' {
         public args: (ArgumentOptions | Control)[];
 
         public buildArgs(args: (ArgumentOptions | Control)[]): (Argument | Control)[];
-        public parse(message: Message, content: string): Promise<object>;
+        public parse(message: Message, content: string): Promise<object|ParsingFlag>;
 
         public static getFlags(args: (ArgumentOptions | Control)[]): object;
     }
@@ -184,7 +184,7 @@ declare module 'discord-akairo' {
         public before(message: Message): any;
         public condition(message: Message): boolean;
         public exec(message: Message, args: any): any;
-        public parse(message: Message, content: string): Promise<object>;
+        public parse(message: Message, content: string): Promise<object|ParsingFlag>;
         public reload(): this;
         public remove(): this;
     }
@@ -290,6 +290,8 @@ declare module 'discord-akairo' {
         public optionFlagWords: string[];
         public quoted: boolean;
         public separator?: string;
+
+        public static ContentParserState: typeof ContentParserState;
 
         public parse(content: string): object;
     }
@@ -436,6 +438,22 @@ declare module 'discord-akairo' {
         public setEmitters(emitters: { [x: string]: EventEmitter }): void;
         public on(event: 'remove', listener: (listener: Listener) => any): this;
         public on(event: 'load', listener: (listener: Listener, isReload: boolean) => any): this;
+    }
+
+    export class ParsingFlag {
+        public static CommandCancel: typeof CommandCancel;
+        public static CommandRetry: typeof CommandRetry;
+
+        public static cancel(): CommandCancel;
+        public static retry(message: Message): CommandMessage;
+    }
+
+    class CommandCancel extends ParsingFlag {}
+
+    class CommandRetry extends ParsingFlag {
+        public constructor(message: Message);
+
+        public message: Message;
     }
 
     export abstract class Provider {

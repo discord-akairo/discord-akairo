@@ -1,5 +1,5 @@
 const { ArgumentMatches, ArgumentTypes } = require('../../../util/Constants');
-const InternalFlag = require('../InternalFlag');
+const ParsingFlag = require('../ParsingFlag');
 const { isPromise } = require('../../../util/Util');
 
 class Argument {
@@ -152,7 +152,7 @@ class Argument {
      * @param {Message} message - Message to prompt.
      * @param {Object} args - Previous arguments from command.
      * @param {string} [commandInput] - Previous input from command if there was one.
-     * @returns {Promise<any>}
+     * @returns {Promise<any|ParsingFlag>}
      */
     async collect(message, args = {}, commandInput = '') {
         const promptOptions = {};
@@ -256,12 +256,12 @@ class Argument {
                     if (message.util) message.util.addMessage(sentTimeout);
                 }
 
-                return InternalFlag.cancel();
+                return ParsingFlag.cancel();
             }
 
             if (promptOptions.breakout) {
                 const looksLike = await this.handler.parseCommand(input);
-                if (looksLike && looksLike.command) return InternalFlag.retry(input);
+                if (looksLike && looksLike.command) return ParsingFlag.retry(input);
             }
 
             if (input.content.toLowerCase() === promptOptions.cancelWord.toLowerCase()) {
@@ -271,7 +271,7 @@ class Argument {
                     if (message.util) message.util.addMessage(sentCancel);
                 }
 
-                return InternalFlag.cancel();
+                return ParsingFlag.cancel();
             }
 
             if (isInfinite && input.content.toLowerCase() === promptOptions.stopWord.toLowerCase()) {
@@ -291,7 +291,7 @@ class Argument {
                     if (message.util) message.util.addMessage(sentEnded);
                 }
 
-                return InternalFlag.cancel();
+                return ParsingFlag.cancel();
             }
 
             if (isInfinite) {

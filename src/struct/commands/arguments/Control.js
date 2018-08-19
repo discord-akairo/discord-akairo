@@ -1,5 +1,5 @@
 const AkairoError = require('../../../util/AkairoError');
-const InternalFlag = require('../InternalFlag');
+const ParsingFlag = require('../ParsingFlag');
 
 class Control {
     /**
@@ -218,10 +218,10 @@ class CancelControl extends Control {
     /**
      * Cancels the command.
      * @param {Object} data - Data for control.
-     * @returns {Object}
+     * @returns {CommandCancel}
      */
     control() {
-        return InternalFlag.cancel();
+        return ParsingFlag.cancel();
     }
 }
 
