@@ -442,24 +442,8 @@ class Argument {
     }
 
     /**
-     * Creates a type that uses the parsed value to create a new value.
-     * If the value of the dependent type is void, the result is null.
-     * @param {ArgumentType|ArgumentTypeCaster} type - The type to use.
-     * @param {ParsedValueMapper} fn - The mapping function.
-     * @returns {ArgumentTypeCaster}
-     */
-    static map(type, fn) {
-        return async function typeFn(phrase, message, args) {
-            if (typeof type === 'function') type = type.bind(this);
-            const res = await Argument.cast(type, this.handler.resolver, phrase, message, args);
-            if (res == null) return null;
-            return fn.call(this, res, phrase, message, args);
-        };
-    }
-
-    /**
      * Creates a type that takes the result of the first type and runs it with the second.
-     * It is recommended that the first type return a string since built-in types expect a string.
+     * The first type should return a string since types expect a string as the input.
      * @param {ArgumentType|ArgumentTypeCaster} type1 - First type.
      * @param {ArgumentType|ArgumentTypeCaster} type2 - Second type.
      * @param {boolean} [ignoreVoid=true] - Whether or not to return null if the first type resolved with a void value.
@@ -468,9 +452,9 @@ class Argument {
     static compose(type1, type2, ignoreVoid = true) {
         return async function typeFn(phrase, message, args) {
             if (typeof type1 === 'function') type1 = type1.bind(this);
-            if (typeof type2 === 'function') type2 = type2.bind(this);
             const res = await Argument.cast(type1, this.handler.resolver, phrase, message, args);
             if (res == null && !ignoreVoid) return null;
+            if (typeof type2 === 'function') type2 = type2.bind(this);
             return Argument.cast(type2, this.handler.resolver, res, message, args);
         };
     }
@@ -626,16 +610,6 @@ module.exports = Argument;
 /**
  * Function get the default value of the argument.
  * @typedef {Function} DefaultValueSupplier
- * @param {Message} message - Message that triggered the command.
- * @param {Object} prevArgs - Previous arguments.
- * @returns {any}
- */
-
-/**
- * A function for mapping parsed arguments.
- * @typedef {Function} ParsedValueMapper
- * @param {any} value - The parsed value.
- * @param {string} phrase - The user input.
  * @param {Message} message - Message that triggered the command.
  * @param {Object} prevArgs - Previous arguments.
  * @returns {any}

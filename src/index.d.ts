@@ -95,7 +95,6 @@ declare module 'discord-akairo' {
 
         public static cast(type: ArgumentType | ArgumentTypeCaster, resolver: TypeResolver, phrase: string, message: Message, args?: any): Promise<any>;
         public static compose(type1: ArgumentType | ArgumentTypeCaster, type2: ArgumentType | ArgumentTypeCaster): ArgumentTypeCaster;
-        public static map(type: ArgumentType | ArgumentTypeCaster, fn: ParsedValueMapper): ArgumentTypeCaster;
         public static range(type: ArgumentType | ArgumentTypeCaster, min: number, max: number, inclusive?: boolean): ArgumentTypeCaster;
         public static tuple(...types: (ArgumentType | ArgumentTypeCaster)[]): ArgumentTypeCaster;
         public static union(...types: (ArgumentType | ArgumentTypeCaster)[]): ArgumentTypeCaster;
@@ -678,8 +677,6 @@ declare module 'discord-akairo' {
     export type MentionPrefixPredicate = (message: Message) => boolean;
 
     export type MissingPermissionSupplier = (message: Message) => any | Promise<any>;
-
-    export type ParsedValueMapper = (value: any, phrase: string, message: Message, args: any) => any;
 
     export type ParsedValuePredicate = (value: any, phrase: string, message: Message, args: any) => boolean;
 
