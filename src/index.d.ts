@@ -647,7 +647,7 @@ declare module 'discord-akairo' {
     export type ArgumentMatch = 'phrase' | 'rest' | 'separate' | 'flag' | 'option' | 'text' | 'content' | 'none';
 
     export type ArgumentType = 'string' | 'lowercase' | 'uppercase' | 'charCodes'
-        | 'number' | 'integer' | 'bigint'
+        | 'number' | 'integer' | 'bigint' | 'emojint'
         | 'url' | 'date' | 'color'
         | 'user' | 'users' | 'member' | 'members' | 'relevant' | 'relevants'
         | 'channel' | 'channels' | 'textChannel' | 'textChannels' | 'voiceChannel' | 'voiceChannels'
@@ -709,6 +709,7 @@ declare module 'discord-akairo' {
             NUMBER: 'number',
             INTEGER: 'integer',
             BIGINT: 'bigint',
+            EMOJINT: 'emojint',
             URL: 'url',
             DATE: 'date',
             COLOR: 'color',

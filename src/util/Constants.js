@@ -17,6 +17,7 @@ module.exports = {
         NUMBER: 'number',
         INTEGER: 'integer',
         BIGINT: 'bigint',
+        EMOJINT: 'emojint',
         URL: 'url',
         DATE: 'date',
         COLOR: 'color',
