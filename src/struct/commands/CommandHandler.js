@@ -341,7 +341,7 @@ class CommandHandler extends AkairoHandler {
                 if (this.commandUtils.has(message.id)) {
                     message.util = this.commandUtils.get(message.id);
                 } else {
-                    message.util = new CommandUtil(this.client, message);
+                    message.util = new CommandUtil(this, message);
                     this.commandUtils.set(message.id, message.util);
 
                     if (this.commandUtilLifetime) {
