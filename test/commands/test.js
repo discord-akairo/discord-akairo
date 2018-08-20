@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-const { Argument, Command } = require('../..');
+const { Argument: { compose, range, union }, Command } = require('../..');
 const util = require('util');
 
 class TestCommand extends Command {
@@ -11,7 +11,8 @@ class TestCommand extends Command {
             args: [
                 {
                     id: 'x',
-                    type: Argument.range(Argument.union('integer', 'emojint'), 0, 10)
+                    match: 'rest',
+                    type: compose(s => s.replace(/\s/g, ''), range(union('integer', 'emojint'), 0, 50))
                 }
             ]
         });

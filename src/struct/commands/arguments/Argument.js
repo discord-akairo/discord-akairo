@@ -424,7 +424,7 @@ class Argument {
             if (typeof type === 'function') type = type.bind(this);
             const res = await Argument.cast(type, this.handler.resolver, phrase, message, args);
             if (res == null) return null;
-            if (!predicate(res, phrase, message, args)) return null;
+            if (!predicate.call(this, res, phrase, message, args)) return null;
             return res;
         };
     }
@@ -453,7 +453,25 @@ class Argument {
             if (typeof type === 'function') type = type.bind(this);
             const res = await Argument.cast(type, this.handler.resolver, phrase, message, args);
             if (res == null) return null;
-            return fn(res, phrase, message, args);
+            return fn.call(this, res, phrase, message, args);
+        };
+    }
+
+    /**
+     * Creates a type that takes the result of the first type and runs it with the second.
+     * It is recommended that the first type return a string since built-in types expect a string.
+     * @param {ArgumentType|ArgumentTypeCaster} type1 - First type.
+     * @param {ArgumentType|ArgumentTypeCaster} type2 - Second type.
+     * @param {boolean} [ignoreVoid=true] - Whether or not to return null if the first type resolved with a void value.
+     * @returns {ArgumentTypeCaster}
+     */
+    static compose(type1, type2, ignoreVoid = true) {
+        return async function typeFn(phrase, message, args) {
+            if (typeof type1 === 'function') type1 = type1.bind(this);
+            if (typeof type2 === 'function') type2 = type2.bind(this);
+            const res = await Argument.cast(type1, this.handler.resolver, phrase, message, args);
+            if (res == null && !ignoreVoid) return null;
+            return Argument.cast(type2, this.handler.resolver, res, message, args);
         };
     }
     /* eslint-enable no-invalid-this */

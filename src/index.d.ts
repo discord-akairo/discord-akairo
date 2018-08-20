@@ -94,6 +94,7 @@ declare module 'discord-akairo' {
         public process(phrase: string, message: Message, args?: any): Promise<any>;
 
         public static cast(type: ArgumentType | ArgumentTypeCaster, resolver: TypeResolver, phrase: string, message: Message, args?: any): Promise<any>;
+        public static compose(type1: ArgumentType | ArgumentTypeCaster, type2: ArgumentType | ArgumentTypeCaster): ArgumentTypeCaster;
         public static map(type: ArgumentType | ArgumentTypeCaster, fn: ParsedValueMapper): ArgumentTypeCaster;
         public static range(type: ArgumentType | ArgumentTypeCaster, min: number, max: number, inclusive?: boolean): ArgumentTypeCaster;
         public static tuple(...types: (ArgumentType | ArgumentTypeCaster)[]): ArgumentTypeCaster;
