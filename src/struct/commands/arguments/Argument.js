@@ -381,7 +381,7 @@ class Argument {
     static union(...types) {
         return async function typeFn(phrase, message, args) {
             for (let entry of types) {
-                if (typeof entry === 'function') entry = entry.bind(this);
+                if (typeof type === 'function') entry = entry.bind(this);
                 // eslint-disable-next-line no-await-in-loop
                 const res = await Argument.cast(entry, this.handler.resolver, phrase, message, args);
                 if (res != null) return res;
@@ -400,7 +400,8 @@ class Argument {
     static tuple(...types) {
         return async function typeFn(phrase, message, args) {
             const results = [];
-            for (const entry of types) {
+            for (let entry of types) {
+                if (typeof type === 'function') entry = entry.bind(this);
                 // eslint-disable-next-line no-await-in-loop
                 const res = await Argument.cast(entry, this.handler.resolver, phrase, message, args);
                 if (res == null) return null;
@@ -420,6 +421,7 @@ class Argument {
      */
     static validate(type, predicate) {
         return async function typeFn(phrase, message, args) {
+            if (typeof type === 'function') type = type.bind(this);
             const res = await Argument.cast(type, this.handler.resolver, phrase, message, args);
             if (res == null) return null;
             if (!predicate(res, phrase, message, args)) return null;
@@ -448,6 +450,7 @@ class Argument {
      */
     static map(type, fn) {
         return async function typeFn(phrase, message, args) {
+            if (typeof type === 'function') type = type.bind(this);
             const res = await Argument.cast(type, this.handler.resolver, phrase, message, args);
             if (res == null) return null;
             return fn(res, phrase, message, args);

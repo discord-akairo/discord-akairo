@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-const { Command } = require('../..');
+const { Argument, Command } = require('../..');
 const util = require('util');
 
 class TestCommand extends Command {
@@ -10,24 +10,8 @@ class TestCommand extends Command {
             cooldown: 5000,
             args: [
                 {
-                    id: 'integer',
-                    type: 'integer',
-                    prompt: {
-                        start: 'Give me an integer!',
-                        retry: 'That\'s not an integer, try again!',
-                        optional: true
-                    },
-                    default: 1
-                },
-                {
-                    id: 'number',
-                    type: 'number',
-                    prompt: {
-                        start: 'Give me a number!',
-                        retry: 'That\'s not a number, try again!',
-                        optional: true
-                    },
-                    default: 2
+                    id: 'x',
+                    type: Argument.range(Argument.union('integer', 'emojint'), 0, 10)
                 }
             ]
         });
@@ -35,7 +19,6 @@ class TestCommand extends Command {
 
     exec(message, args) {
         message.channel.send(util.inspect(args, { depth: 1 }), { code: 'js' });
-        console.log(message.util.messages.map(m => m.content));
     }
 }
 
