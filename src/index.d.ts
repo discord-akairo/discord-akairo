@@ -445,7 +445,7 @@ declare module 'discord-akairo' {
         public static CommandRetry: typeof CommandRetry;
 
         public static cancel(): CommandCancel;
-        public static retry(message: Message): CommandMessage;
+        public static retry(message: Message): CommandRetry;
     }
 
     class CommandCancel extends ParsingFlag {}
@@ -671,6 +671,8 @@ declare module 'discord-akairo' {
     export type DefaultValueSupplier = (message: Message, args: any) => any;
 
     export type ExecutionPredicate = (message: Message) => boolean;
+
+    export type IgnoreCheckPredicate = (message: Message, command: Command) => boolean;
 
     export type LoadPredicate = (filepath: string) => boolean;
 
