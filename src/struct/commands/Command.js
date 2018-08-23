@@ -243,7 +243,7 @@ module.exports = Command;
  * @prop {Snowflake|Snowflake[]|IgnoreCheckPredicate} [ignoreCooldown] - ID of user(s) to ignore cooldown or a function to ignore.
  * @prop {Snowflake|Snowflake[]|IgnoreCheckPredicate} [ignorePermissions] - ID of user(s) to ignore `userPermissions` checks or a function to ignore.
  * @prop {ArgumentPromptOptions} [defaultPrompt={}] - The default prompt options.
- * @prop {string|string[]} [description=''] - Description of the command.
+ * @prop {StringResolvable} [description=''] - Description of the command.
  */
 
 /**

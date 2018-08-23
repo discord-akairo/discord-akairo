@@ -5,7 +5,7 @@ declare module 'discord-akairo' {
         MessageAdditions, MessageEditOptions, MessageOptions,
         User, UserResolvable, GuildMember,
         Channel, Role, Emoji, Guild,
-        PermissionResolvable, Snowflake
+        PermissionResolvable, StringResolvable, Snowflake
     } from 'discord.js';
 
     import * as SQLite from 'sqlite';
@@ -539,7 +539,7 @@ declare module 'discord-akairo' {
 
     export type ArgumentOptions = {
         default?: DefaultValueSupplier | any;
-        description?: string | string[];
+        description?: StringResolvable;
         id: string;
         index?: number;
         limit?: number;
@@ -559,9 +559,9 @@ declare module 'discord-akairo' {
 
     export type ArgumentPromptOptions = {
         breakout?: boolean;
-        cancel?: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | PromptContentSupplier;
+        cancel?: StringResolvable | MessageOptions | MessageAdditions | PromptContentSupplier;
         cancelWord?: string;
-        ended?: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | PromptContentSupplier;
+        ended?: StringResolvable | MessageOptions | MessageAdditions | PromptContentSupplier;
         infinite?: boolean;
         limit?: number;
         modifyCancel?: PromptContentModifier;
@@ -571,11 +571,11 @@ declare module 'discord-akairo' {
         modifyTimeout?: PromptContentModifier;
         optional?: boolean;
         retries?: number;
-        retry?: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | PromptContentSupplier;
-        start?: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | PromptContentSupplier;
+        retry?: StringResolvable | MessageOptions | MessageAdditions | PromptContentSupplier;
+        start?: StringResolvable | MessageOptions | MessageAdditions | PromptContentSupplier;
         stopWord?: string;
         time?: number;
-        timeout?: string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions | PromptContentSupplier;
+        timeout?: StringResolvable | MessageOptions | MessageAdditions | PromptContentSupplier;
     };
 
     export type CommandOptions = {
@@ -587,7 +587,7 @@ declare module 'discord-akairo' {
         condition?: ExecutionPredicate;
         cooldown?: number;
         defaultPrompt?: ArgumentPromptOptions;
-        description?: string | string[];
+        description?: StringResolvable;
         editable?: boolean;
         ignoreCooldown?: Snowflake | Snowflake[] | IgnoreCheckPredicate;
         ignorePermissions?: Snowflake | Snowflake[] | IgnoreCheckPredicate;
@@ -688,9 +688,9 @@ declare module 'discord-akairo' {
 
     export type PrefixSupplier = (message: Message) => string | string[] | Promise<string | string[]>;
 
-    export type PromptContentModifier = (text: string, message: Message, args: any, data: ArgumentPromptData) => string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions;
+    export type PromptContentModifier = (text: string, message: Message, args: any, data: ArgumentPromptData) => StringResolvable | MessageOptions | MessageAdditions;
 
-    export type PromptContentSupplier = (message: Message, args: any, data: ArgumentPromptData) => string | string[] | MessageEmbed | MessageAttachment | MessageAttachment[] | MessageOptions;
+    export type PromptContentSupplier = (message: Message, args: any, data: ArgumentPromptData) => StringResolvable | MessageOptions | MessageAdditions;
 
     export type RegexSupplier = (message: Message) => RegExp;
 

@@ -484,7 +484,7 @@ module.exports = Argument;
  * Applicable to text, content, rest, or separate match only.
  * @prop {any|DefaultValueSupplier} [default=null] - Default value if no input or did not cast correctly.
  * If using a flag match, setting the default value to a non-void value inverses the result.
- * @prop {string|string[]} [description=''] - A description of the argument.
+ * @prop {StringResolvable} [description=''] - A description of the argument.
  * @prop {ArgumentPromptOptions} [prompt] - Prompt options for when user does not provide input.
  */
 
@@ -512,11 +512,11 @@ module.exports = Argument;
  * @prop {number} [limit=Infinity] - Amount of inputs allowed for an infinite prompt before finishing.
  * @prop {boolean} [breakout=true] - Whenever an input matches the format of a command, this option controls whether or not to cancel this command and run that command.
  * The command to be run may be the same command or some other command.
- * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|PromptContentSupplier} [start] - Text sent on start of prompt.
- * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|PromptContentSupplier} [retry] - Text sent on a retry (failure to cast type).
- * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|PromptContentSupplier} [timeout] - Text sent on collector time out.
- * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|PromptContentSupplier} [ended] - Text sent on amount of tries reaching the max.
- * @prop {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions|PromptContentSupplier} [cancel] - Text sent on cancellation of command.
+ * @prop {StringResolvable|MessageOptions|MessageAdditions|PromptContentSupplier} [start] - Text sent on start of prompt.
+ * @prop {StringResolvable|MessageOptions|MessageAdditions|PromptContentSupplier} [retry] - Text sent on a retry (failure to cast type).
+ * @prop {StringResolvable|MessageOptions|MessageAdditions|PromptContentSupplier} [timeout] - Text sent on collector time out.
+ * @prop {StringResolvable|MessageOptions|MessageAdditions|PromptContentSupplier} [ended] - Text sent on amount of tries reaching the max.
+ * @prop {StringResolvable|MessageOptions|MessageAdditions|PromptContentSupplier} [cancel] - Text sent on cancellation of command.
  * @prop {PromptContentModifier} [modifyStart] - Function to modify start prompts.
  * @prop {PromptContentModifier} [modifyRetry] - Function to modify retry prompts.
  * @prop {PromptContentModifier} [modifyTimeout] - Function to modify timeout messages.
@@ -632,7 +632,7 @@ module.exports = Argument;
  * @param {Message} message - Message that triggered the command.
  * @param {Object} prevArgs - Previous arguments.
  * @param {ArgumentPromptData} data - Miscellaneous data.
- * @returns {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions}
+ * @returns {StringResolvable|MessageOptions|MessageAdditions}
  */
 
 /**
@@ -641,5 +641,5 @@ module.exports = Argument;
  * @param {Message} message - Message that triggered the command.
  * @param {Object} prevArgs - Previous arguments.
  * @param {ArgumentPromptData} data - Miscellaneous data.
- * @returns {string|string[]|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions}
+ * @returns {StringResolvable|MessageOptions|MessageAdditions}
  */
