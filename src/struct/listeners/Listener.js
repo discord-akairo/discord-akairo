@@ -10,8 +10,8 @@ class Listener extends AkairoModule {
      */
     constructor(id, {
         category,
-        emitter = 'client',
-        event = 'ready',
+        emitter,
+        event,
         type = 'on'
     } = {}) {
         super(id, { category });
@@ -78,7 +78,7 @@ module.exports = Listener;
  * Options to use for listener execution behavior.
  * Also includes properties from AkairoModuleOptions.
  * @typedef {AkairoModuleOptions} ListenerOptions
- * @prop {string|EventEmitter} [emitter='client'] - The event emitter, either a key from `ListenerHandler#emitters` or an EventEmitter.
- * @prop {string} [event='ready'] - Event name to listen to.
+ * @prop {string|EventEmitter} emitter - The event emitter, either a key from `ListenerHandler#emitters` or an EventEmitter.
+ * @prop {string} event - Event name to listen to.
  * @prop {string} [type='on'] - Type of listener, either 'on' or 'once'.
  */
