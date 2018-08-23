@@ -107,7 +107,7 @@ class Command extends AkairoModule {
 
         /**
          * Description of the command.
-         * @type {string}
+         * @type {string|any}
          */
         this.description = Array.isArray(description) ? description.join('\n') : description;
 

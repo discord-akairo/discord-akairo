@@ -70,7 +70,7 @@ class Argument {
 
         /**
          * The description of the argument.
-         * @type {string}
+         * @type {string|any}
          */
         this.description = Array.isArray(description) ? description.join('\n') : description;
 
@@ -82,7 +82,7 @@ class Argument {
 
         /**
          * The default value of the argument or a function supplying the default value.
-         * @type {any|DefaultValueSupplier}
+         * @type {DefaultValueSupplier|any}
          */
         this.default = typeof defaultValue === 'function' ? defaultValue.bind(this) : defaultValue;
     }
@@ -152,7 +152,7 @@ class Argument {
      * @param {Message} message - Message to prompt.
      * @param {Object} args - Previous arguments from command.
      * @param {string} [commandInput] - Previous input from command if there was one.
-     * @returns {Promise<any|ParsingFlag>}
+     * @returns {Promise<ParsingFlag|any>}
      */
     async collect(message, args = {}, commandInput = '') {
         const promptOptions = {};
@@ -482,7 +482,7 @@ module.exports = Argument;
  * Applicable to phrase match only.
  * @prop {number} [limit=Infinity] - Amount of phrases to match when matching more than one.
  * Applicable to text, content, rest, or separate match only.
- * @prop {any|DefaultValueSupplier} [default=null] - Default value if no input or did not cast correctly.
+ * @prop {DefaultValueSupplier|any} [default=null] - Default value if no input or did not cast correctly.
  * If using a flag match, setting the default value to a non-void value inverses the result.
  * @prop {StringResolvable} [description=''] - A description of the argument.
  * @prop {ArgumentPromptOptions} [prompt] - Prompt options for when user does not provide input.

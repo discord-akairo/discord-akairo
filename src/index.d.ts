@@ -80,8 +80,8 @@ declare module 'discord-akairo' {
 
         public readonly client: AkairoClient;
         public command: Command;
-        public default: any | DefaultValueSupplier;
-        public description: string;
+        public default: DefaultValueSupplier | any;
+        public description: string | any;
         public readonly handler: CommandHandler;
         public id: string;
         public index?: number;
@@ -94,7 +94,7 @@ declare module 'discord-akairo' {
 
         public allow(message: Message, args: any): boolean;
         public cast(phrase: string, message: Message, args?: any): Promise<any>;
-        public collect(message: Message, args?: any, commandInput?: string): Promise<any|ParsingFlag>;
+        public collect(message: Message, args?: any, commandInput?: string): Promise<ParsingFlag | any>;
         public process(phrase: string, message: Message, args?: any): Promise<any>;
 
         public static cast(type: ArgumentType | ArgumentTypeCaster, resolver: TypeResolver, phrase: string, message: Message, args?: any): Promise<any>;
@@ -170,7 +170,7 @@ declare module 'discord-akairo' {
         public clientPermissions: PermissionResolvable | PermissionResolvable[] | MissingPermissionSupplier;
         public cooldown?: number;
         public defaultPrompt: ArgumentPromptOptions;
-        public description: string;
+        public description: string | any;
         public editable: boolean;
         public filepath: string;
         public handler: CommandHandler;
@@ -682,7 +682,7 @@ declare module 'discord-akairo' {
 
     export type MentionPrefixPredicate = (message: Message) => boolean;
 
-    export type MissingPermissionSupplier = (message: Message) => any | Promise<any>;
+    export type MissingPermissionSupplier = (message: Message) => Promise<any> | any;
 
     export type ParsedValuePredicate = (value: any, phrase: string, message: Message, args: any) => boolean;
 
