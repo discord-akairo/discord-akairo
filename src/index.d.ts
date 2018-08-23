@@ -630,8 +630,8 @@ declare module 'discord-akairo' {
     } & AkairoModuleOptions;
 
     export type ListenerOptions = {
-        emitter?: string | EventEmitter;
-        event?: string;
+        emitter: string | EventEmitter;
+        event: string;
         type?: string;
     } & AkairoModuleOptions;
 
