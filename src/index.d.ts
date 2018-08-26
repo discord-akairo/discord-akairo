@@ -295,9 +295,9 @@ declare module 'discord-akairo' {
         public quoted: boolean;
         public separator?: string;
 
-        public static ContentParserState: typeof ContentParserState;
-
         public parse(content: string): object;
+
+        public static ContentParserState: typeof ContentParserState;
     }
 
     class ContentParserState {
@@ -622,7 +622,7 @@ declare module 'discord-akairo' {
         optionFlagWords?: string[];
         quoted?: boolean;
         separator?: string;
-    }
+    };
 
     export type InhibitorOptions = {
         reason?: string;
