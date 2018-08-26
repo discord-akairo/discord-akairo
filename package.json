@@ -1,47 +1,47 @@
 {
-  "name": "discord-akairo",
-  "version": "8.0.0-dev",
-  "description": "A highly customizable bot framework for Discord.js.",
-  "main": "./src/index.js",
-  "types": "./src/index.d.ts",
-  "author": "1Computer",
-  "license": "MIT",
-  "keywords": [
-    "discord",
-    "discord-js",
-    "discord.js",
-    "framework",
-    "bot",
-    "client",
-    "modular",
-    "commands",
-    "arguments"
-  ],
-  "dependencies": {},
-  "peerDependencies": {
-    "discord.js": ">=12.0.0-dev",
-    "sqlite": "^2.8.0",
-    "sequelize": "^4.38.0"
-  },
-  "devDependencies": {
-    "@types/node": "^10.9.2",
-    "@types/sequelize": "^4.27.25",
-    "docdash": "github:1computer1/docdash",
-    "eslint": "^5.4.0",
-    "jsdoc": "^3.5.5",
-    "jsdoc-strip-async-await": "^0.1.0"
-  },
-  "scripts": {
-    "docs": "node_modules/.bin/jsdoc --configure .jsdoc.json --verbose",
-    "test": "npm run lint",
-    "lint": "eslint ./src"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/1Computer1/discord-akairo.git"
-  },
-  "bugs": {
-    "url": "https://github.com/1Computer1/discord-akairo/issues"
-  },
-  "homepage": "https://github.com/1Computer1/discord-akairo"
+    "name": "discord-akairo",
+    "version": "8.0.0-dev",
+    "description": "A highly customizable bot framework for Discord.js.",
+    "main": "./src/index.js",
+    "types": "./src/index.d.ts",
+    "author": "1Computer",
+    "license": "MIT",
+    "keywords": [
+        "discord",
+        "discord-js",
+        "discord.js",
+        "framework",
+        "bot",
+        "client",
+        "modular",
+        "commands",
+        "arguments"
+    ],
+    "dependencies": {},
+    "peerDependencies": {
+        "discord.js": ">=12.0.0-dev",
+        "sqlite": "^2.8.0",
+        "sequelize": "^4.38.0"
+    },
+    "devDependencies": {
+        "@types/node": "^10.9.2",
+        "@types/sequelize": "^4.27.25",
+        "docdash": "github:1computer1/docdash",
+        "eslint": "^5.4.0",
+        "jsdoc": "^3.5.5",
+        "jsdoc-strip-async-await": "^0.1.0"
+    },
+    "scripts": {
+        "docs": "node_modules/.bin/jsdoc --configure .jsdoc.json --verbose",
+        "test": "npm run lint",
+        "lint": "eslint ./src"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/1Computer1/discord-akairo.git"
+    },
+    "bugs": {
+        "url": "https://github.com/1Computer1/discord-akairo/issues"
+    },
+    "homepage": "https://github.com/1Computer1/discord-akairo"
 }
