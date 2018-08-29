@@ -9,6 +9,9 @@ const Messages = {
     // Command-related
     ALIAS_CONFLICT: (alias, id, conflict) => `Alias '${alias}' of '${id}' already exists on '${conflict}'`,
 
+    // Options-related
+    COMMAND_UTIL_EXPLICIT: 'The command handler options `handleEdits` and `storeMessages` require the `commandUtil` option to be true',
+
     // Generic errors
     NOT_IMPLEMENTED: (constructor, method) => `${constructor}#${method} has not been implemented`,
     INVALID_TYPE: (name, expected, vowel = false) => `Value of '${name}' was not ${vowel ? 'an' : 'a'} ${expected}`

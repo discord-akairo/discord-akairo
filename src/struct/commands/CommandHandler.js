@@ -27,7 +27,7 @@ class CommandHandler extends AkairoHandler {
         handleEdits = false,
         storeMessages = false,
         commandUtil,
-        commandUtilLifetime = 0,
+        commandUtilLifetime = 3e5,
         defaultCooldown = 0,
         ignoreCooldown = client.ownerID,
         ignorePermissions = [],
@@ -106,7 +106,10 @@ class CommandHandler extends AkairoHandler {
          * Whether or not `message.util` is assigned.
          * @type {boolean}
          */
-        this.commandUtil = commandUtil !== undefined ? Boolean(commandUtil) : this.handleEdits || this.storeMessages;
+        this.commandUtil = Boolean(commandUtil);
+        if ((this.handlerEdits || this.storeMessages) && !this.commandUtil) {
+            throw new AkairoError('COMMAND_UTIL_EXPLICIT');
+        }
 
         /**
          * How long a command util will last in milliseconds before it is removed.
@@ -343,8 +346,7 @@ class CommandHandler extends AkairoHandler {
                 } else {
                     message.util = new CommandUtil(this, message);
                     this.commandUtils.set(message.id, message.util);
-
-                    if (this.commandUtilLifetime) {
+                    if (this.commandUtilLifetime > 0) {
                         this.client.setTimeout(() => this.commandUtils.delete(message.id), this.commandUtilLifetime);
                     }
                 }
@@ -1108,9 +1110,8 @@ module.exports = CommandHandler;
  * @prop {boolean} [handleEdits=false] - Whether or not to handle edited messages using CommandUtil.
  * @prop {boolean} [storeMessages=false] - Whether or not to have CommandUtil store all prompts and their replies.
  * @prop {boolean} [commandUtil=false] - Whether or not to assign `message.util`.
- * Set to `true` by default if `handleEdits` or `storeMessages` is on.
- * @prop {number} [commandUtilLifetime=0] - Milliseconds a command util should last before it is removed.
- * If 0, CommandUtil instances will never be removed.
+ * @prop {number} [commandUtilLifetime=30000] - Milliseconds a command util should last before it is removed.
+ * If 0, CommandUtil instances will never be removed and will cause memory to increase indefinitely.
  * @prop {boolean} [fetchMembers=false] - Whether or not to fetch member on each message from a guild.
  * @prop {number} [defaultCooldown=0] - The default cooldown for commands.
  * @prop {Snowflake|Snowflake[]|IgnoreCheckPredicate} [ignoreCooldown] - ID of user(s) to ignore cooldown or a function to ignore.

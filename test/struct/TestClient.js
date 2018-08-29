@@ -11,10 +11,11 @@ class TestClient extends AkairoClient {
             directory: './test/commands/',
             ignoreCooldownID: ['132266422679240704'],
             aliasReplacement: /-/g,
-            handleEdits: true,
             prefix: '!!',
             allowMention: true,
+            commandUtil: true,
             storeMessages: true,
+            handleEdits: true,
             defaultPrompt: {
                 start: 'What is thing?',
                 modifyStart: (text, msg) => `${msg.author}, ${text}\nType \`cancel\` to cancel this command.`,
