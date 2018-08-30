@@ -107,7 +107,7 @@ class CommandHandler extends AkairoHandler {
          * @type {boolean}
          */
         this.commandUtil = Boolean(commandUtil);
-        if ((this.handlerEdits || this.storeMessages) && !this.commandUtil) {
+        if ((this.handleEdits || this.storeMessages) && !this.commandUtil) {
             throw new AkairoError('COMMAND_UTIL_EXPLICIT');
         }
 
