@@ -1110,7 +1110,7 @@ module.exports = CommandHandler;
  * @prop {boolean} [handleEdits=false] - Whether or not to handle edited messages using CommandUtil.
  * @prop {boolean} [storeMessages=false] - Whether or not to have CommandUtil store all prompts and their replies.
  * @prop {boolean} [commandUtil=false] - Whether or not to assign `message.util`.
- * @prop {number} [commandUtilLifetime=30000] - Milliseconds a command util should last before it is removed.
+ * @prop {number} [commandUtilLifetime=3e5] - Milliseconds a command util should last before it is removed.
  * If 0, CommandUtil instances will never be removed and will cause memory to increase indefinitely.
  * @prop {boolean} [fetchMembers=false] - Whether or not to fetch member on each message from a guild.
  * @prop {number} [defaultCooldown=0] - The default cooldown for commands.
