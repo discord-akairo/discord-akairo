@@ -28,6 +28,7 @@ class CommandHandler extends AkairoHandler {
         storeMessages = false,
         commandUtil,
         commandUtilLifetime = 3e5,
+        commandUtilSweepInterval = 3e5,
         defaultCooldown = 0,
         ignoreCooldown = client.ownerID,
         ignorePermissions = [],
@@ -112,10 +113,19 @@ class CommandHandler extends AkairoHandler {
         }
 
         /**
-         * How long a command util will last in milliseconds before it is removed.
+         * Milliseconds a message should exist for before its command util instance is marked for removal.
          * @type {number}
          */
         this.commandUtilLifetime = commandUtilLifetime;
+
+        /**
+         * Time interval in milliseconds for sweeping command util instances.
+         * @type {number}
+         */
+        this.commandUtilSweepInterval = commandUtilSweepInterval;
+        if (this.commandUtilSweepInterval > 0) {
+            this.client.setInterval(() => this.sweepCommandUtil(), this.commandUtilSweepInterval);
+        }
 
         /**
          * Collection of CommandUtils.
@@ -346,9 +356,6 @@ class CommandHandler extends AkairoHandler {
                 } else {
                     message.util = new CommandUtil(this, message);
                     this.commandUtils.set(message.id, message.util);
-                    if (this.commandUtilLifetime > 0) {
-                        this.client.setTimeout(() => this.commandUtils.delete(message.id), this.commandUtilLifetime);
-                    }
                 }
             }
 
@@ -876,6 +883,26 @@ class CommandHandler extends AkairoHandler {
     }
 
     /**
+     * Sweep command util instances from cache and returns amount sweeped.
+     * @param {number} lifetime - Messages older than this will have their command util instance sweeped.
+     * This is in milliseconds and defaults to the `commandUtilLifetime` option.
+     * @returns {number}
+     */
+    sweepCommandUtil(lifetime = this.commandUtilLifetime) {
+        let count = 0;
+        for (const commandUtil of this.commandUtils.values()) {
+            const now = Date.now();
+            const message = commandUtil.message;
+            if (now - (message.editedTimestamp || message.createdTimestamp) > lifetime) {
+                count++;
+                this.commandUtils.delete(message.id);
+            }
+        }
+
+        return count;
+    }
+
+    /**
      * Adds an ongoing prompt in order to prevent command usage in the channel.
      * @param {Channel} channel - Channel to add to.
      * @param {User} user - User to add.
@@ -1110,7 +1137,9 @@ module.exports = CommandHandler;
  * @prop {boolean} [handleEdits=false] - Whether or not to handle edited messages using CommandUtil.
  * @prop {boolean} [storeMessages=false] - Whether or not to have CommandUtil store all prompts and their replies.
  * @prop {boolean} [commandUtil=false] - Whether or not to assign `message.util`.
- * @prop {number} [commandUtilLifetime=3e5] - Milliseconds a command util should last before it is removed.
+ * @prop {number} [commandUtilLifetime=3e5] - Milliseconds a message should exist for before its command util instance is marked for removal.
+ * If 0, CommandUtil instances will never be removed and will cause memory to increase indefinitely.
+ * @prop {number} [commandUtilSweepInterval=3e5] - Time interval in milliseconds for sweeping command util instances.
  * If 0, CommandUtil instances will never be removed and will cause memory to increase indefinitely.
  * @prop {boolean} [fetchMembers=false] - Whether or not to fetch member on each message from a guild.
  * @prop {number} [defaultCooldown=0] - The default cooldown for commands.

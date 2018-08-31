@@ -207,6 +207,7 @@ declare module 'discord-akairo' {
         public commandUtil: boolean;
         public commandUtilLifetime: number;
         public commandUtils: Collection<string, CommandUtil>;
+        public commandUtilSweepInterval: number;
         public cooldowns: Collection<string, object>;
         public defaultCooldown: number;
         public defaultPrompt: ArgumentPromptOptions;
@@ -607,6 +608,7 @@ declare module 'discord-akairo' {
         blockClient?: boolean;
         commandUtil?: boolean;
         commandUtilLifetime?: number;
+        commandUtilSweepInterval?: number;
         defaultCooldown?: number;
         defaultPrompt?: ArgumentPromptOptions;
         fetchMembers?: boolean;
