@@ -583,7 +583,7 @@ declare module 'discord-akairo' {
         aliases?: string[];
         args?: (ArgumentOptions | Control)[] | ArgumentProvider;
         before?: BeforeAction;
-        channel?: string;
+        channel?: 'guild' | 'dm';
         clientPermissions?: PermissionResolvable | PermissionResolvable[] | MissingPermissionSupplier;
         condition?: ExecutionPredicate;
         cooldown?: number;
