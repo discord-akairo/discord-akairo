@@ -597,6 +597,7 @@ declare module 'discord-akairo' {
         separator?: string;
         typing?: boolean;
         userPermissions?: PermissionResolvable | PermissionResolvable[] | MissingPermissionSupplier;
+        quoted?: boolean;
     } & AkairoModuleOptions;
 
     export type CommandHandlerOptions = {
