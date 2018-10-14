@@ -8,8 +8,8 @@ declare module 'discord-akairo' {
         PermissionResolvable, StringResolvable, Snowflake
     } from 'discord.js';
 
-    import { Database, Statement } from 'sqlite'
-    import { Model } from 'sequelize'
+    import { Database, Statement } from 'sqlite';
+    import { Model } from 'sequelize';
     import { EventEmitter } from 'events';
     import { Stream } from 'stream';
 
