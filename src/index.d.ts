@@ -8,11 +8,9 @@ declare module 'discord-akairo' {
         PermissionResolvable, StringResolvable, Snowflake
     } from 'discord.js';
 
-    import * as SQLite from 'sqlite';
-    import * as Sequelize from 'sequelize';
-    import * as Bluebird from 'bluebird';
-
-    import * as EventEmitter from 'events';
+    import { Database, Statement } from 'sqlite'
+    import { Model } from 'sequelize'
+    import { EventEmitter } from 'events';
     import { Stream } from 'stream';
 
     module 'discord.js' {
@@ -472,34 +470,34 @@ declare module 'discord-akairo' {
     }
 
     export class SequelizeProvider extends Provider {
-        public constructor(table: Sequelize.Model<any, any>, options?: ProviderOptions);
+        public constructor(table: Model<any, any>, options?: ProviderOptions);
 
         public dataColumn?: string;
         public idColumn: string;
         public items: Collection<string, any>;
-        public table: Sequelize.Model<any, any>;
+        public table: Model<any, any>;
 
-        public clear(id: string): Bluebird<void>;
-        public delete(id: string, key: string): Bluebird<boolean>;
+        public clear(id: string): Promise<void>;
+        public delete(id: string, key: string): Promise<boolean>;
         public get(id: string, key: string, defaultValue: any): any;
-        public init(): Bluebird<void>;
-        public set(id: string, key: string, value: any): Bluebird<boolean>;
+        public init(): Promise<void>;
+        public set(id: string, key: string, value: any): Promise<boolean>;
     }
 
     export class SQLiteProvider extends Provider {
-        public constructor(db: SQLite.Database | Promise<SQLite.Database>, tableName: string, options?: ProviderOptions);
+        public constructor(db: Database | Promise<Database>, tableName: string, options?: ProviderOptions);
 
         public dataColumn?: string;
-        public db: SQLite.Database;
+        public db: Database;
         public idColumn: string;
         public items: Collection<string, any>;
         public tableName: string;
 
-        public clear(id: string): Promise<SQLite.Statement>;
-        public delete(id: string, key: string): Promise<SQLite.Statement>;
+        public clear(id: string): Promise<Statement>;
+        public delete(id: string, key: string): Promise<Statement>;
         public get(id: string, key: string, defaultValue: any): any;
         public init(): Promise<void>;
-        public set(id: string, key: string, value: any): Promise<SQLite.Statement>;
+        public set(id: string, key: string, value: any): Promise<Statement>;
     }
 
     export class TypeResolver {
