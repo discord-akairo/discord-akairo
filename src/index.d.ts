@@ -680,9 +680,9 @@ declare module 'discord-akairo' {
 
     export type ExecutionPredicate = (message: Message) => boolean;
 
-    export type KeyGenerator = (message: Message, args: any) => string;
-
     export type IgnoreCheckPredicate = (message: Message, command: Command) => boolean;
+
+    export type KeyGenerator = (message: Message, args: any) => string;
 
     export type LoadPredicate = (filepath: string) => boolean;
 
