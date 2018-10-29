@@ -154,7 +154,7 @@ class Command extends AkairoModule {
 
         /**
          * The key generator for the locker.
-         * @type {KeyGenerator}
+         * @type {?KeyGenerator}
          */
         this.lock = lock;
 
@@ -169,7 +169,7 @@ class Command extends AkairoModule {
         if (this.lock) {
             /**
              * Stores the current locks.
-             * @type {Set<string>}
+             * @type {?Set<string>}
              */
             this.locker = new Set();
         }
