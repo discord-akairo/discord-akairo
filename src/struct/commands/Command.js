@@ -32,6 +32,7 @@ class Command extends AkairoModule {
             regex = this.regex,
             condition = this.condition || (() => false),
             before = this.before || (() => undefined),
+            lock,
             ignoreCooldown,
             ignorePermissions
         } = options;
@@ -152,6 +153,27 @@ class Command extends AkairoModule {
         this.before = before.bind(this);
 
         /**
+         * The key generator for the locker.
+         */
+        this.lock = lock;
+
+        if (typeof lock === 'string') {
+            this.lock = {
+                guild: message => message.guild && message.guild.id,
+                channel: message => message.channel.id,
+                user: message => message.author.id
+            }[lock];
+        }
+
+        if (this.lock) {
+            /**
+             * Stores the current locks.
+             * @type {Set<string>}
+             */
+            this.locker = new Set();
+        }
+
+        /**
          * ID of user(s) to ignore cooldown or a function to ignore.
          * @type {?Snowflake|Snowflake[]|IgnoreCheckPredicate}
          */
@@ -240,6 +262,7 @@ module.exports = Command;
  * The args object will have `match` and `matches` properties.
  * @prop {ExecutionPredicate} [condition] - Whether or not to run on messages that are not directly commands.
  * @prop {BeforeAction} [before] - Function to run before argument parsing and execution.
+ * @prop {KeyGenerator|string} [lock] - The key type or key generator for the locker. If lock is a string, it's expected one of 'guild', 'channel', or 'user'.
  * @prop {Snowflake|Snowflake[]|IgnoreCheckPredicate} [ignoreCooldown] - ID of user(s) to ignore cooldown or a function to ignore.
  * @prop {Snowflake|Snowflake[]|IgnoreCheckPredicate} [ignorePermissions] - ID of user(s) to ignore `userPermissions` checks or a function to ignore.
  * @prop {ArgumentPromptOptions} [defaultPrompt={}] - The default prompt options.
@@ -259,6 +282,14 @@ module.exports = Command;
  * @typedef {Function} BeforeAction
  * @param {Message} message - Message that triggered the command.
  * @returns {any}
+ */
+
+/**
+ * A function used to generate the key for the locker.
+ * @typedef {Function} KeyGenerator
+ * @param {Message} message - Message that triggered the command.
+ * @param {Object} args - Evaluated arguments.
+ * @returns {string}
  */
 
 /**

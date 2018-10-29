@@ -62,6 +62,7 @@ module.exports = {
         COMMAND_STARTED: 'commandStarted',
         COMMAND_FINISHED: 'commandFinished',
         COMMAND_CANCELLED: 'commandCancelled',
+        COMMAND_LOCKED: 'commandLocked',
         MISSING_PERMISSIONS: 'missingPermissions',
         COOLDOWN: 'cooldown',
         IN_PROMPT: 'inPrompt',
