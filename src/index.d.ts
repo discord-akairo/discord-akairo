@@ -173,6 +173,8 @@ declare module 'discord-akairo' {
         public filepath: string;
         public handler: CommandHandler;
         public id: string;
+        public lock?: KeyGenerator;
+        public locker?: Set<string>;
         public ignoreCooldown?: Snowflake | Snowflake[] | IgnoreCheckPredicate;
         public ignorePermissions?: Snowflake | Snowflake[] | IgnoreCheckPredicate;
         public ownerOnly: boolean;
@@ -588,6 +590,7 @@ declare module 'discord-akairo' {
         defaultPrompt?: ArgumentPromptOptions;
         description?: StringResolvable;
         editable?: boolean;
+        lock?: KeyGenerator | 'guild' | 'channel' | 'user';
         ignoreCooldown?: Snowflake | Snowflake[] | IgnoreCheckPredicate;
         ignorePermissions?: Snowflake | Snowflake[] | IgnoreCheckPredicate;
         ownerOnly?: boolean;
@@ -677,6 +680,8 @@ declare module 'discord-akairo' {
 
     export type ExecutionPredicate = (message: Message) => boolean;
 
+    export type KeyGenerator = (message: Message, args: any) => string;
+
     export type IgnoreCheckPredicate = (message: Message, command: Command) => boolean;
 
     export type LoadPredicate = (filepath: string) => boolean;
@@ -759,6 +764,7 @@ declare module 'discord-akairo' {
             COMMAND_STARTED: 'commandStarted',
             COMMAND_FINISHED: 'commandFinished',
             COMMAND_CANCELLED: 'commandCancelled',
+            COMMAND_LOCKED: 'commandLocked',
             MISSING_PERMISSIONS: 'missingPermissions',
             COOLDOWN: 'cooldown',
             IN_PROMPT: 'inPrompt',
