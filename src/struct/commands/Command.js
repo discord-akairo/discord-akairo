@@ -154,6 +154,7 @@ class Command extends AkairoModule {
 
         /**
          * The key generator for the locker.
+         * @type {KeyGenerator}
          */
         this.lock = lock;
 
