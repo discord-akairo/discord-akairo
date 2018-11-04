@@ -396,6 +396,7 @@ class CommandHandler extends AkairoHandler {
      * @returns {Promise<?boolean>}
      */
     async handleDirectCommand(message, content, command, ignore = false) {
+        let key;
         try {
             if (!ignore) {
                 if (message.edited && !command.editable) return false;
@@ -414,10 +415,25 @@ class CommandHandler extends AkairoHandler {
                 return this.handle(args.message);
             }
 
-            return this.runCommand(message, command, args);
+            if (!ignore) {
+                if (command.lock) key = command.lock(message, args);
+                if (isPromise(key)) key = await key;
+                if (key) {
+                    if (command.locker.has(key)) {
+                        key = null;
+                        this.emit(CommandHandlerEvents.COMMAND_LOCKED, message, command);
+                        return false;
+                    }
+                    command.locker.add(key);
+                }
+            }
+
+            return await this.runCommand(message, command, args);
         } catch (err) {
             this.emitError(err, message, command);
             return null;
+        } finally {
+            if (key) command.locker.delete(key);
         }
     }
 
@@ -728,11 +744,14 @@ class CommandHandler extends AkairoHandler {
             message.channel.startTyping();
         }
 
-        this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, args);
-        const ret = await command.exec(message, args);
-        this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, args, ret);
-        if (command.typing) {
-            message.channel.stopTyping();
+        try {
+            this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, args);
+            const ret = await command.exec(message, args);
+            this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, args, ret);
+        } finally {
+            if (command.typing) {
+                message.channel.stopTyping();
+            }
         }
     }
 
