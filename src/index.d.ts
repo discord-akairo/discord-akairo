@@ -662,7 +662,8 @@ declare module 'discord-akairo' {
         | 'memberMention' | 'channelMention' | 'roleMention' | 'emojiMention'
         | 'commandAlias' | 'command' | 'inhibitor' | 'listener'
         | (string | string[])[]
-        | RegExp;
+        | RegExp
+        | string;
 
     export type ArgumentProvider = (message: Message, content: string) => any;
 
