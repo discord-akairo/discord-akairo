@@ -638,7 +638,7 @@ declare module 'discord-akairo' {
     } & AkairoModuleOptions;
 
     export type ParsedComponentData = {
-        afterContent?: string;
+        afterPrefix?: string;
         alias?: string;
         command?: Command;
         content?: string;
