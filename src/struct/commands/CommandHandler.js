@@ -409,7 +409,7 @@ class CommandHandler extends AkairoHandler {
             const args = await command.parse(message, content);
             if (args instanceof ParsingFlag.CommandCancel) {
                 this.emit(CommandHandlerEvents.COMMAND_CANCELLED, message, command);
-                return false;
+                return true;
             } else if (args instanceof ParsingFlag.CommandRetry) {
                 this.emit(CommandHandlerEvents.COMMAND_BREAKOUT, message, command, args.message);
                 return this.handle(args.message);
@@ -422,8 +422,9 @@ class CommandHandler extends AkairoHandler {
                     if (command.locker.has(key)) {
                         key = null;
                         this.emit(CommandHandlerEvents.COMMAND_LOCKED, message, command);
-                        return false;
+                        return true;
                     }
+
                     command.locker.add(key);
                 }
             }
