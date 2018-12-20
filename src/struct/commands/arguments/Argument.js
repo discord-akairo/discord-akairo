@@ -587,6 +587,7 @@ module.exports = Argument;
  * Other Discord-related types:
  * - `message` tries to fetch a message from an ID within the channel.
  * - `guildMessage` tries to fetch a message from an ID within the guild.
+ * - `relevantMessage` is a combination of the above, works in both guilds and DMs.
  * - `invite` tries to fetch an invite object from a link.
  * - `userMention` matches a mention of a user.
  * - `memberMention` matches a mention of a guild member.
