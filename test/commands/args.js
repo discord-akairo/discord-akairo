@@ -36,7 +36,8 @@ class ArgsCommand extends Command {
                 {
                     id: 'option',
                     match: 'option',
-                    flag: '-o'
+                    flag: '-o',
+                    multipleFlags: true
                 }
             ]
         });

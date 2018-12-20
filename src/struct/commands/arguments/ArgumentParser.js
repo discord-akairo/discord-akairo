@@ -113,6 +113,23 @@ class ArgumentParser {
             },
             [ArgumentMatches.OPTION]: arg => {
                 const names = Array.isArray(arg.flag) ? arg.flag : [arg.flag];
+                if (arg.multipleFlags) {
+                    const flags = parts.optionFlags.filter(f => {
+                        return names.some(name => name.toLowerCase() === f.key.toLowerCase());
+                    });
+
+                    return async (msg, processed) => {
+                        const res = [];
+                        processed[arg.id] = res;
+                        for (const flag of flags) {
+                            // eslint-disable-next-line no-await-in-loop
+                            res.push(await arg.process(flag.value, msg, processed));
+                        }
+
+                        return res;
+                    };
+                }
+
                 const flag = parts.optionFlags.find(f => names.some(name => name.toLowerCase() === f.key.toLowerCase()));
                 return arg.process.bind(arg, flag ? flag.value : '');
             },

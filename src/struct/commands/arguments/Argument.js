@@ -13,6 +13,7 @@ class Argument {
         match = ArgumentMatches.PHRASE,
         type = ArgumentTypes.STRING,
         flag = null,
+        multipleFlags = false,
         index = null,
         unordered = false,
         limit = Infinity,
@@ -49,6 +50,12 @@ class Argument {
          * @type {?string|string[]}
          */
         this.flag = flag;
+
+        /**
+         * Whether to process multiple option flags instead of just the first.
+         * @type {boolean}
+         */
+        this.multipleFlags = multipleFlags;
 
         /**
          * The index to start from.
@@ -470,6 +477,7 @@ module.exports = Argument;
  * @prop {ArgumentMatch} [match='phrase'] - Method to match text.
  * @prop {ArgumentType|ArgumentTypeCaster} [type='string'] - Type to cast to.
  * @prop {string|string[]} [flag] - The string(s) to use as the flag for flag or option match.
+ * @prop {boolean} [multipleFlags=false] - Whether or not to have option flags match process multiple inputs.
  * @prop {number} [index] - Index of phrase to start from.
  * Applicable to phrase, text, content, rest, or separate match only.
  * Ignored when used with the unordered option.
