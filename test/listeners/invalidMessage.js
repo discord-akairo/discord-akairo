@@ -12,7 +12,7 @@ class InvalidMessageListener extends Listener {
     }
 
     exec(msg) {
-        console.log(msg.util);
+        console.log(msg.util.parsed);
     }
 }
 

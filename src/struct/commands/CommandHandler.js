@@ -5,7 +5,7 @@ const { Collection } = require('discord.js');
 const Command = require('./Command');
 const CommandUtil = require('./CommandUtil');
 const ParsingFlag = require('./ParsingFlag');
-const { isPromise } = require('../../util/Util');
+const { isPromise, prefixCompare } = require('../../util/Util');
 const TypeResolver = require('./arguments/TypeResolver');
 
 /** @extends AkairoHandler */
@@ -281,17 +281,7 @@ class CommandHandler extends AkairoHandler {
             }
 
             if (newEntry) {
-                this.prefixes = this.prefixes.sort((aVal, bVal, aKey, bKey) => {
-                    if (aKey === '' && bKey === '') return 0;
-                    if (aKey === '') return 1;
-                    if (bKey === '') return -1;
-                    if (typeof aKey === 'function' && typeof bKey === 'function') return 0;
-                    if (typeof aKey === 'function') return 1;
-                    if (typeof bKey === 'function') return -1;
-                    return aKey.length === bKey.length
-                        ? aKey.localeCompare(bKey)
-                        : bKey.length - aKey.length;
-                });
+                this.prefixes = this.prefixes.sort((aVal, bVal, aKey, bKey) => prefixCompare(aKey, bKey));
             }
         }
     }
@@ -762,59 +752,49 @@ class CommandHandler extends AkairoHandler {
      * @returns {Promise<Object>}
      */
     async parseCommand(message) {
-        let prefix;
+        let prefixes;
         if (typeof this.prefix === 'function') {
-            prefix = this.prefix(message);
-            if (isPromise(prefix)) {
-                prefix = await prefix;
+            prefixes = this.prefix(message);
+            if (isPromise(prefixes)) {
+                prefixes = await prefixes;
             }
         } else {
-            prefix = this.prefix;
+            prefixes = this.prefix;
         }
 
         if (typeof this.allowMention === 'function' ? this.allowMention(message) : this.allowMention) {
-            prefix = Array.isArray(prefix)
-                ? [`<@${this.client.user.id}>`, `<@!${this.client.user.id}>`, ...prefix]
-                : [`<@${this.client.user.id}>`, `<@!${this.client.user.id}>`, prefix];
+            const mentions = [`<@${this.client.user.id}>`, `<@!${this.client.user.id}>`];
+            prefixes = Array.isArray(prefixes)
+                ? [...mentions, ...prefixes]
+                : [...mentions, prefixes];
         }
 
-        let start;
-
-        if (Array.isArray(prefix)) {
-            prefix.sort((a, b) => {
-                if (a === '' && b === '') return 0;
-                if (a === '') return 1;
-                if (a === '') return -1;
-                return a.length === b.length
-                    ? a.localeCompare(b)
-                    : b.length - a.length;
-            });
-
-            const content = message.content.toLowerCase();
-            const match = prefix.find(p => {
-                return content.startsWith(p.toLowerCase());
-            });
-
-            start = match;
-        } else if (message.content.toLowerCase().startsWith(prefix.toLowerCase())) {
-            start = prefix;
+        const lowerContent = message.content.toLowerCase();
+        let prefix;
+        if (Array.isArray(prefixes)) {
+            prefixes.sort(prefixCompare);
+            prefix = prefixes.find(p => lowerContent.startsWith(p.toLowerCase()));
+        } else if (lowerContent.startsWith(prefixes.toLowerCase())) {
+            prefix = prefixes;
         }
 
-        if (start === undefined) return this.parseCommandWithOverwrittenPrefixes(message);
+        if (prefix === undefined) {
+            return this.parseCommandWithOverwrittenPrefixes(message);
+        }
 
-        const startIndex = message.content.toLowerCase().indexOf(start.toLowerCase()) + start.length;
-        const argsIndex = message.content.slice(startIndex).search(/\S/) + start.length;
-        const name = message.content.slice(argsIndex).split(/\s{1,}|\n{1,}/)[0];
-        const command = this.findCommand(name);
-        const content = message.content.slice(argsIndex + name.length + 1).trim();
-        const afterPrefix = message.content.slice(start.length).trim();
+        const endOfPrefix = lowerContent.indexOf(prefix.toLowerCase()) + prefix.length;
+        const startOfArgs = message.content.slice(endOfPrefix).search(/\S/) + prefix.length;
+        const alias = message.content.slice(startOfArgs).split(/\s{1,}|\n{1,}/)[0];
+        const command = this.findCommand(alias);
+        const content = message.content.slice(startOfArgs + alias.length + 1).trim();
+        const afterPrefix = message.content.slice(prefix.length).trim();
 
         if (!command || command.prefix != null) {
             return await this.parseCommandWithOverwrittenPrefixes(message)
-            || { prefix: start, alias: name, content, afterPrefix };
+                || { prefix, alias, content, afterPrefix };
         }
 
-        return { command, prefix: start, alias: name, content, afterPrefix };
+        return { command, prefix, alias, content, afterPrefix };
     }
 
     /**
@@ -823,66 +803,55 @@ class CommandHandler extends AkairoHandler {
      * @returns {Promise<Object>}
      */
     async parseCommandWithOverwrittenPrefixes(message) {
-        if (!this.prefixes.size) return null;
+        if (!this.prefixes.size) {
+            return null;
+        }
 
-        let start;
+        let prefix;
         let commands;
-
+        const lowerContent = message.content.toLowerCase();
         for (const entry of this.prefixes) {
-            let prefix;
+            let prefixes;
             if (typeof entry[0] === 'function') {
-                prefix = entry[0](message);
-                if (isPromise(prefix)) {
-                    // eslint-disable-next-line no-await-in-loop
-                    prefix = await prefix;
+                prefixes = entry[0](message);
+                if (isPromise(prefixes)) {
+                    prefixes = await prefixes; // eslint-disable-line no-await-in-loop
                 }
             } else {
-                prefix = entry[0];
+                prefixes = entry[0];
             }
 
-            if (Array.isArray(prefix)) {
-                prefix.sort((a, b) => {
-                    if (a === '' && b === '') return 0;
-                    if (a === '') return 1;
-                    if (a === '') return -1;
-                    return a.length === b.length
-                        ? a.localeCompare(b)
-                        : b.length - a.length;
-                });
-            }
-
-            if (Array.isArray(prefix)) {
-                const content = message.content.toLowerCase();
-                const match = prefix.find(p => {
-                    return content.startsWith(p.toLowerCase());
-                });
-
+            if (Array.isArray(prefixes)) {
+                prefixes.sort(prefixCompare);
+                const match = prefixes.find(p => lowerContent.startsWith(p.toLowerCase()));
                 if (match !== undefined) {
-                    start = match;
+                    prefix = match;
                     commands = entry[1];
                     break;
                 }
-            } else if (message.content.toLowerCase().startsWith(prefix.toLowerCase())) {
-                start = prefix;
+            } else if (lowerContent.startsWith(prefixes.toLowerCase())) {
+                prefix = prefixes;
                 commands = entry[1];
                 break;
             }
         }
 
-        if (start === undefined) return null;
-
-        const startIndex = message.content.toLowerCase().indexOf(start) + start.length;
-        const argsIndex = message.content.slice(startIndex).search(/\S/) + start.length;
-        const name = message.content.slice(argsIndex).split(/\s{1,}|\n{1,}/)[0];
-        const command = this.findCommand(name);
-        const content = message.content.slice(argsIndex + name.length + 1).trim();
-        const afterPrefix = message.content.slice(start.length).trim();
-
-        if (!command || !commands.has(command.id)) {
-            return { prefix: start, alias: name, content, afterPrefix };
+        if (prefix === undefined) {
+            return null;
         }
 
-        return { command, prefix: start, alias: name, content, afterPrefix };
+        const endOfPrefix = lowerContent.indexOf(prefix.toLowerCase()) + prefix.length;
+        const startOfArgs = message.content.slice(endOfPrefix).search(/\S/) + prefix.length;
+        const alias = message.content.slice(startOfArgs).split(/\s{1,}|\n{1,}/)[0];
+        const command = this.findCommand(alias);
+        const content = message.content.slice(startOfArgs + alias.length + 1).trim();
+        const afterPrefix = message.content.slice(prefix.length).trim();
+
+        if (!command || !commands.has(command.id)) {
+            return { prefix, alias, content, afterPrefix };
+        }
+
+        return { command, prefix, alias, content, afterPrefix };
     }
 
     /**
