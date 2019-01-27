@@ -22,6 +22,31 @@ class Util {
             ? aKey.localeCompare(bKey)
             : bKey.length - aKey.length;
     }
+
+    static intoArray(x) {
+        if (Array.isArray(x)) {
+            return x;
+        }
+
+        return [x];
+    }
+
+    static intoCallable(thing) {
+        if (typeof thing === 'function') {
+            return thing;
+        }
+
+        return () => thing;
+    }
+
+    static flatMap(xs, f) {
+        const res = [];
+        for (const x of xs) {
+            res.push(...f(x));
+        }
+
+        return res;
+    }
 }
 
 module.exports = Util;

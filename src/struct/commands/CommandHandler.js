@@ -5,7 +5,7 @@ const { Collection } = require('discord.js');
 const Command = require('./Command');
 const CommandUtil = require('./CommandUtil');
 const ParsingFlag = require('./ParsingFlag');
-const { isPromise, prefixCompare } = require('../../util/Util');
+const { flatMap, intoArray, intoCallable, isPromise, prefixCompare } = require('../../util/Util');
 const TypeResolver = require('./arguments/TypeResolver');
 
 /** @extends AkairoHandler */
@@ -353,7 +353,11 @@ class CommandHandler extends AkairoHandler {
                 return false;
             }
 
-            const parsed = await this.parseCommand(message) || {};
+            let parsed = await this.parseCommand(message);
+            if (!parsed.command) {
+                parsed = await this.parseCommandOverwrittenPrefixes(message);
+            }
+
             if (this.commandUtil) {
                 message.util.parsed = parsed;
             }
@@ -752,49 +756,22 @@ class CommandHandler extends AkairoHandler {
      * @returns {Promise<Object>}
      */
     async parseCommand(message) {
-        let prefixes;
-        if (typeof this.prefix === 'function') {
-            prefixes = this.prefix(message);
-            if (isPromise(prefixes)) {
-                prefixes = await prefixes;
-            }
-        } else {
-            prefixes = this.prefix;
-        }
-
-        if (typeof this.allowMention === 'function' ? this.allowMention(message) : this.allowMention) {
+        let prefixes = intoArray(await intoCallable(this.prefix)(message));
+        const allowMention = await intoCallable(this.prefix)(message);
+        if (allowMention) {
             const mentions = [`<@${this.client.user.id}>`, `<@!${this.client.user.id}>`];
-            prefixes = Array.isArray(prefixes)
-                ? [...mentions, ...prefixes]
-                : [...mentions, prefixes];
+            prefixes = [...mentions, ...prefixes];
         }
 
-        const lowerContent = message.content.toLowerCase();
-        let prefix;
-        if (Array.isArray(prefixes)) {
-            prefixes.sort(prefixCompare);
-            prefix = prefixes.find(p => lowerContent.startsWith(p.toLowerCase()));
-        } else if (lowerContent.startsWith(prefixes.toLowerCase())) {
-            prefix = prefixes;
+        prefixes.sort(prefixCompare);
+        for (const prefix of prefixes) {
+            const res = this.parseWithPrefix(message, prefix);
+            if (res.command) {
+                return res;
+            }
         }
 
-        if (prefix === undefined) {
-            return this.parseCommandWithOverwrittenPrefixes(message);
-        }
-
-        const endOfPrefix = lowerContent.indexOf(prefix.toLowerCase()) + prefix.length;
-        const startOfArgs = message.content.slice(endOfPrefix).search(/\S/) + prefix.length;
-        const alias = message.content.slice(startOfArgs).split(/\s{1,}|\n{1,}/)[0];
-        const command = this.findCommand(alias);
-        const content = message.content.slice(startOfArgs + alias.length + 1).trim();
-        const afterPrefix = message.content.slice(prefix.length).trim();
-
-        if (!command || command.prefix != null) {
-            return await this.parseCommandWithOverwrittenPrefixes(message)
-                || { prefix, alias, content, afterPrefix };
-        }
-
-        return { command, prefix, alias, content, afterPrefix };
+        return {};
     }
 
     /**
@@ -802,42 +779,40 @@ class CommandHandler extends AkairoHandler {
      * @param {Message} message - Message that called the command.
      * @returns {Promise<Object>}
      */
-    async parseCommandWithOverwrittenPrefixes(message) {
+    async parseCommandOverwrittenPrefixes(message) {
         if (!this.prefixes.size) {
-            return null;
+            return {};
         }
 
-        let prefix;
-        let commands;
+        const promises = this.prefixes.map(async (cmds, provider) => {
+            const prefixes = intoArray(await intoCallable(provider)(message));
+            return prefixes.map(p => [p, cmds]);
+        });
+
+        const pairs = flatMap(await Promise.all(promises), x => x);
+        pairs.sort(([a], [b]) => prefixCompare(a, b));
+        for (const [prefix, cmds] of pairs) {
+            const res = this.parseWithPrefix(message, prefix, cmds);
+            if (res.command) {
+                return res;
+            }
+        }
+
+        return {};
+    }
+
+    /**
+     * Tries to parse a message with the given prefix and associated commands.
+     * Associated commands refer to when a prefix is used in prefix overrides.
+     * @param {Message} message - Message to parse.
+     * @param {string} prefix - Prefix to use.
+     * @param {Set<string>} [associatedCommands=null] - Associated commands.
+     * @returns {Object}
+     */
+    parseWithPrefix(message, prefix, associatedCommands = null) {
         const lowerContent = message.content.toLowerCase();
-        for (const entry of this.prefixes) {
-            let prefixes;
-            if (typeof entry[0] === 'function') {
-                prefixes = entry[0](message);
-                if (isPromise(prefixes)) {
-                    prefixes = await prefixes; // eslint-disable-line no-await-in-loop
-                }
-            } else {
-                prefixes = entry[0];
-            }
-
-            if (Array.isArray(prefixes)) {
-                prefixes.sort(prefixCompare);
-                const match = prefixes.find(p => lowerContent.startsWith(p.toLowerCase()));
-                if (match !== undefined) {
-                    prefix = match;
-                    commands = entry[1];
-                    break;
-                }
-            } else if (lowerContent.startsWith(prefixes.toLowerCase())) {
-                prefix = prefixes;
-                commands = entry[1];
-                break;
-            }
-        }
-
-        if (prefix === undefined) {
-            return null;
+        if (!lowerContent.starts(prefix.toLowerCase())) {
+            return {};
         }
 
         const endOfPrefix = lowerContent.indexOf(prefix.toLowerCase()) + prefix.length;
@@ -847,7 +822,15 @@ class CommandHandler extends AkairoHandler {
         const content = message.content.slice(startOfArgs + alias.length + 1).trim();
         const afterPrefix = message.content.slice(prefix.length).trim();
 
-        if (!command || !commands.has(command.id)) {
+        if (!command) {
+            return { prefix, alias, content, afterPrefix };
+        }
+
+        if (associatedCommands == null) {
+            if (command.prefix != null) {
+                return { prefix, alias, content, afterPrefix };
+            }
+        } else if (!associatedCommands.has(command.id)) {
             return { prefix, alias, content, afterPrefix };
         }
 

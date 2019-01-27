@@ -3,15 +3,15 @@
 const { Argument: { compose, range, union }, Command } = require('../..');
 const util = require('util');
 
-class TestCommand extends Command {
+class Test2Command extends Command {
     constructor() {
-        super('test', {
-            aliases: ['test', 'test-a'],
+        super('test2', {
+            aliases: ['test2'],
             cooldown: 5000,
-            prefix: ['$', '%'],
+            prefix: () => ['/', '>'],
             args: [
                 {
-                    id: 'x',
+                    id: 'y',
                     match: 'rest',
                     type: compose(s => s.replace(/\s/g, ''), range(union('integer', 'emojint'), 0, 50))
                 }
@@ -24,4 +24,4 @@ class TestCommand extends Command {
     }
 }
 
-module.exports = TestCommand;
+module.exports = Test2Command;
