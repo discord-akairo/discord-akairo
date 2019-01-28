@@ -237,8 +237,9 @@ declare module 'discord-akairo' {
         public hasPrompt(channel: Channel, user: User): boolean;
         public load(thing: string | Function): Command;
         public loadAll(directory?: string, filter?: LoadPredicate): this;
-        public parseCommand(message: Message): Promise<object | null>;
-        public parseCommandWithOverwrittenPrefixes(message: Message): Promise<object | null>;
+        public parseCommand(message: Message): Promise<object>;
+        public parseCommandWithOverwrittenPrefixes(message: Message): Promise<object>;
+        public parseWithPrefix(message: Message, prefix: string, associatedCommands?: Set<string>): object;
         public register(command: Command, filepath?: string): void;
         public reload(id: string): Command;
         public reloadAll(): this;
@@ -660,7 +661,7 @@ declare module 'discord-akairo' {
         | 'user' | 'users' | 'member' | 'members' | 'relevant' | 'relevants'
         | 'channel' | 'channels' | 'textChannel' | 'textChannels' | 'voiceChannel' | 'voiceChannels'
         | 'role' | 'roles' | 'emoji' | 'emojis' | 'guild' | 'guilds'
-        | 'message' | 'guildMessage' | 'invite'
+        | 'message' | 'guildMessage' | 'relevantMessage' | 'invite'
         | 'memberMention' | 'channelMention' | 'roleMention' | 'emojiMention'
         | 'commandAlias' | 'command' | 'inhibitor' | 'listener'
         | (string | string[])[]
