@@ -811,7 +811,7 @@ class CommandHandler extends AkairoHandler {
      */
     parseWithPrefix(message, prefix, associatedCommands = null) {
         const lowerContent = message.content.toLowerCase();
-        if (!lowerContent.starts(prefix.toLowerCase())) {
+        if (!lowerContent.startsWith(prefix.toLowerCase())) {
             return {};
         }
 
