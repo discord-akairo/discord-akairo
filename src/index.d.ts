@@ -136,7 +136,7 @@ declare module 'discord-akairo' {
         public checkMember(text: string, member: GuildMember, caseSensitive?: boolean, wholeWord?: boolean): boolean;
         public checkRole(text: string, role: Role, caseSensitive?: boolean, wholeWord?: boolean): boolean;
         public checkUser(text: string, user: User, caseSensitive?: boolean, wholeWord?: boolean): boolean;
-        public collection<K, V>(iterable: Iterable<[K, V][]>): Collection<K, V>;
+        public collection<K, V>(iterable?: Iterable<[K, V][]>): Collection<K, V>;
         public compareStreaming(oldMember: GuildMember, newMember: GuildMember): number;
         public embed(data?: object): MessageEmbed;
         public fetchMember(guild: Guild, id: string, cache?: boolean): Promise<GuildMember>;
