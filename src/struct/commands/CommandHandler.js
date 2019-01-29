@@ -355,7 +355,10 @@ class CommandHandler extends AkairoHandler {
 
             let parsed = await this.parseCommand(message);
             if (!parsed.command) {
-                parsed = await this.parseCommandOverwrittenPrefixes(message);
+                const overParsed = await this.parseCommandOverwrittenPrefixes(message);
+                if (overParsed.command || (parsed.prefix == null && overParsed.prefix != null)) {
+                    parsed = overParsed;
+                }
             }
 
             if (this.commandUtil) {
@@ -764,14 +767,7 @@ class CommandHandler extends AkairoHandler {
         }
 
         prefixes.sort(prefixCompare);
-        for (const prefix of prefixes) {
-            const res = this.parseWithPrefix(message, prefix);
-            if (res.command) {
-                return res;
-            }
-        }
-
-        return {};
+        return this.parseMultiplePrefixes(prefixes.map(p => [p, null]));
     }
 
     /**
@@ -791,11 +787,26 @@ class CommandHandler extends AkairoHandler {
 
         const pairs = flatMap(await Promise.all(promises), x => x);
         pairs.sort(([a], [b]) => prefixCompare(a, b));
-        for (const [prefix, cmds] of pairs) {
-            const res = this.parseWithPrefix(message, prefix, cmds);
-            if (res.command) {
-                return res;
-            }
+        return this.parseMultiplePrefixes(message, pairs);
+    }
+
+    /**
+     * Runs parseWithPrefix on multiple prefixes and returns the best parse.
+     * @param {Message} message - Message to parse.
+     * @param {any[]} pairs - Pairs of prefix to associated commands.
+     * That is, `[string, Set<string> | null][]`.
+     * @returns {Object}
+     */
+    parseMultiplePrefixes(message, pairs) {
+        const parses = pairs.map(([prefix, cmds]) => this.parseWithPrefix(message, prefix, cmds));
+        const result = parses.find(parsed => parsed.command);
+        if (result) {
+            return result;
+        }
+
+        const guess = parses.find(parsed => parsed.prefix != null);
+        if (guess) {
+            return guess;
         }
 
         return {};
