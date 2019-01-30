@@ -168,7 +168,7 @@ class Argument {
         Object.assign(promptOptions, this.command.defaultPrompt);
         Object.assign(promptOptions, this.prompt || {});
 
-        const isInfinite = promptOptions.infinite && (this.match === ArgumentMatches.SEPARATE ? !commandInput : true);
+        const isInfinite = promptOptions.infinite || (this.match === ArgumentMatches.SEPARATE && !commandInput);
         const additionalRetry = Number(Boolean(commandInput));
 
         const values = isInfinite ? [] : null;
