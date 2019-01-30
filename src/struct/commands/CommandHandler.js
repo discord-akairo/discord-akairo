@@ -767,7 +767,7 @@ class CommandHandler extends AkairoHandler {
         }
 
         prefixes.sort(prefixCompare);
-        return this.parseMultiplePrefixes(prefixes.map(p => [p, null]));
+        return this.parseMultiplePrefixes(message, prefixes.map(p => [p, null]));
     }
 
     /**
