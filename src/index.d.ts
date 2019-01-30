@@ -239,6 +239,7 @@ declare module 'discord-akairo' {
         public loadAll(directory?: string, filter?: LoadPredicate): this;
         public parseCommand(message: Message): Promise<object>;
         public parseCommandWithOverwrittenPrefixes(message: Message): Promise<object>;
+        public parseMultiplePrefixes(message: Message, prefixes: [string, Set<string> | null]): object;
         public parseWithPrefix(message: Message, prefix: string, associatedCommands?: Set<string>): object;
         public register(command: Command, filepath?: string): void;
         public reload(id: string): Command;
@@ -688,7 +689,7 @@ declare module 'discord-akairo' {
 
     export type LoadPredicate = (filepath: string) => boolean;
 
-    export type MentionPrefixPredicate = (message: Message) => boolean;
+    export type MentionPrefixPredicate = (message: Message) => boolean | Promise<boolean>;
 
     export type MissingPermissionSupplier = (message: Message) => Promise<any> | any;
 
