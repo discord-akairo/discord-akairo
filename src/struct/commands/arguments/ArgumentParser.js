@@ -68,6 +68,10 @@ class ArgumentParser {
                                 : Array.from(parts.phrases.keys());
 
                         for (const i of indices) {
+                            if (usedIndices.has(i)) {
+                                continue;
+                            }
+
                             const phrase = parts.phrases[i] ? parts.phrases[i].value : '';
                             // eslint-disable-next-line no-await-in-loop
                             const res = await arg.cast(phrase, msg, processed);
