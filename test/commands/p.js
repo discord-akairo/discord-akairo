@@ -12,9 +12,12 @@ class PCommand extends Command {
                     id: 'integer',
                     type: 'bigint',
                     prompt: {
-                        start: 'Give me an integer!',
+                        start: async () => {
+                            await Promise.resolve(1);
+                            return 'Give me an integer!';
+                        },
                         retry: 'That\'s not an integer, try again!',
-                        optional: true
+                        optional: false
                     }
                 }
             ]

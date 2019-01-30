@@ -174,11 +174,10 @@ class Argument {
         const values = isInfinite ? [] : null;
         if (isInfinite) args[this.id] = values;
 
-        const getText = (promptType, prompter, retryCount, inputMessage, inputPhrase) => {
+        const getText = async (promptType, prompter, retryCount, inputMessage, inputPhrase) => {
             let text = prompter;
-
             if (typeof prompter === 'function') {
-                text = prompter.call(this, message, args, {
+                text = await prompter.call(this, message, args, {
                     retries: retryCount,
                     infinite: isInfinite,
                     message: inputMessage,
@@ -199,7 +198,7 @@ class Argument {
             }[promptType];
 
             if (modifier) {
-                text = modifier.call(this, text, message, args, {
+                text = await modifier.call(this, text, message, args, {
                     retries: retryCount,
                     infinite: isInfinite,
                     message: inputMessage,
@@ -231,7 +230,7 @@ class Argument {
 
                 const promptType = retryCount === 1 ? 'start' : 'retry';
                 const prompter = retryCount === 1 ? promptOptions.start : promptOptions.retry;
-                const startText = getText(promptType, prompter, retryCount, prevMessage, prevInput);
+                const startText = await getText(promptType, prompter, retryCount, prevMessage, prevInput);
 
                 if (startText) {
                     sentStart = await (message.util || message.channel).send(startText);
@@ -257,7 +256,7 @@ class Argument {
 
                 if (message.util) message.util.addMessage(input);
             } catch (err) {
-                const timeoutText = getText('timeout', promptOptions.timeout, retryCount, prevMessage, '');
+                const timeoutText = await getText('timeout', promptOptions.timeout, retryCount, prevMessage, '');
                 if (timeoutText) {
                     const sentTimeout = await message.channel.send(timeoutText);
                     if (message.util) message.util.addMessage(sentTimeout);
@@ -272,7 +271,7 @@ class Argument {
             }
 
             if (input.content.toLowerCase() === promptOptions.cancelWord.toLowerCase()) {
-                const cancelText = getText('cancel', promptOptions.cancel, retryCount, input, '');
+                const cancelText = await getText('cancel', promptOptions.cancel, retryCount, input, '');
                 if (cancelText) {
                     const sentCancel = await message.channel.send(cancelText);
                     if (message.util) message.util.addMessage(sentCancel);
@@ -292,7 +291,7 @@ class Argument {
                     return promptOne(input, retryCount + 1);
                 }
 
-                const endedText = getText('ended', promptOptions.ended, retryCount, input, input.content);
+                const endedText = await getText('ended', promptOptions.ended, retryCount, input, input.content);
                 if (endedText) {
                     const sentEnded = await message.channel.send(endedText);
                     if (message.util) message.util.addMessage(sentEnded);
@@ -641,7 +640,7 @@ module.exports = Argument;
  * @param {Message} message - Message that triggered the command.
  * @param {Object} prevArgs - Previous arguments.
  * @param {ArgumentPromptData} data - Miscellaneous data.
- * @returns {StringResolvable|MessageOptions|MessageAdditions}
+ * @returns {StringResolvable|MessageOptions|MessageAdditions|Promise<StringResolvable|MessageOptions|MessageAdditions>}
  */
 
 /**
@@ -650,5 +649,5 @@ module.exports = Argument;
  * @param {Message} message - Message that triggered the command.
  * @param {Object} prevArgs - Previous arguments.
  * @param {ArgumentPromptData} data - Miscellaneous data.
- * @returns {StringResolvable|MessageOptions|MessageAdditions}
+ * @returns {StringResolvable|MessageOptions|MessageAdditions|Promise<StringResolvable|MessageOptions|MessageAdditions>}
  */
