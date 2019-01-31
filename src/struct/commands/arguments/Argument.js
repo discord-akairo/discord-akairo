@@ -177,7 +177,6 @@ class Argument {
                 message: inputMessage,
                 phrase: inputPhrase
             });
-            }
 
             if (Array.isArray(text)) {
                 text = text.join('\n');
