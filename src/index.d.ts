@@ -258,8 +258,10 @@ declare module 'discord-akairo' {
         public on(event: 'remove', listener: (command: Command) => any): this;
         public on(event: 'load', listener: (command: Command, isReload: boolean) => any): this;
         public on(event: 'commandBlocked', listener: (message: Message, command: Command, reason: string) => any): this;
+        public on(event: 'commandBreakout', listener: (message: Message, command: Command, breakMessage: Message) => any): this;
         public on(event: 'commandCancelled', listener: (message: Message, command: Command, retryMessage?: Message) => any): this;
         public on(event: 'commandFinished', listener: (message: Message, command: Command, args: any, returnValue: any) => any): this;
+        public on(event: 'commandLocked', listener: (message: Message, command: Command) => any): this;
         public on(event: 'commandStarted', listener: (message: Message, command: Command, args: any) => any): this;
         public on(event: 'cooldown', listener: (message: Message, command: Command, remaining: number) => any): this;
         public on(event: 'error', listener: (error: Error, message: Message, command: Command) => any): this;
@@ -663,7 +665,7 @@ declare module 'discord-akairo' {
         | 'channel' | 'channels' | 'textChannel' | 'textChannels' | 'voiceChannel' | 'voiceChannels'
         | 'role' | 'roles' | 'emoji' | 'emojis' | 'guild' | 'guilds'
         | 'message' | 'guildMessage' | 'relevantMessage' | 'invite'
-        | 'memberMention' | 'channelMention' | 'roleMention' | 'emojiMention'
+        | 'userMention' | 'memberMention' | 'channelMention' | 'roleMention' | 'emojiMention'
         | 'commandAlias' | 'command' | 'inhibitor' | 'listener'
         | (string | string[])[]
         | RegExp
