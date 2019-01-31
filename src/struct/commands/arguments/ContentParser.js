@@ -81,7 +81,7 @@ class ContentParser {
             if (!matches) return parts;
             let prev;
             outer: for (const match of matches) {
-                if (match.toLowerCase() === sep.toLowerCase()) {
+                if (match.toLowerCase() === this.separator.toLowerCase()) {
                     prev.content += match;
                     parts.content[parts.content.length - 1] += match;
                     continue;
