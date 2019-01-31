@@ -1,6 +1,6 @@
 const { ArgumentMatches, ArgumentTypes } = require('../../../util/Constants');
 const ParsingFlag = require('../ParsingFlag');
-const { isPromise } = require('../../../util/Util');
+const { intoCallable, isPromise } = require('../../../util/Util');
 
 class Argument {
     /**
@@ -125,19 +125,16 @@ class Argument {
             || (this.handler.defaultPrompt && this.handler.defaultPrompt.optional);
 
         if (!phrase && isOptional) {
-            let res = typeof this.default === 'function' ? this.default(message, args) : this.default;
-            if (isPromise(res)) res = await res;
-            return res;
+            return intoCallable(this.default)(message, args);
         }
 
-        let res = await this.cast(phrase, message, args);
-
+        const res = await this.cast(phrase, message, args);
         if (res == null) {
-            if (this.prompt) return this.collect(message, args, phrase);
+            if (this.prompt) {
+                return this.collect(message, args, phrase);
+            }
 
-            res = typeof this.default === 'function' ? this.default(message, args) : this.default;
-            if (isPromise(res)) res = await res;
-            return res;
+            return intoCallable(this.default)(message, args);
         }
 
         return res;
@@ -163,7 +160,6 @@ class Argument {
      */
     async collect(message, args = {}, commandInput = '') {
         const promptOptions = {};
-
         Object.assign(promptOptions, this.handler.defaultPrompt);
         Object.assign(promptOptions, this.command.defaultPrompt);
         Object.assign(promptOptions, this.prompt || {});
@@ -175,14 +171,12 @@ class Argument {
         if (isInfinite) args[this.id] = values;
 
         const getText = async (promptType, prompter, retryCount, inputMessage, inputPhrase) => {
-            let text = prompter;
-            if (typeof prompter === 'function') {
-                text = await prompter.call(this, message, args, {
-                    retries: retryCount,
-                    infinite: isInfinite,
-                    message: inputMessage,
-                    phrase: inputPhrase
-                });
+            let text = await intoCallable(prompter).call(this, message, args, {
+                retries: retryCount,
+                infinite: isInfinite,
+                message: inputMessage,
+                phrase: inputPhrase
+            });
             }
 
             if (Array.isArray(text)) {
@@ -216,11 +210,8 @@ class Argument {
         // eslint-disable-next-line complexity
         const promptOne = async (prevMessage, retryCount) => {
             let sentStart;
-            const shouldSend = retryCount === 1
-                ? !isInfinite || (isInfinite && !values.length)
-                : true;
-
-            if (shouldSend) {
+            // This is either a retry prompt, the start of a non-infinite, or the start of an infinite.
+            if (retryCount !== 1 || !isInfinite || !values.length) {
                 let prevInput;
                 if (retryCount <= 1 + additionalRetry) {
                     prevInput = commandInput || '';
