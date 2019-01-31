@@ -244,11 +244,7 @@ class Argument {
 
             let input;
             try {
-                input = (await message.channel.awaitMessages(m => {
-                    if (sentStart && m.id === sentStart.id) return false;
-                    if (m.author.id !== message.author.id) return false;
-                    return true;
-                }, {
+                input = (await message.channel.awaitMessages(m => m.author.id === message.author.id, {
                     max: 1,
                     time: promptOptions.time,
                     errors: ['time']
