@@ -226,7 +226,7 @@ declare module 'discord-akairo' {
         public add(filename: string): Command;
         public addPrompt(channel: Channel, user: User): void;
         public deregister(command: Command): void;
-        public emitError(err: Error, message: Message, command: Command): void;
+        public emitError(err: Error, message: Message, command?: Command): void;
         public findCategory(name: string): Category<string, Command>;
         public findCommand(name: string): Command;
         public handle(message: Message): Promise<boolean | null>;
@@ -235,10 +235,10 @@ declare module 'discord-akairo' {
         public handleRegexCommands(message: Message): Promise<boolean>;
         public handleConditionalCommands(message: Message): Promise<boolean>;
         public hasPrompt(channel: Channel, user: User): boolean;
-        public load(thing: string | Function): Command;
+        public load(thing: string | Function, isReload?: boolean): Command;
         public loadAll(directory?: string, filter?: LoadPredicate): this;
         public parseCommand(message: Message): Promise<object>;
-        public parseCommandWithOverwrittenPrefixes(message: Message): Promise<object>;
+        public parseCommandOverwrittenPrefixes(message: Message): Promise<object>;
         public parseMultiplePrefixes(message: Message, prefixes: [string, Set<string> | null]): object;
         public parseWithPrefix(message: Message, prefix: string, associatedCommands?: Set<string>): object;
         public register(command: Command, filepath?: string): void;
@@ -253,8 +253,8 @@ declare module 'discord-akairo' {
         public runPostTypeInhibitors(message: Message, command: Command): Promise<boolean>;
         public runCooldowns(message: Message, command: Command): boolean;
         public runCommand(message: Message, command: Command, args: any): Promise<void>;
-        public useInhibitorHandler(inhibitorHandler: InhibitorHandler): void;
-        public useListenerHandler(ListenerHandler: ListenerHandler): void;
+        public useInhibitorHandler(inhibitorHandler: InhibitorHandler): this;
+        public useListenerHandler(ListenerHandler: ListenerHandler): this;
         public on(event: 'remove', listener: (command: Command) => any): this;
         public on(event: 'load', listener: (command: Command, isReload: boolean) => any): this;
         public on(event: 'commandBlocked', listener: (message: Message, command: Command, reason: string) => any): this;
@@ -264,7 +264,7 @@ declare module 'discord-akairo' {
         public on(event: 'commandLocked', listener: (message: Message, command: Command) => any): this;
         public on(event: 'commandStarted', listener: (message: Message, command: Command, args: any) => any): this;
         public on(event: 'cooldown', listener: (message: Message, command: Command, remaining: number) => any): this;
-        public on(event: 'error', listener: (error: Error, message: Message, command: Command) => any): this;
+        public on(event: 'error', listener: (error: Error, message: Message, command?: Command) => any): this;
         public on(event: 'inPrompt' | 'messageInvalid', listener: (message: Message) => any): this;
         public on(event: 'messageBlocked', listener: (message: Message, reason: string) => any): this;
         public on(event: 'missingPermissions', listener: (message: Message, command: Command, type: 'client' | 'user', missing?: any) => any): this;
