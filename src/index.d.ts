@@ -550,7 +550,7 @@ declare module 'discord-akairo' {
         match?: ArgumentMatch;
         multipleFlags?: boolean;
         flag?: string | string[];
-        prompt?: ArgumentPromptOptions;
+        prompt?: ArgumentPromptOptions | boolean;
         type?: ArgumentType | ArgumentTypeCaster;
         unordered?: boolean | number | number[];
     };
