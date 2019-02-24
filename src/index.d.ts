@@ -527,7 +527,7 @@ declare module 'discord-akairo' {
 
     export type AkairoHandlerOptions = {
         automateCategories?: boolean;
-        classToHandle?: string;
+        classToHandle?: Function;
         directory?: string;
         extensions?: string[] | Set<string>;
         loadFilter?: LoadPredicate;
