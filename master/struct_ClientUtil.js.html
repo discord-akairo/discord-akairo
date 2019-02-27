@@ -396,9 +396,8 @@ class ClientUtil {
      * @returns {number}
      */
     compareStreaming(oldMember, newMember) {
-        const s1 = oldMember.presence.game &amp;&amp; oldMember.presence.game.streaming;
-        const s2 = newMember.presence.game &amp;&amp; newMember.presence.game.streaming;
-
+        const s1 = oldMember.presence.activity &amp;&amp; oldMember.presence.activity.type === 'STREAMING';
+        const s2 = newMember.presence.activity &amp;&amp; newMember.presence.activity.type === 'STREAMING';
         if (s1 === s2) return 0;
         if (s1) return 1;
         if (s2) return 2;
