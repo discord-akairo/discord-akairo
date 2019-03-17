@@ -8,7 +8,7 @@
         "node": true
     },
     "rules": {
-        "no-await-in-loop": "warn",
+        "no-await-in-loop": "off",
         "no-extra-parens": [
             "warn",
             "all",

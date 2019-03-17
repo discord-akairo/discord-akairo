@@ -361,7 +361,6 @@ class Argument {
         return async function typeFn(message, phrase) {
             for (let entry of types) {
                 if (typeof type === 'function') entry = entry.bind(this);
-                // eslint-disable-next-line no-await-in-loop
                 const res = await Argument.cast(entry, this.handler.resolver, message, phrase);
                 if (res != null) return res;
             }
@@ -381,7 +380,6 @@ class Argument {
             const results = [];
             for (let entry of types) {
                 if (typeof type === 'function') entry = entry.bind(this);
-                // eslint-disable-next-line no-await-in-loop
                 const res = await Argument.cast(entry, this.handler.resolver, message, phrase);
                 if (res == null) return null;
                 results.push(res);
