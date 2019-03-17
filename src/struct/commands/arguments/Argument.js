@@ -16,7 +16,6 @@ class Argument {
         index = null,
         unordered = false,
         limit = Infinity,
-        description = '',
         prompt = null,
         default: defaultValue = null
     } = {}) {
@@ -67,12 +66,6 @@ class Argument {
          * @type {number}
          */
         this.limit = limit;
-
-        /**
-         * The description of the argument.
-         * @type {string|any}
-         */
-        this.description = Array.isArray(description) ? description.join('\n') : description;
 
         /**
          * The prompt options.
@@ -478,7 +471,6 @@ module.exports = Argument;
  * Applicable to text, content, rest, or separate match only.
  * @prop {DefaultValueSupplier|any} [default=null] - Default value if no input or did not cast correctly.
  * If using a flag match, setting the default value to a non-void value inverses the result.
- * @prop {StringResolvable} [description=''] - A description of the argument.
  * @prop {ArgumentPromptOptions} [prompt] - Prompt options for when user does not provide input.
  */
 
