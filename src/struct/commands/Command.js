@@ -241,7 +241,7 @@ module.exports = Command;
  * Also includes properties from AkairoModuleOptions.
  * @typedef {AkairoModuleOptions} CommandOptions
  * @prop {string[]} [aliases=[]] - Command names.
- * @prop {ArgumentOptions[]|ArgumentGenerator} [args=[]] - Argument options to use.
+ * @prop {ArgumentOptions[]|ArgumentGenerator} [args=[]] - Argument options or generator.
  * @prop {boolean} [quoted=true] - Whether or not to consider quotes.
  * @prop {string} [separator] - Custom separator for argument input.
  * @prop {string[]} [flags=[]] - Flags to use when using an ArgumentGenerator.
@@ -312,6 +312,7 @@ module.exports = Command;
  */
 
 /**
+ * Function that can be yielded in an ArgumentGenerator.
  * @typedef {Function} InternalDataMapper
  * @param {Message} message - Message being parsed.
  * @param {object} parsed - Parsed content.
