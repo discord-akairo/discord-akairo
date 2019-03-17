@@ -151,8 +151,8 @@ class Command extends AkairoModule {
         this.before = before.bind(this);
 
         /**
-         * The key generator for the locker.
-         * @type {?KeyGenerator}
+         * The key supplier for the locker.
+         * @type {?KeySupplier}
          */
         this.lock = lock;
 
@@ -259,7 +259,7 @@ module.exports = Command;
  * The args object will have `match` and `matches` properties.
  * @prop {ExecutionPredicate} [condition] - Whether or not to run on messages that are not directly commands.
  * @prop {BeforeAction} [before] - Function to run before argument parsing and execution.
- * @prop {KeyGenerator|string} [lock] - The key type or key generator for the locker. If lock is a string, it's expected one of 'guild', 'channel', or 'user'.
+ * @prop {KeySupplier|string} [lock] - The key type or key generator for the locker. If lock is a string, it's expected one of 'guild', 'channel', or 'user'.
  * @prop {Snowflake|Snowflake[]|IgnoreCheckPredicate} [ignoreCooldown] - ID of user(s) to ignore cooldown or a function to ignore.
  * @prop {Snowflake|Snowflake[]|IgnoreCheckPredicate} [ignorePermissions] - ID of user(s) to ignore `userPermissions` checks or a function to ignore.
  * @prop {ArgumentPromptOptions} [defaultPrompt={}] - The default prompt options.
@@ -274,8 +274,8 @@ module.exports = Command;
  */
 
 /**
- * A function used to generate the key for the locker.
- * @typedef {Function} KeyGenerator
+ * A function used to supply the key for the locker.
+ * @typedef {Function} KeySupplier
  * @param {Message} message - Message that triggered the command.
  * @param {Object} args - Evaluated arguments.
  * @returns {string}
