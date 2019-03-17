@@ -1,62 +1,40 @@
-const AkairoError = require('../../util/AkairoError');
-
 class Flag {
     /**
      * A special return value during commmand execution or argument parsing.
+     * @param {string} type - Type of flag.
+     * @param {any} [data={}] - Extra data.
      */
-    constructor() {
-        throw new AkairoError('NOT_INSTANTIABLE', 'Flag');
+    constructor(type, data = {}) {
+        this.type = type;
+        Object.assign(this, data);
     }
 
     /**
      * Creates a flag that cancels the command.
-     * @returns {CommandCancel}
+     * @returns {Flag}
      */
     static cancel() {
-        return new CancelFlag();
+        return new Flag('cancel');
     }
 
     /**
      * Creates a flag that retries with another input.
      * @param {Message} message - Message to handle.
-     * @returns {CommandRetry}
+     * @returns {Flag}
      */
     static retry(message) {
-        return new RetryFlag(message);
+        return new Flag('retry', { message });
     }
-}
 
-/** @extends Flag */
-class CancelFlag extends Flag {
     /**
-     * Ends execution prematurely.
+     * Checks if a value is a flag and of some type.
+     * @param {any} value - Value to check.
+     * @param {string} type - Type of flag.
+     * @returns {boolean}
      */
-    // eslint-disable-next-line no-useless-constructor
-    constructor() {
-        super();
+    static is(value, type) {
+        return value instanceof Flag && value.type === type;
     }
 }
-
-/** @extends Flag */
-class RetryFlag extends Flag {
-    /**
-     * Retries with another input.
-     * @param {Message} message - Message to handle.
-     */
-    constructor(message) {
-        super();
-
-        /**
-         * Message to handle.
-         * @type {Message}
-         */
-        this.message = message;
-    }
-}
-
-Object.assign(Flag, {
-    CancelFlag,
-    RetryFlag
-});
 
 module.exports = Flag;

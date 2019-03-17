@@ -407,10 +407,10 @@ class CommandHandler extends AkairoHandler {
             if (isPromise(before)) await before;
 
             const args = await command.parse(message, content);
-            if (args instanceof Flag.CancelFlag) {
+            if (Flag.is(args, 'cancel')) {
                 this.emit(CommandHandlerEvents.COMMAND_CANCELLED, message, command);
                 return true;
-            } else if (args instanceof Flag.RetryFlag) {
+            } else if (Flag.is(args, 'retry')) {
                 this.emit(CommandHandlerEvents.COMMAND_BREAKOUT, message, command, args.message);
                 return this.handle(args.message);
             }

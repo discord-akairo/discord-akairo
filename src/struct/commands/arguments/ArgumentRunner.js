@@ -29,7 +29,7 @@ class ArgumentRunner {
                 ? curr.value(message, parsed, state)
                 : await this.runOne(message, parsed, state, new Argument(this.command, curr.value));
 
-            if (res instanceof Flag) {
+            if (Flag.is(res, 'cancel') || Flag.is(res, 'retry')) {
                 return res;
             }
 
