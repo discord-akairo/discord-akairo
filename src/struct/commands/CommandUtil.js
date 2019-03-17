@@ -155,6 +155,7 @@ class CommandUtil {
      */
     static transformOptions(content, options, extra) {
         const transformedOptions = APIMessage.transformOptions(content, options, extra);
+        if (!transformedOptions.content) transformedOptions.content = null;
         if (!transformedOptions.embed) transformedOptions.embed = null;
         return transformedOptions;
     }
