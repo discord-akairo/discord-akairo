@@ -431,6 +431,23 @@ class Argument {
             return Argument.cast(type2, this.handler.resolver, message, res);
         };
     }
+
+    /**
+     * Creates a type that parses as normal but also carries the original input.
+     * Result is in an object `{ input, value }` and wrapped in `Flag.fail` when failed.
+     * @param {ArgumentType|ArgumentTypeCaster} type - The type to use.
+     * @returns {ArgumentTypeCaster}
+     */
+    static withInput(type) {
+        return async function typeFn(message, phrase) {
+            const res = await Argument.cast(type, this.handler.resolver, message, phrase);
+            if (res == null || Flag.is(res, 'fail')) {
+                return Flag.fail({ input: phrase, value: res });
+            }
+
+            return { input: phrase, value: res };
+        };
+    }
     /* eslint-enable no-invalid-this */
 }
 
