@@ -362,6 +362,7 @@ declare module 'discord-akairo' {
 
         public static cancel(): Flag;
         public static retry(message: Message): Flag & { message: Message };
+        public static fail(data: any): Flag & { data: any };
     }
 
     export abstract class Provider {
@@ -460,6 +461,7 @@ declare module 'discord-akairo' {
         message: Message;
         retries: number;
         phrase: string;
+        value: void | (Flag & { data: any });
     };
 
     export type ArgumentPromptOptions = {
@@ -572,11 +574,7 @@ declare module 'discord-akairo' {
 
     export type BeforeAction = (message: Message) => any;
 
-    export type ControlAction = (message: Message, args: any) => any;
-
-    export type ControlPredicate = (message: Message, args: any) => boolean;
-
-    export type DefaultValueSupplier = (message: Message, args: any) => any;
+    export type DefaultValueSupplier = (message: Message, value: void | (Flag & { data: any })) => any;
 
     export type ExecutionPredicate = (message: Message) => boolean;
 
@@ -596,7 +594,7 @@ declare module 'discord-akairo' {
 
     export type PrefixSupplier = (message: Message) => string | string[] | Promise<string | string[]>;
 
-    export type PromptContentModifier = (message: Message, phrase: string, data: ArgumentPromptData)
+    export type PromptContentModifier = (message: Message, text: string, data: ArgumentPromptData)
         => StringResolvable | MessageOptions | MessageAdditions | Promise<StringResolvable | MessageOptions | MessageAdditions>;
 
     export type PromptContentSupplier = (message: Message, data: ArgumentPromptData)

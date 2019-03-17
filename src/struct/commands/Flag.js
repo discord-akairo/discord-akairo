@@ -27,6 +27,15 @@ class Flag {
     }
 
     /**
+     * Creates a flag that acts as argument cast failure with extra data.
+     * @param {any} data - Additional data.
+     * @returns {Flag}
+     */
+    static fail(data) {
+        return new Flag('fail', { data });
+    }
+
+    /**
      * Checks if a value is a flag and of some type.
      * @param {any} value - Value to check.
      * @param {string} type - Type of flag.
