@@ -1,3 +1,4 @@
+const AkairoError = require('../../../util/AkairoError');
 const Argument = require('./Argument');
 const { ArgumentMatches } = require('../../../util/Constants');
 const Flag = require('../Flag');
@@ -52,8 +53,7 @@ class ArgumentRunner {
 
         const runFn = cases[arg.match];
         if (runFn == null) {
-            // TODO: Make into AkairoError.
-            throw new TypeError('Unknown match type');
+            throw new AkairoError('UNKNOWN_MATCH_TYPE', arg.match);
         }
 
         return runFn.call(this, message, parsed, state, arg);

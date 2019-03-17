@@ -1,9 +1,11 @@
+const AkairoError = require('../../util/AkairoError');
+
 class Flag {
     /**
      * A special return value during commmand execution or argument parsing.
      */
     constructor() {
-        throw new TypeError('This should not be instantiated');
+        throw new AkairoError('NOT_INSTANTIABLE', 'Flag');
     }
 
     /**
