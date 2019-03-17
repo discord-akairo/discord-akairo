@@ -9,13 +9,10 @@ module.exports = {
     Command: require('./struct/commands/Command'),
     CommandHandler: require('./struct/commands/CommandHandler'),
     CommandUtil: require('./struct/commands/CommandUtil'),
-    ParsingFlag: require('./struct/commands/ParsingFlag'),
+    Flag: require('./struct/commands/Flag'),
 
     // Arguments
     Argument: require('./struct/commands/arguments/Argument'),
-    ArgumentParser: require('./struct/commands/arguments/ArgumentParser'),
-    ContentParser: require('./struct/commands/arguments/ContentParser'),
-    Control: require('./struct/commands/arguments/Control'),
     TypeResolver: require('./struct/commands/arguments/TypeResolver'),
 
     // Inhibitors

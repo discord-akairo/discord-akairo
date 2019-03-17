@@ -1,16 +1,17 @@
-class ParsingFlag {
+class Flag {
     /**
-     * A special return value for argument parsing.
+     * A special return value during commmand execution or argument parsing.
      */
-    // eslint-disable-next-line no-useless-constructor, no-empty-function
-    constructor() {}
+    constructor() {
+        throw new TypeError('This should not be instantiated');
+    }
 
     /**
      * Creates a flag that cancels the command.
      * @returns {CommandCancel}
      */
     static cancel() {
-        return new CommandCancel();
+        return new CancelFlag();
     }
 
     /**
@@ -19,14 +20,14 @@ class ParsingFlag {
      * @returns {CommandRetry}
      */
     static retry(message) {
-        return new CommandRetry(message);
+        return new RetryFlag(message);
     }
 }
 
-/** @extends ParsingFlag */
-class CommandCancel extends ParsingFlag {
+/** @extends Flag */
+class CancelFlag extends Flag {
     /**
-     * Ends parsing prematurely.
+     * Ends execution prematurely.
      */
     // eslint-disable-next-line no-useless-constructor
     constructor() {
@@ -34,8 +35,8 @@ class CommandCancel extends ParsingFlag {
     }
 }
 
-/** @extends ParsingFlag */
-class CommandRetry extends ParsingFlag {
+/** @extends Flag */
+class RetryFlag extends Flag {
     /**
      * Retries with another input.
      * @param {Message} message - Message to handle.
@@ -51,9 +52,9 @@ class CommandRetry extends ParsingFlag {
     }
 }
 
-Object.assign(ParsingFlag, {
-    CommandCancel,
-    CommandRetry
+Object.assign(Flag, {
+    CancelFlag,
+    RetryFlag
 });
 
-module.exports = ParsingFlag;
+module.exports = Flag;

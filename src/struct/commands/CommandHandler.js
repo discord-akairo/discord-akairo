@@ -4,7 +4,7 @@ const { BuiltInReasons, CommandHandlerEvents } = require('../../util/Constants')
 const { Collection } = require('discord.js');
 const Command = require('./Command');
 const CommandUtil = require('./CommandUtil');
-const ParsingFlag = require('./ParsingFlag');
+const Flag = require('./Flag');
 const { flatMap, intoArray, intoCallable, isPromise, prefixCompare } = require('../../util/Util');
 const TypeResolver = require('./arguments/TypeResolver');
 
@@ -407,10 +407,10 @@ class CommandHandler extends AkairoHandler {
             if (isPromise(before)) await before;
 
             const args = await command.parse(message, content);
-            if (args instanceof ParsingFlag.CommandCancel) {
+            if (args instanceof Flag.CancelFlag) {
                 this.emit(CommandHandlerEvents.COMMAND_CANCELLED, message, command);
                 return true;
-            } else if (args instanceof ParsingFlag.CommandRetry) {
+            } else if (args instanceof Flag.RetryFlag) {
                 this.emit(CommandHandlerEvents.COMMAND_BREAKOUT, message, command, args.message);
                 return this.handle(args.message);
             }
