@@ -278,7 +278,6 @@ class TypeResolver {
                 for (const channel of message.guild.channels.values()) {
                     if (channel.type !== 'text') continue;
                     try {
-                        // eslint-disable-next-line no-await-in-loop
                         return await channel.messages.fetch(phrase);
                     } catch (err) {
                         if (/^Invalid Form Body/.test(err.message)) return null;
@@ -299,7 +298,6 @@ class TypeResolver {
                     for (const channel of message.guild.channels.values()) {
                         if (channel.type !== 'text') continue;
                         try {
-                            // eslint-disable-next-line no-await-in-loop
                             return await channel.messages.fetch(phrase);
                         } catch (err) {
                             if (/^Invalid Form Body/.test(err.message)) return null;
