@@ -581,7 +581,7 @@ declare module 'discord-akairo' {
     export type IgnoreCheckPredicate = (message: Message, command: Command) => boolean;
 
     export type InternalDataMapper = (message: Message, parsed: object, state: object) => any;
-    
+
     export type KeySupplier = (message: Message, args: any) => string;
 
     export type LoadPredicate = (filepath: string) => boolean;
