@@ -401,7 +401,7 @@ class Argument {
             if (typeof type === 'function') type = type.bind(this);
             const res = await Argument.cast(type, this.handler.resolver, message, phrase);
             if (res == null) return null;
-            if (!predicate.call(this, res, phrase, message)) return null;
+            if (!predicate.call(this, message, phrase, res)) return null;
             return res;
         };
     }
@@ -415,7 +415,7 @@ class Argument {
      * @returns {ArgumentTypeCaster}
      */
     static range(type, min, max, inclusive = false) {
-        return Argument.validate(type, x => x >= min && (inclusive ? x <= max : x < max));
+        return Argument.validate(type, (msg, p, x) => x >= min && (inclusive ? x <= max : x < max));
     }
 
     /**
@@ -444,6 +444,7 @@ module.exports = Argument;
  * Options for how an argument parses text.
  * @typedef {Object} ArgumentOptions
  * @prop {string} id - ID of the argument for use in the args object.
+ * This does nothing inside an ArgumentGenerator.
  * @prop {ArgumentMatch} [match='phrase'] - Method to match text.
  * @prop {ArgumentType|ArgumentTypeCaster} [type='string'] - Type to cast to.
  * @prop {string|string[]} [flag] - The string(s) to use as the flag for flag or option match.
@@ -580,8 +581,8 @@ module.exports = Argument;
  * Any other truthy return value will be used as the evaluated argument.
  * If returning a Promise, the resolved value will go through the above steps.
  * @typedef {Function} ArgumentTypeCaster
- * @param {string} phrase - The user input.
  * @param {Message} message - Message that triggered the command.
+ * @param {string} phrase - The user input.
  * @returns {any}
  */
 
@@ -595,9 +596,9 @@ module.exports = Argument;
 /**
  * A function for validating parsed arguments.
  * @typedef {Function} ParsedValuePredicate
- * @param {any} value - The parsed value.
- * @param {string} phrase - The user input.
  * @param {Message} message - Message that triggered the command.
+ * @param {string} phrase - The user input.
+ * @param {any} value - The parsed value.
  * @returns {boolean}
  */
 
