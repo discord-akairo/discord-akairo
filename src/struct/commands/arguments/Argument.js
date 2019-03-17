@@ -1,5 +1,5 @@
 const { ArgumentMatches, ArgumentTypes } = require('../../../util/Constants');
-const ParsingFlag = require('../ParsingFlag');
+const Flag = require('../Flag');
 const { intoCallable, isPromise } = require('../../../util/Util');
 
 class Argument {
@@ -9,7 +9,6 @@ class Argument {
      * @param {ArgumentOptions} options - Options for the argument.
      */
     constructor(command, {
-        id,
         match = ArgumentMatches.PHRASE,
         type = ArgumentTypes.STRING,
         flag = null,
@@ -21,12 +20,6 @@ class Argument {
         prompt = null,
         default: defaultValue = null
     } = {}) {
-        /**
-         * The ID of the argument.
-         * @type {string}
-         */
-        this.id = id;
-
         /**
          * The command this argument belongs to.
          * @type {Command}
@@ -112,29 +105,26 @@ class Argument {
 
     /**
      * Processes the type casting and prompting of the argument for a phrase.
-     * @param {string} phrase - The phrase to process.
      * @param {Message} message - The message that called the command.
-     * @param {Object} args - Previous arguments from command.
+     * @param {string} phrase - The phrase to process.
      * @returns {Promise<any>}
      */
-    async process(phrase, message, args = {}) {
-        phrase = phrase.trim();
-
+    async process(message, phrase) {
         const isOptional = (this.prompt && this.prompt.optional)
             || (this.command.defaultPrompt && this.command.defaultPrompt.optional)
             || (this.handler.defaultPrompt && this.handler.defaultPrompt.optional);
 
         if (!phrase && isOptional) {
-            return intoCallable(this.default)(message, args);
+            return intoCallable(this.default)(message);
         }
 
-        const res = await this.cast(phrase, message, args);
+        const res = await this.cast(message, phrase);
         if (res == null) {
             if (this.prompt) {
-                return this.collect(message, args, phrase);
+                return this.collect(message, phrase);
             }
 
-            return intoCallable(this.default)(message, args);
+            return intoCallable(this.default)(message);
         }
 
         return res;
@@ -142,23 +132,21 @@ class Argument {
 
     /**
      * Casts a phrase to this argument's type.
-     * @param {string} phrase - Phrase to process.
      * @param {Message} message - Message that called the command.
-     * @param {Object} args - Previous arguments from command.
+     * @param {string} phrase - Phrase to process.
      * @returns {Promise<any>}
      */
-    cast(phrase, message, args = {}) {
-        return Argument.cast(this.type, this.handler.resolver, phrase, message, args);
+    cast(message, phrase) {
+        return Argument.cast(this.type, this.handler.resolver, message, phrase);
     }
 
     /**
      * Collects input from the user by prompting.
      * @param {Message} message - Message to prompt.
-     * @param {Object} args - Previous arguments from command.
      * @param {string} [commandInput] - Previous input from command if there was one.
      * @returns {Promise<ParsingFlag|any>}
      */
-    async collect(message, args = {}, commandInput = '') {
+    async collect(message, commandInput = '') {
         const promptOptions = {};
         Object.assign(promptOptions, this.handler.defaultPrompt);
         Object.assign(promptOptions, this.command.defaultPrompt);
@@ -166,12 +154,10 @@ class Argument {
 
         const isInfinite = promptOptions.infinite || (this.match === ArgumentMatches.SEPARATE && !commandInput);
         const additionalRetry = Number(Boolean(commandInput));
-
         const values = isInfinite ? [] : null;
-        if (isInfinite) args[this.id] = values;
 
         const getText = async (promptType, prompter, retryCount, inputMessage, inputPhrase) => {
-            let text = await intoCallable(prompter).call(this, message, args, {
+            let text = await intoCallable(prompter).call(this, message, {
                 retries: retryCount,
                 infinite: isInfinite,
                 message: inputMessage,
@@ -191,7 +177,7 @@ class Argument {
             }[promptType];
 
             if (modifier) {
-                text = await modifier.call(this, text, message, args, {
+                text = await modifier.call(this, message, text, {
                     retries: retryCount,
                     infinite: isInfinite,
                     message: inputMessage,
@@ -248,12 +234,12 @@ class Argument {
                     if (message.util) message.util.addMessage(sentTimeout);
                 }
 
-                return ParsingFlag.cancel();
+                return Flag.cancel();
             }
 
             if (promptOptions.breakout) {
                 const looksLike = await this.handler.parseCommand(input);
-                if (looksLike && looksLike.command) return ParsingFlag.retry(input);
+                if (looksLike && looksLike.command) return Flag.retry(input);
             }
 
             if (input.content.toLowerCase() === promptOptions.cancelWord.toLowerCase()) {
@@ -263,7 +249,7 @@ class Argument {
                     if (message.util) message.util.addMessage(sentCancel);
                 }
 
-                return ParsingFlag.cancel();
+                return Flag.cancel();
             }
 
             if (isInfinite && input.content.toLowerCase() === promptOptions.stopWord.toLowerCase()) {
@@ -271,7 +257,7 @@ class Argument {
                 return values;
             }
 
-            const parsedValue = await this.cast(input.content, input, args);
+            const parsedValue = await this.cast(input, input.content);
             if (parsedValue == null) {
                 if (retryCount <= promptOptions.retries) {
                     return promptOne(input, retryCount + 1);
@@ -283,7 +269,7 @@ class Argument {
                     if (message.util) message.util.addMessage(sentEnded);
                 }
 
-                return ParsingFlag.cancel();
+                return Flag.cancel();
             }
 
             if (isInfinite) {
@@ -299,7 +285,10 @@ class Argument {
 
         this.handler.addPrompt(message.channel, message.author);
         const returnValue = await promptOne(message, 1 + additionalRetry);
-        if (this.handler.commandUtil) message.util.setEditable(false);
+        if (this.handler.commandUtil) {
+            message.util.setEditable(false);
+        }
+
         this.handler.removePrompt(message.channel, message.author);
         return returnValue;
     }
@@ -308,12 +297,11 @@ class Argument {
      * Casts a phrase to the specified type.
      * @param {ArgumentType|ArgumentTypeCaster} type - Type to use.
      * @param {TypeResolver} resolver - Type resolver to use.
-     * @param {string} phrase - Phrase to process.
      * @param {Message} message - Message that called the command.
-     * @param {Object} args - Previous arguments from command.
+     * @param {string} phrase - Phrase to process.
      * @returns {Promise<any>}
      */
-    static async cast(type, resolver, phrase, message, args) {
+    static async cast(type, resolver, message, phrase) {
         if (Array.isArray(type)) {
             for (const entry of type) {
                 if (Array.isArray(entry)) {
@@ -329,7 +317,7 @@ class Argument {
         }
 
         if (typeof type === 'function') {
-            let res = type(phrase, message, args);
+            let res = type(message, phrase);
             if (isPromise(res)) res = await res;
             if (res != null) return res;
             return null;
@@ -353,14 +341,13 @@ class Argument {
         }
 
         if (resolver.type(type)) {
-            let res = resolver.type(type).call(this, phrase, message, args);
+            let res = resolver.type(type).call(this, message, phrase);
             if (isPromise(res)) res = await res;
             if (res != null) return res;
             return null;
         }
 
-        if (phrase) return phrase;
-        return null;
+        return phrase || null;
     }
 
     /* eslint-disable no-invalid-this */
@@ -371,11 +358,11 @@ class Argument {
      * @returns {ArgumentTypeCaster}
      */
     static union(...types) {
-        return async function typeFn(phrase, message, args) {
+        return async function typeFn(message, phrase) {
             for (let entry of types) {
                 if (typeof type === 'function') entry = entry.bind(this);
                 // eslint-disable-next-line no-await-in-loop
-                const res = await Argument.cast(entry, this.handler.resolver, phrase, message, args);
+                const res = await Argument.cast(entry, this.handler.resolver, message, phrase);
                 if (res != null) return res;
             }
 
@@ -390,12 +377,12 @@ class Argument {
      * @returns {ArgumentTypeCaster}
      */
     static tuple(...types) {
-        return async function typeFn(phrase, message, args) {
+        return async function typeFn(message, phrase) {
             const results = [];
             for (let entry of types) {
                 if (typeof type === 'function') entry = entry.bind(this);
                 // eslint-disable-next-line no-await-in-loop
-                const res = await Argument.cast(entry, this.handler.resolver, phrase, message, args);
+                const res = await Argument.cast(entry, this.handler.resolver, message, phrase);
                 if (res == null) return null;
                 results.push(res);
             }
@@ -412,11 +399,11 @@ class Argument {
      * @returns {ArgumentTypeCaster}
      */
     static validate(type, predicate) {
-        return async function typeFn(phrase, message, args) {
+        return async function typeFn(message, phrase) {
             if (typeof type === 'function') type = type.bind(this);
-            const res = await Argument.cast(type, this.handler.resolver, phrase, message, args);
+            const res = await Argument.cast(type, this.handler.resolver, message, phrase);
             if (res == null) return null;
-            if (!predicate.call(this, res, phrase, message, args)) return null;
+            if (!predicate.call(this, res, phrase, message)) return null;
             return res;
         };
     }
@@ -442,12 +429,12 @@ class Argument {
      * @returns {ArgumentTypeCaster}
      */
     static compose(type1, type2, ignoreVoid = true) {
-        return async function typeFn(phrase, message, args) {
+        return async function typeFn(message, phrase) {
             if (typeof type1 === 'function') type1 = type1.bind(this);
-            const res = await Argument.cast(type1, this.handler.resolver, phrase, message, args);
+            const res = await Argument.cast(type1, this.handler.resolver, message, phrase);
             if (res == null && !ignoreVoid) return null;
             if (typeof type2 === 'function') type2 = type2.bind(this);
-            return Argument.cast(type2, this.handler.resolver, res, message, args);
+            return Argument.cast(type2, this.handler.resolver, message, res);
         };
     }
     /* eslint-enable no-invalid-this */
@@ -597,7 +584,6 @@ module.exports = Argument;
  * @typedef {Function} ArgumentTypeCaster
  * @param {string} phrase - The user input.
  * @param {Message} message - Message that triggered the command.
- * @param {Object} prevArgs - Previous arguments.
  * @returns {any}
  */
 
@@ -605,7 +591,6 @@ module.exports = Argument;
  * Function get the default value of the argument.
  * @typedef {Function} DefaultValueSupplier
  * @param {Message} message - Message that triggered the command.
- * @param {Object} prevArgs - Previous arguments.
  * @returns {any}
  */
 
@@ -615,7 +600,6 @@ module.exports = Argument;
  * @param {any} value - The parsed value.
  * @param {string} phrase - The user input.
  * @param {Message} message - Message that triggered the command.
- * @param {Object} prevArgs - Previous arguments.
  * @returns {boolean}
  */
 
@@ -624,7 +608,6 @@ module.exports = Argument;
  * @typedef {Function} PromptContentModifier
  * @param {string|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions} text - Text from the prompt to modify.
  * @param {Message} message - Message that triggered the command.
- * @param {Object} prevArgs - Previous arguments.
  * @param {ArgumentPromptData} data - Miscellaneous data.
  * @returns {StringResolvable|MessageOptions|MessageAdditions|Promise<StringResolvable|MessageOptions|MessageAdditions>}
  */
@@ -633,7 +616,6 @@ module.exports = Argument;
  * A function returning text for the prompt.
  * @typedef {Function} PromptContentSupplier
  * @param {Message} message - Message that triggered the command.
- * @param {Object} prevArgs - Previous arguments.
  * @param {ArgumentPromptData} data - Miscellaneous data.
  * @returns {StringResolvable|MessageOptions|MessageAdditions|Promise<StringResolvable|MessageOptions|MessageAdditions>}
  */

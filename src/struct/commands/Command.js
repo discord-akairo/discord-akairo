@@ -1,7 +1,8 @@
 const AkairoError = require('../../util/AkairoError');
 const AkairoModule = require('../AkairoModule');
-const ArgumentParser = require('./arguments/ArgumentParser');
-const ContentParser = require('./arguments/ContentParser');
+const Argument = require('./arguments/Argument');
+const ArgumentRunner = require('./arguments/ArgumentRunner');
+const ContentParser = require('./ContentParser');
 
 /** @extends AkairoModule */
 class Command extends AkairoModule {
@@ -34,7 +35,9 @@ class Command extends AkairoModule {
             before = this.before || (() => undefined),
             lock,
             ignoreCooldown,
-            ignorePermissions
+            ignorePermissions,
+            flags = [],
+            optionFlags = []
         } = options;
 
         /**
@@ -43,26 +46,21 @@ class Command extends AkairoModule {
          */
         this.aliases = aliases;
 
-        /**
-         * The content parser.
-         * @type {ContentParser}
-         */
-        this.parser = null;
-        if (typeof args !== 'function') {
-            const flags = ArgumentParser.getFlags(args);
-            this.parser = new ContentParser({
-                flagWords: flags.flagWords,
-                optionFlagWords: flags.optionFlagWords,
-                quoted,
-                separator
-            });
-        }
+        const { flagWords, optionFlagWords } = Array.isArray(args)
+            ? ContentParser.getFlags(args)
+            : { flagWords: flags, optionFlagWords: optionFlags };
 
-        /**
-         * The argument parser.
-         * @type {ArgumentParser|ArgumentProvider}
-         */
-        this.args = typeof args === 'function' ? args.bind(this) : new ArgumentParser(this, this.parser, args);
+        this.contentParser = new ContentParser({
+            flagWords,
+            optionFlagWords,
+            quoted,
+            separator
+        });
+
+        this.argumentRunner = new ArgumentRunner(this);
+        this.argumentGenerator = Array.isArray(args)
+            ? ArgumentRunner.fromArguments(args.map(arg => [arg.id, new Argument(this, arg)]))
+            : args;
 
         /**
          * Usable only in this channel type.
@@ -217,12 +215,8 @@ class Command extends AkairoModule {
      * @returns {Promise<Object|ParsingFlag>}
      */
     parse(message, content) {
-        if (typeof this.args === 'function') {
-            const res = this.args(message, content);
-            return Promise.resolve(res);
-        }
-
-        return this.args.parse(message, content);
+        const parsed = this.contentParser.parse(content);
+        return this.argumentRunner.run(message, parsed, this.argumentGenerator);
     }
 
     /**
@@ -247,9 +241,11 @@ module.exports = Command;
  * Also includes properties from AkairoModuleOptions.
  * @typedef {AkairoModuleOptions} CommandOptions
  * @prop {string[]} [aliases=[]] - Command names.
- * @prop {Array<ArgumentOptions|Control>|ArgumentProvider} [args=[]] - Argument options to use.
+ * @prop {ArgumentOptions[]|ArgumentGenerator} [args=[]] - Argument options to use.
  * @prop {boolean} [quoted=true] - Whether or not to consider quotes.
  * @prop {string} [separator] - Custom separator for argument input.
+ * @prop {string[]} [flags=[]] - Flags to use when using an ArgumentGenerator.
+ * @prop {string[]} [optionFlags=[]] - Option flags to use when using an ArgumentGenerator.
  * @prop {string} [channel] - Restricts channel to either 'guild' or 'dm'.
  * @prop {boolean} [ownerOnly=false] - Whether or not to allow client owner(s) only.
  * @prop {boolean} [typing=false] - Whether or not to type in channel during execution.
@@ -268,14 +264,6 @@ module.exports = Command;
  * @prop {Snowflake|Snowflake[]|IgnoreCheckPredicate} [ignorePermissions] - ID of user(s) to ignore `userPermissions` checks or a function to ignore.
  * @prop {ArgumentPromptOptions} [defaultPrompt={}] - The default prompt options.
  * @prop {StringResolvable} [description=''] - Description of the command.
- */
-
-/**
- * A function to replace Akairo's argument handler.
- * @typedef {Function} ArgumentProvider
- * @param {Message} message - Message that triggered the command.
- * @param {string} content - The content of the message.
- * @returns {any}
  */
 
 /**
@@ -313,4 +301,12 @@ module.exports = Command;
  * @typedef {Function} RegexSupplier
  * @param {Message} message - Message to get regex for.
  * @returns {RegExp}
+ */
+
+/**
+ * Generator for arguments.
+ * When yielding argument options, that argument is ran and the result of the processing is given.
+ * When yield a function, that function is called with internal data and the return value is given.
+ * @typedef {GeneratorFunction} ArgumentGenerator
+ * @returns {Iterator<ArgumentOptions|Function>}
  */
