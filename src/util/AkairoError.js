@@ -11,8 +11,10 @@ const Messages = {
 
     // Options-related
     COMMAND_UTIL_EXPLICIT: 'The command handler options `handleEdits` and `storeMessages` require the `commandUtil` option to be true',
+    UNKNOWN_MATCH_TYPE: match => `Unknown match type '${match}'`,
 
     // Generic errors
+    NOT_INSTANTIABLE: constructor => `${constructor} is not instantiable`,
     NOT_IMPLEMENTED: (constructor, method) => `${constructor}#${method} has not been implemented`,
     INVALID_TYPE: (name, expected, vowel = false) => `Value of '${name}' was not ${vowel ? 'an' : 'a'} ${expected}`
 };
