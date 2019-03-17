@@ -360,6 +360,8 @@ declare module 'discord-akairo' {
     export class Flag {
         public constructor(type: string, data: object);
 
+        public type: string;
+
         public static cancel(): Flag;
         public static retry(message: Message): Flag & { message: Message };
         public static fail(data: any): Flag & { data: any };
@@ -568,7 +570,7 @@ declare module 'discord-akairo' {
         | RegExp
         | string;
 
-    export type ArgumentGenerator = IterableIterator<ArgumentOptions | Flag | InternalDataMapper | any>;
+    export type ArgumentGenerator = () => IterableIterator<ArgumentOptions | Flag | InternalDataMapper | any>;
 
     export type ArgumentTypeCaster = (message: Message, phrase: string) => any;
 
