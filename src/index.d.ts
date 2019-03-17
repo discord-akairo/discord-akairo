@@ -275,6 +275,17 @@ declare module 'discord-akairo' {
         public static transformOptions(content?: StringResolvable, options?: MessageOptions | MessageAdditions): any[];
     }
 
+    export class Flag {
+        public constructor(type: string, data: object);
+
+        public type: string;
+
+        public static cancel(): Flag;
+        public static retry(message: Message): Flag & { message: Message };
+        public static fail(data: any): Flag & { data: any };
+        public static is(value: any, type: string): boolean;
+    }
+
     export class Inhibitor extends AkairoModule {
         public constructor(id: string, options?: InhibitorOptions);
 
@@ -355,16 +366,6 @@ declare module 'discord-akairo' {
         public setEmitters(emitters: { [x: string]: EventEmitter }): void;
         public on(event: 'remove', listener: (listener: Listener) => any): this;
         public on(event: 'load', listener: (listener: Listener, isReload: boolean) => any): this;
-    }
-
-    export class Flag {
-        public constructor(type: string, data: object);
-
-        public type: string;
-
-        public static cancel(): Flag;
-        public static retry(message: Message): Flag & { message: Message };
-        public static fail(data: any): Flag & { data: any };
     }
 
     export abstract class Provider {
