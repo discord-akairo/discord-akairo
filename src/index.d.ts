@@ -358,19 +358,10 @@ declare module 'discord-akairo' {
     }
 
     export class Flag {
-        public static CancelFlag: typeof CancelFlag;
-        public static RetryFlag: typeof RetryFlag;
+        public constructor(type: string, data: object);
 
-        public static cancel(): CancelFlag;
-        public static retry(message: Message): RetryFlag;
-    }
-
-    class CancelFlag extends Flag {}
-
-    class RetryFlag extends Flag {
-        public constructor(message: Message);
-
-        public message: Message;
+        public static cancel(): Flag;
+        public static retry(message: Message): Flag & { message: Message };
     }
 
     export abstract class Provider {
