@@ -461,7 +461,9 @@ module.exports = Argument;
  * @prop {ArgumentMatch} [match='phrase'] - Method to match text.
  * @prop {ArgumentType|ArgumentTypeCaster} [type='string'] - Type to cast to.
  * @prop {string|string[]} [flag] - The string(s) to use as the flag for flag or option match.
- * @prop {boolean} [multipleFlags=false] - Whether or not to have option flags match process multiple inputs.
+ * @prop {boolean} [multipleFlags=false] - Whether or not to have flags process multiple inputs.
+ * For option flags, this works like the separate match; the limit option will also work here.
+ * For flags, this will count the number of occurrences.
  * @prop {number} [index] - Index of phrase to start from.
  * Applicable to phrase, text, content, rest, or separate match only.
  * Ignored when used with the unordered option.

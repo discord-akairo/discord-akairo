@@ -131,6 +131,16 @@ class ArgumentRunner {
 
     runFlag(message, parsed, state, arg) {
         const names = Array.isArray(arg.flag) ? arg.flag : [arg.flag];
+        if (arg.multipleFlags) {
+            const amount = parsed.flags.filter(flag =>
+                names.some(name =>
+                    name.toLowerCase() === flag.toLowerCase()
+                )
+            ).length;
+
+            return amount;
+        }
+
         const flagFound = parsed.flags.some(flag =>
             names.some(name =>
                 name.toLowerCase() === flag.toLowerCase()
@@ -147,7 +157,7 @@ class ArgumentRunner {
                 names.some(name =>
                     name.toLowerCase() === flag.toLowerCase()
                 )
-            ).map(([, value]) => value);
+            ).map(([, value]) => value).slice(0, arg.limit);
 
             const res = [];
             for (const value of values) {
