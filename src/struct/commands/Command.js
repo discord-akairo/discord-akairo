@@ -308,5 +308,13 @@ module.exports = Command;
  * When yielding argument options, that argument is ran and the result of the processing is given.
  * When yield a function, that function is called with internal data and the return value is given.
  * @typedef {GeneratorFunction} ArgumentGenerator
- * @returns {Iterator<ArgumentOptions|Function>}
+ * @returns {IterableIterator<ArgumentOptions|InternalDataMapper|any>}
+ */
+
+/**
+ * @typedef {Function} InternalDataMapper
+ * @param {Message} message - Message being parsed.
+ * @param {object} parsed - Parsed content.
+ * @param {object} state - Argument processing state.
+ * @returns {any}
  */
