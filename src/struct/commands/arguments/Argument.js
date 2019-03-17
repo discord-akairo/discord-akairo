@@ -115,16 +115,18 @@ class Argument {
             || (this.handler.defaultPrompt && this.handler.defaultPrompt.optional);
 
         if (!phrase && isOptional) {
-            return intoCallable(this.default)(message);
+            return intoCallable(this.default)(message, null);
         }
 
         const res = await this.cast(message, phrase);
-        if (res == null) {
+        if (res == null || Flag.is(res, 'fail')) {
             if (this.prompt) {
-                return this.collect(message, phrase);
+                return this.collect(message, phrase, res);
             }
 
-            return intoCallable(this.default)(message);
+            return this.default == null
+                ? res
+                : intoCallable(this.default)(message, res);
         }
 
         return res;
@@ -144,9 +146,10 @@ class Argument {
      * Collects input from the user by prompting.
      * @param {Message} message - Message to prompt.
      * @param {string} [commandInput] - Previous input from command if there was one.
+     * @param {any} [parsedInput] - Previous parsed input from command if there was one.
      * @returns {Promise<ParsingFlag|any>}
      */
-    async collect(message, commandInput = '') {
+    async collect(message, commandInput = '', parsedInput = null) {
         const promptOptions = {};
         Object.assign(promptOptions, this.handler.defaultPrompt);
         Object.assign(promptOptions, this.command.defaultPrompt);
@@ -156,12 +159,13 @@ class Argument {
         const additionalRetry = Number(Boolean(commandInput));
         const values = isInfinite ? [] : null;
 
-        const getText = async (promptType, prompter, retryCount, inputMessage, inputPhrase) => {
+        const getText = async (promptType, prompter, retryCount, inputMessage, inputPhrase, inputParsed) => {
             let text = await intoCallable(prompter).call(this, message, {
                 retries: retryCount,
                 infinite: isInfinite,
                 message: inputMessage,
-                phrase: inputPhrase
+                phrase: inputPhrase,
+                value: inputParsed
             });
 
             if (Array.isArray(text)) {
@@ -181,7 +185,8 @@ class Argument {
                     retries: retryCount,
                     infinite: isInfinite,
                     message: inputMessage,
-                    phrase: inputPhrase
+                    phrase: inputPhrase,
+                    value: inputParsed
                 });
             }
 
@@ -193,20 +198,13 @@ class Argument {
         };
 
         // eslint-disable-next-line complexity
-        const promptOne = async (prevMessage, retryCount) => {
+        const promptOne = async (prevMessage, prevInput, prevParsed, retryCount) => {
             let sentStart;
             // This is either a retry prompt, the start of a non-infinite, or the start of an infinite.
             if (retryCount !== 1 || !isInfinite || !values.length) {
-                let prevInput;
-                if (retryCount <= 1 + additionalRetry) {
-                    prevInput = commandInput || '';
-                } else {
-                    prevInput = prevMessage.content;
-                }
-
                 const promptType = retryCount === 1 ? 'start' : 'retry';
                 const prompter = retryCount === 1 ? promptOptions.start : promptOptions.retry;
-                const startText = await getText(promptType, prompter, retryCount, prevMessage, prevInput);
+                const startText = await getText(promptType, prompter, retryCount, prevMessage, prevInput, prevParsed);
 
                 if (startText) {
                     sentStart = await (message.util || message.channel).send(startText);
@@ -253,14 +251,14 @@ class Argument {
             }
 
             if (isInfinite && input.content.toLowerCase() === promptOptions.stopWord.toLowerCase()) {
-                if (!values.length) return promptOne(input, retryCount + 1);
+                if (!values.length) return promptOne(input, retryCount + 1, input.content, null);
                 return values;
             }
 
             const parsedValue = await this.cast(input, input.content);
-            if (parsedValue == null) {
+            if (parsedValue == null || Flag.is(parsedValue, 'fail')) {
                 if (retryCount <= promptOptions.retries) {
-                    return promptOne(input, retryCount + 1);
+                    return promptOne(input, retryCount + 1, input.content, parsedValue);
                 }
 
                 const endedText = await getText('ended', promptOptions.ended, retryCount, input, input.content);
@@ -275,7 +273,7 @@ class Argument {
             if (isInfinite) {
                 values.push(parsedValue);
                 const limit = promptOptions.limit;
-                if (values.length < limit) return promptOne(message, 1);
+                if (values.length < limit) return promptOne(message, 1, input.content, parsedValue);
 
                 return values;
             }
@@ -284,7 +282,7 @@ class Argument {
         };
 
         this.handler.addPrompt(message.channel, message.author);
-        const returnValue = await promptOne(message, 1 + additionalRetry);
+        const returnValue = await promptOne(message, 1 + additionalRetry, commandInput, parsedInput);
         if (this.handler.commandUtil) {
             message.util.setEditable(false);
         }
@@ -319,8 +317,7 @@ class Argument {
         if (typeof type === 'function') {
             let res = type(message, phrase);
             if (isPromise(res)) res = await res;
-            if (res != null) return res;
-            return null;
+            return res;
         }
 
         if (type instanceof RegExp) {
@@ -343,8 +340,7 @@ class Argument {
         if (resolver.type(type)) {
             let res = resolver.type(type).call(this, message, phrase);
             if (isPromise(res)) res = await res;
-            if (res != null) return res;
-            return null;
+            return res;
         }
 
         return phrase || null;
@@ -362,7 +358,7 @@ class Argument {
             for (let entry of types) {
                 if (typeof type === 'function') entry = entry.bind(this);
                 const res = await Argument.cast(entry, this.handler.resolver, message, phrase);
-                if (res != null) return res;
+                if (res != null && !Flag.is(res, 'fail')) return res;
             }
 
             return null;
@@ -381,7 +377,7 @@ class Argument {
             for (let entry of types) {
                 if (typeof type === 'function') entry = entry.bind(this);
                 const res = await Argument.cast(entry, this.handler.resolver, message, phrase);
-                if (res == null) return null;
+                if (res == null || Flag.is(res, 'fail')) return res;
                 results.push(res);
             }
 
@@ -400,7 +396,7 @@ class Argument {
         return async function typeFn(message, phrase) {
             if (typeof type === 'function') type = type.bind(this);
             const res = await Argument.cast(type, this.handler.resolver, message, phrase);
-            if (res == null) return null;
+            if (res == null || Flag.is(res, 'fail')) return res;
             if (!predicate.call(this, message, phrase, res)) return null;
             return res;
         };
@@ -430,7 +426,7 @@ class Argument {
         return async function typeFn(message, phrase) {
             if (typeof type1 === 'function') type1 = type1.bind(this);
             const res = await Argument.cast(type1, this.handler.resolver, message, phrase);
-            if (res == null && !ignoreVoid) return null;
+            if (!ignoreVoid && (res == null || Flag.is(res, 'fail'))) return res;
             if (typeof type2 === 'function') type2 = type2.bind(this);
             return Argument.cast(type2, this.handler.resolver, message, res);
         };
@@ -474,6 +470,7 @@ module.exports = Argument;
  * @prop {boolean} infinite - Whether the prompt is infinite or not.
  * @prop {Message} message - The message that caused the prompt.
  * @prop {string} phrase - The input phrase that caused the prompt if there was one.
+ * @param {void|Flag} value - The value that failed.
  */
 
 /**
@@ -590,6 +587,7 @@ module.exports = Argument;
  * Function get the default value of the argument.
  * @typedef {Function} DefaultValueSupplier
  * @param {Message} message - Message that triggered the command.
+ * @param {void|Flag} value - The value that failed.
  * @returns {any}
  */
 
