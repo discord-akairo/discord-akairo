@@ -226,7 +226,7 @@ class Argument {
 
                 if (message.util) message.util.addMessage(input);
             } catch (err) {
-                const timeoutText = await getText('timeout', promptOptions.timeout, retryCount, prevMessage, '');
+                const timeoutText = await getText('timeout', promptOptions.timeout, retryCount, prevMessage, prevInput, '');
                 if (timeoutText) {
                     const sentTimeout = await message.channel.send(timeoutText);
                     if (message.util) message.util.addMessage(sentTimeout);
@@ -241,7 +241,7 @@ class Argument {
             }
 
             if (input.content.toLowerCase() === promptOptions.cancelWord.toLowerCase()) {
-                const cancelText = await getText('cancel', promptOptions.cancel, retryCount, input, '');
+                const cancelText = await getText('cancel', promptOptions.cancel, retryCount, input, input.content, 'cancel');
                 if (cancelText) {
                     const sentCancel = await message.channel.send(cancelText);
                     if (message.util) message.util.addMessage(sentCancel);
@@ -251,17 +251,17 @@ class Argument {
             }
 
             if (isInfinite && input.content.toLowerCase() === promptOptions.stopWord.toLowerCase()) {
-                if (!values.length) return promptOne(input, retryCount + 1, input.content, null);
+                if (!values.length) return promptOne(input, input.content, null, retryCount + 1);
                 return values;
             }
 
             const parsedValue = await this.cast(input, input.content);
             if (parsedValue == null || Flag.is(parsedValue, 'fail')) {
                 if (retryCount <= promptOptions.retries) {
-                    return promptOne(input, retryCount + 1, input.content, parsedValue);
+                    return promptOne(input, input.content, parsedValue, retryCount + 1);
                 }
 
-                const endedText = await getText('ended', promptOptions.ended, retryCount, input, input.content);
+                const endedText = await getText('ended', promptOptions.ended, retryCount, input, input.content, 'stop');
                 if (endedText) {
                     const sentEnded = await message.channel.send(endedText);
                     if (message.util) message.util.addMessage(sentEnded);
@@ -273,7 +273,7 @@ class Argument {
             if (isInfinite) {
                 values.push(parsedValue);
                 const limit = promptOptions.limit;
-                if (values.length < limit) return promptOne(message, 1, input.content, parsedValue);
+                if (values.length < limit) return promptOne(message, input.content, parsedValue, 1);
 
                 return values;
             }
@@ -282,7 +282,7 @@ class Argument {
         };
 
         this.handler.addPrompt(message.channel, message.author);
-        const returnValue = await promptOne(message, 1 + additionalRetry, commandInput, parsedInput);
+        const returnValue = await promptOne(message, commandInput, parsedInput, 1 + additionalRetry);
         if (this.handler.commandUtil) {
             message.util.setEditable(false);
         }
