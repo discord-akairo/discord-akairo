@@ -306,16 +306,10 @@ module.exports = Command;
 /**
  * Generator for arguments.
  * When yielding argument options, that argument is ran and the result of the processing is given.
- * When yield a function, that function is called with internal data and the return value is given.
+ * The last value when the generator is done is the resulting `args` for the command's `exec`.
  * @typedef {GeneratorFunction} ArgumentGenerator
- * @returns {IterableIterator<ArgumentOptions|InternalDataMapper|any>}
- */
-
-/**
- * Function that can be yielded in an ArgumentGenerator.
- * @typedef {Function} InternalDataMapper
- * @param {Message} message - Message being parsed.
+ * @param {Message} message - Message that triggered the command.
  * @param {object} parsed - Parsed content.
  * @param {object} state - Argument processing state.
- * @returns {any}
+ * @returns {IterableIterator<ArgumentOptions|Flag|any>}
  */
