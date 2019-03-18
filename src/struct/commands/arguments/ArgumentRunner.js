@@ -22,13 +22,15 @@ class ArgumentRunner {
             phraseIndex: 0
         };
 
-        const iter = generator();
+        const iter = generator(message, parsed, state);
         let curr = await iter.next();
         while (!curr.done) {
-            const res = typeof curr.value === 'function'
-                ? curr.value(message, parsed, state)
-                : await this.runOne(message, parsed, state, new Argument(this.command, curr.value));
+            const value = curr.value;
+            if (Flag.is(value, 'cancel') || Flag.is(value, 'retry')) {
+                return value;
+            }
 
+            const res = await this.runOne(message, parsed, state, new Argument(this.command, value));
             if (Flag.is(res, 'cancel') || Flag.is(res, 'retry')) {
                 return res;
             }
