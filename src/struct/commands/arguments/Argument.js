@@ -158,7 +158,7 @@ class Argument {
                 infinite: isInfinite,
                 message: inputMessage,
                 phrase: inputPhrase,
-                value: inputParsed
+                failure: inputParsed
             });
 
             if (Array.isArray(text)) {
@@ -179,7 +179,7 @@ class Argument {
                     infinite: isInfinite,
                     message: inputMessage,
                     phrase: inputPhrase,
-                    value: inputParsed
+                    failure: inputParsed
                 });
             }
 
@@ -480,8 +480,8 @@ module.exports = Argument;
  * @prop {number} retries - Amount of retries so far.
  * @prop {boolean} infinite - Whether the prompt is infinite or not.
  * @prop {Message} message - The message that caused the prompt.
- * @prop {string} phrase - The input phrase that caused the prompt if there was one.
- * @param {void|Flag} value - The value that failed.
+ * @prop {string} phrase - The input phrase that caused the prompt if there was one, otherwise an empty string.
+ * @param {void|Flag} failure - The value that failed if there was one, otherwise null.
  */
 
 /**
@@ -598,7 +598,7 @@ module.exports = Argument;
  * Function get the default value of the argument.
  * @typedef {Function} DefaultValueSupplier
  * @param {Message} message - Message that triggered the command.
- * @param {void|Flag} value - The value that failed.
+ * @param {void|Flag} failure - The value that failed.
  * @returns {any}
  */
 
