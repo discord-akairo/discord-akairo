@@ -464,7 +464,7 @@ declare module 'discord-akairo' {
         message: Message;
         retries: number;
         phrase: string;
-        value: void | (Flag & { data: any });
+        failure: void | (Flag & { data: any });
     };
 
     export type ArgumentPromptOptions = {
@@ -577,7 +577,7 @@ declare module 'discord-akairo' {
 
     export type BeforeAction = (message: Message) => any;
 
-    export type DefaultValueSupplier = (message: Message, value: void | (Flag & { data: any })) => any;
+    export type DefaultValueSupplier = (message: Message, failure: void | (Flag & { data: any })) => any;
 
     export type ExecutionPredicate = (message: Message) => boolean;
 
