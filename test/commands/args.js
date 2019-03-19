@@ -31,13 +31,12 @@ class ArgsCommand extends Command {
                 {
                     id: 'flag',
                     match: 'flag',
-                    flag: '-f'
+                    flag: ['-f', '--flag']
                 },
                 {
                     id: 'option',
                     match: 'option',
-                    flag: '-o',
-                    multipleFlags: true
+                    flag: ['-o', '--option']
                 }
             ]
         });
