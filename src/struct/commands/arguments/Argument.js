@@ -108,7 +108,7 @@ class Argument {
             || (this.handler.defaultPrompt && this.handler.defaultPrompt.optional);
 
         if (!phrase && isOptional) {
-            return intoCallable(this.default)(message, null);
+            return intoCallable(this.default)(message, { phrase, failure: null });
         }
 
         const res = await this.cast(message, phrase);
@@ -119,7 +119,7 @@ class Argument {
 
             return this.default == null
                 ? res
-                : intoCallable(this.default)(message, res);
+                : intoCallable(this.default)(message, { phrase, failure: res });
         }
 
         return res;
@@ -595,10 +595,17 @@ module.exports = Argument;
  */
 
 /**
+ * Data passed to default functions.
+ * @typedef {Object} DefaultData
+ * @prop {string} phrase - The input phrase that failed if there was one, otherwise an empty string.
+ * @param {void|Flag} failure - The value that failed if there was one, otherwise null.
+ */
+
+/**
  * Function get the default value of the argument.
  * @typedef {Function} DefaultValueSupplier
  * @param {Message} message - Message that triggered the command.
- * @param {void|Flag} failure - The value that failed.
+ * @param {DefaultData} data - Miscellaneous data.
  * @returns {any}
  */
 

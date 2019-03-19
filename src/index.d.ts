@@ -532,6 +532,11 @@ declare module 'discord-akairo' {
         storeMessages?: boolean;
     } & AkairoHandlerOptions;
 
+    export type DefaultData = {
+        phrase: string;
+        failure: void | (Flag & { data: any });
+    };
+
     export type InhibitorOptions = {
         reason?: string;
         type?: string;
@@ -577,7 +582,7 @@ declare module 'discord-akairo' {
 
     export type BeforeAction = (message: Message) => any;
 
-    export type DefaultValueSupplier = (message: Message, failure: void | (Flag & { data: any })) => any;
+    export type DefaultValueSupplier = (message: Message, data: DefaultData) => any;
 
     export type ExecutionPredicate = (message: Message) => boolean;
 
