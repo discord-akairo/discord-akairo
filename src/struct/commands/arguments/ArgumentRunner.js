@@ -169,13 +169,13 @@ class ArgumentRunner {
             return res;
         }
 
-        const [, value] = parsed.optionFlags.find(([flag]) =>
+        const pair = parsed.optionFlags.find(([flag]) =>
             names.some(name =>
                 name.toLowerCase() === flag.toLowerCase()
             )
         );
 
-        return arg.process(message, value);
+        return arg.process(message, pair != null ? pair[1] : '');
     }
 
     runText(message, parsed, state, arg) {
