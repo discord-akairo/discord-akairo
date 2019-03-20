@@ -17,7 +17,8 @@ class Argument {
         unordered = false,
         limit = Infinity,
         prompt = null,
-        default: defaultValue = null
+        default: defaultValue = null,
+        otherwise = null
     } = {}) {
         /**
          * The command this argument belongs to.
@@ -78,6 +79,12 @@ class Argument {
          * @type {DefaultValueSupplier|any}
          */
         this.default = typeof defaultValue === 'function' ? defaultValue.bind(this) : defaultValue;
+
+        /**
+         * The content or function supplying the content sent when the argument is not given.
+         * @type {StringResolvable|MessageOptions|MessageAdditions|OtherwiseContentSupplier}
+         */
+        this.otherwise = typeof otherwise === 'function' ? otherwise.bind(this) : otherwise;
     }
 
     /**
@@ -108,11 +115,25 @@ class Argument {
             || (this.handler.defaultPrompt && this.handler.defaultPrompt.optional);
 
         if (!phrase && isOptional) {
+            if (this.otherwise != null) {
+                const text = await intoCallable(this.otherwise)(message, { phrase, failure: null });
+                const sent = await message.channel.send(text);
+                if (message.util) message.util.addMessage(sent);
+                return Flag.cancel();
+            }
+
             return intoCallable(this.default)(message, { phrase, failure: null });
         }
 
         const res = await this.cast(message, phrase);
         if (res == null || Flag.is(res, 'fail')) {
+            if (this.otherwise != null) {
+                const text = await intoCallable(this.otherwise)(message, { phrase, failure: res });
+                const sent = await message.channel.send(text);
+                if (message.util) message.util.addMessage(sent);
+                return Flag.cancel();
+            }
+
             if (this.prompt) {
                 return this.collect(message, phrase, res);
             }
@@ -471,6 +492,8 @@ module.exports = Argument;
  * Applicable to text, content, rest, or separate match only.
  * @prop {DefaultValueSupplier|any} [default=null] - Default value if no input or did not cast correctly.
  * If using a flag match, setting the default value to a non-void value inverses the result.
+ * @prop {StringResolvable|MessageOptions|MessageAdditions|OtherwiseContentSupplier} [otherwise] - Text sent if the argument is not given.
+ * This overrides the `default` option and all prompt options.
  * @prop {ArgumentPromptOptions} [prompt] - Prompt options for when user does not provide input.
  */
 
@@ -595,8 +618,8 @@ module.exports = Argument;
  */
 
 /**
- * Data passed to default functions.
- * @typedef {Object} DefaultData
+ * Data passed to functions that run when things failed.
+ * @typedef {Object} FailureData
  * @prop {string} phrase - The input phrase that failed if there was one, otherwise an empty string.
  * @param {void|Flag} failure - The value that failed if there was one, otherwise null.
  */
@@ -605,7 +628,7 @@ module.exports = Argument;
  * Function get the default value of the argument.
  * @typedef {Function} DefaultValueSupplier
  * @param {Message} message - Message that triggered the command.
- * @param {DefaultData} data - Miscellaneous data.
+ * @param {FailureData} data - Miscellaneous data.
  * @returns {any}
  */
 
@@ -616,6 +639,14 @@ module.exports = Argument;
  * @param {string} phrase - The user input.
  * @param {any} value - The parsed value.
  * @returns {boolean}
+ */
+
+/**
+ * A function returning the content if the argument is not supplied.
+ * @typedef {Function} OtherwiseContentSupplier
+ * @param {Message} message - Message that triggered the command.
+ * @param {FailureData} data - Miscellaneous data.
+ * @returns {StringResolvable|MessageOptions|MessageAdditions|Promise<StringResolvable|MessageOptions|MessageAdditions>}
  */
 
 /**
