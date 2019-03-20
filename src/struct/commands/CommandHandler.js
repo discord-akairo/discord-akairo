@@ -413,6 +413,9 @@ class CommandHandler extends AkairoHandler {
             } else if (Flag.is(args, 'retry')) {
                 this.emit(CommandHandlerEvents.COMMAND_BREAKOUT, message, command, args.message);
                 return this.handle(args.message);
+            } else if (Flag.is(args, 'continue')) {
+                const continueCommand = this.modules.get(args.command);
+                return this.handleDirectCommand(message, args.rest, continueCommand, args.ignore);
             }
 
             if (!ignore) {

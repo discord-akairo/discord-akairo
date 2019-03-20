@@ -284,6 +284,7 @@ declare module 'discord-akairo' {
         public type: string;
 
         public static cancel(): Flag;
+        public static continue(command: string, ignore?: boolean, rest?: string): Flag & { command: string, ignore: boolean, rest: string };
         public static retry(message: Message): Flag & { message: Message };
         public static fail(value: any): Flag & { value: any };
         public static is(value: any, type: string): boolean;
@@ -468,7 +469,7 @@ declare module 'discord-akairo' {
         message: Message;
         retries: number;
         phrase: string;
-        failure: void | (Flag & { data: any });
+        failure: void | (Flag & { value: any });
     };
 
     export type ArgumentPromptOptions = {
@@ -538,7 +539,7 @@ declare module 'discord-akairo' {
 
     export type FailureData = {
         phrase: string;
-        failure: void | (Flag & { data: any });
+        failure: void | (Flag & { value: any });
     };
 
     export type InhibitorOptions = {
