@@ -283,7 +283,7 @@ declare module 'discord-akairo' {
 
         public static cancel(): Flag;
         public static retry(message: Message): Flag & { message: Message };
-        public static fail(data: any): Flag & { data: any };
+        public static fail(value: any): Flag & { value: any };
         public static is(value: any, type: string): boolean;
     }
 

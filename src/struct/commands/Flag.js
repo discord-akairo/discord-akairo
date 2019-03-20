@@ -28,11 +28,11 @@ class Flag {
 
     /**
      * Creates a flag that acts as argument cast failure with extra data.
-     * @param {any} data - Additional data.
+     * @param {any} value - The extra data for the failure.
      * @returns {Flag}
      */
-    static fail(data) {
-        return new Flag('fail', { data });
+    static fail(value) {
+        return new Flag('fail', { value });
     }
 
     /**
