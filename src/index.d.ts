@@ -101,6 +101,7 @@ declare module 'discord-akairo' {
         public static tuple(...types: (ArgumentType | ArgumentTypeCaster)[]): ArgumentTypeCaster;
         public static union(...types: (ArgumentType | ArgumentTypeCaster)[]): ArgumentTypeCaster;
         public static validate(type: ArgumentType | ArgumentTypeCaster, predicate: ParsedValuePredicate): ArgumentTypeCaster;
+        public static withInput(type: ArgumentType | ArgumentTypeCaster): ArgumentTypeCaster;
     }
 
     export class Category<K, V> extends Collection<K, V> {
