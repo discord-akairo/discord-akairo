@@ -84,6 +84,7 @@ declare module 'discord-akairo' {
         public match: ArgumentMatch;
         public multipleFlags: boolean;
         public flag?: string | string[];
+        public otherwise?: StringResolvable | MessageOptions | MessageAdditions | OtherwiseContentSupplier;
         public prompt?: ArgumentPromptOptions | boolean;
         public type: ArgumentType | ArgumentTypeCaster;
         public unordered: boolean | number | number[];
@@ -454,6 +455,7 @@ declare module 'discord-akairo' {
         match?: ArgumentMatch;
         multipleFlags?: boolean;
         flag?: string | string[];
+        otherwise?: StringResolvable | MessageOptions | MessageAdditions | OtherwiseContentSupplier;
         prompt?: ArgumentPromptOptions | boolean;
         type?: ArgumentType | ArgumentTypeCaster;
         unordered?: boolean | number | number[];
@@ -532,7 +534,7 @@ declare module 'discord-akairo' {
         storeMessages?: boolean;
     } & AkairoHandlerOptions;
 
-    export type DefaultData = {
+    export type FailureData = {
         phrase: string;
         failure: void | (Flag & { data: any });
     };
@@ -582,7 +584,7 @@ declare module 'discord-akairo' {
 
     export type BeforeAction = (message: Message) => any;
 
-    export type DefaultValueSupplier = (message: Message, data: DefaultData) => any;
+    export type DefaultValueSupplier = (message: Message, data: FailureData) => any;
 
     export type ExecutionPredicate = (message: Message) => boolean;
 
@@ -595,6 +597,9 @@ declare module 'discord-akairo' {
     export type MentionPrefixPredicate = (message: Message) => boolean | Promise<boolean>;
 
     export type MissingPermissionSupplier = (message: Message) => Promise<any> | any;
+
+    export type OtherwiseContentSupplier = (message: Message, data: FailureData)
+        => StringResolvable | MessageOptions | MessageAdditions | Promise<StringResolvable | MessageOptions | MessageAdditions>;
 
     export type ParsedValuePredicate = (message: Message, phrase: string, value: any) => boolean;
 
