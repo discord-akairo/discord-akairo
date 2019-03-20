@@ -126,7 +126,7 @@ class Argument {
         }
 
         const res = await this.cast(message, phrase);
-        if (res == null || Flag.is(res, 'fail')) {
+        if (Argument.isFailure(res)) {
             if (this.otherwise != null) {
                 const text = await intoCallable(this.otherwise)(message, { phrase, failure: res });
                 const sent = await message.channel.send(text);
@@ -270,7 +270,7 @@ class Argument {
             }
 
             const parsedValue = await this.cast(input, input.content);
-            if (parsedValue == null || Flag.is(parsedValue, 'fail')) {
+            if (Argument.isFailure(parsedValue)) {
                 if (retryCount <= promptOptions.retries) {
                     return promptOne(input, input.content, parsedValue, retryCount + 1);
                 }
@@ -372,7 +372,7 @@ class Argument {
             for (let entry of types) {
                 if (typeof type === 'function') entry = entry.bind(this);
                 const res = await Argument.cast(entry, this.handler.resolver, message, phrase);
-                if (res != null && !Flag.is(res, 'fail')) return res;
+                if (!Argument.isFailure(res)) return res;
             }
 
             return null;
@@ -391,7 +391,7 @@ class Argument {
             for (let entry of types) {
                 if (typeof type === 'function') entry = entry.bind(this);
                 const res = await Argument.cast(entry, this.handler.resolver, message, phrase);
-                if (res == null || Flag.is(res, 'fail')) return res;
+                if (Argument.isFailure(res)) return res;
                 results.push(res);
             }
 
@@ -410,7 +410,7 @@ class Argument {
         return async function typeFn(message, phrase) {
             if (typeof type === 'function') type = type.bind(this);
             const res = await Argument.cast(type, this.handler.resolver, message, phrase);
-            if (res == null || Flag.is(res, 'fail')) return res;
+            if (Argument.isFailure(res)) return res;
             if (!predicate.call(this, message, phrase, res)) return null;
             return res;
         };
@@ -440,7 +440,7 @@ class Argument {
         return async function typeFn(message, phrase) {
             if (typeof type1 === 'function') type1 = type1.bind(this);
             const res = await Argument.cast(type1, this.handler.resolver, message, phrase);
-            if (!ignoreVoid && (res == null || Flag.is(res, 'fail'))) return res;
+            if (!ignoreVoid && Argument.isFailure(res)) return res;
             if (typeof type2 === 'function') type2 = type2.bind(this);
             return Argument.cast(type2, this.handler.resolver, message, res);
         };
@@ -455,7 +455,7 @@ class Argument {
     static withInput(type) {
         return async function typeFn(message, phrase) {
             const res = await Argument.cast(type, this.handler.resolver, message, phrase);
-            if (res == null || Flag.is(res, 'fail')) {
+            if (Argument.isFailure(res)) {
                 return Flag.fail({ input: phrase, value: res });
             }
 
@@ -463,6 +463,15 @@ class Argument {
         };
     }
     /* eslint-enable no-invalid-this */
+
+    /**
+     * Checks if something is null, undefined, or a fail flag.
+     * @param {any} value - Value to check.
+     * @returns {boolean}
+     */
+    static isFailure(value) {
+        return value == null || Flag.is(value, 'fail');
+    }
 }
 
 module.exports = Argument;

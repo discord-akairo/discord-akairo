@@ -96,6 +96,7 @@ declare module 'discord-akairo' {
 
         public static cast(type: ArgumentType | ArgumentTypeCaster, resolver: TypeResolver, message: Message, phrase: string): Promise<any>;
         public static compose(type1: ArgumentType | ArgumentTypeCaster, type2: ArgumentType | ArgumentTypeCaster): ArgumentTypeCaster;
+        public static isFailure(value: any): boolean;
         public static range(type: ArgumentType | ArgumentTypeCaster, min: number, max: number, inclusive?: boolean): ArgumentTypeCaster;
         public static tuple(...types: (ArgumentType | ArgumentTypeCaster)[]): ArgumentTypeCaster;
         public static union(...types: (ArgumentType | ArgumentTypeCaster)[]): ArgumentTypeCaster;
