@@ -1,33 +1,26 @@
 /* eslint-disable no-console */
 
-const { Command } = require('../..');
+const { Command, Flag } = require('../..');
 const util = require('util');
 
 class GenerateCommand extends Command {
     constructor() {
         super('generate', {
-            aliases: ['generate', 'g'],
-            flags: ['-f']
+            aliases: ['generate', 'g']
         });
     }
 
     *args() {
-        const x = yield { type: 'integer' };
-        const xs = yield {
-            match: 'separate',
-            type: 'integer',
-            prompt: {
-                start: 'Give me some integers!',
-                retry: (msg, { phrase }) => `"${phrase}" is not an integer, try again!`
-            }
+        const x = yield {
+            type: ['1', '2'],
+            otherwise: 'Type 1 or 2!'
         };
 
-        const f = yield {
-            match: 'flag',
-            flag: '-f'
-        };
+        if (x === '1') {
+            return Flag.continue('sub');
+        }
 
-        return { x, xs, f };
+        return { x };
     }
 
     exec(message, args) {

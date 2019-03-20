@@ -26,16 +26,28 @@ class ArgumentRunner {
         let curr = await iter.next();
         while (!curr.done) {
             const value = curr.value;
-            if (Flag.is(value, 'cancel') || Flag.is(value, 'retry')) {
+            if (ArgumentRunner.isShortCircuit(value)) {
+                if (Flag.is(value, 'continue') && value.rest == null) {
+                    value.rest = parsed.phrases.slice(state.phraseIndex).join(' ');
+                }
+
                 return value;
             }
 
             const res = await this.runOne(message, parsed, state, new Argument(this.command, value));
-            if (Flag.is(res, 'cancel') || Flag.is(res, 'retry')) {
+            if (ArgumentRunner.isShortCircuit(res)) {
+                if (Flag.is(res, 'continue') && res.rest == null) {
+                    res.rest = parsed.phrases.slice(state.phraseIndex).join(' ');
+                }
+
                 return res;
             }
 
             curr = await iter.next(res);
+        }
+
+        if (Flag.is(curr.value, 'continue') && curr.value.rest == null) {
+            curr.value.rest = parsed.phrases.slice(state.phraseIndex).join(' ');
         }
 
         return curr.value;
@@ -192,6 +204,10 @@ class ArgumentRunner {
 
     runNone(message, parsed, state, arg) {
         return arg.process(message, '');
+    }
+
+    static isShortCircuit(value) {
+        return Flag.is(value, 'cancel') || Flag.is(value, 'retry') || Flag.is(value, 'continue');
     }
 
     static fromArguments(args) {

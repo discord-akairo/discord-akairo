@@ -36,6 +36,18 @@ class Flag {
     }
 
     /**
+     * Creates a flag that runs another command with the rest of the arguments.
+     * @param {string} command - Command ID.
+     * @param {boolean} [ignore=false] - Whether or not to ignore permission checks.
+     * @param {string} [rest] - The rest of the arguments.
+     * If this is not set, the argument handler will automatically use the rest of the content.
+     * @returns {Flag}
+     */
+    static continue(command, ignore = false, rest = null) {
+        return new Flag('continue', { command, ignore, rest });
+    }
+
+    /**
      * Checks if a value is a flag and of some type.
      * @param {any} value - Value to check.
      * @param {string} type - Type of flag.
