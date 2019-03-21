@@ -22,34 +22,31 @@ class ArgumentRunner {
             phraseIndex: 0
         };
 
+        const augmentRest = val => {
+            if (Flag.is(val, 'continue') && val.rest == null) {
+                val.rest = parsed.phrases.slice(state.phraseIndex).join(' ');
+            }
+        };
+
         const iter = generator(message, parsed, state);
         let curr = await iter.next();
         while (!curr.done) {
             const value = curr.value;
             if (ArgumentRunner.isShortCircuit(value)) {
-                if (Flag.is(value, 'continue') && value.rest == null) {
-                    value.rest = parsed.phrases.slice(state.phraseIndex).join(' ');
-                }
-
+                augmentRest(value);
                 return value;
             }
 
             const res = await this.runOne(message, parsed, state, new Argument(this.command, value));
             if (ArgumentRunner.isShortCircuit(res)) {
-                if (Flag.is(res, 'continue') && res.rest == null) {
-                    res.rest = parsed.phrases.slice(state.phraseIndex).join(' ');
-                }
-
+                augmentRest(res);
                 return res;
             }
 
             curr = await iter.next(res);
         }
 
-        if (Flag.is(curr.value, 'continue') && curr.value.rest == null) {
-            curr.value.rest = parsed.phrases.slice(state.phraseIndex).join(' ');
-        }
-
+        augmentRest(curr.value);
         return curr.value;
     }
 
