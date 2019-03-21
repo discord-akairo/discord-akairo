@@ -114,12 +114,16 @@ class Argument {
             || (this.command.defaultPrompt && this.command.defaultPrompt.optional)
             || (this.handler.defaultPrompt && this.handler.defaultPrompt.optional);
 
+        const doOtherwise = async failure => {
+            const text = await intoCallable(this.otherwise)(message, { phrase, failure });
+            const sent = await message.channel.send(text);
+            if (message.util) message.util.addMessage(sent);
+            return Flag.cancel();
+        };
+
         if (!phrase && isOptional) {
             if (this.otherwise != null) {
-                const text = await intoCallable(this.otherwise)(message, { phrase, failure: null });
-                const sent = await message.channel.send(text);
-                if (message.util) message.util.addMessage(sent);
-                return Flag.cancel();
+                return doOtherwise(null);
             }
 
             return intoCallable(this.default)(message, { phrase, failure: null });
@@ -128,10 +132,7 @@ class Argument {
         const res = await this.cast(message, phrase);
         if (Argument.isFailure(res)) {
             if (this.otherwise != null) {
-                const text = await intoCallable(this.otherwise)(message, { phrase, failure: res });
-                const sent = await message.channel.send(text);
-                if (message.util) message.util.addMessage(sent);
-                return Flag.cancel();
+                return doOtherwise(res);
             }
 
             if (this.prompt) {
