@@ -81,7 +81,7 @@ class Argument {
         this.default = typeof defaultValue === 'function' ? defaultValue.bind(this) : defaultValue;
 
         /**
-         * The content or function supplying the content sent when the argument is not given.
+         * The content or function supplying the content sent when argument parsing fails.
          * @type {StringResolvable|MessageOptions|MessageAdditions|OtherwiseContentSupplier}
          */
         this.otherwise = typeof otherwise === 'function' ? otherwise.bind(this) : otherwise;
@@ -502,7 +502,7 @@ module.exports = Argument;
  * Applicable to text, content, rest, or separate match only.
  * @prop {DefaultValueSupplier|any} [default=null] - Default value if no input or did not cast correctly.
  * If using a flag match, setting the default value to a non-void value inverses the result.
- * @prop {StringResolvable|MessageOptions|MessageAdditions|OtherwiseContentSupplier} [otherwise] - Text sent if the argument is not given.
+ * @prop {StringResolvable|MessageOptions|MessageAdditions|OtherwiseContentSupplier} [otherwise] - Text sent if argument parsing fails.
  * This overrides the `default` option and all prompt options.
  * @prop {ArgumentPromptOptions} [prompt] - Prompt options for when user does not provide input.
  */
@@ -652,7 +652,7 @@ module.exports = Argument;
  */
 
 /**
- * A function returning the content if the argument is not supplied.
+ * A function returning the content if argument parsing fails.
  * @typedef {Function} OtherwiseContentSupplier
  * @param {Message} message - Message that triggered the command.
  * @param {FailureData} data - Miscellaneous data.
