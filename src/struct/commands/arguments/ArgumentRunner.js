@@ -189,13 +189,13 @@ class ArgumentRunner {
 
     runText(message, parsed, state, arg) {
         const index = arg.index == null ? 0 : arg.index;
-        const text = parsed.raws.slice(index, index + arg.limit).join('').trim();
+        const text = parsed.phrases.slice(index, index + arg.limit).join(' ').trim();
         return arg.process(message, text);
     }
 
     runContent(message, parsed, state, arg) {
         const index = arg.index == null ? 0 : arg.index;
-        const content = parsed.phrases.slice(index, index + arg.limit).join(' ').trim();
+        const content = parsed.raws.slice(index, index + arg.limit).join('').trim();
         return arg.process(message, content);
     }
 
