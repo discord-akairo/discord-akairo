@@ -142,6 +142,10 @@ class Argument {
             return this.default == null
                 ? res
                 : intoCallable(this.default)(message, { phrase, failure: res });
+        } else {
+            if (this.prompt) {
+                return this.collect(message, phrase, res)
+            }
         }
 
         return res;
