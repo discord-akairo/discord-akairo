@@ -3,10 +3,11 @@ module.exports = {
         PHRASE: 'phrase',
         FLAG: 'flag',
         OPTION: 'option',
-        TEXT: 'text',
-        CONTENT: 'content',
         REST: 'rest',
         SEPARATE: 'separate',
+        TEXT: 'text',
+        CONTENT: 'content',
+        REST_CONTENT: 'restContent',
         NONE: 'none'
     },
     ArgumentTypes: {

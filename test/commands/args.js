@@ -25,6 +25,10 @@ class ArgsCommand extends Command {
                     match: 'rest'
                 },
                 {
+                    id: 'restContent',
+                    match: 'restContent'
+                },
+                {
                     id: 'separate',
                     match: 'separate'
                 },

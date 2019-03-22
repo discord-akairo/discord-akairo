@@ -54,12 +54,13 @@ class ArgumentRunner {
     runOne(message, parsed, state, arg) {
         const cases = {
             [ArgumentMatches.PHRASE]: this.runPhrase,
-            [ArgumentMatches.REST]: this.runRest,
-            [ArgumentMatches.SEPARATE]: this.runSeparate,
             [ArgumentMatches.FLAG]: this.runFlag,
             [ArgumentMatches.OPTION]: this.runOption,
+            [ArgumentMatches.REST]: this.runRest,
+            [ArgumentMatches.SEPARATE]: this.runSeparate,
             [ArgumentMatches.TEXT]: this.runText,
             [ArgumentMatches.CONTENT]: this.runContent,
+            [ArgumentMatches.REST_CONTENT]: this.runRestContent,
             [ArgumentMatches.NONE]: this.runNone
         };
 
@@ -108,7 +109,7 @@ class ArgumentRunner {
 
     async runRest(message, parsed, state, arg) {
         const index = arg.index == null ? state.phraseIndex : arg.index;
-        const rest = parsed.phrases.slice(index, index + arg.limit).map(x => x.raw).join('');
+        const rest = parsed.phrases.slice(index, index + arg.limit).map(x => x.raw).join('').trim();
         const ret = await arg.process(message, rest);
         if (arg.index == null) {
             ArgumentRunner.increaseIndex(parsed, state);
@@ -198,6 +199,17 @@ class ArgumentRunner {
         const index = arg.index == null ? 0 : arg.index;
         const content = parsed.all.slice(index, index + arg.limit).map(x => x.raw).join('').trim();
         return arg.process(message, content);
+    }
+
+    async runRestContent(message, parsed, state, arg) {
+        const index = arg.index == null ? state.index : arg.index;
+        const rest = parsed.all.slice(index, index + arg.limit).map(x => x.raw).join('').trim();
+        const ret = await arg.process(message, rest);
+        if (arg.index == null) {
+            ArgumentRunner.increaseIndex(parsed, state);
+        }
+
+        return ret;
     }
 
     runNone(message, parsed, state, arg) {

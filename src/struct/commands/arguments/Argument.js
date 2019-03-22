@@ -548,21 +548,22 @@ module.exports = Argument;
  * The method to match arguments from text.
  * - `phrase` matches by the order of the phrases inputted.
  * It ignores phrases that matches a flag.
- * - `rest` matches the rest of the phrases in order.
- * It ignores phrases that matches a flag.
- * It also tries to preserve the original whitespace between phrases and the quotes around phrases.
- * - `separate` matches the rest of the phrases in order.
- * Unlike rest, each phrase is processed separately.
- * It ignores phrases that matches a flag.
  * - `flag` matches phrases that are the same as its flag.
  * The evaluated argument is either true or false.
  * - `option` matches phrases that starts with the flag.
  * The phrase after the flag is the evaluated argument.
- * - `text` matches the entire text, except for the command.
- * It also tries to preserve the original whitespace between phrases and the quotes around phrases.
+ * - `rest` matches the rest of the phrases.
  * It ignores phrases that matches a flag.
+ * It preserves the original whitespace between phrases and the quotes around phrases.
+ * - `separate` matches the rest of the phrases and processes each individually.
+ * It ignores phrases that matches a flag.
+ * - `text` matches the entire text, except for the command.
+ * It ignores phrases that matches a flag.
+ * It preserves the original whitespace between phrases and the quotes around phrases.
  * - `content` matches the entire text as it was inputted, except for the command.
- * It also preserves the original whitespace between phrases and the quotes around phrases.
+ * It preserves the original whitespace between phrases and the quotes around phrases.
+ * - `restContent` matches the rest of the text as it was inputted.
+ * It preserves the original whitespace between phrases and the quotes around phrases.
  * - `none` matches nothing at all and an empty string will be used for type operations.
  * @typedef {string} ArgumentMatch
  */

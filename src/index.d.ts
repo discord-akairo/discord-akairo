@@ -566,7 +566,7 @@ declare module 'discord-akairo' {
         idColumn?: string;
     };
 
-    export type ArgumentMatch = 'phrase' | 'rest' | 'separate' | 'flag' | 'option' | 'text' | 'content' | 'none';
+    export type ArgumentMatch = 'phrase' | 'flag' | 'option' | 'rest' | 'separate' | 'text' | 'content' | 'restContent' | 'none';
 
     export type ArgumentType = 'string' | 'lowercase' | 'uppercase' | 'charCodes'
         | 'number' | 'integer' | 'bigint' | 'emojint'
@@ -621,10 +621,11 @@ declare module 'discord-akairo' {
             PHRASE: 'phrase',
             FLAG: 'flag',
             OPTION: 'option',
-            TEXT: 'text',
-            CONTENT: 'content',
             REST: 'rest',
             SEPARATE: 'separate',
+            TEXT: 'text',
+            CONTENT: 'content',
+            REST_CONTENT: 'restContent',
             NONE: 'none'
         },
         ArgumentTypes: {
