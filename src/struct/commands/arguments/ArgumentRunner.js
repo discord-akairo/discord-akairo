@@ -19,12 +19,13 @@ class ArgumentRunner {
     async run(message, parsed, generator) {
         const state = {
             usedIndices: new Set(),
-            phraseIndex: 0
+            phraseIndex: 0,
+            index: 0
         };
 
         const augmentRest = val => {
-            if (Flag.is(val, 'continue') && val.rest == null) {
-                val.rest = parsed.phrases.slice(state.phraseIndex).join(' ');
+            if (Flag.is(val, 'continue')) {
+                val.rest = parsed.all.slice(state.index).map(x => x.raw).join('');
             }
         };
 
@@ -83,7 +84,7 @@ class ArgumentRunner {
                     continue;
                 }
 
-                const phrase = parsed.phrases[i] || '';
+                const phrase = parsed.phrases[i] ? parsed.phrases[i].value : '';
                 // `cast` is used instead of `process` since we do not want prompts.
                 const res = await arg.cast(message, phrase);
                 if (res != null) {
@@ -97,9 +98,9 @@ class ArgumentRunner {
         }
 
         const index = arg.index == null ? state.phraseIndex : arg.index;
-        const ret = arg.process(message, parsed.phrases[index] || '');
+        const ret = arg.process(message, parsed.phrases[index] ? parsed.phrases[index].value : '');
         if (arg.index == null) {
-            state.phraseIndex++;
+            ArgumentRunner.increaseIndex(parsed, state);
         }
 
         return ret;
@@ -107,10 +108,10 @@ class ArgumentRunner {
 
     async runRest(message, parsed, state, arg) {
         const index = arg.index == null ? state.phraseIndex : arg.index;
-        const rest = parsed.phrases.slice(index, index + arg.limit).join(' ');
+        const rest = parsed.phrases.slice(index, index + arg.limit).map(x => x.raw).join('');
         const ret = await arg.process(message, rest);
         if (arg.index == null) {
-            state.phraseIndex++;
+            ArgumentRunner.increaseIndex(parsed, state);
         }
 
         return ret;
@@ -122,7 +123,7 @@ class ArgumentRunner {
         if (!phrases.length) {
             const ret = await arg.process(message, '');
             if (arg.index != null) {
-                state.phraseIndex++;
+                ArgumentRunner.increaseIndex(parsed, state);
             }
 
             return ret;
@@ -130,11 +131,11 @@ class ArgumentRunner {
 
         const res = [];
         for (const phrase of phrases) {
-            res.push(await arg.process(message, phrase));
+            res.push(await arg.process(message, phrase.value));
         }
 
         if (arg.index != null) {
-            state.phraseIndex++;
+            ArgumentRunner.increaseIndex(parsed, state);
         }
 
         return res;
@@ -145,7 +146,7 @@ class ArgumentRunner {
         if (arg.multipleFlags) {
             const amount = parsed.flags.filter(flag =>
                 names.some(name =>
-                    name.toLowerCase() === flag.toLowerCase()
+                    name.toLowerCase() === flag.key.toLowerCase()
                 )
             ).length;
 
@@ -154,7 +155,7 @@ class ArgumentRunner {
 
         const flagFound = parsed.flags.some(flag =>
             names.some(name =>
-                name.toLowerCase() === flag.toLowerCase()
+                name.toLowerCase() === flag.key.toLowerCase()
             )
         );
 
@@ -164,11 +165,11 @@ class ArgumentRunner {
     async runOption(message, parsed, state, arg) {
         const names = Array.isArray(arg.flag) ? arg.flag : [arg.flag];
         if (arg.multipleFlags) {
-            const values = parsed.optionFlags.filter(([flag]) =>
+            const values = parsed.optionFlags.filter(flag =>
                 names.some(name =>
-                    name.toLowerCase() === flag.toLowerCase()
+                    name.toLowerCase() === flag.key.toLowerCase()
                 )
-            ).map(([, value]) => value).slice(0, arg.limit);
+            ).map(x => x.value).slice(0, arg.limit);
 
             const res = [];
             for (const value of values) {
@@ -178,29 +179,39 @@ class ArgumentRunner {
             return res;
         }
 
-        const pair = parsed.optionFlags.find(([flag]) =>
+        const foundFlag = parsed.optionFlags.find(flag =>
             names.some(name =>
-                name.toLowerCase() === flag.toLowerCase()
+                name.toLowerCase() === flag.key.toLowerCase()
             )
         );
 
-        return arg.process(message, pair != null ? pair[1] : '');
+        return arg.process(message, foundFlag != null ? foundFlag.value : '');
     }
 
     runText(message, parsed, state, arg) {
         const index = arg.index == null ? 0 : arg.index;
-        const text = parsed.phrases.slice(index, index + arg.limit).join(' ').trim();
+        const text = parsed.phrases.slice(index, index + arg.limit).map(x => x.raw).join('').trim();
         return arg.process(message, text);
     }
 
     runContent(message, parsed, state, arg) {
         const index = arg.index == null ? 0 : arg.index;
-        const content = parsed.raws.slice(index, index + arg.limit).join('').trim();
+        const content = parsed.all.slice(index, index + arg.limit).map(x => x.raw).join('').trim();
         return arg.process(message, content);
     }
 
     runNone(message, parsed, state, arg) {
         return arg.process(message, '');
+    }
+
+    static increaseIndex(parsed, state, n = 1) {
+        state.phraseIndex += n;
+        while (n > 0) {
+            do {
+                state.index++;
+            } while (parsed.all[state.index] && parsed.all[state.index].type !== 'Phrase');
+            n--;
+        }
     }
 
     static isShortCircuit(value) {

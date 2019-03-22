@@ -209,7 +209,7 @@ class Command extends AkairoModule {
     }
 
     /**
-     * Parses content using the command's argument options.
+     * Parses content using the command's arguments.
      * @param {Message} message - Message to use.
      * @param {string} content - String to parse.
      * @returns {Promise<Object|ParsingFlag>}
