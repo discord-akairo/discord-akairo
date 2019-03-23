@@ -84,7 +84,7 @@ Requires Node 10 and Discord.js v12.
 - [Repository](https://github.com/1Computer1/discord-akairo)  
 - [Changelog](https://github.com/1Computer1/discord-akairo/releases)  
 - [Documentation](https://1computer1.github.io/discord-akairo/) ([master](https://1computer1.github.io/discord-akairo/master))  
-- [Tutorials](https://github.com/1Computer1/discord-akairo-guides/tree/stable) ([master](https://github.com/1Computer1/discord-akairo-guides/))  
+- [Tutorials](https://1computer1.gitbooks.io/akairo-tutorials/) ([master](https://1computer1.gitbooks.io/akairo-tutorials/v/formaster/))  
 - [Discord Server](https://discord.gg/arTauDY)  
 
 ## Contributing
