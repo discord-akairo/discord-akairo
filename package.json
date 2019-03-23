@@ -26,6 +26,7 @@
     "devDependencies": {
         "@types/node": "^10.9.2",
         "@types/sequelize": "^4.27.25",
+        "discord.js-docgen": "discordjs/docgen",
         "docdash": "github:1computer1/docdash",
         "eslint": "^5.4.0",
         "jsdoc": "^3.5.5",
