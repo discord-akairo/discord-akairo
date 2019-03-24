@@ -9,7 +9,7 @@ Not only are there changes within the framework, there are also changes with Dis
 You will have to update to Node 10 in order to use the libraries due to new JavaScript features.  
 
 The suggestions below are not an exhaustive list.  
-For a full changelog, see [here](https://github.com/1Computer1/discord-akairo/releases).  
+For a full changelog, see [here](https://github.com/discord-akairo/discord-akairo/releases).  
 
 ### Renames
 
