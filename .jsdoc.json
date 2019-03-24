@@ -8,30 +8,10 @@
         "includePattern": ".js$",
         "excludePattern": "node_modules/"
     },
-    "templates": {
-        "cleverLinks": false,
-        "monospaceLinks": true,
-        "useLongnameInNav": false,
-        "default": {
-            "includeDate": false
-        }
-    },
     "opts": {
         "encoding": "utf8",
         "private": true,
         "recurse": true,
         "sort": true
-    },
-    "plugins": ["plugins/markdown"],
-    "markdown": {
-        "hardwrap": true
-    },
-    "docdash": {
-        "sectionOrder": ["Classes"],
-        "static": false,
-        "sort": true,
-        "search": true,
-        "collapse": true,
-        "typedefs": true
     }
 }
