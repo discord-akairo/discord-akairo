@@ -420,6 +420,11 @@ class Parser {
     }
 }
 
+/**
+ * Parses content.
+ * @param {Object} options - Options.
+ * @private
+ */
 class ContentParser {
     constructor({
         flagWords = [],
@@ -437,6 +442,11 @@ class ContentParser {
         this.separator = separator;
     }
 
+    /**
+     * Parses content.
+     * @param {string} content - Content to parse.
+     * @returns {Object}
+     */
     parse(content) {
         const tokens = new Tokenizer(content, {
             flagWords: this.flagWords,
@@ -448,6 +458,11 @@ class ContentParser {
         return new Parser(tokens, { separated: this.separator != null }).parse();
     }
 
+    /**
+     * Extracts the flags from argument options.
+     * @param {ArgumentOptions[]} args - Argument options.
+     * @returns {Object}
+     */
     static getFlags(args) {
         const res = {
             flagWords: [],
