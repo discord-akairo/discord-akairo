@@ -2,12 +2,12 @@ const { ArgumentMatches, ArgumentTypes } = require('../../../util/Constants');
 const Flag = require('../Flag');
 const { intoCallable, isPromise } = require('../../../util/Util');
 
+/**
+ * Represents an argument for a command.
+ * @param {Command} command - Command of the argument.
+ * @param {ArgumentOptions} options - Options for the argument.
+ */
 class Argument {
-    /**
-     * An argument for a command.
-     * @param {Command} command - Command of the argument.
-     * @param {ArgumentOptions} options - Options for the argument.
-     */
     constructor(command, {
         match = ArgumentMatches.PHRASE,
         type = ArgumentTypes.STRING,

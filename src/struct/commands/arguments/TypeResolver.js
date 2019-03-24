@@ -2,12 +2,12 @@ const { ArgumentTypes } = require('../../../util/Constants');
 const { Collection } = require('discord.js');
 const { URL } = require('url');
 
+/**
+ * Type resolver for command arguments.
+ * The types are documented under ArgumentType.
+ * @param {CommandHandler} handler - The command handler.
+ */
 class TypeResolver {
-    /**
-     * Type resolver for command arguments.
-     * The types are documented under ArgumentType.
-     * @param {CommandHandler} handler - The command handler.
-     */
     constructor(handler) {
         /**
          * The Akairo client.

@@ -4,13 +4,13 @@ const Argument = require('./arguments/Argument');
 const ArgumentRunner = require('./arguments/ArgumentRunner');
 const ContentParser = require('./ContentParser');
 
-/** @extends AkairoModule */
+/**
+ * Represents a command.
+ * @param {string} id - Command ID.
+ * @param {CommandOptions} [options={}] - Options for the command.
+ * @extends {AkairoModule}
+ */
 class Command extends AkairoModule {
-    /**
-     * Creates a new command.
-     * @param {string} id - Command ID.
-     * @param {CommandOptions} [options={}] - Options for the command.
-     */
     constructor(id, options = {}) {
         super(id, { category: options.category });
 

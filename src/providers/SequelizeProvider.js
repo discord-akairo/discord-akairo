@@ -1,12 +1,12 @@
 const Provider = require('./Provider');
 
-/** @extends Provider */
+/**
+ * Provider using the `sequelize` library.
+ * @param {Model} table - A Sequelize model.
+ * @param {ProviderOptions} [options={}] - Options to use.
+ * @extends {Provider}
+ */
 class SequelizeProvider extends Provider {
-    /**
-     * Provider using the `sequelize` library.
-     * @param {Model} table - A Sequelize model.
-     * @param {ProviderOptions} [options={}] - Options to use.
-     */
     constructor(table, { idColumn = 'id', dataColumn } = {}) {
         super();
 

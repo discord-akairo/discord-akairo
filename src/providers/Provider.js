@@ -1,11 +1,11 @@
 const AkairoError = require('../util/AkairoError');
 const { Collection } = require('discord.js');
 
+/**
+ * A provider for key-value storage.
+ * Must be implemented.
+ */
 class Provider {
-    /**
-     * A provider for key-value storage.
-     * Must be implemented.
-     */
     constructor() {
         /**
          * Cached entries.

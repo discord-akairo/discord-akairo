@@ -1,9 +1,9 @@
+/**
+ * Base class for a module.
+ * @param {string} id - ID of module.
+ * @param {AkairoModuleOptions} [options={}] - Options.
+ */
 class AkairoModule {
-    /**
-     * Creates a new module.
-     * @param {string} id - ID of module.
-     * @param {AkairoModuleOptions} [options={}] - Options.
-     */
     constructor(id, { category = 'default' } = {}) {
         /**
          * ID of the module.

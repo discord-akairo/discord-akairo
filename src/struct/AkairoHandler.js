@@ -7,13 +7,13 @@ const EventEmitter = require('events');
 const fs = require('fs');
 const path = require('path');
 
-/** @extends EventEmitter */
+/**
+ * Base class for handling modules.
+ * @param {AkairoClient} client - The Akairo client.
+ * @param {AkairoHandlerOptions} options - Options for module loading and handling.
+ * @extends {EventEmitter}
+ */
 class AkairoHandler extends EventEmitter {
-    /**
-     * Handles module loading.
-     * @param {AkairoClient} client - The Akairo client.
-     * @param {AkairoHandlerOptions} options - Options for module loading and handling.
-     */
     constructor(client, {
         directory,
         classToHandle = AkairoModule,

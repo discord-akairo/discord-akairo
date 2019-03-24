@@ -1,12 +1,12 @@
 const { Collection } = require('discord.js');
 
-/** @extends Collection */
+/**
+ * A group of modules.
+ * @param {string} id - ID of the category.
+ * @param {Iterable} [iterable] - Entries to set.
+ * @extends {Collection}
+ */
 class Category extends Collection {
-    /**
-     * A group of modules.
-     * @param {string} id - ID of the category.
-     * @param {Iterable} [iterable] - Entries to set.
-     */
     constructor(id, iterable) {
         super(iterable);
 

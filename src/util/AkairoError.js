@@ -19,13 +19,13 @@ const Messages = {
     INVALID_TYPE: (name, expected, vowel = false) => `Value of '${name}' was not ${vowel ? 'an' : 'a'} ${expected}`
 };
 
-/** @extends Error */
+/**
+ * Represents an error for Akairo.
+ * @param {string} key - Error key.
+ * @param {...any} args - Arguments.
+ * @extends {Error}
+ */
 class AkairoError extends Error {
-    /**
-     * Creates an error for Akairo
-     * @param {string} key - Error key.
-     * @param {...any} args - Arguments.
-     */
     constructor(key, ...args) {
         if (Messages[key] == null) throw new TypeError(`Error key '${key}' does not exist`);
         const message = typeof Messages[key] === 'function'

@@ -1,13 +1,13 @@
 const AkairoError = require('../../util/AkairoError');
 const AkairoModule = require('../AkairoModule');
 
-/** @extends AkairoModule */
+/**
+ * Represents an inhibitor.
+ * @param {string} id - Inhibitor ID.
+ * @param {InhibitorOptions} [options={}] - Options for the inhibitor.
+ * @extends {AkairoModule}
+ */
 class Inhibitor extends AkairoModule {
-    /**
-     * Creates a new Inhibitor.
-     * @param {string} id - Inhibitor ID.
-     * @param {InhibitorOptions} [options={}] - Options for the inhibitor.
-     */
     constructor(id, {
         category,
         reason = '',

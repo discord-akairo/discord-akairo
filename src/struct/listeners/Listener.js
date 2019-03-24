@@ -1,13 +1,13 @@
 const AkairoError = require('../../util/AkairoError');
 const AkairoModule = require('../AkairoModule');
 
-/** @extends AkairoModule */
+/**
+ * Represents a listener.
+ * @param {string} id - Listener ID.
+ * @param {ListenerOptions} [options={}] - Options for the listener.
+ * @extends {AkairoModule}
+ */
 class Listener extends AkairoModule {
-    /**
-     * Creates a new Listener.
-     * @param {string} id - Listener ID.
-     * @param {ListenerOptions} [options={}] - Options for the listener.
-     */
     constructor(id, {
         category,
         emitter,

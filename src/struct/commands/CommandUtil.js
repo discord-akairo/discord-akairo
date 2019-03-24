@@ -1,11 +1,11 @@
 const { APIMessage, Collection } = require('discord.js');
 
+/**
+ * Command utilies.
+ * @param {CommandHandler} handler - The command handler.
+ * @param {Message} message - Message that triggered the command.
+ */
 class CommandUtil {
-    /**
-     * Command utilies.
-     * @param {CommandHandler} handler - The command handler.
-     * @param {Message} message - Message that triggered the command.
-     */
     constructor(handler, message) {
         /**
          * The command handler.

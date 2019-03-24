@@ -8,13 +8,13 @@ const Flag = require('./Flag');
 const { flatMap, intoArray, intoCallable, isPromise, prefixCompare } = require('../../util/Util');
 const TypeResolver = require('./arguments/TypeResolver');
 
-/** @extends AkairoHandler */
+/**
+ * Loads commands and handles messages.
+ * @param {AkairoClient} client - The Akairo client.
+ * @param {CommandHandlerOptions} options - Options.
+ * @extends {AkairoHandler}
+ */
 class CommandHandler extends AkairoHandler {
-    /**
-     * Loads commands and handles messages.
-     * @param {AkairoClient} client - The Akairo client.
-     * @param {CommandHandlerOptions} options - Options.
-     */
     constructor(client, {
         directory,
         classToHandle = Command,

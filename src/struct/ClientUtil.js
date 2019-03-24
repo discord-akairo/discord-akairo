@@ -1,10 +1,10 @@
 const { Collection, MessageAttachment, MessageEmbed, Permissions } = require('discord.js');
 
+/**
+ * Client utilities to help with common tasks.
+ * @param {AkairoClient} client - The client.
+ */
 class ClientUtil {
-    /**
-     * Client utilities to help with common tasks.
-     * @param {AkairoClient} client - The client.
-     */
     constructor(client) {
         /**
          * The Akairo client.

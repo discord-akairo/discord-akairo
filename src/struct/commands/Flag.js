@@ -1,9 +1,9 @@
+/**
+ * Represents a special return value during commmand execution or argument parsing.
+ * @param {string} type - Type of flag.
+ * @param {any} [data={}] - Extra data.
+ */
 class Flag {
-    /**
-     * A special return value during commmand execution or argument parsing.
-     * @param {string} type - Type of flag.
-     * @param {any} [data={}] - Extra data.
-     */
     constructor(type, data = {}) {
         this.type = type;
         Object.assign(this, data);
