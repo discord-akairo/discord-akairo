@@ -51,14 +51,17 @@
     - name: Generator Arguments
       path: generators.md
 - name: Inhibitors
+  files:
     - name: Inhibitor Types
       path: inhibtypes.md
     - name: Inhibitor Priority
       path: priority.md
 - name: Listeners
+  files:
     - name: Custom Emitters
       path: emitters.md
 - name: Other
+  files:
     - name: Updating to v8
       path: updating.md
     - name: Handling Modules
@@ -70,5 +73,6 @@
     - name: ClientUtil
       path: clientutil.md
 - name: Snippets
+  files:
     - name: Ping Command
       path: ping.md
