@@ -6,31 +6,14 @@ const path = require('path');
 let sql;
 
 /**
- * Options to use for the SQLiteHandler.
- * @typedef {Object} SQLiteOptions
- * @prop {string} [tablename='configs'] - Name of the table.
- * @prop {Object} [defaultConfig={}] - Default configuration.
- * @prop {string[]} [json=[]] - Array of keys to parse and stringify as JSON.
- * @prop {string[]|SQLiteInitFunction} [init=[]] - IDs to use to initialize database.
- * If you want to load the database before login, use `SQLiteHandler#load`.
+ * Creates an SQLiteHandler.
+ * Tables must have an 'id' column.
+ * @deprecated Use SQLiteProvider
+ * @param {string} filepath - Path to .sqlite file.
+ * @param {SQLiteOptions} [options={}] - Options for the handler.
+ * @extends {EventEmitter}
  */
-
-/**
- * Function used to get IDs for database.
- * @typedef {Function} SQLiteInitFunction
- * @param {AkairoClient} client - The client.
- * @returns {string[]}
- */
-
-/** @extends EventEmitter */
 class SQLiteHandler extends EventEmitter {
-    /**
-     * Creates an SQLiteHandler.
-     * Tables must have an 'id' column.
-     * @deprecated Use SQLiteProvider
-     * @param {string} filepath - Path to .sqlite file.
-     * @param {SQLiteOptions} [options={}] - Options for the handler.
-     */
     constructor(filepath, options = {}) {
         super();
 
@@ -441,4 +424,21 @@ module.exports = SQLiteHandler;
 /**
  * Emitted when many configs were saved from memory.
  * @event SQLiteHandler#saveAll
+ */
+
+/**
+ * Options to use for the SQLiteHandler.
+ * @typedef {Object} SQLiteOptions
+ * @prop {string} [tablename='configs'] - Name of the table.
+ * @prop {Object} [defaultConfig={}] - Default configuration.
+ * @prop {string[]} [json=[]] - Array of keys to parse and stringify as JSON.
+ * @prop {string[]|SQLiteInitFunction} [init=[]] - IDs to use to initialize database.
+ * If you want to load the database before login, use `SQLiteHandler#load`.
+ */
+
+/**
+ * Function used to get IDs for database.
+ * @typedef {Function} SQLiteInitFunction
+ * @param {AkairoClient} client - The client.
+ * @returns {string[]}
  */

@@ -3,13 +3,13 @@ const { Collection } = require('discord.js');
 const EventEmitter = require('events');
 const Listener = require('./Listener');
 
-/** @extends AkairoHandler */
+/**
+ * Loads listeners and registers them with EventEmitters.
+ * @param {AkairoClient} client - The Akairo client.
+ * @param {Object} options - Options from client.
+ * @extends {AkairoHandler}
+ */
 class ListenerHandler extends AkairoHandler {
-    /**
-     * Loads listeners and registers them with EventEmitters.
-     * @param {AkairoClient} client - The Akairo client.
-     * @param {Object} options - Options from client.
-     */
     constructor(client, options) {
         super(client, options.listenerDirectory, Listener);
 

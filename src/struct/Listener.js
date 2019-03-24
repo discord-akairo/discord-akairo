@@ -1,29 +1,13 @@
 const AkairoModule = require('./AkairoModule');
 
 /**
- * Options to use for listener execution behavior.
- * @typedef {Object} ListenerOptions
- * @prop {string|EventEmitter} [emitter='client'] - The event emitter, either a key from `ListenerHandler#emitters` or an EventEmitter.
- * @prop {string} [eventName='ready'] - Event name to listen to.
- * @prop {string} [type='on'] - Type of listener, either 'on' or 'once'.
- * @prop {string} [category='default'] - Category ID for organization purposes.
+ * Represents a listener.
+ * @param {string} id - Listener ID.
+ * @param {ListenerExecFunction} exec - The function called when event emitted.
+ * @param {ListenerOptions} [options={}] - Options for the listener.
+ * @extends {AkairoModule}
  */
-
-/**
- * Function called when event emitted.
- * @typedef {Function} ListenerExecFunction
- * @param {...args} [args] - Arguments.
- * @returns {any}
- */
-
-/** @extends AkairoModule */
 class Listener extends AkairoModule {
-    /**
-     * Creates a new Listener.
-     * @param {string} id - Listener ID.
-     * @param {ListenerExecFunction} exec - The function called when event emitted.
-     * @param {ListenerOptions} [options={}] - Options for the listener.
-     */
     constructor(id, exec, options) {
         if (!options && typeof exec === 'object') {
             options = exec;
@@ -109,3 +93,19 @@ class Listener extends AkairoModule {
 }
 
 module.exports = Listener;
+
+/**
+ * Options to use for listener execution behavior.
+ * @typedef {Object} ListenerOptions
+ * @prop {string|EventEmitter} [emitter='client'] - The event emitter, either a key from `ListenerHandler#emitters` or an EventEmitter.
+ * @prop {string} [eventName='ready'] - Event name to listen to.
+ * @prop {string} [type='on'] - Type of listener, either 'on' or 'once'.
+ * @prop {string} [category='default'] - Category ID for organization purposes.
+ */
+
+/**
+ * Function called when event emitted.
+ * @typedef {Function} ListenerExecFunction
+ * @param {...args} [args] - Arguments.
+ * @returns {any}
+ */

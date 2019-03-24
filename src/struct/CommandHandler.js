@@ -5,13 +5,13 @@ const Command = require('./Command');
 const CommandUtil = require('./CommandUtil');
 const TypeResolver = require('./TypeResolver');
 
-/** @extends AkairoHandler */
+/**
+ * Loads commands and handles messages.
+ * @param {AkairoClient} client - The Akairo client.
+ * @param {Object} options - Options from client.
+ * @extends {AkairoHandler}
+ */
 class CommandHandler extends AkairoHandler {
-    /**
-     * Loads commands and handles messages.
-     * @param {AkairoClient} client - The Akairo client.
-     * @param {Object} options - Options from client.
-     */
     constructor(client, options = {}) {
         super(client, options.commandDirectory, Command);
 

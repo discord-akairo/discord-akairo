@@ -1,20 +1,12 @@
 /**
- * Extra properties applied to the Discord.js message object.
- * @typedef {Object} MessageExtensions
- * @prop {?CommandUtil} util - Utilities for command responding.
- * Available on all messages after 'all' inhibitors and built-in inhibitors (bot, client, notSelf).
- * Not all properties of the util are available, depending on the input.
+ * Command utilies.
+ * @param {AkairoClient} client - The Akairo client.
+ * @param {Message} message - Message that triggered the command.
+ * @param {Command} command - Command triggered.
+ * @param {string} [prefix] - Prefix used to trigger.
+ * @param {string} [alias] - Alias used to trigger.
  */
-
 class CommandUtil {
-    /**
-     * Command utilies.
-     * @param {AkairoClient} client - The Akairo client.
-     * @param {Message} message - Message that triggered the command.
-     * @param {Command} command - Command triggered.
-     * @param {string} [prefix] - Prefix used to trigger.
-     * @param {string} [alias] - Alias used to trigger.
-     */
     constructor(client, message, command, prefix, alias) {
         /**
          * The Akairo client.
@@ -183,3 +175,11 @@ class CommandUtil {
 }
 
 module.exports = CommandUtil;
+
+/**
+ * Extra properties applied to the Discord.js message object.
+ * @typedef {Object} MessageExtensions
+ * @prop {?CommandUtil} util - Utilities for command responding.
+ * Available on all messages after 'all' inhibitors and built-in inhibitors (bot, client, notSelf).
+ * Not all properties of the util are available, depending on the input.
+ */

@@ -8,15 +8,15 @@ const path = require('path');
 
 let instanceDeprecation = false;
 
-/** @extends EventEmitter */
+/**
+ * Base class for handling modules.
+ * @param {AkairoClient} client - The Akairo client.
+ * @param {string} directory - Directory to modules.
+ * @param {class} classToHandle - Only instances of this can be handled.
+ * Exports not instance of this class are ignored.
+ * @extends {EventEmitter}
+ */
 class AkairoHandler extends EventEmitter {
-    /**
-     * Handles module loading.
-     * @param {AkairoClient} client - The Akairo client.
-     * @param {string} directory - Directory to modules.
-     * @param {class} classToHandle - Only instances of this can be handled.
-     * Exports not instance of this class are ignored.
-     */
     constructor(client, directory, classToHandle) {
         super();
 

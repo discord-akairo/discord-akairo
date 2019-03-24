@@ -1,13 +1,13 @@
 const AkairoHandler = require('./AkairoHandler');
 const Inhibitor = require('./Inhibitor');
 
-/** @extends AkairoHandler */
+/**
+ * Loads inhibitors and checks messages.
+ * @param {AkairoClient} client - The Akairo client.
+ * @param {Object} options - Options from client.
+ * @extends {AkairoHandler}
+ */
 class InhibitorHandler extends AkairoHandler {
-    /**
-     * Loads inhibitors and checks messages.
-     * @param {AkairoClient} client - The Akairo client.
-     * @param {Object} options - Options from client.
-     */
     constructor(client, options = {}) {
         super(client, options.inhibitorDirectory, Inhibitor);
 

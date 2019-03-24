@@ -1,25 +1,12 @@
 const { AkairoHandlerEvents } = require('../util/Constants');
 
 /**
- * Options for module.
- * @typedef {Object} ModuleOptions
- * @prop {string} [category='default'] - Category ID for organization purposes.
+ * Base class for a module.
+ * @param {string} id - ID of module.
+ * @param {ModuleExecFunction} exec - Function called when module is used.
+ * @param {ModuleOptions} [options={}] - Options.
  */
-
-/**
- * The module's execution function.
- * @typedef {Function} ModuleExecFunction
- * @param {...any} args - Arguments.
- * @returns {any}
- */
-
 class AkairoModule {
-    /**
-     * Creates a new module.
-     * @param {string} id - ID of module.
-     * @param {ModuleExecFunction} exec - Function called when module is used.
-     * @param {ModuleOptions} [options={}] - Options.
-     */
     constructor(id, exec, options) {
         if (!options && typeof exec === 'object') {
             options = exec;
@@ -122,3 +109,16 @@ class AkairoModule {
 }
 
 module.exports = AkairoModule;
+
+/**
+ * Options for module.
+ * @typedef {Object} ModuleOptions
+ * @prop {string} [category='default'] - Category ID for organization purposes.
+ */
+
+/**
+ * The module's execution function.
+ * @typedef {Function} ModuleExecFunction
+ * @param {...any} args - Arguments.
+ * @returns {any}
+ */

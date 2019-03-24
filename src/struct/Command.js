@@ -3,117 +3,13 @@ const Argument = require('./Argument');
 const { ArgumentMatches, ArgumentSplits } = require('../util/Constants');
 
 /**
- * Options to use for command execution behavior.
- * @typedef {Object} CommandOptions
- * @prop {string[]} [aliases=[]] - Command names.
- * @prop {ArgumentOptions[]} [args=[]] - Arguments to parse.
- * @prop {ArgumentSplit|ArgumentSplitFunction} [split='plain'] - Method to split text into words.
- * @prop {string} [channelRestriction] - Restricts channel: 'guild' or 'dm'.
- * @prop {string} [category='default'] - Category ID for organization purposes.
- * @prop {boolean} [ownerOnly=false] - Whether or not to allow client owner(s) only.
- * @prop {boolean} [protected=false] - Whether or not this command cannot be disabled.
- * @prop {boolean} [typing=false] - Whether or not to type in channel during execution.
- * @prop {boolean} [editable=true] - Whether or not message edits will run this command.
- * On an edited message, the exec function edited param will be true.
- * @prop {number} [cooldown] - The command cooldown in milliseconds.
- * @prop {number} [ratelimit=1] - Amount of command uses allowed until cooldown.
- * @prop {string|string[]|PrefixFunction} [prefix] - The prefix(es) to overwrite the global one for this command.
- * @prop {PermissionResolvable|PermissionResolvable[]|PermissionFunction} [userPermissions] - Permissions required by the user to run this command.
- * @prop {PermissionResolvable|PermissionResolvable[]|PermissionFunction} [clientPermissions] - Permissions required by the client to run this command.
- * @prop {RegExp|TriggerFunction} [trigger] - A regex to match in messages that are NOT commands.
- * The exec function becomes `((message, match, groups, edited) => any)`.
- * @prop {ConditionFunction} [condition] - Whether or not to run on messages that are NOT commands.
- * The exec function becomes `((message, edited) => any)`.
- * @prop {ArgumentPromptOptions} [defaultPrompt={}] - The default prompt options.
- * @prop {Object} [options={}] - An object for custom options.
- * @prop {string|string[]} [description=''] - Description of the command.
+ * Represents a command.
+ * @param {string} id - Command ID.
+ * @param {CommandExecFunction|RegexCommandExecFunction|ConditionalCommandExecFunction} exec - Function called when command is ran.
+ * @param {CommandOptions} [options={}] - Options for the command.
+ * @extends {AkairoModule}
  */
-
-/**
- * A function used to check if a message has permissions for the command.
- * @typedef {Function} PermissionFunction
- * @param {Message} message - Message that triggered the command.
- * @returns {boolean}
- */
-
-/**
- * A function used to return a regular expression.
- * @typedef {Function} TriggerFunction
- * @param {Message} message - Message to get regex for.
- * @returns {RegExp}
- */
-
-/**
- * A function used to check if the command should run.
- * @typedef {Function} ConditionFunction
- * @param {Message} message - Message to check.
- * @returns {boolean}
- */
-
-/**
- * The method to split text into words.
- * - `plain` splits word separated by whitespace.
- * Extra whitespace between words are ignored.
- * - `split` splits word separated by whitespace.
- * Should not be used due to possible inconsistent whitespace.
- * DEPRECATED: no alternatives.
- * - `quoted` is similar to plain, but counts text inside double quotes as one word.
- * - `sticky` is similar to quoted, but makes it so that quoted text must have a whitespace or another double quote before it.
- * This means that `thing="hello world"` would be one, rather than two like when using `quoted`.
- * - `none` gives the entire content.
- *
- * It is recommended that you use either `plain` or `sticky` for your commands.
- *
- * A regex or a character can be used instead (for example, a comma) to split the message by that regex or character.
- * @typedef {string|RegExp} ArgumentSplit
- */
-
-/**
- * A function that returns the words to use for the arguments.
- * @typedef {Function} ArgumentSplitFunction
- * @param {string} content - The message content without the prefix and command.
- * @param {Message} message - Message that triggered the command.
- * @returns {string[]}
- */
-
-/**
- * The command's execution function.
- * @typedef {Function} CommandExecFunction
- * @param {Message} message - Message that triggered the command.
- * @param {Object} args - Evaluated arguments.
- * @param {boolean} edited - Whether the user's message was edited.
- * DEPRECATED: Use Messaged#edited.
- * @returns {any}
- */
-
-/**
- * The command's execution function when triggered with a regex.
- * @typedef {Function} RegexCommandExecFunction
- * @param {Message} message - Message that triggered the command.
- * @param {any} match - The results from `string.match()` with the regex.
- * @param {string[]} groups - The matched groups if a global regex.
- * @param {boolean} edited - Whether the user's message was edited.
- * DEPRECATED: Use Messaged#edited.
- * @returns {any}
- */
-
-/**
- * The command's execution function when triggered with a condition.
- * @typedef {Function} ConditionalCommandExecFunction
- * @param {Message} message - Message that triggered the command.
- * @param {boolean} edited - Whether the user's message was edited.
- * DEPRECATED: Use Messaged#edited.
- * @returns {any}
- */
-
-/** @extends AkairoModule */
 class Command extends AkairoModule {
-    /**
-     * Creates a new command.
-     * @param {string} id - Command ID.
-     * @param {CommandExecFunction|RegexCommandExecFunction|ConditionalCommandExecFunction} exec - Function called when command is ran.
-     * @param {CommandOptions} [options={}] - Options for the command.
-     */
     constructor(id, exec, options) {
         if (!options && typeof exec === 'object') {
             options = exec;
@@ -453,3 +349,107 @@ class Command extends AkairoModule {
 }
 
 module.exports = Command;
+
+/**
+ * Options to use for command execution behavior.
+ * @typedef {Object} CommandOptions
+ * @prop {string[]} [aliases=[]] - Command names.
+ * @prop {ArgumentOptions[]} [args=[]] - Arguments to parse.
+ * @prop {ArgumentSplit|ArgumentSplitFunction} [split='plain'] - Method to split text into words.
+ * @prop {string} [channelRestriction] - Restricts channel: 'guild' or 'dm'.
+ * @prop {string} [category='default'] - Category ID for organization purposes.
+ * @prop {boolean} [ownerOnly=false] - Whether or not to allow client owner(s) only.
+ * @prop {boolean} [protected=false] - Whether or not this command cannot be disabled.
+ * @prop {boolean} [typing=false] - Whether or not to type in channel during execution.
+ * @prop {boolean} [editable=true] - Whether or not message edits will run this command.
+ * On an edited message, the exec function edited param will be true.
+ * @prop {number} [cooldown] - The command cooldown in milliseconds.
+ * @prop {number} [ratelimit=1] - Amount of command uses allowed until cooldown.
+ * @prop {string|string[]|PrefixFunction} [prefix] - The prefix(es) to overwrite the global one for this command.
+ * @prop {PermissionResolvable|PermissionResolvable[]|PermissionFunction} [userPermissions] - Permissions required by the user to run this command.
+ * @prop {PermissionResolvable|PermissionResolvable[]|PermissionFunction} [clientPermissions] - Permissions required by the client to run this command.
+ * @prop {RegExp|TriggerFunction} [trigger] - A regex to match in messages that are NOT commands.
+ * The exec function becomes `((message, match, groups, edited) => any)`.
+ * @prop {ConditionFunction} [condition] - Whether or not to run on messages that are NOT commands.
+ * The exec function becomes `((message, edited) => any)`.
+ * @prop {ArgumentPromptOptions} [defaultPrompt={}] - The default prompt options.
+ * @prop {Object} [options={}] - An object for custom options.
+ * @prop {string|string[]} [description=''] - Description of the command.
+ */
+
+/**
+ * A function used to check if a message has permissions for the command.
+ * @typedef {Function} PermissionFunction
+ * @param {Message} message - Message that triggered the command.
+ * @returns {boolean}
+ */
+
+/**
+ * A function used to return a regular expression.
+ * @typedef {Function} TriggerFunction
+ * @param {Message} message - Message to get regex for.
+ * @returns {RegExp}
+ */
+
+/**
+ * A function used to check if the command should run.
+ * @typedef {Function} ConditionFunction
+ * @param {Message} message - Message to check.
+ * @returns {boolean}
+ */
+
+/**
+ * The method to split text into words.
+ * - `plain` splits word separated by whitespace.
+ * Extra whitespace between words are ignored.
+ * - `split` splits word separated by whitespace.
+ * Should not be used due to possible inconsistent whitespace.
+ * DEPRECATED: no alternatives.
+ * - `quoted` is similar to plain, but counts text inside double quotes as one word.
+ * - `sticky` is similar to quoted, but makes it so that quoted text must have a whitespace or another double quote before it.
+ * This means that `thing="hello world"` would be one, rather than two like when using `quoted`.
+ * - `none` gives the entire content.
+ *
+ * It is recommended that you use either `plain` or `sticky` for your commands.
+ *
+ * A regex or a character can be used instead (for example, a comma) to split the message by that regex or character.
+ * @typedef {string|RegExp} ArgumentSplit
+ */
+
+/**
+ * A function that returns the words to use for the arguments.
+ * @typedef {Function} ArgumentSplitFunction
+ * @param {string} content - The message content without the prefix and command.
+ * @param {Message} message - Message that triggered the command.
+ * @returns {string[]}
+ */
+
+/**
+ * The command's execution function.
+ * @typedef {Function} CommandExecFunction
+ * @param {Message} message - Message that triggered the command.
+ * @param {Object} args - Evaluated arguments.
+ * @param {boolean} edited - Whether the user's message was edited.
+ * DEPRECATED: Use Messaged#edited.
+ * @returns {any}
+ */
+
+/**
+ * The command's execution function when triggered with a regex.
+ * @typedef {Function} RegexCommandExecFunction
+ * @param {Message} message - Message that triggered the command.
+ * @param {any} match - The results from `string.match()` with the regex.
+ * @param {string[]} groups - The matched groups if a global regex.
+ * @param {boolean} edited - Whether the user's message was edited.
+ * DEPRECATED: Use Messaged#edited.
+ * @returns {any}
+ */
+
+/**
+ * The command's execution function when triggered with a condition.
+ * @typedef {Function} ConditionalCommandExecFunction
+ * @param {Message} message - Message that triggered the command.
+ * @param {boolean} edited - Whether the user's message was edited.
+ * DEPRECATED: Use Messaged#edited.
+ * @returns {any}
+ */

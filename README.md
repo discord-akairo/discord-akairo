@@ -1,13 +1,18 @@
-[![logo](./da.png)](https://github.com/1Computer1/discord-akairo)
-
-A modular and highly customizable bot framework for Discord.js v11.
-
-[![npm](https://nodei.co/npm/discord-akairo.png?downloads=true)](https://nodei.co/npm/discord-akairo)
-
-[![deps](https://david-dm.org/1computer1/discord-akairo.svg)](https://david-dm.org/1computer1/discord-akairo)
-[![travis](https://travis-ci.org/1Computer1/discord-akairo.svg?branch=master)](https://travis-ci.org/1Computer1/discord-akairo)
-
-----
+<div align="center">
+  <br />
+  <p>
+    <a href="https://discord-akairo.github.io"><img src="https://discord-akairo.github.io/static/logo.svg" width="546" alt="discord-akairo" /></a>
+  </p>
+  <br />
+  <p>
+    <a href="https://www.npmjs.com/package/discord-akairo"><img src="https://img.shields.io/npm/v/discord-akairo.svg?maxAge=3600" alt="NPM version" /></a>
+    <a href="https://www.npmjs.com/package/discord-akairo"><img src="https://img.shields.io/npm/dt/discord-akairo.svg?maxAge=3600" alt="NPM downloads" /></a>
+    <a href="https://travis-ci.org/discord-akairo/discord-akairo"><img src="https://travis-ci.org/discord-akairo/discord-akairo.svg" alt="Build status" /></a>
+  </p>
+  <p>
+    <a href="https://nodei.co/npm/discord-akairo/"><img src="https://nodei.co/npm/discord-akairo.png?downloads=true" alt="npm installnfo" /></a>
+  </p>
+</div>
 
 ## Example
 
@@ -114,11 +119,10 @@ Requires Node 6 or higher and Discord.js 11.4 or higher.
 
 ## Links
 
-Repository: [https://github.com/1Computer1/discord-akairo](https://github.com/1Computer1/discord-akairo)  
-Changelog: [https://github.com/1Computer1/discord-akairo/releases](https://github.com/1Computer1/discord-akairo/releases)  
-Documentation: [https://1computer1.github.io/discord-akairo](https://1computer1.github.io/discord-akairo/) ([master](https://1computer1.github.io/discord-akairo/master))  
-Tutorials: [https://1computer1.gitbooks.io/akairo-tutorials/content](https://1computer1.gitbooks.io/akairo-tutorials/content) ([master](https://1computer1.gitbooks.io/akairo-tutorials/content/v/formaster))  
-Discord Server: [https://discord.gg/arTauDY](https://discord.gg/arTauDY)  
+- [Website](https://discord-akairo.github.io)
+- [Repository](https://github.com/discord-akairo/discord-akairo)  
+- [Changelog](https://github.com/discord-akairo/discord-akairo/releases)
+- [Discord](https://discord.gg/arTauDY)  
 
 ## Contributing
 

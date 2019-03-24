@@ -1,13 +1,13 @@
 const Provider = require('./Provider');
 
-/** @extends Provider */
+/**
+ * A provider using the `sqlite` library.
+ * @param {Database|Promise<Database>} db - SQLite database from `sqlite`.
+ * @param {string} tableName - Name of table to handle.
+ * @param {ProviderOptions} [options={}] - Options to use.
+ * @extends {Provider}
+ */
 class SQLiteProvider extends Provider {
-    /**
-     * Provider using the `sqlite` library.
-     * @param {Database|Promise<Database>} db - SQLite database from `sqlite`.
-     * @param {string} tableName - Name of table to handle.
-     * @param {ProviderOptions} [options={}] - Options to use.
-     */
     constructor(db, tableName, options = {}) {
         super();
 

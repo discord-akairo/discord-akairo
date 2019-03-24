@@ -1,18 +1,10 @@
 const { Collection, Permissions, RichEmbed, MessageEmbed, User } = require('discord.js');
 
 /**
- * Function used to check if a response should pass for the prompt.
- * @typedef {Function} PromptCheckFunction
- * @param {Message} message - Message to check.
- * @param {Message} [sent] - The prompt's sent message.
- * @returns {boolean}
+ * Client utilities to help with common tasks.
+ * @param {AkairoClient} client - The client.
  */
-
 class ClientUtil {
-    /**
-     * Client utilities to help with common tasks.
-     * @param {AkairoClient} client - The client.
-     */
     constructor(client) {
         /**
          * The Akairo client.
@@ -564,3 +556,11 @@ class ClientUtil {
 }
 
 module.exports = ClientUtil;
+
+/**
+ * Function used to check if a response should pass for the prompt.
+ * @typedef {Function} PromptCheckFunction
+ * @param {Message} message - Message to check.
+ * @param {Message} [sent] - The prompt's sent message.
+ * @returns {boolean}
+ */
