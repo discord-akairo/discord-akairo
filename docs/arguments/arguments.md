@@ -71,10 +71,3 @@ The `default` is what is used if there are no input or no number input.
 
 By default, arguments are able to be quoted (you can disable this by having the `quoted` option set to false).  
 So, technically, this works (although it won't be an actual number input): `?add "hello world" 2 3`.  
-
-----
-
-Next Steps:  
-
-- [Matching Input](./matches.md)
-- [Argument Types](./types.md)

@@ -129,11 +129,3 @@ args: [
 ```
 
 This casts the input to an integer, ensure it is at least 0, and decrements it by 1.  
-
-----
-
-Next Steps:  
-
-- [Composing Types](./compose.md)
-- [Custom Types](./custom.md)
-- [Basic Prompting](./prompts.md)

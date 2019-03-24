@@ -223,11 +223,3 @@ Here are all the match types available in Akairo.
 The different match types have the following behavior with border whitespaces, quotes, and separators:  
 - `phrase`, `separate`, and `option` do not preserve any of the three.  
 - `rest`, `content`, `text` do preserve all three.  
-
-----
-
-Next Steps:  
-
-- [Argument Types](./types.md)
-- [Unordered Arguments](./unordered.md)
-- [Using Functions](./functions.md)

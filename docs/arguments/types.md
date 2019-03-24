@@ -188,12 +188,3 @@ module.exports = AskCommand;
 
 This will match `yes` or `no`, case-insensitive and `args.yesOrNo` will give you the result from `word.match(/^(yes|no)$/i`.  
 If using a global regex, the `matches` property will be filled for the matches.   
-
-----
-
-Next Steps: 
-
-- [Matching Input](./matches.md)
-- [Using Functions](./functions.md)
-- [Composing Types](./compose.md)
-- [ClientUtil](../../other/util.md)

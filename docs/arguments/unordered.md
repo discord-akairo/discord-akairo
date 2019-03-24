@@ -57,9 +57,3 @@ If there is a prompt and nothing matches:
   - If not, the prompt is started as if no input was given.  
 
 So, if you do have a prompt, make sure the `optional` option is not used or else it will prompt not at all.  
-
-----
-
-Next Steps:  
-
-- [Control Flow](./control.md)

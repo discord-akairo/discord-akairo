@@ -60,10 +60,3 @@ this.commandHandler.resolver.addType('moderator', (phrase, message) => {
     return member;
 });
 ```
-
-----
-
-Next Steps:  
-
-- [Basic Prompting](./prompts.md)
-- [ClientUtil](../../other/util.md)

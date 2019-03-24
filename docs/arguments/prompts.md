@@ -183,9 +183,3 @@ defaultPrompt: {
 
 The options `modifyStart`, `modifyRetry`, etc. are used to modify those types of prompts.  
 With the above options, all `start` and `retry` prompts will have "Type cancel to cancel this command." appended after it.  
-
-----
-
-Next Steps:  
-
-- [More Prompting](./prompts2.md)

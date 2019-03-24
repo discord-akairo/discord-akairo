@@ -84,9 +84,3 @@ And with that, `args.items` is now an array of responses from the user.
 Note that the `none` match is used, meaning nothing is matched in the original message.  
 Because this is an infinite prompt that goes across multiple messages, we don't want it to take input from the original message.  
 If you wish to allow a hybrid of matching and prompting multiple phrases, try using `separate` match with infinite prompts.   
-
-----
-
-Next Steps:  
-
-- [Generator Arguments](./generators.md)

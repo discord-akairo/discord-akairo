@@ -72,10 +72,3 @@ A use case of this function is for preprocessing before casting:
 
 For more complicated types compositions and validations, it will be a lot easier to use type functions.  
 See the [Using Functions](./functions.md) section for more information.  
-
-----
-
-Next Steps:
-
-- [Using Functions](./functions.md)
-- [Custom Types](./custom.md)
