@@ -6,7 +6,7 @@
     "source": {
         "include": ["README.md", "src", "package.json"],
         "includePattern": ".js$",
-        "excludePattern": "(node_modules/|index.(?:js|d.ts)$)"
+        "excludePattern": "node_modules/"
     },
     "templates": {
         "cleverLinks": false,
@@ -17,14 +17,12 @@
         }
     },
     "opts": {
-        "destination": "../discord-akairo-docs/out",
         "encoding": "utf8",
         "private": true,
         "recurse": true,
-        "sort": true,
-        "template": "./node_modules/docdash"
+        "sort": true
     },
-    "plugins": ["plugins/markdown", "node_modules/jsdoc-strip-async-await"],
+    "plugins": ["plugins/markdown"],
     "markdown": {
         "hardwrap": true
     },
