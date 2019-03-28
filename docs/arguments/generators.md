@@ -6,7 +6,7 @@ The most powerful aspect of Akairo's argument parsing is the fact that it is imp
 With this, you can do things such as:
 - Have an argument depend on the previous argument
 - Branch your argument parsing
-- Run an argument multiples times
+- Run an argument multiple times
 - Inject code in between arguments
 - And more!
 
