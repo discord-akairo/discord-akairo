@@ -90,6 +90,9 @@ The `commandUtilLifetime` option also now defaults to 5 minutes.
 
 All the CommandUtil parse information such as `command`, `prefix`, `alias` etc. are moved to the `parsed` property.  
 
+The `defaultPrompt` option has been changed to `argumentDefaults` which allow for more defaults.  
+You can simply move your options into `argumentDefaults.prompt`.  
+
 ##### Arguments
 
 Argument parsing now uses a new parser.  
