@@ -25,7 +25,7 @@ class Command extends AkairoModule {
             typing = false,
             cooldown = null,
             ratelimit = 1,
-            defaultPrompt = {},
+            argumentDefaults = {},
             description = '',
             prefix = this.prefix,
             clientPermissions = this.clientPermissions,
@@ -100,9 +100,9 @@ class Command extends AkairoModule {
 
         /**
          * Default prompt options.
-         * @type {ArgumentPromptOptions}
+         * @type {DefaultArgumentOptions}
          */
-        this.defaultPrompt = defaultPrompt;
+        this.argumentDefaults = argumentDefaults;
 
         /**
          * Description of the command.
@@ -262,7 +262,7 @@ module.exports = Command;
  * @prop {KeySupplier|string} [lock] - The key type or key generator for the locker. If lock is a string, it's expected one of 'guild', 'channel', or 'user'.
  * @prop {Snowflake|Snowflake[]|IgnoreCheckPredicate} [ignoreCooldown] - ID of user(s) to ignore cooldown or a function to ignore.
  * @prop {Snowflake|Snowflake[]|IgnoreCheckPredicate} [ignorePermissions] - ID of user(s) to ignore `userPermissions` checks or a function to ignore.
- * @prop {ArgumentPromptOptions} [defaultPrompt={}] - The default prompt options.
+ * @prop {DefaultArgumentOptions} [argumentDefaults] - The default argument options.
  * @prop {StringResolvable} [description=''] - Description of the command.
  */
 

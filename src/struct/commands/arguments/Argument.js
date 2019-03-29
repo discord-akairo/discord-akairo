@@ -82,7 +82,7 @@ class Argument {
 
         /**
          * The content or function supplying the content sent when argument parsing fails.
-         * @type {StringResolvable|MessageOptions|MessageAdditions|OtherwiseContentSupplier}
+         * @type {?StringResolvable|MessageOptions|MessageAdditions|OtherwiseContentSupplier}
          */
         this.otherwise = typeof otherwise === 'function' ? otherwise.bind(this) : otherwise;
     }
@@ -111,18 +111,22 @@ class Argument {
      */
     async process(message, phrase) {
         const isOptional = (this.prompt && this.prompt.optional)
-            || (this.command.defaultPrompt && this.command.defaultPrompt.optional)
-            || (this.handler.defaultPrompt && this.handler.defaultPrompt.optional);
+            || (this.command.argumentDefaults.prompt && this.command.argumentDefaults.prompt.optional)
+            || (this.handler.argumentDefaults.prompt && this.handler.argumentDefaults.prompt.optional);
+
+        const otherwise = this.otherwise
+            || this.command.argumentDefaults.otherwise
+            || this.handler.argumentDefaults.otherwise;
 
         const doOtherwise = async failure => {
-            const text = await intoCallable(this.otherwise)(message, { phrase, failure });
+            const text = await intoCallable(otherwise)(message, { phrase, failure });
             const sent = await message.channel.send(text);
             if (message.util) message.util.addMessage(sent);
             return Flag.cancel();
         };
 
         if (!phrase && isOptional) {
-            if (this.otherwise != null) {
+            if (otherwise != null) {
                 return doOtherwise(null);
             }
 
@@ -131,7 +135,7 @@ class Argument {
 
         const res = await this.cast(message, phrase);
         if (Argument.isFailure(res)) {
-            if (this.otherwise != null) {
+            if (otherwise != null) {
                 return doOtherwise(res);
             }
 
@@ -166,8 +170,8 @@ class Argument {
      */
     async collect(message, commandInput = '', parsedInput = null) {
         const promptOptions = {};
-        Object.assign(promptOptions, this.handler.defaultPrompt);
-        Object.assign(promptOptions, this.command.defaultPrompt);
+        Object.assign(promptOptions, this.handler.argumentDefaults.prompt);
+        Object.assign(promptOptions, this.command.argumentDefaults.prompt);
         Object.assign(promptOptions, this.prompt || {});
 
         const isInfinite = promptOptions.infinite || (this.match === ArgumentMatches.SEPARATE && !commandInput);
@@ -633,6 +637,13 @@ module.exports = Argument;
  * @typedef {Object} FailureData
  * @prop {string} phrase - The input phrase that failed if there was one, otherwise an empty string.
  * @param {void|Flag} failure - The value that failed if there was one, otherwise null.
+ */
+
+/**
+ * Defaults for argument options.
+ * @typedef {Object} DefaultArgumentOptions
+ * @prop {ArgumentPromptOptions} [prompt] - Default prompt options.
+ * @prop {StringResolvable|MessageOptions|MessageAdditions|OtherwiseContentSupplier} [otherwise] - Default text sent if argument parsing fails.
  */
 
 /**

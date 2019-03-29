@@ -18,15 +18,18 @@ class TestClient extends AkairoClient {
             commandUtilSweepInterval: 10000,
             storeMessages: true,
             handleEdits: true,
-            defaultPrompt: {
-                start: 'What is thing?',
-                modifyStart: (msg, text) => `${msg.author}, ${text}\nType \`cancel\` to cancel this command.`,
-                retry: 'What is thing, again?',
-                modifyRetry: (msg, text) => `${msg.author}, ${text}\nType \`cancel\` to cancel this command.`,
-                timeout: 'Out of time.',
-                ended: 'No more tries.',
-                cancel: 'Cancelled.',
-                retries: 5
+            argumentDefaults: {
+                prompt: {
+                    start: 'What is thing?',
+                    modifyStart: (msg, text) => `${msg.author}, ${text}\nType \`cancel\` to cancel this command.`,
+                    retry: 'What is thing, again?',
+                    modifyRetry: (msg, text) => `${msg.author}, ${text}\nType \`cancel\` to cancel this command.`,
+                    timeout: 'Out of time.',
+                    ended: 'No more tries.',
+                    cancel: 'Cancelled.',
+                    retries: 5
+                },
+                otherwise: () => 'no!'
             }
         });
 

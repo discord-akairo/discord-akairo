@@ -148,13 +148,13 @@ declare module 'discord-akairo' {
         public constructor(id: string, options?: CommandOptions);
 
         public aliases: string[];
+        public argumentDefaults: DefaultArgumentOptions;
         public quoted: boolean;
         public category: Category<string, Command>;
         public channel?: string;
         public client: AkairoClient;
         public clientPermissions: PermissionResolvable | PermissionResolvable[] | MissingPermissionSupplier;
         public cooldown?: number;
-        public defaultPrompt: ArgumentPromptOptions;
         public description: string | any;
         public editable: boolean;
         public filepath: string;
@@ -185,6 +185,7 @@ declare module 'discord-akairo' {
         public aliasReplacement?: RegExp;
         public aliases: Collection<string, string>;
         public allowMention: boolean | MentionPrefixPredicate;
+        public argumentDefaults: DefaultArgumentOptions;
         public blockBots: boolean;
         public blockClient: boolean;
         public categories: Collection<string, Category<string, Command>>;
@@ -196,7 +197,6 @@ declare module 'discord-akairo' {
         public commandUtilSweepInterval: number;
         public cooldowns: Collection<string, object>;
         public defaultCooldown: number;
-        public defaultPrompt: ArgumentPromptOptions;
         public directory: string;
         public fetchMembers: boolean;
         public handleEdits: boolean;
@@ -447,6 +447,11 @@ declare module 'discord-akairo' {
 
     export type AkairoOptions = {
         ownerID?: Snowflake | Snowflake[];
+    };
+
+    export type DefaultArgumentOptions = {
+        prompt?: ArgumentPromptOptions;
+        otherwise?: StringResolvable | MessageOptions | MessageAdditions | OtherwiseContentSupplier;
     };
 
     export type ArgumentOptions = {

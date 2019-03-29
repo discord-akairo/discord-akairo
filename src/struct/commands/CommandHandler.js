@@ -5,7 +5,7 @@ const { Collection } = require('discord.js');
 const Command = require('./Command');
 const CommandUtil = require('./CommandUtil');
 const Flag = require('./Flag');
-const { flatMap, intoArray, intoCallable, isPromise, prefixCompare } = require('../../util/Util');
+const { deepAssign, flatMap, intoArray, intoCallable, isPromise, prefixCompare } = require('../../util/Util');
 const TypeResolver = require('./arguments/TypeResolver');
 
 /**
@@ -32,7 +32,7 @@ class CommandHandler extends AkairoHandler {
         defaultCooldown = 0,
         ignoreCooldown = client.ownerID,
         ignorePermissions = [],
-        defaultPrompt = {},
+        argumentDefaults = {},
         prefix = '!',
         allowMention = true,
         aliasReplacement
@@ -164,24 +164,26 @@ class CommandHandler extends AkairoHandler {
         this.prompts = new Collection();
 
         /**
-         * Default prompt options.
-         * @type {ArgumentPromptOptions}
+         * Default argument options.
+         * @type {DefaultArgumentOptions}
          */
-        this.defaultPrompt = Object.assign({
-            start: '',
-            retry: '',
-            timeout: '',
-            ended: '',
-            cancel: '',
-            retries: 1,
-            time: 30000,
-            cancelWord: 'cancel',
-            stopWord: 'stop',
-            optional: false,
-            infinite: false,
-            limit: Infinity,
-            breakout: true
-        }, defaultPrompt);
+        this.argumentDefaults = deepAssign({
+            prompt: {
+                start: '',
+                retry: '',
+                timeout: '',
+                ended: '',
+                cancel: '',
+                retries: 1,
+                time: 30000,
+                cancelWord: 'cancel',
+                stopWord: 'stop',
+                optional: false,
+                infinite: false,
+                limit: Infinity,
+                breakout: true
+            }
+        }, argumentDefaults);
 
         /**
          * The prefix(es) for command parsing.
@@ -1135,7 +1137,7 @@ module.exports = CommandHandler;
  * @prop {Snowflake|Snowflake[]|IgnoreCheckPredicate} [ignoreCooldown] - ID of user(s) to ignore cooldown or a function to ignore.
  * Defaults to the client owner(s).
  * @prop {Snowflake|Snowflake[]|IgnoreCheckPredicate} [ignorePermissions=[]] - ID of user(s) to ignore `userPermissions` checks or a function to ignore.
- * @prop {ArgumentPromptOptions} [defaultPrompt] - The default prompt options.
+ * @prop {DefaultArgumentOptions} [argumentDefaults] - The default argument options.
  */
 
 /**
