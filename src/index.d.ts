@@ -503,12 +503,12 @@ declare module 'discord-akairo' {
     export type CommandOptions = {
         aliases?: string[];
         args?: ArgumentOptions[] | ArgumentGenerator;
+        argumentDefaults?: DefaultArgumentOptions;
         before?: BeforeAction;
         channel?: 'guild' | 'dm';
         clientPermissions?: PermissionResolvable | PermissionResolvable[] | MissingPermissionSupplier;
         condition?: ExecutionPredicate;
         cooldown?: number;
-        defaultPrompt?: ArgumentPromptOptions;
         description?: StringResolvable;
         editable?: boolean;
         flags?: string[];
@@ -529,13 +529,13 @@ declare module 'discord-akairo' {
     export type CommandHandlerOptions = {
         aliasReplacement?: RegExp;
         allowMention?: boolean | MentionPrefixPredicate;
+        argumentDefaults?: DefaultArgumentOptions;
         blockBots?: boolean;
         blockClient?: boolean;
         commandUtil?: boolean;
         commandUtilLifetime?: number;
         commandUtilSweepInterval?: number;
         defaultCooldown?: number;
-        defaultPrompt?: ArgumentPromptOptions;
         fetchMembers?: boolean;
         handleEdits?: boolean;
         ignoreCooldown?: Snowflake | Snowflake[] | IgnoreCheckPredicate;
