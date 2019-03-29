@@ -15,16 +15,16 @@ You can import the `Argument` class, where there is the `Argument.union` static 
 The above argument will try matching using `integer` first, then `string`.  
 So, it is recommended that you go from most to least specific types.  
 
-### Tuple Types
+### Product Types
 
-A tuple type in Akairo casts the input to multiple types.  
-The static method `Argument.tuple` lets us create one of these.  
+A product type in Akairo casts the input to multiple types.  
+The static method `Argument.product` lets us create one of these.  
 The type will parse the input into an array containing the values respective to the given types.  
 
 ```js
 {
     id: 'numAndName',
-    type: Argument.tuple('integer', 'string')
+    type: Argument.product('integer', 'string')
 }
 ```
 

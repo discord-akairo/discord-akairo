@@ -404,12 +404,12 @@ class Argument {
     }
 
     /**
-     * Creates a type from multiple types (tuple type).
+     * Creates a type from multiple types (product type).
      * Only inputs where each type resolves with a non-void value are valid.
      * @param {...ArgumentType|ArgumentTypeCaster} types - Types to use.
      * @returns {ArgumentTypeCaster}
      */
-    static tuple(...types) {
+    static product(...types) {
         return async function typeFn(message, phrase) {
             const results = [];
             for (let entry of types) {
