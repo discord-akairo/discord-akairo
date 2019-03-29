@@ -18,7 +18,8 @@ class Argument {
         limit = Infinity,
         prompt = null,
         default: defaultValue = null,
-        otherwise = null
+        otherwise = null,
+        modifyOtherwise = null
     } = {}) {
         /**
          * The command this argument belongs to.
@@ -85,6 +86,12 @@ class Argument {
          * @type {?StringResolvable|MessageOptions|MessageAdditions|OtherwiseContentSupplier}
          */
         this.otherwise = typeof otherwise === 'function' ? otherwise.bind(this) : otherwise;
+
+        /**
+         * Function to modify otherwise content.
+         * @type {?OtherwiseContentModifier}
+         */
+        this.modifyOtherwise = modifyOtherwise;
     }
 
     /**
@@ -118,8 +125,20 @@ class Argument {
             || this.command.argumentDefaults.otherwise
             || this.handler.argumentDefaults.otherwise;
 
+        const otherwiseModifier = this.modifyOtherwise
+            || this.command.argumentDefaults.modifyOtherwise
+            || this.handler.argumentDefaults.modifyOtherwise;
+
         const doOtherwise = async failure => {
-            const text = await intoCallable(otherwise)(message, { phrase, failure });
+            let text = await intoCallable(otherwise).call(this, message, { phrase, failure });
+            if (Array.isArray(text)) {
+                text = text.join('\n');
+            }
+
+            if (otherwiseModifier) {
+                text = await otherwiseModifier.call(this, message, text, { phrase, failure });
+            }
+
             const sent = await message.channel.send(text);
             if (message.util) message.util.addMessage(sent);
             return Flag.cancel();
@@ -508,6 +527,7 @@ module.exports = Argument;
  * If using a flag match, setting the default value to a non-void value inverses the result.
  * @prop {StringResolvable|MessageOptions|MessageAdditions|OtherwiseContentSupplier} [otherwise] - Text sent if argument parsing fails.
  * This overrides the `default` option and all prompt options.
+ * @prop {OtherwiseContentModifier} [modifyOtherwise] - Function to modify otherwise content.
  * @prop {ArgumentPromptOptions} [prompt] - Prompt options for when user does not provide input.
  */
 
@@ -644,6 +664,7 @@ module.exports = Argument;
  * @typedef {Object} DefaultArgumentOptions
  * @prop {ArgumentPromptOptions} [prompt] - Default prompt options.
  * @prop {StringResolvable|MessageOptions|MessageAdditions|OtherwiseContentSupplier} [otherwise] - Default text sent if argument parsing fails.
+ * @prop {OtherwiseContentModifier} [modifyOtherwise] - Function to modify otherwise content.
  */
 
 /**
@@ -661,6 +682,15 @@ module.exports = Argument;
  * @param {string} phrase - The user input.
  * @param {any} value - The parsed value.
  * @returns {boolean}
+ */
+
+/**
+ * A function modifying a prompt text.
+ * @typedef {Function} OtherwiseContentModifier
+ * @param {string|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions} text - Text to modify.
+ * @param {Message} message - Message that triggered the command.
+ * @param {FailureData} data - Miscellaneous data.
+ * @returns {StringResolvable|MessageOptions|MessageAdditions|Promise<StringResolvable|MessageOptions|MessageAdditions>}
  */
 
 /**

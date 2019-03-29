@@ -29,7 +29,7 @@ class TestClient extends AkairoClient {
                     cancel: 'Cancelled.',
                     retries: 5
                 },
-                otherwise: () => 'no!'
+                modifyOtherwise: (msg, text) => `${msg.author}, ${text}`
             }
         });
 

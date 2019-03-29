@@ -452,6 +452,7 @@ declare module 'discord-akairo' {
     export type DefaultArgumentOptions = {
         prompt?: ArgumentPromptOptions;
         otherwise?: StringResolvable | MessageOptions | MessageAdditions | OtherwiseContentSupplier;
+        modifyOtherwise?: OtherwiseContentModifier;
     };
 
     export type ArgumentOptions = {
@@ -461,6 +462,7 @@ declare module 'discord-akairo' {
         index?: number;
         limit?: number;
         match?: ArgumentMatch;
+        modifyOtherwise?: OtherwiseContentModifier;
         multipleFlags?: boolean;
         flag?: string | string[];
         otherwise?: StringResolvable | MessageOptions | MessageAdditions | OtherwiseContentSupplier;
@@ -605,6 +607,9 @@ declare module 'discord-akairo' {
     export type MentionPrefixPredicate = (message: Message) => boolean | Promise<boolean>;
 
     export type MissingPermissionSupplier = (message: Message) => Promise<any> | any;
+
+    export type OtherwiseContentModifier = (message: Message, text: string, data: FailureData)
+        => StringResolvable | MessageOptions | MessageAdditions | Promise<StringResolvable | MessageOptions | MessageAdditions>;
 
     export type OtherwiseContentSupplier = (message: Message, data: FailureData)
         => StringResolvable | MessageOptions | MessageAdditions | Promise<StringResolvable | MessageOptions | MessageAdditions>;

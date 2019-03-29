@@ -18,7 +18,8 @@ class ArgsCommand extends Command {
                 },
                 {
                     id: 'phrase',
-                    match: 'phrase'
+                    match: 'phrase',
+                    otherwise: () => 'no!'
                 },
                 {
                     id: 'rest',
