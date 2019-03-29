@@ -102,18 +102,20 @@ prompt: {
 ### Cascading
 
 Prompts can also "cascade" from three places: the command handler, then the command, then the argument.  
-For the command handler or the command, we would set the `defaultPrompt` option.  
+For the command handler or the command, we would set the `argumentDefaults` option.  
 
 ```js
 this.commandHandler = new CommandHandler(this, {
     directory: './commands/',
     prefix: '?',
-    defaultPrompt: {
-        timeout: 'Time ran out, command has been cancelled.',
-        ended: 'Too many retries, command has been cancelled.',
-        cancel: 'Command has been cancelled.',
-        retries: 4,
-        time: 30000
+    argumentDefaults: {
+        prompt: {
+            timeout: 'Time ran out, command has been cancelled.',
+            ended: 'Too many retries, command has been cancelled.',
+            cancel: 'Command has been cancelled.',
+            retries: 4,
+            time: 30000
+        }
     }
 });
 ```
@@ -167,17 +169,19 @@ Their `prompt` property still has to be truthy in order to actually prompt, of c
 ### Modifying
 
 Prompts can then be modified with a modify function.  
-It is most useful inside a `defaultPrompt` option, such as on the command handler.  
+It is most useful inside the `argumentDefaults` option, such as on the command handler.  
 
 ```js
-defaultPrompt: {
-    modifyStart: text => `${text}\nType cancel to cancel this command.`,
-    modifyRetry: text => `${text}\nType cancel to cancel this command.`,
-    timeout: 'Time ran out, command has been cancelled.',
-    ended: 'Too many retries, command has been cancelled.',
-    cancel: 'Command has been cancelled.',
-    retries: 4,
-    time: 30000
+argumentDefaults: {
+    prompt: {
+        modifyStart: text => `${text}\nType cancel to cancel this command.`,
+        modifyRetry: text => `${text}\nType cancel to cancel this command.`,
+        timeout: 'Time ran out, command has been cancelled.',
+        ended: 'Too many retries, command has been cancelled.',
+        cancel: 'Command has been cancelled.',
+        retries: 4,
+        time: 30000
+    }
 }
 ```
 
