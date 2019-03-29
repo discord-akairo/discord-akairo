@@ -94,11 +94,16 @@ declare module 'discord-akairo' {
         public collect(message: Message, commandInput?: string): Promise<Flag | any>;
         public process(message: Message, phrase: string): Promise<any>;
 
+        public static andThen(type1: ArgumentType | ArgumentTypeCaster, type2: ArgumentType | ArgumentTypeCaster): ArgumentTypeCaster;
         public static cast(type: ArgumentType | ArgumentTypeCaster, resolver: TypeResolver, message: Message, phrase: string): Promise<any>;
         public static compose(type1: ArgumentType | ArgumentTypeCaster, type2: ArgumentType | ArgumentTypeCaster): ArgumentTypeCaster;
         public static isFailure(value: any): boolean;
+        public static orElse(type1: ArgumentType | ArgumentTypeCaster, type2: ArgumentType | ArgumentTypeCaster): ArgumentTypeCaster;
         public static product(...types: (ArgumentType | ArgumentTypeCaster)[]): ArgumentTypeCaster;
         public static range(type: ArgumentType | ArgumentTypeCaster, min: number, max: number, inclusive?: boolean): ArgumentTypeCaster;
+        public static tagged(type: ArgumentType | ArgumentTypeCaster, tag?: any): ArgumentTypeCaster;
+        public static taggedUnion(...types: (ArgumentType | ArgumentTypeCaster)[]): ArgumentTypeCaster;
+        public static taggedWithInput(type: ArgumentType | ArgumentTypeCaster, tag?: any): ArgumentTypeCaster;
         public static union(...types: (ArgumentType | ArgumentTypeCaster)[]): ArgumentTypeCaster;
         public static validate(type: ArgumentType | ArgumentTypeCaster, predicate: ParsedValuePredicate): ArgumentTypeCaster;
         public static withInput(type: ArgumentType | ArgumentTypeCaster): ArgumentTypeCaster;

@@ -442,29 +442,74 @@ class Argument {
 
     /**
      * Creates a type where the parsed value must be within a range.
-     * @param {ArgumentType|ArgumentTypeCaster} type - The type to use
+     * @param {ArgumentType|ArgumentTypeCaster} type - The type to use.
      * @param {number} min - Minimum value.
      * @param {number} max - Maximum value.
      * @param {boolean} [inclusive=false] - Whether or not to be inclusive on the upper bound.
      * @returns {ArgumentTypeCaster}
      */
     static range(type, min, max, inclusive = false) {
-        return Argument.validate(type, (msg, p, x) => x >= min && (inclusive ? x <= max : x < max));
+        return Argument.validate(type, (msg, p, x) => {
+            /* eslint-disable-next-line valid-typeof */
+            const o = typeof x === 'number' || typeof x === 'bigint'
+                ? x
+                : x.length != null
+                    ? x.length
+                    : x.size != null
+                        ? x.size
+                        : x;
+
+            return o >= min && (inclusive ? o <= max : o < max);
+        });
     }
 
     /**
-     * Creates a type that takes the result of the first type and runs it with the second.
-     * The first type should return a string since types expect a string as the input.
+     * Creates a type that takes the result of the first type and runs it with the second type.
+     * Whether or not the first type fails does not matter, it will be passed along nonetheless.
+     * You may want to use `andThen` or `orElse` if you desire a different behavior.
      * @param {ArgumentType|ArgumentTypeCaster} type1 - First type.
      * @param {ArgumentType|ArgumentTypeCaster} type2 - Second type.
-     * @param {boolean} [ignoreVoid=true] - Whether or not to return null if the first type resolved with a void value.
      * @returns {ArgumentTypeCaster}
      */
-    static compose(type1, type2, ignoreVoid = true) {
+    static compose(type1, type2) {
         return async function typeFn(message, phrase) {
             if (typeof type1 === 'function') type1 = type1.bind(this);
             const res = await Argument.cast(type1, this.handler.resolver, message, phrase);
-            if (!ignoreVoid && Argument.isFailure(res)) return res;
+            if (typeof type2 === 'function') type2 = type2.bind(this);
+            return Argument.cast(type2, this.handler.resolver, message, res);
+        };
+    }
+
+    /**
+     * Creates a type that takes the result of the first type and, if it succeeds, runs it with the second type.
+     * @param {ArgumentType|ArgumentTypeCaster} type1 - First type.
+     * @param {ArgumentType|ArgumentTypeCaster} type2 - Second type.
+     * @returns {ArgumentTypeCaster}
+     */
+    static andThen(type1, type2) {
+        return async function typeFn(message, phrase) {
+            if (typeof type1 === 'function') type1 = type1.bind(this);
+            const res = await Argument.cast(type1, this.handler.resolver, message, phrase);
+            if (Argument.isFailure(res)) return res;
+            if (typeof type2 === 'function') type2 = type2.bind(this);
+            return Argument.cast(type2, this.handler.resolver, message, res);
+        };
+    }
+
+    /**
+     * Creates a type that takes the result of the first type and, if it fails, runs it with the second type.
+     * @param {ArgumentType|ArgumentTypeCaster} type1 - First type.
+     * @param {ArgumentType|ArgumentTypeCaster} type2 - Second type.
+     * @returns {ArgumentTypeCaster}
+     */
+    static orElse(type1, type2) {
+        return async function typeFn(message, phrase) {
+            if (typeof type1 === 'function') type1 = type1.bind(this);
+            const res = await Argument.cast(type1, this.handler.resolver, message, phrase);
+            if (!Argument.isFailure(res)) {
+                return res;
+            }
+
             if (typeof type2 === 'function') type2 = type2.bind(this);
             return Argument.cast(type2, this.handler.resolver, message, res);
         };
@@ -478,12 +523,72 @@ class Argument {
      */
     static withInput(type) {
         return async function typeFn(message, phrase) {
+            if (typeof type === 'function') type = type.bind(this);
             const res = await Argument.cast(type, this.handler.resolver, message, phrase);
             if (Argument.isFailure(res)) {
                 return Flag.fail({ input: phrase, value: res });
             }
 
             return { input: phrase, value: res };
+        };
+    }
+
+    /**
+     * Creates a type that parses as normal but also tags it with some data.
+     * Result is in an object `{ tag, value }` and wrapped in `Flag.fail` when failed.
+     * @param {ArgumentType|ArgumentTypeCaster} type - The type to use.
+     * @param {any} [tag] - Tag to add.
+     * Defaults to the `type` argument, so useful if it is a string.
+     * @returns {ArgumentTypeCaster}
+     */
+    static tagged(type, tag = type) {
+        return async function typeFn(message, phrase) {
+            if (typeof type === 'function') type = type.bind(this);
+            const res = await Argument.cast(type, this.handler.resolver, message, phrase);
+            if (Argument.isFailure(res)) {
+                return Flag.fail({ tag, value: res });
+            }
+
+            return { tag, value: res };
+        };
+    }
+
+    /**
+     * Creates a type that parses as normal but also tags it with some data and carries the original input.
+     * Result is in an object `{ tag, input, value }` and wrapped in `Flag.fail` when failed.
+     * @param {ArgumentType|ArgumentTypeCaster} type - The type to use.
+     * @param {any} [tag] - Tag to add.
+     * Defaults to the `type` argument, so useful if it is a string.
+     * @returns {ArgumentTypeCaster}
+     */
+    static taggedWithInput(type, tag = type) {
+        return async function typeFn(message, phrase) {
+            if (typeof type === 'function') type = type.bind(this);
+            const res = await Argument.cast(type, this.handler.resolver, message, phrase);
+            if (Argument.isFailure(res)) {
+                return Flag.fail({ tag, input: phrase, value: res });
+            }
+
+            return { tag, input: phrase, value: res };
+        };
+    }
+
+    /**
+     * Creates a type from multiple types (union type).
+     * The first type that resolves to a non-void value is used.
+     * Each type will also be tagged using `tagged` with themselves.
+     * @param {...ArgumentType|ArgumentTypeCaster} types - Types to use.
+     * @returns {ArgumentTypeCaster}
+     */
+    static taggedUnion(...types) {
+        return async function typeFn(message, phrase) {
+            for (let entry of types) {
+                entry = Argument.tagged(entry);
+                const res = await Argument.cast(entry, this.handler.resolver, message, phrase);
+                if (!Argument.isFailure(res)) return res;
+            }
+
+            return null;
         };
     }
     /* eslint-enable no-invalid-this */
@@ -649,6 +754,15 @@ module.exports = Argument;
  * @typedef {Function} ArgumentTypeCaster
  * @param {Message} message - Message that triggered the command.
  * @param {string} phrase - The user input.
+ * @returns {any}
+ */
+
+/**
+ * A function for processing some value to use as an argument.
+ * This is mainly used in composing argument types.
+ * @typedef {Function} ArgumentTypeCaster
+ * @param {Message} message - Message that triggered the command.
+ * @param {any} value - Some value.
  * @returns {any}
  */
 

@@ -34,7 +34,7 @@ If any of the types fail, the entire argument fails.
 ### Validation
 
 Extra validation can be done on the parsed value using `Argument.validate`.  
-For numerical values, `Argument.range` is a convenient method as well.  
+For numbers and things with a length or size, `Argument.range` is a convenient method as well.  
 
 ```js
 {
@@ -59,16 +59,18 @@ To make the upper bound inclusive, simply pass `true` to the 4th argument in the
 
 ### We're Going Functional
 
-Types can be composed together using `Argument.compose`.  
-The result of `Argument.compose(type1, type2)` is a type that goes uses the first type, then the result of that is passed the second.  
+Types can be composed together using `Argument.compose`, `Argument.andThen`, or `Argument.orElse`.  
+For example, the result of `Argument.andThen(type1, type2)` is a type that uses the first type, then the result of that is passed the second.  
 A use case of this function is for preprocessing before casting:  
 
 ```js
 {
     id: 'lowercaseChars',
-    type: Argument.compose('lowercase', 'charCodes')
+    type: Argument.andThen('lowercase', 'charCodes')
 }
 ```
+
+You would use `Argument.orElse` if you would like a fallback to a type, and `Argument.compose` if you do not care if the first type fails, which `Argument.andThen` does.  
 
 For more complicated types compositions and validations, it will be a lot easier to use type functions.  
 See the [Using Functions](./functions.md) section for more information.  
