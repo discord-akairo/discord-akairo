@@ -1,5 +1,7 @@
-const { Client } = require('discord.js');
+const { Client, version } = require('discord.js');
 const ClientUtil = require('./ClientUtil');
+
+const neededVersion = '12.0.0-dev';
 
 /**
  * The Akairo framework client.
@@ -11,6 +13,8 @@ const ClientUtil = require('./ClientUtil');
 class AkairoClient extends Client {
     constructor(options = {}, clientOptions) {
         super(clientOptions || options);
+
+        if (version !== neededVersion) throw new Error('Version of discord.js needed: ' + neededVersion + '. Installed version: ' + version);
 
         const { ownerID = '' } = options;
 
