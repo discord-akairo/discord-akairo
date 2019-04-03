@@ -135,12 +135,18 @@ class Argument {
                 text = text.join('\n');
             }
 
-            if (otherwiseModifier) {
-                text = await otherwiseModifier.call(this, message, text, { phrase, failure });
+            if (modifyOtherwise) {
+                text = await modifyOtherwise.call(this, message, text, { phrase, failure });
+                if (Array.isArray(text)) {
+                    text = text.join('\n');
+                }
             }
 
-            const sent = await message.channel.send(text);
-            if (message.util) message.util.addMessage(sent);
+            if (text) {
+                const sent = await message.channel.send(text);
+                if (message.util) message.util.addMessage(sent);
+            }
+
             return Flag.cancel();
         };
 
