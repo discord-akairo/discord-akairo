@@ -1,6 +1,6 @@
 const { ArgumentMatches, ArgumentTypes } = require('../../../util/Constants');
 const Flag = require('../Flag');
-const { intoCallable, isPromise } = require('../../../util/Util');
+const { choice, intoCallable, isPromise } = require('../../../util/Util');
 
 /**
  * Represents an argument for a command.
@@ -117,17 +117,25 @@ class Argument {
      * @returns {Promise<any>}
      */
     async process(message, phrase) {
-        const isOptional = (this.prompt && this.prompt.optional)
-            || (this.command.argumentDefaults.prompt && this.command.argumentDefaults.prompt.optional)
-            || (this.handler.argumentDefaults.prompt && this.handler.argumentDefaults.prompt.optional);
+        const commandDefs = this.command.argumentDefaults;
+        const handlerDefs = this.handler.argumentDefaults;
+        const optional = choice(
+            this.prompt && this.prompt.optional,
+            commandDefs.prompt && commandDefs.prompt.optional,
+            handlerDefs.prompt && handlerDefs.prompt.optional
+        );
 
-        const otherwise = this.otherwise
-            || this.command.argumentDefaults.otherwise
-            || this.handler.argumentDefaults.otherwise;
+        const otherwise = choice(
+            this.otherwise,
+            commandDefs.otherwise,
+            handlerDefs.otherwise
+        );
 
-        const otherwiseModifier = this.modifyOtherwise
-            || this.command.argumentDefaults.modifyOtherwise
-            || this.handler.argumentDefaults.modifyOtherwise;
+        const modifyOtherwise = choice(
+            this.modifyOtherwise,
+            commandDefs.modifyOtherwise,
+            handlerDefs.modifyOtherwise
+        );
 
         const doOtherwise = async failure => {
             let text = await intoCallable(otherwise).call(this, message, { phrase, failure });
@@ -150,7 +158,7 @@ class Argument {
             return Flag.cancel();
         };
 
-        if (!phrase && isOptional) {
+        if (!phrase && optional) {
             if (otherwise != null) {
                 return doOtherwise(null);
             }
@@ -232,10 +240,10 @@ class Argument {
                     phrase: inputPhrase,
                     failure: inputParsed
                 });
-            }
 
-            if (Array.isArray(text)) {
-                text = text.join('\n');
+                if (Array.isArray(text)) {
+                    text = text.join('\n');
+                }
             }
 
             return text;

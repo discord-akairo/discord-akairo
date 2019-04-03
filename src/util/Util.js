@@ -63,6 +63,16 @@ class Util {
 
         return o1;
     }
+
+    static choice(...xs) {
+        for (const x of xs) {
+            if (x != null) {
+                return x;
+            }
+        }
+
+        return null;
+    }
 }
 
 module.exports = Util;
