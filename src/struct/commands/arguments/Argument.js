@@ -478,54 +478,39 @@ class Argument {
     }
 
     /**
-     * Creates a type that takes the result of the first type and runs it with the second type.
-     * Whether or not the first type fails does not matter, it will be passed along nonetheless.
-     * You may want to use `andThen` or `orElse` if you desire a different behavior.
-     * @param {ArgumentType|ArgumentTypeCaster} type1 - First type.
-     * @param {ArgumentType|ArgumentTypeCaster} type2 - Second type.
+     * Creates a type that is the left-to-right composition of the given types.
+     * If any of the types fails, the entire composition fails.
+     * @param {...ArgumentType|ArgumentTypeCaster} types - Types to use.
      * @returns {ArgumentTypeCaster}
      */
-    static compose(type1, type2) {
+    static compose(types) {
         return async function typeFn(message, phrase) {
-            if (typeof type1 === 'function') type1 = type1.bind(this);
-            const res = await Argument.cast(type1, this.handler.resolver, message, phrase);
-            if (typeof type2 === 'function') type2 = type2.bind(this);
-            return Argument.cast(type2, this.handler.resolver, message, res);
-        };
-    }
-
-    /**
-     * Creates a type that takes the result of the first type and, if it succeeds, runs it with the second type.
-     * @param {ArgumentType|ArgumentTypeCaster} type1 - First type.
-     * @param {ArgumentType|ArgumentTypeCaster} type2 - Second type.
-     * @returns {ArgumentTypeCaster}
-     */
-    static andThen(type1, type2) {
-        return async function typeFn(message, phrase) {
-            if (typeof type1 === 'function') type1 = type1.bind(this);
-            const res = await Argument.cast(type1, this.handler.resolver, message, phrase);
-            if (Argument.isFailure(res)) return res;
-            if (typeof type2 === 'function') type2 = type2.bind(this);
-            return Argument.cast(type2, this.handler.resolver, message, res);
-        };
-    }
-
-    /**
-     * Creates a type that takes the result of the first type and, if it fails, runs it with the second type.
-     * @param {ArgumentType|ArgumentTypeCaster} type1 - First type.
-     * @param {ArgumentType|ArgumentTypeCaster} type2 - Second type.
-     * @returns {ArgumentTypeCaster}
-     */
-    static orElse(type1, type2) {
-        return async function typeFn(message, phrase) {
-            if (typeof type1 === 'function') type1 = type1.bind(this);
-            const res = await Argument.cast(type1, this.handler.resolver, message, phrase);
-            if (!Argument.isFailure(res)) {
-                return res;
+            let acc = phrase;
+            for (let entry of types) {
+                if (typeof type === 'function') entry = entry.bind(this);
+                acc = await Argument.cast(entry, this.handler.resolver, message, acc);
+                if (Argument.isFailure(acc)) return acc;
             }
 
-            if (typeof type2 === 'function') type2 = type2.bind(this);
-            return Argument.cast(type2, this.handler.resolver, message, res);
+            return acc;
+        };
+    }
+
+    /**
+     * Creates a type that is the left-to-right composition of the given types.
+     * If any of the types fails, the composition still continues with the failure passed on.
+     * @param {...ArgumentType|ArgumentTypeCaster} types - Types to use.
+     * @returns {ArgumentTypeCaster}
+     */
+    static composeWithFailure(types) {
+        return async function typeFn(message, phrase) {
+            let acc = phrase;
+            for (let entry of types) {
+                if (typeof type === 'function') entry = entry.bind(this);
+                acc = await Argument.cast(entry, this.handler.resolver, message, acc);
+            }
+
+            return acc;
         };
     }
 
