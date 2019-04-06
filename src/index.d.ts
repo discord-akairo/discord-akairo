@@ -571,7 +571,7 @@ declare module 'discord-akairo' {
         end: number;
         timer: NodeJS.Timer;
         uses: number;
-    }
+    };
 
     export type FailureData = {
         phrase: string;
