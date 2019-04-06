@@ -125,19 +125,19 @@ class Argument {
             handlerDefs.prompt && handlerDefs.prompt.optional
         );
 
-        const otherwise = choice(
-            this.otherwise,
-            commandDefs.otherwise,
-            handlerDefs.otherwise
-        );
-
-        const modifyOtherwise = choice(
-            this.modifyOtherwise,
-            commandDefs.modifyOtherwise,
-            handlerDefs.modifyOtherwise
-        );
-
         const doOtherwise = async failure => {
+            const otherwise = choice(
+                this.otherwise,
+                commandDefs.otherwise,
+                handlerDefs.otherwise
+            );
+
+            const modifyOtherwise = choice(
+                this.modifyOtherwise,
+                commandDefs.modifyOtherwise,
+                handlerDefs.modifyOtherwise
+            );
+
             let text = await intoCallable(otherwise).call(this, message, { phrase, failure });
             if (Array.isArray(text)) {
                 text = text.join('\n');
@@ -172,7 +172,7 @@ class Argument {
                 return doOtherwise(res);
             }
 
-            if (this.prompt) {
+            if (this.prompt != null) {
                 return this.collect(message, phrase, res);
             }
 
