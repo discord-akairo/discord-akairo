@@ -519,5 +519,5 @@ module.exports = ContentParser;
  * @prop {string} type - One of 'Phrase', 'Flag', 'OptionFlag'.
  * @prop {string} raw - The raw string with whitespace and/or separator.
  * @prop {?string} key - The key of a 'Flag' or 'OptionFlag'.
- * @prop {?string} value - The value of an 'OptionFlag'.
+ * @prop {?string} value - The value of a 'Phrase' or 'OptionFlag'.
  */

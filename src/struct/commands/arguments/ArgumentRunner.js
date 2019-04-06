@@ -33,7 +33,7 @@ class ArgumentRunner {
      * Runs the arguments.
      * @param {Message} message - Message that triggered the command.
      * @param {ContentParserResult} parsed - Parsed data from ContentParser.
-     * @param {GeneratorFunction} generator - Argument generator.
+     * @param {ArgumentGenerator} generator - Argument generator.
      * @returns {Promise<Flag|any>}
      */
     async run(message, parsed, generator) {
