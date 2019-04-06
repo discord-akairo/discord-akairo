@@ -159,7 +159,7 @@ class Argument {
         };
 
         if (!phrase && optional) {
-            if (otherwise != null) {
+            if (this.otherwise != null) {
                 return doOtherwise(null);
             }
 
@@ -168,7 +168,7 @@ class Argument {
 
         const res = await this.cast(message, phrase);
         if (Argument.isFailure(res)) {
-            if (otherwise != null) {
+            if (this.otherwise != null) {
                 return doOtherwise(res);
             }
 
