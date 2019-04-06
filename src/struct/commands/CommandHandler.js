@@ -135,7 +135,7 @@ class CommandHandler extends AkairoHandler {
 
         /**
          * Collection of cooldowns.
-         * @type {Collection<string, Object>}
+         * @type {Collection<string, CooldownData>}
          */
         this.cooldowns = new Collection();
 
@@ -742,7 +742,7 @@ class CommandHandler extends AkairoHandler {
      * Runs a command.
      * @param {Message} message - Message to handle.
      * @param {Command} command - Command to handle.
-     * @param {Object} args - Arguments to use.
+     * @param {any} args - Arguments to use.
      * @returns {Promise<void>}
      */
     async runCommand(message, command, args) {
@@ -764,7 +764,7 @@ class CommandHandler extends AkairoHandler {
     /**
      * Parses the command and its argument list.
      * @param {Message} message - Message that called the command.
-     * @returns {Promise<Object>}
+     * @returns {Promise<ParsedComponentData>}
      */
     async parseCommand(message) {
         let prefixes = intoArray(await intoCallable(this.prefix)(message));
@@ -781,7 +781,7 @@ class CommandHandler extends AkairoHandler {
     /**
      * Parses the command and its argument list using prefix overwrites.
      * @param {Message} message - Message that called the command.
-     * @returns {Promise<Object>}
+     * @returns {Promise<ParsedComponentData>}
      */
     async parseCommandOverwrittenPrefixes(message) {
         if (!this.prefixes.size) {
@@ -803,7 +803,7 @@ class CommandHandler extends AkairoHandler {
      * @param {Message} message - Message to parse.
      * @param {any[]} pairs - Pairs of prefix to associated commands.
      * That is, `[string, Set<string> | null][]`.
-     * @returns {Object}
+     * @returns {ParsedComponentData}
      */
     parseMultiplePrefixes(message, pairs) {
         const parses = pairs.map(([prefix, cmds]) => this.parseWithPrefix(message, prefix, cmds));
@@ -826,7 +826,7 @@ class CommandHandler extends AkairoHandler {
      * @param {Message} message - Message to parse.
      * @param {string} prefix - Prefix to use.
      * @param {Set<string>} [associatedCommands=null] - Associated commands.
-     * @returns {Object}
+     * @returns {ParsedComponentData}
      */
     parseWithPrefix(message, prefix, associatedCommands = null) {
         const lowerContent = message.content.toLowerCase();
@@ -1049,7 +1049,7 @@ module.exports = CommandHandler;
  * @event CommandHandler#commandStarted
  * @param {Message} message - Message sent.
  * @param {Command} command - Command executed.
- * @param {Object} args - The args passed to the command.
+ * @param {any} args - The args passed to the command.
  */
 
 /**
@@ -1057,7 +1057,7 @@ module.exports = CommandHandler;
  * @event CommandHandler#commandFinished
  * @param {Message} message - Message sent.
  * @param {Command} command - Command executed.
- * @param {Object} args - The args passed to the command.
+ * @param {any} args - The args passed to the command.
  * @param {any} returnValue - The command's return value.
  */
 
@@ -1138,6 +1138,24 @@ module.exports = CommandHandler;
  * Defaults to the client owner(s).
  * @prop {Snowflake|Snowflake[]|IgnoreCheckPredicate} [ignorePermissions=[]] - ID of user(s) to ignore `userPermissions` checks or a function to ignore.
  * @prop {DefaultArgumentOptions} [argumentDefaults] - The default argument options.
+ */
+
+/**
+ * Data for managing cooldowns.
+ * @typedef {Object} CooldownData
+ * @prop {Timeout} timer - Timeout object.
+ * @prop {number} end - When the cooldown ends.
+ * @prop {number} uses - Number of times the command has been used.
+ */
+
+/**
+ * Various parsed components of the message.
+ * @typedef {Object} ParsedComponentData
+ * @prop {?Command} command - The command used.
+ * @prop {?string} prefix - The prefix used.
+ * @prop {?string} alias - The alias used.
+ * @prop {?string} content - The content to the right of the alias.
+ * @prop {?string} afterPrefix - The content to the right of the prefix.
  */
 
 /**

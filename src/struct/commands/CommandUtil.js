@@ -151,7 +151,7 @@ class CommandUtil {
      * @param {StringResolvable} [content=''] - Content to send.
      * @param {MessageOptions|MessageAdditions} [options={}] - Options to use.
      * @param {MessageOptions} [extra={}] - Extra options to add.
-     * @returns {Object}
+     * @returns {MessageOptions}
      */
     static transformOptions(content, options, extra) {
         const transformedOptions = APIMessage.transformOptions(content, options, extra);
@@ -169,14 +169,4 @@ module.exports = CommandUtil;
  * @prop {?CommandUtil} util - Utilities for command responding.
  * Available on all messages after 'all' inhibitors and built-in inhibitors (bot, client).
  * Not all properties of the util are available, depending on the input.
- */
-
-/**
- * Various parsed components of the message.
- * @typedef {Object} ParsedComponentData
- * @prop {?Command} command - The command used.
- * @prop {?string} prefix - The prefix used.
- * @prop {?string} alias - The alias used.
- * @prop {?string} content - The content to the right of the alias.
- * @prop {?string} afterPrefix - The content to the right of the prefix.
  */

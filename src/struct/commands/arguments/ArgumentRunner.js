@@ -32,7 +32,7 @@ class ArgumentRunner {
     /**
      * Runs the arguments.
      * @param {Message} message - Message that triggered the command.
-     * @param {Object} parsed - Parsed data from ContentParser.
+     * @param {ContentParserResult} parsed - Parsed data from ContentParser.
      * @param {GeneratorFunction} generator - Argument generator.
      * @returns {Promise<Flag|any>}
      */
@@ -74,8 +74,8 @@ class ArgumentRunner {
     /**
      * Runs one argument.
      * @param {Message} message - Message that triggered the command.
-     * @param {Object} parsed - Parsed data from ContentParser.
-     * @param {Object} state - Argument handling state.
+     * @param {ContentParserResult} parsed - Parsed data from ContentParser.
+     * @param {ArgumentRunnerState} state - Argument handling state.
      * @param {Argument} arg - Current argument.
      * @returns {Promise<Flag|any>}
      */
@@ -103,8 +103,8 @@ class ArgumentRunner {
     /**
      * Runs `phrase` match.
      * @param {Message} message - Message that triggered the command.
-     * @param {Object} parsed - Parsed data from ContentParser.
-     * @param {Object} state - Argument handling state.
+     * @param {ContentParserResult} parsed - Parsed data from ContentParser.
+     * @param {ArgumentRunnerState} state - Argument handling state.
      * @param {Argument} arg - Current argument.
      * @returns {Promise<Flag|any>}
      */
@@ -146,8 +146,8 @@ class ArgumentRunner {
     /**
      * Runs `rest` match.
      * @param {Message} message - Message that triggered the command.
-     * @param {Object} parsed - Parsed data from ContentParser.
-     * @param {Object} state - Argument handling state.
+     * @param {ContentParserResult} parsed - Parsed data from ContentParser.
+     * @param {ArgumentRunnerState} state - Argument handling state.
      * @param {Argument} arg - Current argument.
      * @returns {Promise<Flag|any>}
      */
@@ -165,8 +165,8 @@ class ArgumentRunner {
     /**
      * Runs `separate` match.
      * @param {Message} message - Message that triggered the command.
-     * @param {Object} parsed - Parsed data from ContentParser.
-     * @param {Object} state - Argument handling state.
+     * @param {ContentParserResult} parsed - Parsed data from ContentParser.
+     * @param {ArgumentRunnerState} state - Argument handling state.
      * @param {Argument} arg - Current argument.
      * @returns {Promise<Flag|any>}
      */
@@ -197,8 +197,8 @@ class ArgumentRunner {
     /**
      * Runs `flag` match.
      * @param {Message} message - Message that triggered the command.
-     * @param {Object} parsed - Parsed data from ContentParser.
-     * @param {Object} state - Argument handling state.
+     * @param {ContentParserResult} parsed - Parsed data from ContentParser.
+     * @param {ArgumentRunnerState} state - Argument handling state.
      * @param {Argument} arg - Current argument.
      * @returns {Promise<Flag|any>}
      */
@@ -226,8 +226,8 @@ class ArgumentRunner {
     /**
      * Runs `option` match.
      * @param {Message} message - Message that triggered the command.
-     * @param {Object} parsed - Parsed data from ContentParser.
-     * @param {Object} state - Argument handling state.
+     * @param {ContentParserResult} parsed - Parsed data from ContentParser.
+     * @param {ArgumentRunnerState} state - Argument handling state.
      * @param {Argument} arg - Current argument.
      * @returns {Promise<Flag|any>}
      */
@@ -260,8 +260,8 @@ class ArgumentRunner {
     /**
      * Runs `text` match.
      * @param {Message} message - Message that triggered the command.
-     * @param {Object} parsed - Parsed data from ContentParser.
-     * @param {Object} state - Argument handling state.
+     * @param {ContentParserResult} parsed - Parsed data from ContentParser.
+     * @param {ArgumentRunnerState} state - Argument handling state.
      * @param {Argument} arg - Current argument.
      * @returns {Promise<Flag|any>}
      */
@@ -274,8 +274,8 @@ class ArgumentRunner {
     /**
      * Runs `content` match.
      * @param {Message} message - Message that triggered the command.
-     * @param {Object} parsed - Parsed data from ContentParser.
-     * @param {Object} state - Argument handling state.
+     * @param {ContentParserResult} parsed - Parsed data from ContentParser.
+     * @param {ArgumentRunnerState} state - Argument handling state.
      * @param {Argument} arg - Current argument.
      * @returns {Promise<Flag|any>}
      */
@@ -288,8 +288,8 @@ class ArgumentRunner {
     /**
      * Runs `restContent` match.
      * @param {Message} message - Message that triggered the command.
-     * @param {Object} parsed - Parsed data from ContentParser.
-     * @param {Object} state - Argument handling state.
+     * @param {ContentParserResult} parsed - Parsed data from ContentParser.
+     * @param {ArgumentRunnerState} state - Argument handling state.
      * @param {Argument} arg - Current argument.
      * @returns {Promise<Flag|any>}
      */
@@ -307,8 +307,8 @@ class ArgumentRunner {
     /**
      * Runs `none` match.
      * @param {Message} message - Message that triggered the command.
-     * @param {Object} parsed - Parsed data from ContentParser.
-     * @param {Object} state - Argument handling state.
+     * @param {ContentParserResult} parsed - Parsed data from ContentParser.
+     * @param {ArgumentRunnerState} state - Argument handling state.
      * @param {Argument} arg - Current argument.
      * @returns {Promise<Flag|any>}
      */
@@ -318,8 +318,8 @@ class ArgumentRunner {
 
     /**
      * Modifies state by incrementing the indices.
-     * @param {Object} parsed - Parsed data from ContentParser.
-     * @param {Object} state - Argument handling state.
+     * @param {ContentParserResult} parsed - Parsed data from ContentParser.
+     * @param {ArgumentRunnerState} state - Argument handling state.
      * @param {number} n - Number of indices to increase by.
      * @returns {Promise<Flag|any>}
      */
@@ -360,3 +360,11 @@ class ArgumentRunner {
 }
 
 module.exports = ArgumentRunner;
+
+/**
+ * State for the argument runner.
+ * @typedef {Object} ArgumentRunnerState
+ * @prop {Set<number>} usedIndices - Indices already used for unordered match.
+ * @prop {number} phraseIndex - Index in terms of phrases.
+ * @prop {number} index - Index in terms of the raw strings.
+ */

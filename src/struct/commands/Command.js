@@ -201,7 +201,7 @@ class Command extends AkairoModule {
      * Executes the command.
      * @abstract
      * @param {Message} message - Message that triggered the command.
-     * @param {Object} args - Evaluated arguments.
+     * @param {any} args - Evaluated arguments.
      * @returns {any}
      */
     exec() {
@@ -212,7 +212,7 @@ class Command extends AkairoModule {
      * Parses content using the command's arguments.
      * @param {Message} message - Message to use.
      * @param {string} content - String to parse.
-     * @returns {Promise<Object|ParsingFlag>}
+     * @returns {Promise<Flag|any>}
      */
     parse(message, content) {
         const parsed = this.contentParser.parse(content);
@@ -277,7 +277,7 @@ module.exports = Command;
  * A function used to supply the key for the locker.
  * @typedef {Function} KeySupplier
  * @param {Message} message - Message that triggered the command.
- * @param {Object} args - Evaluated arguments.
+ * @param {any} args - Evaluated arguments.
  * @returns {string}
  */
 
@@ -309,7 +309,7 @@ module.exports = Command;
  * The last value when the generator is done is the resulting `args` for the command's `exec`.
  * @typedef {GeneratorFunction} ArgumentGenerator
  * @param {Message} message - Message that triggered the command.
- * @param {object} parsed - Parsed content.
- * @param {object} state - Argument processing state.
- * @returns {IterableIterator<ArgumentOptions|Flag|any>}
+ * @param {ContentParserResult} parsed - Parsed content.
+ * @param {ArgumentRunnerState} state - Argument processing state.
+ * @returns {IterableIterator<ArgumentOptions|Flag>}
  */

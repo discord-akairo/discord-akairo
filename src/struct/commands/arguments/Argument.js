@@ -199,7 +199,7 @@ class Argument {
      * @param {Message} message - Message to prompt.
      * @param {string} [commandInput] - Previous input from command if there was one.
      * @param {any} [parsedInput] - Previous parsed input from command if there was one.
-     * @returns {Promise<ParsingFlag|any>}
+     * @returns {Promise<Flag|any>}
      */
     async collect(message, commandInput = '', parsedInput = null) {
         const promptOptions = {};

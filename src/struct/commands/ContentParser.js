@@ -422,7 +422,7 @@ class Parser {
 
 /**
  * Parses content.
- * @param {Object} options - Options.
+ * @param {ContentParserOptions} options - Options.
  * @private
  */
 class ContentParser {
@@ -445,7 +445,7 @@ class ContentParser {
     /**
      * Parses content.
      * @param {string} content - Content to parse.
-     * @returns {Object}
+     * @returns {ContentParserResult}
      */
     parse(content) {
         const tokens = new Tokenizer(content, {
@@ -461,7 +461,7 @@ class ContentParser {
     /**
      * Extracts the flags from argument options.
      * @param {ArgumentOptions[]} args - Argument options.
-     * @returns {Object}
+     * @returns {ExtractedFlags}
      */
     static getFlags(args) {
         const res = {
@@ -485,3 +485,39 @@ class ContentParser {
 }
 
 module.exports = ContentParser;
+
+/**
+ * Options for the content parser.
+ * @typedef {Object} ContentParserOptions
+ * @prop {string[]} [flagWords=[]] - Words considered flags.
+ * @prop {string[]} [optionFlagWords=[]] - Words considered option flags.
+ * @prop {boolean} [quoted=true] - Whether to parse quotes.
+ * @prop {string} [separator] - Whether to parse a separator.
+ * @private
+ */
+
+/**
+ * Result of parsing.
+ * @typedef {Object} ContentParserResult
+ * @prop {StringData[]} all - All phrases and flags.
+ * @prop {StringData[]} phrases - Phrases.
+ * @prop {StringData[]} flags - Flags.
+ * @prop {StringData[]} optionFlags - Option flags.
+ */
+
+/**
+ * Flags extracted from an argument list.
+ * @typedef {Object} ExtractedFlags
+ * @prop {string[]} [flagWords=[]] - Words considered flags.
+ * @prop {string[]} [optionFlagWords=[]] - Words considered option flags.
+ * @private
+ */
+
+/**
+ * A single phrase or flag.
+ * @typedef {Object} StringData
+ * @prop {string} type - One of 'Phrase', 'Flag', 'OptionFlag'.
+ * @prop {string} raw - The raw string with whitespace and/or separator.
+ * @prop {?string} key - The key of a 'Flag' or 'OptionFlag'.
+ * @prop {?string} value - The value of an 'OptionFlag'.
+ */

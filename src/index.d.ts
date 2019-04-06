@@ -1,3 +1,5 @@
+import { TimeoutError } from 'bluebird';
+
 declare module 'discord-akairo' {
     import {
         BufferResolvable, Client, ClientOptions, Collection,
@@ -97,7 +99,7 @@ declare module 'discord-akairo' {
         public static cast(type: ArgumentType | ArgumentTypeCaster, resolver: TypeResolver, message: Message, phrase: string): Promise<any>;
         public static compose(...types: (ArgumentType | ArgumentTypeCaster)[]): ArgumentTypeCaster;
         public static composeWithFailure(...types: (ArgumentType | ArgumentTypeCaster)[]): ArgumentTypeCaster;
-        public static isFailure(value: any): boolean;
+        public static isFailure(value: any): value is null | undefined | Flag & { value: any };
         public static product(...types: (ArgumentType | ArgumentTypeCaster)[]): ArgumentTypeCaster;
         public static range(type: ArgumentType | ArgumentTypeCaster, min: number, max: number, inclusive?: boolean): ArgumentTypeCaster;
         public static tagged(type: ArgumentType | ArgumentTypeCaster, tag?: any): ArgumentTypeCaster;
@@ -199,7 +201,7 @@ declare module 'discord-akairo' {
         public commandUtilLifetime: number;
         public commandUtils: Collection<string, CommandUtil>;
         public commandUtilSweepInterval: number;
-        public cooldowns: Collection<string, object>;
+        public cooldowns: Collection<string, CooldownData>;
         public defaultCooldown: number;
         public directory: string;
         public fetchMembers: boolean;
@@ -228,10 +230,10 @@ declare module 'discord-akairo' {
         public hasPrompt(channel: Channel, user: User): boolean;
         public load(thing: string | Function, isReload?: boolean): Command;
         public loadAll(directory?: string, filter?: LoadPredicate): this;
-        public parseCommand(message: Message): Promise<object>;
-        public parseCommandOverwrittenPrefixes(message: Message): Promise<object>;
-        public parseMultiplePrefixes(message: Message, prefixes: [string, Set<string> | null]): object;
-        public parseWithPrefix(message: Message, prefix: string, associatedCommands?: Set<string>): object;
+        public parseCommand(message: Message): Promise<ParsedComponentData>;
+        public parseCommandOverwrittenPrefixes(message: Message): Promise<ParsedComponentData>;
+        public parseMultiplePrefixes(message: Message, prefixes: [string, Set<string> | null]): ParsedComponentData;
+        public parseWithPrefix(message: Message, prefix: string, associatedCommands?: Set<string>): ParsedComponentData;
         public register(command: Command, filepath?: string): void;
         public reload(id: string): Command;
         public reloadAll(): this;
@@ -291,7 +293,11 @@ declare module 'discord-akairo' {
         public static continue(command: string, ignore?: boolean, rest?: string): Flag & { command: string, ignore: boolean, rest: string };
         public static retry(message: Message): Flag & { message: Message };
         public static fail(value: any): Flag & { value: any };
-        public static is(value: any, type: string): boolean;
+        public static is(value: any, type: 'cancel'): value is Flag;
+        public static is(value: any, type: 'continue'): value is Flag & { command: string, ignore: boolean, rest: string };
+        public static is(value: any, type: 'retry'): value is Flag & { message: Message };
+        public static is(value: any, type: 'fail'): value is Flag & { value: any };
+        public static is(value: any, type: string): value is Flag;
     }
 
     export class Inhibitor extends AkairoModule {
@@ -504,6 +510,12 @@ declare module 'discord-akairo' {
         timeout?: StringResolvable | MessageOptions | MessageAdditions | PromptContentSupplier;
     };
 
+    export type ArgumentRunnerState = {
+        index: number;
+        phraseIndex: number;
+        usedIndices: Set<number>;
+    };
+
     export type CommandOptions = {
         aliases?: string[];
         args?: ArgumentOptions[] | ArgumentGenerator;
@@ -548,6 +560,19 @@ declare module 'discord-akairo' {
         storeMessages?: boolean;
     } & AkairoHandlerOptions;
 
+    export type ContentParserResult = {
+        all: StringData[];
+        phrases: StringData[];
+        flags: StringData[];
+        optionFlags: StringData[];
+    };
+
+    export type CooldownData = {
+        end: number;
+        timer: NodeJS.Timer;
+        uses: number;
+    }
+
     export type FailureData = {
         phrase: string;
         failure: void | (Flag & { value: any });
@@ -577,6 +602,21 @@ declare module 'discord-akairo' {
         idColumn?: string;
     };
 
+    export type StringData = {
+        type: 'Phrase';
+        value: string;
+        raw: string;
+    } | {
+        type: 'Flag';
+        key: string;
+        raw: string;
+    } | {
+        type: 'OptionFlag',
+        key: string;
+        value: string;
+        raw: string;
+    };
+
     export type ArgumentMatch = 'phrase' | 'flag' | 'option' | 'rest' | 'separate' | 'text' | 'content' | 'restContent' | 'none';
 
     export type ArgumentType = 'string' | 'lowercase' | 'uppercase' | 'charCodes'
@@ -592,7 +632,7 @@ declare module 'discord-akairo' {
         | RegExp
         | string;
 
-    export type ArgumentGenerator = (message: Message, parsed: object, state: object) => IterableIterator<ArgumentOptions | Flag | any>;
+    export type ArgumentGenerator = (message: Message, parsed: ContentParserResult, state: ArgumentRunnerState) => IterableIterator<ArgumentOptions | Flag>;
 
     export type ArgumentTypeCaster = (message: Message, phrase: string) => any;
 
