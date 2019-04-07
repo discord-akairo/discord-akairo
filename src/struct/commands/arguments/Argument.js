@@ -114,7 +114,7 @@ class Argument {
      * Processes the type casting and prompting of the argument for a phrase.
      * @param {Message} message - The message that called the command.
      * @param {string} phrase - The phrase to process.
-     * @returns {Promise<any>}
+     * @returns {Promise<Flag|any>}
      */
     async process(message, phrase) {
         const commandDefs = this.command.argumentDefaults;
@@ -800,8 +800,8 @@ module.exports = Argument;
 /**
  * A function modifying a prompt text.
  * @typedef {Function} OtherwiseContentModifier
- * @param {string|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions} text - Text to modify.
  * @param {Message} message - Message that triggered the command.
+ * @param {string|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions} text - Text to modify.
  * @param {FailureData} data - Miscellaneous data.
  * @returns {StringResolvable|MessageOptions|MessageAdditions|Promise<StringResolvable|MessageOptions|MessageAdditions>}
  */
@@ -817,8 +817,8 @@ module.exports = Argument;
 /**
  * A function modifying a prompt text.
  * @typedef {Function} PromptContentModifier
- * @param {string|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions} text - Text from the prompt to modify.
  * @param {Message} message - Message that triggered the command.
+ * @param {string|MessageEmbed|MessageAttachment|MessageAttachment[]|MessageOptions} text - Text from the prompt to modify.
  * @param {ArgumentPromptData} data - Miscellaneous data.
  * @returns {StringResolvable|MessageOptions|MessageAdditions|Promise<StringResolvable|MessageOptions|MessageAdditions>}
  */
