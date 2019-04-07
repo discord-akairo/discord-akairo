@@ -1,5 +1,3 @@
-import { TimeoutError } from 'bluebird';
-
 declare module 'discord-akairo' {
     import {
         BufferResolvable, Client, ClientOptions, Collection,
