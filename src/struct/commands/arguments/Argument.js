@@ -487,7 +487,7 @@ class Argument {
         return async function typeFn(message, phrase) {
             let acc = phrase;
             for (let entry of types) {
-                if (typeof type === 'function') entry = entry.bind(this);
+                if (typeof entry === 'function') entry = entry.bind(this);
                 acc = await Argument.cast(entry, this.handler.resolver, message, acc);
                 if (Argument.isFailure(acc)) return acc;
             }
@@ -506,7 +506,7 @@ class Argument {
         return async function typeFn(message, phrase) {
             let acc = phrase;
             for (let entry of types) {
-                if (typeof type === 'function') entry = entry.bind(this);
+                if (typeof entry === 'function') entry = entry.bind(this);
                 acc = await Argument.cast(entry, this.handler.resolver, message, acc);
             }
 
