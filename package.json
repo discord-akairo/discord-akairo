@@ -19,19 +19,18 @@
     ],
     "dependencies": {},
     "peerDependencies": {
-        "discord.js": ">=12.0.0-dev",
-        "sqlite": "^2.8.0",
-        "sequelize": "^4.38.0"
+        "discord.js": "^12.0.0-dev",
+        "sqlite": "^3.0.3",
+        "sequelize": "^5.2.12"
     },
     "devDependencies": {
-        "@types/node": "^10.9.2",
-        "@types/sequelize": "^4.27.25",
+        "@types/node": "^10.14.4",
         "discord.js-docgen": "discordjs/docgen",
-        "eslint": "^5.4.0",
+        "eslint": "^5.16.0",
         "jsdoc": "^3.5.5",
-        "tslint": "^5.11.0",
+        "tslint": "^5.15.0",
         "tslint-config-typings": "^0.3.1",
-        "typescript": "^3.0.1"
+        "typescript": "^3.4.2"
     },
     "scripts": {
         "test": "npm run lint",
