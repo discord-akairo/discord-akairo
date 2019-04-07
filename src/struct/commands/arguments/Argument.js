@@ -483,7 +483,7 @@ class Argument {
      * @param {...ArgumentType|ArgumentTypeCaster} types - Types to use.
      * @returns {ArgumentTypeCaster}
      */
-    static compose(types) {
+    static compose(...types) {
         return async function typeFn(message, phrase) {
             let acc = phrase;
             for (let entry of types) {
@@ -502,7 +502,7 @@ class Argument {
      * @param {...ArgumentType|ArgumentTypeCaster} types - Types to use.
      * @returns {ArgumentTypeCaster}
      */
-    static composeWithFailure(types) {
+    static composeWithFailure(...types) {
         return async function typeFn(message, phrase) {
             let acc = phrase;
             for (let entry of types) {
