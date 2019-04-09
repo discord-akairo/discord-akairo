@@ -1,4 +1,7 @@
 # NPM
+node_modules
+.git
+.vscode
 .eslintrc.json
 .gitattributes
 .gitignore
