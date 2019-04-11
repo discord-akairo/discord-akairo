@@ -93,6 +93,8 @@ this.listenerHandler.setEmitters({
 });
 ```
 
+Note: You have to call `setEmitters` before `loadAll` or Akairo will not be able to resolve your emitters.
+
 ### Blocked Commands
 
 Remember the `reason` for inhibitors in previous tutorial?  
