@@ -19,7 +19,7 @@ Now both `?ping` and `@BOT ping` works!
 
 A prefix can change based on the message.  
 Use a function as the `prefix` option to do so.  
-This is most useful with an actual database to back it up, so check out the [Using Providers](../other/providers.md) section.  
+This is most useful with an actual database to back it up, so check out the [Using Providers](https://discord-akairo.github.io/#/docs/main/master/other/providers) section.  
 
 ```js
 this.commandHandler = new CommandHandler(this, {
