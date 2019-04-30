@@ -349,13 +349,13 @@ class CommandHandler extends AkairoHandler {
             if (await this.runAllTypeInhibitors(message)) {
                 return false;
             }
-            let parsed = await this.parseCommand(message);
-            
+            let parsed = await this.parseCommand(message)
+
             if (this.commandUtil) {
-                if(this.onlyStoreCommands) {
-                    if(!parsed.command) return false;
+                if (this.onlyStoreCommands) {
+                    if (!parsed.command) return false;
                 }
-                
+
                 if (this.commandUtils.has(message.id)) {
                     message.util = this.commandUtils.get(message.id);
                 } else {
