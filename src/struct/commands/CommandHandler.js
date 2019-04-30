@@ -351,10 +351,11 @@ class CommandHandler extends AkairoHandler {
             if (await this.runAllTypeInhibitors(message)) {
                 return false;
             }
-
+            let parsed = await this.parseCommand(message);
+            
             if (this.commandUtil) {
                 if(this.onlyStoreCommands) {
-                    if(!message.util.parsed.command) return;
+                    if(!parsed.command) return;
                 }
                 if (this.commandUtils.has(message.id)) {
                     message.util = this.commandUtils.get(message.id);
@@ -367,8 +368,6 @@ class CommandHandler extends AkairoHandler {
             if (await this.runPreTypeInhibitors(message)) {
                 return false;
             }
-
-            let parsed = await this.parseCommand(message);
             if (!parsed.command) {
                 const overParsed = await this.parseCommandOverwrittenPrefixes(message);
                 if (overParsed.command || (parsed.prefix == null && overParsed.prefix != null)) {
