@@ -27,6 +27,7 @@ class CommandHandler extends AkairoHandler {
         handleEdits = false,
         storeMessages = false,
         commandUtil,
+        onlyStoreCommands = true,
         commandUtilLifetime = 3e5,
         commandUtilSweepInterval = 3e5,
         defaultCooldown = 0,
