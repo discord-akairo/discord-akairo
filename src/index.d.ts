@@ -213,7 +213,6 @@ declare module 'discord-akairo' {
         public prompts: Collection<string, Set<string>>;
         public resolver: TypeResolver;
         public storeMessage: boolean;
-        public onlyStoreCommmands: boolean;
 
         public add(filename: string): Command;
         public addPrompt(channel: Channel, user: User): void;
@@ -557,6 +556,7 @@ declare module 'discord-akairo' {
         ignorePermissions?: Snowflake | Snowflake[] | IgnoreCheckPredicate;
         prefix?: string | string[] | PrefixSupplier;
         storeMessages?: boolean;
+        public onlyStoreCommmands: boolean;
     } & AkairoHandlerOptions;
 
     export type ContentParserResult = {
