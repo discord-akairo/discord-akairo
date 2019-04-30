@@ -66,12 +66,12 @@ class CommandUtil {
     /**
      * Adds client prompt or user reply to messages.
      * @param {Message|Message[]} message - Message to add.
-     * @returns {Message|Message[]}
+     * @returns {Message|Message[]|any}
      */
     addMessage(message) {
         if (this.handler.storeMessages) {
             if(this.handler.onlyStoreCommands) {
-                if(!message.util.parsed.commands) return;
+                if(!message.util.parsed.command) return;
             }
             if (Array.isArray(message)) {
                 for (const msg of message) {
