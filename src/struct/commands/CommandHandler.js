@@ -355,7 +355,7 @@ class CommandHandler extends AkairoHandler {
             
             if (this.commandUtil) {
                 if(this.onlyStoreCommands) {
-                    if(!parsed.command) return;
+                    if(!parsed.command) return false;
                 }
                 if (this.commandUtils.has(message.id)) {
                     message.util = this.commandUtils.get(message.id);
