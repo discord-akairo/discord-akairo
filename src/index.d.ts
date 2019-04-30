@@ -556,7 +556,7 @@ declare module 'discord-akairo' {
         ignorePermissions?: Snowflake | Snowflake[] | IgnoreCheckPredicate;
         prefix?: string | string[] | PrefixSupplier;
         storeMessages?: boolean;
-        public onlyStoreCommmands: boolean;
+        onlyStoreCommmands: boolean;
     } & AkairoHandlerOptions;
 
     export type ContentParserResult = {
