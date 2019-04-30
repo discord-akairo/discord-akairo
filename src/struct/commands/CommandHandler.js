@@ -103,11 +103,13 @@ class CommandHandler extends AkairoHandler {
          * @type {boolean}
          */
         this.storeMessages = Boolean(storeMessages);
+        
         /**
          * Whether or not to store messages that aren't commands in CommandUtil.
          * @type {boolean}
          */
         this.onlyStoreCommands = Boolean(onlyStoreCommands);
+        
         /**
          * Whether or not `message.util` is assigned.
          * @type {boolean}
