@@ -70,6 +70,9 @@ class CommandUtil {
      */
     addMessage(message) {
         if (this.handler.storeMessages) {
+            if(this.handler.onlyStoreCommands) {
+                if(!message.util.parsed.commands) return;
+            }
             if (Array.isArray(message)) {
                 for (const msg of message) {
                     this.messages.set(msg.id, msg);
