@@ -130,7 +130,7 @@ class Command extends AkairoModule {
 
         /**
          * The regex trigger for this command.
-         * @type {RegExp|TriggerFunction}
+         * @type {RegExp|RegexSupplier}
          */
         this.regex = typeof regex === 'function' ? regex.bind(this) : regex;
 
