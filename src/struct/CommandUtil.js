@@ -79,8 +79,8 @@ class CommandUtil {
      */
     send(content, options) {
         [content, options] = this.constructor.swapOptions(content, options);
-        const hadFiles = (options.file || options.files)
-        || (options.embed && (options.embed.file || options.embed.files));
+        const hadFiles = (options.file || (options.files || []).length > 0)
+        || (options.embed && (options.embed.file || (options.embed.files || []).length > 0));
 
         if (this.shouldEdit && (this.command ? this.command.editable : true) && (hadFiles || !this.lastResponse.attachments.size)) {
             return this.lastResponse.edit(content, options);
