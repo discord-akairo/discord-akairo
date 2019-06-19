@@ -235,6 +235,63 @@ class TypeResolver {
                 return voiceChannels.size ? voiceChannels : null;
             },
 
+            [ArgumentTypes.CATEGORY_CHANNEL]: (message, phrase) => {
+                if (!phrase) return null;
+
+                const channel = this.client.util.resolveChannel(phrase, message.guild.channels);
+                if (!channel || channel.type !== 'category') return null;
+
+                return channel;
+            },
+
+            [ArgumentTypes.CATEGORY_CHANNELS]: (message, phrase) => {
+                if (!phrase) return null;
+
+                const channels = this.client.util.resolveChannels(phrase, message.guild.channels);
+                if (!channels.size) return null;
+
+                const categoryChannels = channels.filter(c => c.type === 'category');
+                return categoryChannels.size ? categoryChannels : null;
+            },
+
+            [ArgumentTypes.NEWS_CHANNEL]: (message, phrase) => {
+                if (!phrase) return null;
+
+                const channel = this.client.util.resolveChannel(phrase, message.guild.channels);
+                if (!channel || channel.type !== 'news') return null;
+
+                return channel;
+            },
+
+            [ArgumentTypes.NEWS_CHANNELS]: (message, phrase) => {
+                if (!phrase) return null;
+
+                const channels = this.client.util.resolveChannels(phrase, message.guild.channels);
+                if (!channels.size) return null;
+
+                const newsChannels = channels.filter(c => c.type === 'news');
+                return newsChannels.size ? newsChannels : null;
+            },
+
+            [ArgumentTypes.STORE_CHANNEL]: (message, phrase) => {
+                if (!phrase) return null;
+
+                const channel = this.client.util.resolveChannel(phrase, message.guild.channels);
+                if (!channel || channel.type !== 'store') return null;
+
+                return channel;
+            },
+
+            [ArgumentTypes.STORE_CHANNELS]: (message, phrase) => {
+                if (!phrase) return null;
+
+                const channels = this.client.util.resolveChannels(phrase, message.guild.channels);
+                if (!channels.size) return null;
+
+                const storeChannels = channels.filter(c => c.type === 'store');
+                return storeChannels.size ? storeChannels : null;
+            },
+
             [ArgumentTypes.ROLE]: (message, phrase) => {
                 if (!phrase) return null;
                 return this.client.util.resolveRole(phrase, message.guild.roles);

@@ -621,7 +621,7 @@ declare module 'discord-akairo' {
         | 'number' | 'integer' | 'bigint' | 'emojint'
         | 'url' | 'date' | 'color'
         | 'user' | 'users' | 'member' | 'members' | 'relevant' | 'relevants'
-        | 'channel' | 'channels' | 'textChannel' | 'textChannels' | 'voiceChannel' | 'voiceChannels'
+        | 'channel' | 'channels' | 'textChannel' | 'textChannels' | 'voiceChannel' | 'voiceChannels' | 'categoryChannel' | 'categoryChannels' | 'newsChannel' | 'newsChannels' | 'storeChannel' | 'storeChannels'
         | 'role' | 'roles' | 'emoji' | 'emojis' | 'guild' | 'guilds'
         | 'message' | 'guildMessage' | 'relevantMessage' | 'invite'
         | 'userMention' | 'memberMention' | 'channelMention' | 'roleMention' | 'emojiMention'
@@ -704,6 +704,12 @@ declare module 'discord-akairo' {
             TEXT_CHANNELS: 'textChannels',
             VOICE_CHANNEL: 'voiceChannel',
             VOICE_CHANNELS: 'voiceChannels',
+            CATEGORY_CHANNEL: 'categoryChannel',
+            CATEGORY_CHANNELS: 'categoryChannels',
+            NEWS_CHANNEL: 'newsChannel',
+            NEWS_CHANNELS: 'newsChannels',
+            STORE_CHANNEL: 'storeChannel',
+            STORE_CHANNELS: 'storeChannels',
             ROLE: 'role',
             ROLES: 'roles',
             EMOJI: 'emoji',
