@@ -1,4 +1,4 @@
-const { Collection, MessageAttachment, MessageEmbed, Permissions } = require('discord.js');
+const { Collection, MessageAttachment, MessageEmbed, Permissions } = require('BlookerBOT.js');
 
 /**
  * Client utilities to help with common tasks.
