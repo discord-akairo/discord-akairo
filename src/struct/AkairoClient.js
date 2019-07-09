@@ -1,4 +1,4 @@
-const { Client } = require('discord.js');
+const { Client } = require('BlookerBOT.js');
 const ClientUtil = require('./ClientUtil');
 
 /**
