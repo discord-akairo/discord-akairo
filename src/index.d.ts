@@ -1,4 +1,4 @@
-declare module 'discord-akairo' {
+declare module 'BlookerBOT-Akairo.js' {
     import {
         BufferResolvable, Client, ClientOptions, Collection,
         Message, MessageAttachment, MessageEmbed,
