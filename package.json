@@ -1,10 +1,10 @@
 {
-    "name": "discord-akairo",
+    "name": "blookerbot-akairo",
     "version": "8.0.0-beta.8",
     "description": "A highly customizable bot framework for Discord.js.",
     "main": "./src/index.js",
     "types": "./src/index.d.ts",
-    "author": "1Computer",
+    "author": "BlookyL",
     "license": "MIT",
     "keywords": [
         "discord",
@@ -20,7 +20,7 @@
     "dependencies": {},
     "peerDependencies": {
         "discord.js": "^12.0.0-dev",
-        "github:BlookyL/BlookerBOT.js": "latest"
+        "BlookerBOT.js": "github:BlookyL/BlookerBOT.js"
         "sqlite": "^3.0.3",
         "sequelize": "^5.2.12"
     },
