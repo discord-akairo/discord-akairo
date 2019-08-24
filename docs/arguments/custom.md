@@ -7,7 +7,7 @@ To add a new type:
 
 ```js
 this.commandHandler = new CommandHandler(this, { /* Options here */ });
-this.commandHandler.resolver.addType('pokemon', phrase => {
+this.commandHandler.resolver.addType('pokemon', (message, phrase) => {
     if (!phrase) return null;
 
     for (const pokemon of pokemonList) {
@@ -30,7 +30,7 @@ This means we need access to the guild through the message.
 Good thing the second parameter is the message!  
 
 ```js
-this.commandHandler.resolver.addType('colorRole', (phrase, message) => {
+this.commandHandler.resolver.addType('colorRole', (message, phrase) => {
     if (!phrase) return null;
 
     const roles = {
@@ -52,10 +52,10 @@ To get another type for use, you use the `type` method on `TypeResolver`.
 The following gives the `member` type and we can use as part of another type.  
 
 ```js
-this.commandHandler.resolver.addType('moderator', (phrase, message) => {
+this.commandHandler.resolver.addType('moderator', (message, phrase) => {
     if (!phrase) return null;
     const memberType = this.commandHandler.resolver.type('member');
-    const member = memberType(phrase, message);
+    const member = memberType(message, phrase);
     if (!member.roles.has('222089067028807682')) return null;
     return member;
 });
