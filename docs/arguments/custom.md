@@ -27,7 +27,7 @@ Simply do `type: 'pokemon'` for an argument and everything will work as expected
 
 Let's say we want to add a type that would get a role based on the input.  
 This means we need access to the guild through the message.  
-Good thing the second parameter is the message!  
+Good thing the first parameter is the message!  
 
 ```js
 this.commandHandler.resolver.addType('colorRole', (message, phrase) => {
