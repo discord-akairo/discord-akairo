@@ -579,6 +579,7 @@ declare module 'discord-akairo' {
     export type InhibitorOptions = {
         reason?: string;
         type?: string;
+        priority?: number;
     } & AkairoModuleOptions;
 
     export type ListenerOptions = {
