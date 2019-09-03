@@ -80,7 +80,7 @@ class RollCommand extends Command {
             args: [
                 {
                     id: 'amount',
-                    type: phrase => {
+                    type: (message, phrase) => {
                         if (!phrase || isNaN(phrase)) return null;
                         const num = parseInt(phrase);
                         if (num < 1 || num > 100) return null;
