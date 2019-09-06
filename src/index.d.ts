@@ -399,7 +399,7 @@ declare module 'discord-akairo' {
 
         public abstract clear(id: string): unknown;
         public abstract delete(id: string, key: string): unknown;
-        public abstract get<T>(id: string, key: string, defaultValue: any): T;
+        public abstract get<T = unknown>(id: string, key: string, defaultValue: any): T;
         public abstract init(): unknown;
         public abstract set(id: string, key: string, value: any): unknown;
     }
@@ -414,7 +414,7 @@ declare module 'discord-akairo' {
 
         public clear(id: string): Promise<void>;
         public delete(id: string, key: string): Promise<boolean>;
-        public get<T>(id: string, key: string, defaultValue: any): T;
+        public get<T = unknown>(id: string, key: string, defaultValue: any): T;
         public init(): Promise<void>;
         public set(id: string, key: string, value: any): Promise<boolean>;
     }
@@ -430,7 +430,7 @@ declare module 'discord-akairo' {
 
         public clear(id: string): Promise<any>;
         public delete(id: string, key: string): Promise<any>;
-        public get<T>(id: string, key: string, defaultValue: any): T;
+        public get<T = unknown>(id: string, key: string, defaultValue: any): T;
         public init(): Promise<void>;
         public set(id: string, key: string, value: any): Promise<any>;
     }
