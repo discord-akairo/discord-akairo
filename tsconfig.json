@@ -1,13 +1,25 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
-        "target": "es6",
-        "noImplicitAny": true,
-        "strictNullChecks": true,
-        "noEmit": true,
-        "forceConsistentCasingInFileNames": true
-    },
-    "files": [
-        "./src/index.d.ts"
-    ]
+        "strict": true,
+        "moduleResolution": "node",
+        "module": "esnext",
+        "target": "es2019",
+        "lib": [
+            "esnext",
+            "esnext.array",
+            "esnext.asynciterable",
+            "esnext.intl",
+            "esnext.symbol"
+        ],
+        "sourceMap": false,
+        "inlineSourceMap": true,
+        "inlineSources": true,
+        "sourceRoot": "src",
+        "outDir": "dist",
+        "declaration": false,
+        "removeComments": false,
+        "alwaysStrict": true,
+        "allowSyntheticDefaultImports": true,
+        "pretty": true
+    }
 }
