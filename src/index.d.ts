@@ -441,29 +441,29 @@ declare module 'discord-akairo' {
         public static isPromise(value: any): boolean;
     }
 
-    export type AkairoHandlerOptions = {
+    export interface AkairoHandlerOptions {
         automateCategories?: boolean;
         classToHandle?: Function;
         directory?: string;
         extensions?: string[] | Set<string>;
         loadFilter?: LoadPredicate;
-    };
+    }
 
-    export type AkairoModuleOptions = {
+    export interface AkairoModuleOptions {
         category?: string;
-    };
+    }
 
-    export type AkairoOptions = {
+    export interface AkairoOptions {
         ownerID?: Snowflake | Snowflake[];
-    };
+    }
 
-    export type DefaultArgumentOptions = {
+    export interface DefaultArgumentOptions {
         prompt?: ArgumentPromptOptions;
         otherwise?: StringResolvable | MessageOptions | MessageAdditions | OtherwiseContentSupplier;
         modifyOtherwise?: OtherwiseContentModifier;
-    };
+    }
 
-    export type ArgumentOptions = {
+    export interface ArgumentOptions {
         default?: DefaultValueSupplier | any;
         description?: StringResolvable;
         id?: string;
@@ -477,17 +477,17 @@ declare module 'discord-akairo' {
         prompt?: ArgumentPromptOptions | boolean;
         type?: ArgumentType | ArgumentTypeCaster;
         unordered?: boolean | number | number[];
-    };
+    }
 
-    export type ArgumentPromptData = {
+    export interface ArgumentPromptData {
         infinite: boolean;
         message: Message;
         retries: number;
         phrase: string;
         failure: void | (Flag & { value: any });
-    };
+    }
 
-    export type ArgumentPromptOptions = {
+    export interface ArgumentPromptOptions {
         breakout?: boolean;
         cancel?: StringResolvable | MessageOptions | MessageAdditions | PromptContentSupplier;
         cancelWord?: string;
@@ -506,15 +506,15 @@ declare module 'discord-akairo' {
         stopWord?: string;
         time?: number;
         timeout?: StringResolvable | MessageOptions | MessageAdditions | PromptContentSupplier;
-    };
+    }
 
-    export type ArgumentRunnerState = {
+    export interface ArgumentRunnerState {
         index: number;
         phraseIndex: number;
         usedIndices: Set<number>;
-    };
+    }
 
-    export type CommandOptions = {
+    export interface CommandOptions extends AkairoModuleOptions {
         aliases?: string[];
         args?: ArgumentOptions[] | ArgumentGenerator;
         argumentDefaults?: DefaultArgumentOptions;
@@ -538,9 +538,9 @@ declare module 'discord-akairo' {
         typing?: boolean;
         userPermissions?: PermissionResolvable | PermissionResolvable[] | MissingPermissionSupplier;
         quoted?: boolean;
-    } & AkairoModuleOptions;
+    }
 
-    export type CommandHandlerOptions = {
+    export interface CommandHandlerOptions extends AkairoHandlerOptions {
         aliasReplacement?: RegExp;
         allowMention?: boolean | MentionPrefixPredicate;
         argumentDefaults?: DefaultArgumentOptions;
@@ -556,50 +556,50 @@ declare module 'discord-akairo' {
         ignorePermissions?: Snowflake | Snowflake[] | IgnoreCheckPredicate;
         prefix?: string | string[] | PrefixSupplier;
         storeMessages?: boolean;
-    } & AkairoHandlerOptions;
+    }
 
-    export type ContentParserResult = {
+    export interface ContentParserResult {
         all: StringData[];
         phrases: StringData[];
         flags: StringData[];
         optionFlags: StringData[];
-    };
+    }
 
-    export type CooldownData = {
+    export interface CooldownData {
         end: number;
         timer: NodeJS.Timer;
         uses: number;
-    };
+    }
 
-    export type FailureData = {
+    export interface FailureData {
         phrase: string;
         failure: void | (Flag & { value: any });
-    };
+    }
 
-    export type InhibitorOptions = {
+    export interface InhibitorOptions extends AkairoModuleOptions {
         reason?: string;
         type?: string;
         priority?: number;
-    } & AkairoModuleOptions;
+    }
 
-    export type ListenerOptions = {
+    export interface ListenerOptions extends AkairoModuleOptions {
         emitter: string | EventEmitter;
         event: string;
         type?: string;
-    } & AkairoModuleOptions;
+    }
 
-    export type ParsedComponentData = {
+    export interface ParsedComponentData {
         afterPrefix?: string;
         alias?: string;
         command?: Command;
         content?: string;
         prefix?: string;
-    };
+    }
 
-    export type ProviderOptions = {
+    export interface ProviderOptions {
         dataColumn?: string;
         idColumn?: string;
-    };
+    }
 
     export type StringData = {
         type: 'Phrase';
@@ -669,7 +669,7 @@ declare module 'discord-akairo' {
 
     export type RegexSupplier = (message: Message) => RegExp;
 
-    export const Constants: {
+    export interface Constants {
         ArgumentMatches: {
             PHRASE: 'phrase',
             FLAG: 'flag',
@@ -753,7 +753,7 @@ declare module 'discord-akairo' {
             GUILD: 'guild',
             DM: 'dm'
         }
-    };
+    }
 
     export const version: string;
 }
