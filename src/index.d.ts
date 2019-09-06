@@ -285,7 +285,7 @@ declare module 'discord-akairo' {
         public sendNew(content?: StringResolvable, options?: MessageOptions & { split: true | SplitOptions } | MessageAdditions): Promise<Message[]>;
         public sendNew(options?: MessageOptions | MessageAdditions): Promise<Message>;
         public sendNew(options?: MessageOptions & { split?: false } | MessageAdditions): Promise<Message>;
-        public sendNew(options?: MessageOptions & { split: true | SplitOptions } | MessageAdditions): Promise<Message[]>; 
+        public sendNew(options?: MessageOptions & { split: true | SplitOptions } | MessageAdditions): Promise<Message[]>;
         public setEditable(state: boolean): this;
         public setLastResponse(message: Message | Message[]): Message;
 
