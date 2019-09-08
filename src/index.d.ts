@@ -273,6 +273,7 @@ declare module 'discord-akairo' {
 
         public addMessage(message: Message | Message[]): Message | Message[];
         public edit(content?: StringResolvable, options?: MessageEmbed | MessageEditOptions): Promise<Message>;
+        public edit(options?: MessageOptions | MessageAdditions): Promise<Message>;
         public reply(content?: StringResolvable, options?: MessageOptions | MessageAdditions): Promise<Message>;
         public reply(content?: StringResolvable, options?: MessageOptions & { split?: false } | MessageAdditions): Promise<Message>;
         public reply(content?: StringResolvable, options?: MessageOptions & { split: true | SplitOptions } | MessageAdditions): Promise<Message[]>;
