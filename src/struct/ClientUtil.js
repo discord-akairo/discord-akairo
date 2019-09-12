@@ -1,4 +1,4 @@
-const { Collection, MessageAttachment, MessageEmbed, Permissions } = require('discord.js');
+const { Collection, MessageAttachment, MessageEmbed, Permissions, WebhookClient } = require('discord.js');
 
 /**
  * Client utilities to help with common tasks.
@@ -397,6 +397,19 @@ class ClientUtil {
      */
     collection(iterable) {
         return new Collection(iterable);
+    }
+    
+    /**
+     * Makes a WebhookClient.
+     * @param {string} [link] - The webhook link.
+     * @returns {Collection}
+     */
+    webhook(link) {
+        const parts = link.split('/');
+        const id = parts[parts.length - 2];
+        const token = parts[parts.length - 1];
+        if (!id || !token) return null;
+        return new WebhookClient(parts[parts.length - 2], parts[parts.length - 1]);
     }
 }
 
