@@ -398,7 +398,7 @@ class ClientUtil {
     collection(iterable) {
         return new Collection(iterable);
     }
-    
+
     /**
      * Makes a WebhookClient.
      * @param {string} [link] - The webhook link.
