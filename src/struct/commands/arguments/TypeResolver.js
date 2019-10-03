@@ -1,5 +1,5 @@
 const { ArgumentTypes } = require('../../../util/Constants');
-const { Collection } = require('discord.js');
+const { Collection, resolveColor } = require('discord.js');
 const { URL } = require('url');
 
 /**
@@ -113,13 +113,8 @@ class TypeResolver {
 
             [ArgumentTypes.COLOR]: (message, phrase) => {
                 if (!phrase) return null;
-
-                const color = parseInt(phrase.replace('#', ''), 16);
-                if (color < 0 || color > 0xFFFFFF || isNaN(color)) {
-                    return null;
-                }
-
-                return color;
+                const color = phrase.startsWith('[') ? phrase.slice(phrase.indexOf('[') + 1).slice(0, phrase.indexOf(']') - 1).split(',').map(e => parseInt(e.trim())) : phrase.toUpperCase();
+                return resolveColor(color);
             },
 
             [ArgumentTypes.USER]: (message, phrase) => {
