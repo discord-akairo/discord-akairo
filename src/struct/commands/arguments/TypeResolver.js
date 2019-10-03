@@ -113,7 +113,7 @@ class TypeResolver {
 
             [ArgumentTypes.COLOR]: (message, phrase) => {
                 if (!phrase) return null;
-                const color = phrase.startsWith('[') ? phrase.slice(phrase.indexOf('[') + 1).slice(0, phrase.indexOf(']') - 1).split(',').map(e => parseInt(e.trim())) : phrase.toUpperCase();
+                const color = phrase.startsWith('[') ? phrase.slice(phrase.indexOf('[') + 1).slice(0, phrase.indexOf(']') - 1).split(',').map(e => parseInt(e.trim())) : phrase.toUpperCase().replace(' ', '_');
                 return resolveColor(color);
             },
 
