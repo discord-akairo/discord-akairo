@@ -4,8 +4,8 @@
 
 Before even doing anything else, you of course have to install the Discord.js and Akairo.  
 
-`npm i discord.js`  
-`npm i discord-akairo`  
+`npm i discordjs/discord.js`  
+`npm i discord-akairo/discord-akairo`  
 
 If you feel like working with SQLite or Sequelize later, install them too.  
 
