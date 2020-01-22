@@ -124,23 +124,23 @@ class TypeResolver {
 
             [ArgumentTypes.USER]: (message, phrase) => {
                 if (!phrase) return null;
-                return this.client.util.resolveUser(phrase, this.client.users);
+                return this.client.util.resolveUser(phrase, this.client.users.cache);
             },
 
             [ArgumentTypes.USERS]: (message, phrase) => {
                 if (!phrase) return null;
-                const users = this.client.util.resolveUsers(phrase, this.client.users);
+                const users = this.client.util.resolveUsers(phrase, this.client.users.cache);
                 return users.size ? users : null;
             },
 
             [ArgumentTypes.MEMBER]: (message, phrase) => {
                 if (!phrase) return null;
-                return this.client.util.resolveMember(phrase, message.guild.members);
+                return this.client.util.resolveMember(phrase, message.guild.members.cache);
             },
 
             [ArgumentTypes.MEMBERS]: (message, phrase) => {
                 if (!phrase) return null;
-                const members = this.client.util.resolveMembers(phrase, message.guild.members);
+                const members = this.client.util.resolveMembers(phrase, message.guild.members.cache);
                 return members.size ? members : null;
             },
 
@@ -148,7 +148,7 @@ class TypeResolver {
                 if (!phrase) return null;
 
                 const person = message.channel.type === 'text'
-                    ? this.client.util.resolveMember(phrase, message.guild.members)
+                    ? this.client.util.resolveMember(phrase, message.guild.members.cache)
                     : message.channel.type === 'dm'
                         ? this.client.util.resolveUser(phrase, new Collection([
                             [message.channel.recipient.id, message.channel.recipient],
@@ -167,7 +167,7 @@ class TypeResolver {
                 if (!phrase) return null;
 
                 const persons = message.channel.type === 'text'
-                    ? this.client.util.resolveMembers(phrase, message.guild.members)
+                    ? this.client.util.resolveMembers(phrase, message.guild.members.cache)
                     : message.channel.type === 'dm'
                         ? this.client.util.resolveUsers(phrase, new Collection([
                             [message.channel.recipient.id, message.channel.recipient],
@@ -188,19 +188,19 @@ class TypeResolver {
 
             [ArgumentTypes.CHANNEL]: (message, phrase) => {
                 if (!phrase) return null;
-                return this.client.util.resolveChannel(phrase, message.guild.channels);
+                return this.client.util.resolveChannel(phrase, message.guild.channels.cache);
             },
 
             [ArgumentTypes.CHANNELS]: (message, phrase) => {
                 if (!phrase) return null;
-                const channels = this.client.util.resolveChannels(phrase, message.guild.channels);
+                const channels = this.client.util.resolveChannels(phrase, message.guild.channels.cache);
                 return channels.size ? channels : null;
             },
 
             [ArgumentTypes.TEXT_CHANNEL]: (message, phrase) => {
                 if (!phrase) return null;
 
-                const channel = this.client.util.resolveChannel(phrase, message.guild.channels);
+                const channel = this.client.util.resolveChannel(phrase, message.guild.channels.cache);
                 if (!channel || channel.type !== 'text') return null;
 
                 return channel;
@@ -209,7 +209,7 @@ class TypeResolver {
             [ArgumentTypes.TEXT_CHANNELS]: (message, phrase) => {
                 if (!phrase) return null;
 
-                const channels = this.client.util.resolveChannels(phrase, message.guild.channels);
+                const channels = this.client.util.resolveChannels(phrase, message.guild.channels.cache);
                 if (!channels.size) return null;
 
                 const textChannels = channels.filter(c => c.type === 'text');
@@ -219,7 +219,7 @@ class TypeResolver {
             [ArgumentTypes.VOICE_CHANNEL]: (message, phrase) => {
                 if (!phrase) return null;
 
-                const channel = this.client.util.resolveChannel(phrase, message.guild.channels);
+                const channel = this.client.util.resolveChannel(phrase, message.guild.channels.cache);
                 if (!channel || channel.type !== 'voice') return null;
 
                 return channel;
@@ -228,7 +228,7 @@ class TypeResolver {
             [ArgumentTypes.VOICE_CHANNELS]: (message, phrase) => {
                 if (!phrase) return null;
 
-                const channels = this.client.util.resolveChannels(phrase, message.guild.channels);
+                const channels = this.client.util.resolveChannels(phrase, message.guild.channels.cache);
                 if (!channels.size) return null;
 
                 const voiceChannels = channels.filter(c => c.type === 'voice');
@@ -238,7 +238,7 @@ class TypeResolver {
             [ArgumentTypes.CATEGORY_CHANNEL]: (message, phrase) => {
                 if (!phrase) return null;
 
-                const channel = this.client.util.resolveChannel(phrase, message.guild.channels);
+                const channel = this.client.util.resolveChannel(phrase, message.guild.channels.cache);
                 if (!channel || channel.type !== 'category') return null;
 
                 return channel;
@@ -247,7 +247,7 @@ class TypeResolver {
             [ArgumentTypes.CATEGORY_CHANNELS]: (message, phrase) => {
                 if (!phrase) return null;
 
-                const channels = this.client.util.resolveChannels(phrase, message.guild.channels);
+                const channels = this.client.util.resolveChannels(phrase, message.guild.channels.cache);
                 if (!channels.size) return null;
 
                 const categoryChannels = channels.filter(c => c.type === 'category');
@@ -257,7 +257,7 @@ class TypeResolver {
             [ArgumentTypes.NEWS_CHANNEL]: (message, phrase) => {
                 if (!phrase) return null;
 
-                const channel = this.client.util.resolveChannel(phrase, message.guild.channels);
+                const channel = this.client.util.resolveChannel(phrase, message.guild.channels.cache);
                 if (!channel || channel.type !== 'news') return null;
 
                 return channel;
@@ -266,7 +266,7 @@ class TypeResolver {
             [ArgumentTypes.NEWS_CHANNELS]: (message, phrase) => {
                 if (!phrase) return null;
 
-                const channels = this.client.util.resolveChannels(phrase, message.guild.channels);
+                const channels = this.client.util.resolveChannels(phrase, message.guild.channels.cache);
                 if (!channels.size) return null;
 
                 const newsChannels = channels.filter(c => c.type === 'news');
@@ -276,7 +276,7 @@ class TypeResolver {
             [ArgumentTypes.STORE_CHANNEL]: (message, phrase) => {
                 if (!phrase) return null;
 
-                const channel = this.client.util.resolveChannel(phrase, message.guild.channels);
+                const channel = this.client.util.resolveChannel(phrase, message.guild.channels.cache);
                 if (!channel || channel.type !== 'store') return null;
 
                 return channel;
@@ -285,7 +285,7 @@ class TypeResolver {
             [ArgumentTypes.STORE_CHANNELS]: (message, phrase) => {
                 if (!phrase) return null;
 
-                const channels = this.client.util.resolveChannels(phrase, message.guild.channels);
+                const channels = this.client.util.resolveChannels(phrase, message.guild.channels.cache);
                 if (!channels.size) return null;
 
                 const storeChannels = channels.filter(c => c.type === 'store');
@@ -294,34 +294,34 @@ class TypeResolver {
 
             [ArgumentTypes.ROLE]: (message, phrase) => {
                 if (!phrase) return null;
-                return this.client.util.resolveRole(phrase, message.guild.roles);
+                return this.client.util.resolveRole(phrase, message.guild.roles.cache);
             },
 
             [ArgumentTypes.ROLES]: (message, phrase) => {
                 if (!phrase) return null;
-                const roles = this.client.util.resolveRoles(phrase, message.guild.roles);
+                const roles = this.client.util.resolveRoles(phrase, message.guild.roles.cache);
                 return roles.size ? roles : null;
             },
 
             [ArgumentTypes.EMOJI]: (message, phrase) => {
                 if (!phrase) return null;
-                return this.client.util.resolveEmoji(phrase, message.guild.emojis);
+                return this.client.util.resolveEmoji(phrase, message.guild.emojis.cache);
             },
 
             [ArgumentTypes.EMOJIS]: (message, phrase) => {
                 if (!phrase) return null;
-                const emojis = this.client.util.resolveEmojis(phrase, message.guild.emojis);
+                const emojis = this.client.util.resolveEmojis(phrase, message.guild.emojis.cache);
                 return emojis.size ? emojis : null;
             },
 
             [ArgumentTypes.GUILD]: (message, phrase) => {
                 if (!phrase) return null;
-                return this.client.util.resolveGuild(phrase, this.client.guilds);
+                return this.client.util.resolveGuild(phrase, this.client.guilds.cache);
             },
 
             [ArgumentTypes.GUILDS]: (message, phrase) => {
                 if (!phrase) return null;
-                const guilds = this.client.util.resolveGuilds(phrase, this.client.guilds);
+                const guilds = this.client.util.resolveGuilds(phrase, this.client.guilds.cache);
                 return guilds.size ? guilds : null;
             },
 
@@ -332,7 +332,7 @@ class TypeResolver {
 
             [ArgumentTypes.GUILD_MESSAGE]: async (message, phrase) => {
                 if (!phrase) return null;
-                for (const channel of message.guild.channels.values()) {
+                for (const channel of message.guild.channels.cache.values()) {
                     if (channel.type !== 'text') continue;
                     try {
                         return await channel.messages.fetch(phrase);
@@ -352,7 +352,7 @@ class TypeResolver {
                 }
 
                 if (message.guild) {
-                    for (const channel of message.guild.channels.values()) {
+                    for (const channel of message.guild.channels.cache.values()) {
                         if (channel.type !== 'text') continue;
                         try {
                             return await channel.messages.fetch(phrase);
@@ -374,35 +374,35 @@ class TypeResolver {
                 if (!phrase) return null;
                 const id = phrase.match(/<@!?(\d{17,19})>/);
                 if (!id) return null;
-                return this.client.users.get(id[1]) || null;
+                return this.client.users.cache.get(id[1]) || null;
             },
 
             [ArgumentTypes.MEMBER_MENTION]: (message, phrase) => {
                 if (!phrase) return null;
                 const id = phrase.match(/<@!?(\d{17,19})>/);
                 if (!id) return null;
-                return message.guild.members.get(id[1]) || null;
+                return message.guild.members.cache.get(id[1]) || null;
             },
 
             [ArgumentTypes.CHANNEL_MENTION]: (message, phrase) => {
                 if (!phrase) return null;
                 const id = phrase.match(/<#(\d{17,19})>/);
                 if (!id) return null;
-                return message.guild.channels.get(id[1]) || null;
+                return message.guild.channels.cache.get(id[1]) || null;
             },
 
             [ArgumentTypes.ROLE_MENTION]: (message, phrase) => {
                 if (!phrase) return null;
                 const id = phrase.match(/<@&(\d{17,19})>/);
                 if (!id) return null;
-                return message.guild.roles.get(id[1]) || null;
+                return message.guild.roles.cache.get(id[1]) || null;
             },
 
             [ArgumentTypes.EMOJI_MENTION]: (message, phrase) => {
                 if (!phrase) return null;
                 const id = phrase.match(/<a?:[a-zA-Z0-9_]+:(\d{17,19})>/);
                 if (!id) return null;
-                return message.guild.emojis.get(id[1]) || null;
+                return message.guild.emojis.cache.get(id[1]) || null;
             },
 
             [ArgumentTypes.COMMAND_ALIAS]: (message, phrase) => {
