@@ -516,7 +516,7 @@ declare module 'discord-akairo' {
         split?: ArgumentSplit | ArgumentSplitFunction;
         channelRestriction?: string;
         category?: string;
-        ownerOnly?: string;
+        ownerOnly?: boolean;
         protected?: string;
         typing?: boolean;
         editable?: boolean;
