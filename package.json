@@ -20,21 +20,23 @@
     "dependencies": {},
     "peerDependencies": {
         "discord.js": "^12.0.0-dev",
-        "sqlite": "^3.0.3",
-        "sequelize": "^5.2.12"
+        "sequelize": "^5.2.12",
+        "sqlite": "^3.0.3"
     },
     "devDependencies": {
-        "@types/node": "^10.14.4",
+        "@types/node": "^12.7.4",
         "discord.js-docgen": "discordjs/docgen",
         "eslint": "^5.16.0",
         "jsdoc": "^3.5.5",
-        "tslint": "^5.15.0",
+        "rimraf": "^3.0.0",
+        "tslint": "^5.19.0",
         "tslint-config-typings": "^0.3.1",
-        "typescript": "^3.4.2"
+        "typescript": "^3.6.2"
     },
     "scripts": {
         "test": "npm run lint",
-        "lint": "eslint ./src && tslint ./src/index.d.ts"
+        "lint": "eslint ./src && tslint ./src/index.d.ts",
+        "test:build": "rimraf dist/ && tsc"
     },
     "repository": {
         "type": "git",

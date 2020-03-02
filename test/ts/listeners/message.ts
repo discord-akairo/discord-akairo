@@ -1,9 +1,10 @@
 /* eslint-disable no-console */
 
-const { Listener } = require('../..');
+import { Listener } from 'discord-akairo';
+import { Message } from 'discord.js';
 
-class MessageListener extends Listener {
-    constructor() {
+export default class MessageListener extends Listener {
+    public constructor() {
         super('message', {
             emitter: 'client',
             event: 'message',
@@ -11,9 +12,7 @@ class MessageListener extends Listener {
         });
     }
 
-    exec(msg) {
+    public exec(msg: Message) {
         console.log(msg.content);
     }
 }
-
-module.exports = MessageListener;

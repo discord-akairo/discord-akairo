@@ -4,12 +4,14 @@ declare module 'discord-akairo' {
         Message, MessageAttachment, MessageEmbed,
         MessageAdditions, MessageEditOptions, MessageOptions, SplitOptions,
         User, UserResolvable, GuildMember,
-        Channel, Role, Emoji, Guild,
+        Channel, GuildChannel, TextChannel, VoiceChannel, CategoryChannel, NewsChannel, StoreChannel,
+        Role, Emoji, Guild,
         PermissionResolvable, StringResolvable, Snowflake
     } from 'discord.js';
 
     import { EventEmitter } from 'events';
     import { Stream } from 'stream';
+    import { URL } from 'url';
 
     module 'discord.js' {
         export interface Message {
@@ -86,7 +88,7 @@ declare module 'discord-akairo' {
         public flag?: string | string[];
         public otherwise?: StringResolvable | MessageOptions | MessageAdditions | OtherwiseContentSupplier;
         public prompt?: ArgumentPromptOptions | boolean;
-        public type: ArgumentType | ArgumentTypeCaster;
+        public type: keyof ArgumentType | ArgumentTypeCaster;
         public unordered: boolean | number | number[];
 
         public allow(message: Message): boolean;
@@ -94,18 +96,29 @@ declare module 'discord-akairo' {
         public collect(message: Message, commandInput?: string): Promise<Flag | any>;
         public process(message: Message, phrase: string): Promise<any>;
 
-        public static cast(type: ArgumentType | ArgumentTypeCaster, resolver: TypeResolver, message: Message, phrase: string): Promise<any>;
-        public static compose(...types: (ArgumentType | ArgumentTypeCaster)[]): ArgumentTypeCaster;
-        public static composeWithFailure(...types: (ArgumentType | ArgumentTypeCaster)[]): ArgumentTypeCaster;
+        public static cast<T extends ArgumentTypeCaster, S = ArgumentTypeCasterReturn<T>>(type: T, resolver: TypeResolver, message: Message, phrase: string): Promise<S>;
+        public static cast<T extends keyof ArgumentType>(type: T, resolver: TypeResolver, message: Message, phrase: string): Promise<ArgumentType[T]>;
+        public static compose<T extends ArgumentTypeCaster, S = ArgumentTypeCasterReturn<T>>(...types: T[]): ArgumentTypeCaster<S>;
+        public static compose<T extends keyof ArgumentType>(...types: T[]): ArgumentTypeCaster<ArgumentType[T]>;
+        public static composeWithFailure<T extends ArgumentTypeCaster, S = ArgumentTypeCasterReturn<T>>(...types: T[]): ArgumentTypeCaster<S>;
+        public static composeWithFailure<T extends keyof ArgumentType>(...types: T[]): ArgumentTypeCaster<ArgumentType[T]>;
         public static isFailure(value: any): value is null | undefined | Flag & { value: any };
-        public static product(...types: (ArgumentType | ArgumentTypeCaster)[]): ArgumentTypeCaster;
-        public static range(type: ArgumentType | ArgumentTypeCaster, min: number, max: number, inclusive?: boolean): ArgumentTypeCaster;
-        public static tagged(type: ArgumentType | ArgumentTypeCaster, tag?: any): ArgumentTypeCaster;
-        public static taggedUnion(...types: (ArgumentType | ArgumentTypeCaster)[]): ArgumentTypeCaster;
-        public static taggedWithInput(type: ArgumentType | ArgumentTypeCaster, tag?: any): ArgumentTypeCaster;
-        public static union(...types: (ArgumentType | ArgumentTypeCaster)[]): ArgumentTypeCaster;
-        public static validate(type: ArgumentType | ArgumentTypeCaster, predicate: ParsedValuePredicate): ArgumentTypeCaster;
-        public static withInput(type: ArgumentType | ArgumentTypeCaster): ArgumentTypeCaster;
+        public static product<T extends ArgumentTypeCaster, S = ArgumentTypeCasterReturn<T>>(...types: T[]): ArgumentTypeCaster<S>;
+        public static product<T extends keyof ArgumentType>(...types: T[]): ArgumentTypeCaster<ArgumentType[T]>;
+        public static range<T extends ArgumentTypeCaster, S = ArgumentTypeCasterReturn<T>>(type: T, min: number, max: number, inclusive?: boolean): ArgumentTypeCaster<S>;
+        public static range<T extends keyof ArgumentType>(type: T, min: number, max: number, inclusive?: boolean): ArgumentTypeCaster<ArgumentType[T]>;
+        public static tagged<T extends ArgumentTypeCaster, S = ArgumentTypeCasterReturn<T>>(type: T, tag?: any): ArgumentTypeCaster<S>;
+        public static tagged<T extends keyof ArgumentType>(type: T, tag?: any): ArgumentTypeCaster<ArgumentType[T]>;
+        public static taggedUnion<T extends ArgumentTypeCaster, S = ArgumentTypeCasterReturn<T>>(...types: T[]): ArgumentTypeCaster<S>;
+        public static taggedUnion<T extends keyof ArgumentType>(...types: T[]): ArgumentTypeCaster<ArgumentType[T]>;
+        public static taggedWithInput<T extends ArgumentTypeCaster, S = ArgumentTypeCasterReturn<T>>(type: T, tag?: any): ArgumentTypeCaster<S>;
+        public static taggedWithInput<T extends keyof ArgumentType>(type: T, tag?: any): ArgumentTypeCaster<ArgumentType[T]>;
+        public static union<T extends ArgumentTypeCaster, S = ArgumentTypeCasterReturn<T>>(...types: T[]): ArgumentTypeCaster<S>;
+        public static union<T extends keyof ArgumentType>(...types: T[]): ArgumentTypeCaster<ArgumentType[T]>;
+        public static validate<T extends ArgumentTypeCaster, S = ArgumentTypeCasterReturn<T>>(type: T, predicate: ParsedValuePredicate): ArgumentTypeCaster<S>;
+        public static validate<T extends keyof ArgumentType>(type: T, predicate: ParsedValuePredicate): ArgumentTypeCaster<ArgumentType[T]>;
+        public static withInput<T extends ArgumentTypeCaster, S = ArgumentTypeCasterReturn<T>>(type: T): ArgumentTypeCaster<S>;
+        public static withInput<T extends keyof ArgumentType>(type: T): ArgumentTypeCaster<ArgumentType[T]>;
     }
 
     export class Category<K, V> extends Collection<K, V> {
@@ -271,7 +284,8 @@ declare module 'discord-akairo' {
         public parsed?: ParsedComponentData;
         public shouldEdit: boolean;
 
-        public addMessage(message: Message | Message[]): Message | Message[];
+        public addMessage(message: Message): Message;
+        public addMessage(message: Message[]): Message[];
         public edit(content?: StringResolvable, options?: MessageEmbed | MessageEditOptions): Promise<Message>;
         public edit(options?: MessageOptions | MessageAdditions): Promise<Message>;
         public reply(content?: StringResolvable, options?: MessageOptions | MessageAdditions): Promise<Message>;
@@ -399,11 +413,11 @@ declare module 'discord-akairo' {
     export abstract class Provider {
         public items: Collection<string, any>;
 
-        public abstract clear(id: string): any;
-        public abstract delete(id: string, key: string): any;
-        public abstract get(id: string, key: string, defaultValue: any): any;
-        public abstract init(): any;
-        public abstract set(id: string, key: string, value: any): any;
+        public abstract clear(id: string): unknown;
+        public abstract delete(id: string, key: string): unknown;
+        public abstract get<T = unknown>(id: string, key: string, defaultValue: any): T;
+        public abstract init(): unknown;
+        public abstract set(id: string, key: string, value: any): unknown;
     }
 
     export class SequelizeProvider extends Provider {
@@ -416,7 +430,7 @@ declare module 'discord-akairo' {
 
         public clear(id: string): Promise<void>;
         public delete(id: string, key: string): Promise<boolean>;
-        public get(id: string, key: string, defaultValue: any): any;
+        public get<T = unknown>(id: string, key: string, defaultValue: any): T;
         public init(): Promise<void>;
         public set(id: string, key: string, value: any): Promise<boolean>;
     }
@@ -432,7 +446,7 @@ declare module 'discord-akairo' {
 
         public clear(id: string): Promise<any>;
         public delete(id: string, key: string): Promise<any>;
-        public get(id: string, key: string, defaultValue: any): any;
+        public get<T = unknown>(id: string, key: string, defaultValue: any): T;
         public init(): Promise<void>;
         public set(id: string, key: string, value: any): Promise<any>;
     }
@@ -449,7 +463,7 @@ declare module 'discord-akairo' {
         public addBuiltInTypes(): void;
         public addType(name: string, fn: ArgumentTypeCaster): this;
         public addTypes(types: { [x: string]: ArgumentTypeCaster }): this;
-        public type(name: string): ArgumentTypeCaster;
+        public type<T extends keyof ArgumentType>(name: T): ArgumentTypeCaster<ArgumentType[T]>;
     }
 
     export class Util {
@@ -491,7 +505,7 @@ declare module 'discord-akairo' {
         flag?: string | string[];
         otherwise?: StringResolvable | MessageOptions | MessageAdditions | OtherwiseContentSupplier;
         prompt?: ArgumentPromptOptions | boolean;
-        type?: ArgumentType | ArgumentTypeCaster;
+        type?: keyof ArgumentType | ArgumentTypeCaster;
         unordered?: boolean | number | number[];
     }
 
@@ -634,22 +648,63 @@ declare module 'discord-akairo' {
 
     export type ArgumentMatch = 'phrase' | 'flag' | 'option' | 'rest' | 'separate' | 'text' | 'content' | 'restContent' | 'none';
 
-    export type ArgumentType = 'string' | 'lowercase' | 'uppercase' | 'charCodes'
-        | 'number' | 'integer' | 'bigint' | 'emojint'
-        | 'url' | 'date' | 'color'
-        | 'user' | 'users' | 'member' | 'members' | 'relevant' | 'relevants'
-        | 'channel' | 'channels' | 'textChannel' | 'textChannels' | 'voiceChannel' | 'voiceChannels' | 'categoryChannel' | 'categoryChannels' | 'newsChannel' | 'newsChannels' | 'storeChannel' | 'storeChannels'
-        | 'role' | 'roles' | 'emoji' | 'emojis' | 'guild' | 'guilds'
-        | 'message' | 'guildMessage' | 'relevantMessage' | 'invite'
-        | 'userMention' | 'memberMention' | 'channelMention' | 'roleMention' | 'emojiMention'
-        | 'commandAlias' | 'command' | 'inhibitor' | 'listener'
-        | (string | string[])[]
-        | RegExp
-        | string;
+    export interface ArgumentType {
+        string: string;
+        lowercase: string;
+        uppercase: string;
+        charCodes: string;
+        number: number;
+        integer: number;
+        bigint: bigint;
+        emojint: number;
+        url: URL;
+        date: Date;
+        color: string;
+        user: User | null;
+        users: User[] | null;
+        member: GuildMember | null;
+        members: GuildMember[] | null;
+        relevant: User | GuildMember | null;
+        relevants: User[] | GuildMember[] | null;
+        channel: Channel | null;
+        channels: Channel[] | null;
+        textChannel: TextChannel | null;
+        textChannels: TextChannel[] | null;
+        voiceChannel: VoiceChannel | null;
+        voiceChannels: VoiceChannel[] | null;
+        categoryChannel: CategoryChannel | null;
+        categoryChannels: CategoryChannel[] | null;
+        newsChannel: NewsChannel | null;
+        newsChannels: NewsChannel[] | null;
+        storeChannel: StoreChannel | null;
+        storeChannels: StoreChannel[] | null;
+        role: Role | null;
+        roles: Role[] | null;
+        emoji: Emoji | null;
+        emojis: Emoji[] | null;
+        guild: Guild | null;
+        guilds: Guild[] | null;
+        message: Message | null;
+        guildMessage: Message | null;
+        relevantMessage: Message | null;
+        invite: any;
+        userMention: User | null;
+        memberMention: GuildMember | null;
+        channelMention: GuildChannel | null;
+        roleMention: Role | null;
+        emojiMention: Emoji | null;
+        commandAlias: Command | null;
+        command: Command | null;
+        inhibitor: Inhibitor | null;
+        listener: Listener | null;
+        [key: string]: string | (string | string[]) | RegExp | any;
+    }
 
     export type ArgumentGenerator = (message: Message, parsed: ContentParserResult, state: ArgumentRunnerState) => IterableIterator<ArgumentOptions | Flag>;
 
-    export type ArgumentTypeCaster = (message: Message, phrase: string) => any;
+    export type ArgumentTypeCaster<T = unknown> = (message: Message, phrase: string) => T;
+
+    type ArgumentTypeCasterReturn<R> = R extends ArgumentTypeCaster<infer S> ? S : R;
 
     export type BeforeAction = (message: Message) => any;
 

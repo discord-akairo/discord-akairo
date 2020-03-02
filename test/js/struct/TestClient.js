@@ -1,4 +1,4 @@
-const { AkairoClient, CommandHandler, InhibitorHandler, ListenerHandler, SQLiteProvider } = require('../../src/index');
+const { AkairoClient, CommandHandler, InhibitorHandler, ListenerHandler, SQLiteProvider } = require('../../../src/index');
 const sqlite = require('sqlite');
 
 class TestClient extends AkairoClient {

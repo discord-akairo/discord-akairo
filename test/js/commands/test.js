@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-const { Argument: { compose, range, union }, Command } = require('../..');
+const { Argument: { compose, range, union }, Command } = require('../../../src');
 const util = require('util');
 
 class TestCommand extends Command {
