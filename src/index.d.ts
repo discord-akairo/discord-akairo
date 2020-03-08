@@ -25,8 +25,7 @@ declare module 'discord-akairo' {
         public constructor(options?: AkairoOptions & ClientOptions, clientOptions?: ClientOptions);
 
         public ownerID: Snowflake | Snowflake[];
-        public util: ClientUtil;
-
+        
         public isOwner(user: UserResolvable): boolean;
     }
 
@@ -115,37 +114,6 @@ declare module 'discord-akairo' {
 
         public reloadAll(): this;
         public removeAll(): this;
-    }
-
-    export class ClientUtil {
-        public constructor(client: AkairoClient);
-
-        public readonly client: AkairoClient;
-
-        public attachment(file: BufferResolvable | Stream, name?: string): MessageAttachment;
-        public checkChannel(text: string, channel: Channel, caseSensitive?: boolean, wholeWord?: boolean): boolean;
-        public checkEmoji(text: string, emoji: Emoji, caseSensitive?: boolean, wholeWord?: boolean): boolean;
-        public checkGuild(text: string, guild: Guild, caseSensitive?: boolean, wholeWord?: boolean): boolean;
-        public checkMember(text: string, member: GuildMember, caseSensitive?: boolean, wholeWord?: boolean): boolean;
-        public checkRole(text: string, role: Role, caseSensitive?: boolean, wholeWord?: boolean): boolean;
-        public checkUser(text: string, user: User, caseSensitive?: boolean, wholeWord?: boolean): boolean;
-        public collection<K, V>(iterable?: Iterable<[K, V][]>): Collection<K, V>;
-        public compareStreaming(oldMember: GuildMember, newMember: GuildMember): number;
-        public embed(data?: object): MessageEmbed;
-        public fetchMember(guild: Guild, id: string, cache?: boolean): Promise<GuildMember>;
-        public resolveChannel(text: string, channels: Collection<Snowflake, Channel>, caseSensitive?: boolean, wholeWord?: boolean): Channel;
-        public resolveChannels(text: string, channels: Collection<Snowflake, Channel>, caseSensitive?: boolean, wholeWord?: boolean): Collection<Snowflake, Channel>;
-        public resolveEmoji(text: string, emojis: Collection<Snowflake, Emoji>, caseSensitive?: boolean, wholeWord?: boolean): Emoji;
-        public resolveEmojis(text: string, emojis: Collection<Snowflake, Emoji>, caseSensitive?: boolean, wholeWord?: boolean): Collection<Snowflake, Emoji>;
-        public resolveGuild(text: string, guilds: Collection<Snowflake, Guild>, caseSensitive?: boolean, wholeWord?: boolean): Guild;
-        public resolveGuilds(text: string, guilds: Collection<Snowflake, Guild>, caseSensitive?: boolean, wholeWord?: boolean): Collection<Snowflake, Guild>;
-        public resolveMember(text: string, members: Collection<Snowflake, GuildMember>, caseSensitive?: boolean, wholeWord?: boolean): GuildMember;
-        public resolveMembers(text: string, members: Collection<Snowflake, GuildMember>, caseSensitive?: boolean, wholeWord?: boolean): Collection<Snowflake, GuildMember>;
-        public resolvePermissionNumber(number: number): string[];
-        public resolveRole(text: string, roles: Collection<Snowflake, Role>, caseSensitive?: boolean, wholeWord?: boolean): Role;
-        public resolveRoles(text: string, roles: Collection<Snowflake, Role>, caseSensitive?: boolean, wholeWord?: boolean): Collection<Snowflake, Role>;
-        public resolveUser(text: string, users: Collection<Snowflake, User>, caseSensitive?: boolean, wholeWord?: boolean): User;
-        public resolveUsers(text: string, users: Collection<Snowflake, User>, caseSensitive?: boolean, wholeWord?: boolean): Collection<Snowflake, User>;
     }
 
     export class Command extends AkairoModule {
@@ -450,11 +418,33 @@ declare module 'discord-akairo' {
         public addType(name: string, fn: ArgumentTypeCaster): this;
         public addTypes(types: { [x: string]: ArgumentTypeCaster }): this;
         public type(name: string): ArgumentTypeCaster;
+
+        public static checkChannel(text: string, channel: Channel, caseSensitive?: boolean, wholeWord?: boolean): boolean;
+        public static checkEmoji(text: string, emoji: Emoji, caseSensitive?: boolean, wholeWord?: boolean): boolean;
+        public static checkGuild(text: string, guild: Guild, caseSensitive?: boolean, wholeWord?: boolean): boolean;
+        public static checkMember(text: string, member: GuildMember, caseSensitive?: boolean, wholeWord?: boolean): boolean;
+        public static checkRole(text: string, role: Role, caseSensitive?: boolean, wholeWord?: boolean): boolean;
+        public static checkUser(text: string, user: User, caseSensitive?: boolean, wholeWord?: boolean): boolean;
+        public static resolveChannel(text: string, channels: Collection<Snowflake, Channel>, caseSensitive?: boolean, wholeWord?: boolean): Channel;
+        public static resolveChannels(text: string, channels: Collection<Snowflake, Channel>, caseSensitive?: boolean, wholeWord?: boolean): Collection<Snowflake, Channel>;
+        public static resolveEmoji(text: string, emojis: Collection<Snowflake, Emoji>, caseSensitive?: boolean, wholeWord?: boolean): Emoji;
+        public static resolveEmojis(text: string, emojis: Collection<Snowflake, Emoji>, caseSensitive?: boolean, wholeWord?: boolean): Collection<Snowflake, Emoji>;
+        public static resolveGuild(text: string, guilds: Collection<Snowflake, Guild>, caseSensitive?: boolean, wholeWord?: boolean): Guild;
+        public static resolveGuilds(text: string, guilds: Collection<Snowflake, Guild>, caseSensitive?: boolean, wholeWord?: boolean): Collection<Snowflake, Guild>;
+        public static resolveMember(text: string, members: Collection<Snowflake, GuildMember>, caseSensitive?: boolean, wholeWord?: boolean): GuildMember;
+        public static resolveMembers(text: string, members: Collection<Snowflake, GuildMember>, caseSensitive?: boolean, wholeWord?: boolean): Collection<Snowflake, GuildMember>;
+        public static resolvePermissionNumber(number: number): string[];
+        public static resolveRole(text: string, roles: Collection<Snowflake, Role>, caseSensitive?: boolean, wholeWord?: boolean): Role;
+        public static resolveRoles(text: string, roles: Collection<Snowflake, Role>, caseSensitive?: boolean, wholeWord?: boolean): Collection<Snowflake, Role>;
+        public static resolveUser(text: string, users: Collection<Snowflake, User>, caseSensitive?: boolean, wholeWord?: boolean): User;
+        public static resolveUsers(text: string, users: Collection<Snowflake, User>, caseSensitive?: boolean, wholeWord?: boolean): Collection<Snowflake, User>;
     }
 
     export class Util {
+        public static compareStreaming(oldMember: GuildMember, newMember: GuildMember): number;
         public static isEventEmitter(value: any): boolean;
         public static isPromise(value: any): boolean;
+        public static resolvePermissionNumber(number: number): string[];
     }
 
     export interface AkairoHandlerOptions {
