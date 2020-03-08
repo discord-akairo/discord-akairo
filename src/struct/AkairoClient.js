@@ -1,5 +1,4 @@
 const { Client } = require('discord.js');
-const ClientUtil = require('./ClientUtil');
 
 /**
  * The Akairo framework client.
@@ -19,12 +18,6 @@ class AkairoClient extends Client {
          * @type {Snowflake|Snowflake[]}
          */
         this.ownerID = ownerID;
-
-        /**
-         * Utility methods.
-         * @type {ClientUtil}
-         */
-        this.util = new ClientUtil(this);
     }
 
     /**
