@@ -1,3 +1,5 @@
+const { Permissions } = require('discord.js');
+
 class Util {
     static isPromise(value) {
         return value
@@ -72,6 +74,37 @@ class Util {
         }
 
         return null;
+    }
+
+    /**
+     * Compares two member objects presences and checks if they stopped or started a stream or not.
+     * Returns `0`, `1`, or `2` for no change, stopped, or started.
+     * @param {GuildMember} oldMember - The old member.
+     * @param {GuildMember} newMember - The new member.
+     * @returns {number}
+     */
+    compareStreaming(oldMember, newMember) {
+        const s1 = oldMember.presence.activity && oldMember.presence.activity.type === 'STREAMING';
+        const s2 = newMember.presence.activity && newMember.presence.activity.type === 'STREAMING';
+        if (s1 === s2) return 0;
+        if (s1) return 1;
+        if (s2) return 2;
+        return 0;
+    }
+
+    /**
+     * Resolves a permission number and returns an array of permission names.
+     * @param {number} number - The permissions number.
+     * @returns {string[]}
+     */
+    resolvePermissionNumber(number) {
+        const resolved = [];
+
+        for (const key of Object.keys(Permissions.FLAGS)) {
+            if (number & Permissions.FLAGS[key]) resolved.push(key);
+        }
+
+        return resolved;
     }
 }
 
