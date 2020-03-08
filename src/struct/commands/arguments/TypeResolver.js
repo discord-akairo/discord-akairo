@@ -124,23 +124,23 @@ class TypeResolver {
 
             [ArgumentTypes.USER]: (message, phrase) => {
                 if (!phrase) return null;
-                return this.client.util.resolveUser(phrase, this.client.users.cache);
+                return TypeResolver.resolveUser(phrase, this.client.users.cache);
             },
 
             [ArgumentTypes.USERS]: (message, phrase) => {
                 if (!phrase) return null;
-                const users = this.client.util.resolveUsers(phrase, this.client.users.cache);
+                const users = TypeResolver.resolveUsers(phrase, this.client.users.cache);
                 return users.size ? users : null;
             },
 
             [ArgumentTypes.MEMBER]: (message, phrase) => {
                 if (!phrase) return null;
-                return this.client.util.resolveMember(phrase, message.guild.members.cache);
+                return TypeResolver.resolveMember(phrase, message.guild.members.cache);
             },
 
             [ArgumentTypes.MEMBERS]: (message, phrase) => {
                 if (!phrase) return null;
-                const members = this.client.util.resolveMembers(phrase, message.guild.members.cache);
+                const members = TypeResolver.resolveMembers(phrase, message.guild.members.cache);
                 return members.size ? members : null;
             },
 
@@ -148,13 +148,13 @@ class TypeResolver {
                 if (!phrase) return null;
 
                 const person = message.channel.type === 'text'
-                    ? this.client.util.resolveMember(phrase, message.guild.members.cache)
+                    ? TypeResolver.resolveMember(phrase, message.guild.members.cache)
                     : message.channel.type === 'dm'
-                        ? this.client.util.resolveUser(phrase, new Collection([
+                        ? TypeResolver.resolveUser(phrase, new Collection([
                             [message.channel.recipient.id, message.channel.recipient],
                             [this.client.user.id, this.client.user]
                         ]))
-                        : this.client.util.resolveUser(phrase, new Collection([
+                        : TypeResolver.resolveUser(phrase, new Collection([
                             [this.client.user.id, this.client.user]
                         ]).concat(message.channel.recipients));
 
@@ -167,13 +167,13 @@ class TypeResolver {
                 if (!phrase) return null;
 
                 const persons = message.channel.type === 'text'
-                    ? this.client.util.resolveMembers(phrase, message.guild.members.cache)
+                    ? TypeResolver.resolveMembers(phrase, message.guild.members.cache)
                     : message.channel.type === 'dm'
-                        ? this.client.util.resolveUsers(phrase, new Collection([
+                        ? TypeResolver.resolveUsers(phrase, new Collection([
                             [message.channel.recipient.id, message.channel.recipient],
                             [this.client.user.id, this.client.user]
                         ]))
-                        : this.client.util.resolveUsers(phrase, new Collection([
+                        : TypeResolver.resolveUsers(phrase, new Collection([
                             [this.client.user.id, this.client.user]
                         ]).concat(message.channel.recipients));
 
@@ -188,19 +188,19 @@ class TypeResolver {
 
             [ArgumentTypes.CHANNEL]: (message, phrase) => {
                 if (!phrase) return null;
-                return this.client.util.resolveChannel(phrase, message.guild.channels.cache);
+                return TypeResolver.resolveChannel(phrase, message.guild.channels.cache);
             },
 
             [ArgumentTypes.CHANNELS]: (message, phrase) => {
                 if (!phrase) return null;
-                const channels = this.client.util.resolveChannels(phrase, message.guild.channels.cache);
+                const channels = TypeResolver.resolveChannels(phrase, message.guild.channels.cache);
                 return channels.size ? channels : null;
             },
 
             [ArgumentTypes.TEXT_CHANNEL]: (message, phrase) => {
                 if (!phrase) return null;
 
-                const channel = this.client.util.resolveChannel(phrase, message.guild.channels.cache);
+                const channel = TypeResolver.resolveChannel(phrase, message.guild.channels.cache);
                 if (!channel || channel.type !== 'text') return null;
 
                 return channel;
@@ -209,7 +209,7 @@ class TypeResolver {
             [ArgumentTypes.TEXT_CHANNELS]: (message, phrase) => {
                 if (!phrase) return null;
 
-                const channels = this.client.util.resolveChannels(phrase, message.guild.channels.cache);
+                const channels = TypeResolver.resolveChannels(phrase, message.guild.channels.cache);
                 if (!channels.size) return null;
 
                 const textChannels = channels.filter(c => c.type === 'text');
@@ -219,7 +219,7 @@ class TypeResolver {
             [ArgumentTypes.VOICE_CHANNEL]: (message, phrase) => {
                 if (!phrase) return null;
 
-                const channel = this.client.util.resolveChannel(phrase, message.guild.channels.cache);
+                const channel = TypeResolver.resolveChannel(phrase, message.guild.channels.cache);
                 if (!channel || channel.type !== 'voice') return null;
 
                 return channel;
@@ -228,7 +228,7 @@ class TypeResolver {
             [ArgumentTypes.VOICE_CHANNELS]: (message, phrase) => {
                 if (!phrase) return null;
 
-                const channels = this.client.util.resolveChannels(phrase, message.guild.channels.cache);
+                const channels = TypeResolver.resolveChannels(phrase, message.guild.channels.cache);
                 if (!channels.size) return null;
 
                 const voiceChannels = channels.filter(c => c.type === 'voice');
@@ -238,7 +238,7 @@ class TypeResolver {
             [ArgumentTypes.CATEGORY_CHANNEL]: (message, phrase) => {
                 if (!phrase) return null;
 
-                const channel = this.client.util.resolveChannel(phrase, message.guild.channels.cache);
+                const channel = TypeResolver.resolveChannel(phrase, message.guild.channels.cache);
                 if (!channel || channel.type !== 'category') return null;
 
                 return channel;
@@ -247,7 +247,7 @@ class TypeResolver {
             [ArgumentTypes.CATEGORY_CHANNELS]: (message, phrase) => {
                 if (!phrase) return null;
 
-                const channels = this.client.util.resolveChannels(phrase, message.guild.channels.cache);
+                const channels = TypeResolver.resolveChannels(phrase, message.guild.channels.cache);
                 if (!channels.size) return null;
 
                 const categoryChannels = channels.filter(c => c.type === 'category');
@@ -257,7 +257,7 @@ class TypeResolver {
             [ArgumentTypes.NEWS_CHANNEL]: (message, phrase) => {
                 if (!phrase) return null;
 
-                const channel = this.client.util.resolveChannel(phrase, message.guild.channels.cache);
+                const channel = TypeResolver.resolveChannel(phrase, message.guild.channels.cache);
                 if (!channel || channel.type !== 'news') return null;
 
                 return channel;
@@ -266,7 +266,7 @@ class TypeResolver {
             [ArgumentTypes.NEWS_CHANNELS]: (message, phrase) => {
                 if (!phrase) return null;
 
-                const channels = this.client.util.resolveChannels(phrase, message.guild.channels.cache);
+                const channels = TypeResolver.resolveChannels(phrase, message.guild.channels.cache);
                 if (!channels.size) return null;
 
                 const newsChannels = channels.filter(c => c.type === 'news');
@@ -276,7 +276,7 @@ class TypeResolver {
             [ArgumentTypes.STORE_CHANNEL]: (message, phrase) => {
                 if (!phrase) return null;
 
-                const channel = this.client.util.resolveChannel(phrase, message.guild.channels.cache);
+                const channel = TypeResolver.resolveChannel(phrase, message.guild.channels.cache);
                 if (!channel || channel.type !== 'store') return null;
 
                 return channel;
@@ -285,7 +285,7 @@ class TypeResolver {
             [ArgumentTypes.STORE_CHANNELS]: (message, phrase) => {
                 if (!phrase) return null;
 
-                const channels = this.client.util.resolveChannels(phrase, message.guild.channels.cache);
+                const channels = TypeResolver.resolveChannels(phrase, message.guild.channels.cache);
                 if (!channels.size) return null;
 
                 const storeChannels = channels.filter(c => c.type === 'store');
@@ -294,34 +294,34 @@ class TypeResolver {
 
             [ArgumentTypes.ROLE]: (message, phrase) => {
                 if (!phrase) return null;
-                return this.client.util.resolveRole(phrase, message.guild.roles.cache);
+                return TypeResolver.resolveRole(phrase, message.guild.roles.cache);
             },
 
             [ArgumentTypes.ROLES]: (message, phrase) => {
                 if (!phrase) return null;
-                const roles = this.client.util.resolveRoles(phrase, message.guild.roles.cache);
+                const roles = TypeResolver.resolveRoles(phrase, message.guild.roles.cache);
                 return roles.size ? roles : null;
             },
 
             [ArgumentTypes.EMOJI]: (message, phrase) => {
                 if (!phrase) return null;
-                return this.client.util.resolveEmoji(phrase, message.guild.emojis.cache);
+                return TypeResolver.resolveEmoji(phrase, message.guild.emojis.cache);
             },
 
             [ArgumentTypes.EMOJIS]: (message, phrase) => {
                 if (!phrase) return null;
-                const emojis = this.client.util.resolveEmojis(phrase, message.guild.emojis.cache);
+                const emojis = TypeResolver.resolveEmojis(phrase, message.guild.emojis.cache);
                 return emojis.size ? emojis : null;
             },
 
             [ArgumentTypes.GUILD]: (message, phrase) => {
                 if (!phrase) return null;
-                return this.client.util.resolveGuild(phrase, this.client.guilds.cache);
+                return TypeResolver.resolveGuild(phrase, this.client.guilds.cache);
             },
 
             [ArgumentTypes.GUILDS]: (message, phrase) => {
                 if (!phrase) return null;
-                const guilds = this.client.util.resolveGuilds(phrase, this.client.guilds.cache);
+                const guilds = TypeResolver.resolveGuilds(phrase, this.client.guilds.cache);
                 return guilds.size ? guilds : null;
             },
 
@@ -462,6 +462,313 @@ class TypeResolver {
         }
 
         return this;
+    }
+
+    /**
+     * Resolves a user from a string, such as an ID, a name, or a mention.
+     * @param {string} text - Text to resolve.
+     * @param {Collection<Snowflake, User>} users - Collection of users to find in.
+     * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
+     * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
+     * @returns {User}
+     */
+    static resolveUser(text, users, caseSensitive = false, wholeWord = false) {
+        return users.get(text) || users.find(user => this.checkUser(text, user, caseSensitive, wholeWord));
+    }
+
+    /**
+     * Resolves multiple users from a string, such as an ID, a name, or a mention.
+     * @param {string} text - Text to resolve.
+     * @param {Collection<Snowflake, User>} users - Collection of users to find in.
+     * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
+     * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
+     * @returns {Collection<Snowflake, User>}
+     */
+    static resolveUsers(text, users, caseSensitive = false, wholeWord = false) {
+        return users.filter(user => this.checkUser(text, user, caseSensitive, wholeWord));
+    }
+
+    /**
+     * Checks if a string could be referring to a user.
+     * @param {string} text - Text to check.
+     * @param {User} user - User to check.
+     * @param {boolean} [caseSensitive=false] - Makes checking by name case sensitive.
+     * @param {boolean} [wholeWord=false] - Makes checking by name match full word only.
+     * @returns {boolean}
+     */
+    static checkUser(text, user, caseSensitive = false, wholeWord = false) {
+        if (user.id === text) return true;
+
+        const reg = /<@!?(\d{17,19})>/;
+        const match = text.match(reg);
+
+        if (match && user.id === match[1]) return true;
+
+        text = caseSensitive ? text : text.toLowerCase();
+        const username = caseSensitive ? user.username : user.username.toLowerCase();
+        const discrim = user.discriminator;
+
+        if (!wholeWord) {
+            return username.includes(text)
+            || (username.includes(text.split('#')[0]) && discrim.includes(text.split('#')[1]));
+        }
+
+        return username === text
+        || (username === text.split('#')[0] && discrim === text.split('#')[1]);
+    }
+
+    /**
+     * Resolves a member from a string, such as an ID, a name, or a mention.
+     * @param {string} text - Text to resolve.
+     * @param {Collection<Snowflake, GuildMember>} members - Collection of members to find in.
+     * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
+     * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
+     * @returns {GuildMember}
+     */
+    static resolveMember(text, members, caseSensitive = false, wholeWord = false) {
+        return members.get(text) || members.find(member => this.checkMember(text, member, caseSensitive, wholeWord));
+    }
+
+    /**
+     * Resolves multiple members from a string, such as an ID, a name, or a mention.
+     * @param {string} text - Text to resolve.
+     * @param {Collection<Snowflake, GuildMember>} members - Collection of members to find in.
+     * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
+     * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
+     * @returns {Collection<Snowflake, GuildMember>}
+     */
+    static resolveMembers(text, members, caseSensitive = false, wholeWord = false) {
+        return members.filter(member => this.checkMember(text, member, caseSensitive, wholeWord));
+    }
+
+    /**
+     * Checks if a string could be referring to a member.
+     * @param {string} text - Text to check.
+     * @param {GuildMember} member - Member to check.
+     * @param {boolean} [caseSensitive=false] - Makes checking by name case sensitive.
+     * @param {boolean} [wholeWord=false] - Makes checking by name match full word only.
+     * @returns {boolean}
+     */
+    static checkMember(text, member, caseSensitive = false, wholeWord = false) {
+        if (member.id === text) return true;
+
+        const reg = /<@!?(\d{17,19})>/;
+        const match = text.match(reg);
+
+        if (match && member.id === match[1]) return true;
+
+        text = caseSensitive ? text : text.toLowerCase();
+        const username = caseSensitive ? member.user.username : member.user.username.toLowerCase();
+        const displayName = caseSensitive ? member.displayName : member.displayName.toLowerCase();
+        const discrim = member.user.discriminator;
+
+        if (!wholeWord) {
+            return displayName.includes(text)
+            || username.includes(text)
+            || ((username.includes(text.split('#')[0]) || displayName.includes(text.split('#')[0])) && discrim.includes(text.split('#')[1]));
+        }
+
+        return displayName === text
+        || username === text
+        || ((username === text.split('#')[0] || displayName === text.split('#')[0]) && discrim === text.split('#')[1]);
+    }
+
+    /**
+     * Resolves a channel from a string, such as an ID, a name, or a mention.
+     * @param {string} text - Text to resolve.
+     * @param {Collection<Snowflake, Channel>} channels - Collection of channels to find in.
+     * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
+     * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
+     * @returns {Channel}
+     */
+    static resolveChannel(text, channels, caseSensitive = false, wholeWord = false) {
+        return channels.get(text) || channels.find(channel => this.checkChannel(text, channel, caseSensitive, wholeWord));
+    }
+
+    /**
+     * Resolves multiple channels from a string, such as an ID, a name, or a mention.
+     * @param {string} text - Text to resolve.
+     * @param {Collection<Snowflake, Channel>} channels - Collection of channels to find in.
+     * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
+     * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
+     * @returns {Collection<Snowflake, Channel>}
+     */
+    static resolveChannels(text, channels, caseSensitive = false, wholeWord = false) {
+        return channels.filter(channel => this.checkChannel(text, channel, caseSensitive, wholeWord));
+    }
+
+    /**
+     * Checks if a string could be referring to a channel.
+     * @param {string} text - Text to check.
+     * @param {Channel} channel - Channel to check.
+     * @param {boolean} [caseSensitive=false] - Makes checking by name case sensitive.
+     * @param {boolean} [wholeWord=false] - Makes checking by name match full word only.
+     * @returns {boolean}
+     */
+    static checkChannel(text, channel, caseSensitive = false, wholeWord = false) {
+        if (channel.id === text) return true;
+
+        const reg = /<#(\d{17,19})>/;
+        const match = text.match(reg);
+
+        if (match && channel.id === match[1]) return true;
+
+        text = caseSensitive ? text : text.toLowerCase();
+        const name = caseSensitive ? channel.name : channel.name.toLowerCase();
+
+        if (!wholeWord) {
+            return name.includes(text)
+            || name.includes(text.replace(/^#/, ''));
+        }
+
+        return name === text
+        || name === text.replace(/^#/, '');
+    }
+
+    /**
+     * Resolves a role from a string, such as an ID, a name, or a mention.
+     * @param {string} text - Text to resolve.
+     * @param {Collection<Snowflake, Role>} roles - Collection of roles to find in.
+     * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
+     * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
+     * @returns {Role}
+     */
+    static resolveRole(text, roles, caseSensitive = false, wholeWord = false) {
+        return roles.get(text) || roles.find(role => this.checkRole(text, role, caseSensitive, wholeWord));
+    }
+
+    /**
+     * Resolves multiple roles from a string, such as an ID, a name, or a mention.
+     * @param {string} text - Text to resolve.
+     * @param {Collection<Snowflake, Role>} roles - Collection of roles to find in.
+     * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
+     * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
+     * @returns {Collection<Snowflake, Role>}
+     */
+    static resolveRoles(text, roles, caseSensitive = false, wholeWord = false) {
+        return roles.filter(role => this.checkRole(text, role, caseSensitive, wholeWord));
+    }
+
+    /**
+     * Checks if a string could be referring to a role.
+     * @param {string} text - Text to check.
+     * @param {Role} role - Role to check.
+     * @param {boolean} [caseSensitive=false] - Makes checking by name case sensitive.
+     * @param {boolean} [wholeWord=false] - Makes checking by name match full word only.
+     * @returns {boolean}
+     */
+    static checkRole(text, role, caseSensitive = false, wholeWord = false) {
+        if (role.id === text) return true;
+
+        const reg = /<@&(\d{17,19})>/;
+        const match = text.match(reg);
+
+        if (match && role.id === match[1]) return true;
+
+        text = caseSensitive ? text : text.toLowerCase();
+        const name = caseSensitive ? role.name : role.name.toLowerCase();
+
+        if (!wholeWord) {
+            return name.includes(text)
+            || name.includes(text.replace(/^@/, ''));
+        }
+
+        return name === text
+        || name === text.replace(/^@/, '');
+    }
+
+    /**
+     * Resolves a custom emoji from a string, such as a name or a mention.
+     * @param {string} text - Text to resolve.
+     * @param {Collection<Snowflake, Emoji>} emojis - Collection of emojis to find in.
+     * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
+     * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
+     * @returns {Emoji}
+     */
+    static resolveEmoji(text, emojis, caseSensitive = false, wholeWord = false) {
+        return emojis.get(text) || emojis.find(emoji => this.checkEmoji(text, emoji, caseSensitive, wholeWord));
+    }
+
+    /**
+     * Resolves multiple custom emojis from a string, such as a name or a mention.
+     * @param {string} text - Text to resolve.
+     * @param {Collection<Snowflake, Emoji>} emojis - Collection of emojis to find in.
+     * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
+     * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
+     * @returns {Collection<Snowflake, Emoji>}
+     */
+    static resolveEmojis(text, emojis, caseSensitive = false, wholeWord = false) {
+        return emojis.filter(emoji => this.checkEmoji(text, emoji, caseSensitive, wholeWord));
+    }
+
+    /**
+     * Checks if a string could be referring to a emoji.
+     * @param {string} text - Text to check.
+     * @param {Emoji} emoji - Emoji to check.
+     * @param {boolean} [caseSensitive=false] - Makes checking by name case sensitive.
+     * @param {boolean} [wholeWord=false] - Makes checking by name match full word only.
+     * @returns {boolean}
+     */
+    static checkEmoji(text, emoji, caseSensitive = false, wholeWord = false) {
+        if (emoji.id === text) return true;
+
+        const reg = /<a?:[a-zA-Z0-9_]+:(\d{17,19})>/;
+        const match = text.match(reg);
+
+        if (match && emoji.id === match[1]) return true;
+
+        text = caseSensitive ? text : text.toLowerCase();
+        const name = caseSensitive ? emoji.name : emoji.name.toLowerCase();
+
+        if (!wholeWord) {
+            return name.includes(text)
+            || name.includes(text.replace(/:/, ''));
+        }
+
+        return name === text
+        || name === text.replace(/:/, '');
+    }
+
+    /**
+     * Resolves a guild from a string, such as an ID or a name.
+     * @param {string} text - Text to resolve.
+     * @param {Collection<Snowflake, Guild>} guilds - Collection of guilds to find in.
+     * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
+     * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
+     * @returns {Guild}
+     */
+    static resolveGuild(text, guilds, caseSensitive = false, wholeWord = false) {
+        return guilds.get(text) || guilds.find(guild => this.checkGuild(text, guild, caseSensitive, wholeWord));
+    }
+
+    /**
+     * Resolves multiple guilds from a string, such as an ID or a name.
+     * @param {string} text - Text to resolve.
+     * @param {Collection<Snowflake, Guild>} guilds - Collection of guilds to find in.
+     * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
+     * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
+     * @returns {Collection<Snowflake, Guild>}
+     */
+    static resolveGuilds(text, guilds, caseSensitive = false, wholeWord = false) {
+        return guilds.filter(guild => this.checkGuild(text, guild, caseSensitive, wholeWord));
+    }
+
+    /**
+     * Checks if a string could be referring to a guild.
+     * @param {string} text - Text to check.
+     * @param {Guild} guild - Guild to check.
+     * @param {boolean} [caseSensitive=false] - Makes checking by name case sensitive.
+     * @param {boolean} [wholeWord=false] - Makes checking by name match full word only.
+     * @returns {boolean}
+     */
+    static checkGuild(text, guild, caseSensitive = false, wholeWord = false) {
+        if (guild.id === text) return true;
+
+        text = caseSensitive ? text : text.toLowerCase();
+        const name = caseSensitive ? guild.name : guild.name.toLowerCase();
+
+        if (!wholeWord) return name.includes(text);
+        return name === text;
     }
 }
 
