@@ -25,7 +25,7 @@ declare module 'discord-akairo' {
         public constructor(options?: AkairoOptions & ClientOptions, clientOptions?: ClientOptions);
 
         public ownerID: Snowflake | Snowflake[];
-        
+
         public isOwner(user: UserResolvable): boolean;
     }
 
