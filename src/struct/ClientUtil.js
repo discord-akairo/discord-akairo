@@ -350,18 +350,6 @@ class ClientUtil {
         if (s2) return 2;
         return 0;
     }
-
-    /**
-     * Combination of `<Client>.fetchUser()` and `<Guild>.fetchMember()`.
-     * @param {Guild} guild - Guild to fetch in.
-     * @param {string} id - ID of the user.
-     * @param {boolean} cache - Whether or not to add to cache.
-     * @returns {Promise<GuildMember>}
-     */
-    async fetchMember(guild, id, cache) {
-        const user = await this.client.users.fetch(id, cache);
-        return guild.members.fetch(user, cache);
-    }
 }
 
 module.exports = ClientUtil;
