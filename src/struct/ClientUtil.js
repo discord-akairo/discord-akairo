@@ -1,4 +1,4 @@
-const { Collection, MessageAttachment, MessageEmbed, Permissions } = require('discord.js');
+const { Permissions } = require('discord.js');
 
 /**
  * Client utilities to help with common tasks.
@@ -321,14 +321,6 @@ class ClientUtil {
     }
 
     /**
-     * Array of permission names.
-     * @returns {string[]}
-     */
-    permissionNames() {
-        return Object.keys(Permissions.FLAGS);
-    }
-
-    /**
      * Resolves a permission number and returns an array of permission names.
      * @param {number} number - The permissions number.
      * @returns {string[]}
@@ -369,34 +361,6 @@ class ClientUtil {
     async fetchMember(guild, id, cache) {
         const user = await this.client.users.fetch(id, cache);
         return guild.members.fetch(user, cache);
-    }
-
-    /**
-     * Makes a MessageEmbed.
-     * @param {Object} [data] - Embed data.
-     * @returns {MessageEmbed}
-     */
-    embed(data) {
-        return new MessageEmbed(data);
-    }
-
-    /**
-     * Makes a MessageAttachment.
-     * @param {BufferResolvable|Stream} file - The file.
-     * @param {string} [name] - The filename.
-     * @returns {MessageAttachment}
-     */
-    attachment(file, name) {
-        return new MessageAttachment(file, name);
-    }
-
-    /**
-     * Makes a Collection.
-     * @param {Iterable} [iterable] - Entries to fill with.
-     * @returns {Collection}
-     */
-    collection(iterable) {
-        return new Collection(iterable);
     }
 }
 
