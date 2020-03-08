@@ -83,7 +83,7 @@ class Util {
      * @param {GuildMember} newMember - The new member.
      * @returns {number}
      */
-    compareStreaming(oldMember, newMember) {
+    static compareStreaming(oldMember, newMember) {
         const s1 = oldMember.presence.activity && oldMember.presence.activity.type === 'STREAMING';
         const s2 = newMember.presence.activity && newMember.presence.activity.type === 'STREAMING';
         if (s1 === s2) return 0;
@@ -97,7 +97,7 @@ class Util {
      * @param {number} number - The permissions number.
      * @returns {string[]}
      */
-    resolvePermissionNumber(number) {
+    static resolvePermissionNumber(number) {
         const resolved = [];
 
         for (const key of Object.keys(Permissions.FLAGS)) {
