@@ -222,6 +222,7 @@ class CommandHandler extends AkairoHandler {
         this.client.once('ready', () => {
             this.client.on('message', async m => {
                 if (m.partial) await m.fetch();
+                m.content.replace(/(?<!\\)[“”]/g, '"');
                 this.handle(m);
             });
 
