@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-const { Listener } = require('../../src');
+const { Listener } = require('../../');
 
 class InvalidMessageListener extends Listener {
     constructor() {

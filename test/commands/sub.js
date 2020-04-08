@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 const { Command } = require('../../src');
 const { inspect } = require('util');
 

@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 const { Command, Flag } = require('../..');
 
 class GenerateCommand extends Command {

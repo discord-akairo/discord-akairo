@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 const { Argument: { compose, range, union }, Command } = require('../..');
 
 class Test2Command extends Command {
