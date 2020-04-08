@@ -14,8 +14,8 @@ class TestClient extends AkairoClient {
             prefix: '!!',
             allowMention: true,
             commandUtil: true,
-            commandUtilLifetime: 10000,
-            commandUtilSweepInterval: 10000,
+            commandUtilLifetime: 30000,
+            commandUtilSweepInterval: 30000,
             storeMessages: true,
             handleEdits: true,
             argumentDefaults: {

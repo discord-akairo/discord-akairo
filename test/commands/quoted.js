@@ -1,5 +1,7 @@
+/* eslint-disable no-console */
+
 const { Command } = require('discord-akairo');
-const util = require('util');
+const { inspect } = require('util');
 
 class QuotedCommand extends Command {
     constructor() {
@@ -19,7 +21,7 @@ class QuotedCommand extends Command {
     }
 
     exec(message, args) {
-        return message.channel.send(util.inspect(args, { depth: 1 }), { code: 'js' });
+        return message.util.send(inspect(args, { depth: 1 }), { code: 'js' });
     }
 }
 
