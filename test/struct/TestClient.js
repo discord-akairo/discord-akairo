@@ -1,4 +1,6 @@
 const { AkairoClient, CommandHandler, InhibitorHandler, ListenerHandler, SQLiteProvider } = require('../../src/index');
+const { owner } = require('../config.json');
+
 let sqlite;
 
 const useDb = !process.argv.includes('--no-db');
@@ -6,13 +8,11 @@ if (useDb) sqlite = require('sqlite');
 
 class TestClient extends AkairoClient {
     constructor() {
-        super({
-            ownerID: '123992700587343872'
-        });
+        super({ ownerID: owner });
 
         this.commandHandler = new CommandHandler(this, {
             directory: './test/commands/',
-            ignoreCooldownID: ['132266422679240704'],
+            ignoreCooldownID: owner,
             aliasReplacement: /-/g,
             prefix: '!!',
             allowMention: true,
