@@ -33,7 +33,7 @@
         "typescript": "^3.4.2"
     },
     "scripts": {
-        "test": "npm run lint && node test/bot.js",
+        "test": "node test/bot.js",
         "lint": "eslint ./src && eslint ./test && tslint ./src/index.d.ts"
     },
     "repository": {
