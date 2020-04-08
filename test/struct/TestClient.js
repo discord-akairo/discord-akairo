@@ -1,6 +1,9 @@
 const { AkairoClient, CommandHandler, InhibitorHandler, ListenerHandler, SQLiteProvider } = require('../../src/index');
-const sqlite = require('sqlite');
+let sqlite;
 
+const useDb = !process.argv.includes('--no-db');
+
+if (useDb) sqlite = require('sqlite');
 class TestClient extends AkairoClient {
     constructor() {
         super({
@@ -41,9 +44,11 @@ class TestClient extends AkairoClient {
             directory: './test/listeners/'
         });
 
-        const db = sqlite.open('./test/db.sqlite')
-            .then(d => d.run('CREATE TABLE IF NOT EXISTS guilds (id TEXT NOT NULL UNIQUE, settings TEXT)').then(() => d));
-        this.settings = new SQLiteProvider(db, 'guilds', { dataColumn: 'settings' });
+        if (useDb) {
+            const db = sqlite.open('./test/db.sqlite')
+                .then(d => d.run('CREATE TABLE IF NOT EXISTS guilds (id TEXT NOT NULL UNIQUE, settings TEXT)').then(() => d));
+            this.settings = new SQLiteProvider(db, 'guilds', { dataColumn: 'settings' });
+        }
 
         this.setup();
     }
@@ -72,7 +77,7 @@ class TestClient extends AkairoClient {
     }
 
     async start(token) {
-        await this.settings.init();
+        if (useDb) await this.settings.init();
         await this.login(token);
         console.log('Ready!'); // eslint-disable-line no-console
     }

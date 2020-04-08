@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-const { Command } = require('discord-akairo');
+const { Command } = require('../../');
 const { inspect } = require('util');
 
 class QuotedCommand extends Command {
