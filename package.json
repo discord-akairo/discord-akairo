@@ -35,7 +35,7 @@
     "scripts": {
         "test": "node test/bot.js",
         "test:nodb": "node test/bot.js --no-db",
-        "lint": "eslint ./src && eslint ./test && tslint ./src/index.d.ts"
+        "lint": "eslint ./test ./src && tslint ./src/index.d.ts"
     },
     "repository": {
         "type": "git",
