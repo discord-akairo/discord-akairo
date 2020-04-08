@@ -2,8 +2,8 @@ const { AkairoClient, CommandHandler, InhibitorHandler, ListenerHandler, SQLiteP
 let sqlite;
 
 const useDb = !process.argv.includes('--no-db');
-
 if (useDb) sqlite = require('sqlite');
+
 class TestClient extends AkairoClient {
     constructor() {
         super({
