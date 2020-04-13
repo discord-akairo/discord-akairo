@@ -230,9 +230,7 @@ class Tokenizer {
     runWord() {
         const wordRegex = this.state === 0
             ? /^\S+/
-            : this.state === 1
-                ? /^[^\s"]+/
-                : /^[^\s”]+/;
+            : new RegExp(`^[^\\s${this.state === 1 ? Quotes.Normal : Quotes.End}]+`);
 
         const wordMatch = this.match(wordRegex);
         if (wordMatch) {
