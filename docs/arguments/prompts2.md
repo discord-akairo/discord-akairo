@@ -29,7 +29,7 @@ class HighestRoleCommand extends Command {
     }
 
     exec(message, args) {
-        return message.reply(args.member.highestRole.name);
+        return message.reply(args.member.roles.highest.name);
     }
 }
 
