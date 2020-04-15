@@ -688,7 +688,8 @@ declare module 'discord-akairo' {
     export const Constants: {
         ArgumentMatches: Record<
             'PHRASE' | 'FLAG' | 'OPTION' | 'REST' | 'SEPARATE' |
-            'TEXT' | 'CONTENT' | 'REST_CONTENT' | 'NONE', string>;
+            'TEXT' | 'CONTENT' | 'REST_CONTENT' | 'NONE', string
+        >;
         ArgumentTypes: Record<
             'STRING' | 'LOWERCASE' | 'UPPERCASE' | 'CHAR_CODES' |
             'NUMBER' | 'INTEGER' | 'BIGINT' | 'EMOJINT' |
@@ -708,7 +709,8 @@ declare module 'discord-akairo' {
             'COMMAND_BLOCKED' | 'COMMAND_STARTED' |
             'COMMAND_FINISHED' | 'COMMAND_CANCELLED' |
             'COMMAND_LOCKED' | 'MISSING_PERMISSIONS' |
-            'COOLDOWN' | 'IN_PROMPT' | 'ERROR', string>;
+            'COOLDOWN' | 'IN_PROMPT' | 'ERROR', string
+        >;
         BuiltInReasons: Record<'CLIENT' | 'BOT' | 'OWNER' | 'GUILD' | 'DM', string>;
     };
 
