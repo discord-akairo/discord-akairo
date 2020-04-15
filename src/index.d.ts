@@ -730,7 +730,7 @@ declare module 'discord-akairo' {
             ROLE: 'role';
             ROLES: 'roles';
             EMOJI: 'emoji';
-            EMOJIS: 'emoji';
+            EMOJIS: 'emojis';
             GUILD: 'guild';
             GUILDS: 'guilds';
             MESSAGE: 'message';
