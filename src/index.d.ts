@@ -686,17 +686,14 @@ declare module 'discord-akairo' {
     export type RegexSupplier = (message: Message) => RegExp;
 
     export const Constants: {
-        ArgumentMatches: Record<'PHRASE'|            'FLAG' |'OPTION'|
-            'REST'|
-            'SEPARATE'|
-            'TEXT'|
-            'CONTENT'|
-            'REST_CONTENT'|
-            'NONE', string>
-        ;
-        ArgumentTypes: Record<'STRING' | 'LOWERCASE' | 'UPPERCASE' | 'CHAR_CODES' | 'NUMBER' | 'INTEGER' | 'BIGINT' | 'EMOJINT' | 'URL' | 'DATE' | 'COLOR' | 'USER' |
-        'USERS' | 'MEMBER' | 'MEMBERS' | 'RELEVANT' | 'RELEVANTS' | 'CHANNEL' | 'CHANNELS' | 'TEXT_CHANNEL' | 'TEXT_CHANNELS' | 'VOICE_CHANNEL' | 'VOICE_CHANNELS' | 'CATEGORY_CHANNEL' | 'CATEGORY_CHANNELS' | 'NEWS_CHANNEL' | 'NEWS_CHANNELS' | 'STORE_CHANNEL' | 'STORE_CHANNELS' | 'ROLE' | 'ROLES' | 'EMOJI' | 'EMOJIS' |
-        'GUILD' | 'GUILDS' | 'MESSAGE' | 'GUILD_MESSAGE' | 'RELEVANT_MESSAGE' | 'INVITE' | 'MEMBER_MENTION' | 'CHANNEL_MENTION' | 'ROLE_MENTION' | 'EMOJI_MENTION' | 'COMMAND_ALIAS' | 'COMMAND' | 'INHIBITOR' | 'LISTENER', string>;
+        ArgumentMatches: Record<'PHRASE' | 'FLAG' | 'OPTION'| 'REST' | 'SEPARATE' | 'TEXT' | 'CONTENT' | 'REST_CONTENT' | 'NONE', string>;
+
+        ArgumentTypes: Record<
+            'STRING' | 'LOWERCASE' | 'UPPERCASE' | 'CHAR_CODES' |
+            'NUMBER' | 'INTEGER' | 'BIGINT' | 'EMOJINT' |
+            'URL' | 'DATE' | 'COLOR' | 'USER' |
+            'USERS' | 'MEMBER' | 'MEMBERS' | 'RELEVANT' | 'RELEVANTS' | 'CHANNEL' | 'CHANNELS' | 'TEXT_CHANNEL' | 'TEXT_CHANNELS' | 'VOICE_CHANNEL' | 'VOICE_CHANNELS' | 'CATEGORY_CHANNEL' | 'CATEGORY_CHANNELS' | 'NEWS_CHANNEL' | 'NEWS_CHANNELS' | 'STORE_CHANNEL' | 'STORE_CHANNELS' | 'ROLE' | 'ROLES' | 'EMOJI' | 'EMOJIS' |
+            'GUILD' | 'GUILDS' | 'MESSAGE' | 'GUILD_MESSAGE' | 'RELEVANT_MESSAGE' | 'INVITE' | 'MEMBER_MENTION' | 'CHANNEL_MENTION' | 'ROLE_MENTION' | 'EMOJI_MENTION' | 'COMMAND_ALIAS' | 'COMMAND' | 'INHIBITOR' | 'LISTENER', string>;
         AkairoHandlerEvents: Record<'LOAD' | 'REMOVE', string>
         CommandHandlerEvents: Record<'MESSAGE_BLOCKED' | 'MESSAGE_INVALID' | 'COMMAND_BLOCKED' | 'COMMAND_STARTED' | 'COMMAND_FINISHED' | 'COMMAND_CANCELLED' | 'COMMAND_LOCKED' | 'MISSING_PERMISSIONS' | 'COOLDOWN' | 'IN_PROMPT' | 'ERROR', string>
         BuiltInReasons: Record<'CLIENT' | 'BOT' | 'OWNER' | 'GUILD' | 'DM', string>
