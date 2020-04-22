@@ -1,11 +1,7 @@
 const { ArgumentMatches } = require('../../../util/Constants');
 const { string: StringType } = require('./Types');
-const { deprecate } = require('util');
 const Flag = require('../Flag');
 const { choice, intoCallable, isPromise } = require('../../../util/Util');
-
-// eslint-disable-next-line no-empty-function
-const warnType = deprecate(() => {}, 'Argument#type: pass a function instead');
 
 /**
  * Represents an argument for a command.
@@ -42,8 +38,7 @@ class Argument {
          * The type to cast to or a function to use to cast.
          * @type {ArgumentType|ArgumentTypeCaster}
          */
-        this.type = typeof type === 'function' ? type.bind(this) : type;
-        if (typeof this.type !== 'string') warnType();
+        this.type = type.bind(this);
 
         /**
          * The string(s) to use for flag or option match.
