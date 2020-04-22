@@ -1,5 +1,5 @@
 const { ArgumentMatches } = require('../../../util/Constants');
-const { string: StringType } = require('./Types');
+const { string } = require('./Types');
 const Flag = require('../Flag');
 const { choice, intoCallable, isPromise } = require('../../../util/Util');
 
@@ -11,7 +11,7 @@ const { choice, intoCallable, isPromise } = require('../../../util/Util');
 class Argument {
     constructor(command, {
         match = ArgumentMatches.PHRASE,
-        type = StringType,
+        type = string(),
         flag = null,
         multipleFlags = false,
         index = null,
