@@ -6,7 +6,6 @@ const Command = require('./Command');
 const CommandUtil = require('./CommandUtil');
 const Flag = require('./Flag');
 const { deepAssign, flatMap, intoArray, intoCallable, isPromise, prefixCompare } = require('../../util/Util');
-const TypeResolver = require('./arguments/TypeResolver');
 
 /**
  * Loads commands and handles messages.
@@ -48,12 +47,6 @@ class CommandHandler extends AkairoHandler {
             automateCategories,
             loadFilter
         });
-
-        /**
-         * The type resolver.
-         * @type {TypeResolver}
-         */
-        this.resolver = new TypeResolver(this);
 
         /**
          * Collecion of command aliases.
@@ -947,18 +940,6 @@ class CommandHandler extends AkairoHandler {
      */
     useInhibitorHandler(inhibitorHandler) {
         this.inhibitorHandler = inhibitorHandler;
-        this.resolver.inhibitorHandler = inhibitorHandler;
-
-        return this;
-    }
-
-    /**
-     * Set the listener handler to use.
-     * @param {ListenerHandler} listenerHandler - The listener handler.
-     * @returns {CommandHandler}
-     */
-    useListenerHandler(listenerHandler) {
-        this.resolver.listenerHandler = listenerHandler;
 
         return this;
     }

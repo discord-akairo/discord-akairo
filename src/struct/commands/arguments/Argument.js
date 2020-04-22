@@ -192,7 +192,7 @@ class Argument {
      * @returns {Promise<any>}
      */
     cast(message, phrase) {
-        return Argument.cast(this.type, this.handler.resolver, message, phrase);
+        return Argument.cast(this.type, message, phrase);
     }
 
     /**
@@ -347,12 +347,11 @@ class Argument {
     /**
      * Casts a phrase to the specified type.
      * @param {ArgumentType|ArgumentTypeCaster} type - Type to use.
-     * @param {TypeResolver} resolver - Type resolver to use.
      * @param {Message} message - Message that called the command.
      * @param {string} phrase - Phrase to process.
      * @returns {Promise<any>}
      */
-    static async cast(type, resolver, message, phrase) {
+    static async cast(type, message, phrase) {
         if (Array.isArray(type)) {
             for (const entry of type) {
                 if (Array.isArray(entry)) {
@@ -390,12 +389,6 @@ class Argument {
             return { match, matches };
         }
 
-        if (resolver.type(type)) {
-            let res = resolver.type(type).call(this, message, phrase);
-            if (isPromise(res)) res = await res;
-            return res;
-        }
-
         return phrase || null;
     }
 
@@ -410,7 +403,7 @@ class Argument {
         return async function typeFn(message, phrase) {
             for (let entry of types) {
                 if (typeof type === 'function') entry = entry.bind(this);
-                const res = await Argument.cast(entry, this.handler.resolver, message, phrase);
+                const res = await Argument.cast(entry, message, phrase);
                 if (!Argument.isFailure(res)) return res;
             }
 
@@ -429,7 +422,7 @@ class Argument {
             const results = [];
             for (let entry of types) {
                 if (typeof type === 'function') entry = entry.bind(this);
-                const res = await Argument.cast(entry, this.handler.resolver, message, phrase);
+                const res = await Argument.cast(entry, message, phrase);
                 if (Argument.isFailure(res)) return res;
                 results.push(res);
             }
@@ -448,7 +441,7 @@ class Argument {
     static validate(type, predicate) {
         return async function typeFn(message, phrase) {
             if (typeof type === 'function') type = type.bind(this);
-            const res = await Argument.cast(type, this.handler.resolver, message, phrase);
+            const res = await Argument.cast(type, message, phrase);
             if (Argument.isFailure(res)) return res;
             if (!predicate.call(this, message, phrase, res)) return null;
             return res;
@@ -489,7 +482,7 @@ class Argument {
             let acc = phrase;
             for (let entry of types) {
                 if (typeof entry === 'function') entry = entry.bind(this);
-                acc = await Argument.cast(entry, this.handler.resolver, message, acc);
+                acc = await Argument.cast(entry, message, acc);
                 if (Argument.isFailure(acc)) return acc;
             }
 
@@ -508,7 +501,7 @@ class Argument {
             let acc = phrase;
             for (let entry of types) {
                 if (typeof entry === 'function') entry = entry.bind(this);
-                acc = await Argument.cast(entry, this.handler.resolver, message, acc);
+                acc = await Argument.cast(entry, message, acc);
             }
 
             return acc;
@@ -524,7 +517,7 @@ class Argument {
     static withInput(type) {
         return async function typeFn(message, phrase) {
             if (typeof type === 'function') type = type.bind(this);
-            const res = await Argument.cast(type, this.handler.resolver, message, phrase);
+            const res = await Argument.cast(type, message, phrase);
             if (Argument.isFailure(res)) {
                 return Flag.fail({ input: phrase, value: res });
             }
@@ -544,7 +537,7 @@ class Argument {
     static tagged(type, tag = type) {
         return async function typeFn(message, phrase) {
             if (typeof type === 'function') type = type.bind(this);
-            const res = await Argument.cast(type, this.handler.resolver, message, phrase);
+            const res = await Argument.cast(type, message, phrase);
             if (Argument.isFailure(res)) {
                 return Flag.fail({ tag, value: res });
             }
@@ -564,7 +557,7 @@ class Argument {
     static taggedWithInput(type, tag = type) {
         return async function typeFn(message, phrase) {
             if (typeof type === 'function') type = type.bind(this);
-            const res = await Argument.cast(type, this.handler.resolver, message, phrase);
+            const res = await Argument.cast(type, message, phrase);
             if (Argument.isFailure(res)) {
                 return Flag.fail({ tag, input: phrase, value: res });
             }
@@ -584,7 +577,7 @@ class Argument {
         return async function typeFn(message, phrase) {
             for (let entry of types) {
                 entry = Argument.tagged(entry);
-                const res = await Argument.cast(entry, this.handler.resolver, message, phrase);
+                const res = await Argument.cast(entry, message, phrase);
                 if (!Argument.isFailure(res)) return res;
             }
 
