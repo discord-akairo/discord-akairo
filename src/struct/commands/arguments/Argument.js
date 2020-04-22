@@ -38,7 +38,7 @@ class Argument {
          * The type to cast to or a function to use to cast.
          * @type {ArgumentType|ArgumentTypeCaster}
          */
-        this.type = type.bind(this);
+        this.type = typeof type === 'function' ? type.bind(this) : type;
 
         /**
          * The string(s) to use for flag or option match.
