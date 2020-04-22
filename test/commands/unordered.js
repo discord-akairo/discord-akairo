@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-const { Command } = require('../..');
+const { Command, Types } = require('../..');
 const util = require('util');
 
 class UnorderedCommand extends Command {
@@ -11,12 +11,12 @@ class UnorderedCommand extends Command {
                 {
                     id: 'integer1',
                     unordered: true,
-                    type: 'integer'
+                    type: Types.number({ type: 'integer' })
                 },
                 {
                     id: 'integer2',
                     unordered: true,
-                    type: 'integer'
+                    type: Types.number({ type: 'integer' })
                 }
             ]
         });

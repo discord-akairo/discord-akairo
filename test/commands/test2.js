@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-const { Argument: { compose, range, union }, Command } = require('../..');
+const { Argument: { compose, range, union }, Command, Types } = require('../..');
 const util = require('util');
 
 class Test2Command extends Command {
@@ -13,7 +13,7 @@ class Test2Command extends Command {
                 {
                     id: 'y',
                     match: 'rest',
-                    type: compose((m, s) => s.replace(/\s/g, ''), range(union('integer', 'emojint'), 0, 50))
+                    type: compose((m, s) => s.replace(/\s/g, ''), range(union(Types.number({ type: 'integer' }), Types.number({ type: 'emojint' })), 0, 50))
                 }
             ]
         });
