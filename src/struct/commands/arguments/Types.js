@@ -40,7 +40,7 @@ const mentionTypes = {
 };
 
 module.exports = {
-    string: ({ case: casing } = {}) => (message, phrase) => {
+    string: ({ casing } = {}) => (message, phrase) => {
         if (!phrase) return null;
         return casing
             ? casing === 'low'
