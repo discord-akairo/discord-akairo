@@ -736,7 +736,7 @@ module.exports = Argument;
  *
  * A regular expression can also be used.
  * The evaluated argument will be an object containing the `match` and `matches` if global.
- * @typedef {string|string[]} ArgumentType
+ * @typedef {RegExp|string[]} ArgumentType
  */
 
 /**
@@ -747,15 +747,6 @@ module.exports = Argument;
  * @typedef {Function} ArgumentTypeCaster
  * @param {Message} message - Message that triggered the command.
  * @param {string} phrase - The user input.
- * @returns {any}
- */
-
-/**
- * A function for processing some value to use as an argument.
- * This is mainly used in composing argument types.
- * @typedef {Function} ArgumentTypeCaster
- * @param {Message} message - Message that triggered the command.
- * @param {any} value - Some value.
  * @returns {any}
  */
 
