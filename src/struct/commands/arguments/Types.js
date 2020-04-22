@@ -57,7 +57,16 @@ module.exports = {
     },
 
     number: ({ type } = {}) => (message, phrase) => {
-        if (!phrase || isNaN(phrase)) return null;
+        if (!phrase) return null;
+        if (type === 'emojint') {
+            const n = phrase.replace(/0⃣|1⃣|2⃣|3⃣|4⃣|5⃣|6⃣|7⃣|8⃣|9⃣|🔟/g, m => {
+                return ['0⃣', '1⃣', '2⃣', '3⃣', '4⃣', '5⃣', '6⃣', '7⃣', '8⃣', '9⃣', '🔟'].indexOf(m);
+            });
+            if (isNaN(n)) return null;
+            return parseInt(n);
+        }
+
+        if (isNaN(phrase)) return null;
         if (type === 'integer') {
             return parseInt(phrase);
         } else if (type === 'bigint') {
@@ -66,12 +75,6 @@ module.exports = {
             } catch (_) {
                 return null;
             }
-        } else if (type === 'emojint') {
-            const n = phrase.replace(/0⃣|1⃣|2⃣|3⃣|4⃣|5⃣|6⃣|7⃣|8⃣|9⃣|🔟/g, m => {
-                return ['0⃣', '1⃣', '2⃣', '3⃣', '4⃣', '5⃣', '6⃣', '7⃣', '8⃣', '9⃣', '🔟'].indexOf(m);
-            });
-            if (isNaN(n)) return null;
-            return parseInt(n);
         }
         return parseFloat(phrase);
     },
