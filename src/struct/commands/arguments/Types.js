@@ -275,3 +275,26 @@ module.exports = {
         return handler.findCommand(phrase) || null;
     }
 };
+
+/**
+ * The type that the argument should be cast to.
+ *
+ * An array of strings can be used to restrict input to only those strings, case insensitive.
+ * The array can also contain an inner array of strings, for aliases.
+ * If so, the first entry of the array will be used as the final argument.
+ *
+ * A regular expression can also be used.
+ * The evaluated argument will be an object containing the `match` and `matches` if global.
+ * @typedef {RegExp|string[]} ArgumentType
+ */
+
+/**
+ * A function for processing user input to use as an argument.
+ * A void return value will use the default value for the argument or start a prompt.
+ * Any other truthy return value will be used as the evaluated argument.
+ * If returning a Promise, the resolved value will go through the above steps.
+ * @typedef {Function} ArgumentTypeCaster
+ * @param {Message} message - Message that triggered the command.
+ * @param {string} phrase - The user input.
+ * @returns {any}
+ */
