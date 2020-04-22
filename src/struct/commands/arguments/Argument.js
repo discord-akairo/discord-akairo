@@ -1,6 +1,11 @@
-const { ArgumentMatches, ArgumentTypes } = require('../../../util/Constants');
+const { ArgumentMatches } = require('../../../util/Constants');
+const { string: StringType } = require('./Types');
+const { deprecate } = require('util');
 const Flag = require('../Flag');
 const { choice, intoCallable, isPromise } = require('../../../util/Util');
+
+// eslint-disable-next-line no-empty-function
+const warnType = deprecate(() => {}, 'Argument#type: pass a function instead');
 
 /**
  * Represents an argument for a command.
@@ -10,7 +15,7 @@ const { choice, intoCallable, isPromise } = require('../../../util/Util');
 class Argument {
     constructor(command, {
         match = ArgumentMatches.PHRASE,
-        type = ArgumentTypes.STRING,
+        type = StringType,
         flag = null,
         multipleFlags = false,
         index = null,
@@ -38,6 +43,7 @@ class Argument {
          * @type {ArgumentType|ArgumentTypeCaster}
          */
         this.type = typeof type === 'function' ? type.bind(this) : type;
+        if (typeof this.type !== 'string') warnType();
 
         /**
          * The string(s) to use for flag or option match.
