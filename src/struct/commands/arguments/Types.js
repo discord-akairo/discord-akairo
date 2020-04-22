@@ -43,9 +43,9 @@ module.exports = {
     string: ({ casing } = {}) => (message, phrase) => {
         if (!phrase) return null;
         return casing
-            ? casing === 'low'
-                ? phrase.toLowerCase()
-                : phrase.toUpperCase()
+            ? casing === 'upper'
+                ? phrase.toUpperCase()
+                : phrase.toLowerCase()
             : phrase;
     },
 
@@ -61,7 +61,11 @@ module.exports = {
         if (type === 'integer') {
             return parseInt(phrase);
         } else if (type === 'bigint') {
-            return BigInt(phrase); // eslint-disable-line no-undef, new-cap
+            try {
+                return BigInt(phrase); // eslint-disable-line no-undef, new-cap
+            } catch (_) {
+                return null;
+            }
         } else if (type === 'emojint') {
             const n = phrase.replace(/0⃣|1⃣|2⃣|3⃣|4⃣|5⃣|6⃣|7⃣|8⃣|9⃣|🔟/g, m => {
                 return ['0⃣', '1⃣', '2⃣', '3⃣', '4⃣', '5⃣', '6⃣', '7⃣', '8⃣', '9⃣', '🔟'].indexOf(m);

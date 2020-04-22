@@ -13,6 +13,7 @@ module.exports = {
 
     // Arguments
     Argument: require('./struct/commands/arguments/Argument'),
+    Types: require('./struct/commands/arguments/Types'),
 
     // Inhibitors
     Inhibitor: require('./struct/inhibitors/Inhibitor'),
