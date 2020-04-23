@@ -706,7 +706,7 @@ declare module 'discord-akairo' {
         akairoModule: TypeFunction<{ handler: AkairoHandler }>;
         commandAlias: TypeFunction<{ handler: CommandHandler }>;
     } & Record<
-          | 'charCodes' | 'url' | 'date' | 'color'
+        | 'charCodes' | 'url' | 'date' | 'color'
         | 'user' | 'users'
         | 'member' | 'members'
         | 'relevant' | 'relevants'
