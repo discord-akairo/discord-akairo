@@ -65,7 +65,7 @@ const TokenTypes = Object.freeze({
     OpenQuote: 'OpenQuote',
     Quote: 'Quote',
     EndQuote: 'EndQuote',
-    Seperator: 'Seperator',
+    Separator: 'Separator',
     WS: 'WS',
     Word: 'Word',
     EOF: 'EOF'
@@ -219,7 +219,7 @@ class Tokenizer {
 
     runSeparator() {
         if (this.separator != null && this.startsWith(this.separator)) {
-            this.addToken(TokenTypes.Seperator, this.slice(0, this.separator.length));
+            this.addToken(TokenTypes.Separator, this.slice(0, this.separator.length));
             this.advance(this.separator.length);
             return true;
         }
@@ -327,7 +327,7 @@ class Parser {
         if (this.lookahead(TokenTypes.FlagWord, TokenTypes.OptionFlagWord)) {
             const parsed = this.parseFlag();
             const trailing = this.lookahead(TokenTypes.WS) ? this.match(TokenTypes.WS).value : '';
-            const separator = this.lookahead(TokenTypes.Seperator) ? this.match(TokenTypes.Seperator).value : '';
+            const separator = this.lookahead(TokenTypes.Separator) ? this.match(TokenTypes.Separator).value : '';
             parsed.raw = `${leading}${parsed.raw}${trailing}${separator}`;
             this.results.all.push(parsed);
             if (parsed.type === ResultTypes.Flag) {
@@ -341,7 +341,7 @@ class Parser {
 
         const parsed = this.parsePhrase();
         const trailing = this.lookahead(TokenTypes.WS) ? this.match(TokenTypes.WS).value : '';
-        const separator = this.lookahead(TokenTypes.Seperator) ? this.match(TokenTypes.Seperator).value : '';
+        const separator = this.lookahead(TokenTypes.Separator) ? this.match(TokenTypes.Separator).value : '';
         parsed.raw = `${leading}${parsed.raw}${trailing}${separator}`;
         this.results.all.push(parsed);
         this.results.phrases.push(parsed);
