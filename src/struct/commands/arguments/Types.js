@@ -5,6 +5,7 @@ const { URL } = require('url');
 const mentionTypes = {
     user: (message, phrase) => {
         if (!phrase) return null;
+
         const id = phrase.match(/<@!?(\d{17,19})>/);
         if (!id) return null;
         return message.client.users.cache.get(id[1]) || null;
@@ -12,6 +13,7 @@ const mentionTypes = {
 
     member: (message, phrase) => {
         if (!phrase) return null;
+
         const id = phrase.match(/<@!?(\d{17,19})>/);
         if (!id) return null;
         return message.guild.members.cache.get(id[1]) || null;
@@ -19,6 +21,7 @@ const mentionTypes = {
 
     channel: (message, phrase) => {
         if (!phrase) return null;
+
         const id = phrase.match(/<#(\d{17,19})>/);
         if (!id) return null;
         return message.guild.channels.cache.get(id[1]) || null;
@@ -26,6 +29,7 @@ const mentionTypes = {
 
     role: (message, phrase) => {
         if (!phrase) return null;
+
         const id = phrase.match(/<@&(\d{17,19})>/);
         if (!id) return null;
         return message.guild.roles.cache.get(id[1]) || null;
@@ -33,6 +37,7 @@ const mentionTypes = {
 
     emoji: (message, phrase) => {
         if (!phrase) return null;
+
         const id = phrase.match(/<a?:[a-zA-Z0-9_]+:(\d{17,19})>/);
         if (!id) return null;
         return message.guild.emojis.cache.get(id[1]) || null;
@@ -42,6 +47,7 @@ const mentionTypes = {
 module.exports = {
     string: ({ casing } = {}) => (message, phrase) => {
         if (!phrase) return null;
+
         return casing
             ? casing === 'upper'
                 ? phrase.toUpperCase()
@@ -51,6 +57,7 @@ module.exports = {
 
     charCodes: () => (message, phrase) => {
         if (!phrase) return null;
+
         const codes = [];
         for (const char of phrase) codes.push(char.charCodeAt(0));
         return codes;
@@ -58,6 +65,7 @@ module.exports = {
 
     number: ({ type } = {}) => (message, phrase) => {
         if (!phrase) return null;
+
         if (type === 'emojint') {
             const n = phrase.replace(/0⃣|1⃣|2⃣|3⃣|4⃣|5⃣|6⃣|7⃣|8⃣|9⃣|🔟/g, m => {
                 return ['0⃣', '1⃣', '2⃣', '3⃣', '4⃣', '5⃣', '6⃣', '7⃣', '8⃣', '9⃣', '🔟'].indexOf(m);
@@ -81,6 +89,7 @@ module.exports = {
 
     url: () => (message, phrase) => {
         if (!phrase) return null;
+
         if (/^<.+>$/.test(phrase)) phrase = phrase.slice(1, -1);
 
         try {
@@ -92,6 +101,7 @@ module.exports = {
 
     date: () => (message, phrase) => {
         if (!phrase) return null;
+
         const timestamp = Date.parse(phrase);
         if (isNaN(timestamp)) return null;
         return new Date(timestamp);
@@ -110,22 +120,26 @@ module.exports = {
 
     user: () => (message, phrase) => {
         if (!phrase) return null;
+
         return message.client.util.resolveUser(phrase, message.client.users.cache);
     },
 
     users: () => (message, phrase) => {
         if (!phrase) return null;
+
         const users = message.client.util.resolveUsers(phrase, message.client.users.cache);
         return users.size ? users : null;
     },
 
     member: () => (message, phrase) => {
         if (!phrase) return null;
+
         return message.client.util.resolveMember(phrase, message.guild.members.cache);
     },
 
     members: () => (message, phrase) => {
         if (!phrase) return null;
+
         const members = message.client.util.resolveMembers(phrase, message.guild.members.cache);
         return members.size ? members : null;
     },
