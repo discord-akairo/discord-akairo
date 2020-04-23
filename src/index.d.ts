@@ -94,7 +94,7 @@ declare module 'discord-akairo' {
         public collect(message: Message, commandInput?: string): Promise<Flag | any>;
         public process(message: Message, phrase: string): Promise<any>;
 
-        public static cast(type: ArgumentType | ArgumentTypeCaster, resolver: TypeResolver, message: Message, phrase: string): Promise<any>;
+        public static cast(type: ArgumentType | ArgumentTypeCaster, message: Message, phrase: string): Promise<any>;
         public static compose(...types: (ArgumentType | ArgumentTypeCaster)[]): ArgumentTypeCaster;
         public static composeWithFailure(...types: (ArgumentType | ArgumentTypeCaster)[]): ArgumentTypeCaster;
         public static isFailure(value: any): value is null | undefined | Flag & { value: any };
@@ -211,7 +211,6 @@ declare module 'discord-akairo' {
         public prefix: string | string[] | PrefixSupplier;
         public prefixes: Collection<string | PrefixSupplier, Set<string>>;
         public prompts: Collection<string, Set<string>>;
-        public resolver: TypeResolver;
         public storeMessage: boolean;
 
         public add(filename: string): Command;
@@ -245,7 +244,6 @@ declare module 'discord-akairo' {
         public runCooldowns(message: Message, command: Command): boolean;
         public runCommand(message: Message, command: Command, args: any): Promise<void>;
         public useInhibitorHandler(inhibitorHandler: InhibitorHandler): this;
-        public useListenerHandler(ListenerHandler: ListenerHandler): this;
         public on(event: 'remove', listener: (command: Command) => any): this;
         public on(event: 'load', listener: (command: Command, isReload: boolean) => any): this;
         public on(event: 'commandBlocked', listener: (message: Message, command: Command, reason: string) => any): this;
@@ -437,21 +435,6 @@ declare module 'discord-akairo' {
         public set(id: string, key: string, value: any): Promise<any>;
     }
 
-    export class TypeResolver {
-        public constructor(handler: CommandHandler);
-
-        public client: AkairoClient;
-        public commandHandler: CommandHandler;
-        public inhibitorHandler?: InhibitorHandler;
-        public listenerHandler?: ListenerHandler;
-        public types: Collection<string, ArgumentTypeCaster>;
-
-        public addBuiltInTypes(): void;
-        public addType(name: string, fn: ArgumentTypeCaster): this;
-        public addTypes(types: { [x: string]: ArgumentTypeCaster }): this;
-        public type(name: string): ArgumentTypeCaster;
-    }
-
     export class Util {
         public static isEventEmitter(value: any): boolean;
         public static isPromise(value: any): boolean;
@@ -634,18 +617,7 @@ declare module 'discord-akairo' {
 
     export type ArgumentMatch = 'phrase' | 'flag' | 'option' | 'rest' | 'separate' | 'text' | 'content' | 'restContent' | 'none';
 
-    export type ArgumentType = 'string' | 'lowercase' | 'uppercase' | 'charCodes'
-        | 'number' | 'integer' | 'bigint' | 'emojint'
-        | 'url' | 'date' | 'color'
-        | 'user' | 'users' | 'member' | 'members' | 'relevant' | 'relevants'
-        | 'channel' | 'channels' | 'textChannel' | 'textChannels' | 'voiceChannel' | 'voiceChannels' | 'categoryChannel' | 'categoryChannels' | 'newsChannel' | 'newsChannels' | 'storeChannel' | 'storeChannels'
-        | 'role' | 'roles' | 'emoji' | 'emojis' | 'guild' | 'guilds'
-        | 'message' | 'guildMessage' | 'relevantMessage' | 'invite'
-        | 'userMention' | 'memberMention' | 'channelMention' | 'roleMention' | 'emojiMention'
-        | 'commandAlias' | 'command' | 'inhibitor' | 'listener'
-        | (string | string[])[]
-        | RegExp
-        | string;
+    export type ArgumentType = (string | string[])[] | RegExp;
 
     export type ArgumentGenerator = (message: Message, parsed: ContentParserResult, state: ArgumentRunnerState) => IterableIterator<ArgumentOptions | Flag>;
 
@@ -697,54 +669,6 @@ declare module 'discord-akairo' {
             REST_CONTENT: 'restContent';
             NONE: 'none';
         };
-        ArgumentTypes: {
-            STRING: 'string';
-            LOWERCASE: 'lowercase';
-            UPPERCASE: 'uppercase';
-            CHAR_CODES: 'charCodes';
-            NUMBER: 'number';
-            INTEGER: 'integer';
-            BIGINT: 'bigint';
-            EMOJINT: 'emojint';
-            URL: 'url';
-            DATE: 'date';
-            COLOR: 'color';
-            USER: 'user';
-            USERS: 'users';
-            MEMBER: 'member';
-            MEMBERS: 'members';
-            RELEVANT: 'relevant';
-            RELEVANTS: 'relevants';
-            CHANNEL: 'channel';
-            CHANNELS: 'channels';
-            TEXT_CHANNEL: 'textChannel';
-            TEXT_CHANNELS: 'textChannels';
-            VOICE_CHANNEL: 'voiceChannel';
-            VOICE_CHANNELS: 'voiceChannels';
-            CATEGORY_CHANNEL: 'categoryChannel';
-            CATEGORY_CHANNELS: 'categoryChannels';
-            NEWS_CHANNEL: 'newsChannel';
-            NEWS_CHANNELS: 'newsChannels';
-            STORE_CHANNEL: 'storeChannel';
-            STORE_CHANNELS: 'storeChannels';
-            ROLE: 'role';
-            ROLES: 'roles';
-            EMOJI: 'emoji';
-            EMOJIS: 'emojis';
-            GUILD: 'guild';
-            GUILDS: 'guilds';
-            MESSAGE: 'message';
-            GUILD_MESSAGE: 'guildMessage';
-            INVITE: 'invite';
-            MEMBER_MENTION: 'memberMention';
-            CHANNEL_MENTION: 'channelMention';
-            ROLE_MENTION: 'roleMention';
-            EMOJI_MENTION: 'emojiMention';
-            COMMAND_ALIAS: 'commandAlias';
-            COMMAND: 'command';
-            INHIBITOR: 'inhibitor';
-            LISTENER: 'listener';
-        };
         AkairoHandlerEvents: {
             LOAD: 'load';
             REMOVE: 'remove';
@@ -770,6 +694,28 @@ declare module 'discord-akairo' {
             DM: 'dm';
         };
     }
+
+    type TypeFunction<T = never> = (options?: T) => ArgumentTypeCaster;
+    export const Types: {
+        string: TypeFunction<{ casing: 'lower' | 'upper' | undefined }>;
+        number: TypeFunction<{ type: 'integer' | 'bigint' | 'emojint' | undefined }>;
+        channel: TypeFunction<{ type: 'text' | 'voice' | 'category' | 'news' | 'store' | undefined }>;
+        channels: TypeFunction<{ type: 'text' | 'voice' | 'category' | 'news' | 'store' | undefined }>;
+        message: TypeFunction<{ type: 'guild' | 'relevant' | undefined }>;
+        mention: TypeFunction<{ type: 'user' | 'member' | 'channel' | 'role' | 'emoji' }>;
+        akairoModule: TypeFunction<{ handler: AkairoHandler }>;
+        commandAlias: TypeFunction<{ handler: CommandHandler }>;
+    } & Record<
+          | 'charCodes' | 'url' | 'date' | 'color'
+        | 'user' | 'users'
+        | 'member' | 'members'
+        | 'relevant' | 'relevants'
+        | 'role' | 'roles'
+        | 'emoji' | 'emojis'
+        | 'guild' | 'guilds'
+        | 'invite',
+        TypeFunction
+    >;
 
     export const version: string;
 }
