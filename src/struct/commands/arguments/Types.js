@@ -209,33 +209,39 @@ module.exports = {
 
     role: () => (message, phrase) => {
         if (!phrase) return null;
+
         return message.client.util.resolveRole(phrase, message.guild.roles.cache);
     },
 
     roles: () => (message, phrase) => {
         if (!phrase) return null;
+
         const roles = message.client.util.resolveRoles(phrase, message.guild.roles.cache);
         return roles.size ? roles : null;
     },
 
     emoji: () => (message, phrase) => {
         if (!phrase) return null;
+
         return message.client.util.resolveEmoji(phrase, message.guild.emojis.cache);
     },
 
     emojis: () => (message, phrase) => {
         if (!phrase) return null;
+
         const emojis = message.client.util.resolveEmojis(phrase, message.guild.emojis.cache);
         return emojis.size ? emojis : null;
     },
 
     guild: () => (message, phrase) => {
         if (!phrase) return null;
+
         return message.client.util.resolveGuild(phrase, message.client.guilds.cache);
     },
 
     guilds: () => (message, phrase) => {
         if (!phrase) return null;
+
         const guilds = message.client.util.resolveGuilds(phrase, message.client.guilds.cache);
         return guilds.size ? guilds : null;
     },
@@ -271,11 +277,13 @@ module.exports = {
 
             return null;
         }
+
         return message.channel.messages.fetch(phrase).catch(() => null);
     },
 
     invite: () => (message, phrase) => {
         if (!phrase) return null;
+
         return message.client.fetchInvite(phrase).catch(() => null);
     },
 
@@ -288,11 +296,13 @@ module.exports = {
 
     akairoModule: ({ handler }) => (message, phrase) => {
         if (!phrase) return null;
+
         return handler.modules.get(phrase) || null;
     },
 
     commandAlias: ({ handler }) => (message, phrase) => {
         if (!phrase) return null;
+
         return handler.findCommand(phrase) || null;
     }
 };
