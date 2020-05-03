@@ -246,39 +246,45 @@ module.exports = {
         return guilds.size ? guilds : null;
     },
 
-    message: ({ type } = {}) => async (message, phrase) => {
-        if (!phrase) return null;
-
+    message: ({ type } = {}) => {
         if (type === 'guild') {
-            for (const channel of message.guild.channels.cache.values()) {
-                if (channel.type !== 'text') continue;
-                try {
-                    return await channel.messages.fetch(phrase);
-                } catch (err) {
-                    if (/^Invalid Form Body/.test(err.message)) return null;
-                }
-            }
-            return null;
-        } else if (type === 'relevant') {
-            if (!phrase) return null;
-            const hereMsg = await message.channel.messages.fetch(phrase).catch(() => null);
-            if (hereMsg) return hereMsg;
-
-            if (message.guild) {
+            return async (message, phrase) => {
+                if (!phrase) return null;
                 for (const channel of message.guild.channels.cache.values()) {
                     if (channel.type !== 'text') continue;
                     try {
-                        return channel.messages.fetch(phrase);
+                        return await channel.messages.fetch(phrase);
                     } catch (err) {
                         if (/^Invalid Form Body/.test(err.message)) return null;
                     }
                 }
-            }
+                return null;
+            };
+        } else if (type === 'relevant') {
+            return async (message, phrase) => {
+                if (!phrase) return null;
+                const hereMsg = await message.channel.messages.fetch(phrase).catch(() => null);
+                if (hereMsg) return hereMsg;
 
-            return null;
+                if (message.guild) {
+                    for (const channel of message.guild.channels.cache.values()) {
+                        if (channel.type !== 'text') continue;
+                        try {
+                            return channel.messages.fetch(phrase);
+                        } catch (err) {
+                            if (/^Invalid Form Body/.test(err.message)) return null;
+                        }
+                    }
+                }
+
+                return null;
+            };
+        } else {
+            return (message, phrase) => {
+                if (!phrase) return null;
+                return message.channel.messages.fetch(phrase).catch(() => null);
+            };
         }
-
-        return message.channel.messages.fetch(phrase).catch(() => null);
     },
 
     invite: () => (message, phrase) => {
