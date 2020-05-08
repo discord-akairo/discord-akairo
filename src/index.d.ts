@@ -396,7 +396,7 @@ declare module 'discord-akairo' {
         public setEmitters(emitters: { [x: string]: EventEmitter }): void;
         public on(event: 'remove', listener: (listener: Listener) => any): this;
         public on(event: 'load', listener: (listener: Listener, isReload: boolean) => any): this;
-        public on(event: 'error', listner: (error: Error, listener: Listener, args: any[]) => any): this;
+        public on(event: 'error', listener: (error: Error, listener: Listener, args: any[]) => any): this;
     }
 
     export abstract class Provider {
