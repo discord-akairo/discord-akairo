@@ -44,7 +44,7 @@ client.login('TOKEN');
 
 There are some options you may want to setup first, for example, the owner of the bot.
 If you would like to have multiple owners simply add those with an array.  
-We want to use Discord.js's `disableEveryone` option too.  
+We want to use Discord.js's `disableMentions` option too.  
 
 ```js
 const { AkairoClient } = require('discord-akairo');
@@ -54,7 +54,7 @@ class MyClient extends AkairoClient {
         super({
             ownerID: '123992700587343872', // or ['123992700587343872', '86890631690977280']
         }, {
-            disableEveryone: true
+            disableMentions: 'everyone'
         });
     }
 }

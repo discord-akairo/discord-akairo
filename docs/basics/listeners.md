@@ -17,7 +17,7 @@ class MyClient extends AkairoClient {
         super({
             ownerID: '123992700587343872',
         }, {
-            disableEveryone: true
+            disableMentions: 'everyone'
         });
 
         this.commandHandler = new CommandHandler(this, {
