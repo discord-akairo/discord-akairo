@@ -748,6 +748,7 @@ declare module 'discord-akairo' {
         AkairoHandlerEvents: {
             LOAD: 'load';
             REMOVE: 'remove';
+            ERROR: 'error';
         };
         CommandHandlerEvents: {
             MESSAGE_BLOCKED: 'messageBlocked';
@@ -760,7 +761,6 @@ declare module 'discord-akairo' {
             MISSING_PERMISSIONS: 'missingPermissions';
             COOLDOWN: 'cooldown';
             IN_PROMPT: 'inPrompt';
-            ERROR: 'error';
         };
         BuiltInReasons: {
             CLIENT: 'client';
