@@ -1,5 +1,6 @@
 const AkairoError = require('../../util/AkairoError');
 const AkairoHandler = require('../AkairoHandler');
+const { AkairoHandlerEvents } = require('../../util/Constants');
 const { Collection } = require('discord.js');
 const { isEventEmitter } = require('../../util/Util');
 const Listener = require('./Listener');
@@ -127,6 +128,22 @@ class ListenerHandler extends AkairoHandler {
     }
 
     /**
+     * Handles errors from the handling.
+     * @param {Error} err The error.
+     * @param {Listener} listener Listener that errored.
+     * @param {any[]} args Argumentss the listener was called with.
+     * @returns {void}
+     */
+    emitError(err, listener, args) {
+        if (this.listenerCount(AkairoHandlerEvents.ERROR)) {
+            this.emit(AkairoHandlerEvents.ERROR, err, listener, args);
+            return;
+        }
+
+        throw err;
+    }
+
+    /**
      * Loads a listener.
      * @method
      * @name ListenerHandler#load
@@ -188,4 +205,12 @@ module.exports = ListenerHandler;
  * Emitted when a listener is removed.
  * @event ListenerHandler#remove
  * @param {Listener} listener - Listener removed.
+ */
+
+/**
+ * Emitted when a listener errors
+ * @event ListenerHandler#error
+ * @param {Error} error The error.
+ * @param {Listener} listener Listener executed.
+ * @param {any[]} args Arguments the listener was called with
  */

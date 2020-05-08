@@ -382,6 +382,7 @@ declare module 'discord-akairo' {
         public add(filename: string): Listener;
         public addToEmitter(id: string): Listener;
         public deregister(listener: Listener): void;
+        public emitError(err: Error, listener: Listener, args: any[]): void;
         public findCategory(name: string): Category<string, Listener>;
         public load(thing: string | Function): Listener;
         public loadAll(directory?: string, filter?: LoadPredicate): this;
@@ -394,6 +395,7 @@ declare module 'discord-akairo' {
         public setEmitters(emitters: { [x: string]: EventEmitter }): void;
         public on(event: 'remove', listener: (listener: Listener) => any): this;
         public on(event: 'load', listener: (listener: Listener, isReload: boolean) => any): this;
+        public on(event: 'error', listner: (error: Error, listener: Listener, args: any[]) => any): this;
     }
 
     export abstract class Provider {
