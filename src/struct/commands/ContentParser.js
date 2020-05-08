@@ -193,6 +193,8 @@ class Tokenizer {
         if (this.separator == null && this.quoted && this.startsWith(Quotes.Open)) {
             if (this.state === 0) {
                 this.state = 2;
+            } else {
+                this.state = 0;
             }
 
             this.addToken(TokenTypes.OpenQuote, Quotes.Open);
@@ -207,6 +209,8 @@ class Tokenizer {
         if (this.separator == null && this.quoted && this.startsWith(Quotes.End)) {
             if (this.state === 2) {
                 this.state = 0;
+            } else {
+                this.state = 2;
             }
 
             this.addToken(TokenTypes.EndQuote, Quotes.End);
@@ -230,8 +234,7 @@ class Tokenizer {
     runWord() {
         const wordRegex = this.state === 0
             ? /^\S+/
-            : new RegExp(`^[^\\s${this.state === 1 ? Quotes.Normal : Quotes.End}]+`);
-
+            : new RegExp(`^[^\\s${this.state === 1 ? Quotes.Normal : `${Quotes.Open}${Quotes.End}`}]+`);
         const wordMatch = this.match(wordRegex);
         if (wordMatch) {
             if (this.separator) {
@@ -376,22 +379,22 @@ class Parser {
 
     parsePhrase() {
         if (!this.separated) {
-            if (this.lookahead(TokenTypes.Quote, TokenTypes.OpenQuote)) {
+            if (this.lookahead(TokenTypes.Quote, TokenTypes.OpenQuote, TokenTypes.EndQuote)) {
                 const parsed = { type: ResultTypes.Phrase, value: '', raw: '' };
 
-                const openQuote = this.match(TokenTypes.Quote, TokenTypes.OpenQuote);
+                const openQuote = this.match(TokenTypes.Quote, TokenTypes.OpenQuote, TokenTypes.EndQuote);
                 parsed.raw += openQuote.value;
 
-                // Open quote - End quote; Normal quote - normal quote
-                const ender = openQuote.type === TokenTypes.Quote ? TokenTypes.Quote : TokenTypes.EndQuote;
+                // Open quote - end quote / open quote; Normal quote - normal quote
+                const enders = openQuote.type === TokenTypes.Quote ? [TokenTypes.Quote] : [TokenTypes.OpenQuote, TokenTypes.EndQuote];
 
                 while (this.lookahead(TokenTypes.Word, TokenTypes.WS)) {
                     const match = this.match(TokenTypes.Word, TokenTypes.WS);
                     parsed.value += match.value;
                     parsed.raw += match.value;
                 }
+                const endQuote = this.lookahead(...enders) ? this.match(...enders) : null;
 
-                const endQuote = this.lookahead(ender) ? this.match(ender) : null;
                 if (endQuote != null) {
                     parsed.raw += endQuote.value;
                 }
