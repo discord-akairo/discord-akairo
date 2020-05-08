@@ -30,7 +30,7 @@ class AddRoleCommand extends Command {
     }
 
     async exec(message, args) {
-        await args.member.addRole(args.role);
+        await args.member.roles.add(args.role);
         return message.reply('Done!');
     }
 }
