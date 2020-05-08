@@ -131,7 +131,7 @@ class ListenerHandler extends AkairoHandler {
      * Handles errors from the handling.
      * @param {Error} err The error.
      * @param {Listener} listener Listener that errored.
-     * @param {any[]} args Argumentss the listener was called with.
+     * @param {any[]} args Arguments the listener was called with.
      * @returns {void}
      */
     emitError(err, listener, args) {
@@ -229,5 +229,5 @@ module.exports = ListenerHandler;
  * @event ListenerHandler#error
  * @param {Error} error The error.
  * @param {Listener} listener Listener executed.
- * @param {any[]} args Arguments the listener was called with
+ * @param {any[]} args Arguments the listener was called with.
  */
