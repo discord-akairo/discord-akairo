@@ -60,7 +60,7 @@ class MyClient extends AkairoClient {
         super({
             ownerID: '123992700587343872',
         }, {
-            disableEveryone: true
+            disableMentions: 'everyone'
         });
 
         this.customHandler = new CustomHandler(this, {
