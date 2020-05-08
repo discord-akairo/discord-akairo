@@ -61,7 +61,8 @@ module.exports = {
     },
     AkairoHandlerEvents: {
         LOAD: 'load',
-        REMOVE: 'remove'
+        REMOVE: 'remove',
+        ERROR: 'error'
     },
     CommandHandlerEvents: {
         MESSAGE_BLOCKED: 'messageBlocked',
@@ -73,8 +74,7 @@ module.exports = {
         COMMAND_LOCKED: 'commandLocked',
         MISSING_PERMISSIONS: 'missingPermissions',
         COOLDOWN: 'cooldown',
-        IN_PROMPT: 'inPrompt',
-        ERROR: 'error'
+        IN_PROMPT: 'inPrompt'
     },
     BuiltInReasons: {
         CLIENT: 'client',
