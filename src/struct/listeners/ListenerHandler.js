@@ -144,6 +144,23 @@ class ListenerHandler extends AkairoHandler {
     }
 
     /**
+     * Modifies a listener's exec function to emit an error on fail.
+     * @param {Listener} listener The listener.
+     * @returns {Function}
+     * @private
+     */
+    modifyExec(listener) {
+        const originalExec = listener.exec.bind(listener);
+        return async function exec(...args) {
+            try {
+                await originalExec(...args);
+            } catch (err) {
+                this.handler.emitError(err, this, args);
+            }
+        }.bind(listener);
+    }
+
+    /**
      * Loads a listener.
      * @method
      * @name ListenerHandler#load

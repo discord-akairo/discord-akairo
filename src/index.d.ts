@@ -386,6 +386,7 @@ declare module 'discord-akairo' {
         public findCategory(name: string): Category<string, Listener>;
         public load(thing: string | Function): Listener;
         public loadAll(directory?: string, filter?: LoadPredicate): this;
+        private modifyExec(listener: Listener): Function;
         public register(listener: Listener, filepath?: string): void;
         public reload(id: string): Listener;
         public reloadAll(): this;
