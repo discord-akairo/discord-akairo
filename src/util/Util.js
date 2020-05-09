@@ -40,6 +40,10 @@ class Util {
     }
 
     static flatMap(xs, f) {
+        if (Array.prototype.flatMap) {
+            return xs.flatMap(i => f(i));
+        }
+        
         const res = [];
         for (const x of xs) {
             res.push(...f(x));
