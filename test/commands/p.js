@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-const { Command } = require('../..');
+const { Command, Types } = require('../..');
 const util = require('util');
 
 class PCommand extends Command {
@@ -10,7 +10,7 @@ class PCommand extends Command {
             args: [
                 {
                     id: 'integer',
-                    type: 'bigint',
+                    type: Types.number({ type: 'bigint' }),
                     prompt: {
                         start: async () => {
                             await Promise.resolve(1);

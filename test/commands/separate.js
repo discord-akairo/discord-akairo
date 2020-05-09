@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-const { Command } = require('../..');
+const { Command, Types } = require('../..');
 const util = require('util');
 
 class SeparateCommand extends Command {
@@ -11,7 +11,7 @@ class SeparateCommand extends Command {
                 {
                     id: 'integers',
                     match: 'separate',
-                    type: 'integer',
+                    type: Types.number({ type: 'integer' }),
                     prompt: {
                         start: 'Give me some integers!',
                         retry: (msg, { phrase }) => `"${phrase}" is not an integer, try again!`
