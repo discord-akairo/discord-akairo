@@ -39,19 +39,6 @@ class Util {
         return () => thing;
     }
 
-    static flatMap(xs, f) {
-        if (Array.prototype.flatMap) {
-            return xs.flatMap(x => f(x));
-        }
-
-        const res = [];
-        for (const x of xs) {
-            res.push(...f(x));
-        }
-
-        return res;
-    }
-
     static deepAssign(o1, ...os) {
         for (const o of os) {
             for (const [k, v] of Object.entries(o)) {
