@@ -41,7 +41,7 @@ class Util {
 
     static flatMap(xs, f) {
         if (Array.prototype.flatMap) {
-            return xs.flatMap(i => f(i));
+            return xs.flatMap(x => f(x));
         }
 
         const res = [];
