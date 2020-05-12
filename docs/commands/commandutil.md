@@ -20,7 +20,7 @@ To keep them alive longer, set a larger time in milliseconds using the `commandU
 Note that this can build up memory usage really fast on larger bots, so it is recommended you give it a reasonable lifetime.  
 
 You can CommandUtil methods such as `send` in order to send responses.  
-With `handleEdits` on, the `send` methods will edits responses accordingly.  
+With `handleEdits` on, the `send` methods will edit responses accordingly.  
 This works for prompts as well.  
 
 ```js

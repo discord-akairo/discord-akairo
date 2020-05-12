@@ -46,7 +46,7 @@ class AddCommand extends Command {
                     id: 'numTwo',
                     type: 'number',
                     default: 0
-                }
+                },
                 {
                     id: 'numThree',
                     type: 'number',
