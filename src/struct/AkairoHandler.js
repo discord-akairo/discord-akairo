@@ -115,7 +115,8 @@ class AkairoHandler extends EventEmitter {
      * @param {boolean} [isReload=false] - Whether this is a reload or not.
      * @returns {AkairoModule}
      */
-    load(thing, isReload = false) {
+    // eslint-disable-next-line require-await
+    async load(thing, isReload = false) {
         const isClass = typeof thing === 'function';
         if (!isClass && !this.extensions.has(path.extname(thing))) return undefined;
 
@@ -125,7 +126,7 @@ class AkairoHandler extends EventEmitter {
                 if (!m) return null;
                 if (m.prototype instanceof this.classToHandle) return m;
                 return m.default ? findExport.call(this, m.default) : null;
-            }.call(this, require(thing));
+            }.call(this, await import(thing));
 
         if (mod && mod.prototype instanceof this.classToHandle) {
             mod = new mod(this); // eslint-disable-line new-cap
