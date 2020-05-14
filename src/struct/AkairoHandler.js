@@ -117,6 +117,7 @@ class AkairoHandler extends EventEmitter {
      */
     // eslint-disable-next-line require-await
     async load(thing, isReload = false) {
+        console.log(thing);
         const isClass = typeof thing === 'function';
         if (!isClass && !this.extensions.has(path.extname(thing))) return undefined;
 
