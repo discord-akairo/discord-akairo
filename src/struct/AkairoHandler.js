@@ -131,7 +131,7 @@ class AkairoHandler extends EventEmitter {
         if (mod && mod.prototype instanceof this.classToHandle) {
             mod = new mod(this); // eslint-disable-line new-cap
         } else {
-            if (!isClass) delete require.cache[require.resolve(thing)];
+            if (!isClass) delete require.cache[await import(thing)];
             return undefined;
         }
 
