@@ -614,6 +614,27 @@ class CommandHandler extends AkairoHandler {
             return true;
         }
 
+        if (command.nsfw) {
+            if (!message.channel.nsfw) {
+                this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, 'NSFW');
+                return true;
+            }
+        }
+
+        if (command.voiceOnly) {
+            if (!message.voice) {
+                this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, 'voice');
+                return true;
+            }
+        }
+
+        if (command.allowedGuilds && command.allowedGuilds.length > 0) {
+            if (!command.allowedGuilds.includes(message.guild.id)) {
+                this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, 'specific_guild');
+                return true;
+            }
+        }
+
         const reason = this.inhibitorHandler
             ? await this.inhibitorHandler.test('post', message, command)
             : null;
