@@ -21,9 +21,9 @@ class Command extends AkairoModule {
             separator,
             channel = null,
             ownerOnly = false,
-            allowedGuilds = [], 
-            nsfw = false, 
-            voiceOnly = false, 
+            allowedGuilds = [],
+            nsfw = false,
+            voiceOnly = false,
             usage = '',
             editable = true,
             typing = false,
@@ -77,6 +77,30 @@ class Command extends AkairoModule {
          * @type {boolean}
          */
         this.ownerOnly = Boolean(ownerOnly);
+
+        /**
+         * NSFW.
+         * @type {boolean}
+         */
+        this.nsfw = Boolean(nsfw);
+
+        /**
+         * Voice Command.
+         * @type {boolean}
+         */
+        this.voiceOnly = Boolean(voiceOnly);
+
+        /**
+         * Allowed Guilds.
+         * @type {string[]}
+         */
+        this.allowedGuilds = Array.isArray(allowedGuilds) ? allowedGuilds : [];
+
+        /**
+         * Usage of the command.
+         * @type {string|any}
+         */
+        this.usage = Array.isArray(usage) ? usage.join('\n') : usage;
 
         /**
          * Whether or not this command can be ran by an edit.
