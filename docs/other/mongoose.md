@@ -102,12 +102,10 @@ const guildSchema = new Schema({
         required: true
     },
     name: {
-        type: String,
-        required: false
+        type: String
     },
     joinedAt: {
-        type: Number,
-        required: false
+        type: Number
     },
     settings: {
         type: Object,
