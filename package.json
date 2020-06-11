@@ -26,7 +26,7 @@
     },
     "devDependencies": {
         "@types/node": "^10.14.4",
-        "discord.js-docgen": "discordjs/docgen",
+        "discord.js-docgen": "github:discordjs/docgen",
         "eslint": "^5.16.0",
         "jsdoc": "^3.6.4",
         "tslint": "^5.15.0",
