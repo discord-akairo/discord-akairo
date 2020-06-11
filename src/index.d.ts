@@ -437,6 +437,20 @@ declare module 'discord-akairo' {
         public set(id: string, key: string, value: any): Promise<any>;
     }
 
+    export class MongooseProvider extends Provider {
+        public constructor(model: any);
+
+        public model: any;
+        public items: Collection<string, any>;
+
+        public clear(id: string): Promise<any>;
+        public delete(id: string, key: string): Promise<any>;
+        public get(id: string, key: string, defaultValue: any): any;
+        public getDocument(id: string): any;
+        public init(): Promise<void>;
+        public set(id: string, key: string, value: any): Promise<any>;
+    }
+
     export class TypeResolver {
         public constructor(handler: CommandHandler);
 
