@@ -18,7 +18,7 @@ class MongooseProvider extends Provider {
 
     /**
      * Initializes the provider.
-     * @returns {<void>}
+     * @returns {Promise<void>}
      */
     async init() {
         const guilds = await this.model.find();
@@ -49,7 +49,7 @@ class MongooseProvider extends Provider {
      * @param {string} id - guildID.
      * @param {string} key - The key to set.
      * @param {any} value - The value.
-     * @returns {Promise} - Mongoose query object|document
+     * @returns {Promise<any>} - Mongoose query object|document
      */
     async set(id, key, value) {
         const data = this.items.get(id) || {};
@@ -59,14 +59,14 @@ class MongooseProvider extends Provider {
         const doc = await this.getDocument(id);
         doc.settings[key] = value;
         doc.markModified('settings');
-        return await doc.save();
+        return doc.save();
     }
 
     /**
      * Deletes a value.
      * @param {string} id - guildID.
      * @param {string} key - The key to delete.
-     * @returns {Promise} - Mongoose query object|document
+     * @returns {Promise<any>} - Mongoose query object|document
      */
     async delete(id, key) {
         const data = this.items.get(id) || {};
@@ -75,7 +75,7 @@ class MongooseProvider extends Provider {
         const doc = await this.getDocument(id);
         delete doc.settings[key];
         doc.markModified('settings');
-        return await doc.save();
+        return doc.save();
     }
 
     /**
@@ -92,11 +92,12 @@ class MongooseProvider extends Provider {
     /**
      * Gets a document by guildID.
      * @param {string} id - guildID.
-     * @returns {Promise} - Mongoose query object|document
+     * @returns {Promise<any>} - Mongoose query object|document
      */
     async getDocument(id) {
         const obj = await this.model.findOne({ id });
         if (!obj) {
+            // eslint-disable-next-line new-cap
             const newDoc = await new this.model({ id, settings: {} }).save();
             return newDoc;
         }
