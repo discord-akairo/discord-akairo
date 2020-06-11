@@ -21,7 +21,8 @@
     "peerDependencies": {
         "discord.js": "^12.0.0",
         "sqlite": "^3.0.3",
-        "sequelize": "^5.2.12"
+        "sequelize": "^5.2.12",
+        "mongoose": "^5.9.14"
     },
     "devDependencies": {
         "@types/node": "^10.14.4",
