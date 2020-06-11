@@ -1,4 +1,4 @@
-const { Provider } = require('discord-akairo');
+const { Provider } = require('./Provider');
 
 /**
  * Provider using the `Mongoose` library.
@@ -22,8 +22,7 @@ class MongooseProvider extends Provider {
      */
     async init() {
         const guilds = await this.model.find();
-        for (const i in guilds) {
-            const guild = guilds[i];
+        for (const guild in Object.values(guilds)) {
             this.items.set(guild.id, guild.settings);
         }
     }
@@ -101,6 +100,7 @@ class MongooseProvider extends Provider {
             const newDoc = await new this.model({ id, settings: {} }).save();
             return newDoc;
         }
+
         return obj;
     }
 }
