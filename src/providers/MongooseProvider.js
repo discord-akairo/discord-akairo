@@ -1,4 +1,4 @@
-const { Provider } = require('./Provider');
+const Provider = require('./Provider');
 
 /**
  * Provider using the `Mongoose` library.
@@ -22,7 +22,8 @@ class MongooseProvider extends Provider {
      */
     async init() {
         const guilds = await this.model.find();
-        for (const guild in Object.values(guilds)) {
+        for (const i in guilds) {
+            const guild = guilds[i];
             this.items.set(guild.id, guild.settings);
         }
     }
