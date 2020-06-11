@@ -685,7 +685,7 @@ declare module 'discord-akairo' {
 
     export type RegexSupplier = (message: Message) => RegExp;
 
-    export interface Constants {
+    export const Constants: {
         ArgumentMatches: {
             PHRASE: 'phrase';
             FLAG: 'flag';
@@ -769,7 +769,7 @@ declare module 'discord-akairo' {
             GUILD: 'guild';
             DM: 'dm';
         };
-    }
+    };
 
     export const version: string;
 }
