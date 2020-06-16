@@ -13,6 +13,8 @@ this.listenerHandler.setEmitters({
 });
 ```
 
+Note: You have to call `setEmitters` before `load` or `loadAll` so that Akairo will be able to resolve your emitters.
+
 The key will be the emitter's name, and the value is the emitter itself.  
 Now, we can use a listener on the process:  
 

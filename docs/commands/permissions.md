@@ -70,7 +70,7 @@ class BanCommand extends Command {
     }
 
     userPermissions(message) {
-        if (!message.member.roles.some(role => role.name === 'Moderator')) {
+        if (!message.member.roles.cache.some(role => role.name === 'Moderator')) {
             return 'Moderator';
         }
 
