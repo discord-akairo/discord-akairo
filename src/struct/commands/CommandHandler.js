@@ -514,17 +514,26 @@ class CommandHandler extends AkairoHandler {
      * @returns {Promise<boolean>}
      */
     async handleConditionalCommands(message) {
-        const trueCommands = this.modules.filter(command =>
-            (message.edited ? command.editable : true)
-            && command.condition(message)
-        );
+        const trueCommands = [];
 
-        if (!trueCommands.size) {
+        const filterPromises = [];
+        for (const command of this.modules.values()) {
+            if (message.edited && !command.editable) continue;
+            filterPromises.push((async () => {
+                let cond = command.condition(message);
+                if (isPromise(cond)) cond = await cond;
+                if (cond) trueCommands.push(command);
+            })());
+        }
+
+        await Promise.all(filterPromises);
+
+        if (!trueCommands.length) {
             return false;
         }
 
         const promises = [];
-        for (const command of trueCommands.values()) {
+        for (const command of trueCommands) {
             promises.push((async () => {
                 try {
                     if (await this.runPostTypeInhibitors(message, command)) return;

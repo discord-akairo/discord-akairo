@@ -1,5 +1,7 @@
 node_modules
+
 .git
 .vscode
+
 test/auth.json
 test/db.sqlite

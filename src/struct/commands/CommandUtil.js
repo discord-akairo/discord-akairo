@@ -103,7 +103,7 @@ class CommandUtil {
         const hasFiles = (transformedOptions.files && transformedOptions.files.length > 0)
             || (transformedOptions.embed && transformedOptions.embed.files && transformedOptions.embed.files.length > 0);
 
-        if (this.shouldEdit && (this.command ? this.command.editable : true) && !hasFiles && !this.lastResponse.attachments.size) {
+        if (this.shouldEdit && (this.command ? this.command.editable : true) && !hasFiles && !this.lastResponse.deleted && !this.lastResponse.attachments.size) {
             return this.lastResponse.edit(transformedOptions);
         }
 

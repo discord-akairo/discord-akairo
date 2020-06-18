@@ -3,7 +3,7 @@
 ### More Coverage
 
 Right now, your inhibitors only runs before a command.  
-They does not actually run on all messages.  
+They do not actually run on all messages.  
 
 To change that, change the `type` option.  
 

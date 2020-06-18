@@ -7,5 +7,6 @@ node_modules
 .gitignore
 .travis.yml
 test/
+docs/
 tsconfig.json
 tslint.json

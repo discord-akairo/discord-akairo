@@ -39,7 +39,7 @@ this.commandHandler.resolver.addType('colorRole', (message, phrase) => {
         green: '225939232512802816'
     };
 
-    const role = message.guild.roles.get(roles[phrase.toLowerCase()]);
+    const role = message.guild.roles.cache.get(roles[phrase.toLowerCase()]);
     return role || null;
 });
 ```
@@ -56,7 +56,7 @@ this.commandHandler.resolver.addType('moderator', (message, phrase) => {
     if (!phrase) return null;
     const memberType = this.commandHandler.resolver.type('member');
     const member = memberType(message, phrase);
-    if (!member.roles.has('222089067028807682')) return null;
+    if (!member.roles.cache.has('222089067028807682')) return null;
     return member;
 });
 ```

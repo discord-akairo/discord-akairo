@@ -70,6 +70,8 @@
       path: handlers.md
     - name: Using Providers
       path: providers.md
+    - name: Using Mongoose Provider
+      path: mongoose.md
     - name: ClientUtil
       path: clientutil.md
 - name: Snippets

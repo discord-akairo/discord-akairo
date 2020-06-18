@@ -39,7 +39,7 @@ For numbers and things with a length or size, `Argument.range` is a convenient m
 ```js
 {
     id: 'content',
-    type: Argument.validate('string', str => str.length < 2000)
+    type: Argument.validate('string', (m, p, str) => str.length < 2000)
 }
 ```
 

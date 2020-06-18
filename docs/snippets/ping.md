@@ -16,7 +16,7 @@ class PingCommand extends Command {
         return message.util.reply([
             'Pong!',
             `🔂 **RTT**: ${timeDiff} ms`,
-            `💟 **Heartbeat**: ${Math.round(this.client.ping)} ms`
+            `💟 **Heartbeat**: ${Math.round(this.client.ws.ping)} ms`
         ]);
     }
 }
