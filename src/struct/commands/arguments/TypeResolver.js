@@ -1,5 +1,8 @@
 const { ArgumentTypes } = require('../../../util/Constants');
-const { Collection, resolveColor } = require('discord.js');
+const {
+  Collection,
+  Util: { resolveColor }
+} = require('discord.js');
 const { URL } = require('url');
 
 /**
