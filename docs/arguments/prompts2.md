@@ -72,7 +72,7 @@ class PickCommand extends Command {
     }
 
     exec(message, args) {
-        const picked = args.items[Math.floor(Math.random() * items.length)];
+        const picked = args.items[Math.floor(Math.random() * args.items.length)];
         return message.reply(`I picked ${picked.trim()}!`);
     }
 }
