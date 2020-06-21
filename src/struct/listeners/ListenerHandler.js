@@ -109,6 +109,7 @@ class ListenerHandler extends AkairoHandler {
         if (!isEventEmitter(emitter)) throw new AkairoError('INVALID_TYPE', 'emitter', 'EventEmitter', true);
 
         emitter.removeListener(listener.event, listener.exec);
+        listener.exec = listener.exec._raw;
         return listener;
     }
 
@@ -151,13 +152,15 @@ class ListenerHandler extends AkairoHandler {
      */
     modifyExec(listener) {
         const originalExec = listener.exec.bind(listener);
-        return async function exec(...args) {
+        const exec = async function exec(...args) {
             try {
                 await originalExec(...args);
             } catch (err) {
                 this.handler.emitError(err, this, args);
             }
         }.bind(listener);
+        Object.defineProperty(exec, '_raw', { value: exec });
+        return exec;
     }
 
     /**
