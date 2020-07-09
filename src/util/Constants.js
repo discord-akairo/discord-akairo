@@ -11,6 +11,7 @@ module.exports = {
         NONE: 'none'
     },
     ArgumentTypes: {
+        REQUIRED: 'required',
         STRING: 'string',
         LOWERCASE: 'lowercase',
         UPPERCASE: 'uppercase',
