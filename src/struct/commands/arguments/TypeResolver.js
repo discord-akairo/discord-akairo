@@ -1,4 +1,5 @@
 const { ArgumentTypes } = require('../../../util/Constants');
+const Flag = require('../Flag');
 const { Collection } = require('discord.js');
 const { URL } = require('url');
 
@@ -48,6 +49,10 @@ class TypeResolver {
      */
     addBuiltInTypes() {
         const builtins = {
+            [ArgumentTypes.REQUIRED]: (message, phrase) => {
+                return phrase || Flag.fail({ reason: 'requiredFailed', input: phrase });
+            },
+
             [ArgumentTypes.STRING]: (message, phrase) => {
                 return phrase || null;
             },
