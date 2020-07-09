@@ -590,9 +590,10 @@ class Argument {
                 entry = Argument.tagged(entry);
                 const res = await Argument.cast.call(this, entry, this.handler.resolver, message, phrase);
                 if (!Argument.isFailure(res)) return res;
+                lastFailure = res;
             }
 
-            return null;
+            return lastFailure;
         };
     }
     /* eslint-enable no-invalid-this */
