@@ -366,8 +366,7 @@ class Argument {
             return null;
         }
 
-        if (
-            type === 'function') {
+        if (type === 'function') {
             let res = type(message, phrase);
             if (isPromise(res)) res = await res;
             return res;
