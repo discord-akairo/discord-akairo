@@ -50,7 +50,7 @@ class TypeResolver {
     addBuiltInTypes() {
         const builtins = {
             [ArgumentTypes.REQUIRED]: (message, phrase) => {
-                return phrase || Flag.fail({ reason: 'requiredFailed', input: phrase });
+                return phrase || Flag.fail({ reason: 'requiredFailed' });
             },
 
             [ArgumentTypes.STRING]: (message, phrase) => {
