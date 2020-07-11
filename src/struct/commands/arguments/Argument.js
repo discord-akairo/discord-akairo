@@ -408,7 +408,7 @@ class Argument {
     static union(...types) {
         return async function typeFn(message, phrase) {
             for (let entry of types) {
-                if (typeof type === 'function') entry = entry.bind(this);
+                if (typeof entry === 'function') entry = entry.bind(this);
                 const res = await Argument.cast(entry, this.handler.resolver, message, phrase);
                 if (!Argument.isFailure(res)) return res;
             }
@@ -427,7 +427,7 @@ class Argument {
         return async function typeFn(message, phrase) {
             const results = [];
             for (let entry of types) {
-                if (typeof type === 'function') entry = entry.bind(this);
+                if (typeof entry === 'function') entry = entry.bind(this);
                 const res = await Argument.cast(entry, this.handler.resolver, message, phrase);
                 if (Argument.isFailure(res)) return res;
                 results.push(res);
