@@ -199,7 +199,7 @@ declare module 'discord-akairo' {
         public commandUtilLifetime: number;
         public commandUtils: Collection<string, CommandUtil>;
         public commandUtilSweepInterval: number;
-        public cooldowns: Collection<string, CooldownData>;
+        public cooldowns: Collection<string, { [id: string]: CooldownData }>;
         public defaultCooldown: number;
         public directory: string;
         public fetchMembers: boolean;
