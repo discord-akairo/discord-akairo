@@ -135,7 +135,9 @@ class CommandHandler extends AkairoHandler {
 
         /**
          * Collection of cooldowns.
-         * @type {Collection<string, CooldownData>}
+         * <info>The elements in the collection are objects with user IDs as keys
+         * and {@link CooldownData} objects as values</info>
+         * @type {Collection<string, Object>}
          */
         this.cooldowns = new Collection();
 
