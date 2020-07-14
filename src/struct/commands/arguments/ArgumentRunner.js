@@ -184,7 +184,13 @@ class ArgumentRunner {
 
         const res = [];
         for (const phrase of phrases) {
-            res.push(await arg.process(message, phrase.value));
+            const response = await arg.process(message, phrase.value);
+
+            if (Flag.is(response, 'cancel')) {
+                return response;
+            }
+
+            res.push(response);
         }
 
         if (arg.index != null) {
