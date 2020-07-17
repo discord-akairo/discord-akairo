@@ -159,7 +159,7 @@ class ListenerHandler extends AkairoHandler {
                 this.handler.emitError(err, this, args);
             }
         }.bind(listener);
-        Object.defineProperty(exec, '_raw', { value: exec });
+        Object.defineProperty(exec, '_raw', { value: originalExec });
         return exec;
     }
 
