@@ -764,6 +764,7 @@ declare module 'discord-akairo' {
             MISSING_PERMISSIONS: 'missingPermissions';
             COOLDOWN: 'cooldown';
             IN_PROMPT: 'inPrompt';
+            ERROR: 'error';
         };
         BuiltInReasons: {
             CLIENT: 'client';

@@ -74,7 +74,8 @@ module.exports = {
         COMMAND_LOCKED: 'commandLocked',
         MISSING_PERMISSIONS: 'missingPermissions',
         COOLDOWN: 'cooldown',
-        IN_PROMPT: 'inPrompt'
+        IN_PROMPT: 'inPrompt',
+        ERROR: 'error'
     },
     BuiltInReasons: {
         CLIENT: 'client',
