@@ -101,17 +101,11 @@ const guildSchema = new Schema({
         type: String,
         required: true
     },
-    name: {
-        type: String
-    },
-    joinedAt: {
-        type: Number
-    },
     settings: {
         type: Object,
         require: true
     }
-});
+}, { minimize: false });
 
 module.exports = mongoose.model('model', guildSchema);
 ```
