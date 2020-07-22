@@ -566,7 +566,7 @@ class CommandHandler extends AkairoHandler {
             this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, reason);
         } else if (this.blockClient && message.author.id === this.client.user.id) {
             this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.CLIENT);
-        } else if (this.blockBots && message.author.bot && !this.client.ownerID.includes(message.author.id)) {
+        } else if (this.blockBots && message.author.bot && (Array.isArray(this.client.ownerID) ? this.client.ownerID.includes(message.author.id) : message.author.id === this.client.ownerID)) {
             this.emit(CommandHandlerEvents.MESSAGE_BLOCKED, message, BuiltInReasons.BOT);
         } else if (this.hasPrompt(message.channel, message.author)) {
             this.emit(CommandHandlerEvents.IN_PROMPT, message);
