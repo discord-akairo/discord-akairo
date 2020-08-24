@@ -23,6 +23,7 @@ class CommandHandler extends AkairoHandler {
         loadFilter,
         blockClient = true,
         blockBots = true,
+        blockDM = false,
         fetchMembers = false,
         handleEdits = false,
         storeMessages = false,
@@ -84,6 +85,12 @@ class CommandHandler extends AkairoHandler {
          * @type {boolean}
          */
         this.blockBots = Boolean(blockBots);
+
+        /**
+         * Whether or not to block DM message.
+         * @type {boolean}
+         */
+        this.blockDM = Boolean(blockDM);
 
         /**
          * Whether or not members are fetched on each message author from a guild.
@@ -223,12 +230,14 @@ class CommandHandler extends AkairoHandler {
     setup() {
         this.client.once('ready', () => {
             this.client.on('message', async m => {
+                if (this.blockDM && m.channel.type === "dm") return;
                 if (m.partial) await m.fetch();
                 this.handle(m);
             });
 
             if (this.handleEdits) {
                 this.client.on('messageUpdate', async (o, m) => {
+                    if (this.blockDM && (o.channel.type === "dm" || m.channel.type === "dm")) return;
                     if (o.partial) await o.fetch();
                     if (m.partial) await m.fetch();
                     if (o.content === m.content) return;

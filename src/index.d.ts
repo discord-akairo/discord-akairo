@@ -190,6 +190,7 @@ declare module 'discord-akairo' {
         public aliases: Collection<string, string>;
         public allowMention: boolean | MentionPrefixPredicate;
         public argumentDefaults: DefaultArgumentOptions;
+        public blockDM: boolean;
         public blockBots: boolean;
         public blockClient: boolean;
         public categories: Collection<string, Category<string, Command>>;
@@ -574,6 +575,7 @@ declare module 'discord-akairo' {
         aliasReplacement?: RegExp;
         allowMention?: boolean | MentionPrefixPredicate;
         argumentDefaults?: DefaultArgumentOptions;
+        blockDM?: boolean;
         blockBots?: boolean;
         blockClient?: boolean;
         commandUtil?: boolean;
