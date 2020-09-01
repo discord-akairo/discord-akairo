@@ -671,7 +671,7 @@ class CommandHandler extends AkairoHandler {
             const isIgnored = Array.isArray(ignorer)
                 ? ignorer.includes(message.author.id)
                 : typeof ignorer === 'function'
-                    ? ignorer(message, command)
+                    ? await ignorer(message, command)
                     : message.author.id === ignorer;
 
             if (!isIgnored) {
