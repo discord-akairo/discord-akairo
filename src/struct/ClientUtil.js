@@ -16,13 +16,14 @@ class ClientUtil {
     /**
      * Resolves a user from a string, such as an ID, a name, or a mention.
      * @param {string} text - Text to resolve.
-     * @param {Collection<Snowflake, User>} users - Collection of users to find in.
+     * @param {UserManager} users - Collection of users to find in.
      * @param {boolean} [caseSensitive=false] - Makes finding by name case sensitive.
      * @param {boolean} [wholeWord=false] - Makes finding by name match full word only.
      * @returns {User}
      */
-    resolveUser(text, users, caseSensitive = false, wholeWord = false) {
-        return users.get(text) || users.find(user => this.checkUser(text, user, caseSensitive, wholeWord));
+    async resolveUser(text, users, caseSensitive = false, wholeWord = false) {
+        // eslint-disable-next-line no-return-await
+        return users.cache.find(user => this.checkUser(text, user, caseSensitive, wholeWord)) || await users.fetch(text);
     }
 
     /**

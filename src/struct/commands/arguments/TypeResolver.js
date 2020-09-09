@@ -1,6 +1,7 @@
 const { ArgumentTypes } = require('../../../util/Constants');
 const { Collection } = require('discord.js');
 const { URL } = require('url');
+const TimeParser = require('../../../util/TimeParser');
 
 /**
  * Type resolver for command arguments.
@@ -93,6 +94,12 @@ class TypeResolver {
                 return parseInt(n);
             },
 
+            [ArgumentTypes.TIME]: async (message, phrase) => {
+                if (!phrase) return null;
+
+                return await TimeParser.run(phrase) || null;
+            },
+
             [ArgumentTypes.URL]: (message, phrase) => {
                 if (!phrase) return null;
                 if (/^<.+>$/.test(phrase)) phrase = phrase.slice(1, -1);
@@ -122,9 +129,10 @@ class TypeResolver {
                 return color;
             },
 
-            [ArgumentTypes.USER]: (message, phrase) => {
+            [ArgumentTypes.USER]: async (message, phrase) => {
                 if (!phrase) return null;
-                return this.client.util.resolveUser(phrase, this.client.users.cache);
+                // eslint-disable-next-line no-return-await
+                return await this.client.util.resolveUser(phrase, this.client.users);
             },
 
             [ArgumentTypes.USERS]: (message, phrase) => {

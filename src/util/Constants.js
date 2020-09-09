@@ -11,6 +11,7 @@ module.exports = {
         NONE: 'none'
     },
     ArgumentTypes: {
+        TIME: 'time',
         STRING: 'string',
         LOWERCASE: 'lowercase',
         UPPERCASE: 'uppercase',
