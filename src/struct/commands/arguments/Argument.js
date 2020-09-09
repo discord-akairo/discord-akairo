@@ -19,7 +19,8 @@ class Argument {
         prompt = null,
         default: defaultValue = null,
         otherwise = null,
-        modifyOtherwise = null
+        modifyOtherwise = null,
+        required = true,
     } = {}) {
         /**
          * The command this argument belongs to.
@@ -92,6 +93,12 @@ class Argument {
          * @type {?OtherwiseContentModifier}
          */
         this.modifyOtherwise = modifyOtherwise;
+
+        /**
+         * The option that indicates if this argument is required or not.
+         * @type {Boolean}
+         */
+        this.required = required;
     }
 
     /**

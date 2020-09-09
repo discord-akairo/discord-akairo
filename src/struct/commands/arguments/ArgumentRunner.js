@@ -59,6 +59,7 @@ class ArgumentRunner {
             }
 
             const res = await this.runOne(message, parsed, state, new Argument(this.command, value));
+
             if (ArgumentRunner.isShortCircuit(res)) {
                 augmentRest(res);
                 return res;

@@ -436,6 +436,13 @@ class CommandHandler extends AkairoHandler {
                 }
             }
 
+            for (const [name, argument] of command.arguments) {
+                if (argument.required && !argument.prompt && !argument.default && !args[name]) {
+                    argument.id = name;
+                    return this.emit(CommandHandlerEvents.MISSING_ARGUMENTS, message, command, argument);
+                }
+            }
+
             return await this.runCommand(message, command, args);
         } catch (err) {
             this.emitError(err, message, command);

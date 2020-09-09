@@ -88,6 +88,7 @@ declare module 'discord-akairo' {
         public prompt?: ArgumentPromptOptions | boolean;
         public type: ArgumentType | ArgumentTypeCaster;
         public unordered: boolean | number | number[];
+        public required?: boolean;
 
         public allow(message: Message): boolean;
         public cast(message: Message, phrase: string): Promise<any>;
