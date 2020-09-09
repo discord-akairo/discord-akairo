@@ -75,6 +75,7 @@ declare module 'discord-akairo' {
         public constructor(command: Command, options: ArgumentOptions);
 
         public readonly client: AkairoClient;
+        public id: string;
         public command: Command;
         public default: DefaultValueSupplier | any;
         public description: string | any;
@@ -88,7 +89,7 @@ declare module 'discord-akairo' {
         public prompt?: ArgumentPromptOptions | boolean;
         public type: ArgumentType | ArgumentTypeCaster;
         public unordered: boolean | number | number[];
-        public required?: boolean;
+        public required: boolean;
 
         public allow(message: Message): boolean;
         public cast(message: Message, phrase: string): Promise<any>;
@@ -200,7 +201,7 @@ declare module 'discord-akairo' {
         public commandUtilLifetime: number;
         public commandUtils: Collection<string, CommandUtil>;
         public commandUtilSweepInterval: number;
-        public cooldowns: Collection<string, { [id: string]: CooldownData }>;
+        public cooldowns: Collection<string, CooldownData>;
         public defaultCooldown: number;
         public directory: string;
         public fetchMembers: boolean;
@@ -508,6 +509,7 @@ declare module 'discord-akairo' {
         prompt?: ArgumentPromptOptions | boolean;
         type?: ArgumentType | ArgumentTypeCaster;
         unordered?: boolean | number | number[];
+        required?: boolean;
     }
 
     export interface ArgumentPromptData {
@@ -773,6 +775,7 @@ declare module 'discord-akairo' {
             COMMAND_CANCELLED: 'commandCancelled';
             COMMAND_LOCKED: 'commandLocked';
             MISSING_PERMISSIONS: 'missingPermissions';
+            MISSING_ARGUMENTS: 'missingArguments';
             COOLDOWN: 'cooldown';
             IN_PROMPT: 'inPrompt';
             ERROR: 'error';
