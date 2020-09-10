@@ -653,7 +653,7 @@ declare module 'discord-akairo' {
 
     export type ArgumentType = 'string' | 'lowercase' | 'uppercase' | 'charCodes'
         | 'number' | 'integer' | 'bigint' | 'emojint'
-        | 'url' | 'date' | 'color'
+        | 'url' | 'date' | 'color' | 'time'
         | 'user' | 'users' | 'member' | 'members' | 'relevant' | 'relevants'
         | 'channel' | 'channels' | 'textChannel' | 'textChannels' | 'voiceChannel' | 'voiceChannels' | 'categoryChannel' | 'categoryChannels' | 'newsChannel' | 'newsChannels' | 'storeChannel' | 'storeChannels'
         | 'role' | 'roles' | 'emoji' | 'emojis' | 'guild' | 'guilds'
@@ -715,6 +715,7 @@ declare module 'discord-akairo' {
             NONE: 'none';
         };
         ArgumentTypes: {
+						TIME: 'time';
             STRING: 'string';
             LOWERCASE: 'lowercase';
             UPPERCASE: 'uppercase';
