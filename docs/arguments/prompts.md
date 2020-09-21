@@ -174,8 +174,8 @@ It is most useful inside the `argumentDefaults` option, such as on the command h
 ```js
 argumentDefaults: {
     prompt: {
-        modifyStart: text => `${text}\nType cancel to cancel this command.`,
-        modifyRetry: text => `${text}\nType cancel to cancel this command.`,
+        modifyStart: (message, text) => `${text}\nType cancel to cancel this command.`,
+        modifyRetry: (message, text) => `${text}\nType cancel to cancel this command.`,
         timeout: 'Time ran out, command has been cancelled.',
         ended: 'Too many retries, command has been cancelled.',
         cancel: 'Command has been cancelled.',
