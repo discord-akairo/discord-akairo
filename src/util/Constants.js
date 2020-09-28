@@ -22,6 +22,7 @@ module.exports = {
         URL: 'url',
         DATE: 'date',
         COLOR: 'color',
+        TIME: 'time',
         USER: 'user',
         USERS: 'users',
         MEMBER: 'member',
