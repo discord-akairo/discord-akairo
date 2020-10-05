@@ -127,7 +127,7 @@ class TypeResolver {
 
                 const TIME_UNITS = {
                     years: {
-                        label: '(?:y|years|year)',
+                        label: '(?:y|years?|year?)',
                         value: 1000 * 60 * 60 * 24 * 365,
                     },
                     weeks: {
@@ -170,7 +170,7 @@ class TypeResolver {
                 
                 let milliseconds = 0;
                 for (const key in match.groups) {
-                    const value = Number(match.groups[key] ?? 0);
+                    const value = Number(match.groups[key] || 0);
                     milliseconds += value * TIME_UNITS[key].value;
                 }
 
