@@ -124,81 +124,57 @@ class TypeResolver {
 
             [ArgumentTypes.TIME]: (message, phrase) => {
                 if (!phrase) return null;
-                if (!/^((-?(?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|month?|mo|minutes?|mins?|m|hours?|hrs?|h|days?|d|weeks?|w|years?|yrs?|y) *)+$/i.test(phrase)) return null;
 
-                const s = 1000;
-                const m = s * 60;
-                const h = m * 60;
-                const d = h * 24;
-                const w = d * 7;
-                const mo = d * 30.5;
-                const y = d * 365.25;
-                let ms = 0;
+                const TIME_UNITS = {
+                    years: {
+                        label: '(?:y|years|year)',
+                        value: 1000 * 60 * 60 * 24 * 365,
+                    },
+                    weeks: {
+                        label: '(?:w|weeks?|week?)',
+                        value: 1000 * 60 * 60 * 24 * 7,
+                    },
+                    days: {
+                        label: '(?:d|days?|day?)',
+                        value: 1000 * 60 * 60 * 24,
+                    },
+                    hours: {
+                        label: '(?:h|hours?|hrs?)',
+                        value: 1000 * 60 * 60,
+                    },
+                    minutes: {
+                        label: '(?:m|minutes?|mins?)',
+                        value: 1000 * 60,
+                    },
+                    seconds: {
+                        label: '(?:s|seconds?|secs?)',
+                        value: 1000,
+                    },
+                    months: {
+                        label: '(?:mo|months?|month?)',
+                        value: 1000 * 60 * 60 * 24 * 30,
+                    },
+                    milliseconds: {
+                        label: '(?:ms|milliseconds?|msecs?)',
+                        value: 1,
+                    },
+                };
 
-                let timeRegex = /(-?(?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|month?|mo|minutes?|mins?|m|hours?|hrs?|h|days?|d|weeks?|w|years?|yrs?|y)+/i;
+                const TIME_REGEX = (() => {
+                    const regexString = Object.entries(TIME_UNITS).map(([name, { label }]) => `(?:(?<${name}>-?(?:\\d+)?\\.?\\d+) *${label})?`).join('\\s?');
+                    return new RegExp(`^${regexString}$`, 'i');
+                })();
 
-                while (phrase.length > 0) {
-                    const match = timeRegex.exec(phrase);
-                    phrase = phrase.replace(match[0], '').trim();
-                    const n = parseFloat(match[1]);
-                    const type = (match[2] || 'ms').toLowerCase();
-                    switch (type) {
-                        case 'years':
-                        case 'year':
-                        case 'yrs':
-                        case 'yr':
-                        case 'y':
-                            ms += n * y;
-                            break;
-                        case 'months':
-                        case 'month':
-                        case 'mo':
-                            ms += n * mo;
-                            break;
-                        case 'weeks':
-                        case 'week':
-                        case 'w':
-                            ms += n * w;
-                            break;
-                        case 'days':
-                        case 'day':
-                        case 'd':
-                            ms += n * d;
-                            break;
-                        case 'hours':
-                        case 'hour':
-                        case 'hrs':
-                        case 'hr':
-                        case 'h':
-                            ms += n * h;
-                            break;
-                        case 'minutes':
-                        case 'minute':
-                        case 'mins':
-                        case 'min':
-                        case 'm':
-                            ms += n * m;
-                            break;
-                        case 'seconds':
-                        case 'second':
-                        case 'secs':
-                        case 'sec':
-                        case 's':
-                            ms += n * s;
-                            break;
-                        case 'milliseconds':
-                        case 'millisecond':
-                        case 'msecs':
-                        case 'msec':
-                        case 'ms':
-                            ms += n;
-                            break;
-                        default:
-                            return null;
-                    }
+                const match = TIME_REGEX.exec(phrase);
+                if (!match) return null;
+                
+                let milliseconds = 0;
+                for (const key in match.groups) {
+                    const value = Number(match.groups[key] ?? 0);
+                    milliseconds += value * TIME_UNITS[key].value;
                 }
 
-                return ms;
+                return milliseconds;
             },
 
             [ArgumentTypes.USER]: (message, phrase) => {
