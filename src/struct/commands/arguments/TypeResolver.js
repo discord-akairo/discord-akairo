@@ -160,14 +160,11 @@ class TypeResolver {
                     },
                 };
 
-                const TIME_REGEX = (() => {
-                    const regexString = Object.entries(TIME_UNITS).map(([name, { label }]) => `(?:(?<${name}>-?(?:\\d+)?\\.?\\d+) *${label})?`).join('\\s?');
-                    return new RegExp(`^${regexString}$`, 'i');
-                })();
+                const regexString = Object.entries(TIME_UNITS).map(([name, { label }]) => `(?:(?<${name}>-?(?:\\d+)?\\.?\\d+) *${label})?`).join('\\s?');
 
-                const match = TIME_REGEX.exec(phrase);
+                const match = new RegExp(`^${regexString}$`, 'i').exec(phrase);
                 if (!match) return null;
-                
+
                 let milliseconds = 0;
                 for (const key in match.groups) {
                     const value = Number(match.groups[key] || 0);
