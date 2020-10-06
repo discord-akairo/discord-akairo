@@ -84,7 +84,7 @@ module.exports = {
         GUILD: 'guild',
         DM: 'dm'
     },
-    TimeUnits = {
+    TimeUnits: {
         years: {
             label: '(?:years?|y)',
             value: 1000 * 60 * 60 * 24 * 365,
