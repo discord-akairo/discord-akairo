@@ -127,40 +127,40 @@ class TypeResolver {
 
                 const TIME_UNITS = {
                     years: {
-                        label: '(?:y|years?|year?)',
+                        label: '(?:years?|y)',
                         value: 1000 * 60 * 60 * 24 * 365,
                     },
+                    months: {
+                        label: '(?:months?|mo)',
+                        value: 1000 * 60 * 60 * 24 * 30,
+                    },
                     weeks: {
-                        label: '(?:w|weeks?|week?)',
+                        label: '(?:weeks?|w)',
                         value: 1000 * 60 * 60 * 24 * 7,
                     },
                     days: {
-                        label: '(?:d|days?|day?)',
+                        label: '(?:days?|d)',
                         value: 1000 * 60 * 60 * 24,
                     },
                     hours: {
-                        label: '(?:h|hours?|hrs?)',
+                        label: '(?:hours?|hrs?|h)',
                         value: 1000 * 60 * 60,
                     },
                     minutes: {
-                        label: '(?:m|minutes?|mins?)',
+                        label: '(?:minutes?|mins?|m)',
                         value: 1000 * 60,
                     },
                     seconds: {
-                        label: '(?:s|seconds?|secs?)',
+                        label: '(?:seconds?|secs?|s)',
                         value: 1000,
                     },
-                    months: {
-                        label: '(?:mo|months?|month?)',
-                        value: 1000 * 60 * 60 * 24 * 30,
-                    },
                     milliseconds: {
-                        label: '(?:ms|milliseconds?|msecs?)',
+                        label: '(?:milliseconds?|msecs?|ms)',
                         value: 1,
                     },
                 };
 
-                const regexString = Object.entries(TIME_UNITS).map(([name, { label }]) => `(?:(?<${name}>-?(?:\\d+)?\\.?\\d+) *${label})?`).join('\\s?');
+                const regexString = Object.entries(TIME_UNITS).map(([name, { label }]) => String.raw`(?:(?<${name}>-?(?:\d+)?\.?\d+) *${label})?`).join('\\s*');
 
                 const match = new RegExp(`^${regexString}$`, 'i').exec(phrase);
                 if (!match) return null;
