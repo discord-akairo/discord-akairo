@@ -40,7 +40,7 @@ class CustomClient extends AkairoClient {
             /* Options here */
         });
 
-        // Mongoose Provider
+        // Redis Provider
         this.settings = new RedisProvider('Settings');
     }
 }
