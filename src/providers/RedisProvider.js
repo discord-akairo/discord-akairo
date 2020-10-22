@@ -1,5 +1,5 @@
 const Provider = require('./Provider');
-const promisify = require("util").promisify;
+const { promisify } = require("util");
 const redis = require('redis');
 
 /**
