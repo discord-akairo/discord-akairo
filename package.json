@@ -17,18 +17,21 @@
         "commands",
         "arguments"
     ],
-    "dependencies": {},
     "devDependencies": {
         "@types/node": "^10.14.4",
+        "discord.js": "^12.4.0",
         "discord.js-docgen": "github:discordjs/docgen",
         "eslint": "^5.16.0",
         "jsdoc": "^3.6.4",
+        "sqlite": "^4.0.15",
+        "sqlite3": "^5.0.0",
         "tslint": "^5.15.0",
         "tslint-config-typings": "^0.3.1",
         "typescript": "^3.4.2"
     },
     "scripts": {
         "test": "npm run lint",
+        "testbot": "node test/bot.js",
         "lint": "eslint ./src && tslint ./src/index.d.ts"
     },
     "repository": {

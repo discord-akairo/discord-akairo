@@ -1,10 +1,11 @@
 const { AkairoClient, CommandHandler, InhibitorHandler, ListenerHandler, SQLiteProvider } = require('../../src/index');
 const sqlite = require('sqlite');
+const sqlite3 = require('sqlite3');
 
 class TestClient extends AkairoClient {
-    constructor() {
+    constructor(ownerID) {
         super({
-            ownerID: '123992700587343872'
+            ownerID: ownerID
         });
 
         this.commandHandler = new CommandHandler(this, {
@@ -41,9 +42,14 @@ class TestClient extends AkairoClient {
             directory: './test/listeners/'
         });
 
-        const db = sqlite.open('./test/db.sqlite')
+        const db = sqlite.open({
+            filename: './test/db.sqlite',
+            driver: sqlite3.Database
+        })
             .then(d => d.run('CREATE TABLE IF NOT EXISTS guilds (id TEXT NOT NULL UNIQUE, settings TEXT)').then(() => d));
-        this.settings = new SQLiteProvider(db, 'guilds', { dataColumn: 'settings' });
+        this.settings = new SQLiteProvider(db, 'guilds', {
+            dataColumn: 'settings'
+        });
 
         this.setup();
     }
