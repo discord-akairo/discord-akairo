@@ -46,7 +46,6 @@ class RedisProvider extends Provider {
     } catch (err) {
       /* ignore */
     }
-    console.log(`USE_REJSON: ${this.useReJSON}`);
     const client = redis.createClient(this.options);
 
     if (this.useReJSON) {
