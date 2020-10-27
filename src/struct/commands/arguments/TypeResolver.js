@@ -122,7 +122,7 @@ class TypeResolver {
                 return color;
             },
 
-            [ArgumentTypes.TIME]: (message, phrase) => {
+            [ArgumentTypes.TIMESPAN]: (message, phrase) => {
                 if (!phrase) return null;
 
                 const regexString = Object.entries(TimeUnits).map(([name, { label }]) => String.raw`(?:(?<${name}>-?(?:\d+)?\.?\d+) *${label})?`).join('\\s*');
