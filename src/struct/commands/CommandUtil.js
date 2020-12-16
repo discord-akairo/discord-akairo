@@ -133,7 +133,7 @@ class CommandUtil {
      * @returns {Promise<Message|Message[]>}
      */
     reply(content, options) {
-        return this.send(this.constructor.transformOptions(content, options, { reply: this.message.member || this.message.author }));
+        return this.send(this.constructor.transformOptions(content, options, { replyTo: this.message }));
     }
 
     /**
