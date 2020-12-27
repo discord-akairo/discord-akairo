@@ -18,6 +18,15 @@ declare module 'discord-akairo' {
     }
 
     export class AkairoError extends Error {
+        public constructor(key: 'ALIAS_CONFLICT', alias: string, id: string, conflict: string);
+        public constructor(key: 'ALREADY_LOADED' | 'MODULE_NOT_FOUND' | 'NOT_RELOADABLE', constructor: string, id: string);
+        public constructor(key: 'COMMAND_UTIL_EXPLICIT');
+        public constructor(key: 'FILE_NOT_FOUND', filename: string);
+        public constructor(key: 'INVALID_CLASS_TO_HANDLE', given: string, expected: string);
+        public constructor(key: 'INVALID_TYPE', name: string, expected: string, vowel?: boolean);
+        public constructor(key: 'NOT_INSTANTIABLE', constructor: string);
+        public constructor(key: 'NOT_IMPLEMENTED', constructor: string, method: string);
+        public constructor(key: 'UNKNOWN_MATCH_TYPE', match: string);
         public code: string;
     }
 
