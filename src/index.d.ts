@@ -4,7 +4,7 @@ declare module 'discord-akairo' {
         Message, MessageAttachment, MessageEmbed,
         MessageAdditions, MessageEditOptions, MessageOptions, SplitOptions,
         User, UserResolvable, GuildMember,
-        Channel, Role, Emoji, Guild,
+        Channel, TextChannel, NewsChannel, Role, Emoji, Guild,
         PermissionResolvable, StringResolvable, Snowflake
     } from 'discord.js';
 
@@ -187,6 +187,7 @@ declare module 'discord-akairo' {
 
         public before(message: Message): any;
         public condition(message: Message): boolean;
+        public exec(message: { channel: TextChannel | NewsChannel } & Message, args: any): any;
         public exec(message: Message, args: any): any;
         public parse(message: Message, content: string): Promise<Flag | any>;
         public reload(): this;
