@@ -78,6 +78,7 @@ declare module 'discord-akairo' {
 
         public reload(): this;
         public remove(): this;
+        public toString(): string;
     }
 
     export class Argument {
