@@ -323,7 +323,7 @@ declare module 'discord-akairo' {
         public handler: InhibitorHandler;
         public id: string;
         public reason: string;
-        public type: string;
+        public type: 'all' | 'pre' | 'post';
 
         public exec(message: Message, command?: Command): boolean | Promise<boolean>;
         public reload(): this;
@@ -608,7 +608,7 @@ declare module 'discord-akairo' {
 
     export interface InhibitorOptions extends AkairoModuleOptions {
         reason?: string;
-        type?: string;
+        type?: 'all' | 'pre' | 'post';
         priority?: number;
     }
 
