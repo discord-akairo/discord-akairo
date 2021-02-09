@@ -134,7 +134,7 @@ class Argument {
             commandDefs.modifyOtherwise,
             handlerDefs.modifyOtherwise
         );
-        const promp = choice(
+        const prompy = choice(
             this.prompt,
             commandDefs.prompt,
             handlerDefs.prompt
