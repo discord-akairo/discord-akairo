@@ -25,7 +25,7 @@ declare module 'discord-akairo' {
         public constructor(options?: AkairoOptions & ClientOptions, clientOptions?: ClientOptions);
 
         public ownerID: Snowflake | Snowflake[];
-        public SuperUserID: Snowflake | Snowflake[];
+        public superUserID: Snowflake | Snowflake[];
         public util: ClientUtil;
 
         public isOwner(user: UserResolvable): boolean;
@@ -491,7 +491,7 @@ declare module 'discord-akairo' {
     }
 
     export interface AkairoOptions {
-        superUserId?: Snowflake | Snowflake[];
+        superUserID?: Snowflake | Snowflake[];
     }
 
     export interface DefaultArgumentOptions {

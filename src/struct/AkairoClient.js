@@ -14,7 +14,7 @@ class AkairoClient extends Client {
 
         const { ownerID = '' } = options;
 
-        const { SuperUserID = '' } = options;
+        const { superUserID = '' } = options;
 
         /**
          * The ID of the owner(s).
@@ -26,7 +26,7 @@ class AkairoClient extends Client {
          * The ID of the superUser(s).
          * @type {Snowflake|Snowflake[]}
          */
-        this.SuperUserID = SuperUserID;
+        this.superUserID = superUserID;
 
         /**
          * Utility methods.
@@ -53,9 +53,9 @@ class AkairoClient extends Client {
      */
     isSuperUser(user) {
         const id = this.users.resolveID(user);
-        return Array.isArray(this.SuperUserID)
-            ? this.SuperUserID.includes(id)
-            : id === this.SuperUserID;
+        return Array.isArray(this.superUserID)
+            ? this.superUserID.includes(id)
+            : id === this.superUserID;
     }
 }
 
@@ -65,4 +65,9 @@ module.exports = AkairoClient;
  * Options for the client.
  * @typedef {Object} AkairoOptions
  * @prop {Snowflake|Snowflake[]} [ownerID=''] - Discord ID of the client owner(s).
+ */
+/**
+ * Options for the client.
+ * @typedef {Object} AkairoOptions
+ * @prop {Snowflake|Snowflake[]} [superUserID=''] - Discord ID of the client superUsers(s).
  */
