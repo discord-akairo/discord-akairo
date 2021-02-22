@@ -14,11 +14,19 @@ class AkairoClient extends Client {
 
         const { ownerID = '' } = options;
 
+        const { SuperUserID = '' } = options;
+
         /**
          * The ID of the owner(s).
          * @type {Snowflake|Snowflake[]}
          */
         this.ownerID = ownerID;
+
+        /**
+         * The ID of the superUser(s).
+         * @type {Snowflake|Snowflake[]}
+         */
+        this.SuperUserID = SuperUserID;
 
         /**
          * Utility methods.
