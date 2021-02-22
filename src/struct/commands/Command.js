@@ -21,6 +21,7 @@ class Command extends AkairoModule {
             separator,
             channel = null,
             ownerOnly = false,
+            superUserOnly = false,
             editable = true,
             typing = false,
             cooldown = null,
@@ -73,6 +74,12 @@ class Command extends AkairoModule {
          * @type {boolean}
          */
         this.ownerOnly = Boolean(ownerOnly);
+
+        /**
+         * Usable only by the client owner.
+         * @type {boolean}
+         */
+        this.superUserOnly = Boolean(superUserOnly);
 
         /**
          * Whether or not this command can be ran by an edit.
@@ -248,6 +255,7 @@ module.exports = Command;
  * @prop {string[]} [optionFlags=[]] - Option flags to use when using an ArgumentGenerator.
  * @prop {string} [channel] - Restricts channel to either 'guild' or 'dm'.
  * @prop {boolean} [ownerOnly=false] - Whether or not to allow client owner(s) only.
+ * @prop {boolean} [superUserOnly=false] - Whether or not to allow client SuperUsers(s) only.
  * @prop {boolean} [typing=false] - Whether or not to type in channel during execution.
  * @prop {boolean} [editable=true] - Whether or not message edits will run this command.
  * @prop {number} [cooldown] - The command cooldown in milliseconds.

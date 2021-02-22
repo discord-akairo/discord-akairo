@@ -38,6 +38,17 @@ class AkairoClient extends Client {
             ? this.ownerID.includes(id)
             : id === this.ownerID;
     }
+    /**
+     * Checks if a user is the owner of this bot.
+     * @param {UserResolvable} user - User to check.
+     * @returns {boolean}
+     */
+    isSuperUser(user) {
+        const id = this.users.resolveID(user);
+        return Array.isArray(this.SuperUserID)
+            ? this.SuperUserID.includes(id)
+            : id === this.SuperUserID;
+    }
 }
 
 module.exports = AkairoClient;

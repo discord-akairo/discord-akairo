@@ -25,9 +25,11 @@ declare module 'discord-akairo' {
         public constructor(options?: AkairoOptions & ClientOptions, clientOptions?: ClientOptions);
 
         public ownerID: Snowflake | Snowflake[];
+        public SuperUserID: Snowflake | Snowflake[];
         public util: ClientUtil;
 
         public isOwner(user: UserResolvable): boolean;
+        public isSuperUser(user: UserResolvable): boolean;
     }
 
     export class AkairoHandler extends EventEmitter {
@@ -169,6 +171,7 @@ declare module 'discord-akairo' {
         public ignoreCooldown?: Snowflake | Snowflake[] | IgnoreCheckPredicate;
         public ignorePermissions?: Snowflake | Snowflake[] | IgnoreCheckPredicate;
         public ownerOnly: boolean;
+        public superUserOnly: boolean;
         public prefix?: string | string[] | PrefixSupplier;
         public ratelimit: number;
         public regex: RegExp | RegexSupplier;
@@ -487,6 +490,10 @@ declare module 'discord-akairo' {
         ownerID?: Snowflake | Snowflake[];
     }
 
+    export interface AkairoOptions {
+        superUserId?: Snowflake | Snowflake[];
+    }
+
     export interface DefaultArgumentOptions {
         prompt?: ArgumentPromptOptions;
         otherwise?: StringResolvable | MessageOptions | MessageAdditions | OtherwiseContentSupplier;
@@ -561,6 +568,7 @@ declare module 'discord-akairo' {
         lock?: KeySupplier | 'guild' | 'channel' | 'user';
         optionFlags?: string[];
         ownerOnly?: boolean;
+        superUserOnly?: boolean;
         prefix?: string | string[] | PrefixSupplier;
         ratelimit?: number;
         regex?: RegExp | RegexSupplier;

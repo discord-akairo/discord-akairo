@@ -611,6 +611,14 @@ class CommandHandler extends AkairoHandler {
             }
         }
 
+        if (command.superUserOnly) {
+            const isSuperUser = this.client.isSuperUser(message.author);
+            if (!isSuperUser) {
+                this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.OWNER);
+                return true;
+            }
+        }
+
         if (command.channel === 'guild' && !message.guild) {
             this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, BuiltInReasons.GUILD);
             return true;
