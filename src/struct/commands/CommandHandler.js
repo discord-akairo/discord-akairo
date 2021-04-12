@@ -5,7 +5,7 @@ const { Collection } = require('discord.js');
 const Command = require('./Command');
 const CommandUtil = require('./CommandUtil');
 const Flag = require('./Flag');
-const { deepAssign, flatMap, intoArray, intoCallable, isPromise, prefixCompare } = require('../../util/Util');
+const { deepAssign, intoArray, intoCallable, isPromise, prefixCompare } = require('../../util/Util');
 const TypeResolver = require('./arguments/TypeResolver');
 
 /**
@@ -56,7 +56,7 @@ class CommandHandler extends AkairoHandler {
         this.resolver = new TypeResolver(this);
 
         /**
-         * Collecion of command aliases.
+         * Collection of command aliases.
          * @type {Collection<string, string>}
          */
         this.aliases = new Collection();
@@ -780,8 +780,8 @@ class CommandHandler extends AkairoHandler {
      * @returns {Promise<ParsedComponentData>}
      */
     async parseCommand(message) {
-        let prefixes = intoArray(await intoCallable(this.prefix)(message));
         const allowMention = await intoCallable(this.prefix)(message);
+        let prefixes = intoArray(allowMention);
         if (allowMention) {
             const mentions = [`<@${this.client.user.id}>`, `<@!${this.client.user.id}>`];
             prefixes = [...mentions, ...prefixes];
@@ -806,7 +806,7 @@ class CommandHandler extends AkairoHandler {
             return prefixes.map(p => [p, cmds]);
         });
 
-        const pairs = flatMap(await Promise.all(promises), x => x);
+        const pairs = (await Promise.all(promises)).flat();
         pairs.sort(([a], [b]) => prefixCompare(a, b));
         return this.parseMultiplePrefixes(message, pairs);
     }
