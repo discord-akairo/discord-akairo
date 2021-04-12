@@ -759,6 +759,10 @@ class CommandHandler extends AkairoHandler {
      * @returns {Promise<void>}
      */
     async runCommand(message, command, args) {
+        if (!command.enabled) {
+            this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, 'Command Not enabled');
+            return false;
+        }
         if (command.typing) {
             message.channel.startTyping();
         }
