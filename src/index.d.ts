@@ -185,6 +185,7 @@ declare module 'discord-akairo' {
         public regex: RegExp | RegexSupplier;
         public typing: boolean;
         public userPermissions: PermissionResolvable | PermissionResolvable[] | MissingPermissionSupplier;
+        public enabled: boolean;
 
         public before(message: Message): any;
         public condition(message: Message): boolean;
