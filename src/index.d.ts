@@ -582,6 +582,7 @@ declare module 'discord-akairo' {
         typing?: boolean;
         userPermissions?: PermissionResolvable | PermissionResolvable[] | MissingPermissionSupplier;
         quoted?: boolean;
+        enabled?: boolean;
     }
 
     export interface CommandHandlerOptions extends AkairoHandlerOptions {
