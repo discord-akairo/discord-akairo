@@ -1,13 +1,21 @@
 # Additonal Features
 Ability to enable and disable commands
 [Fixed outdated function references in ClientUtil](https://github.com/discord-akairo/discord-akairo/pull/202)
+
 [Added ClientUtil#permissionNames to typings](https://github.com/discord-akairo/discord-akairo/pull/188)
+
 [typings(InhibitorOptions): improve 'type' type](https://github.com/discord-akairo/discord-akairo/pull/186)
+
 [fix(typings): Made 3 improvements](https://github.com/discord-akairo/discord-akairo/pull/182)
+
 [Remove unnecessary second CommandHandler prefix function call](https://github.com/discord-akairo/discord-akairo/pull/177)
+
 [Fixed Type For Aliasas](https://github.com/discord-akairo/discord-akairo/pull/172)
+
 [Support 'timespan' ArgumentType](https://github.com/discord-akairo/discord-akairo/pull/163)
+
 [refactor(Util): remove custom flatMap implementation](https://github.com/discord-akairo/discord-akairo/pull/118)
+
 [feat: update for discord.js v13](https://github.com/discord-akairo/discord-akairo/pull/179)
 
 ## Installation
@@ -15,7 +23,7 @@ Ability to enable and disable commands
 Requires Node 12+ and Discord.js v12.  
 
 *discord-akairo*  
-`npm install discord-akairo`
+`npm install greysilly7/discord-akairo`
 
 *discord.js*  
 `npm install discord.js`
