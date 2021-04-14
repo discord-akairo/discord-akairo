@@ -191,7 +191,7 @@ class CommandHandler extends AkairoHandler {
          * The prefix(es) for command parsing.
          * @type {string|string[]|PrefixSupplier}
          */
-        this.prefix = typeof prefix === 'function' ? prefix.bind(this) : prefix;
+        this.prefix = typeof prefix === 'function' ? prefix.bind(this)() : prefix;
 
         /**
          * Whether or not mentions are allowed for prefixing.
@@ -245,6 +245,11 @@ class CommandHandler extends AkairoHandler {
      * @returns {void}
      */
     register(command, filepath) {
+        if (!command.enabled) {
+            this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, 'Command Not enabled');
+            return false;
+        }
+
         super.register(command, filepath);
 
         for (let alias of command.aliases) {
@@ -759,10 +764,6 @@ class CommandHandler extends AkairoHandler {
      * @returns {Promise<void>}
      */
     async runCommand(message, command, args) {
-        if (!command.enabled) {
-            this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, 'Command Not enabled');
-            return false;
-        }
         if (command.typing) {
             message.channel.startTyping();
         }

@@ -101,6 +101,7 @@ class Command extends AkairoModule {
 
         /**
          * Detirmens wether or not to actually run the command
+         * @type {boolean}
          */
         this.enabled = enabled;
 
