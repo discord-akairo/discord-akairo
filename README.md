@@ -1,5 +1,6 @@
 # Additonal Features
 Ability to enable and disable commands
+
 [Fixed outdated function references in ClientUtil](https://github.com/discord-akairo/discord-akairo/pull/202)
 
 [Added ClientUtil#permissionNames to typings](https://github.com/discord-akairo/discord-akairo/pull/188)
@@ -23,7 +24,7 @@ Ability to enable and disable commands
 Requires Node 12+ and Discord.js v12.  
 
 *discord-akairo*  
-`npm install greysilly7/discord-akairo`
+`npm install greysilly7/discord-akairo` or `yarn add greysilly7/discord-akairo`
 
 *discord.js*  
 `npm install discord.js`
