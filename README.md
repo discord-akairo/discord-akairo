@@ -47,3 +47,6 @@ Requires Node 12+ and Discord.js v12.
 Open an issue or a pull request!  
 Everyone is welcome to do so.  
 Make sure to run `npm test` before committing.  
+
+## Explains some of the features
+Enabling/Disabling a Command: Just add enabled to the super of the command it is a boolan true equals enabled false equals disabled
