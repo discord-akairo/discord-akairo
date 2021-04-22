@@ -27,13 +27,8 @@ Requires Node 12+ and Discord.js v12.
 `npm install greysilly7/discord-akairo` or `yarn add greysilly7/discord-akairo`
 
 *discord.js*  
-`npm install discord.js`
+`npm install discordjs/discord.js`
 
-*sqlite (optional)*  
-`npm install sqlite`
-
-*sequelize (optional)*  
-`npm install sequelize`
 
 ## Links
 
