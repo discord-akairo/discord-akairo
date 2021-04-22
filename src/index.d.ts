@@ -409,7 +409,7 @@ declare module 'discord-akairo' {
         public on(event: 'remove', listener: (listener: Listener) => any): this;
         public on(event: 'load', listener: (listener: Listener, isReload: boolean) => any): this;
     }
-
+    /*
     export abstract class Provider {
         public items: Collection<string, any>;
 
@@ -464,6 +464,7 @@ declare module 'discord-akairo' {
         public init(): Promise<void>;
         public set(id: string, key: string, value: any): Promise<any>;
     }
+    */
 
     export class TypeResolver {
         public constructor(handler: CommandHandler);
