@@ -50,3 +50,4 @@ Make sure to run `npm test` before committing.
 
 ## Explains some of the features
 Enabling/Disabling a Command: Just add enabled to the super of the command it is a boolan true equals enabled false equals disabled
+`Support 'timespan' ArgumentType` to do this in your argument just set the type to `timespan`
