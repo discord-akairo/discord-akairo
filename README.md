@@ -17,7 +17,7 @@ Ability to enable and disable commands
 
 [refactor(Util): remove custom flatMap implementation](https://github.com/discord-akairo/discord-akairo/pull/118)
 
-[feat: update for discord.js v13](https://github.com/discord-akairo/discord-akairo/pull/179)
+[feat: update for discord.js v13](https://github.com/discord-akairo/discord-akairo/pull/179) Just adds inline repies replies for CommandUtil#reply
 
 ## Installation
 
