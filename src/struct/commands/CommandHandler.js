@@ -246,7 +246,7 @@ class CommandHandler extends AkairoHandler {
      */
     register(command, filepath) {
         if (!command.enabled) {
-            this.emit(CommandHandlerEvents.COMMAND_BLOCKED, message, command, 'Command Not enabled');
+            // this.emit(CommandHandlerEvents.COMMAND_BLOCKED, command, 'Command Not enabled');
             return false;
         }
 
