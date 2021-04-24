@@ -4,7 +4,7 @@ declare module 'discord-akairo' {
         Message, MessageAttachment, MessageEmbed,
         MessageAdditions, MessageEditOptions, MessageOptions, SplitOptions,
         User, UserResolvable, GuildMember,
-        Channel, Role, Emoji, Guild,
+        Channel, TextChannel, NewsChannel, Role, Emoji, Guild,
         PermissionResolvable, StringResolvable, Snowflake
     } from 'discord.js';
 
@@ -18,6 +18,15 @@ declare module 'discord-akairo' {
     }
 
     export class AkairoError extends Error {
+        public constructor(key: 'ALIAS_CONFLICT', alias: string, id: string, conflict: string);
+        public constructor(key: 'ALREADY_LOADED' | 'MODULE_NOT_FOUND' | 'NOT_RELOADABLE', constructor: string, id: string);
+        public constructor(key: 'COMMAND_UTIL_EXPLICIT');
+        public constructor(key: 'FILE_NOT_FOUND', filename: string);
+        public constructor(key: 'INVALID_CLASS_TO_HANDLE', given: string, expected: string);
+        public constructor(key: 'INVALID_TYPE', name: string, expected: string, vowel?: boolean);
+        public constructor(key: 'NOT_INSTANTIABLE', constructor: string);
+        public constructor(key: 'NOT_IMPLEMENTED', constructor: string, method: string);
+        public constructor(key: 'UNKNOWN_MATCH_TYPE', match: string);
         public code: string;
     }
 
@@ -71,6 +80,7 @@ declare module 'discord-akairo' {
 
         public reload(): this;
         public remove(): this;
+        public toString(): string;
     }
 
     export class Argument {
@@ -135,6 +145,7 @@ declare module 'discord-akairo' {
         public compareStreaming(oldMember: GuildMember, newMember: GuildMember): number;
         public embed(data?: object): MessageEmbed;
         public fetchMember(guild: Guild, id: string, cache?: boolean): Promise<GuildMember>;
+        public permissionNames(): string[];
         public resolveChannel(text: string, channels: Collection<Snowflake, Channel>, caseSensitive?: boolean, wholeWord?: boolean): Channel;
         public resolveChannels(text: string, channels: Collection<Snowflake, Channel>, caseSensitive?: boolean, wholeWord?: boolean): Collection<Snowflake, Channel>;
         public resolveEmoji(text: string, emojis: Collection<Snowflake, Emoji>, caseSensitive?: boolean, wholeWord?: boolean): Emoji;
@@ -177,9 +188,11 @@ declare module 'discord-akairo' {
         public regex: RegExp | RegexSupplier;
         public typing: boolean;
         public userPermissions: PermissionResolvable | PermissionResolvable[] | MissingPermissionSupplier;
+        public enabled: boolean;
 
         public before(message: Message): any;
         public condition(message: Message): boolean;
+        public exec(message: { channel: TextChannel | NewsChannel } & Message, args: any): any;
         public exec(message: Message, args: any): any;
         public parse(message: Message, content: string): Promise<Flag | any>;
         public reload(): this;
@@ -326,7 +339,8 @@ declare module 'discord-akairo' {
         public handler: InhibitorHandler;
         public id: string;
         public reason: string;
-        public type: string;
+        public type: 'all' | 'pre' | 'post';
+
 
         public exec(message: Message, command?: Command): boolean | Promise<boolean>;
         public reload(): this;
@@ -398,7 +412,7 @@ declare module 'discord-akairo' {
         public on(event: 'remove', listener: (listener: Listener) => any): this;
         public on(event: 'load', listener: (listener: Listener, isReload: boolean) => any): this;
     }
-
+    /*
     export abstract class Provider {
         public items: Collection<string, any>;
 
@@ -453,6 +467,7 @@ declare module 'discord-akairo' {
         public init(): Promise<void>;
         public set(id: string, key: string, value: any): Promise<any>;
     }
+    */
 
     export class TypeResolver {
         public constructor(handler: CommandHandler);
@@ -576,6 +591,7 @@ declare module 'discord-akairo' {
         typing?: boolean;
         userPermissions?: PermissionResolvable | PermissionResolvable[] | MissingPermissionSupplier;
         quoted?: boolean;
+        enabled?: boolean;
     }
 
     export interface CommandHandlerOptions extends AkairoHandlerOptions {
@@ -616,7 +632,7 @@ declare module 'discord-akairo' {
 
     export interface InhibitorOptions extends AkairoModuleOptions {
         reason?: string;
-        type?: string;
+        type?: 'all' | 'pre' | 'post';
         priority?: number;
     }
 
@@ -658,7 +674,7 @@ declare module 'discord-akairo' {
 
     export type ArgumentType = 'string' | 'lowercase' | 'uppercase' | 'charCodes'
         | 'number' | 'integer' | 'bigint' | 'emojint'
-        | 'url' | 'date' | 'color'
+        | 'url' | 'date' | 'color' | 'timespan'
         | 'user' | 'users' | 'member' | 'members' | 'relevant' | 'relevants'
         | 'channel' | 'channels' | 'textChannel' | 'textChannels' | 'voiceChannel' | 'voiceChannels' | 'categoryChannel' | 'categoryChannels' | 'newsChannel' | 'newsChannels' | 'storeChannel' | 'storeChannels'
         | 'role' | 'roles' | 'emoji' | 'emojis' | 'guild' | 'guilds'
@@ -718,6 +734,7 @@ declare module 'discord-akairo' {
             CONTENT: 'content';
             REST_CONTENT: 'restContent';
             NONE: 'none';
+            TIMESPAN: 'timespan';
         };
         ArgumentTypes: {
             STRING: 'string';
