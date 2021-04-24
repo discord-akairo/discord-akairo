@@ -19,6 +19,8 @@ Ability to enable and disable commands
 
 [feat: update for discord.js v13](https://github.com/discord-akairo/discord-akairo/pull/179) Just adds inline repies replies for CommandUtil#reply
 
+[SuperUser only commands](https://github.com/SkyBlockDev/discord-akairo)
+
 ## Installation
 
 Requires Node 12+ and Discord.js v12.  
