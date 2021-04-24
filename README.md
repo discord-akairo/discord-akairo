@@ -19,7 +19,7 @@ Ability to enable and disable commands
 
 [feat: update for discord.js v13](https://github.com/discord-akairo/discord-akairo/pull/179) Just adds inline repies replies for CommandUtil#reply
 
-[SuperUser only commands](https://github.com/SkyBlockDev/discord-akairo)
+[SuperUser only commands](https://github.com/SkyBlockDev/discord-akairo) Just add the superuser only command option same as owneronly
 
 ## Installation
 
