@@ -1,88 +1,36 @@
-<div align="center">
-  <br />
-  <p>
-    <a href="https://discord-akairo.github.io"><img src="https://discord-akairo.github.io/static/logo.svg" width="546" alt="discord-akairo" /></a>
-  </p>
-  <br />
-  <p>
-    <a href="https://www.npmjs.com/package/discord-akairo"><img src="https://img.shields.io/npm/v/discord-akairo.svg?maxAge=3600" alt="NPM version" /></a>
-    <a href="https://www.npmjs.com/package/discord-akairo"><img src="https://img.shields.io/npm/dt/discord-akairo.svg?maxAge=3600" alt="NPM downloads" /></a>
-    <a href="https://travis-ci.org/discord-akairo/discord-akairo"><img src="https://travis-ci.org/discord-akairo/discord-akairo.svg" alt="Build status" /></a>
-  </p>
-  <p>
-    <a href="https://nodei.co/npm/discord-akairo/"><img src="https://nodei.co/npm/discord-akairo.png?downloads=true" alt="npm installnfo" /></a>
-  </p>
-</div>
+# Additonal Features
+Ability to enable and disable commands
 
-## Features
+[Fixed outdated function references in ClientUtil](https://github.com/discord-akairo/discord-akairo/pull/202)
 
-#### Completely modular commands, inhibitors, and listeners.
+[Added ClientUtil#permissionNames to typings](https://github.com/discord-akairo/discord-akairo/pull/188)
 
-  - Reading files recursively from directories.
-  - Adding, removing, and reloading modules.
-  - Creating your own handlers and module types.
+[typings(InhibitorOptions): improve 'type' type](https://github.com/discord-akairo/discord-akairo/pull/186)
 
-#### Flexible command handling and creation.
+[fix(typings): Made 3 improvements](https://github.com/discord-akairo/discord-akairo/pull/182)
 
-  - Command aliases.
-  - Command throttling and cooldowns.
-  - Client and user permission checks.
-  - Running commands on edits and editing previous responses.
-  - Multiple prefixes and mention prefixes.
-  - Regular expression and conditional triggers.
+[Remove unnecessary second CommandHandler prefix function call](https://github.com/discord-akairo/discord-akairo/pull/177)
 
-#### Complex and highly customizable arguments.
+[Fixed Type For Aliasas](https://github.com/discord-akairo/discord-akairo/pull/172)
 
-  - Support for quoted arguments.
-  - Arguments based on previous arguments.
-  - Several ways to match arguments, such as flag arguments.
-  - Casting input into certain types.
-    - Simple types such as string, integer, float, url, date, etc.
-    - Discord-related types such as user, member, message, etc.
-    - Types that you can add yourself.
-    - Asynchronous type casting.
-  - Prompting for input for arguments.
-    - Customizable prompts with embeds, files, etc.
-    - Easily include dynamic data such as the incorrect input.
-    - Infinite argument prompting.
+[Support 'timespan' ArgumentType](https://github.com/discord-akairo/discord-akairo/pull/163)
 
-#### Blocking and monitoring messages with inhibitors.
+[refactor(Util): remove custom flatMap implementation](https://github.com/discord-akairo/discord-akairo/pull/118)
 
-  - Run at various stages of command handling.
-    - On all messages.
-    - On messages that are from valid users.
-    - On messages before commands.
+[feat: update for discord.js v13](https://github.com/discord-akairo/discord-akairo/pull/179) Just adds inline repies replies for CommandUtil#reply
 
-#### Helpful events and modular listeners.
-
-  - Events for handlers, such as loading modules.
-  - Events for various stages of command handling.
-  - Reloadable listeners to easily separate your event handling.
-
-#### Useful utilities and database providers.
-
-  - Resolvers for members, users, and others that can filter by name.
-  - Shortcut methods for making embeds and collections.
-  - Simple to use database providers.
-    - Built-in support for `sqlite` and `sequelize`.
-    - Works on entire table or single JSON column.
-    - Caching data from databases.
+[SuperUser only commands](https://github.com/SkyBlockDev/discord-akairo) Just add the superuser only command option same as owneronly
 
 ## Installation
 
 Requires Node 12+ and Discord.js v12.  
 
 *discord-akairo*  
-`npm install discord-akairo`
+`npm install greysilly7/discord-akairo` or `yarn add greysilly7/discord-akairo`
 
 *discord.js*  
-`npm install discord.js`
+`npm install discordjs/discord.js`
 
-*sqlite (optional)*  
-`npm install sqlite`
-
-*sequelize (optional)*  
-`npm install sequelize`
 
 ## Links
 
@@ -96,3 +44,7 @@ Requires Node 12+ and Discord.js v12.
 Open an issue or a pull request!  
 Everyone is welcome to do so.  
 Make sure to run `npm test` before committing.  
+
+## Explains some of the features
+Enabling/Disabling a Command: Just add enabled to the super of the command it is a boolan true equals enabled false equals disabled
+`Support 'timespan' ArgumentType` to do this in your argument just set the type to `timespan`
