@@ -38,8 +38,7 @@ class Command extends AkairoModule {
             ignoreCooldown,
             ignorePermissions,
             flags = [],
-            optionFlags = [],
-            enabled = true
+            optionFlags = []
         } = options;
 
         /**
@@ -105,12 +104,6 @@ class Command extends AkairoModule {
          * @type {number}
          */
         this.ratelimit = ratelimit;
-
-        /**
-         * Detirmens wether or not to actually run the command
-         * @type {boolean}
-         */
-        this.enabled = enabled;
 
         /**
          * Default prompt options.

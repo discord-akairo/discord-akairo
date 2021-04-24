@@ -120,7 +120,7 @@ class Argument {
         const commandDefs = this.command.argumentDefaults;
         const handlerDefs = this.handler.argumentDefaults;
         const optional = choice(
-            this.default ? true : (this.prompt && this.prompt.optional),
+            this.prompt && this.prompt.optional,
             commandDefs.prompt && commandDefs.prompt.optional,
             handlerDefs.prompt && handlerDefs.prompt.optional
         );
@@ -708,7 +708,6 @@ module.exports = Argument;
  * - `url` casts to an `URL` object.
  * - `date` casts to a `Date` object.
  * - `color` casts a hex code to an integer.
- * - `timespan` casts a time string to the milliseconds it represents.
  * - `commandAlias` tries to resolve to a command from an alias.
  * - `command` matches the ID of a command.
  * - `inhibitor` matches the ID of an inhibitor.

@@ -5,7 +5,7 @@ const { Collection } = require('discord.js');
 const Command = require('./Command');
 const CommandUtil = require('./CommandUtil');
 const Flag = require('./Flag');
-const { deepAssign, intoArray, intoCallable, isPromise, prefixCompare } = require('../../util/Util');
+const { deepAssign, flatMap, intoArray, intoCallable, isPromise, prefixCompare } = require('../../util/Util');
 const TypeResolver = require('./arguments/TypeResolver');
 
 /**
@@ -56,7 +56,7 @@ class CommandHandler extends AkairoHandler {
         this.resolver = new TypeResolver(this);
 
         /**
-         * Collection of command aliases.
+         * Collecion of command aliases.
          * @type {Collection<string, string>}
          */
         this.aliases = new Collection();
@@ -191,7 +191,7 @@ class CommandHandler extends AkairoHandler {
          * The prefix(es) for command parsing.
          * @type {string|string[]|PrefixSupplier}
          */
-        this.prefix = typeof prefix === 'function' ? prefix.bind(this)() : prefix;
+        this.prefix = typeof prefix === 'function' ? prefix.bind(this) : prefix;
 
         /**
          * Whether or not mentions are allowed for prefixing.
@@ -245,11 +245,6 @@ class CommandHandler extends AkairoHandler {
      * @returns {void}
      */
     register(command, filepath) {
-        if (!command.enabled) {
-            // this.emit(CommandHandlerEvents.COMMAND_BLOCKED, command, 'Command Not enabled');
-            return false;
-        }
-
         super.register(command, filepath);
 
         for (let alias of command.aliases) {
@@ -819,7 +814,7 @@ class CommandHandler extends AkairoHandler {
             return prefixes.map(p => [p, cmds]);
         });
 
-        const pairs = (await Promise.all(promises)).flat();
+        const pairs = flatMap(await Promise.all(promises), x => x);
         pairs.sort(([a], [b]) => prefixCompare(a, b));
         return this.parseMultiplePrefixes(message, pairs);
     }
