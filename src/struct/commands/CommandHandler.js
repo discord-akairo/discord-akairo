@@ -235,6 +235,9 @@ class CommandHandler extends AkairoHandler {
                     if (this.handleEdits) this.handle(m);
                 });
             }
+            this.client.on('interaction', async m => {
+                this.handleSlash(m);
+            });
         });
     }
 
@@ -390,7 +393,41 @@ class CommandHandler extends AkairoHandler {
             return null;
         }
     }
+    async handleSlash(interaction) {
+        if (!interaction.isCommand()) return;
 
+        if (!interaction.guildID) {
+            return interaction.reply("Slash Commands dont work in dms", {
+                ephemeral: true,
+            });
+        }
+
+        const command = this.modules.get(interaction.commandName);
+
+        if (!command) {
+            return interaction.reply(`**${interaction.commandName}** Was not found`, {
+                ephemeral: true,
+            });
+        }
+
+        if (command.ownerOnly && !this.client.isOwner(interaction.user)) {
+            return interaction.reply(`**${interaction.commandName}** Is owner only`, {
+                ephemeral: true,
+            });
+        }
+
+        try {
+            this.emit("slashStarted", interaction, command);
+            await command.execSlash(interaction);
+        } catch (error) {
+            console.error(error);
+
+            const reply = interaction.deferred ? interaction.editReply : interaction.reply;
+            reply(`Something went wrong trying to run \`${interaction.commandName}\`!`, {
+                ephemeral: true,
+            });
+        }
+    }
     /**
      * Handles normal commands.
      * @param {Message} message - Message to handle.
