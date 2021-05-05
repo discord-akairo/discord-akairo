@@ -419,10 +419,9 @@ class CommandHandler extends AkairoHandler {
         try {
             this.emit("slashStarted", interaction, command);
             await command.execSlash(interaction);
-        } catch (error) {
-            console.error(error);
-
-            const reply = interaction.deferred ? interaction.editReply : interaction.reply;
+        } catch (err) {
+            this.emitError(err, interaction);
+            const reply = interaction?.deferred ? interaction.editReply : interaction.reply;
             reply(`Something went wrong trying to run \`${interaction.commandName}\`!`, {
                 ephemeral: true,
             });
