@@ -410,6 +410,12 @@ class CommandHandler extends AkairoHandler {
             });
         }
 
+        if (!command.slash) {
+            return interaction.reply(`**${interaction.commandName}** Is not enabled as a slash command`, {
+                ephemeral: true,
+            });
+        }
+
         if (command.ownerOnly && !this.client.isOwner(interaction.user)) {
             return interaction.reply(`**${interaction.commandName}** Is owner only`, {
                 ephemeral: true,
