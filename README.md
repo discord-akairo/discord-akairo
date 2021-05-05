@@ -14,6 +14,11 @@
   </p>
 </div>
 
+### Has slash commands
+
+For slash commands to work you need to add execslash to the command and when it recieves a command it will try and run it
+
+
 ## Features
 
 #### Completely modular commands, inhibitors, and listeners.
