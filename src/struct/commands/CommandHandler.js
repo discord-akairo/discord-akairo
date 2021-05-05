@@ -420,7 +420,7 @@ class CommandHandler extends AkairoHandler {
             this.emit("slashStarted", interaction, command);
             await command.execSlash(interaction);
         } catch (err) {
-            this.emit("slashError", interaction, command)
+            this.emit("slashError", err, interaction, command)
         }
     }
     /**
