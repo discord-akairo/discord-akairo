@@ -23,12 +23,6 @@ module.exports = {
     Listener: require('./struct/listeners/Listener'),
     ListenerHandler: require('./struct/listeners/ListenerHandler'),
 
-    // Providers
-    Provider: require('./providers/Provider'),
-    SequelizeProvider: require('./providers/SequelizeProvider'),
-    SQLiteProvider: require('./providers/SQLiteProvider'),
-    MongooseProvider: require('./providers/MongooseProvider'),
-
     // Utilities
     AkairoError: require('./util/AkairoError'),
     Category: require('./util/Category'),
