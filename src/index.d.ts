@@ -174,7 +174,6 @@ declare module 'discord-akairo' {
         public superUserOnly: boolean;
         public prefix?: string | string[] | PrefixSupplier;
         public ratelimit: number;
-        public slash: boolean;
         public options: any | any[]
         public regex: RegExp | RegexSupplier;
         public typing: boolean;
