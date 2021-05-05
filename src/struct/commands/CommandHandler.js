@@ -235,8 +235,8 @@ class CommandHandler extends AkairoHandler {
                     if (this.handleEdits) this.handle(m);
                 });
             }
-            this.client.on('interaction', async m => {
-                this.handleSlash(m);
+            this.client.on('interaction', async i => {
+                this.handleSlash(i);
             });
         });
     }
@@ -420,11 +420,7 @@ class CommandHandler extends AkairoHandler {
             this.emit("slashStarted", interaction, command);
             await command.execSlash(interaction);
         } catch (err) {
-            this.emitError(err, interaction);
-            const reply = interaction?.deferred ? interaction.editReply : interaction.reply;
-            reply(`Something went wrong trying to run \`${interaction.commandName}\`!`, {
-                ephemeral: true,
-            });
+            this.emit("slashError", interaction, command)
         }
     }
     /**
