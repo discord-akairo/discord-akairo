@@ -42,20 +42,20 @@ export default class AvatarCommand extends Command {
 		super("avatar", {
 			aliases: ["avatar", "av"],
 			category: "Info",
-      slash:true,
-      options: [
-        {
+			slash:true,
+			options: [
+        			{
 					type: 6,
 					name: "user",
 					description: "User you want the avatar of",
 					required: false,
 				}
-      ]
+      			]
 		});
 	}
-  exec(message){
-    message.reply("This also works")
-  }
+	exec(message) {
+		message.reply("This also works")
+	}
 	async execSlash(message: CommandInteraction) {
 		const member = message.options[0]?.user ?? message.user;
 		return message.reply(
