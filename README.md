@@ -18,7 +18,17 @@
 
 For slash commands to work you need to add execslash to the command and when it recieves a command it will try and run it
 
-new even slashError
+new events:
+ * slashError
+ * slashBlocked
+    * owner
+    * superuser
+ * slashStarted
+ * slashNotFound
+ * slashGuildOnly
+
+for more info about these events view the [source code](https://github.com/SkyBlockDev/discord-akairo/blob/b5554a38c54b618d7929c219e7da17c93de48b05/src/struct/commands/CommandHandler.js#L396)
+
 
 examples:
 ```ts

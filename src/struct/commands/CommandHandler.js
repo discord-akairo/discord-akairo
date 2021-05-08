@@ -397,17 +397,13 @@ class CommandHandler extends AkairoHandler {
         if (!interaction.isCommand()) return;
 
         if (!interaction.guildID) {
-            return interaction.reply("Slash Commands dont work in dms", {
-                ephemeral: true,
-            });
+            return this.emit("slashGuildOnly", interaction)
         }
 
         const command = this.modules.get(interaction.commandName);
 
         if (!command) {
-            return interaction.reply(`**${interaction.commandName}** Was not found`, {
-                ephemeral: true,
-            });
+            return this.emit("slashNotFound", interaction)
         }
 
         if (command.ownerOnly && !this.client.isOwner(interaction.user)) {
@@ -416,7 +412,6 @@ class CommandHandler extends AkairoHandler {
         }
         if (command.superUserOnly && !this.client.isSuperUser(interaction.user)) {
             return this.emit("slashBlocked", interaction, command, "superuser")
-
         }
 
         try {
