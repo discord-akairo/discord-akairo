@@ -411,14 +411,17 @@ class CommandHandler extends AkairoHandler {
         }
 
         if (command.ownerOnly && !this.client.isOwner(interaction.user)) {
-            return interaction.reply(`**${interaction.commandName}** Is owner only`, {
-                ephemeral: true,
-            });
+            return this.emit("slashBlocked", interaction, command, "owner")
+
+        }
+        if (command.superUserOnly && !this.client.isSuperUser(interaction.user)) {
+            return this.emit("slashBlocked", interaction, command, "superuser")
+
         }
 
         try {
             this.emit("slashStarted", interaction, command);
-            await command.execSlash(interaction);
+            await command.execSlash(interaction)
         } catch (err) {
             this.emit("slashError", err, interaction, command)
         }
