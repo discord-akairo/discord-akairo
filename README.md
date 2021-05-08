@@ -29,6 +29,7 @@ new events:
 
 for more info about these events view the [source code](https://github.com/SkyBlockDev/discord-akairo/blob/b5554a38c54b618d7929c219e7da17c93de48b05/src/struct/commands/CommandHandler.js#L396)
 
+Also if someone wants to add slash commands and superuseronly to the test
 
 examples:
 ```ts
@@ -118,10 +119,6 @@ export default class AvatarCommand extends Command {
 
   - Resolvers for members, users, and others that can filter by name.
   - Shortcut methods for making embeds and collections.
-  - Simple to use database providers.
-    - Built-in support for `sqlite` and `sequelize`.
-    - Works on entire table or single JSON column.
-    - Caching data from databases.
 
 ## Installation
 
