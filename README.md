@@ -125,10 +125,10 @@ export default class AvatarCommand extends Command {
 Requires Node 12+ and Discord.js v12.  
 
 *discord-akairo*  
-`npm install discord-akairo`
+`yarn add SkyBlockDev/discord-akairo`
 
 *discord.js*  
-`npm install discord.js`
+`yarn add discordjs/discord.js`
 
 ## Links
 
