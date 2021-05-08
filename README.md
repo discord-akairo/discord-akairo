@@ -34,39 +34,35 @@ Also if someone wants to add slash commands and superuseronly to the test
 examples:
 ```ts
 import { Command } from "discord-akairo";
-import type { Message, GuildMember, ImageSize, AllowedImageFormat, CommandInteraction } from "discord.js";
-import { MessageEmbed } from "discord.js";
-import { GetMember } from "../../Lib/Utils";
+import type { CommandInteractionk, Message } from "discord.js";
 export default class AvatarCommand extends Command {
-	public constructor() {
-		super("avatar", {
-			aliases: ["avatar", "av"],
-			category: "Info",
-			slash:true,
-			options: [
-        			{
-					type: 6,
-					name: "user",
-					description: "User you want the avatar of",
-					required: false,
-				}
-      			]
-		});
-	}
-	exec(message) {
-		message.reply("This also works")
-	}
-	async execSlash(message: CommandInteraction) {
-		const member = message.options[0]?.user ?? message.user;
-		return message.reply(
-			this.client.util
-				.embed()
-				.setTitle(`${member.username}'s Avatar`)
-				.setURL(member.displayAvatarURL({ format: "png", size: 512, dynamic: true }))
-				.setColor(this.client.colors.green)
-				.setImage(member.displayAvatarURL({ format: "png", size: 512, dynamic: true }))
-		);
-	}
+    public constructor() {
+        super("avatar", {
+            aliases: ["avatar"],
+            options: [
+                {
+                    type: 6,
+                    name: "user",
+                    description: "User you want the avatar of",
+                    required: false,
+                }
+            ]
+        });
+    }
+    exec(message: Message) {
+        message.reply("This also works")
+    }
+    async execSlash(interaction: CommandInteraction) {
+        const member = message.options[0]?.user ?? message.user;
+        return message.reply(
+            this.client.util
+                .embed()
+                .setTitle(`${member.username}'s Avatar`)
+                .setURL(member.displayAvatarURL({ format: "png", size: 512, dynamic: true }))
+                .setColor(this.client.colors.green)
+                .setImage(member.displayAvatarURL({ format: "png", size: 512, dynamic: true }))
+        );
+    }
 }
 ```
 
