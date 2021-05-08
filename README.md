@@ -130,12 +130,6 @@ Requires Node 12+ and Discord.js v12.
 *discord.js*  
 `npm install discord.js`
 
-*sqlite (optional)*  
-`npm install sqlite`
-
-*sequelize (optional)*  
-`npm install sequelize`
-
 ## Links
 
 - [Website](https://discord-akairo.github.io)
