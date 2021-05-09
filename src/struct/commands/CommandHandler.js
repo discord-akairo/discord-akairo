@@ -415,6 +415,8 @@ class CommandHandler extends AkairoHandler {
         }
 
         try {
+            interaction.defer(false)
+            interaction.reply = interaction.editReply
             this.emit("slashStarted", interaction, command);
             await command.execSlash(interaction)
         } catch (err) {
