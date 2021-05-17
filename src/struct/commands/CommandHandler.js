@@ -417,8 +417,12 @@ class CommandHandler extends AkairoHandler {
         try {
             interaction.defer(false)
             interaction.reply = interaction.editReply
+            const convertedOptions = {}
+            for (const option of interaction.options) {
+                convertedOptions[option.name] = option
+            }
             this.emit("slashStarted", interaction, command);
-            await command.execSlash(interaction)
+            await command.execSlash(interaction, convertedOptions)
         } catch (err) {
             this.emit("slashError", err, interaction, command)
         }
