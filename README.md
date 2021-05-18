@@ -14,57 +14,8 @@
   </p>
 </div>
 
-### Has slash commands
-
-For slash commands to work you need to add execslash to the command and when it recieves a command it will try and run it
-
-new events:
- * slashError
- * slashBlocked
-    * owner
-    * superuser
- * slashStarted
- * slashNotFound
- * slashGuildOnly
-
-for more info about these events view the [source code](https://github.com/SkyBlockDev/discord-akairo/blob/master/src/struct/commands/CommandHandler.js#L396)
-
-Also if someone wants to add slash commands and superuseronly to the test
-
-examples:
-```ts
-import { Command } from "discord-akairo";
-import type { CommandInteractionk, Message } from "discord.js";
-export default class AvatarCommand extends Command {
-    public constructor() {
-        super("avatar", {
-            aliases: ["avatar"],
-            options: [
-                {
-                    type: 6,
-                    name: "user",
-                    description: "User you want the avatar of",
-                    required: false,
-                }
-            ]
-        });
-    }
-    exec(message: Message) {
-        message.reply("This also works")
-    }
-    async execSlash(interaction: CommandInteraction) {
-        const member = message.options[0]?.user ?? message.user;
-        return message.reply(
-            this.client.util
-                .embed()
-                .setTitle(`${member.username}'s Avatar`)
-                .setURL(member.displayAvatarURL({ format: "png", size: 512, dynamic: true }))
-                .setColor(this.client.colors.green)
-                .setImage(member.displayAvatarURL({ format: "png", size: 512, dynamic: true }))
-        );
-    }
-}
-```
+### Changes in this fork of akairo
+Please see [this file](/docs/general/updates.md) for a list of changes in this fork vs normal akairo
 
 ## Features
 
