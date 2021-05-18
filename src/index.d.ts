@@ -5,7 +5,7 @@ declare module 'discord-akairo' {
         MessageAdditions, MessageEditOptions, MessageOptions, SplitOptions,
         User, UserResolvable, GuildMember,
         Channel, Role, Emoji, Guild,
-        PermissionResolvable, StringResolvable, Snowflake,CommandInteraction
+        PermissionResolvable, StringResolvable, Snowflake, CommandInteraction
     } from 'discord.js';
 
     import { EventEmitter } from 'events';
@@ -174,7 +174,7 @@ declare module 'discord-akairo' {
         public superUserOnly: boolean;
         public prefix?: string | string[] | PrefixSupplier;
         public ratelimit: number;
-        public options: any | any[]
+        public options: any | any[];
         public regex: RegExp | RegexSupplier;
         public typing: boolean;
         public userPermissions: PermissionResolvable | PermissionResolvable[] | MissingPermissionSupplier;
