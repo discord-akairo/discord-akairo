@@ -15,7 +15,7 @@
 </div>
 
 ### Changes in this fork of akairo
-Please see [this file](/blob/master/docs/general/updates.md) for a list of changes in this fork vs normal akairo
+Please see [this file](/docs/general/updates.md) for a list of changes in this fork vs normal akairo
 
 ## Features
 
