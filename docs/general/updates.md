@@ -12,6 +12,8 @@ New slash command related events:
  * slashNotFound
  * slashGuildOnly
  * slashMissingPermissions
+    * user
+    * client
 
 For more info about these events view the [source code](https://github.com/SkyBlockDev/discord-akairo/blob/master/src/struct/commands/CommandHandler.js#L396). If you don't want to do that, you can safely assume that they are the exact same as their non-slash versions, execpt all `Message` arguments are changed to `CommandInteraction`.
 
@@ -44,9 +46,9 @@ export default class AvatarCommand extends Command {
 Note that this example assumes a few things.
 1. You already have a registered slash command called `avatar`
 2. The registered command has one option named `user`, and
-   1. The type is User
-   2. Required is `false`
-<br>
+    1. The type is `6` (enum value for user)
+    2. Required is `false`
+
 You can do this all manually using something like an eval command, or just making the http requests to the discord api yourself, or making it automated, but just keep in mind that the library won't register anything for you.
 
 ## Superusers
