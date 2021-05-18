@@ -1,7 +1,7 @@
 const AkairoError = require('../../util/AkairoError');
 const AkairoHandler = require('../AkairoHandler');
 const { BuiltInReasons, CommandHandlerEvents } = require('../../util/Constants');
-const { Collection } = require('discord.js');
+const { Collection, CommandInteraction } = require('discord.js');
 const Command = require('./Command');
 const CommandUtil = require('./CommandUtil');
 const Flag = require('./Flag');
@@ -393,6 +393,12 @@ class CommandHandler extends AkairoHandler {
             return null;
         }
     }
+
+	/**
+     * Handles a slash command.
+     * @param {CommandInteraction} interaction - Interaction to handle.
+     * @returns {Promise<?boolean>}
+     */
     async handleSlash(interaction) {
         if (!interaction.isCommand()) return;
 
@@ -413,6 +419,25 @@ class CommandHandler extends AkairoHandler {
         if (command.superUserOnly && !this.client.isSuperUser(interaction.user)) {
             return this.emit("slashBlocked", interaction, command, "superuser")
         }
+		const userPermissions = interaction.channel.permissionsFor(interaction.member).toArray()
+		const userMissingPermissions = command.userPermissions.filter(p => !userPermissions.includes(p))
+		if (
+			command.userPermissions &&
+			command.userPermissions.length > 0 &&
+			userMissingPermissions.length > 0
+		) {
+			return this.emit("slashMissingPermissions", interaction, command, "user", userMissingPermissions)
+		}
+
+		const clientPermissions = interaction.channel.permissionsFor(interaction.guild.me).toArray()
+		const clientMissingPermissions = command.clientPermissions.filter(p => !clientPermissions.includes(p))
+		if (
+			command.clientPermissions &&
+			command.clientPermissions.length > 0 &&
+			clientMissingPermissions.length > 0
+		) {
+			return this.emit("slashMissingPermissions", interaction, command, "client", clientMissingPermissions)
+		}
 
         try {
             interaction.defer(false)
