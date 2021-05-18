@@ -49,7 +49,7 @@ Note that this example assumes a few things.
     1. The type is `6` (enum value for user)
     2. Required is `false`
 
-You can do this all manually using something like an eval command, or just making the http requests to the discord api yourself, or making it automated, but just keep in mind that the library won't register anything for you.
+You can do this all manually using something like an eval command, or just making the http requests to the discord api yourself, or making it automated, but just keep in mind that the library won't register anything for you. Read [this](https://discord.js.org/#/docs/main/master/examples/commands) for how to create/edit/delete slash commands in discord.js.
 
 ## Superusers
 Superusers are included, no documentation yet though.
