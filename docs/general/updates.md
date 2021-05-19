@@ -63,3 +63,12 @@ constructor(config: Option) {
 		});
 	}
 ```
+```ts
+constructor(config: Option) {
+		super({
+			ownerID: config.owners,
+            //Owners arent automatically added as superuser
+			superUserID: [...config.owners,...config.superUsers],
+		});
+	}
+```
