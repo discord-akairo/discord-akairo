@@ -428,26 +428,34 @@ class CommandHandler extends AkairoHandler {
             return false;
         }
         const userPermissions = interaction.channel.permissionsFor(interaction.member).toArray();
-        const userMissingPermissions = command.userPermissions.filter(p => !userPermissions.includes(p));
-        if (
-            command.userPermissions
-            && command.userPermissions.length > 0
-            && userMissingPermissions.length > 0
-        ) {
-            this.emit('slashMissingPermissions', interaction, command, 'user', userMissingPermissions);
-            return false;
+
+        if (command.userPermissions) {
+            const userMissingPermissions = command.userPermissions.filter(p => !userPermissions.includes(p));
+            if (
+                command.userPermissions
+                && command.userPermissions.length > 0
+                && userMissingPermissions.length > 0
+            ) {
+                this.emit('slashMissingPermissions', interaction, command, 'user', userMissingPermissions);
+                return false;
+            }
         }
 
+
         const clientPermissions = interaction.channel.permissionsFor(interaction.guild.me).toArray();
-        const clientMissingPermissions = command.clientPermissions.filter(p => !clientPermissions.includes(p));
-        if (
-            command.clientPermissions
-            && command.clientPermissions.length > 0
-            && clientMissingPermissions.length > 0
-        ) {
-            this.emit('slashMissingPermissions', interaction, command, 'client', clientMissingPermissions);
-            return false;
+
+        if (command.clientPermissions) {
+            const clientMissingPermissions = command.clientPermissions.filter(p => !clientPermissions.includes(p));
+            if (
+                command.clientPermissions
+                && command.clientPermissions.length > 0
+                && clientMissingPermissions.length > 0
+            ) {
+                this.emit('slashMissingPermissions', interaction, command, 'client', clientMissingPermissions);
+                return false;
+            }
         }
+
 
         try {
             if (this.autoDefer) {
