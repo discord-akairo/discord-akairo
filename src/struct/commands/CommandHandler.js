@@ -35,7 +35,8 @@ class CommandHandler extends AkairoHandler {
         argumentDefaults = {},
         prefix = '!',
         allowMention = true,
-        aliasReplacement
+        aliasReplacement,
+        autoDefer = true
     } = {}) {
         if (!(classToHandle.prototype instanceof Command || classToHandle === Command)) {
             throw new AkairoError('INVALID_CLASS_TO_HANDLE', classToHandle.name, Command.name);
@@ -48,7 +49,11 @@ class CommandHandler extends AkairoHandler {
             automateCategories,
             loadFilter
         });
-
+        /**
+         * Automatically defer messages "BotName is thinking"
+         * Defaults to true.
+         */
+        this.autoDefer = autoDefer;
         /**
          * The type resolver.
          * @type {TypeResolver}
@@ -426,8 +431,8 @@ class CommandHandler extends AkairoHandler {
         const userMissingPermissions = command.userPermissions.filter(p => !userPermissions.includes(p));
         if (
             command.userPermissions
-			&& command.userPermissions.length > 0
-			&& userMissingPermissions.length > 0
+            && command.userPermissions.length > 0
+            && userMissingPermissions.length > 0
         ) {
             this.emit('slashMissingPermissions', interaction, command, 'user', userMissingPermissions);
             return false;
@@ -437,16 +442,19 @@ class CommandHandler extends AkairoHandler {
         const clientMissingPermissions = command.clientPermissions.filter(p => !clientPermissions.includes(p));
         if (
             command.clientPermissions
-			&& command.clientPermissions.length > 0
-			&& clientMissingPermissions.length > 0
+            && command.clientPermissions.length > 0
+            && clientMissingPermissions.length > 0
         ) {
             this.emit('slashMissingPermissions', interaction, command, 'client', clientMissingPermissions);
             return false;
         }
 
         try {
-            interaction.defer(false);
-            interaction.reply = interaction.editReply;
+            if (this.autoDefer) {
+                interaction.defer(false);
+                interaction.reply = interaction.editReply;
+            }
+
             const convertedOptions = {};
             for (const option of interaction.options) {
                 convertedOptions[option.name] = option;
