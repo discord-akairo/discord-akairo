@@ -72,3 +72,15 @@ constructor(config: Option) {
 		});
 	}
 ```
+
+## Auto defer
+Auto defer automatically defers a message aka "BotName is thinking"
+
+```ts
+commandHandler: CommandHandler = new CommandHandler(this, {
+		directory: join(__dirname, "..", "Commands"),
+		prefix: "!",
+        //To disable it
+        autoDefer: false
+	});
+```
