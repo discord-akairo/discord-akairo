@@ -32,7 +32,7 @@ export default class AvatarCommand extends Command {
     }
     async execSlash(interaction: CommandInteraction, { user }: { user?: CommandInteractionOption } ) {
         const member = user?.user ?? interaction.user;
-        return message.reply(
+        return interaction.reply(
             this.client.util
                 .embed()
                 .setTitle(`${member.username}'s Avatar`)
