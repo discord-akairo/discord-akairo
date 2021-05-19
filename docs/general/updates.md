@@ -53,3 +53,13 @@ You can do this all manually using something like an eval command, or just makin
 
 ## Superusers
 Superusers are included, no documentation yet though.
+
+SuperUsers example: 
+```ts
+constructor(config: Option) {
+		super({
+			ownerID: config.owners,
+			superUserID: config.superUsers,
+		});
+	}
+```
