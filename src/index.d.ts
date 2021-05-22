@@ -438,6 +438,7 @@ declare module 'discord-akairo' {
         public reload(id: string): Task;
         public reloadAll(): this;
         public remove(id: string): Task;
+        public startAll(): void;
         public removeAll(): this;
         public on(event: 'remove', task: (task: Task) => any): this;
         public on(event: 'load', task: (task: Task, isReload: boolean) => any): this;
