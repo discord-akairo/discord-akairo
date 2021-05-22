@@ -57,8 +57,9 @@ Yes this fork has tasks!
 
 example: 
 
-bot.ts
+
 ```ts
+//bot.ts
 import {TaskHandler} from "discord-akairo"
 ....
 taskHandler: TaskHandler = new TaskHandler(this, {
@@ -69,9 +70,10 @@ this.taskHandler.loadAll();
 this.taskHandler.startAll();
 ...
 ```
-tasks/task.ts
+
 ```ts
-import {Task} from "discord.js";
+//tasks/task.ts
+import {Task} from "discord-akairo";
 export default class extends Task {
 	constructor() {
 		super("hello", {
