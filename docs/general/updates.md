@@ -1,4 +1,6 @@
 # Changes in this fork of akairo
+## for support regarding this pr you can ping @tricked in akairo discord general or preferably join [my discord](https://discord.gg/KkMKCchJb8) and ask there
+
 
 ## Slash commands
 For slash commands to work you need to add `execSlash` to the command, and when it recieves a slash command it will run `execSlash`.
