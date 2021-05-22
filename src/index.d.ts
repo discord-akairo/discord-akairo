@@ -444,61 +444,6 @@ declare module 'discord-akairo' {
         public on(event: 'load', task: (task: Task, isReload: boolean) => any): this;
     }
 
-    export abstract class Provider {
-        public items: Collection<string, any>;
-
-        public abstract clear(id: string): any;
-        public abstract delete(id: string, key: string): any;
-        public abstract get(id: string, key: string, defaultValue: any): any;
-        public abstract init(): any;
-        public abstract set(id: string, key: string, value: any): any;
-    }
-
-    export class SequelizeProvider extends Provider {
-        public constructor(table: any, options?: ProviderOptions);
-
-        public dataColumn?: string;
-        public idColumn: string;
-        public items: Collection<string, any>;
-        public table: any;
-
-        public clear(id: string): Promise<void>;
-        public delete(id: string, key: string): Promise<boolean>;
-        public get(id: string, key: string, defaultValue: any): any;
-        public init(): Promise<void>;
-        public set(id: string, key: string, value: any): Promise<boolean>;
-    }
-
-    export class SQLiteProvider extends Provider {
-        public constructor(db: any | Promise<any>, tableName: string, options?: ProviderOptions);
-
-        public dataColumn?: string;
-        public db: any;
-        public idColumn: string;
-        public items: Collection<string, any>;
-        public tableName: string;
-
-        public clear(id: string): Promise<any>;
-        public delete(id: string, key: string): Promise<any>;
-        public get(id: string, key: string, defaultValue: any): any;
-        public init(): Promise<void>;
-        public set(id: string, key: string, value: any): Promise<any>;
-    }
-
-    export class MongooseProvider extends Provider {
-        public constructor(model: any);
-
-        public model: any;
-        public items: Collection<string, any>;
-
-        public clear(id: string): Promise<any>;
-        public delete(id: string, key: string): Promise<any>;
-        public get(id: string, key: string, defaultValue: any): any;
-        public getDocument(id: string): any;
-        public init(): Promise<void>;
-        public set(id: string, key: string, value: any): Promise<any>;
-    }
-
     export class TypeResolver {
         public constructor(handler: CommandHandler);
 
@@ -682,11 +627,6 @@ declare module 'discord-akairo' {
         command?: Command;
         content?: string;
         prefix?: string;
-    }
-
-    export interface ProviderOptions {
-        dataColumn?: string;
-        idColumn?: string;
     }
 
     export type StringData = {
