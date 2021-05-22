@@ -410,7 +410,7 @@ declare module 'discord-akairo' {
         public emitter: string | EventEmitter;
         public event: string;
         public filepath: string;
-        public handler: ListenerHandler;
+        public handler: TaskHandler;
         public type: string;
 
         public exec(...args: any[]): any;
