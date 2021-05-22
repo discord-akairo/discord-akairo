@@ -32,10 +32,10 @@ class TaskHandler extends AkairoHandler {
     startAll() {
         this.client.on('ready', () => {
             this.modules.forEach(task => {
-                if (task.runOnStart) task.exec(this.client);
+                if (task.runOnStart) task.exec();
                 if (task.delay) {
                     setInterval(() => {
-                        task.exec(this.client);
+                        task.exec();
                     }, Number(task.delay));
                 }
             });

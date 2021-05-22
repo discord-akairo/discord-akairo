@@ -51,8 +51,42 @@ Note that this example assumes a few things.
 
 You can do this all manually using something like an eval command, or just making the http requests to the discord api yourself, or making it automated, but just keep in mind that the library won't register anything for you. Read [this](https://discord.js.org/#/docs/main/master/examples/commands) for how to create/edit/delete slash commands in discord.js.
 
+## Tasks
+
+Yes this fork has tasks!
+
+example: 
+
+bot.ts
+```ts
+import {TaskHandler} from "discord-akairo"
+....
+taskHandler: TaskHandler = new TaskHandler(this, {
+	directory: join(__dirname, "..", "tasks"),
+});
+....
+this.taskHandler.loadAll();
+this.taskHandler.startAll();
+...
+```
+tasks/task.ts
+```ts
+import {Task} from "discord.js";
+export default class extends Task {
+	constructor() {
+		super("hello", {
+			delay: 200,
+			runOnStart: false,
+		});
+	}
+	async exec() {
+		console.log("hello from", this.client.user.username)
+	}
+}
+````
+
+
 ## Superusers
-Superusers are included, no documentation yet though.
 
 SuperUsers example: 
 ```ts
