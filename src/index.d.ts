@@ -402,6 +402,48 @@ declare module 'discord-akairo' {
         public on(event: 'load', listener: (listener: Listener, isReload: boolean) => any): this;
     }
 
+        export class Task extends AkairoModule {
+        public constructor(id: string, options?: TaskOptions);
+
+        public category: Category<string, Task>;
+        public client: AkairoClient;
+        public emitter: string | EventEmitter;
+        public event: string;
+        public filepath: string;
+        public handler: TaskHandler;
+        public type: string;
+
+        public exec(...args: any[]): any;
+        public reload(): this;
+        public remove(): this;
+    }
+
+    export class TaskHandler extends AkairoHandler {
+        public constructor(client: AkairoClient, options: AkairoHandlerOptions);
+
+        public categories: Collection<string, Category<string, Task>>;
+        public classToHandle: typeof Task;
+        public client: AkairoClient;
+        public directory: string;
+        public emitters: Collection<string, EventEmitter>;
+        public modules: Collection<string, Task>;
+
+        public add(filename: string): Task;
+        public addToEmitter(id: string): Task;
+        public deregister(task: Task): void;
+        public findCategory(name: string): Category<string, Task>;
+        public load(thing: string | Function): Task;
+        public loadAll(directory?: string, filter?: LoadPredicate): this;
+        public register(task: Task, filepath?: string): void;
+        public reload(id: string): Task;
+        public reloadAll(): this;
+        public remove(id: string): Task;
+        public startAll(): void;
+        public removeAll(): this;
+        public on(event: 'remove', task: (task: Task) => any): this;
+        public on(event: 'load', task: (task: Task, isReload: boolean) => any): this;
+    }
+
     export abstract class Provider {
         public items: Collection<string, any>;
 
@@ -627,6 +669,11 @@ declare module 'discord-akairo' {
         emitter: string | EventEmitter;
         event: string;
         type?: string;
+    }
+
+    export interface TaskOptions extends AkairoModuleOptions {
+        delay: number;
+        runOnStart: boolean;
     }
 
     export interface ParsedComponentData {

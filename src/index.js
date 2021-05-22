@@ -23,6 +23,10 @@ module.exports = {
     Listener: require('./struct/listeners/Listener'),
     ListenerHandler: require('./struct/listeners/ListenerHandler'),
 
+    // Tasks
+    Task: require('./struct/tasks/Task'),
+    TaskHandler: require('./struct/tasks/TaskHandler'),
+
     // Utilities
     AkairoError: require('./util/AkairoError'),
     Category: require('./util/Category'),
