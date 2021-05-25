@@ -55,7 +55,7 @@ You can do this all manually using something like an eval command, or just makin
 
 ### Emphemeral responses
 
-If you are unaware, an emphemeral response is what causes the "Only you can see this" response with slash commands. You can cause the command to do this with the `slashEmphemeral` command option. Just add `slashEmphemeral: true` and it will respond privatly.
+If you are unaware, an emphemeral response is what causes the "Only you can see this" response with slash commands. You can cause the command to do this with the `slashEmphemeral` command option. Just add `slashEmphemeral: true` and it will respond privately.
 
 Warning: fetchReply will not work with emphemeral responses.
 
