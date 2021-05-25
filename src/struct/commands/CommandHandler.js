@@ -458,8 +458,8 @@ class CommandHandler extends AkairoHandler {
 
 
         try {
-            if (this.autoDefer) {
-                interaction.defer(false);
+            if (this.autoDefer || command.slashEmphemeral) {
+                interaction.defer(command.slashEmphemeral);
                 interaction.reply = interaction.editReply;
             }
 

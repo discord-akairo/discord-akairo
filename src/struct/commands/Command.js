@@ -38,7 +38,8 @@ class Command extends AkairoModule {
             ignoreCooldown,
             ignorePermissions,
             flags = [],
-            optionFlags = []
+            optionFlags = [],
+            slashEmphemeral = false
         } = options;
 
         /**
@@ -190,6 +191,12 @@ class Command extends AkairoModule {
          * @type {?Snowflake|Snowflake[]|IgnoreCheckPredicate}
          */
         this.ignorePermissions = typeof ignorePermissions === 'function' ? ignorePermissions.bind(this) : ignorePermissions;
+        
+        /**
+         * Whether slash command responses for this command should be emphemeral or not. 
+         * @type {boolean}
+         */
+        this.slashEmphemeral = slashEmphemeral
 
         /**
          * The ID of this command.
