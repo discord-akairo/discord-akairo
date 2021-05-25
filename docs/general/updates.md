@@ -53,12 +53,17 @@ Note that this example assumes a few things.
 
 You can do this all manually using something like an eval command, or just making the http requests to the discord api yourself, or making it automated, but just keep in mind that the library won't register anything for you. Read [this](https://github.com/MatteZ02/discord-interactions) for how to create/edit/delete slash commands in discord.js.
 
+### Emphemeral responses
+
+If you are unaware, an emphemeral response is what causes the "Only you can see this" response with slash commands. You can cause the command to do this with the `slashEmphemeral` command option. Just add `slashEmphemeral: true` and it will respond privatly.
+
+Warning: fetchReply will not work with emphemeral responses.
+
 ## Tasks
 
 Yes this fork has tasks!
 
-example: 
-
+Example: 
 
 ```ts
 //bot.ts
