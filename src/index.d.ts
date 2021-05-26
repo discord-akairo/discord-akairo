@@ -5,7 +5,7 @@ declare module 'discord-akairo' {
         MessageAdditions, MessageEditOptions, MessageOptions, SplitOptions,
         User, UserResolvable, GuildMember,
         Channel, Role, Emoji, Guild,
-        PermissionResolvable, StringResolvable, Snowflake
+        PermissionResolvable, StringResolvable, Snowflake, Permissions
     } from 'discord.js';
 
     import { EventEmitter } from 'events';
