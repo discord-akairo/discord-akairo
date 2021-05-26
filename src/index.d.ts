@@ -5,7 +5,7 @@ declare module 'discord-akairo' {
         MessageAdditions, MessageEditOptions, MessageOptions, SplitOptions,
         User, UserResolvable, GuildMember,
         Channel, Role, Emoji, Guild,
-        PermissionResolvable, StringResolvable, Snowflake
+        PermissionResolvable, StringResolvable, Snowflake, Permissions
     } from 'discord.js';
 
     import { EventEmitter } from 'events';
@@ -133,6 +133,7 @@ declare module 'discord-akairo' {
         public compareStreaming(oldMember: GuildMember, newMember: GuildMember): number;
         public embed(data?: object): MessageEmbed;
         public fetchMember(guild: Guild, id: string, cache?: boolean): Promise<GuildMember>;
+        public permissionNames(): (keyof Permissions['FLAGS'])[];
         public resolveChannel(text: string, channels: Collection<Snowflake, Channel>, caseSensitive?: boolean, wholeWord?: boolean): Channel;
         public resolveChannels(text: string, channels: Collection<Snowflake, Channel>, caseSensitive?: boolean, wholeWord?: boolean): Collection<Snowflake, Channel>;
         public resolveEmoji(text: string, emojis: Collection<Snowflake, Emoji>, caseSensitive?: boolean, wholeWord?: boolean): Emoji;
