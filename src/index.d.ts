@@ -39,7 +39,7 @@ declare module 'discord-akairo' {
         public classToHandle: Function;
         public client: AkairoClient;
         public directory: string;
-        public loadFiler: LoadPredicate;
+        public loadFilter: LoadPredicate;
         public modules: Collection<string, AkairoModule>;
 
         public deregister(mod: AkairoModule): void;
