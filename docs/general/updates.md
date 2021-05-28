@@ -1,5 +1,4 @@
 # Changes in this fork of akairo
-## for support regarding this pr you can ping @tricked in akairo discord general or preferably join [my discord](https://discord.gg/KkMKCchJb8) and ask there
 
 
 ## Slash commands
