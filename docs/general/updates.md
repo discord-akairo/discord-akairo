@@ -127,3 +127,14 @@ commandHandler: CommandHandler = new CommandHandler(this, {
         autoDefer: false
 	});
 ```
+
+## removed features
+* provides
+    * mongo
+    * sequelize
+    * sqlite
+
+If you want a good database providers arent it; 
+
+
+### for support regarding this pr you can ping @tricked in akairo discord general or preferably join [my discord](https://discord.gg/KkMKCchJb8) and ask there
