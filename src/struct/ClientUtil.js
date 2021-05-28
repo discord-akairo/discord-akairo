@@ -337,7 +337,7 @@ class ClientUtil {
         const resolved = [];
 
         for (const key of Object.keys(Permissions.FLAGS)) {
-            if (number & Permissions.FLAGS[key]) resolved.push(key);
+            if (BigInt(number) & Permissions.FLAGS[key]) resolved.push(key);
         }
 
         return resolved;
