@@ -13,12 +13,13 @@ New slash command related events:
  * slashStarted
  * slashNotFound
  * slashGuildOnly
- * slashcooldown
  * slashMissingPermissions
     * user
     * client
 
-For more info about these events view the [source code](https://github.com/SkyBlockDev/discord-akairo/blob/master/src/struct/commands/CommandHandler.js#L396). If you don't want to do that, you can safely assume that they are the exact same as their non-slash versions, execpt all `Message` arguments are changed to `CommandInteraction`.
+> Cooldown event will also run on slash commands
+
+For more info about these events view the [source code](https://github.com/SkyBlockDev/discord-akairo/blob/master/src/struct/commands/CommandHandler.js#L408). If you don't want to do that, you can safely assume that they are the exact same as their non-slash versions, execpt all `Message` arguments are changed to `CommandInteraction`.
 
 Slash command example:
 ```ts
@@ -52,7 +53,7 @@ Note that this example assumes a few things.
     1. The type is `6` (enum value for user)
     2. Required is `false`
 
-You can do this all manually using something like an eval command, or just making the http requests to the discord api yourself, or making it automated, but just keep in mind that the library won't register anything for you. Read [this](https://github.com/MatteZ02/discord-interactions) for how to create/edit/delete slash commands in discord.js.
+You can do this all manually using something like an eval command, or just making the http requests to the discord api yourself, or making it automated, but just keep in mind that the library won't register anything for you. Read [this](https://github.com/MatteZ02/discord-interactions) or [this](https://discord.js.org/#/docs/main/master/class/ApplicationCommandManager?scrollTo=set) for how to create/edit/delete slash commands in discord.js.
 
 ### Emphemeral responses
 
