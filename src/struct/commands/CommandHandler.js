@@ -460,6 +460,8 @@ class CommandHandler extends AkairoHandler {
         const message = await interaction.fetchReply();
         message.reply = message.edit;
         message.channel.send = message.edit;
+        message.util.send = message.edit;
+
 
         if (this.runCooldowns(interaction, command)) {
             return true;
