@@ -457,7 +457,7 @@ class CommandHandler extends AkairoHandler {
             }
         }
         await interaction.defer(command.slashEmphemeral);
-        const message = await message.fetchReply();
+        const message = await interaction.fetchReply();
         message.reply = message.edit;
         message.channel.send = message.edit;
 
