@@ -16,11 +16,16 @@ class AkairoMessage {
         this.id = interaction.id;
     }
     async send(...options) {
+        if (options[0].embed) {
+            options[0].embeds = [options[0].embed];
+            delete options[0].embed;
+            delete options[0].allowedMentions;
+        }
         if (this._message) {
             return this._message.edit(...options);
         }
         if (this.replied) {
-            await this.interaction.editReply(...options);
+            await this.interaction.editReply(options[0], options[1]);
             this._message = await this.interaction.fetchReply();
             return this._message;
         }

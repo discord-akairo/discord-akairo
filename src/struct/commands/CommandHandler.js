@@ -465,9 +465,8 @@ class CommandHandler extends AkairoHandler {
 
 
         try {
-            const message = new AkairoMessage(this.client, interaction, { slash: true });
+            const message = new AkairoMessage(this.client, interaction, { slash: true, replied: this.autoDefer || command.slashEmphemeral });
             if (this.autoDefer || command.slashEmphemeral) {
-                message.replied = true
                 await interaction.defer(command.slashEmphemeral);
             }
             const convertedOptions = {};
