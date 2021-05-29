@@ -15,6 +15,7 @@ class Command extends AkairoModule {
         super(id, { category: options.category });
 
         const {
+            slash = false,
             aliases = [],
             args = this.args || [],
             quoted = true,
@@ -41,7 +42,7 @@ class Command extends AkairoModule {
             optionFlags = [],
             slashEmphemeral = false
         } = options;
-
+        this.slash = slash;
         /**
          * Command names.
          * @type {string[]}
