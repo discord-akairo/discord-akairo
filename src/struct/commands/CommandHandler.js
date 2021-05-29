@@ -1,7 +1,8 @@
 const AkairoError = require('../../util/AkairoError');
 const AkairoHandler = require('../AkairoHandler');
 const { BuiltInReasons, CommandHandlerEvents } = require('../../util/Constants');
-const { Message, CommandInteraction } = require("discord.js")
+const { Message } = require('discord.js');
+const AkairoMessage = require('../../util/AkairoMessage');
 const { Collection } = require('discord.js');
 const Command = require('./Command');
 const CommandUtil = require('./CommandUtil');
@@ -456,22 +457,27 @@ class CommandHandler extends AkairoHandler {
                 return false;
             }
         }
+
+
         if (this.runCooldowns(interaction, command)) {
             return true;
         }
 
-        try {
-            if (this.autoDefer || command.slashEmphemeral) {
-                interaction.defer(command.slashEmphemeral);
-                interaction.reply = interaction.editReply;
-            }
 
+        try {
+            const message = new AkairoMessage(this.client, interaction, { slash: true, replied: this.autoDefer || command.slashEmphemeral });
+            if (this.autoDefer || command.slashEmphemeral) {
+                await interaction.defer(command.slashEmphemeral);
+            }
             const convertedOptions = {};
             for (const option of interaction.options) {
-                convertedOptions[option.name] = option;
+                if (option.member) convertedOptions[option.name] = option.member;
+                else if (option.channel) convertedOptions[option.name] = option.channel;
+                else if (option.role) convertedOptions[option.name] = option.role;
+                else convertedOptions[option.name] = option.value;
             }
             this.emit('slashStarted', interaction, command);
-            await command.execSlash(interaction, convertedOptions);
+            await command.exec(message, convertedOptions);
             return true;
         } catch (err) {
             this.emit('slashError', err, interaction, command);

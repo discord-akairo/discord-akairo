@@ -15,6 +15,7 @@ class Command extends AkairoModule {
         super(id, { category: options.category });
 
         const {
+            slash = false,
             aliases = [],
             args = this.args || [],
             quoted = true,
@@ -41,7 +42,7 @@ class Command extends AkairoModule {
             optionFlags = [],
             slashEmphemeral = false
         } = options;
-
+        this.slash = slash;
         /**
          * Command names.
          * @type {string[]}
@@ -191,12 +192,12 @@ class Command extends AkairoModule {
          * @type {?Snowflake|Snowflake[]|IgnoreCheckPredicate}
          */
         this.ignorePermissions = typeof ignorePermissions === 'function' ? ignorePermissions.bind(this) : ignorePermissions;
-        
+
         /**
-         * Whether slash command responses for this command should be emphemeral or not. 
+         * Whether slash command responses for this command should be emphemeral or not.
          * @type {boolean}
          */
-        this.slashEmphemeral = slashEmphemeral
+        this.slashEmphemeral = slashEmphemeral;
 
         /**
          * The ID of this command.

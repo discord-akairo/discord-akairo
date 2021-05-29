@@ -4,7 +4,7 @@ declare module 'discord-akairo' {
         Message, MessageAttachment, MessageEmbed,
         MessageAdditions, MessageEditOptions, MessageOptions, SplitOptions,
         User, UserResolvable, GuildMember,
-        Channel, Role, Emoji, Guild,
+        Channel, Role, Emoji, Guild, TextChannel,
         PermissionResolvable, StringResolvable, Snowflake, CommandInteraction
     } from 'discord.js';
 
@@ -149,10 +149,23 @@ declare module 'discord-akairo' {
         public resolveUser(text: string, users: Collection<Snowflake, User>, caseSensitive?: boolean, wholeWord?: boolean): User;
         public resolveUsers(text: string, users: Collection<Snowflake, User>, caseSensitive?: boolean, wholeWord?: boolean): Collection<Snowflake, User>;
     }
-
+    export class AkairoMessage {
+        public constructor(client: AkairoClient, interaction: CommandInteraction, {slash, replied}: {slash?:boolean ; replied?:boolean});
+        public interaction: CommandInteraction;
+        public _message: Message | null;
+        public channel: TextChannel;
+        public guild: Guild;
+        public member: GuildMember
+        public client: AkairoClient;
+        public replied: boolean;
+        public author: User;
+        public id:string;
+        public send(...options:any): Promise<Message>
+        public reply(...options:any): Promise<Message>
+    }
     export class Command extends AkairoModule {
         public constructor(id: string, options?: CommandOptions);
-
+        public slash: boolean;
         public aliases: string[];
         public argumentDefaults: DefaultArgumentOptions;
         public quoted: boolean;
