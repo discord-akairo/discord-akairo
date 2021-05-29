@@ -1,6 +1,7 @@
 const AkairoError = require('../../util/AkairoError');
 const AkairoHandler = require('../AkairoHandler');
 const { BuiltInReasons, CommandHandlerEvents } = require('../../util/Constants');
+const { Message, CommandInteraction } = require("discord.js")
 const { Collection } = require('discord.js');
 const Command = require('./Command');
 const CommandUtil = require('./CommandUtil');
@@ -455,7 +456,9 @@ class CommandHandler extends AkairoHandler {
                 return false;
             }
         }
-
+        if (this.runCooldowns(interaction, command)) {
+            return true;
+        }
 
         try {
             if (this.autoDefer || command.slashEmphemeral) {
@@ -795,12 +798,13 @@ class CommandHandler extends AkairoHandler {
      * @returns {boolean}
      */
     runCooldowns(message, command) {
+        const id = message instanceof Message ? message.author.id : message.user.id;
         const ignorer = command.ignoreCooldown || this.ignoreCooldown;
         const isIgnored = Array.isArray(ignorer)
-            ? ignorer.includes(message.author.id)
+            ? ignorer.includes(id)
             : typeof ignorer === 'function'
                 ? ignorer(message, command)
-                : message.author.id === ignorer;
+                : id === ignorer;
 
         if (isIgnored) return false;
 
@@ -809,7 +813,7 @@ class CommandHandler extends AkairoHandler {
 
         const endTime = message.createdTimestamp + time;
 
-        const id = message.author.id;
+
         if (!this.cooldowns.has(id)) this.cooldowns.set(id, {});
 
         if (!this.cooldowns.get(id)[command.id]) {
@@ -832,7 +836,7 @@ class CommandHandler extends AkairoHandler {
         const entry = this.cooldowns.get(id)[command.id];
 
         if (entry.uses >= command.ratelimit) {
-            const end = this.cooldowns.get(message.author.id)[command.id].end;
+            const end = this.cooldowns.get(id)[command.id].end;
             const diff = end - message.createdTimestamp;
 
             this.emit(CommandHandlerEvents.COOLDOWN, message, command, diff);
