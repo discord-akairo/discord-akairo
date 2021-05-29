@@ -1,7 +1,7 @@
 const AkairoError = require('../../util/AkairoError');
 const AkairoHandler = require('../AkairoHandler');
 const { BuiltInReasons, CommandHandlerEvents } = require('../../util/Constants');
-const { Message, CommandInteraction } = require("discord.js")
+const { Message } = require('discord.js');
 const { Collection } = require('discord.js');
 const Command = require('./Command');
 const CommandUtil = require('./CommandUtil');
@@ -456,22 +456,23 @@ class CommandHandler extends AkairoHandler {
                 return false;
             }
         }
+        await interaction.defer(command.slashEmphemeral);
+        const message = await message.fetchReply();
+        message.reply = message.edit;
+        message.channel.send = message.edit;
+
         if (this.runCooldowns(interaction, command)) {
             return true;
         }
 
-        try {
-            if (this.autoDefer || command.slashEmphemeral) {
-                interaction.defer(command.slashEmphemeral);
-                interaction.reply = interaction.editReply;
-            }
 
+        try {
             const convertedOptions = {};
             for (const option of interaction.options) {
                 convertedOptions[option.name] = option;
             }
             this.emit('slashStarted', interaction, command);
-            await command.execSlash(interaction, convertedOptions);
+            await command.exec(message, convertedOptions);
             return true;
         } catch (err) {
             this.emit('slashError', err, interaction, command);
