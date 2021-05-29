@@ -471,7 +471,9 @@ class CommandHandler extends AkairoHandler {
             }
             const convertedOptions = {};
             for (const option of interaction.options) {
-                convertedOptions[option.name] = option;
+                if (option.member) convertedOptions[option.name] = option.member;
+                else if (option.channel) convertedOptions[option.name] = option.channel;
+                else convertedOptions[option.name] = option.value;
             }
             this.emit('slashStarted', interaction, command);
             await command.exec(message, convertedOptions);
