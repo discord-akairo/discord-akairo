@@ -5,6 +5,7 @@
 For slash commands to work you need to add `execSlash` to the command, and when it recieves a slash command it will run `execSlash`.
 
 New slash command related events:
+> these are all emitted by the command handler
  * slashError
  * slashBlocked
     * owner
@@ -12,6 +13,7 @@ New slash command related events:
  * slashStarted
  * slashNotFound
  * slashGuildOnly
+ * slashcooldown
  * slashMissingPermissions
     * user
     * client
@@ -66,7 +68,7 @@ Example:
 
 ```ts
 //bot.ts
-import {TaskHandler} from "discord-akairo"
+import { TaskHandler } from "discord-akairo"
 ....
 taskHandler: TaskHandler = new TaskHandler(this, {
 	directory: join(__dirname, "..", "tasks"),
@@ -79,7 +81,7 @@ this.taskHandler.startAll();
 
 ```ts
 //tasks/task.ts
-import {Task} from "discord-akairo";
+import { Task } from "discord-akairo";
 export default class extends Task {
 	constructor() {
 		super("hello", {
