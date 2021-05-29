@@ -473,6 +473,7 @@ class CommandHandler extends AkairoHandler {
             for (const option of interaction.options) {
                 if (option.member) convertedOptions[option.name] = option.member;
                 else if (option.channel) convertedOptions[option.name] = option.channel;
+                else if (option.role) convertedOptions[option.name] = option.role;
                 else convertedOptions[option.name] = option.value;
             }
             this.emit('slashStarted', interaction, command);
