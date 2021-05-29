@@ -8,11 +8,7 @@ class AkairoMessage {
         this.author = interaction.user;
         this.replied = replied;
         this.client = client;
-        this.util = {
-            send: this.send,
-            reply: this.send,
-            parsed: { slash }
-        };
+        this.util = { parsed: { slash } };
         this.id = interaction.id;
     }
     async send(...options) {

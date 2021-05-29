@@ -60,6 +60,10 @@ Note that this example assumes a few things.
     1. The type is `6` (enum value for user)
     2. Required is `false`
 
+Message.util.send/reply doesnt work on slash commands to know whats a slash command use message.util.slash, true if true  
+  
+slash option in commands is just so you can know if a command is slashed for yourself
+
 You can do this all manually using something like an eval command, or just making the http requests to the discord api yourself, or making it automated, but just keep in mind that the library won't register anything for you. Read [this](https://github.com/MatteZ02/discord-interactions) or [this](https://discord.js.org/#/docs/main/master/class/ApplicationCommandManager?scrollTo=set) for how to create/edit/delete slash commands in discord.js.
 
 ### Emphemeral responses
