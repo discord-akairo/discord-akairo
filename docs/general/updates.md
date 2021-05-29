@@ -127,13 +127,12 @@ commandHandler: CommandHandler = new CommandHandler(this, {
 	});
 ```
 
-## removed features
-* provides
+## Removed features
+* Providers
     * mongo
     * sequelize
     * sqlite
 
-If you want a good database providers arent it; 
+If you want a good database, we recommend using an ORM like sequelize. Databases aren't hard to set up by themselves, and are much more convienent when used without being limited by providers.
 
-
-### for support regarding this pr you can ping @tricked in akairo discord general or preferably join [my discord](https://discord.gg/KkMKCchJb8) and ask there
+> For support regarding this fork, you can ping @Tricked in the Akairo discord server #general or preferably join [my discord](https://discord.gg/KkMKCchJb8) and ask there.
