@@ -8,10 +8,11 @@ class AkairoMessage {
         this.author = interaction.user;
         this.replied = replied;
         this.client = client;
+        this.content = 'Interaction';
         this.util = { parsed: { slash } };
         this.id = interaction.id;
     }
-    async send(...options) {
+    async reply(...options) {
         if (options[0].embed) {
             options[0].embeds = [options[0].embed];
             delete options[0].embed;
@@ -25,13 +26,12 @@ class AkairoMessage {
             this._message = await this.interaction.fetchReply();
             return this._message;
         }
-        this.replied = true;
         this.interaction.reply(...options);
         this._message = await this.interaction.fetchReply();
         return this._message;
     }
-    reply(...args) {
-        this.send(...args);
+    delete() {
+        return this.interaction.deleteReply();
     }
 }
 module.exports = AkairoMessage;
