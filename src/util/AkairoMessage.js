@@ -2,7 +2,7 @@ class AkairoMessage {
     constructor(client, interaction, { slash, replied }) {
         this.interaction = interaction;
         this._message = null;
-        this.channel = interaction.guild;
+        this.channel = interaction.channel;
         this.guild = interaction.guild;
         this.member = interaction.member;
         this.author = interaction.user;
