@@ -8,7 +8,21 @@ class AkairoMessage {
         this.author = interaction.user;
         this.replied = replied;
         this.client = client;
-        this.content = 'Interaction';
+        this.content = `/${interaction.name}`;
+        for (const option of interaction.options) {
+            if (option.member) {
+                this.content += ` ${option.name}: ${option.member}`
+            }
+            else if (option.channel) {
+                this.content += ` ${option.name}: ${option.channel}`
+            }
+            else if (option.role) {
+                this.content += ` ${option.name}: ${option.role}`
+            }
+            else {
+                this.content += ` ${option.name}: ${option.value}`
+            }
+        }
         this.util = { parsed: { slash } };
         this.id = interaction.id;
     }
