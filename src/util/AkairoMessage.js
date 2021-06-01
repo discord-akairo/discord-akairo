@@ -25,6 +25,8 @@ class AkairoMessage {
         }
         this.util = { parsed: { slash } };
         this.id = interaction.id;
+        this.createdAt = interaction.createdAt;
+        this.createdTimestamp = interaction.createdTimestamp;
     }
     async reply(...options) {
         if (options[0].embed) {
