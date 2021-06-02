@@ -554,6 +554,8 @@ class Argument {
 		return Argument.validate(type, (msg, p, x) => {
 			/* eslint-disable-next-line valid-typeof */
 			const o =
+				// See src/struct/ClientUtil.js:345:4
+				// eslint-disable-next-line
 				typeof x === "number" || typeof x === "bigint"
 					? x
 					: x.length != null
