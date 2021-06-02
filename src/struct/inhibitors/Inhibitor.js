@@ -1,5 +1,5 @@
-const AkairoError = require('../../util/AkairoError');
-const AkairoModule = require('../AkairoModule');
+const AkairoError = require("../../util/AkairoError");
+const AkairoModule = require("../AkairoModule");
 
 /**
  * Represents an inhibitor.
@@ -8,71 +8,66 @@ const AkairoModule = require('../AkairoModule');
  * @extends {AkairoModule}
  */
 class Inhibitor extends AkairoModule {
-    constructor(id, {
-        category,
-        reason = '',
-        type = 'post',
-        priority = 0
-    } = {}) {
-        super(id, { category });
+	constructor(id, { category, reason = "", type = "post", priority = 0 } = {}) {
+		super(id, { category });
 
-        /**
-         * Reason emitted when command is inhibited.
-         * @type {string}
-         */
-        this.reason = reason;
+		/**
+		 * Reason emitted when command is inhibited.
+		 * @type {string}
+		 */
+		this.reason = reason;
 
-        /**
-         * The type of the inhibitor for when it should run.
-         * @type {string}
-         */
-        this.type = type;
+		/**
+		 * The type of the inhibitor for when it should run.
+		 * @type {string}
+		 */
+		this.type = type;
 
-        /**
-         * The priority of the inhibitor.
-         * @type {number}
-         */
-        this.priority = priority;
+		/**
+		 * The priority of the inhibitor.
+		 * @type {number}
+		 */
+		this.priority = priority;
 
-        /**
-         * The ID of this inhibitor.
-         * @name Inhibitor#id
-         * @type {string}
-         */
+		/**
+		 * The ID of this inhibitor.
+		 * @name Inhibitor#id
+		 * @type {string}
+		 */
 
-        /**
-         * The inhibitor handler.
-         * @name Inhibitor#handler
-         * @type {InhibitorHandler}
-         */
-    }
+		/**
+		 * The inhibitor handler.
+		 * @name Inhibitor#handler
+		 * @type {InhibitorHandler}
+		 */
+	}
 
-    /**
-     * Checks if message should be blocked.
-     * A return value of true will block the message.
-     * If returning a Promise, a resolved value of true will block the message.
-     * @abstract
-     * @param {Message} message - Message being handled.
-     * @param {Command} [command] - Command to check.
-     * @returns {boolean|Promise<boolean>}
-     */
-    exec() {
-        throw new AkairoError('NOT_IMPLEMENTED', this.constructor.name, 'exec');
-    }
+	/**
+	 * Checks if message should be blocked.
+	 * A return value of true will block the message.
+	 * If returning a Promise, a resolved value of true will block the message.
+	 * @abstract
+	 * @param {Message} message - Message being handled.
+	 * @param {Command} [command] - Command to check.
+	 * @returns {boolean|Promise<boolean>}
+	 */
+	exec() {
+		throw new AkairoError("NOT_IMPLEMENTED", this.constructor.name, "exec");
+	}
 
-    /**
-     * Reloads the inhibitor.
-     * @method
-     * @name Inhibitor#reload
-     * @returns {Inhibitor}
-     */
+	/**
+	 * Reloads the inhibitor.
+	 * @method
+	 * @name Inhibitor#reload
+	 * @returns {Inhibitor}
+	 */
 
-    /**
-     * Removes the inhibitor.
-     * @method
-     * @name Inhibitor#remove
-     * @returns {Inhibitor}
-     */
+	/**
+	 * Removes the inhibitor.
+	 * @method
+	 * @name Inhibitor#remove
+	 * @returns {Inhibitor}
+	 */
 }
 
 module.exports = Inhibitor;

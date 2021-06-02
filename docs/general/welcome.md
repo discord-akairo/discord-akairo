@@ -21,6 +21,6 @@ You are currently looking at the discord-akairo v8 tutorials.
 ## Links
 
 - [Website](https://discord-akairo.github.io)
-- [Repository](https://github.com/discord-akairo/discord-akairo)  
+- [Repository](https://github.com/discord-akairo/discord-akairo)
 - [Changelog](https://github.com/discord-akairo/discord-akairo/releases)
-- [Discord](https://discord.gg/arTauDY)  
+- [Discord](https://discord.gg/arTauDY)

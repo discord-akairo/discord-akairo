@@ -1,7 +1,7 @@
-const AkairoError = require('../../util/AkairoError');
-const AkairoHandler = require('../AkairoHandler');
-const Inhibitor = require('./Inhibitor');
-const { isPromise } = require('../../util/Util');
+const AkairoError = require("../../util/AkairoError");
+const AkairoHandler = require("../AkairoHandler");
+const Inhibitor = require("./Inhibitor");
+const { isPromise } = require("../../util/Util");
 
 /**
  * Loads inhibitors and checks messages.
@@ -10,134 +10,148 @@ const { isPromise } = require('../../util/Util');
  * @extends {AkairoHandler}
  */
 class InhibitorHandler extends AkairoHandler {
-    constructor(client, {
-        directory,
-        classToHandle = Inhibitor,
-        extensions = ['.js', '.ts'],
-        automateCategories,
-        loadFilter
-    } = {}) {
-        if (!(classToHandle.prototype instanceof Inhibitor || classToHandle === Inhibitor)) {
-            throw new AkairoError('INVALID_CLASS_TO_HANDLE', classToHandle.name, Inhibitor.name);
-        }
+	constructor(
+		client,
+		{
+			directory,
+			classToHandle = Inhibitor,
+			extensions = [".js", ".ts"],
+			automateCategories,
+			loadFilter
+		} = {}
+	) {
+		if (
+			!(
+				classToHandle.prototype instanceof Inhibitor ||
+				classToHandle === Inhibitor
+			)
+		) {
+			throw new AkairoError(
+				"INVALID_CLASS_TO_HANDLE",
+				classToHandle.name,
+				Inhibitor.name
+			);
+		}
 
-        super(client, {
-            directory,
-            classToHandle,
-            extensions,
-            automateCategories,
-            loadFilter
-        });
+		super(client, {
+			directory,
+			classToHandle,
+			extensions,
+			automateCategories,
+			loadFilter
+		});
 
-        /**
-         * Directory to inhibitors.
-         * @name InhibitorHandler#directory
-         * @type {string}
-         */
+		/**
+		 * Directory to inhibitors.
+		 * @name InhibitorHandler#directory
+		 * @type {string}
+		 */
 
-        /**
-         * Inhibitors loaded, mapped by ID to Inhibitor.
-         * @name InhibitorHandler#modules
-         * @type {Collection<string, Inhibitor>}
-         */
-    }
+		/**
+		 * Inhibitors loaded, mapped by ID to Inhibitor.
+		 * @name InhibitorHandler#modules
+		 * @type {Collection<string, Inhibitor>}
+		 */
+	}
 
-    /**
-     * Tests inhibitors against the message.
-     * Returns the reason if blocked.
-     * @param {string} type - Type of inhibitor, 'all', 'pre', or 'post'.
-     * @param {Message} message - Message to test.
-     * @param {Command} [command] - Command to use.
-     * @returns {Promise<string|void>}
-     */
-    async test(type, message, command) {
-        if (!this.modules.size) return null;
+	/**
+	 * Tests inhibitors against the message.
+	 * Returns the reason if blocked.
+	 * @param {string} type - Type of inhibitor, 'all', 'pre', or 'post'.
+	 * @param {Message} message - Message to test.
+	 * @param {Command} [command] - Command to use.
+	 * @returns {Promise<string|void>}
+	 */
+	async test(type, message, command) {
+		if (!this.modules.size) return null;
 
-        const inhibitors = this.modules.filter(i => i.type === type);
-        if (!inhibitors.size) return null;
+		const inhibitors = this.modules.filter(i => i.type === type);
+		if (!inhibitors.size) return null;
 
-        const promises = [];
+		const promises = [];
 
-        for (const inhibitor of inhibitors.values()) {
-            promises.push((async () => {
-                let inhibited = inhibitor.exec(message, command);
-                if (isPromise(inhibited)) inhibited = await inhibited;
-                if (inhibited) return inhibitor;
-                return null;
-            })());
-        }
+		for (const inhibitor of inhibitors.values()) {
+			promises.push(
+				(async () => {
+					let inhibited = inhibitor.exec(message, command);
+					if (isPromise(inhibited)) inhibited = await inhibited;
+					if (inhibited) return inhibitor;
+					return null;
+				})()
+			);
+		}
 
-        const inhibitedInhibitors = (await Promise.all(promises)).filter(r => r);
-        if (!inhibitedInhibitors.length) return null;
+		const inhibitedInhibitors = (await Promise.all(promises)).filter(r => r);
+		if (!inhibitedInhibitors.length) return null;
 
-        inhibitedInhibitors.sort((a, b) => b.priority - a.priority);
-        return inhibitedInhibitors[0].reason;
-    }
+		inhibitedInhibitors.sort((a, b) => b.priority - a.priority);
+		return inhibitedInhibitors[0].reason;
+	}
 
-    /**
-     * Deregisters a module.
-     * @method
-     * @name InhibitorHandler#deregister
-     * @param {Inhibitor} inhibitor - Module to use.
-     * @returns {void}
-     */
+	/**
+	 * Deregisters a module.
+	 * @method
+	 * @name InhibitorHandler#deregister
+	 * @param {Inhibitor} inhibitor - Module to use.
+	 * @returns {void}
+	 */
 
-    /**
-     * Registers a module.
-     * @method
-     * @name InhibitorHandler#register
-     * @param {Inhibitor} inhibitor - Module to use.
-     * @param {string} [filepath] - Filepath of module.
-     * @returns {void}
-     */
+	/**
+	 * Registers a module.
+	 * @method
+	 * @name InhibitorHandler#register
+	 * @param {Inhibitor} inhibitor - Module to use.
+	 * @param {string} [filepath] - Filepath of module.
+	 * @returns {void}
+	 */
 
-    /**
-     * Loads an inhibitor.
-     * @method
-     * @param {string|Inhibitor} thing - Module or path to module.
-     * @name InhibitorHandler#load
-     * @returns {Inhibitor}
-     */
+	/**
+	 * Loads an inhibitor.
+	 * @method
+	 * @param {string|Inhibitor} thing - Module or path to module.
+	 * @name InhibitorHandler#load
+	 * @returns {Inhibitor}
+	 */
 
-    /**
-     * Reads all inhibitors from the directory and loads them.
-     * @method
-     * @name InhibitorHandler#loadAll
-     * @param {string} [directory] - Directory to load from.
-     * Defaults to the directory passed in the constructor.
-     * @param {LoadPredicate} [filter] - Filter for files, where true means it should be loaded.
-     * @returns {InhibitorHandler}
-     */
+	/**
+	 * Reads all inhibitors from the directory and loads them.
+	 * @method
+	 * @name InhibitorHandler#loadAll
+	 * @param {string} [directory] - Directory to load from.
+	 * Defaults to the directory passed in the constructor.
+	 * @param {LoadPredicate} [filter] - Filter for files, where true means it should be loaded.
+	 * @returns {InhibitorHandler}
+	 */
 
-    /**
-     * Removes an inhibitor.
-     * @method
-     * @name InhibitorHandler#remove
-     * @param {string} id - ID of the inhibitor.
-     * @returns {Inhibitor}
-     */
+	/**
+	 * Removes an inhibitor.
+	 * @method
+	 * @name InhibitorHandler#remove
+	 * @param {string} id - ID of the inhibitor.
+	 * @returns {Inhibitor}
+	 */
 
-    /**
-     * Removes all inhibitors.
-     * @method
-     * @name InhibitorHandler#removeAll
-     * @returns {InhibitorHandler}
-     */
+	/**
+	 * Removes all inhibitors.
+	 * @method
+	 * @name InhibitorHandler#removeAll
+	 * @returns {InhibitorHandler}
+	 */
 
-    /**
-     * Reloads an inhibitor.
-     * @method
-     * @name InhibitorHandler#reload
-     * @param {string} id - ID of the inhibitor.
-     * @returns {Inhibitor}
-     */
+	/**
+	 * Reloads an inhibitor.
+	 * @method
+	 * @name InhibitorHandler#reload
+	 * @param {string} id - ID of the inhibitor.
+	 * @returns {Inhibitor}
+	 */
 
-    /**
-     * Reloads all inhibitors.
-     * @method
-     * @name InhibitorHandler#reloadAll
-     * @returns {InhibitorHandler}
-     */
+	/**
+	 * Reloads all inhibitors.
+	 * @method
+	 * @name InhibitorHandler#reloadAll
+	 * @returns {InhibitorHandler}
+	 */
 }
 
 module.exports = InhibitorHandler;

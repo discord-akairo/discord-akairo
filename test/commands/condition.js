@@ -1,17 +1,17 @@
-const { Command } = require('../../src');
+const { Command } = require("../../src");
 
 class ConditionalCommand extends Command {
-    constructor() {
-        super('condition');
-    }
+	constructor() {
+		super("condition");
+	}
 
-    condition(message) {
-        return message.content === 'make me condition';
-    }
+	condition(message) {
+		return message.content === "make me condition";
+	}
 
-    exec(message) {
-        return message.util.reply('made you condition');
-    }
+	exec(message) {
+		return message.util.reply("made you condition");
+	}
 }
 
 module.exports = ConditionalCommand;

@@ -3,38 +3,38 @@
 ### More Coverage
 
 Right now, your inhibitors only runs before a command.  
-They do not actually run on all messages.  
+They do not actually run on all messages.
 
-To change that, change the `type` option.  
+To change that, change the `type` option.
 
 ```js
-const { Inhibitor } = require('discord-akairo');
+const { Inhibitor } = require("discord-akairo");
 
 class BlacklistInhibitor extends Inhibitor {
-    constructor() {
-        super('blacklist', {
-            reason: 'blacklist',
-            type: 'all'
-        });
-    }
+	constructor() {
+		super("blacklist", {
+			reason: "blacklist",
+			type: "all"
+		});
+	}
 
-    exec(message) {
-        // Still a meanie!
-        const blacklist = ['81440962496172032'];
-        return blacklist.includes(message.author.id);
-    }
+	exec(message) {
+		// Still a meanie!
+		const blacklist = ["81440962496172032"];
+		return blacklist.includes(message.author.id);
+	}
 }
 
 module.exports = BlacklistInhibitor;
 ```
 
-There are three types:  
+There are three types:
 
 - `all` is run on all messages.
 - `pre` is run on messages not blocked by `all` and built-in inhibitors.
 - `post` (the default) is run on messages before commands, not blocked by the previous.
 
-The built-in inhibitors are:  
+The built-in inhibitors are:
 
 - `client` blocks the client (itself).
 - `bot` blocks all other bots.
@@ -42,7 +42,7 @@ The built-in inhibitors are:
 - `guild` blocks guild-only commands used in DMs.
 - `dm` blocks DM-only commands used in guilds.
 
-To make it easier to visualize, here is the order:  
+To make it easier to visualize, here is the order:
 
 - `all` type inhibitors.
 - `client`, and `bot`.

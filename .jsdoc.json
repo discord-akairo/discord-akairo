@@ -1,17 +1,17 @@
 {
-    "tags": {
-        "allowUnknownTags": true,
-        "dictionaries": ["jsdoc"]
-    },
-    "source": {
-        "include": ["README.md", "src", "package.json"],
-        "includePattern": ".js$",
-        "excludePattern": "node_modules/"
-    },
-    "opts": {
-        "encoding": "utf8",
-        "private": true,
-        "recurse": true,
-        "sort": true
-    }
+	"tags": {
+		"allowUnknownTags": true,
+		"dictionaries": ["jsdoc"]
+	},
+	"source": {
+		"include": ["README.md", "src", "package.json"],
+		"includePattern": ".js$",
+		"excludePattern": "node_modules/"
+	},
+	"opts": {
+		"encoding": "utf8",
+		"private": true,
+		"recurse": true,
+		"sort": true
+	}
 }

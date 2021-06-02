@@ -1,31 +1,31 @@
 /* eslint-disable no-console */
 
-const { Command, Flag } = require('../..');
-const util = require('util');
+const { Command, Flag } = require("../..");
+const util = require("util");
 
 class GenerateCommand extends Command {
-    constructor() {
-        super('generate', {
-            aliases: ['generate', 'g']
-        });
-    }
+	constructor() {
+		super("generate", {
+			aliases: ["generate", "g"]
+		});
+	}
 
-    *args() {
-        const x = yield {
-            type: ['1', '2'],
-            otherwise: 'Type 1 or 2!'
-        };
+	*args() {
+		const x = yield {
+			type: ["1", "2"],
+			otherwise: "Type 1 or 2!"
+		};
 
-        if (x === '1') {
-            return Flag.continue('sub');
-        }
+		if (x === "1") {
+			return Flag.continue("sub");
+		}
 
-        return { x };
-    }
+		return { x };
+	}
 
-    exec(message, args) {
-        message.channel.send(util.inspect(args, { depth: 1 }), { code: 'js' });
-    }
+	exec(message, args) {
+		message.channel.send(util.inspect(args, { depth: 1 }), { code: "js" });
+	}
 }
 
 module.exports = GenerateCommand;

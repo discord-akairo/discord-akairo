@@ -1,8 +1,8 @@
-const AkairoError = require('../../util/AkairoError');
-const AkairoModule = require('../AkairoModule');
-const Argument = require('./arguments/Argument');
-const ArgumentRunner = require('./arguments/ArgumentRunner');
-const ContentParser = require('./ContentParser');
+const AkairoError = require("../../util/AkairoError");
+const AkairoModule = require("../AkairoModule");
+const Argument = require("./arguments/Argument");
+const ArgumentRunner = require("./arguments/ArgumentRunner");
+const ContentParser = require("./ContentParser");
 
 /**
  * Represents a command.
@@ -11,241 +11,257 @@ const ContentParser = require('./ContentParser');
  * @extends {AkairoModule}
  */
 class Command extends AkairoModule {
-    constructor(id, options = {}) {
-        super(id, { category: options.category });
+	constructor(id, options = {}) {
+		super(id, { category: options.category });
 
-        const {
-            aliases = [],
-            args = this.args || [],
-            quoted = true,
-            separator,
-            channel = null,
-            ownerOnly = false,
-            superUserOnly = false,
-            editable = true,
-            typing = false,
-            cooldown = null,
-            ratelimit = 1,
-            argumentDefaults = {},
-            description = '',
-            prefix = this.prefix,
-            clientPermissions = this.clientPermissions,
-            userPermissions = this.userPermissions,
-            regex = this.regex,
-            condition = this.condition || (() => false),
-            before = this.before || (() => undefined),
-            lock,
-            ignoreCooldown,
-            ignorePermissions,
-            flags = [],
-            optionFlags = [],
-            slashEmphemeral = false
-        } = options;
+		const {
+			aliases = [],
+			args = this.args || [],
+			quoted = true,
+			separator,
+			channel = null,
+			ownerOnly = false,
+			superUserOnly = false,
+			editable = true,
+			typing = false,
+			cooldown = null,
+			ratelimit = 1,
+			argumentDefaults = {},
+			description = "",
+			prefix = this.prefix,
+			clientPermissions = this.clientPermissions,
+			userPermissions = this.userPermissions,
+			regex = this.regex,
+			condition = this.condition || (() => false),
+			before = this.before || (() => undefined),
+			lock,
+			ignoreCooldown,
+			ignorePermissions,
+			flags = [],
+			optionFlags = [],
+			slashEmphemeral = false
+		} = options;
 
-        /**
-         * Command names.
-         * @type {string[]}
-         */
-        this.aliases = aliases;
+		/**
+		 * Command names.
+		 * @type {string[]}
+		 */
+		this.aliases = aliases;
 
-        const { flagWords, optionFlagWords } = Array.isArray(args)
-            ? ContentParser.getFlags(args)
-            : { flagWords: flags, optionFlagWords: optionFlags };
+		const { flagWords, optionFlagWords } = Array.isArray(args)
+			? ContentParser.getFlags(args)
+			: { flagWords: flags, optionFlagWords: optionFlags };
 
-        this.contentParser = new ContentParser({
-            flagWords,
-            optionFlagWords,
-            quoted,
-            separator
-        });
+		this.contentParser = new ContentParser({
+			flagWords,
+			optionFlagWords,
+			quoted,
+			separator
+		});
 
-        this.argumentRunner = new ArgumentRunner(this);
-        this.argumentGenerator = Array.isArray(args)
-            ? ArgumentRunner.fromArguments(args.map(arg => [arg.id, new Argument(this, arg)]))
-            : args.bind(this);
+		this.argumentRunner = new ArgumentRunner(this);
+		this.argumentGenerator = Array.isArray(args)
+			? ArgumentRunner.fromArguments(
+					args.map(arg => [arg.id, new Argument(this, arg)])
+			  )
+			: args.bind(this);
 
-        /**
-         * Usable only in this channel type.
-         * @type {?string}
-         */
-        this.channel = channel;
+		/**
+		 * Usable only in this channel type.
+		 * @type {?string}
+		 */
+		this.channel = channel;
 
-        /**
-         * Usable only by the client owner.
-         * @type {boolean}
-         */
-        this.ownerOnly = Boolean(ownerOnly);
+		/**
+		 * Usable only by the client owner.
+		 * @type {boolean}
+		 */
+		this.ownerOnly = Boolean(ownerOnly);
 
-        /**
-         * Usable only by the client owner.
-         * @type {boolean}
-         */
-        this.superUserOnly = Boolean(superUserOnly);
+		/**
+		 * Usable only by the client owner.
+		 * @type {boolean}
+		 */
+		this.superUserOnly = Boolean(superUserOnly);
 
-        /**
-         * Whether or not this command can be ran by an edit.
-         * @type {boolean}
-         */
-        this.editable = Boolean(editable);
+		/**
+		 * Whether or not this command can be ran by an edit.
+		 * @type {boolean}
+		 */
+		this.editable = Boolean(editable);
 
-        /**
-         * Whether or not to type during command execution.
-         * @type {boolean}
-         */
-        this.typing = Boolean(typing);
+		/**
+		 * Whether or not to type during command execution.
+		 * @type {boolean}
+		 */
+		this.typing = Boolean(typing);
 
-        /**
-         * Cooldown in milliseconds.
-         * @type {?number}
-         */
-        this.cooldown = cooldown;
+		/**
+		 * Cooldown in milliseconds.
+		 * @type {?number}
+		 */
+		this.cooldown = cooldown;
 
-        /**
-         * Uses allowed before cooldown.
-         * @type {number}
-         */
-        this.ratelimit = ratelimit;
+		/**
+		 * Uses allowed before cooldown.
+		 * @type {number}
+		 */
+		this.ratelimit = ratelimit;
 
-        /**
-         * Default prompt options.
-         * @type {DefaultArgumentOptions}
-         */
-        this.argumentDefaults = argumentDefaults;
+		/**
+		 * Default prompt options.
+		 * @type {DefaultArgumentOptions}
+		 */
+		this.argumentDefaults = argumentDefaults;
 
-        /**
-         * Description of the command.
-         * @type {string|any}
-         */
-        this.description = Array.isArray(description) ? description.join('\n') : description;
+		/**
+		 * Description of the command.
+		 * @type {string|any}
+		 */
+		this.description = Array.isArray(description)
+			? description.join("\n")
+			: description;
 
-        /**
-         * Command prefix overwrite.
-         * @type {?string|string[]|PrefixSupplier}
-         */
-        this.prefix = typeof prefix === 'function' ? prefix.bind(this) : prefix;
+		/**
+		 * Command prefix overwrite.
+		 * @type {?string|string[]|PrefixSupplier}
+		 */
+		this.prefix = typeof prefix === "function" ? prefix.bind(this) : prefix;
 
-        /**
-         * Permissions required to run command by the client.
-         * @type {PermissionResolvable|PermissionResolvable[]|MissingPermissionSupplier}
-         */
-        this.clientPermissions = typeof clientPermissions === 'function' ? clientPermissions.bind(this) : clientPermissions;
+		/**
+		 * Permissions required to run command by the client.
+		 * @type {PermissionResolvable|PermissionResolvable[]|MissingPermissionSupplier}
+		 */
+		this.clientPermissions =
+			typeof clientPermissions === "function"
+				? clientPermissions.bind(this)
+				: clientPermissions;
 
-        /**
-         * Permissions required to run command by the user.
-         * @type {PermissionResolvable|PermissionResolvable[]|MissingPermissionSupplier}
-         */
-        this.userPermissions = typeof userPermissions === 'function' ? userPermissions.bind(this) : userPermissions;
+		/**
+		 * Permissions required to run command by the user.
+		 * @type {PermissionResolvable|PermissionResolvable[]|MissingPermissionSupplier}
+		 */
+		this.userPermissions =
+			typeof userPermissions === "function"
+				? userPermissions.bind(this)
+				: userPermissions;
 
-        /**
-         * The regex trigger for this command.
-         * @type {RegExp|RegexSupplier}
-         */
-        this.regex = typeof regex === 'function' ? regex.bind(this) : regex;
+		/**
+		 * The regex trigger for this command.
+		 * @type {RegExp|RegexSupplier}
+		 */
+		this.regex = typeof regex === "function" ? regex.bind(this) : regex;
 
-        /**
-         * Checks if the command should be ran by using an arbitrary condition.
-         * @method
-         * @param {Message} message - Message being handled.
-         * @returns {boolean}
-         */
-        this.condition = condition.bind(this);
+		/**
+		 * Checks if the command should be ran by using an arbitrary condition.
+		 * @method
+		 * @param {Message} message - Message being handled.
+		 * @returns {boolean}
+		 */
+		this.condition = condition.bind(this);
 
-        /**
-         * Runs before argument parsing and execution.
-         * @method
-         * @param {Message} message - Message being handled.
-         * @returns {any}
-         */
-        this.before = before.bind(this);
+		/**
+		 * Runs before argument parsing and execution.
+		 * @method
+		 * @param {Message} message - Message being handled.
+		 * @returns {any}
+		 */
+		this.before = before.bind(this);
 
-        /**
-         * The key supplier for the locker.
-         * @type {?KeySupplier}
-         */
-        this.lock = lock;
+		/**
+		 * The key supplier for the locker.
+		 * @type {?KeySupplier}
+		 */
+		this.lock = lock;
 
-        if (typeof lock === 'string') {
-            this.lock = {
-                guild: message => message.guild && message.guild.id,
-                channel: message => message.channel.id,
-                user: message => message.author.id
-            }[lock];
-        }
+		if (typeof lock === "string") {
+			this.lock = {
+				guild: message => message.guild && message.guild.id,
+				channel: message => message.channel.id,
+				user: message => message.author.id
+			}[lock];
+		}
 
-        if (this.lock) {
-            /**
-             * Stores the current locks.
-             * @type {?Set<string>}
-             */
-            this.locker = new Set();
-        }
+		if (this.lock) {
+			/**
+			 * Stores the current locks.
+			 * @type {?Set<string>}
+			 */
+			this.locker = new Set();
+		}
 
-        /**
-         * ID of user(s) to ignore cooldown or a function to ignore.
-         * @type {?Snowflake|Snowflake[]|IgnoreCheckPredicate}
-         */
-        this.ignoreCooldown = typeof ignoreCooldown === 'function' ? ignoreCooldown.bind(this) : ignoreCooldown;
+		/**
+		 * ID of user(s) to ignore cooldown or a function to ignore.
+		 * @type {?Snowflake|Snowflake[]|IgnoreCheckPredicate}
+		 */
+		this.ignoreCooldown =
+			typeof ignoreCooldown === "function"
+				? ignoreCooldown.bind(this)
+				: ignoreCooldown;
 
-        /**
-         * ID of user(s) to ignore `userPermissions` checks or a function to ignore.
-         * @type {?Snowflake|Snowflake[]|IgnoreCheckPredicate}
-         */
-        this.ignorePermissions = typeof ignorePermissions === 'function' ? ignorePermissions.bind(this) : ignorePermissions;
-        
-        /**
-         * Whether slash command responses for this command should be emphemeral or not. 
-         * @type {boolean}
-         */
-        this.slashEmphemeral = slashEmphemeral
+		/**
+		 * ID of user(s) to ignore `userPermissions` checks or a function to ignore.
+		 * @type {?Snowflake|Snowflake[]|IgnoreCheckPredicate}
+		 */
+		this.ignorePermissions =
+			typeof ignorePermissions === "function"
+				? ignorePermissions.bind(this)
+				: ignorePermissions;
 
-        /**
-         * The ID of this command.
-         * @name Command#id
-         * @type {string}
-         */
+		/**
+		 * Whether slash command responses for this command should be emphemeral or not.
+		 * @type {boolean}
+		 */
+		this.slashEmphemeral = slashEmphemeral;
 
-        /**
-         * The command handler.
-         * @name Command#handler
-         * @type {CommandHandler}
-         */
-    }
+		/**
+		 * The ID of this command.
+		 * @name Command#id
+		 * @type {string}
+		 */
 
-    /**
-     * Executes the command.
-     * @abstract
-     * @param {Message} message - Message that triggered the command.
-     * @param {any} args - Evaluated arguments.
-     * @returns {any}
-     */
-    exec() {
-        throw new AkairoError('NOT_IMPLEMENTED', this.constructor.name, 'exec');
-    }
+		/**
+		 * The command handler.
+		 * @name Command#handler
+		 * @type {CommandHandler}
+		 */
+	}
 
-    /**
-     * Parses content using the command's arguments.
-     * @param {Message} message - Message to use.
-     * @param {string} content - String to parse.
-     * @returns {Promise<Flag|any>}
-     */
-    parse(message, content) {
-        const parsed = this.contentParser.parse(content);
-        return this.argumentRunner.run(message, parsed, this.argumentGenerator);
-    }
+	/**
+	 * Executes the command.
+	 * @abstract
+	 * @param {Message} message - Message that triggered the command.
+	 * @param {any} args - Evaluated arguments.
+	 * @returns {any}
+	 */
+	exec() {
+		throw new AkairoError("NOT_IMPLEMENTED", this.constructor.name, "exec");
+	}
 
-    /**
-     * Reloads the command.
-     * @method
-     * @name Command#reload
-     * @returns {Command}
-     */
+	/**
+	 * Parses content using the command's arguments.
+	 * @param {Message} message - Message to use.
+	 * @param {string} content - String to parse.
+	 * @returns {Promise<Flag|any>}
+	 */
+	parse(message, content) {
+		const parsed = this.contentParser.parse(content);
+		return this.argumentRunner.run(message, parsed, this.argumentGenerator);
+	}
 
-    /**
-     * Removes the command.
-     * @method
-     * @name Command#remove
-     * @returns {Command}
-     */
+	/**
+	 * Reloads the command.
+	 * @method
+	 * @name Command#reload
+	 * @returns {Command}
+	 */
+
+	/**
+	 * Removes the command.
+	 * @method
+	 * @name Command#remove
+	 * @returns {Command}
+	 */
 }
 
 module.exports = Command;
