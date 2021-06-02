@@ -632,7 +632,7 @@ declare module 'discord-akairo' {
 
     export interface TaskOptions extends AkairoModuleOptions {
         delay: number;
-        runOnStart: boolean;
+        runOnStart?: boolean;
     }
 
     export interface ParsedComponentData {
