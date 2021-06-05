@@ -541,7 +541,7 @@ class Argument {
      * @returns {ArgumentTypeCaster}
      */
     static tagged(type, tag = type) {
-        return async function typeFn(message, phrase) {
+        async function typeFn(message, phrase) {
             if (typeof type === 'function') type = type.bind(this);
             const res = await Argument.cast(type, this.handler.resolver, message, phrase);
             if (Argument.isFailure(res)) {
@@ -549,7 +549,9 @@ class Argument {
             }
 
             return { tag, value: res };
-        };
+        }
+
+        return typeof this === 'undefined' ? typeFn : typeFn.bind(this);
     }
 
     /**
@@ -582,7 +584,7 @@ class Argument {
     static taggedUnion(...types) {
         return async function typeFn(message, phrase) {
             for (let entry of types) {
-                entry = Argument.tagged(entry);
+                entry = Argument.tagged.bind(this)(entry);
                 const res = await Argument.cast(entry, this.handler.resolver, message, phrase);
                 if (!Argument.isFailure(res)) return res;
             }
