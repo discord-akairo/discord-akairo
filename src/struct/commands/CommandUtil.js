@@ -94,7 +94,7 @@ class CommandUtil {
 
     /**
      * Sends a response or edits an old response if available.
-     * @param {StringResolvable} [content=''] - Content to send.
+     * @param {string} [content=''] - Content to send.
      * @param {MessageOptions|MessageAdditions} [options={}] - Options to use.
      * @returns {Promise<Message|Message[]>}
      */
@@ -115,7 +115,7 @@ class CommandUtil {
 
     /**
      * Sends a response, overwriting the last response.
-     * @param {StringResolvable} [content=''] - Content to send.
+     * @param {string} [content=''] - Content to send.
      * @param {MessageOptions|MessageAdditions} [options={}] - Options to use.
      * @returns {Promise<Message|Message[]>}
      */
@@ -128,7 +128,7 @@ class CommandUtil {
 
     /**
      * Sends a response with a mention concantenated to it.
-     * @param {StringResolvable} [content=''] - Content to send.
+     * @param {string} [content=''] - Content to send.
      * @param {MessageOptions|MessageAdditions} [options={}] - Options to use.
      * @returns {Promise<Message|Message[]>}
      */
@@ -138,7 +138,7 @@ class CommandUtil {
 
     /**
      * Edits the last response.
-     * @param {StringResolvable} [content=''] - Content to send.
+     * @param {string} [content=''] - Content to send.
      * @param {MessageEditOptions|MessageEmbed} [options={}] - Options to use.
      * @returns {Promise<Message>}
      */
@@ -148,7 +148,7 @@ class CommandUtil {
 
     /**
      * Transform options for sending.
-     * @param {StringResolvable} [content=''] - Content to send.
+     * @param {string} [content=''] - Content to send.
      * @param {MessageOptions|MessageAdditions} [options={}] - Options to use.
      * @param {MessageOptions} [extra={}] - Extra options to add.
      * @returns {MessageOptions}
