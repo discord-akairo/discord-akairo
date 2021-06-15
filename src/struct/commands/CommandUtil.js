@@ -149,10 +149,10 @@ class CommandUtil {
      * @returns {MessageOptions}
      */
     static transformOptions(options) {
-        if (typeof options === 'string') options = { content: options };
-        if (!options.content) options.content = null;
-        if (!options.embeds) options.embeds = [];
-        return options;
+        const transformedOptions = typeof options === "string" ? { content: options } : { ...options };
+        if (!transformedOptions.content) transformedOptions.content = null;
+        if (!transformedOptions.embeds) transformedOptions.embeds = [];
+        return transformedOptions;
     }
 }
 
