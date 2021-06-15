@@ -279,6 +279,8 @@ declare module 'discord-akairo' {
         public sendNew(options?: string | MessageOptions): Promise<Message>;
         public setEditable(state: boolean): this;
         public setLastResponse(message: Message | Message[]): Message;
+
+        public static transformOptions(options?: string | MessageOptions): MessageOptions;
     }
 
     export class Flag {

@@ -98,13 +98,13 @@ class CommandUtil {
      * @returns {Promise<Message|Message[]>}
      */
     async send(options) {
-        const hasFiles = options.files && options.files.length > 0;
-
+        const transformedOptions = this.constructor.transformOptions(options);
+        const hasFiles = transformedOptions.files && transformedOptions.files.length > 0;
         if (this.shouldEdit && (this.command ? this.command.editable : true) && !hasFiles && !this.lastResponse.deleted && !this.lastResponse.attachments.size) {
-            return this.lastResponse.edit(options);
+            return this.lastResponse.edit(transformedOptions);
         }
 
-        const sent = await this.message.channel.send(options);
+        const sent = await this.message.channel.send(transformedOptions);
         const lastSent = this.setLastResponse(sent);
         this.setEditable(!lastSent.attachments.size);
         return sent;
@@ -115,8 +115,8 @@ class CommandUtil {
      * @param {string|MessageOptions} [options={}] - Options to use.
      * @returns {Promise<Message|Message[]>}
      */
-    async sendNew(content, options) {
-        const sent = await this.message.channel.send(options);
+    async sendNew(options) {
+        const sent = await this.message.channel.send(this.constructor.transformOptions(options));
         const lastSent = this.setLastResponse(sent);
         this.setEditable(!lastSent.attachments.size);
         return sent;
@@ -130,7 +130,7 @@ class CommandUtil {
     reply(options) {
         return this.send({
             reply: { messageReference: this.message, failIfNotExists: false },
-            ...(typeof options === "string" ? { content: options } : options)
+            ...this.constructor.transformOptions(options)
         });
     }
 
@@ -139,8 +139,20 @@ class CommandUtil {
      * @param {string|MessageEditOptions} [options={}] - Options to use.
      * @returns {Promise<Message>}
      */
-    edit(content, options) {
-        return this.lastResponse.edit(content, options);
+    edit(options) {
+        return this.lastResponse.edit(options);
+    }
+
+    /**
+     * Transform options for sending.
+     * @param {string|MessageOptions} [options={}] - Options to use.
+     * @returns {MessageOptions}
+     */
+    static transformOptions(options) {
+        if (typeof options === 'string') options = { content: options };
+        if (!options.content) options.content = null;
+        if (!options.embeds) options.embeds = null;
+        return options;
     }
 }
 
