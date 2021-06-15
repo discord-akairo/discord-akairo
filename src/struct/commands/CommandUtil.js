@@ -1,4 +1,4 @@
-const { APIMessage, Collection } = require('discord.js');
+const { Collection } = require('discord.js');
 
 /**
  * Command utilities.
