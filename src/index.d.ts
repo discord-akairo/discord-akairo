@@ -273,30 +273,12 @@ declare module 'discord-akairo' {
         public shouldEdit: boolean;
 
         public addMessage(message: Message | Message[]): Message | Message[];
-        public edit(content?: string, options?: MessageEmbed | MessageEditOptions): Promise<Message>;
-        public edit(options?: MessageOptions | MessageAdditions): Promise<Message>;
-        public reply(content?: string, options?: MessageOptions | MessageAdditions): Promise<Message>;
-        public reply(content?: string, options?: MessageOptions & { split?: false } | MessageAdditions): Promise<Message>;
-        public reply(content?: string, options?: MessageOptions & { split: true | SplitOptions } | MessageAdditions): Promise<Message[]>;
-        public reply(options?: MessageOptions | MessageAdditions): Promise<Message>;
-        public reply(options?: MessageOptions & { split?: false } | MessageAdditions): Promise<Message>;
-        public reply(options?: MessageOptions & { split: true | SplitOptions } | MessageAdditions): Promise<Message[]>;
-        public send(content?: string, options?: MessageOptions | MessageAdditions): Promise<Message>;
-        public send(content?: string, options?: MessageOptions & { split?: false } | MessageAdditions): Promise<Message>;
-        public send(content?: string, options?: MessageOptions & { split: true | SplitOptions } | MessageAdditions): Promise<Message[]>;
-        public send(options?: MessageOptions | MessageAdditions): Promise<Message>;
-        public send(options?: MessageOptions & { split?: false } | MessageAdditions): Promise<Message>;
-        public send(options?: MessageOptions & { split: true | SplitOptions } | MessageAdditions): Promise<Message[]>;
-        public sendNew(content?: string, options?: MessageOptions | MessageAdditions): Promise<Message>;
-        public sendNew(content?: string, options?: MessageOptions & { split?: false } | MessageAdditions): Promise<Message>;
-        public sendNew(content?: string, options?: MessageOptions & { split: true | SplitOptions } | MessageAdditions): Promise<Message[]>;
-        public sendNew(options?: MessageOptions | MessageAdditions): Promise<Message>;
-        public sendNew(options?: MessageOptions & { split?: false } | MessageAdditions): Promise<Message>;
-        public sendNew(options?: MessageOptions & { split: true | SplitOptions } | MessageAdditions): Promise<Message[]>;
+        public edit(options?: string | MessageEditOptions): Promise<Message>;
+        public reply(options?: string | MessageOptions): Promise<Message>;
+        public send(options?: string | MessageOptions): Promise<Message>;
+        public sendNew(options?: string | MessageOptions): Promise<Message>;
         public setEditable(state: boolean): this;
         public setLastResponse(message: Message | Message[]): Message;
-
-        public static transformOptions(content?: string, options?: MessageOptions | MessageAdditions): any[];
     }
 
     export class Flag {
