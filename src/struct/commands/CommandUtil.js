@@ -151,7 +151,7 @@ class CommandUtil {
     static transformOptions(options) {
         if (typeof options === 'string') options = { content: options };
         if (!options.content) options.content = null;
-        if (!options.embeds) options.embeds = null;
+        if (!options.embeds) options.embeds = [];
         return options;
     }
 }
