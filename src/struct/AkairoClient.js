@@ -33,7 +33,7 @@ class AkairoClient extends Client {
      * @returns {boolean}
      */
     isOwner(user) {
-        const id = this.users.resolveID(user);
+        const id = this.users.resolveId(user);
         return Array.isArray(this.ownerID)
             ? this.ownerID.includes(id)
             : id === this.ownerID;
