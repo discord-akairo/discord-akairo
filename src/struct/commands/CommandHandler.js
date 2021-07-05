@@ -222,7 +222,7 @@ class CommandHandler extends AkairoHandler {
 
     setup() {
         this.client.once('ready', () => {
-            this.client.on('message', async m => {
+            this.client.on('messageCreate', async m => {
                 if (m.partial) await m.fetch();
                 this.handle(m);
             });
