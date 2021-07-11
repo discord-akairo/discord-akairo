@@ -222,7 +222,7 @@ class CommandHandler extends AkairoHandler {
 
     setup() {
         this.client.once('ready', () => {
-            this.client.on('message', async m => {
+            this.client.on('messageCreate', async m => {
                 if (m.partial) await m.fetch();
                 this.handle(m);
             });
@@ -339,7 +339,7 @@ class CommandHandler extends AkairoHandler {
      */
     async handle(message) {
         try {
-            if (this.fetchMembers && message.guild && !message.member && !message.webhookID) {
+            if (this.fetchMembers && message.guild && !message.member && !message.webhookId) {
                 await message.guild.members.fetch(message.author);
             }
 
@@ -1036,7 +1036,7 @@ module.exports = CommandHandler;
  */
 
 /**
- * Emitted when a message does not start with the prefix or match a command.
+ * Emitted when no command has been run.
  * @event CommandHandler#messageInvalid
  * @param {Message} message - Message sent.
  */
