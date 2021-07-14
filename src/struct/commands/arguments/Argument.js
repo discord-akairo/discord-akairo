@@ -270,7 +270,8 @@ class Argument {
 
             let input;
             try {
-                input = (await message.channel.awaitMessages(m => m.author.id === message.author.id, {
+                input = (await message.channel.awaitMessages({
+                    filter: m => m.author.id === message.author.id,
                     max: 1,
                     time: promptOptions.time,
                     errors: ['time']
