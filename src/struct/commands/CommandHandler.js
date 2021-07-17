@@ -124,7 +124,7 @@ class CommandHandler extends AkairoHandler {
          */
         this.commandUtilSweepInterval = commandUtilSweepInterval;
         if (this.commandUtilSweepInterval > 0) {
-            this.client.setInterval(() => this.sweepCommandUtil(), this.commandUtilSweepInterval);
+            setInterval(() => this.sweepCommandUtil(), this.commandUtilSweepInterval);
         }
 
         /**
