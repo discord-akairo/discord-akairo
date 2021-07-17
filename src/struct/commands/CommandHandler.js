@@ -722,7 +722,7 @@ class CommandHandler extends AkairoHandler {
 
         if (!this.cooldowns.get(id)[command.id]) {
             this.cooldowns.get(id)[command.id] = {
-                timer: this.client.setTimeout(() => {
+                timer: setTimeout(() => {
                     if (this.cooldowns.get(id)[command.id]) {
                         this.client.clearTimeout(this.cooldowns.get(id)[command.id].timer);
                     }
