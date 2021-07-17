@@ -731,7 +731,7 @@ class CommandHandler extends AkairoHandler {
                     if (!Object.keys(this.cooldowns.get(id)).length) {
                         this.cooldowns.delete(id);
                     }
-                }, time),
+                }, time).unref(),
                 end: endTime,
                 uses: 0
             };
