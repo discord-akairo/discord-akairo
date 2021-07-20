@@ -760,18 +760,12 @@ class CommandHandler extends AkairoHandler {
      */
     async runCommand(message, command, args) {
         if (command.typing) {
-            message.channel.startTyping();
+            message.channel.sendTyping();
         }
 
-        try {
-            this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, args);
-            const ret = await command.exec(message, args);
-            this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, args, ret);
-        } finally {
-            if (command.typing) {
-                message.channel.stopTyping();
-            }
-        }
+        this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, args);
+        const ret = await command.exec(message, args);
+        this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, args, ret);
     }
 
     /**
