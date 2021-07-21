@@ -124,7 +124,7 @@ class CommandHandler extends AkairoHandler {
          */
         this.commandUtilSweepInterval = commandUtilSweepInterval;
         if (this.commandUtilSweepInterval > 0) {
-            this.client.setInterval(() => this.sweepCommandUtil(), this.commandUtilSweepInterval);
+            setInterval(() => this.sweepCommandUtil(), this.commandUtilSweepInterval).unref();
         }
 
         /**
@@ -722,16 +722,16 @@ class CommandHandler extends AkairoHandler {
 
         if (!this.cooldowns.get(id)[command.id]) {
             this.cooldowns.get(id)[command.id] = {
-                timer: this.client.setTimeout(() => {
+                timer: setTimeout(() => {
                     if (this.cooldowns.get(id)[command.id]) {
-                        this.client.clearTimeout(this.cooldowns.get(id)[command.id].timer);
+                        clearTimeout(this.cooldowns.get(id)[command.id].timer);
                     }
                     this.cooldowns.get(id)[command.id] = null;
 
                     if (!Object.keys(this.cooldowns.get(id)).length) {
                         this.cooldowns.delete(id);
                     }
-                }, time),
+                }, time).unref(),
                 end: endTime,
                 uses: 0
             };
@@ -760,18 +760,12 @@ class CommandHandler extends AkairoHandler {
      */
     async runCommand(message, command, args) {
         if (command.typing) {
-            message.channel.startTyping();
+            message.channel.sendTyping();
         }
 
-        try {
-            this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, args);
-            const ret = await command.exec(message, args);
-            this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, args, ret);
-        } finally {
-            if (command.typing) {
-                message.channel.stopTyping();
-            }
-        }
+        this.emit(CommandHandlerEvents.COMMAND_STARTED, message, command, args);
+        const ret = await command.exec(message, args);
+        this.emit(CommandHandlerEvents.COMMAND_FINISHED, message, command, args, ret);
     }
 
     /**
