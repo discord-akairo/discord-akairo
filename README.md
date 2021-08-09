@@ -70,7 +70,7 @@
 
 ## Installation
 
-Requires Node 16+ and Discord.js v13.  
+Requires Node 16.6.0+ and Discord.js v13.  
 
 *discord-akairo*  
 `npm install discord-akairo`
