@@ -22,7 +22,7 @@ declare module 'discord-akairo' {
     }
 
     export class AkairoClient extends Client {
-        public constructor(options?: AkairoOptions & ClientOptions);
+        public constructor(options: AkairoOptions & ClientOptions);
         public constructor(options: AkairoOptions, clientOptions: ClientOptions);
 
         public ownerID: Snowflake | Snowflake[];
