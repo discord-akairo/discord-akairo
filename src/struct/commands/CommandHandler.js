@@ -338,6 +338,10 @@ class CommandHandler extends AkairoHandler {
      * @returns {Promise<?boolean>}
      */
     async handle(message) {
+        if (message.system) {
+            return false;
+        }
+
         try {
             if (this.fetchMembers && message.guild && !message.member && !message.webhookId) {
                 await message.guild.members.fetch(message.author);
