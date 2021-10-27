@@ -1,38 +1,36 @@
-module.exports = {
-    // Core
-    AkairoClient: require('./struct/AkairoClient'),
-    AkairoHandler: require('./struct/AkairoHandler'),
-    AkairoModule: require('./struct/AkairoModule'),
-    ClientUtil: require('./struct/ClientUtil'),
+// Core
+exports.AkairoClient = require('./struct/AkairoClient');
+exports.AkairoHandler = require('./struct/AkairoHandler');
+exports.AkairoModule = require('./struct/AkairoModule');
+exports.ClientUtil = require('./struct/ClientUtil');
 
-    // Commands
-    Command: require('./struct/commands/Command'),
-    CommandHandler: require('./struct/commands/CommandHandler'),
-    CommandUtil: require('./struct/commands/CommandUtil'),
-    Flag: require('./struct/commands/Flag'),
+// Commands
+exports.Command = require('./struct/commands/Command');
+exports.CommandHandler = require('./struct/commands/CommandHandler');
+exports.CommandUtil = require('./struct/commands/CommandUtil');
+exports.Flag = require('./struct/commands/Flag');
 
-    // Arguments
-    Argument: require('./struct/commands/arguments/Argument'),
-    TypeResolver: require('./struct/commands/arguments/TypeResolver'),
+// Arguments
+exports.Argument = require('./struct/commands/arguments/Argument');
+exports.TypeResolver = require('./struct/commands/arguments/TypeResolver');
 
-    // Inhibitors
-    Inhibitor: require('./struct/inhibitors/Inhibitor'),
-    InhibitorHandler: require('./struct/inhibitors/InhibitorHandler'),
+// Inhibitors
+exports.Inhibitor = require('./struct/inhibitors/Inhibitor');
+exports.InhibitorHandler = require('./struct/inhibitors/InhibitorHandler');
 
-    // Listeners
-    Listener: require('./struct/listeners/Listener'),
-    ListenerHandler: require('./struct/listeners/ListenerHandler'),
+// Listeners
+exports.Listener = require('./struct/listeners/Listener');
+exports.ListenerHandler = require('./struct/listeners/ListenerHandler');
 
-    // Providers
-    Provider: require('./providers/Provider'),
-    SequelizeProvider: require('./providers/SequelizeProvider'),
-    SQLiteProvider: require('./providers/SQLiteProvider'),
-    MongooseProvider: require('./providers/MongooseProvider'),
+// Providers
+exports.Provider = require('./providers/Provider');
+exports.SequelizeProvider = require('./providers/SequelizeProvider');
+exports.SQLiteProvider = require('./providers/SQLiteProvider');
+exports.MongooseProvider = require('./providers/MongooseProvider');
 
-    // Utilities
-    AkairoError: require('./util/AkairoError'),
-    Category: require('./util/Category'),
-    Constants: require('./util/Constants'),
-    Util: require('./util/Util'),
-    version: require('../package.json').version
-};
+// Utilities
+exports.AkairoError = require('./util/AkairoError');
+exports.Category = require('./util/Category');
+exports.Constants = require('./util/Constants');
+exports.Util = require('./util/Util');
+exports.version = require('../package.json').version;
