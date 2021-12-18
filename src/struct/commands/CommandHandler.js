@@ -658,7 +658,7 @@ class CommandHandler extends AkairoHandler {
                     return true;
                 }
             } else if (message.guild) {
-                const missing = message.channel.permissionsFor(this.client.user).missing(command.clientPermissions);
+                const missing = message.channel.permissionsFor(this.client.user)?.missing(command.clientPermissions);
                 if (missing.length) {
                     this.emit(CommandHandlerEvents.MISSING_PERMISSIONS, message, command, 'client', missing);
                     return true;
