@@ -637,7 +637,7 @@ declare module 'discord-akairo' {
 
     export type ArgumentType = 'string' | 'lowercase' | 'uppercase' | 'charCodes'
         | 'number' | 'integer' | 'bigint' | 'emojint'
-        | 'url' | 'date' | 'color'
+        | 'url' | 'date' | 'color' | 'timespan'
         | 'user' | 'users' | 'member' | 'members' | 'relevant' | 'relevants'
         | 'channel' | 'channels' | 'textChannel' | 'textChannels' | 'voiceChannel' | 'voiceChannels' | 'categoryChannel' | 'categoryChannels' | 'newsChannel' | 'newsChannels' | 'storeChannel' | 'storeChannels'
         | 'role' | 'roles' | 'emoji' | 'emojis' | 'guild' | 'guilds'
@@ -710,6 +710,7 @@ declare module 'discord-akairo' {
             URL: 'url';
             DATE: 'date';
             COLOR: 'color';
+            TIMESPAN: 'timespan';
             USER: 'user';
             USERS: 'users';
             MEMBER: 'member';
