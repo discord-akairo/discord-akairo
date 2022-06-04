@@ -100,7 +100,7 @@ class CommandUtil {
     async send(options) {
         const transformedOptions = this.constructor.transformOptions(options);
         const hasFiles = transformedOptions.files && transformedOptions.files.length > 0;
-        if (this.shouldEdit && (this.command ? this.command.editable : true) && !hasFiles && !this.lastResponse.deleted && !this.lastResponse.attachments.size) {
+        if (this.shouldEdit && (this.command ? this.command.editable : true) && !hasFiles && this.lastResponse.deletable && !this.lastResponse.attachments.size) {
             return this.lastResponse.edit(transformedOptions);
         }
 
