@@ -648,6 +648,7 @@ class CommandHandler extends AkairoHandler {
      * @returns {Promise<boolean>}
      */
     async runPermissionChecks(message, command) {
+        if (!command.clientPermissions) command.clientPermissions = [];
         if (command.clientPermissions) {
             if (typeof command.clientPermissions === 'function') {
                 let missing = command.clientPermissions(message);
@@ -658,6 +659,8 @@ class CommandHandler extends AkairoHandler {
                     return true;
                 }
             } else if (message.guild) {
+                if (message.channel.isText()) command.clientPermissions.push('SEND_MESSAGES');
+                if (message.channel.isThread()) command.clientPermissions.push('SEND_MESSAGES_IN_THREADS');
                 const missing = message.channel.permissionsFor(this.client.user).missing(command.clientPermissions);
                 if (missing.length) {
                     this.emit(CommandHandlerEvents.MISSING_PERMISSIONS, message, command, 'client', missing);
