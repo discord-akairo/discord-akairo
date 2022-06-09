@@ -79,7 +79,7 @@ Requires Node 16.6.0+ and Discord.js v13.
 `npm install discord.js`
 
 *sqlite (optional)*  
-`npm install sqlite`
+`npm install sqlite3 sqlite`
 
 *sequelize (optional)*  
 `npm install sequelize`
