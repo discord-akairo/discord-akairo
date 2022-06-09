@@ -407,7 +407,7 @@ class CommandHandler extends AkairoHandler {
         let key;
         try {
             if (!ignore) {
-                if (message.edited && !command.editable) return false;
+                if (message.editedTimestamp && !command.editable) return false;
                 if (await this.runPostTypeInhibitors(message, command)) return false;
             }
 
@@ -468,7 +468,7 @@ class CommandHandler extends AkairoHandler {
     async handleRegexCommands(message) {
         const hasRegexCommands = [];
         for (const command of this.modules.values()) {
-            if (message.edited ? command.editable : true) {
+            if (message.editedTimestamp ? command.editable : true) {
                 const regex = typeof command.regex === 'function' ? command.regex(message) : command.regex;
                 if (regex) hasRegexCommands.push({ command, regex });
             }
@@ -524,7 +524,7 @@ class CommandHandler extends AkairoHandler {
 
         const filterPromises = [];
         for (const command of this.modules.values()) {
-            if (message.edited && !command.editable) continue;
+            if (message.editedTimestamp && !command.editable) continue;
             filterPromises.push((async () => {
                 let cond = command.condition(message);
                 if (isPromise(cond)) cond = await cond;
