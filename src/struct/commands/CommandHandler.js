@@ -414,6 +414,9 @@ class CommandHandler extends AkairoHandler {
             if (Flag.is(args, 'cancel')) {
                 this.emit(CommandHandlerEvents.COMMAND_CANCELLED, message, command);
                 return true;
+            } if (Flag.is(args, 'timeout')) {
+                this.emit(CommandHandlerEvents.COMMAND_TIMEOUT, message, command, args.time);
+                return true;
             } else if (Flag.is(args, 'retry')) {
                 this.emit(CommandHandlerEvents.COMMAND_BREAKOUT, message, command, args.message);
                 return this.handle(args.message);

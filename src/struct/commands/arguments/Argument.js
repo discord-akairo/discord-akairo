@@ -285,7 +285,7 @@ class Argument {
                     if (message.util) message.util.addMessage(sentTimeout);
                 }
 
-                return Flag.cancel();
+                return Flag.timeout(promptOptions.time);
             }
 
             if (promptOptions.breakout) {

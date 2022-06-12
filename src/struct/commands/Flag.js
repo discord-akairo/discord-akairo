@@ -18,6 +18,15 @@ class Flag {
     }
 
     /**
+     * Create a flag that cancels the command because of the timeout.
+     * @param {number} time - Type of flag.
+     * @returns {Flag}
+     */
+     static timeout(time) {
+        return new Flag('timeout', { time });
+    }
+
+    /**
      * Creates a flag that retries with another input.
      * @param {Message} message - Message to handle.
      * @returns {Flag}
