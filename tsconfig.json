@@ -1,13 +1,12 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "target": "es6",
-        "noImplicitAny": true,
-        "strictNullChecks": true,
-        "noEmit": true,
-        "forceConsistentCasingInFileNames": true
-    },
-    "files": [
-        "./src/index.d.ts"
-    ]
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "commonjs",
+    "noEmit": true,
+    "noImplicitAny": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "es2016"
+  }
 }
